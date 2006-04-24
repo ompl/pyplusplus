@@ -1,0 +1,61 @@
+===================
+pyplusplus download
+===================
+
+.. contents:: Table of contents
+
+-------------------------
+pyplusplus on SourceForge
+-------------------------
+
+`pyplusplus`_ project is hosted on SourceForge. Using SourceForge services you
+can:
+
+1) get access to source code
+2) get access to latest release version of pyplusplus
+
+--------
+Download
+--------
+
+https://sourceforge.net/project/showfiles.php?group_id=118209
+
+----------
+CVS access
+----------
+
+https://sourceforge.net/cvs/?group_id=118209
+
+------------
+Installation
+------------
+
+In command prompt or shell change current directory to be "pyplusplus-X.Y.Z".
+"X.Y.Z" is version of `pyplusplus`_. Type next command: 
+
+| ``python setup.py install``
+
+After this command complete, you should have installed `pyplusplus`_ package. 
+
+------------
+Dependencies
+------------
+
+* `pygccxml`_
+
+
+.. _`pyplusplus` : ./pyplusplus.html
+.. _`pygccxml` : ./../pygccxml/pygccxml.html
+.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`SourceForge`: http://sourceforge.net/index.php
+.. _`Docutils`: http://docutils.sourceforge.net
+.. _`Python`: http://www.python.org
+.. _`GCC-XML`: http://www.gccxml.org
+.. _`Debian Linux`: http://www.debian.org
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:

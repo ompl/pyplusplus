@@ -1,0 +1,100 @@
+<!DOCTYPE html  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>generate_code.py</title>
+<meta name="GENERATOR" content="SciTE - www.Scintilla.org" />
+<style type="text/css">
+.S0 {
+	color: #808080;
+	background: #FFFFFF;
+}
+.S1 {
+	font-family: 'Courier New';
+	color: #007F00;
+	background: #FFFFFF;
+	font-size: 9pt;
+}
+.S4 {
+	font-family: 'Courier New';
+	color: #7F007F;
+	background: #FFFFFF;
+	font-size: 10pt;
+}
+.S5 {
+	font-weight: bold;
+	color: #00007F;
+	background: #FFFFFF;
+}
+.S10 {
+	font-weight: bold;
+	color: #000000;
+	background: #FFFFFF;
+}
+.S12 {
+	color: #7F7F7F;
+	background: #FFFFFF;
+}
+span {
+	font-family: 'Courier New';
+	color: #000000;
+	background: #FFFFFF;
+	font-size: 10pt;
+}
+</style>
+</head>
+<body bgcolor="#FFFFFF">
+<span><span class="S1">#! /usr/bin/python</span><br />
+<span class="S1"># Copyright 2004 Roman Yakovenko.</span><br />
+<span class="S1"># Distributed under the Boost Software License, Version 1.0. (See</span><br />
+<span class="S1"># accompanying file LICENSE_1_0.txt or copy at</span><br />
+<span class="S1"># http://www.boost.org/LICENSE_1_0.txt)</span><br />
+<br />
+<span class="S5">import</span><span class="S0"> </span>os<br />
+<span class="S5">from</span><span class="S0"> </span>environment<span class="S0"> </span><span class="S5">import</span><span class="S0"> </span>settings<br />
+<span class="S5">from</span><span class="S0"> </span>pyplusplus<span class="S0"> </span><span class="S5">import</span><span class="S0"> </span>module_builder<br />
+<br />
+mb<span class="S0"> </span><span class="S10">=</span><span class="S0"> </span>module_builder<span class="S10">.</span>module_builder_t<span class="S10">(</span><br />
+<span class="S0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>files<span class="S10">=[</span><span class="S4">'hello_world.hpp'</span><span class="S10">]</span><br />
+<span class="S0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S10">,</span><span class="S0"> </span>gccxml_path<span class="S10">=</span>settings<span class="S10">.</span>gccxml_path<span class="S0"> </span><span class="S1">#path to gccxml executable</span><br />
+<span class="S0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S10">,</span><span class="S0"> </span>working_directory<span class="S10">=</span>settings<span class="S10">.</span>working_dir<span class="S0"> </span><span class="S10">)</span><span class="S0"> </span><span class="S1">#setting working directory for gccxml</span><br />
+<br />
+<span class="S1">#rename enum Color to color</span><br />
+Color<span class="S0"> </span><span class="S10">=</span><span class="S0"> </span>mb<span class="S10">.</span>enum<span class="S10">(</span><span class="S0"> </span><span class="S4">'color'</span><span class="S0"> </span><span class="S10">)</span><br />
+Color<span class="S10">.</span>rename<span class="S10">(</span><span class="S4">'Color'</span><span class="S10">)</span><br />
+<br />
+<span class="S1">#Set call policies to animal::get_name_ptr</span><br />
+animal<span class="S0"> </span><span class="S10">=</span><span class="S0"> </span>mb<span class="S10">.</span>class_<span class="S10">(</span><span class="S0"> </span><span class="S4">'animal'</span><span class="S0"> </span><span class="S10">)</span><br />
+get_name_ptr<span class="S0"> </span><span class="S10">=</span><span class="S0"> </span>animal<span class="S10">.</span>member_function<span class="S10">(</span><span class="S0"> </span><span class="S4">'get_name_ptr'</span><span class="S10">,</span><span class="S0"> </span>recursive<span class="S10">=</span>False<span class="S0"> </span><span class="S10">)</span><br />
+get_name_ptr<span class="S10">.</span>call_policies<span class="S0"> </span><span class="S10">=</span><span class="S0"> </span>module_builder<span class="S10">.</span>call_policies<span class="S10">.</span>return_internal_reference<span class="S10">()</span><br />
+<br />
+<span class="S1">#next code has same effect</span><br />
+get_name_ptr<span class="S0"> </span><span class="S10">=</span><span class="S0"> </span>mb<span class="S10">.</span>member_function<span class="S10">(</span><span class="S0"> </span><span class="S4">'get_name_ptr'</span><span class="S0"> </span><span class="S10">)</span><br />
+get_name_ptr<span class="S10">.</span>call_policies<span class="S0"> </span><span class="S10">=</span><span class="S0"> </span>module_builder<span class="S10">.</span>call_policies<span class="S10">.</span>return_internal_reference<span class="S10">()</span><br />
+<br />
+<span class="S1">#I want to exclude all classes with name starts with impl</span><br />
+impl_classes<span class="S0"> </span><span class="S10">=</span><span class="S0"> </span>mb<span class="S10">.</span>classes<span class="S10">(</span><span class="S0"> </span><span class="S5">lambda</span><span class="S0"> </span>decl<span class="S10">:</span><span class="S0"> </span>decl<span class="S10">.</span>name<span class="S10">.</span>startswith<span class="S10">(</span><span class="S0"> </span><span class="S4">'impl'</span><span class="S0"> </span><span class="S10">)</span><span class="S0"> </span><span class="S10">)</span><br />
+impl_classes<span class="S10">.</span>exclude<span class="S10">()</span><br />
+<br />
+<span class="S1">#I want to exclude all functions that returns pointer to int</span><br />
+ptr_to_int<span class="S0"> </span><span class="S10">=</span><span class="S0"> </span>mb<span class="S10">.</span>free_functions<span class="S10">(</span><span class="S0"> </span>return_type<span class="S10">=</span><span class="S4">'int *'</span><span class="S0"> </span><span class="S10">)</span><br />
+ptr_to_int<span class="S10">.</span>exclude<span class="S10">()</span><br />
+<br />
+<span class="S1">#I can print declarations to see what is going on</span><br />
+mb<span class="S10">.</span>print_declarations<span class="S10">()</span><br />
+<br />
+<span class="S1">#I can print single declaration</span><br />
+mb<span class="S10">.</span>print_declarations<span class="S10">(</span><span class="S0"> </span>animal<span class="S0"> </span><span class="S10">)</span><br />
+<br />
+<span class="S1">#Now it is the time to give a name to our module</span><br />
+mb<span class="S10">.</span>build_code_creator<span class="S10">(</span><span class="S0"> </span>module_name<span class="S10">=</span><span class="S4">'hw'</span><span class="S0"> </span><span class="S10">)</span><br />
+<br />
+<span class="S1">#It is common requirement in software world - each file should have license</span><br />
+mb<span class="S10">.</span>code_creator<span class="S10">.</span>license<span class="S0"> </span><span class="S10">=</span><span class="S0"> </span><span class="S4">'//Boost Software License( http://boost.org/more/license_info.html )'</span><br />
+<br />
+<span class="S1">#I don't want absolute includes within code</span><br />
+mb<span class="S10">.</span>code_creator<span class="S10">.</span>user_defined_directories<span class="S10">.</span>append<span class="S10">(</span><span class="S0"> </span>settings<span class="S10">.</span>working_dir<span class="S0"> </span><span class="S10">)</span><br />
+<br />
+<span class="S1">#And finally we can write code to the disk</span><br />
+mb<span class="S10">.</span>write_module<span class="S10">(</span><span class="S0"> </span>os<span class="S10">.</span>path<span class="S10">.</span>join<span class="S10">(</span><span class="S0"> </span>settings<span class="S10">.</span>working_dir<span class="S10">,</span><span class="S0"> </span><span class="S4">'hello_world.py.cpp'</span><span class="S0"> </span><span class="S10">)</span><span class="S0"> </span><span class="S10">)</span></span>
+</body>
+</html>

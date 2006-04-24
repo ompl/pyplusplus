@@ -1,0 +1,4 @@
+`pyplusplus`_ is an object-oriented framework for creating a code generator for 
+`boost.python`_ library. 
+
+.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html

@@ -1,0 +1,252 @@
+# Copyright 2004 Roman Yakovenko.
+# Distributed under the Boost Software License, Version 1.0. (See
+# accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+
+import os
+import writer
+from pyplusplus import code_creators
+from sets import Set as set
+
+#TODO: to add namespace_alias_t classes
+class multiple_files_t(writer.writer_t):
+    """
+    This class implements classic strategy of deviding classes to files
+    one class in one header + source files.
+    """ 
+    HEADER_EXT = '.pypp.hpp'
+    SOURCE_EXT = '.pypp.cpp'
+
+    def __init__(self, extmodule, directory_path):
+        """Constructor.
+
+        @param extmodule: The root of a code creator tree
+        @type extmodule: module_t
+        @param directory_path: The output directory where the source files are written
+        @type directory_path: str
+        """
+        writer.writer_t.__init__(self, extmodule)
+        self.__directory_path = directory_path
+        self._create_dir()
+        self.__include_creators = []  # List of include_t creators that contain the generated headers
+        self.split_header_names = []  # List of include file names for split files
+        self.split_method_names = []  # List of methods from the split files
+
+        
+    def _create_dir( self ):
+        """Create the output directory if it doesn't already exist.
+        """
+        if os.path.exists( self.__directory_path ) and not os.path.isdir(self.__directory_path):
+            raise RuntimeError( 'directory_path should contain path to directory.' )
+        if not os.path.exists( self.__directory_path ):
+            os.makedirs( self.__directory_path )
+
+    def _get_directory_path(self):
+        return self.__directory_path
+    directory_path = property( _get_directory_path,
+                               doc="""The name of the output directory.
+                               @type: str
+                               """ )
+    
+    def create_header( self, file_name, function_name ):
+        """Return the content of a header file.
+
+        @param file_name: A string that uniquely identifies the file name
+        @type file_name: str
+        @param function_name: The name of the register_xyz() function
+        @type function_name: str
+        @returns: The content for a header file
+        @rtype: str
+        """
+        tmpl = os.linesep.join([
+                    "#ifndef __%(file_name)s_hpp__pyplusplus_wrapper__"
+                  , "#define __%(file_name)s_hpp__pyplusplus_wrapper__"
+                  , ''
+                  , "void %(function_name)s();"
+                  , ''
+                  , "#endif//__%(file_name)s_hpp__pyplusplus_wrapper__" ])
+        
+        content = ''
+        if self.extmodule.license:
+            content = self.extmodule.license.create() + os.linesep
+        content = content + tmpl % { 'file_name' : file_name
+                                     , 'function_name' : function_name }
+        return content
+
+    def create_source( self, file_name, function_name, creators ):
+        """Return the content of a cpp file.
+
+        @param file_name: The base name of the corresponding include file (without extension)
+        @type file_name: str
+        @param function_name: The name of the register_xyz() function
+        @type function_name: str
+        @param creators: The code creators that create the register_xyz() function
+        @type creators: list of code_creator_t
+        @returns: The content for a cpp file
+        @rtype: str
+        """
+        
+        answer = []
+        if self.extmodule.license:
+            answer.append( self.extmodule.license.create() )
+            
+        if self.extmodule.precompiled_header:
+            answer.append( self.extmodule.precompiled_header.create() )
+            
+        answer.append( '#include "%s%s"' % ( file_name, self.HEADER_EXT ) )
+
+        # Include all 'global' include files...
+        include_creators = filter( lambda creator: isinstance( creator, code_creators.include_t )
+                                                   and not isinstance( creator, code_creators.precompiled_header_t )
+                                   , self.extmodule.creators )
+        includes = map( lambda include_creator: include_creator.create()
+                        , include_creators )
+        answer.append( os.linesep.join(includes) )
+
+        # Write all 'global' namespace_alias_t and namespace_using_t creators first...
+        affect_creators = filter( lambda x: isinstance( x, code_creators.namespace_alias_t )
+                                    or isinstance( x, code_creators.namespace_using_t )
+                                  , self.extmodule.creators )
+
+        affect_creators.extend( filter( lambda x: isinstance( x, code_creators.namespace_alias_t )
+                                    or isinstance( x, code_creators.namespace_using_t )
+                                  , self.extmodule.body.creators ) )
+        
+        namespace_aliases = map( lambda creator: creator.create(), affect_creators )
+        if namespace_aliases:
+            answer.append( '' )
+            answer.append( os.linesep.join(namespace_aliases) )
+
+        # Write wrapper classes...
+        for creator in creators:
+            if isinstance( creator, code_creators.class_t ) and creator.wrapper:
+                answer.append( '' )
+                answer.append( creator.wrapper.create() )
+
+        # Write the register() function...
+        answer.append( '' )
+        answer.append( 'void %s(){' % function_name )
+        for creator in creators:
+            answer.append( code_creators.code_creator_t.indent( creator.create() ) )
+            answer.append( '' )
+        answer.append( '}' )
+        return os.linesep.join( answer )
+    
+    def split_class( self, class_creator):
+        """Write the .h/.cpp file for one class.
+
+        Writes a .h/.cpp file for the given class. The files use the class name
+        as base file name.
+
+        @param class_creator: The class creator for one particular class
+        @type class_creator: class_t
+        """
+        function_name = 'register_%s_class' % class_creator.alias
+        file_path = os.path.join( self.directory_path, class_creator.alias )
+        # Write the .h file...
+        header_name = file_path + self.HEADER_EXT
+        self.write_file( header_name
+                         , self.create_header( class_creator.alias, function_name ) )
+        # Write the .cpp file...
+        self.write_file( file_path + self.SOURCE_EXT
+                         , self.create_source( class_creator.alias
+                                               , function_name
+                                               , [class_creator] ))
+        if class_creator.wrapper:
+            # The wrapper has already been written above, so replace the create()
+            # method with a new 'method' that just returns an empty string because
+            # this method is later called again for the main source file.
+            class_creator.wrapper.create = lambda: ''
+        # Replace the create() method so that only the register() method is called
+        # (this is called later for the main source file).
+        class_creator.create = lambda: function_name +'();'
+        self.__include_creators.append( code_creators.include_t( header_name ) )
+        self.split_header_names.append(header_name)
+        self.split_method_names.append(function_name)
+
+    def split_creators( self, creators, pattern, function_name, registrator_pos ):
+        """Write non-class creators into a particular .h/.cpp file.
+
+        @param creators: The code creators that should be written
+        @type creators: list of code_creator_t
+        @param pattern: Name pattern that is used for constructing the final output file name
+        @type pattern: str
+        @param function_name: The name of the register_xyz() function
+        @type function_name: str
+        @param registrator_pos: The position of the code creator that creates the code to invoke the register_xyz() function.
+        @type registrator_pos: int
+        """
+        if not creators:
+            return
+        file_pattern = self.extmodule.body.name + pattern
+        file_path = os.path.join( self.directory_path, file_pattern )
+        header_name = file_path + self.HEADER_EXT
+        self.write_file( header_name
+                         , self.create_header( file_pattern, function_name ) )
+        self.write_file( file_path + self.SOURCE_EXT
+                         , self.create_source( file_pattern
+                                               , function_name
+                                               , creators ))
+        for creator in creators:
+            creator.create = lambda: ''
+        self.extmodule.body.adopt_creator( 
+            code_creators.custom_text_t( function_name + '();' )
+            , registrator_pos)
+        self.__include_creators.append( code_creators.include_t( header_name ) )        
+        self.split_header_names.append(header_name)
+        self.split_method_names.append(function_name)
+
+    def split_enums( self ):
+        """Write all enumerations into a separate .h/.cpp file.
+        """
+        enums_creators = filter( lambda x: isinstance(x, code_creators.enum_t )
+                                 , self.extmodule.body.creators )
+
+        self.split_creators( enums_creators, '_enumerations', 'register_enumerations', 0 )
+
+    def split_global_variables( self ):
+        """Write all global variables into a separate .h/.cpp file.
+        """
+        creators = filter( lambda x: isinstance(x, code_creators.global_variable_t )
+                           , self.extmodule.body.creators )
+        creators.extend( filter( lambda x: isinstance(x, code_creators.unnamed_enum_t )
+                           , self.extmodule.body.creators ) )
+        self.split_creators( creators, '_global_variables', 'register_global_variables', -1 )
+
+    def split_free_functions( self ):
+        """Write all free functions into a separate .h/.cpp file.
+        """
+        creators = filter( lambda x: isinstance(x, code_creators.function_t )
+                                 , self.extmodule.body.creators )
+        self.split_creators( creators, '_free_functions', 'register_free_functions', -1 )
+
+    #TODO: move write_main to __init__
+    def write(self, write_main=True):
+        """ Write out the module.
+            Creates a separate source/header combo for each class and for enums, globals,
+            and free functions.
+            If write_main is True it writes out a main file that calls all the registration methods.
+            After this call split_header_names and split_method_names will contain
+            all the header files and registration methods used.  This can be used by
+            user code to create custom registration methods if main is not written.
+        """
+
+        self.write_code_repository( self.__directory_path )
+
+        self.extmodule.do_include_dirs_optimization()
+
+        # Obtain a list of all class creators...
+        class_creators = filter( lambda x: isinstance(x, code_creators.class_t )
+                                 , self.extmodule.body.creators )
+        # ...and write a .h/.cpp file for each class
+        map( self.split_class, class_creators )
+        
+        self.split_enums()
+        self.split_global_variables()
+        self.split_free_functions()
+        
+        if write_main:
+            map( lambda creator: self.extmodule.adopt_include( creator )
+                 , self.__include_creators )
+            main_cpp = os.path.join( self.directory_path, self.extmodule.body.name + '.main.cpp' )
+            self.write_file( main_cpp, self.extmodule.create() + os.linesep )

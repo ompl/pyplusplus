@@ -1,0 +1,51 @@
+========
+Examples
+========
+
+.. contents:: Table of contents
+
+-------------------
+Graphical interface
+-------------------
+
+`pyplusplus`_ has nice, small and simple graphical interface. Please, read 
+`tutorials`_ for more information.
+
+.. _`tutorials` : ./../tutorials/tutorials.html
+
+-------
+EasyBMP
+-------
+
+`EasyBMP`_ is a small cross-platform library that provide you functionality
+needed to work with Windows bitmap (BMP) image files. I took me only few minutes
+to create Python bindings for the library. Read more `here`__.
+
+  __ : ./easybmp/easybmp.html
+
+---------------
+boost.date_time
+---------------
+
+I thought that running unit tests is not enough. I wanted to check `pyplusplus`_
+on big and complex projects. Also I wanted to check, whether it really simple
+to create fully working Python bindings for such projects. The short answer it is 
+not. The long answer is `here`__.
+
+..  __ : ./date_time/date_time.html
+
+.. _`GUI`: ./../tutorials/pyplusplus_demo.png
+.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`pyplusplus` : ./../pyplusplus.html
+.. _`boost.date_time` : http://www.boost.org
+.. _`py_easybmp` : ./easybmp/easybmp.html
+.. _`py_date_time` : ./date_time/date_time.html
+.. _`EasyBMP`: http://easybmp.sourceforge.net/
+
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:
