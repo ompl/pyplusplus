@@ -24,9 +24,9 @@ class fundamental_tester_base_t( unittest.TestCase ):
             = os.path.join( autoconfig.data_directory
                             , self.__module_name + self.SUFFIX_TO_BE_EXPORTED )
         
-        self.__generated_source_file_name = os.path.join( autoconfig.scons_config.build_dir
+        self.__generated_source_file_name = os.path.join( autoconfig.build_dir
                                                           , self.__module_name + '.cpp' )
-        self.__generated_scons_file_name = os.path.join( autoconfig.scons_config.build_dir
+        self.__generated_scons_file_name = os.path.join( autoconfig.build_dir
                                                           , self.__module_name + '.scons' )
 
     def failIfRaisesAny(self, callableObj, *args, **kwargs):
@@ -51,14 +51,14 @@ class fundamental_tester_base_t( unittest.TestCase ):
     def _create_extension_source_file(self):
         global LICENSE
         mb = module_builder.module_builder_t( [self.__to_be_exported_header]
-                                              , gccxml_path=autoconfig.gccxml_path
-                                              , include_paths=[autoconfig.boost_path]
+                                              , gccxml_path=autoconfig.gccxml.executable
+                                              , include_paths=[autoconfig.boost.include]
                                               , undefine_symbols=['__MINGW32__'] )
         self.customize( mb )
         if not mb.has_code_creator():
             mb.build_code_creator( self.__module_name )
         mb.code_creator.std_directories.extend( autoconfig.scons_config.cpppath )
-        mb.code_creator.user_defined_directories.append( autoconfig.package_location )
+        mb.code_creator.user_defined_directories.append( autoconfig.data_directory )
         mb.code_creator.precompiled_header = "boost/python.hpp" 
         mb.code_creator.license = LICENSE
         mb.write_module( self.__generated_source_file_name )
@@ -76,7 +76,7 @@ class fundamental_tester_base_t( unittest.TestCase ):
         sconstruct_file.close()
     
     def _create_extension(self):
-        cmd = autoconfig.scons_config.cmd_build % self.__generated_scons_file_name
+        cmd = autoconfig.scons.cmd_build % self.__generated_scons_file_name
         output = os.popen( cmd )
         scons_reports = []
         while True:
@@ -93,7 +93,7 @@ class fundamental_tester_base_t( unittest.TestCase ):
             raise RuntimeError( "unable to compile extension. error: %s" % scons_msg )
 
     def _clean_build( self, sconstruct_file ):
-        cmd = autoconfig.scons_config.cmd_clean % sconstruct_file
+        cmd = autoconfig.scons.cmd_clean % sconstruct_file
         output = os.popen( cmd )
         scons_reports = []
         while True:

@@ -24,8 +24,8 @@ class tester_t(unittest.TestCase):
             
     def test(self):
         mb = module_builder.module_builder_t( self._get_files()
-                                              , gccxml_path=autoconfig.gccxml_path
-                                              , include_paths=[autoconfig.boost_path]
+                                              , gccxml_path=autoconfig.gccxml.executable
+                                              , include_paths=[autoconfig.boost.include]
                                               , undefine_symbols=['__MINGW32__'])
         writer = lambda decl: None
         module_builder.print_declarations( mb.global_ns, writer=writer )

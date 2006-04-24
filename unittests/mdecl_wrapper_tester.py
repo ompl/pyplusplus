@@ -25,8 +25,8 @@ class tester_t(unittest.TestCase):
 
     def test(self):
         mb = module_builder.module_builder_t( self._get_files()
-                                              , gccxml_path=autoconfig.gccxml_path
-                                              , include_paths=[autoconfig.boost_path]
+                                              , gccxml_path=autoconfig.gccxml.executable
+                                              , include_paths=[autoconfig.boost.include]
                                               , undefine_symbols=['__MINGW32__'] )
         classes = filter( lambda d: isinstance( d, module_builder.class_t )
                           , declarations.make_flatten( mb.global_ns ) )

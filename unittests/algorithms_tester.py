@@ -23,7 +23,7 @@ class make_flatten_tester_t(unittest.TestCase):
     def test(self):
         mb = module_builder.module_builder_t( 
                 [ module_builder.create_text_fc( 'namespace enums{ enum { OK=1 }; }' ) ]
-                , gccxml_path=autoconfig.gccxml_path )
+                , gccxml_path=autoconfig.gccxml.executable )
         mb.namespace( name='::enums' ).include()
         mb.build_code_creator('dummy')
         flatten = code_creators.make_flatten(mb.code_creator.creators)
@@ -33,7 +33,7 @@ class creator_finder_tester_t( unittest.TestCase ):
     def test_find_by_declaration(self):
         mb = module_builder.module_builder_t( 
             [ module_builder.create_text_fc( 'namespace enums{ enum color{ red = 1}; }' )]
-            , gccxml_path=autoconfig.gccxml_path )
+            , gccxml_path=autoconfig.gccxml.executable )
         mb.namespace( name='::enums' ).include()
         enum_matcher = declarations.match_declaration_t( name='color' )        
         mb.build_code_creator( 'dummy' )
@@ -45,7 +45,7 @@ class creator_finder_tester_t( unittest.TestCase ):
     def test_find_by_class_instance(self):
         mb = module_builder.module_builder_t( 
             [ module_builder.create_text_fc( 'namespace enums{ enum color{ red = 1}; }' )]
-            , gccxml_path=autoconfig.gccxml_path )
+            , gccxml_path=autoconfig.gccxml.executable )
         mb.namespace( name='::enums' ).include()
         mb.build_code_creator('dummy')
         enum_found = code_creators.creator_finder.find_by_class_instance( 
@@ -66,7 +66,7 @@ class class_organizer_tester_t(unittest.TestCase):
         return answer
    
     def test(self):
-        config = parser.config_t( gccxml_path=autoconfig.gccxml_path )
+        config = parser.config_t( gccxml_path=autoconfig.gccxml.executable )
         code = []
         code.append('struct a{};')
         code.append('struct b{};')
