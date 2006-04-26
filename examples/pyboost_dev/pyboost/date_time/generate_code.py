@@ -9,22 +9,22 @@ import os
 import sys
 import time
 import shutil
-from environment import settings
+import settings
 from pygccxml import parser
 from pygccxml import declarations
 from pyplusplus import code_creators
 import customization_data
 from pyplusplus import module_builder
 
-class exporter_t(object):    
+class code_generator_t(object):    
     def __init__(self):
         self.__file = os.path.join( settings.date_time_pypp_include, 'date_time.pypp.hpp' )                        
 
     def _create_xml_file( self ):
         #On windows I have some problems to compile boost.date_time
         #library, so I use xml files generated on linux
-        config = parser.config_t( gccxml_path=settings.gccxml_path
-                                  , include_paths=[settings.boost_path]
+        config = parser.config_t( gccxml_path=settings.gccxml.executable
+                                  , include_paths=[settings.boost.include]
                                   , define_symbols=settings.defined_symbols
                                   , undefine_symbols=settings.undefined_symbols )
 
@@ -37,8 +37,8 @@ class exporter_t(object):
     def create_module_builder(self):
         date_time_xml_file = self._create_xml_file()
         mb = module_builder.module_builder_t( [ parser.create_gccxml_fc( date_time_xml_file ) ]
-                                              , gccxml_path=settings.gccxml_path
-                                              , include_paths=[settings.boost_path]
+                                              , gccxml_path=settings.gccxml.executable
+                                              , include_paths=[settings.boost.include]
                                               , define_symbols=settings.defined_symbols
                                               , undefine_symbols=settings.undefined_symbols
                                               , optimize_queries=False)
@@ -53,13 +53,10 @@ class exporter_t(object):
         
         for name, alias in customization_data.name2alias.items():
             decl = mb.class_( name )
-            s = set( map( lambda typedef: typedef.name, decl.typedefs ) )
-            if len( s ) > 1:
-                print '====> aliases: ', s 
             decl.alias = alias
             if isinstance( decl, declarations.class_t ):
                 decl.wrapper_alias = alias + '_wrapper'
-
+        
         return mb
     
     def filter_declarations(self, mb ):
@@ -91,9 +88,11 @@ class exporter_t(object):
         for name in starts_with:
             boost_ns.classes( lambda decl: decl.name.startswith( name ) ).exclude()
                 
-        ends_with = [ '_impl', '_config']
+        ends_with = [ '_impl', '_config' ]
         for name in ends_with:
             boost_ns.classes( lambda decl: decl.name.endswith( name ) ).exclude()        
+
+        boost_ns.classes( lambda decl: decl.alias.endswith( 'formatter' ) ).exclude()        
 
         #boost.date_time has problem to create local_[micro]sec_clock
         #variable, it has nothing to do with pyplusplus
@@ -208,7 +207,7 @@ class exporter_t(object):
         extmodule = mb.code_creator
         #beautifying include code generation
         extmodule.license = customization_data.license
-        extmodule.user_defined_directories.append( settings.boost_path )
+        extmodule.user_defined_directories.append( settings.boost.include )
         extmodule.user_defined_directories.append( settings.working_dir )
         extmodule.user_defined_directories.append( settings.generated_files_dir )
         extmodule.license = customization_data.license
@@ -235,8 +234,8 @@ class exporter_t(object):
         print 'time taken : ', time.clock() - start_time, ' seconds'
 
 def export():
-    exporter = exporter_t()
-    exporter.create()
+    cg = code_generator_t()
+    cg.create()
 
 if __name__ == '__main__':
     export()

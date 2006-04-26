@@ -5,8 +5,10 @@
 
 import os
 import writer
-from pyplusplus import code_creators
 from sets import Set as set
+from pyplusplus import code_creators
+from pyplusplus import _logging_
+
 
 #TODO: to add namespace_alias_t classes
 class multiple_files_t(writer.writer_t):
@@ -132,15 +134,7 @@ class multiple_files_t(writer.writer_t):
         answer.append( '}' )
         return os.linesep.join( answer )
     
-    def split_class( self, class_creator):
-        """Write the .h/.cpp file for one class.
-
-        Writes a .h/.cpp file for the given class. The files use the class name
-        as base file name.
-
-        @param class_creator: The class creator for one particular class
-        @type class_creator: class_t
-        """
+    def __split_class_impl( self, class_creator):
         function_name = 'register_%s_class' % class_creator.alias
         file_path = os.path.join( self.directory_path, class_creator.alias )
         # Write the .h file...
@@ -163,6 +157,23 @@ class multiple_files_t(writer.writer_t):
         self.__include_creators.append( code_creators.include_t( header_name ) )
         self.split_header_names.append(header_name)
         self.split_method_names.append(function_name)
+
+    def split_class( self, class_creator):
+        """Write the .h/.cpp file for one class.
+
+        Writes a .h/.cpp file for the given class. The files use the class name
+        as base file name.
+
+        @param class_creator: The class creator for one particular class
+        @type class_creator: class_t
+        """
+        try:
+            self.__split_class_impl( class_creator )
+        except IOError, error:
+            msg = 'ERROR: Failed to write code for class "%s" into file. May be the class name is too long?. Error: %s'
+            msg = msg % ( class_creator.declaration.name, str(error) )
+            _logging_.logger.error( msg )
+            raise
 
     def split_creators( self, creators, pattern, function_name, registrator_pos ):
         """Write non-class creators into a particular .h/.cpp file.

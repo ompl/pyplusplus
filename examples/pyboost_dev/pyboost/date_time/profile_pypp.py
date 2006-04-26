@@ -6,15 +6,15 @@
 import os
 import hotshot
 import hotshot.stats
-from environment import settings
-import create_date_time
+import settings
+import generate_code
 
 if __name__ == "__main__":
     statistics_file = os.path.join( settings.generated_files_dir, 'profile.stat' )
     profile = hotshot.Profile(statistics_file)
-    profile.runcall( create_date_time.export )
+    profile.runcall( generate_code.export )
     profile.close()
     statistics = hotshot.stats.load( statistics_file )
     statistics.strip_dirs()
     statistics.sort_stats( 'time', 'calls' )
-    statistics.print_stats( 20 )
+    statistics.print_stats( 40 )

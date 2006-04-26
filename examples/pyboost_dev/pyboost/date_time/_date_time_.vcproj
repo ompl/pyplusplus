@@ -126,6 +126,9 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
+				RelativePath=".\generated\__impl_details_33.pypp.cpp">
+			</File>
+			<File
 				RelativePath=".\generated\_date_time_.main.cpp">
 			</File>
 			<File
@@ -225,9 +228,6 @@
 				RelativePath=".\generated\greg_day_rep.pypp.cpp">
 			</File>
 			<File
-				RelativePath=".\generated\greg_durations_config.pypp.cpp">
-			</File>
-			<File
 				RelativePath=".\generated\greg_month.pypp.cpp">
 			</File>
 			<File
@@ -270,6 +270,24 @@
 				RelativePath=".\generated\int_adapter_ulong.pypp.cpp">
 			</File>
 			<File
+				RelativePath=".\generated\iso_extended_format.pypp.cpp">
+			</File>
+			<File
+				RelativePath=".\generated\iso_extended_wformat.pypp.cpp">
+			</File>
+			<File
+				RelativePath=".\generated\iso_format.pypp.cpp">
+			</File>
+			<File
+				RelativePath=".\generated\iso_format_base.pypp.cpp">
+			</File>
+			<File
+				RelativePath=".\generated\iso_wformat.pypp.cpp">
+			</File>
+			<File
+				RelativePath=".\generated\iso_wformat_base.pypp.cpp">
+			</File>
+			<File
 				RelativePath=".\generated\last_kday_of_month.pypp.cpp">
 			</File>
 			<File
@@ -295,9 +313,6 @@
 			</File>
 			<File
 				RelativePath=".\generated\microseconds.pypp.cpp">
-			</File>
-			<File
-				RelativePath=".\generated\millisec_posix_time_system_config.pypp.cpp">
 			</File>
 			<File
 				RelativePath=".\generated\milliseconds.pypp.cpp">
@@ -351,6 +366,12 @@
 				RelativePath=".\generated\seconds.pypp.cpp">
 			</File>
 			<File
+				RelativePath=".\generated\simple_format.pypp.cpp">
+			</File>
+			<File
+				RelativePath=".\generated\simple_wformat.pypp.cpp">
+			</File>
+			<File
 				RelativePath=".\generated\time_duration.pypp.cpp">
 			</File>
 			<File
@@ -361,18 +382,6 @@
 			</File>
 			<File
 				RelativePath=".\generated\time_period.pypp.cpp">
-			</File>
-			<File
-				RelativePath=".\generated\time_resolution_traits_adapted32_impl.pypp.cpp">
-			</File>
-			<File
-				RelativePath=".\generated\time_resolution_traits_adapted64_impl.pypp.cpp">
-			</File>
-			<File
-				RelativePath=".\generated\time_resolution_traits_bi32_impl.pypp.cpp">
-			</File>
-			<File
-				RelativePath=".\generated\time_resolution_traits_bi64_impl.pypp.cpp">
 			</File>
 			<File
 				RelativePath=".\generated\time_zone_base.pypp.cpp">
@@ -395,6 +404,24 @@
 			<File
 				RelativePath=".\generated\years.pypp.cpp">
 			</File>
+			<File
+				RelativePath=".\generated\ymd_iso_extended_formatter.pypp.cpp">
+			</File>
+			<File
+				RelativePath=".\generated\ymd_iso_extended_wformatter.pypp.cpp">
+			</File>
+			<File
+				RelativePath=".\generated\ymd_iso_formatter.pypp.cpp">
+			</File>
+			<File
+				RelativePath=".\generated\ymd_iso_wformatter.pypp.cpp">
+			</File>
+			<File
+				RelativePath=".\generated\ymd_simple_formatter.pypp.cpp">
+			</File>
+			<File
+				RelativePath=".\generated\ymd_simple_wformatter.pypp.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -402,6 +429,9 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
 				RelativePath=".\generated\__array_1.pypp.hpp">
+			</File>
+			<File
+				RelativePath=".\generated\__impl_details_33.pypp.hpp">
 			</File>
 			<File
 				RelativePath=".\generated\_date_time__enumerations.pypp.hpp">
@@ -503,9 +533,6 @@
 				RelativePath=".\generated\greg_day_rep.pypp.hpp">
 			</File>
 			<File
-				RelativePath=".\generated\greg_durations_config.pypp.hpp">
-			</File>
-			<File
 				RelativePath=".\generated\greg_month.pypp.hpp">
 			</File>
 			<File
@@ -546,6 +573,24 @@
 			</File>
 			<File
 				RelativePath=".\generated\int_adapter_ulong.pypp.hpp">
+			</File>
+			<File
+				RelativePath=".\generated\iso_extended_format.pypp.hpp">
+			</File>
+			<File
+				RelativePath=".\generated\iso_extended_wformat.pypp.hpp">
+			</File>
+			<File
+				RelativePath=".\generated\iso_format.pypp.hpp">
+			</File>
+			<File
+				RelativePath=".\generated\iso_format_base.pypp.hpp">
+			</File>
+			<File
+				RelativePath=".\generated\iso_wformat.pypp.hpp">
+			</File>
+			<File
+				RelativePath=".\generated\iso_wformat_base.pypp.hpp">
 			</File>
 			<File
 				RelativePath=".\generated\last_kday_of_month.pypp.hpp">
@@ -626,6 +671,12 @@
 				RelativePath=".\generated\seconds.pypp.hpp">
 			</File>
 			<File
+				RelativePath=".\generated\simple_format.pypp.hpp">
+			</File>
+			<File
+				RelativePath=".\generated\simple_wformat.pypp.hpp">
+			</File>
+			<File
 				RelativePath=".\generated\time_duration.pypp.hpp">
 			</File>
 			<File
@@ -636,18 +687,6 @@
 			</File>
 			<File
 				RelativePath=".\generated\time_period.pypp.hpp">
-			</File>
-			<File
-				RelativePath=".\generated\time_resolution_traits_adapted32_impl.pypp.hpp">
-			</File>
-			<File
-				RelativePath=".\generated\time_resolution_traits_adapted64_impl.pypp.hpp">
-			</File>
-			<File
-				RelativePath=".\generated\time_resolution_traits_bi32_impl.pypp.hpp">
-			</File>
-			<File
-				RelativePath=".\generated\time_resolution_traits_bi64_impl.pypp.hpp">
 			</File>
 			<File
 				RelativePath=".\generated\time_zone_base.pypp.hpp">
@@ -669,6 +708,24 @@
 			</File>
 			<File
 				RelativePath=".\generated\years.pypp.hpp">
+			</File>
+			<File
+				RelativePath=".\generated\ymd_iso_extended_formatter.pypp.hpp">
+			</File>
+			<File
+				RelativePath=".\generated\ymd_iso_extended_wformatter.pypp.hpp">
+			</File>
+			<File
+				RelativePath=".\generated\ymd_iso_formatter.pypp.hpp">
+			</File>
+			<File
+				RelativePath=".\generated\ymd_iso_wformatter.pypp.hpp">
+			</File>
+			<File
+				RelativePath=".\generated\ymd_simple_formatter.pypp.hpp">
+			</File>
+			<File
+				RelativePath=".\generated\ymd_simple_wformatter.pypp.hpp">
 			</File>
 		</Filter>
 		<Filter

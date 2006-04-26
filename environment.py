@@ -37,3 +37,21 @@ if 'roman' in getpass.getuser():
         boost.include = '/home/roman/boost_cvs'
         python.include = '/usr/include/python2.4'
 
+
+_my_path = None
+try:
+    import environment_path_helper
+    environment_path_helper.raise_error()
+except Exception, error:
+    _my_path = os.path.split( sys.exc_traceback.tb_frame.f_code.co_filename )[0]
+
+try:
+    import pygccxml
+    print 'pygccxml INSTALLED version will be used'
+except ImportError:
+    sys.path.append( os.path.join( _my_path, '../pygccxml_dev' ) )
+    import pygccxml
+    print 'pygccxml DEVELOPMENT version will be used'
+
+import pyplusplus
+

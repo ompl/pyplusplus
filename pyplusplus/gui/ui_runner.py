@@ -7,7 +7,10 @@
 import os
 import sys
 
-sys.path.append( os.path.abspath( './../../' ) )
+#pygccxml
+sys.path.append( os.path.abspath( './../../../pygccxml_dev' ) )
+#pyplusplus
+sys.path.append( os.path.abspath( './../..' ) )
 
 import ui
 if __name__ == '__main__':

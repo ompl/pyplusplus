@@ -18,24 +18,8 @@ from sets import Set as set
 
 build_dir = os.path.abspath( os.path.join( os.curdir, 'temp' ) )
 data_directory = os.path.abspath( os.path.join( os.curdir, 'data' ) )
-
-try:
-    import pygccxml
-    print 'unittests will run on INSTALLED version of pygccxml'
-except ImportError:
-    sys.path.append( os.path.join( os.curdir, '../../pygccxml_dev' ) )
-    import pygccxml
-    print 'unittests will run on DEVELOPMENT version of pygccxml'
-
-try:
-    import pyplusplus
-    print 'unittests will run on INSTALLED version of pyplusplus'
-except ImportError:
-    sys.path.append( os.path.join( os.curdir, '..' ) )
-    import pyplusplus
-    print 'unittests will run on DEVELOPMENT version of pyplusplus'
-
 sys.path.append( os.path.join( os.curdir, '..' ) )
+
 from environment import scons, boost, python, gccxml
 
 class scons_config:
@@ -58,7 +42,9 @@ class scons_config:
         return os.linesep.join( code )
     create_sconstruct = staticmethod(create_sconstruct)
     
+#I need this in order to allow Python to load just compiled modules    
 sys.path.append( build_dir )
+
 os.chdir( build_dir )
 
 if sys.platform == 'linux2':	    
