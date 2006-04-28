@@ -14,7 +14,27 @@ try:
     pygccxml_available = True
 except ImportError:
     pygccxml_available = False
-    
+
+
+def modifyPythonPath():
+    """Update PYTHONPATH so that is refers to pygccxml_dev.
+
+    The updated path is required for generating the documentation when
+    pygccxml is not 'officially' installed.
+    """
+    if not os.environ.has_key( 'PYTHONPATH' ):
+        os.environ['PYTHONPATH'] = ''
+    if sys.platform == 'win32':
+        environment_var_delimiter = ';'
+    else:
+        environment_var_delimiter = ':'
+
+    pygccxml_path = os.path.normpath(os.path.join(os.getcwd(), "..", "pygccxml_dev"))
+    os.environ[ 'PYTHONPATH' ] = os.environ[ 'PYTHONPATH' ] \
+                                 + environment_var_delimiter \
+                                 + pygccxml_path
+    print "Setting PYTHONPATH to", os.environ["PYTHONPATH"]
+        
 
 def generate_doc():
     """Generate the epydoc reference manual.
@@ -31,6 +51,7 @@ def generate_doc():
 #                '--verbose',
                 'pyplusplus']
     cmd_line = "epydoc " + ' '.join( options )
+    modifyPythonPath()
     print cmd_line
     os.system(cmd_line)
     
