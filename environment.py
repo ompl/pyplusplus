@@ -31,11 +31,13 @@ if 'roman' in getpass.getuser():
         boost.include = 'd:/boost_cvs'
         python.libs = 'c:/python/libs'
         python.include = 'c:/python/include'
+        gccxml.executable = 'c:/tools/gccxml/bin/gccxml.exe'
     else:
         scons.suffix = '.so'
         boost.libs = '/home/roman/boost_cvs/bin'
         boost.include = '/home/roman/boost_cvs'
         python.include = '/usr/include/python2.4'
+        gccxml.executable = '/home/roman/gccxml/bin/gccxml'
 
 
 _my_path = None
@@ -43,7 +45,7 @@ try:
     import environment_path_helper
     environment_path_helper.raise_error()
 except Exception, error:
-    _my_path = os.path.split( sys.exc_traceback.tb_frame.f_code.co_filename )[0]
+    _my_path = os.path.abspath( os.path.split( sys.exc_traceback.tb_frame.f_code.co_filename )[0] )
 
 try:
     import pygccxml
