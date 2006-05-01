@@ -1,7 +1,8 @@
 include LICENSE_1_0.txt
 include MANIFEST.in
 include unittests/*.py
-include unittests/data/*
+include unittests/data/*.hpp
+include unittests/data/*.cpp
 recursive-include docs/apidocs *.css
 recursive-include docs/apidocs *.html
 include docs/*.rest
@@ -12,4 +13,6 @@ recursive-include docs/examples *
 include docs/history/*
 include docs/logos/*
 include docs/tutorials/*
+prune docs/*/.svn
+prune docs/*/*/.svn
 recursive-include examples/*
