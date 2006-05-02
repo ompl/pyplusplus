@@ -295,7 +295,7 @@ class tester_t( unittest.TestCase ):
         self.failUnless( gregorian.months(15) == m1 * 3)
         m1 *= 3
         self.failUnless( gregorian.months(15) == m1)
-        self.failUnless( gregorian.months(12) == 4 * m2)
+        self.failUnless( gregorian.months(12) == m2 * 4)
         self.failUnless( gregorian.months(3) == m3 / 3)
         m3 /= 3
         self.failUnless( gregorian.months(3) == m3)
