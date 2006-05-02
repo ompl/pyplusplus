@@ -227,8 +227,8 @@ class multiple_files_t(writer.writer_t):
     def split_free_functions( self ):
         """Write all free functions into a separate .h/.cpp file.
         """
-        creators = filter( lambda x: isinstance(x, code_creators.function_t )
-                                 , self.extmodule.body.creators )
+        creators = filter( lambda x: isinstance(x, code_creators.free_function_t )
+                           , self.extmodule.body.creators )
         self.split_creators( creators, '_free_functions', 'register_free_functions', -1 )
 
     #TODO: move write_main to __init__
