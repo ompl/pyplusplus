@@ -41,11 +41,29 @@ from namespace import namespace_using_t
 
 from enum import enum_t
 
+from calldef import free_function_t
+from calldef import mem_fun_t
+
+from calldef import mem_fun_pv_t
+from calldef import mem_fun_pv_wrapper_t
+from calldef import mem_fun_v_t
+from calldef import mem_fun_v_wrapper_t
+
+from calldef import mem_fun_protected_t
+from calldef import mem_fun_protected_wrapper_t
+from calldef import mem_fun_protected_s_t
+from calldef import mem_fun_protected_s_wrapper_t
+from calldef import mem_fun_protected_v_t
+from calldef import mem_fun_protected_v_wrapper_t
+from calldef import mem_fun_protected_pv_t
+from calldef import mem_fun_protected_pv_wrapper_t
+
+from calldef import mem_fun_private_v_wrapper_t
+from calldef import mem_fun_private_pv_wrapper_t
+
 from calldef import operator_t
-from calldef import function_t
 from calldef import constructor_t
 from calldef import static_method_t
-from calldef import function_wrapper_t
 from calldef import casting_operator_t
 from calldef import casting_constructor_t
 from calldef import constructor_wrapper_t
