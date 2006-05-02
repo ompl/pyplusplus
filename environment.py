@@ -26,7 +26,7 @@ if 'roman' in getpass.getuser():
 
     if sys.platform == 'win32':
         scons.suffix = '.dll'
-        scons.ccflags = ['/MD', '/EHsc', '/GR' ]
+        scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope' ]
         boost.libs = 'd:/boost_cvs/bin'
         boost.include = 'd:/boost_cvs'
         python.libs = 'c:/python/libs'
@@ -46,6 +46,10 @@ try:
     environment_path_helper.raise_error()
 except Exception, error:
     _my_path = os.path.abspath( os.path.split( sys.exc_traceback.tb_frame.f_code.co_filename )[0] )
+    if not os.path.exists( os.path.join( _my_path, 'environment.py' ) ):
+        #try another guess
+        if sys.modules.has_key('environment'):
+            _my_path = os.path.split( sys.modules['environment'].__file__ )[0]
 
 try:
     import pygccxml
