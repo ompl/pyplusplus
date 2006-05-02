@@ -7,17 +7,17 @@
 import os
 import sys
 
-_script_dir = os.path.split( os.path.abspath( sys.argv[0] ) )[0]
-environment_path = os.path.normpath( os.path.join( _script_dir, '..', '..', '..', '..' ) )
-
+_script_dir = os.path.abspath( os.getcwd() )
+environment_path = os.path.realpath( os.path.join( _script_dir, '..', '..', '..', '..' ) )
 sys.path.append( environment_path )
 
-from environment import boost, scons, gccxml
+from environment import boost, scons, gccxml, python
 
 module_name = '_date_time_'
 working_dir = _script_dir
 generated_files_dir = os.path.join( _script_dir, 'generated' )
-unittests_dir = os.path.join( _script_dir, '..', '..', 'unittests', 'date_time' )
+unittests_dir = os.path.realpath( os.path.join( _script_dir, '..', '..', 'unittests', 'date_time' ) )
+
 date_time_pypp_include = os.path.join( _script_dir, 'include' )
 
 undefined_symbols = [ '__MINGW32__' ]
