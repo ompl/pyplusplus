@@ -16,7 +16,7 @@ except ImportError:
     pygccxml_available = False
 
 
-def modifyPythonPath():
+def add_pygccxml_to_PYTHONPATH():
     """Update PYTHONPATH so that is refers to pygccxml_dev.
 
     The updated path is required for generating the documentation when
@@ -36,25 +36,28 @@ def modifyPythonPath():
     print "Setting PYTHONPATH to", os.environ["PYTHONPATH"]
         
 
-def generate_doc():
+def generate_doc():    
     """Generate the epydoc reference manual.
     """
     if not pygccxml_available:
         print "Please install pygccxml before generating the docs."
         sys.exit()
         
-    print "Generating epydoc files..."
-    options = [ '--output="%s"'%os.path.join('docs', 'apidocs'),
-                '--docformat=epytext',
-                '--url=http://www.language-binding.net',
-                '--name=pyplusplus',
-#                '--verbose',
-                'pyplusplus']
-    cmd_line = "epydoc " + ' '.join( options )
-    modifyPythonPath()
-    print cmd_line
-    os.system(cmd_line)
+    add_pygccxml_to_PYTHONPATH()
+
+    from epydoc.docbuilder import build_doc_index
+    from epydoc.docwriter.html import HTMLWriter
+
+    print "Generating epydoc files..."                
+
+    docindex = build_doc_index(['pyplusplus', 'pygccxml'])
+    html_writer = HTMLWriter( docindex
+                              , prj_name='pyplusplus'
+                              , prj_url='http://www.language-binding.net'
+                              , include_sourcecode=True )
     
+    html_writer.write( os.path.join('docs', 'apidocs') )
+
 
 class doc_cmd(Command):
     """This is a new distutils command 'doc' to build the epydoc manual.
