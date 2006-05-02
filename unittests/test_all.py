@@ -49,6 +49,7 @@ import optional_bug_tester
 import pointer_as_arg_tester
 import factory_tester
 import private_assign_tester
+import protected_tester
 
 def create_suite(times):  
     testers = [ 
@@ -95,6 +96,7 @@ def create_suite(times):
         , pointer_as_arg_tester
         , factory_tester
         , private_assign_tester
+        , protected_tester
     ]
     
     main_suite = unittest.TestSuite()    
