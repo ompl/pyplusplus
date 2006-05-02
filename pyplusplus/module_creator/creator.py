@@ -11,6 +11,9 @@ import types_database
 from pyplusplus import code_repository
 from sets import Set as set
 
+ACCESS_TYPES = declarations.ACCESS_TYPES
+VIRTUALITY_TYPES = declarations.VIRTUALITY_TYPES
+
 #TODO: don't export functions that returns non const pointer to fundamental types
 #TODO: add print decl_wrapper.readme messages
 
@@ -82,8 +85,8 @@ class creator_t( declarations.decl_visitor_t ):
         decls = declarations.make_flatten( decls )
         self.__decls = self._filter_decls( self._reorder_decls( self._prepare_decls( decls ) ) )
             
-        self.__curr_parent = self.__module_body
-        self.__curr_decl = None
+        self.curr_code_creator = self.__module_body
+        self.curr_decl = None
         self.__cr_array_1_included = False
         self.__array_1_registered = set() #(type.decl_string,size)
         self.__free_operators = []
@@ -122,69 +125,24 @@ class creator_t( declarations.decl_visitor_t ):
         new_ordered.extend( others )
         new_ordered.extend( variables )
         return new_ordered #
-
-    def _is_calldef_exposable(self, declaration):
-        #see http://www.boost.org/libs/python/doc/v2/faq.html#funcptr
-        if len( declaration.arguments ) > 10:
-            return False #boost.tuple can not contain more than 10 args
-        all_types = [ arg.type for arg in declaration.arguments ]
-        all_types.append( declaration.return_type )
-        for some_type in all_types:
-            units = declarations.decompose_type( some_type )
-            ptr2functions = filter( lambda unit: isinstance( unit, declarations.calldef_type_t )
-                                    , units )
-            if ptr2functions:
-                return False
-            #Function that take as agrument some instance of non public class
-            #will not be exported. Same to the return variable
-            if isinstance( units[-1], declarations.declarated_t ):
-                dtype = units[-1]
-                if isinstance( dtype.declaration.parent, declarations.class_t ):
-                    if dtype.declaration not in dtype.declaration.parent.public_members:
-                        return False
-                    
-        if isinstance( declaration, declarations.operator_t ):
-            if isinstance( declaration, declarations.casting_operator_t ):
-                return True
-            if isinstance( declaration, declarations.member_operator_t ) \
-               and declaration.symbol in ( '()', '[]' ):
-                return True
-            if not code_creators.operator_t.supported.is_supported( declaration ):
-                #see http://www.boost.org/libs/python/doc/v2/operators.html#introduction
-                return False
-        if isinstance( declaration, declarations.constructor_t ) \
-           and declaration.is_artificial:
-            return False
-        return True
     
     def _exportable_class_members( self, class_decl ):
         assert isinstance( class_decl, declarations.class_t )
-        members = []
-        for member in class_decl.public_members:
-            if isinstance( member, declarations.variable_t ) :
-                if member.bits == 0 and member.name == "":
-                    continue #alignement bit
-                type_ = declarations.remove_const( member.type )
-                if declarations.is_pointer( type_ ) \
-                   and member.type_qualifiers.has_static:
-                    continue #right now I don't know what code should be generated in this case
-            members.append( member )
+        members = filter( lambda mv: mv.ignore == False, class_decl.public_members )
         #protected and private virtual functions that not overridable and not pure
         #virtual should not be exported
         for member in class_decl.protected_members:
             if not isinstance( member, declarations.calldef_t ):
                 continue
-            if member.virtuality != declarations.VIRTUALITY_TYPES.VIRTUAL:
+            else:
                 members.append( member )
-            if self._is_overridable( member ):
-                members.append( member )
-        
+       
         vfunction_selector = lambda member: isinstance( member, declarations.member_function_t ) \
-                                            and member.virtuality == declarations.VIRTUALITY_TYPES.PURE_VIRTUAL 
+                                            and member.virtuality == VIRTUALITY_TYPES.PURE_VIRTUAL 
         members.extend( filter( vfunction_selector, class_decl.private_members ) )
         #now lets filter out none public operators: pyplusplus does not support them right now
         members = filter( lambda decl: not isinstance( decl, declarations.member_operator_t )
-                                       or decl.access_type == declarations.ACCESS_TYPES.PUBLIC 
+                                       or decl.access_type == ACCESS_TYPES.PUBLIC 
                           , members )
         #-#if declarations.has_destructor( class_decl ) \
         #-#   and not declarations.has_public_destructor( class_decl ):
@@ -199,11 +157,6 @@ class creator_t( declarations.decl_visitor_t ):
     def _does_class_have_smth_to_export(self, exportable_members ):
         return bool( self._filter_decls( self._reorder_decls( exportable_members ) ) )
     
-    def _is_public_class( self, class_decl ):
-        if isinstance( class_decl.parent, declarations.namespace_t ):
-            return True
-        return class_decl in class_decl.parent.public_members
-
     def _is_constructor_of_abstract_class( self, decl ):
         assert isinstance( decl, declarations.constructor_t )
         return decl.parent.is_abstract
@@ -214,26 +167,63 @@ class creator_t( declarations.decl_visitor_t ):
         decls = filter( lambda x: not (x.is_artificial and 
                                        not (isinstance(x, ( declarations.class_t, declarations.enumeration_t))))
                        , decls )
-        # Filter out internal compiler methods        
-        decls = filter( lambda x: not x.name.startswith( '__' ), decls )
-        decls = filter( lambda x: x.location.file_name != "<internal>", decls )
         # Filter out type defs
         decls = filter( lambda x: not isinstance( x, declarations.typedef_t ), decls )
-        # Filter out non-exposable calls
-        decls = filter( lambda x: not isinstance( x, declarations.calldef_t) 
-                                  or self._is_calldef_exposable(x)
-                        , decls )
-        decls = filter( lambda x: not isinstance( x, declarations.class_t)
-                                  or self._is_public_class( x )
-                        , decls )
+
         return decls
 
-    def _is_wrapper_needed(self, exportable_members):
-        if isinstance( self.__curr_decl, declarations.class_t ) \
-           and self.__curr_decl.wrapper_user_code:
+    def __is_same_func( self, f1, f2 ):
+        if not f1.__class__ is f2.__class__:
+            return False
+        if isinstance( f1, declarations.member_calldef_t ) and f1.has_const != f2.has_const:
+            return False
+        if f1.name != f2.name:
+            return False
+        if f1.return_type != f2.return_type:
+            return False
+        if len( f1.arguments ) != len(f2.arguments):
+            return False
+        for f1_arg, f2_arg in zip( f1.arguments, f2.arguments ):
+            if f1_arg.type != f2_arg.type:
+                return False
+        return True
+            
+    def redefined_funcs( self, cls ):
+        all_included = declarations.custom_matcher_t( lambda decl: decl.ignore == False )
+        all_protected = declarations.access_type_matcher_t( 'protected' ) & all_included
+        all_pure_virtual = declarations.virtuality_type_matcher_t( VIRTUALITY_TYPES.PURE_VIRTUAL )
+        
+        query = all_protected | all_pure_virtual
+        
+        funcs = set()
+        for base in cls.recursive_bases:
+            if base.access == ACCESS_TYPES.PRIVATE:
+                continue
+            base_cls = base.related_class
+            funcs.update( base_cls.member_functions( query, allow_empty=True ) )
+            funcs.update( base_cls.member_operators( query, allow_empty=True ) )
+        
+        not_reimplemented_funcs = set()        
+        for f in funcs:
+            cls_fs = cls.calldefs( name=f.name, recursive=False, allow_empty=True )
+            for cls_f in cls_fs:
+                if self.__is_same_func( f, cls_f ):
+                    break
+            else:
+                #should test whether this function has been added or not
+                for f_impl in not_reimplemented_funcs:
+                    if self.__is_same_func( f, f_impl ):
+                        break
+                else:
+                    not_reimplemented_funcs.add( f )
+        return not_reimplemented_funcs
+    
+    def _is_wrapper_needed(self, class_inst, exportable_members):
+        if isinstance( self.curr_decl, declarations.class_t ) \
+           and self.curr_decl.wrapper_user_code:
             return True
-        elif isinstance( self.__curr_parent, declarations.class_t ) \
-           and self.__curr_parent.wrapper_user_code:
+        elif isinstance( self.curr_code_creator, declarations.class_t ) \
+           and self.curr_code_creator.wrapper_user_code:
             return True
         else:
             pass
@@ -250,12 +240,12 @@ class creator_t( declarations.decl_visitor_t ):
                     return True
             if isinstance( member, declarations.class_t ):
                 return True
-            if isinstance( member, declarations.member_calldef_t ):
-                if member.access_type != declarations.ACCESS_TYPES.PUBLIC:
-                    return True
-                if self._is_overridable( member ):
-                    return True
-        return False
+            if isinstance( member, declarations.calldef_t ):
+                if member.virtuality != VIRTUALITY_TYPES.NOT_VIRTUAL:
+                    return True #virtual and pure virtual functions requieres wrappers.
+                if member.access_type in ( ACCESS_TYPES.PROTECTED, ACCESS_TYPES.PRIVATE ):
+                    return True #we already decided that those functions should be exposed, so I need wrapper for them
+        return bool( self.redefined_funcs(class_inst) )
     
     def _adopt_free_operator( self, operator ):
         def adopt_operator_impl( operator, found_creators ):
@@ -350,7 +340,7 @@ class creator_t( declarations.decl_visitor_t ):
                 self.__extmodule.adopt_include(code_creators.include_t(header=h))
         # Invoke the appropriate visit_*() method on all decls
         for decl in self.__decls:
-            self.__curr_decl = decl
+            self.curr_decl = decl
             declarations.apply_visitor( self, decl )
         for operator in self.__free_operators:
             self._adopt_free_operator( operator )
@@ -366,174 +356,204 @@ class creator_t( declarations.decl_visitor_t ):
             include = code_creators.include_t( header=fn )
             self.__extmodule.adopt_include(include)
 
-    def _is_overridable( self, decl ):
-        #virtual functions that returns const reference to something
-        #could not be overriden by Python. The reason is simple: 
-        #in boost::python::override::operator(...) result of marshaling 
-        #(Python 2 C++) is saved on stack, after functions returns the result
-        #will be reference to no where - access violetion.
-        #For example see temporal variable tester
-        assert isinstance( decl, declarations.member_calldef_t )
-        if decl.virtuality == declarations.VIRTUALITY_TYPES.VIRTUAL \
-           and decl.access_type == declarations.ACCESS_TYPES.PROTECTED \
-           and declarations.is_reference( decl.return_type ):
-            return True
-        if decl.virtuality == declarations.VIRTUALITY_TYPES.VIRTUAL \
-           and declarations.is_reference( decl.return_type ):
-            return False        
-        if decl.virtuality == declarations.VIRTUALITY_TYPES.PURE_VIRTUAL:
-            return True
-        if decl.access_type != declarations.ACCESS_TYPES.PUBLIC:
-            return True
-        if declarations.is_reference( decl.return_type ):
-            return False
-        return decl.virtuality != declarations.VIRTUALITY_TYPES.NOT_VIRTUAL \
-               or decl in decl.parent.protected_members 
-        
+         
+    def guess_functions_code_creators( self ):
+        maker_cls = None
+        fwrapper_cls = None
+        access_level = self.curr_decl.parent.find_out_member_access_type( self.curr_decl )
+        if access_level == ACCESS_TYPES.PUBLIC:
+            if self.curr_decl.virtuality == VIRTUALITY_TYPES.NOT_VIRTUAL:
+                maker_cls = code_creators.mem_fun_t
+            elif self.curr_decl.virtuality == VIRTUALITY_TYPES.PURE_VIRTUAL:
+                fwrapper_cls = code_creators.mem_fun_pv_wrapper_t
+                maker_cls = code_creators.mem_fun_pv_t
+            else:
+                if self.curr_decl.overridable:
+                    fwrapper_cls = code_creators.mem_fun_v_wrapper_t
+                maker_cls = code_creators.mem_fun_v_t
+        elif access_level == ACCESS_TYPES.PROTECTED:
+            if self.curr_decl.virtuality == VIRTUALITY_TYPES.NOT_VIRTUAL:
+                if self.curr_decl.has_static:
+                    fwrapper_cls = code_creators.mem_fun_protected_s_wrapper_t
+                    maker_cls = code_creators.mem_fun_protected_s_t
+                else:
+                    fwrapper_cls = code_creators.mem_fun_protected_wrapper_t
+                    maker_cls = code_creators.mem_fun_protected_t
+            elif self.curr_decl.virtuality == VIRTUALITY_TYPES.VIRTUAL:
+                if self.curr_decl.overridable:
+                    fwrapper_cls = code_creators.mem_fun_protected_v_wrapper_t
+                    maker_cls = code_creators.mem_fun_protected_v_t
+            else:
+                fwrapper_cls = code_creators.mem_fun_protected_pv_wrapper_t
+                maker_cls = code_creators.mem_fun_protected_pv_t
+        else: #private
+            if self.curr_decl.virtuality == VIRTUALITY_TYPES.NOT_VIRTUAL:
+                pass#in general we should not come here
+            elif self.curr_decl.virtuality == VIRTUALITY_TYPES.PURE_VIRTUAL:
+                fwrapper_cls = code_creators.mem_fun_private_pv_wrapper_t
+            else:
+                if self.curr_decl.overridable:
+                    fwrapper_cls = code_creators.mem_fun_v_wrapper_t
+                    maker_cls = code_creators.mem_fun_v_t
+        return ( maker_cls, fwrapper_cls )
+    
     def visit_member_function( self ):
-        if self.__curr_decl.ignore:
+        if self.curr_decl.ignore:
             return
-        if self.__curr_decl.name == 'invert_sign':
-            i = 0
         fwrapper = None
-        self.__types_db.update( self.__curr_decl )
-        access_level = self.__curr_decl.parent.find_out_member_access_type( self.__curr_decl )
-        if self._is_overridable( self.__curr_decl ) or access_level == declarations.ACCESS_TYPES.PROTECTED:
-            class_wrapper = self.__curr_parent.wrapper
-            fwrapper = code_creators.function_wrapper_t( function=self.__curr_decl )
+        self.__types_db.update( self.curr_decl )
+        if None is self.curr_decl.call_policies:
+            self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
+    
+        maker_cls, fwrapper_cls = self.guess_functions_code_creators()
+        
+        maker = None
+        fwrapper = None
+        if fwrapper_cls:
+            fwrapper = fwrapper_cls( function=self.curr_decl )
+            class_wrapper = self.curr_code_creator.wrapper
             class_wrapper.adopt_creator( fwrapper )
-            if access_level == declarations.ACCESS_TYPES.PRIVATE:
-                return 
-        maker = code_creators.function_t( function=self.__curr_decl, wrapper=fwrapper )
-        if None is maker.call_policies:
-            maker.call_policies = self.__call_policies_resolver( self.__curr_decl )
-        self.__curr_parent.adopt_creator( maker )
-        if self.__curr_decl.has_static:
+           
+        if maker_cls:
+            if fwrapper:
+                maker = maker_cls( function=self.curr_decl, wrapper=fwrapper )
+            else:
+                maker = maker_cls( function=self.curr_decl )
+            self.curr_code_creator.adopt_creator( maker )            
+        
+        if self.curr_decl.has_static:
             #static_method should be created only once.
             found = filter( lambda creator: isinstance( creator, code_creators.static_method_t ) 
-                                            and creator.declaration.name == self.__curr_decl.name
-                                     , self.__curr_parent.creators )
+                                            and creator.declaration.name == self.curr_decl.name
+                                     , self.curr_code_creator.creators )
             if not found:
-                static_method = code_creators.static_method_t( function=self.__curr_decl
+                static_method = code_creators.static_method_t( function=self.curr_decl
                                                                , function_code_creator=maker )
-                self.__curr_parent.adopt_creator( static_method )
+                self.curr_code_creator.adopt_creator( static_method )
         
     def visit_constructor( self ):
-        if self.__curr_decl.ignore:
+        if self.curr_decl.ignore:
             return
 
-        if self.__curr_decl.is_copy_constructor:
+        if self.curr_decl.is_copy_constructor:
             return             
-        self.__types_db.update( self.__curr_decl )
-        if not self._is_constructor_of_abstract_class( self.__curr_decl ) \
-           and 1 == len( self.__curr_decl.arguments ) \
+        self.__types_db.update( self.curr_decl )
+        if not self._is_constructor_of_abstract_class( self.curr_decl ) \
+           and 1 == len( self.curr_decl.arguments ) \
            and self.__create_castinig_constructor \
-           and self.__curr_decl.access_type == declarations.ACCESS_TYPES.PUBLIC:
-            maker = code_creators.casting_constructor_t( constructor=self.__curr_decl )
+           and self.curr_decl.access_type == ACCESS_TYPES.PUBLIC:
+            maker = code_creators.casting_constructor_t( constructor=self.curr_decl )
             self.__module_body.adopt_creator( maker )
 
         cwrapper = None
-        exportable_members = self._exportable_class_members(self.__curr_parent.declaration)
-        if self._is_wrapper_needed( exportable_members ):
-            class_wrapper = self.__curr_parent.wrapper
-            cwrapper = code_creators.constructor_wrapper_t( constructor=self.__curr_decl )
+        exportable_members = self._exportable_class_members(self.curr_code_creator.declaration)
+        if self._is_wrapper_needed( self.curr_decl.parent, exportable_members ):
+            class_wrapper = self.curr_code_creator.wrapper
+            cwrapper = code_creators.constructor_wrapper_t( constructor=self.curr_decl )
             class_wrapper.adopt_creator( cwrapper )
-        maker = code_creators.constructor_t( constructor=self.__curr_decl, wrapper=cwrapper )
+        maker = code_creators.constructor_t( constructor=self.curr_decl, wrapper=cwrapper )
         if None is maker.call_policies:
-            maker.call_policies = self.__call_policies_resolver( self.__curr_decl )
-        self.__curr_parent.adopt_creator( maker )
+            maker.call_policies = self.__call_policies_resolver( self.curr_decl )
+        self.curr_code_creator.adopt_creator( maker )
     
     def visit_destructor( self ):
         pass
     
     def visit_member_operator( self ):
-        if self.__curr_decl.ignore:
+        if self.curr_decl.ignore:
             return
 
-        if self.__curr_decl.symbol in ( '()', '[]' ):
+        if self.curr_decl.symbol in ( '()', '[]' ):
             self.visit_member_function()
         else:
-            self.__types_db.update( self.__curr_decl )
-            maker = code_creators.operator_t( operator=self.__curr_decl )
-            self.__curr_parent.adopt_creator( maker )
+            self.__types_db.update( self.curr_decl )
+            maker = code_creators.operator_t( operator=self.curr_decl )
+            self.curr_code_creator.adopt_creator( maker )
         
     def visit_casting_operator( self ):
-        if self.__curr_decl.ignore:
+        if self.curr_decl.ignore:
             return
 
-        if not declarations.is_fundamental( self.__curr_decl.return_type ) \
-           and not self.__curr_decl.has_const:
+        if not declarations.is_fundamental( self.curr_decl.return_type ) \
+           and not self.curr_decl.has_const:
             return #only const casting operators can generate implicitly_convertible
         
-        self.__types_db.update( self.__curr_decl )
-        if not self.__curr_decl.parent.is_abstract \
-           and not declarations.is_reference( self.__curr_decl.return_type ):
-            maker = code_creators.casting_operator_t( operator=self.__curr_decl )
+        if None is self.curr_decl.call_policies:
+            self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
+       
+        self.__types_db.update( self.curr_decl )
+        if not self.curr_decl.parent.is_abstract \
+           and not declarations.is_reference( self.curr_decl.return_type ):
+            maker = code_creators.casting_operator_t( operator=self.curr_decl )
             self.__module_body.adopt_creator( maker )            
         #what to do if class is abstract
-        if self.__curr_decl.access_type == declarations.ACCESS_TYPES.PUBLIC:
-            maker = code_creators.casting_member_operator_t( operator=self.__curr_decl )
-            if None is maker.call_policies:
-                maker.call_policies = self.__call_policies_resolver( self.__curr_decl )
-            self.__curr_parent.adopt_creator( maker )
+        if self.curr_decl.access_type == ACCESS_TYPES.PUBLIC:
+            maker = code_creators.casting_member_operator_t( operator=self.curr_decl )
+            self.curr_code_creator.adopt_creator( maker )
             
     def visit_free_function( self ):
-        if self.__curr_decl.ignore:
+        if self.curr_decl.ignore:
             return
-        self.__types_db.update( self.__curr_decl )
-        maker = code_creators.function_t( function=self.__curr_decl )
-        if None is maker.call_policies:
-            maker.call_policies = self.__call_policies_resolver( self.__curr_decl )        
-        self.__curr_parent.adopt_creator( maker )
+        self.__types_db.update( self.curr_decl )
+        maker = code_creators.free_function_t( function=self.curr_decl )
+        if None is self.curr_decl.call_policies:
+            self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )        
+        self.curr_code_creator.adopt_creator( maker )
     
     def visit_free_operator( self ):
-        if self.__curr_decl.ignore:
+        if self.curr_decl.ignore:
             return
 
-        self.__types_db.update( self.__curr_decl )
-        self.__free_operators.append( self.__curr_decl )
+        self.__types_db.update( self.curr_decl )
+        self.__free_operators.append( self.curr_decl )
 
     def visit_class_declaration(self ):
         pass
         
     def visit_class(self ):
-        if self.__curr_decl.ignore:
+        if self.curr_decl.ignore:
             return
-        assert isinstance( self.__curr_decl, declarations.class_t )
-        temp_curr_decl = self.__curr_decl        
-        temp_curr_parent = self.__curr_parent       
-        exportable_members = self._exportable_class_members(self.__curr_decl)
+        assert isinstance( self.curr_decl, declarations.class_t )
+        temp_curr_decl = self.curr_decl        
+        temp_curr_parent = self.curr_code_creator       
+        exportable_members = self._exportable_class_members(self.curr_decl)
 
         wrapper = None
-        class_inst = code_creators.class_t( class_inst=self.__curr_decl )
+        class_inst = code_creators.class_t( class_inst=self.curr_decl )
 
-        if self._is_wrapper_needed( exportable_members ):
-            wrapper = code_creators.class_wrapper_t( declaration=self.__curr_decl
+        if self._is_wrapper_needed( self.curr_decl, exportable_members ):
+            wrapper = code_creators.class_wrapper_t( declaration=self.curr_decl
                                                      , class_creator=class_inst )
             class_inst.wrapper = wrapper
             #insert wrapper before module body 
-            if isinstance( self.__curr_decl.parent, declarations.class_t ):
+            if isinstance( self.curr_decl.parent, declarations.class_t ):
                 #we deal with internal class
-                self.__curr_parent.wrapper.adopt_creator( wrapper )
+                self.curr_code_creator.wrapper.adopt_creator( wrapper )
             else:
                 self.__extmodule.adopt_creator( wrapper, self.__extmodule.creators.index( self.__module_body ) )
-            if declarations.has_trivial_copy( self.__curr_decl ):
+            if declarations.has_trivial_copy( self.curr_decl ):
                 #I don't know but sometimes boost.python requieres
                 #to construct wrapper from wrapped classe
-                if not declarations.is_noncopyable( self.__curr_decl ):
-                    scons = code_creators.special_constructor_wrapper_t( class_inst=self.__curr_decl )
+                if not declarations.is_noncopyable( self.curr_decl ):
+                    scons = code_creators.special_constructor_wrapper_t( class_inst=self.curr_decl )
                     wrapper.adopt_creator( scons )    
-                trivial_constr = declarations.find_trivial_constructor(self.__curr_decl)
+                trivial_constr = declarations.find_trivial_constructor(self.curr_decl)
                 if trivial_constr and trivial_constr.is_artificial:
                     #this constructor is not going to be exposed
-                    tcons = code_creators.trivial_constructor_wrapper_t( class_inst=self.__curr_decl )
+                    tcons = code_creators.trivial_constructor_wrapper_t( class_inst=self.curr_decl )
                     wrapper.adopt_creator( tcons )                                                  
                     
-        self.__curr_parent.adopt_creator( class_inst )
-        self.__curr_parent = class_inst
+        self.curr_code_creator.adopt_creator( class_inst )
+        self.curr_code_creator = class_inst
         for decl in self._filter_decls( self._reorder_decls( exportable_members ) ):
-            self.__curr_decl = decl
+            self.curr_decl = decl
             declarations.apply_visitor( self, decl )
+
+        for redefined_func in self.redefined_funcs( temp_curr_decl ):
+            if isinstance( redefined_func, declarations.operator_t ):
+                continue
+            self.curr_decl = redefined_func
+            declarations.apply_visitor( self, redefined_func )
 
         #all static_methods_t should be moved to the end
         #better approach is to move them after last def of relevant function
@@ -542,21 +562,21 @@ class creator_t( declarations.decl_visitor_t ):
         for static_method in static_methods:
             class_inst.remove_creator( static_method )
             class_inst.adopt_creator( static_method )
-            
-        self.__curr_decl = temp_curr_decl        
-        self.__curr_parent = temp_curr_parent
+        
+        self.curr_decl = temp_curr_decl        
+        self.curr_code_creator = temp_curr_parent
         
     def visit_enumeration(self):
-        if self.__curr_decl.ignore:
+        if self.curr_decl.ignore:
             return
 
-        assert isinstance( self.__curr_decl, declarations.enumeration_t )
+        assert isinstance( self.curr_decl, declarations.enumeration_t )
         maker = None
-        if self.__curr_decl.name:
-            maker = code_creators.enum_t( enum=self.__curr_decl )
+        if self.curr_decl.name:
+            maker = code_creators.enum_t( enum=self.curr_decl )
         else:
-            maker = code_creators.unnamed_enum_t( unnamed_enum=self.__curr_decl )
-        self.__curr_parent.adopt_creator( maker )
+            maker = code_creators.unnamed_enum_t( unnamed_enum=self.curr_decl )
+        self.curr_code_creator.adopt_creator( maker )
         
     def visit_namespace(self):
         pass
@@ -573,45 +593,45 @@ class creator_t( declarations.decl_visitor_t ):
             return True    
     
     def visit_variable(self):
-        if self.__curr_decl.ignore:
+        if self.curr_decl.ignore:
             return
 
-        self.__types_db.update( self.__curr_decl )
+        self.__types_db.update( self.curr_decl )
         
-        if declarations.is_array( self.__curr_decl.type ):
+        if declarations.is_array( self.curr_decl.type ):
             if not self.__cr_array_1_included:
                 self.__extmodule.adopt_creator( code_creators.include_t( code_repository.array_1.file_name )
                                                 , self.__extmodule.first_include_index() + 1)
                 self.__cr_array_1_included = True
-            if self._register_array_1( self.__curr_decl.type ):
-                array_1_registrator = code_creators.array_1_registrator_t( array_type=self.__curr_decl.type )
-                self.__curr_parent.adopt_creator( array_1_registrator )
+            if self._register_array_1( self.curr_decl.type ):
+                array_1_registrator = code_creators.array_1_registrator_t( array_type=self.curr_decl.type )
+                self.curr_code_creator.adopt_creator( array_1_registrator )
         
-        if isinstance( self.__curr_decl.parent, declarations.namespace_t ):
+        if isinstance( self.curr_decl.parent, declarations.namespace_t ):
             maker = None
             wrapper = None
-            if declarations.is_array( self.__curr_decl.type ):
-                wrapper = code_creators.array_gv_wrapper_t( variable=self.__curr_decl )
-                maker = code_creators.array_gv_t( variable=self.__curr_decl, wrapper=wrapper )
+            if declarations.is_array( self.curr_decl.type ):
+                wrapper = code_creators.array_gv_wrapper_t( variable=self.curr_decl )
+                maker = code_creators.array_gv_t( variable=self.curr_decl, wrapper=wrapper )
             else:
-                maker = code_creators.global_variable_t( variable=self.__curr_decl )
+                maker = code_creators.global_variable_t( variable=self.curr_decl )
             if wrapper:
                 self.__extmodule.adopt_creator( wrapper
                                                 , self.__extmodule.creators.index( self.__module_body ) )
         else:
             maker = None
             wrapper = None
-            if self.__curr_decl.bits != None:
-                wrapper = code_creators.bit_field_wrapper_t( variable=self.__curr_decl )
-                maker = code_creators.bit_field_t( variable=self.__curr_decl, wrapper=wrapper )
-            elif declarations.is_array( self.__curr_decl.type ):
-                wrapper = code_creators.array_mv_wrapper_t( variable=self.__curr_decl )
-                maker = code_creators.array_mv_t( variable=self.__curr_decl, wrapper=wrapper )
-            elif declarations.is_pointer( self.__curr_decl.type ):
-                wrapper = code_creators.member_variable_wrapper_t( variable=self.__curr_decl )
-                maker = code_creators.member_variable_t( variable=self.__curr_decl, wrapper=wrapper )
+            if self.curr_decl.bits != None:
+                wrapper = code_creators.bit_field_wrapper_t( variable=self.curr_decl )
+                maker = code_creators.bit_field_t( variable=self.curr_decl, wrapper=wrapper )
+            elif declarations.is_array( self.curr_decl.type ):
+                wrapper = code_creators.array_mv_wrapper_t( variable=self.curr_decl )
+                maker = code_creators.array_mv_t( variable=self.curr_decl, wrapper=wrapper )
+            elif declarations.is_pointer( self.curr_decl.type ):
+                wrapper = code_creators.member_variable_wrapper_t( variable=self.curr_decl )
+                maker = code_creators.member_variable_t( variable=self.curr_decl, wrapper=wrapper )
             else:
-                maker = code_creators.member_variable_t( variable=self.__curr_decl )                
+                maker = code_creators.member_variable_t( variable=self.curr_decl )                
             if wrapper:
-                self.__curr_parent.wrapper.adopt_creator( wrapper )
-        self.__curr_parent.adopt_creator( maker )            
+                self.curr_code_creator.wrapper.adopt_creator( wrapper )
+        self.curr_code_creator.adopt_creator( maker )            
