@@ -382,7 +382,7 @@ class array_mv_wrapper_t( declaration_based.declaration_based_t ):
                 , str( declarations.array_size( self.declaration.type ) )
         ])
         
-        return algorithm.dummy_type_t( decl_string )
+        return declarations.dummy_type_t( decl_string )
     wrapper_type = property( _get_wrapper_type )
         
     def _get_wrapper_creator_type(self):
