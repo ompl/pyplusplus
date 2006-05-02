@@ -24,23 +24,11 @@ class class_t( scoped.scoped_t ):
                                   , declaration=class_inst )
         self._wrapper = wrapper
         
-    def _get_always_expose_using_scope( self ):
-        return self.declaration.always_expose_using_scope
-    def _set_always_expose_using_scope( self, value ):
-        self.declaration.always_expose_using_scope = value
-    always_expose_using_scope = property( _get_always_expose_using_scope, _set_always_expose_using_scope )
-
     def _get_wrapper( self ):
         return self._wrapper
     def _set_wrapper( self, new_wrapper ):
         self._wrapper = new_wrapper
     wrapper = property( _get_wrapper, _set_wrapper )
-
-    def _get_redefine_operators( self ):
-        return self.declaration.redefine_operators
-    def _set_redefine_operators( self, new_value ):
-        self.declaration.redefine_operators = new_value
-    redefine_operators = property( _get_redefine_operators, _set_redefine_operators )
 
     def _get_held_type(self):
         return self.declaration.held_type
@@ -173,7 +161,7 @@ class class_t( scoped.scoped_t ):
         class_constructor, used_init = self._generate_constructor()
         result.append( class_constructor )
         creators = self.creators
-        if self.redefine_operators:
+        if self.declaration.redefine_operators:
             creators = self.creators + self._get_base_operators(base_classes, base_creators)
         for x in creators:
             if not ( x is used_init ):
@@ -220,7 +208,7 @@ class class_t( scoped.scoped_t ):
         result[-1] = result[-1] + '( %s );' % self.class_var_name        
 
         creators = self.creators
-        if self.redefine_operators:
+        if self.declaration.redefine_operators:
             creators = self.creators + self._get_base_operators(base_classes, base_creators)
         
         for x in creators:
@@ -243,7 +231,7 @@ class class_t( scoped.scoped_t ):
     def is_exposed_using_scope(self):
         scoped_exporters = filter( lambda x: self._should_creator_be_exported_under_scope( x )
                                    , self.creators )
-        return bool( self.always_expose_using_scope or scoped_exporters )
+        return bool( self.declaration.always_expose_using_scope or scoped_exporters )
     
     def _create_impl(self):
         if self.is_exposed_using_scope():
@@ -314,28 +302,11 @@ class class_wrapper_t( scoped.scoped_t ):
     
     def _create_bases(self):
         return ', '.join( [self.exposed_identifier, self.boost_wrapper_identifier] )
-    
-    def _get_pure_virtual_function_creators( self ):
-        creators = []
-        for base_wrapper in self.base_wrappers:
-            for creator in base_wrapper.creators:
-                if not isinstance( creator, declaration_based.declaration_based_t ):
-                    continue
-                if not isinstance( creator.declaration, declarations.member_calldef_t ):
-                    continue
-                if creator.declaration.virtuality != declarations.VIRTUALITY_TYPES.PURE_VIRTUAL:
-                    continue
-                creators.append( creator )
-        return creators
-        
+           
     def _create_impl(self):
         answer = ['struct %s : %s {' % ( self.wrapper_alias, self._create_bases() )]
         answer.append( '' )
         answer.append( self.create_internal_code( self.creators )  )
-        pvcreators = self._get_pure_virtual_function_creators()
-        if pvcreators:
-            answer.append( '' )
-            answer.append( self.create_internal_code( pvcreators ) )
         answer.append( '' )
         answer.append( '};' )
         return os.linesep.join( answer )
