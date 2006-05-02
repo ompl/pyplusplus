@@ -93,15 +93,3 @@ def create_identifier(creator, full_name ):
             return new_name
     else:
         return full_name
-
-class dummy_type_t( pygccxml.declarations.type_t ):
-    #This class is very usefull for code generation
-    def __init__( self, decl_string ):
-        pygccxml.declarations.type_t.__init__( self )
-        self._decl_string = decl_string
-        
-    def _create_decl_string(self):
-        return self._decl_string
-    
-    def _clone_impl( self ):
-        return dummy_type_t( self._decl_string )
