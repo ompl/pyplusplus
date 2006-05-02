@@ -35,6 +35,8 @@ class decl_wrapper_t(object):
         object.__init__(self)
         self._alias = None
         self._ignore = False
+        self._exportable = None
+        self._exportable_reason = None
         
     def _generate_valid_name(self, name=None):
         if name == None:
@@ -62,11 +64,13 @@ class decl_wrapper_t(object):
         self.alias = new_name
     
     def _get_ignore( self ):
-        return self._ignore
+        return self._ignore or not self.exportable
+    
     def _set_ignore( self, value ):
         self._ignore = value
     ignore = property( _get_ignore, _set_ignore
                        ,doc="If you set ignore to True then this declaration will not be exported." )    
+    
     def exclude( self ):
         """Exclude "self" and child declarations from being exposed."""
         self.ignore = True
@@ -75,6 +79,31 @@ class decl_wrapper_t(object):
         """Include "self" and child declarations to be exposed."""
         self.ignore = False
 
+    def why_not_exportable( self ):
+        if None is self._exportable_reason:
+            self.get_exportable()
+        return self._exportable_reason
+
+    def _exportable_impl( self ):
+        return ''
+
+    def get_exportable( self ):
+        if self._exportable is None:
+            if self.name.startswith( '__' ):
+                self._exportable_reason = 'pyplusplus, by default, does not exposes internal compilers declarations. Names of those declarations starts with "__".'
+            elif self.location and self.location.file_name == "<internal>":
+                self._exportable_reason = 'pyplusplus, by default, does not exposes declarations, that belongs to "<internal>" header.'
+            else:
+                self._exportable_reason = self._exportable_impl( )
+            self._exportable = not bool( self._exportable_reason )
+        return self._exportable
+    
+    def set_exportable( self, exportable ):
+        self._exportable = exportable
+        
+    exportable = property( get_exportable, set_exportable
+                          , doc="Returns True if declaration could be exported to Python, otherwise False" )
+    
     #TODO:
     #I think that almost every declaration could have some wrapper. This is the
     #main reason why those 3 functions does not have some well defined interface.
@@ -92,6 +121,8 @@ class decl_wrapper_t(object):
                 #print 'Unable to finalize declaration: ', str( error )
             #else:
                 #raise
+    def _readme_impl( self ):
+        return []
     
     def readme( self ):
         """This function will returns some hints/tips/description of problems
@@ -99,4 +130,8 @@ class decl_wrapper_t(object):
         reference to some fundamental type could be exported, but could not be called
         from Python
         """
-        return []
+        text = []
+        if not self.exportable:
+            text.append( 'WARNING: ' + self.why_not_exportable() )
+        text.extend( self._readme_impl() ) 
+        return text
