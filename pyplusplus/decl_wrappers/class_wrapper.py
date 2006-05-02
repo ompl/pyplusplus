@@ -87,3 +87,9 @@ class class_t(scopedef_wrapper.scopedef_t, declarations.class_t):
     def add_wrapper_code( self, code ):
         self.wrapper_user_code.append( user_text.user_text_t( code ) )
         
+    def _exportable_impl( self ):
+        if isinstance( self.parent, declarations.namespace_t ):
+            return ''
+        if not self in self.parent.public_members:
+            return 'pyplusplus can not expose private class.'
+        return ''
