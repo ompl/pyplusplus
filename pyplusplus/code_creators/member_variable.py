@@ -359,6 +359,8 @@ class array_mv_t( member_variable_base_t ):
         answer.append( ' );' )        
         return ''.join( answer )
     
+#TODO: generated fucntion should be static and take instance of the wrapped class
+#as first argument.
 class array_mv_wrapper_t( declaration_based.declaration_based_t ):
     """
     Creates C++ code that register array class.
