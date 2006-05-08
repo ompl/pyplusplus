@@ -8,7 +8,7 @@ pyplusplus tutorials
 What is pyplusplus?
 -------------------
 
-.. include:: ./../definition.rest 
+.. include:: ./../../definition.rest 
 
 --------
 Preamble
@@ -22,8 +22,8 @@ please take a look on two files:
 * `generate_code.py`_ - Python code, that uses `pyplusplus`_ to export 
   declarations from the source file
 
-.. _`hello_world.hpp` : ./module_builder_hello_world.html
-.. _`generate_code.py` : ./module_builder_generate_code.html
+.. _`hello_world.hpp` : ./hello_world.html
+.. _`generate_code.py` : ./generate_code.html
 
 ----------------
 module_builder_t
@@ -146,13 +146,13 @@ Result
 
 `View generated file`_
 
-.. _`View generated file` : ./module_builder_hello_world_result.html
+.. _`View generated file` : ./result.html
 
 
 That's all. I hope you enjoyed. 
 
-.. _`pyplusplus` : ./../pyplusplus.html
-.. _`pygccxml` : ./../../pygccxml/pygccxml.html
+.. _`pyplusplus` : ./../../pyplusplus.html
+.. _`pygccxml` : ./../../../pygccxml/pygccxml.html
 .. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
 .. _`SourceForge`: http://sourceforge.net/index.php
 .. _`Python`: http://www.python.org
