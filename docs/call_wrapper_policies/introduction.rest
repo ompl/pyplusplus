@@ -50,10 +50,10 @@ Function-wrapper signature will be a little bit different in every case.
 
 Variable names
 --------------
-I think it should be possible to apply few |cwp| on a single function. Thus, it
-will be possible to create few convinience function, from one single function.
-The main,read unresolved, issue, is management of variable names within function-wrapper.
-I see next problems, that we should solve, before proceeding to implementation:
+I think it should be possible to apply few |cwp| on a single function. 
+The main, ( read unresolved ) issue, is management of variable names within 
+function-wrapper. I see next problems, that we should solve, before proceeding 
+to implementation:
 
 1. To share variable name, between different pieces of code.
 
@@ -188,7 +188,7 @@ There are few ways to expose this function:
   }
 
 Arrays size
-~~~~~~~~~~~
+^^^^^^^^^^^
 1. static array - size of array is known at compile time.
 2. dynamic array
 
