@@ -17,11 +17,11 @@ from pygccxml import declarations
 class calldef_t(decl_wrapper.decl_wrapper_t):
     def __init__(self, *arguments, **keywords):
         decl_wrapper.decl_wrapper_t.__init__( self, *arguments, **keywords )
-    
+
         self._call_policies = None
         self._use_keywords = True
         self._use_default_arguments = True
-        self._create_with_signature = False 
+        self._create_with_signature = False
         self._overridable = None
 
     def get_call_policies(self):
@@ -47,7 +47,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
     def _set_use_default_arguments(self, use_default_arguments):
         self._use_default_arguments = use_default_arguments
     use_default_arguments = property( _get_use_default_arguments, _set_use_default_arguments )
-        
+
     def has_wrapper( self ):
         if not isinstance( self, declarations.member_calldef_t ):
             return False
@@ -70,8 +70,8 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
 
     def get_overridable( self ):
         """
-        Virtual functions, that returns const reference, could not be overriden 
-        from Python. The reason is simple: in boost::python::override::operator(...) 
+        Virtual functions, that returns const reference, could not be overriden
+        from Python. The reason is simple: in boost::python::override::operator(...)
         result of marshaling (Python 2 C++) is saved on stack, after function
         exit, the result will be reference to no where - access violetion.
         For example see temporal variable tester
@@ -84,10 +84,10 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
             else:
                 self._overridable = True
         return self._overridable
-    
+
     def set_overridable( self, overridable ):
         self._overridable = overridable
-        
+
     overridable = property( get_overridable, set_overridable
                             , doc = get_overridable.__doc__ )
 
@@ -128,8 +128,8 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
                 tmpl = 'WARNING: Function "%s" takes as argument (name=%s, pos=%d ) ' \
                        + 'non-const reference to C++ fundamental type - ' \
                        + 'function could not be called from Python.'
-                msg.append( tmpl % ( str( self ), arg.name, index ) ) 
-        
+                msg.append( tmpl % ( str( self ), arg.name, index ) )
+
         if False == self.overridable:
             msg.append( self.get_overridable.__doc__ )
         return msg
@@ -138,12 +138,12 @@ class member_function_t( declarations.member_function_t, calldef_t ):
     def __init__(self, *arguments, **keywords):
         declarations.member_function_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
-    
+
 class constructor_t( declarations.constructor_t, calldef_t ):
     def __init__(self, *arguments, **keywords):
         declarations.constructor_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
-        
+
     def _exportable_impl( self ):
         if self.is_artificial:
             return 'pyplusplus does not exports compiler generated constructors'
@@ -156,14 +156,14 @@ class destructor_t( declarations.destructor_t, calldef_t ):
         calldef_t.__init__( self )
 
 class operators_helper:
-    
+
     inplace = [ '+=', '-=', '*=', '/=',  '%=', '>>=', '<<=', '&=', '^=', '|=' ]
     comparison = [ '==', '!=', '<', '>', '<=', '>=' ]
     non_member = [ '+', '-', '*', '/', '%', '&', '^', '|' ] #'>>', '<<', not implemented
     unary = [ '!', '~', '+', '-' ]
-    
+
     all = inplace + comparison + non_member + unary
-    
+
     def is_supported( oper ):
         if oper.symbol == '*' and len( oper.arguments ) == 0:
             #dereference does not make sense
@@ -178,13 +178,13 @@ class operators_helper:
             #see http://www.boost.org/libs/python/doc/v2/operators.html#introduction
             return 'operator %s is not supported. Please take a look on http://www.boost.org/libs/python/doc/v2/operators.html#introduction.'
         return ''
-    exportable = staticmethod( exportable ) 
-    
+    exportable = staticmethod( exportable )
+
 class member_operator_t( declarations.member_operator_t, calldef_t ):
     def __init__(self, *arguments, **keywords):
         declarations.member_operator_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
-            
+
     def _get_alias( self):
         alias = super( member_operator_t, self )._get_alias()
         if alias == self.name:
@@ -200,7 +200,7 @@ class member_operator_t( declarations.member_operator_t, calldef_t ):
     def _exportable_impl( self ):
         return operators_helper.exportable( self )
 
-    
+
 class casting_operator_t( declarations.casting_operator_t, calldef_t ):
 
     def prepare_special_cases():
@@ -221,26 +221,28 @@ class casting_operator_t( declarations.casting_operator_t, calldef_t ):
                     alias = '__int__'
             elif declarations.is_floating_point( type_ ):
                 alias = '__float__'
-            else: 
-                continue #void 
+            else:
+                continue #void
             if alias:
                 special_cases[ type_ ] = alias
                 special_cases[ const_t( type_ ) ] = alias
         special_cases[ pointer_t( const_t( declarations.char_t() ) ) ] = '__str__'
         std_string = '::std::basic_string<char,std::char_traits<char>,std::allocator<char> >'
-        std_wstring = '::std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> >'
+        std_wstring1 = '::std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> >'
+        std_wstring2 = '::std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >'
         special_cases[ std_string ] = '__str__'
-        special_cases[ std_wstring ] = '__str__'
+        special_cases[ std_wstring1 ] = '__str__'
+        special_cases[ std_wstring2 ] = '__str__'
         special_cases[ '::std::string' ] = '__str__'
         special_cases[ '::std::wstring' ] = '__str__'
-        
-        #TODO: add 
+
+        #TODO: add
         #          std::complex<SomeType> some type should be converted to double
         return special_cases
-    
+
     SPECIAL_CASES = prepare_special_cases()
     #casting_member_operator_t.prepare_special_cases()
-    
+
     def __init__(self, *arguments, **keywords):
         declarations.casting_operator_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
@@ -259,7 +261,7 @@ class casting_operator_t( declarations.casting_operator_t, calldef_t ):
                         self._alias = alias
                         break
             else:
-                self._alias = 'as_' + self._generate_valid_name(self.return_type.decl_string) 
+                self._alias = 'as_' + self._generate_valid_name(self.return_type.decl_string)
         return self._alias
     alias = property( _get_alias, decl_wrapper.decl_wrapper_t._set_alias )
 
