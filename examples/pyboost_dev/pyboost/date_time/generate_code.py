@@ -9,7 +9,7 @@ import os
 import sys
 import time
 import shutil
-import settings
+import date_time_settings
 from pygccxml import parser
 from pygccxml import declarations
 from pyplusplus import code_creators
@@ -18,18 +18,18 @@ from pyplusplus import module_builder
 
 class code_generator_t(object):    
     def __init__(self):
-        self.__file = os.path.join( settings.date_time_pypp_include, 'date_time.pypp.hpp' )                        
+        self.__file = os.path.join( date_time_settings.date_time_pypp_include, 'date_time.pypp.hpp' )                        
 
     def _create_xml_file( self ):
         #On windows I have some problems to compile boost.date_time
         #library, so I use xml files generated on linux
-        config = parser.config_t( gccxml_path=settings.gccxml.executable
-                                  , include_paths=[settings.boost.include]
-                                  , define_symbols=settings.defined_symbols
-                                  , undefine_symbols=settings.undefined_symbols )
+        config = parser.config_t( gccxml_path=date_time_settings.gccxml.executable
+                                  , include_paths=[date_time_settings.boost.include]
+                                  , define_symbols=date_time_settings.defined_symbols
+                                  , undefine_symbols=date_time_settings.undefined_symbols )
 
         reader = parser.source_reader_t( config )
-        destination = os.path.join( settings.date_time_pypp_include, 'date_time.pypp.xml' )
+        destination = os.path.join( date_time_settings.date_time_pypp_include, 'date_time.pypp.xml' )
         if sys.platform == 'linux2':
             reader.create_xml_file( self.__file, destination )
         return destination
@@ -37,10 +37,10 @@ class code_generator_t(object):
     def create_module_builder(self):
         date_time_xml_file = self._create_xml_file()
         mb = module_builder.module_builder_t( [ parser.create_gccxml_fc( date_time_xml_file ) ]
-                                              , gccxml_path=settings.gccxml.executable
-                                              , include_paths=[settings.boost.include]
-                                              , define_symbols=settings.defined_symbols
-                                              , undefine_symbols=settings.undefined_symbols
+                                              , gccxml_path=date_time_settings.gccxml.executable
+                                              , include_paths=[date_time_settings.boost.include]
+                                              , define_symbols=date_time_settings.defined_symbols
+                                              , undefine_symbols=date_time_settings.undefined_symbols
                                               , optimize_queries=False)
         if sys.platform == 'win32':
             linux_name = "time_duration<boost::posix_time::time_duration,boost::date_time::time_resolution_traits<boost::date_time::time_resolution_traits_adapted64_impl, micro, 1000000, 6, int> >"
@@ -49,8 +49,13 @@ class code_generator_t(object):
             #small price for generating code from xml and not from sources
             time_duration_impl.name = win_name
 
+        for f_decl in  mb.free_functions():
+            f_decl.alias = f_decl.name
+            f_decl.name = f_decl.demangled_name
+            #f_decl.create_with_signature = True
+            
         mb.run_query_optimizer()
-        
+
         for name, alias in customization_data.name2alias.items():
             decl = mb.class_( name )
             decl.alias = alias
@@ -69,8 +74,8 @@ class code_generator_t(object):
         boost_ns.namespace( 'local_time', recursive=False ).include()
         boost_ns.classes( lambda decl: decl.name.startswith( 'constrained_value<' ) ).include()
                 
-        to_be_removed = [ 'month_str_to_ushort', 'from_stream_type', 'parse_date' ]
-        boost_ns.calldefs( lambda decl: decl.name in to_be_removed ).exclude()
+        for name in [ 'month_str_to_ushort', 'from_stream_type', 'parse_date' ]:
+            boost_ns.calldefs( lambda decl: decl.name.startswith( name ) ).exclude()
 
         to_be_removed = [ 'c_time'
                           , 'duration_traits_long'
@@ -109,54 +114,7 @@ class code_generator_t(object):
         tdi = mb.class_( lambda decl: decl.alias == 'time_duration_impl' )
         tdi_init = tdi.constructor( arg_types=[None, None, None, None], recursive=False)
         tdi_init.ignore=True
-
-
-    def fix_free_template_functions(self, mb):
-        boost_ns = mb.global_ns.namespace( 'boost', recursive=False )
-        boost_ns.free_functions().create_with_signature = True
         
-        #This function fixes some boost.date_time function signatures
-        tmpl_on_return_type = [ 'parse_iso_time'
-                                 , 'parse_undelimited_time_duration'
-                                 , 'parse_delimited_time' 
-                                 , 'parse_delimited_time_duration'
-                                 , 'parse_undelimited_date'
-                                 , 'str_from_delimited_time_duration']
-        functions = boost_ns.free_functions( lambda decl: decl.name in tmpl_on_return_type )
-        for function in functions:
-            function.alias = function.name
-            function.name = declarations.templates.join( function.name
-                                                         , [ function.return_type.decl_string ] )
-            
-        #template on second argument
-        functions = boost_ns.free_functions( 'from_simple_string_type' )
-        functions.create_with_signature = False
-        for function in functions:
-            function.alias = function.name
-            return_args = declarations.templates.split( function.return_type.decl_string )[1]
-            args = [ return_args[0] ]
-            if 'wchar_t' in function.arguments[0].type.decl_string:
-                args.append( 'wchar_t' )
-            else:
-                args.append( 'char' )
-            function.name = declarations.templates.join( function.name, args )
-            
-        tmpl_on_char_type = [ 'to_iso_extended_string_type'
-                              , 'to_iso_string_type' 
-                              , 'to_simple_string_type' 
-                              , 'to_sql_string_type' ]
-
-        functions = boost_ns.free_functions( lambda decl: decl.name in tmpl_on_char_type )
-        for function in functions:
-            function.alias = function.name
-            args = []
-            if 'wchar_t' in function.return_type.decl_string:
-                args.append( 'wchar_t' )
-                function.alias = function.alias + '_w'
-            else:
-                args.append( 'char' )
-            function.name = declarations.templates.join( function.name, args )
-
     def replace_include_directives( self, mb ):
         extmodule = mb.code_creator
         includes = filter( lambda creator: isinstance( creator, code_creators.include_t )
@@ -224,7 +182,6 @@ class code_generator_t(object):
         start_time = time.clock()      
         mb = self.create_module_builder()
         self.filter_declarations(mb)
-        self.fix_free_template_functions( mb )      
         self.add_code( mb )        
         
         mb.build_code_creator( settings.module_name )
