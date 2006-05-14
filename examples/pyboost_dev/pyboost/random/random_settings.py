@@ -7,19 +7,21 @@
 import os
 import sys
 
-_script_dir = os.path.split( os.path.abspath( sys.argv[0] ) )[0]
-environment_path = os.path.normpath( os.path.join( _script_dir, '..', '..', '..', '..' ) )
-
+_script_dir = os.path.abspath( os.getcwd() )
+environment_path = os.path.realpath( os.path.join( _script_dir, '..', '..', '..', '..' ) )
 sys.path.append( environment_path )
 
-from environment import boost, scons, gccxml
+from environment import boost, scons, gccxml, python
 
 module_name = '_random_'
 working_dir = _script_dir
 generated_files_dir = os.path.join( _script_dir, 'generated' )
 unittests_dir = os.path.join( _script_dir, '..', '..', 'unittests', 'random' )
 
+defined_symbols = [ 'BOOST_NO_INCLASS_MEMBER_INITIALIZATION', 'BOOST_NO_INT64_T' ]
 undefined_symbols = [ '__MINGW32__' ]
 #defined_symbols = ['BOOST_DATE_TIME_NO_MEMBER_INIT']
 #if sys.platform == 'win32':
     #defined_symbols.extend( [ 'BOOST_DATE_TIME_DYN_LINK' ] )
+    
+    
