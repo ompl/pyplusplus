@@ -23,8 +23,9 @@ LICENSE = """// Copyright 2004 Roman Yakovenko.
 
 class code_generator_t(object):    
     def __init__(self):
-        self.__file = os.path.join( crc_settings.boost.include
-                                    ,'libs', 'crc', 'crc_test.cpp' )
+        #self.__file = os.path.join( crc_settings.boost.include
+                                    #,'libs', 'crc', 'crc_test.cpp' )
+        self.__file = os.path.join( crc_settings.working_dir, 'crc_export.hpp' )
         
         self.__mb = module_builder.module_builder_t( 
                         [ parser.create_cached_source_fc( 
@@ -40,7 +41,9 @@ class code_generator_t(object):
         boost_ns = self.__mb.global_ns.namespace( 'boost', recursive=False )
         boost_ns.classes( lambda decl: decl.name.startswith( 'crc_basic' ) ).include()
         boost_ns.classes( lambda decl: decl.name.startswith( 'crc_optimal' ) ).include()
-    
+        boost_ns.member_functions( 'process_bytes' ).exclude()
+        boost_ns.member_functions( 'process_block' ).exclude()
+        
     def prepare_decls( self ):
         boost_ns = self.__mb.namespace( 'boost' )
         classes = boost_ns.classes( lambda decl: decl.name.startswith( 'crc_basic' ) )

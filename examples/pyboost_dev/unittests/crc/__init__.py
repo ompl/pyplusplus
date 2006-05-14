@@ -6,14 +6,15 @@
 
 import _crc_
 
-print dir( _crc_ )
+#print dir( _crc_ )
 
-from _crc_ import crc_16_type as crc16
-from _crc_ import crc_32_type as crc32
-from _crc_ import crc_ccitt_type as crc_ccitt
-from _crc_ import fast_crc_type as fast_crc
+from _crc_ import crc_16_type
+from _crc_ import crc_32_type
+from _crc_ import crc_ccitt_type
+from _crc_ import crc_xmodem_type
 
-__optimal__ = [ crc16, crc32, crc_ccitt, fast_crc ]
+
+__optimal__ = [ crc_16_type, crc_32_type, crc_ccitt_type, crc_xmodem_type ]
 
 from _crc_ import crc_basic_1
 from _crc_ import crc_basic_16
@@ -39,3 +40,4 @@ def process_bytes( self, data ):
 
 for cls in __all__:
     cls.process_bytes = process_bytes
+    cls.process_block = process_bytes
