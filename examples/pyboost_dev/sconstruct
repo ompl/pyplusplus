@@ -1,0 +1,22 @@
+#! /usr/bin/python
+# Copyright 2004 Roman Yakovenko.
+# Distributed under the Boost Software License, Version 1.0. (See
+# accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+
+import sys
+sys.path.append( './../..' )
+import environment
+
+env = Environment(
+      LIBS=['boost_python']
+    , LIBPATH=[ environment.boost.libs, environment.python.libs ]
+    , CPPPATH=[ environment.boost.include, environment.python.include ]
+    , SHLIBPREFIX=''
+    , SHLIBSUFFIX=environment.scons.suffix
+)
+
+Export( 'env' )
+env.SConscript( ['pyboost/date_time/sconscript'] )
+env.SConscript( ['pyboost/crc/sconscript'] )
+env.SConscript( ['pyboost/random/sconscript'] )
