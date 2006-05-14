@@ -113,6 +113,13 @@ class calldef_wrapper_t( declaration_based.declaration_based_t):
         msg = msg + 'Reason: function returns reference to local variable!'
         return 'throw std::logic_error("%s");' % msg
 
+    def throw_specifier_code( self ):
+        if not self.declaration.exceptions:
+            return ''
+        exceptions = map( lambda exception: 
+                            algorithm.create_identifier( self, declarations.full_name( exception ) )
+                          , self.declaration.exceptions )
+        return ' throw( ' + self.PARAM_SEPARATOR.join( exceptions ) + ' )'
     
 class free_function_t( calldef_t ):   
     def __init__( self, function, parent=None ):
@@ -210,7 +217,7 @@ class mem_fun_pv_wrapper_t( calldef_wrapper_t ):
         calldef_wrapper_t.__init__( self, function=function, parent=parent )
 
     def create_declaration(self): 
-        template = 'virtual %(return_type)s %(name)s( %(args)s )%(constness)s'
+        template = 'virtual %(return_type)s %(name)s( %(args)s )%(constness)s%(throw)s'
         
         constness = ''
         if self.declaration.has_const:
@@ -221,6 +228,7 @@ class mem_fun_pv_wrapper_t( calldef_wrapper_t ):
             , 'name' : self.declaration.name
             , 'args' : self.args_declaration()
             , 'constness' : constness
+            , 'throw' : self.throw_specifier_code()
         }   
 
     def create_body( self ):
@@ -299,7 +307,7 @@ class mem_fun_v_wrapper_t( calldef_wrapper_t ):
                 , has_const=self.declaration.has_const )
     
     def create_declaration(self, name): 
-        template = 'virtual %(return_type)s %(name)s( %(args)s )%(constness)s'
+        template = 'virtual %(return_type)s %(name)s( %(args)s )%(constness)s %(throw)s'
         
         constness = ''
         if self.declaration.has_const:
@@ -310,6 +318,7 @@ class mem_fun_v_wrapper_t( calldef_wrapper_t ):
             , 'name' : name
             , 'args' : self.args_declaration()
             , 'constness' : constness
+            , 'throw' : self.throw_specifier_code()
         }   
 
     def create_virtual_body(self):
@@ -404,7 +413,7 @@ class mem_fun_protected_wrapper_t( calldef_wrapper_t ):
                 , has_const=self.declaration.has_const )
     
     def create_declaration(self, name): 
-        template = '%(return_type)s %(name)s( %(args)s )%(constness)s'
+        template = '%(return_type)s %(name)s( %(args)s )%(constness)s%(throw)s'
         
         constness = ''
         if self.declaration.has_const:
@@ -415,6 +424,7 @@ class mem_fun_protected_wrapper_t( calldef_wrapper_t ):
             , 'name' : name
             , 'args' : self.args_declaration()
             , 'constness' : constness
+            , 'throw' : self.throw_specifier_code()
         }   
 
     def create_body(self):
@@ -484,12 +494,13 @@ class mem_fun_protected_s_wrapper_t( calldef_wrapper_t ):
                 , arguments_types=map( lambda arg: arg.type, self.declaration.arguments ) )
     
     def create_declaration(self, name): 
-        template = 'static %(return_type)s %(name)s( %(args)s )'
+        template = 'static %(return_type)s %(name)s( %(args)s )%(throw)s'
         
         return template % {
             'return_type' : self.declaration.return_type.decl_string
             , 'name' : name
             , 'args' : self.args_declaration()
+            , 'throw' : self.throw_specifier_code()
         }   
 
     def create_body(self):
@@ -559,7 +570,7 @@ class mem_fun_protected_v_wrapper_t( calldef_wrapper_t ):
                 , has_const=self.declaration.has_const )
     
     def create_declaration(self, name): 
-        template = 'virtual %(return_type)s %(name)s( %(args)s )%(constness)s'
+        template = 'virtual %(return_type)s %(name)s( %(args)s )%(constness)s%(throw)s'
         
         constness = ''
         if self.declaration.has_const:
@@ -570,6 +581,7 @@ class mem_fun_protected_v_wrapper_t( calldef_wrapper_t ):
             , 'name' : name
             , 'args' : self.args_declaration()
             , 'constness' : constness
+            , 'throw' : self.throw_specifier_code()
         }   
 
     def create_virtual_body(self):
@@ -646,7 +658,7 @@ class mem_fun_protected_pv_wrapper_t( calldef_wrapper_t ):
                 , has_const=self.declaration.has_const )
 
     def create_declaration(self): 
-        template = 'virtual %(return_type)s %(name)s( %(args)s )%(constness)s'
+        template = 'virtual %(return_type)s %(name)s( %(args)s )%(constness)s%(throw)s'
         
         constness = ''
         if self.declaration.has_const:
@@ -657,6 +669,7 @@ class mem_fun_protected_pv_wrapper_t( calldef_wrapper_t ):
             , 'name' : self.declaration.name
             , 'args' : self.args_declaration()
             , 'constness' : constness
+            , 'throw' : self.throw_specifier_code()
         }   
 
     def create_body( self ):
@@ -700,7 +713,7 @@ class mem_fun_private_v_wrapper_t( calldef_wrapper_t ):
                 , has_const=self.declaration.has_const )
 
     def create_declaration(self): 
-        template = 'virtual %(return_type)s %(name)s( %(args)s )%(constness)s'
+        template = 'virtual %(return_type)s %(name)s( %(args)s )%(constness)s%(throw)s'
         
         constness = ''
         if self.declaration.has_const:
@@ -711,6 +724,7 @@ class mem_fun_private_v_wrapper_t( calldef_wrapper_t ):
             , 'name' : self.declaration.name
             , 'args' : self.args_declaration()
             , 'constness' : constness
+            , 'throw' : self.throw_specifier_code()
         }   
 
     def create_body( self ):
