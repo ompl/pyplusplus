@@ -20,15 +20,15 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def customize( self, mb ):
         mb.global_ns.exclude()
-
-        rational = mb.class_('rational<long int>')
+    
+        rational = mb.class_('rational<long>')
         rational.include()
         rational.alias = "pyrational"
         
         r_assign = rational.calldef( 'assign', recursive=False )
         r_assign.call_policies = call_policies.return_self()
 
-        foperators = mb.free_operators( lambda decl: 'rational<long int>' in decl.decl_string )
+        foperators = mb.free_operators( lambda decl: 'rational<long>' in decl.decl_string )
         foperators.include()
             
         bad_rational = mb.class_('bad_rational' )
