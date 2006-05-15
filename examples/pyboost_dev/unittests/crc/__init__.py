@@ -6,8 +6,6 @@
 
 import _crc_
 
-#print dir( _crc_ )
-
 from _crc_ import crc_16_type
 from _crc_ import crc_32_type
 from _crc_ import crc_ccitt_type
@@ -35,8 +33,12 @@ __basic__ = basic.values()
 __all__ = __optimal__ + __basic__
 
 def process_bytes( self, data ):
-    for byte in data:
-        self.process_byte( byte )
+    if isinstance( data, str ):
+        for byte in data:
+            self.process_byte( ord( byte ) )
+    else:
+        for byte in data:
+            self.process_byte( byte )
 
 for cls in __all__:
     cls.process_bytes = process_bytes
