@@ -12,7 +12,6 @@ import shutil
 import crc_settings
 from pygccxml import parser
 from pygccxml import declarations
-from pyplusplus import code_creators
 from pyplusplus import module_builder
 
 LICENSE = """// Copyright 2004 Roman Yakovenko.
@@ -23,8 +22,6 @@ LICENSE = """// Copyright 2004 Roman Yakovenko.
 
 class code_generator_t(object):    
     def __init__(self):
-        #self.__file = os.path.join( crc_settings.boost.include
-                                    #,'libs', 'crc', 'crc_test.cpp' )
         self.__file = os.path.join( crc_settings.working_dir, 'crc_export.hpp' )
         
         self.__mb = module_builder.module_builder_t( 
@@ -44,7 +41,7 @@ class code_generator_t(object):
         boost_ns.member_functions( 'process_bytes' ).exclude()
         boost_ns.member_functions( 'process_block' ).exclude()
         
-    def prepare_decls( self ):
+    def prepare_declarations( self ):
         boost_ns = self.__mb.namespace( 'boost' )
         classes = boost_ns.classes( lambda decl: decl.name.startswith( 'crc_basic' ) )
         classes.always_expose_using_scope = True
@@ -72,21 +69,7 @@ class code_generator_t(object):
                 cls.alias = 'slow_crc_type'
             else:
                 print 'no alias for class ', cls.name
-    def beautify_code( self ):
-        extmodule = self.__mb.code_creator
-        position = extmodule.last_include_index() + 1
-        extmodule.adopt_creator( code_creators.namespace_using_t( 'boost' )
-                                 , position )
-        self.__mb.calldefs().create_with_signature = True
-        
-    def replace_include_directives( self ):
-        extmodule = self.__mb.code_creator
-        includes = filter( lambda creator: isinstance( creator, code_creators.include_t )
-                           , extmodule.creators )
-        includes = includes[1:] #all includes except boost\python.hpp
-        map( lambda creator: extmodule.remove_creator( creator ), includes )
-        extmodule.adopt_include( code_creators.include_t( header='boost/crc.hpp' ) )
-
+                
     def customize_extmodule( self ):
         global LICENSE
         extmodule = self.__mb.code_creator
@@ -96,8 +79,8 @@ class code_generator_t(object):
         extmodule.user_defined_directories.append( crc_settings.working_dir )
         extmodule.user_defined_directories.append( crc_settings.generated_files_dir )
         extmodule.precompiled_header = 'boost/python.hpp'
-        self.replace_include_directives()
-        self.beautify_code( )
+        self.__mb.code_creator.replace_included_headers( ['boost/crc.hpp'] )
+        #self.__mb.code_creator.add_namespace_usage( 'boost' )
 
     def write_files( self ):
         self.__mb.write_module( os.path.join( crc_settings.generated_files_dir, 'crc.pypp.cpp' ) )
@@ -106,7 +89,7 @@ class code_generator_t(object):
         start_time = time.clock()      
         self.filter_declarations()
 
-        self.prepare_decls()
+        self.prepare_declarations()
         
         self.__mb.build_code_creator( crc_settings.module_name )
         
