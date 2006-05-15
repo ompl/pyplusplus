@@ -10,10 +10,9 @@ import sys
 import time
 import shutil
 import date_time_settings
+import customization_data
 from pygccxml import parser
 from pygccxml import declarations
-from pyplusplus import code_creators
-import customization_data
 from pyplusplus import module_builder
 
 class code_generator_t(object):    
@@ -115,15 +114,6 @@ class code_generator_t(object):
         tdi_init = tdi.constructor( arg_types=[None, None, None, None], recursive=False)
         tdi_init.ignore=True
         
-    def replace_include_directives( self, mb ):
-        extmodule = mb.code_creator
-        includes = filter( lambda creator: isinstance( creator, code_creators.include_t )
-                           , extmodule.creators )
-        includes = includes[1:] #all includes except boost\python.hpp
-        map( lambda creator: extmodule.remove_creator( creator ), includes )
-        for include_header in customization_data.includes:            
-            extmodule.adopt_include( code_creators.include_t( header=include_header ) )
-
     def add_code( self, mb ):
         as_number_template = 'def( "as_number", &%(class_def)s::operator %(class_def)s::value_type, bp::default_call_policies() )'
         
@@ -147,36 +137,27 @@ class code_generator_t(object):
                 
     def beautify_code( self, mb ):
         extmodule = mb.code_creator
-        position = extmodule.last_include_index() + 1
-        extmodule.adopt_creator( code_creators.namespace_using_t( 'boost' )
-                                 , position )
-        position += 1
-        extmodule.adopt_creator( code_creators.namespace_using_t( 'boost::date_time' )
-                                 , position )
-        position += 1
-        
+        extmodule.add_namespace_usage( 'boost' )
+        extmodule.add_namespace_usage( 'boost::date_time' )
         for full_ns_name, alias in customization_data.ns_aliases.items():
-            creator = code_creators.namespace_alias_t( alias=alias
-                                                       , full_namespace_name=full_ns_name )
-            extmodule.adopt_creator( creator, position )
-            position += 1
+            extmodule.add_namespace_alias( alias, full_ns_name )
 
     def customize_extmodule( self, mb ):
         extmodule = mb.code_creator
         #beautifying include code generation
         extmodule.license = customization_data.license
-        extmodule.user_defined_directories.append( settings.boost.include )
-        extmodule.user_defined_directories.append( settings.working_dir )
-        extmodule.user_defined_directories.append( settings.generated_files_dir )
+        extmodule.user_defined_directories.append( date_time_settings.boost.include )
+        extmodule.user_defined_directories.append( date_time_settings.working_dir )
+        extmodule.user_defined_directories.append( date_time_settings.generated_files_dir )
         extmodule.license = customization_data.license
         extmodule.precompiled_header = 'boost/python.hpp'
-        self.replace_include_directives( mb )
+        mb.code_creator.replace_included_headers( customization_data.includes )
         self.beautify_code( mb )
         
     def write_files( self, mb ):
-        mb.split_module( settings.generated_files_dir )
-        shutil.copyfile( os.path.join( settings.date_time_pypp_include, 'date_time_wrapper.hpp' )
-                         , os.path.join( settings.generated_files_dir, 'date_time_wrapper.hpp' ) )
+        mb.split_module( date_time_settings.generated_files_dir )
+        shutil.copyfile( os.path.join( date_time_settings.date_time_pypp_include, 'date_time_wrapper.hpp' )
+                         , os.path.join( date_time_settings.generated_files_dir, 'date_time_wrapper.hpp' ) )
 
     def create(self):
         start_time = time.clock()      
@@ -184,7 +165,7 @@ class code_generator_t(object):
         self.filter_declarations(mb)
         self.add_code( mb )        
         
-        mb.build_code_creator( settings.module_name )
+        mb.build_code_creator( date_time_settings.module_name )
         
         self.customize_extmodule( mb )
         self.write_files( mb )
