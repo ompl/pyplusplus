@@ -7,6 +7,7 @@ import os
 import types
 import license
 import include
+import namespace    
 import compound
 import algorithm
 import module_body
@@ -109,7 +110,29 @@ class module_t(compound.compound_t):
                 return i
         else:
             raise RuntimeError( "include_t creator has not been found." )
+    
+    def replace_included_headers( self, headers, leave_boost_python_header=True ):
+        to_be_removed = []
+        for creator in self.creators:
+            if isinstance( creator, include.include_t ):
+                to_be_removed.append( creator )
+            elif isinstance( creator, module_body.module_body_t ):
+                break
         
+        boost_python_treated = False
+        for creator in to_be_removed:
+            if not boost_python_treated:
+                boost_python_treated = True
+                if 'boost/python.hpp' in creator.header: 
+                    if not leave_boost_python_header:
+                        self.remove_creator( creator )
+                else:
+                    self.remove_creator( creator )
+            else:
+                self.remove_creator( creator )
+        map( lambda header: self.adopt_include( include.include_t( header=header ) )
+             , headers )
+
     
     def adopt_include(self, include_creator):
         """Insert an L{include_t} object.
@@ -168,4 +191,25 @@ class module_t(compound.compound_t):
         code = compound.compound_t.create_internal_code( self.creators[index:] )
         code = self.unindent(code)        
         return os.linesep.join( includes ) + 2 * os.linesep + code + os.linesep
-    
+        
+    def add_namespace_usage( self, namespace_name ):
+        self.adopt_creator( namespace.namespace_using_t( 'boost' )
+                            , self.last_include_index() + 1 )
+
+    def add_namespace_alias( self, alias, full_namespace_name ):
+        self.adopt_creator( namespace.namespace_alias_t( 
+                                alias=alias
+                                , full_namespace_name=full_namespace_name )
+                            , self.last_include_index() + 1 )
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
