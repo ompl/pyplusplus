@@ -46,3 +46,10 @@ from pyplusplus.decl_wrappers import scopedef_t
 from pyplusplus.decl_wrappers import print_declarations
 
 import call_policies
+
+from pygccxml import utils as __pygccxml_utils
+from pyplusplus import _logging_ as __pyplusplus_logging
+
+def set_logger_level( level ):
+    __pygccxml_utils.logger.setLevel( level )
+    __pyplusplus_logging.logger.setLevel( level )
