@@ -55,6 +55,7 @@ class writer_t(object):
         @param content: The content of the file
         @type content: str
         """
+        fname = os.path.split( fpath )[1]
         _logging_.logger.debug( 'write code to file "%s" - started' % fpath )
         start_time = time.clock()
         fcontent_new = []
@@ -80,6 +81,6 @@ class writer_t(object):
         f = file( fpath, 'w+b' )
         f.write( fcontent_new )
         f.close()
-        _logging_.logger.debug( 'write code - done( %f seconds )' % ( time.clock() - start_time ) )
+        _logging_.logger.info( 'file "%s" - updated( %f seconds )' % ( fname, time.clock() - start_time ) )
 
     write_file = staticmethod( write_file )
