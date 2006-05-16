@@ -135,7 +135,7 @@ class module_builder_t(object):
         map( lambda calldef: calldef.set_call_policies( call_policies_resolver( calldef ) )
              , calldefs )
     
-    def print_declarations(self, decl=None):
+    def print_declarations(self, decl=None, detailed=True, recursive=True, writer=sys.stdout.write):
         """
         This function will print detailed description of all declarations or
         some specific one.
@@ -145,7 +145,7 @@ class module_builder_t(object):
         """
         if None is decl:
             decl = self.global_ns
-        decl_wrappers.print_declarations( decl )
+        decl_wrappers.print_declarations( decl, detailed, recursive, writer )
         
     def build_code_creator( self
                        , module_name
