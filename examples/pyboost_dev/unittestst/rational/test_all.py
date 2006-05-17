@@ -6,7 +6,7 @@
 import sys
 sys.path.append( '../..' )
 
-import rational
+from pyboost import rational
 import unittest
 
 class tester_t( unittest.TestCase ):

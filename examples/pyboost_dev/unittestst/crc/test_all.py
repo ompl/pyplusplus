@@ -7,7 +7,7 @@
 import sys
 sys.path.append( '../..' )
 
-import crc
+from pyboost import crc
 import random
 import unittest
 

@@ -7,7 +7,7 @@
 import sys
 sys.path.append( '../..' )
 
-import boost_random
+from pyboost import boost_random
 import unittest
 
 class tester_t( unittest.TestCase ):

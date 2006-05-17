@@ -5,11 +5,14 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import time
-import date_time
-from date_time import gregorian
-from date_time import posix_time
-from date_time import to_iso_string
-from date_time import to_simple_string
+import sys
+sys.path.append( '../..' )
+
+from pyboost import date_time
+from pyboost.date_time import gregorian
+from pyboost.date_time import posix_time
+from pyboost.date_time import to_iso_string
+from pyboost.date_time import to_simple_string
 import unittest
 
 class tester_t( unittest.TestCase ):
