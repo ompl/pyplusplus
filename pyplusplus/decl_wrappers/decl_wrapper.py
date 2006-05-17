@@ -47,8 +47,8 @@ class decl_wrapper_t(object):
         if not self._alias:
             if declarations.templates.is_instantiation( self.name ):
                 if isinstance( self, declarations.class_t ) \
-                    and 1 == len( set( map( lambda typedef: typedef.name, self.typedefs ) ) ):
-                        self._alias = self.typedefs[0].name
+                    and 1 == len( set( map( lambda typedef: typedef.name, self.aliases ) ) ):
+                        self._alias = self.aliases[0].name
                 else:
                     self._alias = self._generate_valid_name()
             else:

@@ -191,7 +191,10 @@ class module_t(compound.compound_t):
         code = compound.compound_t.create_internal_code( self.creators[index:] )
         code = self.unindent(code)        
         return os.linesep.join( includes ) + 2 * os.linesep + code + os.linesep
-        
+    
+    def add_include( self, header ):
+        self.adopt_include( include.include_t( header=header ) )
+    
     def add_namespace_usage( self, namespace_name ):
         self.adopt_creator( namespace.namespace_using_t( 'boost' )
                             , self.last_include_index() + 1 )
