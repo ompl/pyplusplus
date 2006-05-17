@@ -4,6 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
+import sys
 import time
 import types
 from sets import Set as set
