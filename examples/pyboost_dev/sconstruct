@@ -19,5 +19,5 @@ env = Environment(
 Export( 'env' )
 env.SConscript( ['pyboost/date_time/sconscript'] )
 env.SConscript( ['pyboost/crc/sconscript'] )
-env.SConscript( ['pyboost/random/sconscript'] )
+env.SConscript( ['pyboost/boost_random/sconscript'] )
 env.SConscript( ['pyboost/rational/sconscript'] )

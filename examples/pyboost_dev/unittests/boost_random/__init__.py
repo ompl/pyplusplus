@@ -6,6 +6,10 @@
 
 import _random_
 
+#TODO: 
+#  normal_distribution, cauchy_distribution
+# are missed default argument
+
 #generators:
 from _random_ import ecuyer1988 
 from _random_ import hellekalek1995
@@ -488,5 +492,17 @@ def variate_generator( generator, distribution ):
     if not valid_distrs.has_key( dcls ):
         raise RuntimeError( 'Unable to create variate_generator(%s, %s) - takoe sochetanie does not exist!'
                             % ( gcls.__name__, dcls.__name__ ) )
-    return valid_distrs[dcls]
+    return valid_distrs[dcls]( generator, distribution )
 
+def variate_generator_exists( generator, distribution ):
+    global __vg
+    global distributions
+    gcls = generator.__class__
+    if not __vg.has_key( gcls ):
+        return False
+    dcls = distribution.__class__
+    if dcls not in distributions:
+        return False
+    
+    valid_distrs = __vg[ gcls ]
+    return valid_distrs.has_key( dcls )
