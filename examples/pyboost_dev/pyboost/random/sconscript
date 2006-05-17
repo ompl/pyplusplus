@@ -26,7 +26,7 @@ def get_target():
                          , random_settings.module_name + random_settings.scons.suffix )
 
 local_env = env.Copy()
-local_env.Append( CPPPATH=[ random_settings.generated_files_dir ] )
+local_env.Append( CPPPATH=[ random_settings.working_dir, random_settings.generated_files_dir ] )
 local_env.Append( CCFLAGS=get_ccflags() )
 
 _random_ = local_env.SharedLibrary( target=random_settings.module_name 

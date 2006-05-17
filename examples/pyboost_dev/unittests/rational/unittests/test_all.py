@@ -9,7 +9,6 @@ sys.path.append( '../..' )
 import rational
 import unittest
 
-
 class tester_t( unittest.TestCase ):
     def __init__( self, *args ):
         unittest.TestCase.__init__( self, *args )
@@ -72,6 +71,20 @@ class tester_t( unittest.TestCase ):
         self.failUnless( lcm(-10, -10) ==10 )
         self.failUnless( lcm( 25, -10) ==50 )
 
+    def test_abs( self ):
+        pyrational = rational.rational
+        
+        self.failUnless( abs( pyrational( 28, 7) ) == pyrational( 28, 7) )
+        self.failUnless( abs( pyrational( -28, 7) ) == pyrational( 28, 7) )
+        self.failUnless( abs( pyrational( 28, -7) ) == pyrational( 28, 7) )
+
+    def test_conversion( self ):
+        pyrational = rational.rational
+        
+        half = pyrational( 1, 2 )
+        self.failUnless( float(half) == 0.5 )
+        self.failUnless( int(half) == 0 )
+    
 def create_suite():
     suite = unittest.TestSuite()    
     suite.addTest( unittest.makeSuite(tester_t) )

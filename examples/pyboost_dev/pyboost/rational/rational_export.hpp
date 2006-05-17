@@ -16,6 +16,9 @@ inline void instantiate(){
     sizeof( pyrational );
     boost::gcd<long int>( 1, 1);
     boost::lcm<long int>( 1, 1);
+    boost::abs( pyrational(1) );
+    boost::rational_cast<double>( pyrational(1) );
+    boost::rational_cast<long int>( pyrational(1) );
 }
 
 } }

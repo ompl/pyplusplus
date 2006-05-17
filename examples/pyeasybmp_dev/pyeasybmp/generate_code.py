@@ -6,7 +6,6 @@
 
 import os
 from environment import settings
-from pyplusplus import code_creators
 from pyplusplus import module_builder
 
 
@@ -36,7 +35,7 @@ def export():
     mb.code_creator.license = license
     mb.code_creator.user_defined_directories.append( settings.easybmp_path )
     mb.code_creator.precompiled_header = 'boost/python.hpp'
-    mb.code_creator.adopt_creator( code_creators.include_t( header=header_file ), 2 )
+    mb.code_creator.replace_included_headers( [header_file] )
     
     mb.write_module( os.path.join( settings.generated_files_dir, settings.module_name + '.cpp') )
 

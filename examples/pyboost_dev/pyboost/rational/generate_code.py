@@ -59,6 +59,11 @@ class code_generator_t(object):
         
         self.__mb.free_function( 'lcm<long>' ).include()
         self.__mb.free_function( 'gcd<long>' ).include()
+        self.__mb.free_function( 'rational_cast<double, long>' ).include()
+        self.__mb.free_function( 'rational_cast<double, long>' ).alias = 'to_double'
+        self.__mb.free_function( 'rational_cast<long, long>' ).include()
+        self.__mb.free_function( 'rational_cast<long, long>' ).alias = 'to_long'
+        self.__mb.free_function( 'abs<long>' ).include()
         
     def prepare_decls( self ):
         self.__mb.class_('rational<long>').alias = 'rational'

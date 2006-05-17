@@ -58,7 +58,7 @@ class code_generator_t(object):
                 for arg in f.arguments:
                     if arg.default_value == 'InitRem':
                         arg.default_value = InitRem
-            aliases = set( map( lambda decl: decl.name, cls.typedefs ) )
+            aliases = set( map( lambda decl: decl.name, cls.aliases ) )
             if 'optimal_crc_type' in aliases:
                 aliases.remove( 'optimal_crc_type' )
             if len( aliases ) == 1:
