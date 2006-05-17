@@ -15,8 +15,8 @@ from environment import boost, scons, gccxml, python
 
 module_name = '_rational_'
 working_dir = _script_dir
-generated_files_dir = os.path.join( _script_dir, 'generated' )
-unittests_dir = os.path.join( _script_dir, '..', '..', 'unittests', 'rational' )
+generated_files_dir = os.path.join( _script_dir, '..', '..', 'pyboost', 'rational', 'generated' )
+
 
 defined_symbols = ['BOOST_NO_INCLASS_MEMBER_INITIALIZATION']
 undefined_symbols = [ '__MINGW32__' ]

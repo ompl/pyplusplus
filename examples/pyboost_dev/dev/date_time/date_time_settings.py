@@ -16,7 +16,7 @@ from environment import boost, scons, gccxml, python
 module_name = '_date_time_'
 working_dir = _script_dir
 generated_files_dir = os.path.join( _script_dir, 'generated' )
-unittests_dir = os.path.realpath( os.path.join( _script_dir, '..', '..', 'unittests', 'date_time' ) )
+generated_files_dir = os.path.join( _script_dir, '..', '..', 'pyboost', 'date_time', 'generated' )
 
 date_time_pypp_include = os.path.join( _script_dir, 'include' )
 
