@@ -13,9 +13,13 @@ env = Environment(
     , LIBPATH=[ environment.boost.libs, environment.python.libs ]
     , CPPPATH=[ environment.boost.include, environment.python.include ]
     , SHLIBPREFIX=''
-    , SHLIBSUFFIX=environment.scons.suffix
-    , no_import_lib=1
+    , SHLIBSUFFIX=environment.scons.suffix  
 )
+
+if sys.platform == 'win32':
+    env.Replace( no_import_lib=1 )
+else:
+    env.Append( CCFLAGS=' -ggdb3 -DNDEBUG -O3' )
 
 Export( 'env' )
 env.SConscript( ['dev/date_time/sconscript'] )

@@ -152,6 +152,8 @@ class code_generator_t(object):
         extmodule.user_defined_directories.append( date_time_settings.generated_files_dir )
         extmodule.license = customization_data.license
         extmodule.precompiled_header = 'boost/python.hpp'
+        extmodule.replace_included_headers( customization_data.includes )
+
         self.beautify_code( mb )
         
     def write_files( self, mb ):

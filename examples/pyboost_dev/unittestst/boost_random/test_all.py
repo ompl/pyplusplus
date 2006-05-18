@@ -39,7 +39,6 @@ class tester_t( unittest.TestCase ):
     def instantiate_dist( self, urng, dist ):
         if not boost_random.variate_generator_exists( urng, dist ):
             return
-            
         gen1 = boost_random.variate_generator( urng, dist)
         gen2 = boost_random.variate_generator( urng, dist)
         self.randomness_tester( gen1 )
