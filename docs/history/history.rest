@@ -5,6 +5,27 @@ pyplusplus development history
 .. contents:: Table of contents
 
 -------------
+Version 0.8.0
+-------------
+
+1. `pyplusplus`_ "user guide" functionality has been improved. Now `pyplusplus`_
+   can answer few questions:
+   
+   * why this declaration could not be exported
+   
+   * why this function could not be overriden from Python
+   
+2. `pyplusplus`_ can suggest an alias for exported classes.
+
+3. Small redesign has been done - now it is much easier to understand and 
+   maintain code creators, that creates code for C++ functions.
+   
+4. Exception specification is taken into account, when `pyplusplus`_ exports
+   member functions.
+   
+5. Member variables, that are pointers exported correctly.
+
+-------------
 Version 0.7.0
 -------------
 
