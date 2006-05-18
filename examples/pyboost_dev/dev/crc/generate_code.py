@@ -9,6 +9,7 @@ import os
 import sys
 import time
 import shutil
+import logging
 import crc_settings
 from pygccxml import parser
 from pygccxml import declarations
@@ -22,6 +23,7 @@ LICENSE = """// Copyright 2004 Roman Yakovenko.
 
 class code_generator_t(object):    
     def __init__(self):
+        module_builder.set_logger_level( logging.INFO )
         self.__file = os.path.join( crc_settings.working_dir, 'crc_export.hpp' )
         
         self.__mb = module_builder.module_builder_t( 

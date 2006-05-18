@@ -9,10 +9,10 @@ import os
 import sys
 import time
 import shutil
+import logging
 import rational_settings
 from pygccxml import parser
 from pygccxml import declarations
-from pyplusplus import code_creators
 from pyplusplus import module_builder
 from pyplusplus.module_builder import call_policies
 
@@ -24,6 +24,8 @@ LICENSE = """// Copyright 2004 Roman Yakovenko.
 
 class code_generator_t(object):    
     def __init__(self):
+        module_builder.set_logger_level( logging.INFO )
+        
         self.__file = os.path.join( rational_settings.working_dir, 'rational_export.hpp' )
         
         self.__mb = module_builder.module_builder_t( 
