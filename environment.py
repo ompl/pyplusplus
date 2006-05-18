@@ -5,7 +5,8 @@ import getpass
 class boost:
     libs = ''
     include = ''
-
+    include_linux = ''
+    
 class python:
     libs = ''
     include = ''
@@ -29,6 +30,7 @@ if 'roman' in getpass.getuser():
         scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope' ]
         boost.libs = 'd:/boost_cvs/bin'
         boost.include = 'd:/boost_cvs'
+        boost.include_linux = '/home/roman/boost_cvs'
         python.libs = 'c:/python/libs'
         python.include = 'c:/python/include'
         gccxml.executable = 'd:/gccxml_cvs/gccxml-build/bin/release/gccxml.exe'

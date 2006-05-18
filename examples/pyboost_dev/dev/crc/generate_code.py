@@ -40,6 +40,7 @@ class code_generator_t(object):
         boost_ns.classes( lambda decl: decl.name.startswith( 'crc_optimal' ) ).include()
         boost_ns.member_functions( 'process_bytes' ).exclude()
         boost_ns.member_functions( 'process_block' ).exclude()
+        boost_ns.member_operators( symbol='()' ).exclude()
         
     def prepare_declarations( self ):
         boost_ns = self.__mb.namespace( 'boost' )

@@ -4,6 +4,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import sys
 import _random_
 
 #TODO: 
@@ -20,7 +21,8 @@ from _random_ import lagged_fibonacci2281
 from _random_ import lagged_fibonacci23209
 from _random_ import lagged_fibonacci3217
 from _random_ import lagged_fibonacci4423
-from _random_ import lagged_fibonacci44497
+if sys.platform != 'win32':
+    from _random_ import lagged_fibonacci44497
 from _random_ import lagged_fibonacci607
 from _random_ import lagged_fibonacci9689
 from _random_ import minstd_rand
@@ -44,8 +46,7 @@ generators = [
     , lagged_fibonacci2281
     , lagged_fibonacci23209
     , lagged_fibonacci3217
-    , lagged_fibonacci4423
-    , lagged_fibonacci44497
+    , lagged_fibonacci4423    
     , lagged_fibonacci607
     , lagged_fibonacci9689
     , minstd_rand
@@ -61,6 +62,8 @@ generators = [
     , taus88
 ]
 
+if sys.platform != 'win32':
+    generators.append( lagged_fibonacci44497 )
 #distribution
 from _random_ import bernoulli_distribution
 bernoulli_distribution.__call__ = _random_.py_bernoulli_distribution.call
@@ -264,21 +267,21 @@ __vg[ lagged_fibonacci4423 ][ uniform_real             ] = _random_.variate_gene
 #__vg[  ][ uniform_int             ] = _random_.does not exist
 #__vg[  ][ uniform_smallint         ] = _random_.does not exist
 
-
-__vg[ lagged_fibonacci44497 ][ bernoulli_distribution   ] = _random_.variate_generator_lagged_fibonacci44497__bernoulli_distribution  
-__vg[ lagged_fibonacci44497 ][ binomial_distribution    ] = _random_.variate_generator_lagged_fibonacci44497__binomial_distribution   
-__vg[ lagged_fibonacci44497 ][ cauchy_distribution      ] = _random_.variate_generator_lagged_fibonacci44497__cauchy_distribution     
-__vg[ lagged_fibonacci44497 ][ exponential_distribution ] = _random_.variate_generator_lagged_fibonacci44497__exponential_distribution
-__vg[ lagged_fibonacci44497 ][ gamma_distribution       ] = _random_.variate_generator_lagged_fibonacci44497__gamma_distribution      
-__vg[ lagged_fibonacci44497 ][ geometric_distribution   ] = _random_.variate_generator_lagged_fibonacci44497__geometric_distribution  
-__vg[ lagged_fibonacci44497 ][ lognormal_distribution   ] = _random_.variate_generator_lagged_fibonacci44497__lognormal_distribution  
-__vg[ lagged_fibonacci44497 ][ normal_distribution      ] = _random_.variate_generator_lagged_fibonacci44497__normal_distribution     
-__vg[ lagged_fibonacci44497 ][ poisson_distribution     ] = _random_.variate_generator_lagged_fibonacci44497__poisson_distribution    
-__vg[ lagged_fibonacci44497 ][ triangle_distribution    ] = _random_.variate_generator_lagged_fibonacci44497__triangle_distribution   
-__vg[ lagged_fibonacci44497 ][ uniform_on_sphere        ] = _random_.variate_generator_lagged_fibonacci44497__uniform_on_sphere       
-__vg[ lagged_fibonacci44497 ][ uniform_real             ] = _random_.variate_generator_lagged_fibonacci44497__uniform_real            
-#__vg[  ][ uniform_int             ] = _random_.does not exist
-#__vg[  ][ uniform_smallint         ] = _random_.does not exist
+if sys.platform != 'win32':
+    __vg[ lagged_fibonacci44497 ][ bernoulli_distribution   ] = _random_.variate_generator_lagged_fibonacci44497__bernoulli_distribution  
+    __vg[ lagged_fibonacci44497 ][ binomial_distribution    ] = _random_.variate_generator_lagged_fibonacci44497__binomial_distribution   
+    __vg[ lagged_fibonacci44497 ][ cauchy_distribution      ] = _random_.variate_generator_lagged_fibonacci44497__cauchy_distribution     
+    __vg[ lagged_fibonacci44497 ][ exponential_distribution ] = _random_.variate_generator_lagged_fibonacci44497__exponential_distribution
+    __vg[ lagged_fibonacci44497 ][ gamma_distribution       ] = _random_.variate_generator_lagged_fibonacci44497__gamma_distribution      
+    __vg[ lagged_fibonacci44497 ][ geometric_distribution   ] = _random_.variate_generator_lagged_fibonacci44497__geometric_distribution  
+    __vg[ lagged_fibonacci44497 ][ lognormal_distribution   ] = _random_.variate_generator_lagged_fibonacci44497__lognormal_distribution  
+    __vg[ lagged_fibonacci44497 ][ normal_distribution      ] = _random_.variate_generator_lagged_fibonacci44497__normal_distribution     
+    __vg[ lagged_fibonacci44497 ][ poisson_distribution     ] = _random_.variate_generator_lagged_fibonacci44497__poisson_distribution    
+    __vg[ lagged_fibonacci44497 ][ triangle_distribution    ] = _random_.variate_generator_lagged_fibonacci44497__triangle_distribution   
+    __vg[ lagged_fibonacci44497 ][ uniform_on_sphere        ] = _random_.variate_generator_lagged_fibonacci44497__uniform_on_sphere       
+    __vg[ lagged_fibonacci44497 ][ uniform_real             ] = _random_.variate_generator_lagged_fibonacci44497__uniform_real            
+    #__vg[  ][ uniform_int             ] = _random_.does not exist
+    #__vg[  ][ uniform_smallint         ] = _random_.does not exist
 
 __vg[ lagged_fibonacci607 ][ bernoulli_distribution   ] = _random_.variate_generator_lagged_fibonacci607__bernoulli_distribution  
 __vg[ lagged_fibonacci607 ][ binomial_distribution    ] = _random_.variate_generator_lagged_fibonacci607__binomial_distribution   

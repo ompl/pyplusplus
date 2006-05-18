@@ -32,6 +32,9 @@ __basic__ = basic.values()
 
 __all__ = __optimal__ + __basic__
 
+for cls in __all__:
+    cls.__call__ = cls.process_byte
+
 def process_bytes( self, data ):
     if isinstance( data, str ):
         for byte in data:
