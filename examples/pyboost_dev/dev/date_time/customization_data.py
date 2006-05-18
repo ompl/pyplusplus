@@ -199,7 +199,7 @@ name2alias = {
 }
 
 if sys.platform == 'win32':
-    name2alias[ "time_duration<boost::posix_time::time_duration,boost::date_time::time_resolution_traits<boost::date_time::time_resolution_traits_adapted64_impl, micro, 1000000, 6, long> >" ] \
+    name2alias[ "time_duration<boost::posix_time::time_duration, boost::date_time::time_resolution_traits<boost::date_time::time_resolution_traits_adapted64_impl, (boost::date_time::time_resolutions)5, (long long)1000000, 6, long> >" ] \
         = "time_duration_impl"
 else:
     name2alias[ "time_duration<boost::posix_time::time_duration, boost::date_time::time_resolution_traits<boost::date_time::time_resolution_traits_adapted64_impl, (boost::date_time::time_resolutions)5, (long long)1000000, 6, int> >" ] \

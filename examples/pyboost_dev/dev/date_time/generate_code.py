@@ -42,12 +42,13 @@ class code_generator_t(object):
                                               , undefine_symbols=date_time_settings.undefined_symbols
                                               , optimize_queries=False)
         if sys.platform == 'win32':
-            linux_name = "time_duration<boost::posix_time::time_duration,boost::date_time::time_resolution_traits<boost::date_time::time_resolution_traits_adapted64_impl, micro, 1000000, 6, int> >"
-            win_name = "time_duration<boost::posix_time::time_duration,boost::date_time::time_resolution_traits<boost::date_time::time_resolution_traits_adapted64_impl, micro, 1000000, 6, long int> >"
+            linux_name = "time_duration<boost::posix_time::time_duration, boost::date_time::time_resolution_traits<boost::date_time::time_resolution_traits_adapted64_impl, (boost::date_time::time_resolutions)5, (long long)1000000, 6, int> >"
+            win_name = "time_duration<boost::posix_time::time_duration, boost::date_time::time_resolution_traits<boost::date_time::time_resolution_traits_adapted64_impl, (boost::date_time::time_resolutions)5, (long long)1000000, 6, long> >"
             time_duration_impl = mb.class_( linux_name )            
             #small price for generating code from xml and not from sources
             time_duration_impl.name = win_name
-
+            time_duration_impl.demangled = None
+            
         for f_decl in  mb.free_functions():
             f_decl.alias = f_decl.name
             f_decl.name = f_decl.demangled_name
@@ -151,7 +152,6 @@ class code_generator_t(object):
         extmodule.user_defined_directories.append( date_time_settings.generated_files_dir )
         extmodule.license = customization_data.license
         extmodule.precompiled_header = 'boost/python.hpp'
-        mb.code_creator.replace_included_headers( customization_data.includes )
         self.beautify_code( mb )
         
     def write_files( self, mb ):

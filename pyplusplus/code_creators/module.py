@@ -94,7 +94,7 @@ class module_t(compound.compound_t):
             if isinstance( self.creators[i], include.include_t ):
                 return i
         else:
-            raise RuntimeError( "include_t creator has not been found." )
+            return 0
         
     def first_include_index(self):
         """Return the children index of the first L{include_t} object.
@@ -119,11 +119,12 @@ class module_t(compound.compound_t):
             elif isinstance( creator, module_body.module_body_t ):
                 break
         
+        boost_python_header = include_directories.include_directories_t.normalize( 'boost/python.hpp' )
         boost_python_treated = False
         for creator in to_be_removed:
             if not boost_python_treated:
                 boost_python_treated = True
-                if 'boost/python.hpp' in creator.header: 
+                if boost_python_header in creator.header: 
                     if not leave_boost_python_header:
                         self.remove_creator( creator )
                 else:
