@@ -21,10 +21,10 @@ Download
 https://sourceforge.net/project/showfiles.php?group_id=118209
 
 ----------
-CVS access
+SVN access
 ----------
 
-https://sourceforge.net/cvs/?group_id=118209
+http://sourceforge.net/svn/?group_id=118209
 
 ------------
 Installation
@@ -46,12 +46,7 @@ Dependencies
 
 .. _`pyplusplus` : ./pyplusplus.html
 .. _`pygccxml` : ./../pygccxml/pygccxml.html
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
-.. _`SourceForge`: http://sourceforge.net/index.php
-.. _`Docutils`: http://docutils.sourceforge.net
-.. _`Python`: http://www.python.org
-.. _`GCC-XML`: http://www.gccxml.org
-.. _`Debian Linux`: http://www.debian.org
+
 ..
    Local Variables:
    mode: indented-text
