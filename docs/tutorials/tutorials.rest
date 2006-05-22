@@ -36,7 +36,7 @@ Getting started
 I suppose you decided to do some coding with `pyplusplus`_. `Module builder`_ 
 tutorials will help you. 
 
-.. _`Module builder` : ./module_builder.html
+.. _`Module builder` : ./module_builder/module_builder.html
 
 --------
 Advanced

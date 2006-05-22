@@ -1,1 +1,1 @@
-name = 'tutorials'
+name = 'module builder'
