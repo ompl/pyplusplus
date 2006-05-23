@@ -27,6 +27,8 @@ Version 0.8.0
 
 6. Adding experimental support for ``vector_indexing_suite``.
 
+7. Bug fixes.
+
 -------------
 Version 0.7.0
 -------------
