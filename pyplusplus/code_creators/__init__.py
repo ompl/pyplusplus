@@ -83,6 +83,8 @@ from member_variable import bit_field_t
 from member_variable import bit_field_wrapper_t
 from member_variable import array_mv_t
 from member_variable import array_mv_wrapper_t
+from member_variable import mem_var_ref_t
+from member_variable import mem_var_ref_wrapper_t
 
 from class_declaration import class_t 
 from class_declaration import class_wrapper_t

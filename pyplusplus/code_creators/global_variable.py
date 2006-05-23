@@ -11,6 +11,7 @@ from pygccxml import declarations
 from pyplusplus import code_repository
 from pyplusplus.decl_wrappers import call_policies
 
+#TODO: if variable is not const, then export it using boost::python::ptr
 class global_variable_base_t( declaration_based.declaration_based_t ):
     """
     Base class for all global variables code creators. Mainly exists to 

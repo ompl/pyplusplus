@@ -105,6 +105,20 @@ std::auto_ptr<tree_node_t> create_tree();
 
 }
 
+namespace reference{
+
+enum EFruit{ apple, orange };
+
+struct fundamental_t{
+    fundamental_t( EFruit& fruit, const int& i )
+    : m_fruit( fruit ), m_i( i )
+    {}
+    
+    EFruit& m_fruit;
+    const int& m_i;
+};
+
 }
 
+}
 #endif//__member_variables_to_be_exported_hpp__

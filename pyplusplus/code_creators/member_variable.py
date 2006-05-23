@@ -415,3 +415,108 @@ class array_mv_wrapper_t( declaration_based.declaration_based_t ):
         answer.append('}')
         return os.linesep.join( answer )
         
+
+
+
+
+
+class mem_var_ref_t( member_variable_base_t ):
+    """
+    Creates C++ code that creates accessor for class member variable, that has type reference.
+    """
+    def __init__(self, variable, wrapper, parent=None ):
+        member_variable_base_t.__init__( self
+                                         , variable=variable
+                                         , wrapper=wrapper
+                                         , parent=parent)
+
+    def _create_impl( self ):
+        if self.declaration.type_qualifiers.has_static:
+            add_property = 'add_static_property'
+        else:
+            add_property = 'add_property'
+        answer = [ add_property ]
+        answer.append( '( ' )
+        answer.append('"%s"' % self.alias)
+        answer.append( self.PARAM_SEPARATOR )
+        answer.append( '(%s)(&%s)' 
+                       % ( self.wrapper.getter_type.decl_string, self.wrapper.getter_full_name ) )
+
+        if self.wrapper.has_setter:
+            answer.append( self.PARAM_SEPARATOR )
+            answer.append( '(%s)(&%s)' 
+                           % ( self.wrapper.setter_type.decl_string, self.wrapper.setter_full_name ) )
+        answer.append( ' ) ' )
+        
+        code = ''.join( answer )
+        if len( code ) <= self.LINE_LENGTH:
+            return code
+        else:
+            for i in range( len( answer ) ):
+                if answer[i] == self.PARAM_SEPARATOR:
+                    answer[i] = os.linesep + self.indent( self.indent( self.indent( answer[i] ) ) )
+            return ''.join( answer )
+
+class mem_var_ref_wrapper_t( declaration_based.declaration_based_t ):
+    """
+    Creates C++ code that creates accessor for class member variable, that has type reference.
+    """
+    
+    indent = declaration_based.declaration_based_t.indent
+    GET_TEMPLATE = os.linesep.join([
+          'static %(type)s get_%(name)s(%(class_type)s& inst) {'
+        , indent( 'return inst.%(name)s;' )
+        , '}' 
+        , ''
+    ])
+    
+    SET_TEMPLATE = os.linesep.join([
+          'static void set_%(name)s( %(class_type)s& inst, %(type)s new_value ){ '
+        , indent( 'inst.%(name)s = new_value;' )
+        , '}' 
+        , ''        
+    ])
+
+    def __init__(self, variable, parent=None ):
+        declaration_based.declaration_based_t.__init__( self
+                                                        , parent=parent
+                                                        , declaration=variable)
+
+    def _get_getter_full_name(self):
+        return self.parent.full_name + '::' + 'get_' + self.declaration.name
+    getter_full_name = property( _get_getter_full_name )
+
+    def _get_class_inst_type( self ):
+        return declarations.declarated_t( self.declaration.parent )
+
+    def _get_getter_type(self):
+        return declarations.free_function_type_t(
+                return_type=self.declaration.type
+                , arguments_types=[ self._get_class_inst_type() ] )
+    getter_type = property( _get_getter_type )
+    
+    def _get_setter_full_name(self):
+        return self.parent.full_name + '::' + 'set_' + self.declaration.name
+    setter_full_name = property(_get_setter_full_name)
+    
+    def _get_setter_type(self):
+        return declarations.free_function_type_t(
+                return_type=self.declaration.type
+                , arguments_types=[ self._get_class_inst_type(), self.declaration.type ] )
+    setter_type = property( _get_setter_type )
+
+    def _get_has_setter( self ):
+        return not declarations.is_const( self.declaration.type )
+    has_setter = property( _get_has_setter )
+    
+    def _create_impl(self):
+        answer = []
+        cls_type = algorithm.create_identifier( self, self.declaration.parent.decl_string )
+        
+        substitutions = dict( type=self.declaration.type.decl_string
+                              , class_type=cls_type
+                              , name=self.declaration.name ) 
+        answer.append( self.GET_TEMPLATE % substitutions )
+        if self.has_setter:
+            answer.append( self.SET_TEMPLATE % substitutions )
+        return os.linesep.join( answer )

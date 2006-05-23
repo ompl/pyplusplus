@@ -251,6 +251,8 @@ class creator_t( declarations.decl_visitor_t ):
                     return True
                 if declarations.is_pointer( member.type ):
                     return True
+                #if declarations.is_reference( member.type ):
+                    #return True
                 if declarations.is_array( member.type ):
                     return True
             if isinstance( member, declarations.class_t ):
