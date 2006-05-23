@@ -25,6 +25,8 @@ Version 0.8.0
    
 5. Member variables, that are pointers exported correctly.
 
+6. Adding experimental support for ``vector_indexing_suite``.
+
 -------------
 Version 0.7.0
 -------------

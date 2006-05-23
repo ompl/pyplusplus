@@ -50,6 +50,7 @@ import pointer_as_arg_tester
 import factory_tester
 import private_assign_tester
 import protected_tester
+import indexing_suites_tester
 
 def create_suite(times):  
     testers = [ 
@@ -97,6 +98,7 @@ def create_suite(times):
         , factory_tester
         , private_assign_tester
         , protected_tester
+        , indexing_suites_tester
     ]
     
     main_suite = unittest.TestSuite()    
