@@ -41,3 +41,7 @@ class declaration_based_t(code_creator.code_creator_t):
     def _set_alias(self, alias):
         self.declaration.alias = alias
     alias = property( _get_alias, _set_alias )
+    
+    def _get_decl_identifier( self ):
+        return algorithm.create_identifier( self, self.declaration.decl_string )
+    decl_identifier = property( _get_decl_identifier )

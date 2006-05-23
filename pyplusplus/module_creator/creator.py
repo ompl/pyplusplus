@@ -10,6 +10,7 @@ import call_policies_resolver
 import types_database
 from pyplusplus import code_repository
 from sets import Set as set
+from pyplusplus import decl_wrappers
 
 ACCESS_TYPES = declarations.ACCESS_TYPES
 VIRTUALITY_TYPES = declarations.VIRTUALITY_TYPES
@@ -352,6 +353,13 @@ class creator_t( declarations.decl_visitor_t ):
         return self.__extmodule
 
     def _create_includes(self):
+        for cls in self.__decls:
+            if not isinstance( cls, decl_wrappers.class_t ):
+                continue
+            if cls.indexing_suites:
+                include = code_creators.include_t( header="boost/python/suite/indexing/vector_indexing_suite.hpp" )
+                self.__extmodule.adopt_include(include)
+                break
         for fn in declarations.declaration_files( self.__decls ):
             include = code_creators.include_t( header=fn )
             self.__extmodule.adopt_include(include)
@@ -510,6 +518,13 @@ class creator_t( declarations.decl_visitor_t ):
     def visit_class_declaration(self ):
         pass
         
+    def register_indexing_suites(self, class_decl, class_code_creator):
+        for suite in class_decl.indexing_suites:
+            assert isinstance( suite, decl_wrappers.vector_indexing_suite_t )
+            creator = code_creators.vector_indexing_suite_t( class_inst=class_decl
+                                                             , suite_configuration=suite )
+            class_code_creator.adopt_creator( creator )
+            
     def visit_class(self ):
         if self.curr_decl.ignore:
             return
@@ -565,6 +580,8 @@ class creator_t( declarations.decl_visitor_t ):
         
         self.curr_decl = temp_curr_decl        
         self.curr_code_creator = temp_curr_parent
+        
+        self.register_indexing_suites( self.curr_decl, self.curr_code_creator )       
         
     def visit_enumeration(self):
         if self.curr_decl.ignore:

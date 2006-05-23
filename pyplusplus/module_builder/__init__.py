@@ -43,6 +43,8 @@ from pyplusplus.decl_wrappers import typedef_t
 from pyplusplus.decl_wrappers import variable_t
 from pyplusplus.decl_wrappers import scopedef_t
 
+from pyplusplus.decl_wrappers import vector_indexing_suite_t
+
 from pyplusplus.decl_wrappers import print_declarations
 
 import call_policies

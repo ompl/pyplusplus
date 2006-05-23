@@ -44,6 +44,7 @@ from calldef_wrapper import casting_operator_t
 from calldef_wrapper import free_function_t
 from calldef_wrapper import free_operator_t
 
+from class_wrapper import vector_indexing_suite_t
 from class_wrapper import class_declaration_t
 from class_wrapper import class_t
 

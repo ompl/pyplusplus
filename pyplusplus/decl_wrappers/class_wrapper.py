@@ -8,6 +8,14 @@ import scopedef_wrapper
 from pygccxml import declarations
 import user_text
 
+class vector_indexing_suite_t( object ):
+    def __init__( self, name, container='std::vector', no_proxy=False, derived_policies='' ):
+        object.__init__( self )
+        self.name = name
+        self.container = container
+        self.no_proxy = no_proxy
+        self.derived_policies = derived_policies
+        
 class class_declaration_t(decl_wrapper.decl_wrapper_t, declarations.class_declaration_t):
     def __init__(self, *arguments, **keywords):
         declarations.class_declaration_t.__init__(self, *arguments, **keywords )
@@ -25,6 +33,7 @@ class class_t(scopedef_wrapper.scopedef_t, declarations.class_t):
         self._wrapper_alias = self._generate_valid_name() + "_wrapper"
         self._user_code = []
         self._wrapper_user_code = []
+        self._indexing_suites = []
         
     def _get_always_expose_using_scope( self ):
         return self._always_expose_using_scope
@@ -77,6 +86,12 @@ class class_t(scopedef_wrapper.scopedef_t, declarations.class_t):
     def _set_wrapper_user_code( self, value ):
         self._wrapper_user_code = value
     wrapper_user_code = property( _get_wrapper_user_code, _set_wrapper_user_code )
+
+    def _get_indexing_suites( self ):
+        return self._indexing_suites
+    def _set_indexing_suites( self, value ):
+        self._indexing_suites = value
+    indexing_suites = property( _get_indexing_suites, _set_indexing_suites )
     
     def add_code( self, code, works_on_instance=True ):
         """works_on_instance: If true, the custom code can be applied directly to obj inst.

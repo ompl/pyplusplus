@@ -12,6 +12,7 @@ import algorithm
 import smart_pointers
 import declaration_based
 import array_1_registrator
+import indexing_suites
 from pygccxml import declarations
 
 class class_t( scoped.scoped_t ):
@@ -183,6 +184,9 @@ class class_t( scoped.scoped_t ):
             return True
         
         if isinstance( inst, array_1_registrator.array_1_registrator_t ):
+            return True
+        
+        if isinstance( inst, indexing_suites.indexing_suite_t ):
             return True
         
         return False
