@@ -193,17 +193,23 @@ class creator_t( declarations.decl_visitor_t ):
         all_included = declarations.custom_matcher_t( lambda decl: decl.ignore == False )
         all_protected = declarations.access_type_matcher_t( 'protected' ) & all_included
         all_pure_virtual = declarations.virtuality_type_matcher_t( VIRTUALITY_TYPES.PURE_VIRTUAL )
+        all_not_pure_virtual = ~all_pure_virtual
         
         query = all_protected | all_pure_virtual
         
         funcs = set()
+        defined_funcs = set()
+        
         for base in cls.recursive_bases:
             if base.access == ACCESS_TYPES.PRIVATE:
                 continue
             base_cls = base.related_class
             funcs.update( base_cls.member_functions( query, allow_empty=True ) )
             funcs.update( base_cls.member_operators( query, allow_empty=True ) )
-        
+
+            defined_funcs.update( base_cls.member_functions( all_not_pure_virtual, allow_empty=True ) )
+            defined_funcs.update( base_cls.member_operators( all_not_pure_virtual, allow_empty=True ) )
+
         not_reimplemented_funcs = set()        
         for f in funcs:
             cls_fs = cls.calldefs( name=f.name, recursive=False, allow_empty=True )
@@ -216,7 +222,15 @@ class creator_t( declarations.decl_visitor_t ):
                     if self.__is_same_func( f, f_impl ):
                         break
                 else:
-                    not_reimplemented_funcs.add( f )
+                    #should test whether this function is implemented in base class
+                    if f.virtuality != VIRTUALITY_TYPES.PURE_VIRTUAL:
+                        not_reimplemented_funcs.add( f )
+                    else:
+                        for f_defined in defined_funcs:
+                            if self.__is_same_func( f, f_defined ):
+                                break
+                        else:
+                            not_reimplemented_funcs.add( f )
         return not_reimplemented_funcs
     
     def _is_wrapper_needed(self, class_inst, exportable_members):
@@ -647,6 +661,9 @@ class creator_t( declarations.decl_visitor_t ):
             elif declarations.is_pointer( self.curr_decl.type ):
                 wrapper = code_creators.member_variable_wrapper_t( variable=self.curr_decl )
                 maker = code_creators.member_variable_t( variable=self.curr_decl, wrapper=wrapper )
+            #elif declarations.is_reference( self.curr_decl.type ):
+                #wrapper = code_creators.mem_var_ref_wrapper_t( variable=self.curr_decl )
+                #maker = code_creators.mem_var_ref_t( variable=self.curr_decl, wrapper=wrapper )                
             else:
                 maker = code_creators.member_variable_t( variable=self.curr_decl )                
             if wrapper:
