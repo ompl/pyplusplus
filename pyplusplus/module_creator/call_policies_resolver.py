@@ -11,7 +11,7 @@ class resolver_t( object ):
     def __init__( self ):
         object.__init__( self )
 
-    def __call__(self, calldef):
+    def __call__(self, decl):
         raise NotImplementedError()
 
 class default_policy_resolver_t(resolver_t):
@@ -31,7 +31,9 @@ class default_policy_resolver_t(resolver_t):
         return None
 
     def __call__(self, calldef):
-        assert isinstance( calldef, declarations.calldef_t )
+        if not isinstance( calldef, declarations.calldef_t ):
+            return None
+            
         if not isinstance( calldef, declarations.constructor_t ):
             return self._resolve_by_type( calldef.return_type )
         else:
@@ -45,7 +47,9 @@ class void_pointer_resolver_t(resolver_t):
         resolver_t.__init__( self )
 
     def __call__( self, calldef ):
-        assert isinstance( calldef, declarations.calldef_t )
+        if not isinstance( calldef, declarations.calldef_t ):
+            return None
+
         if isinstance( calldef, declarations.constructor_t ):
             return None
         return_type = declarations.remove_alias( calldef.return_type )
@@ -63,7 +67,9 @@ class return_value_policy_resolver_t(resolver_t):
             = declarations.pointer_t( declarations.const_t( declarations.wchar_t() ) )
         
     def __call__(self, calldef):
-        assert isinstance( calldef, declarations.calldef_t )
+        if not isinstance( calldef, declarations.calldef_t ):
+            return None
+
         if isinstance( calldef, declarations.constructor_t ):
             return None
 
@@ -82,6 +88,9 @@ class return_internal_reference_resolver_t( resolver_t ):
         resolver_t.__init__( self )
         
     def __call__(self, calldef):
+        if not isinstance( calldef, declarations.calldef_t ):
+            return None
+
         if not isinstance( calldef, declarations.member_operator_t ):
             return None
         
@@ -98,7 +107,29 @@ class return_internal_reference_resolver_t( resolver_t ):
                 return decl_wrappers.return_value_policy( decl_wrappers.copy_non_const_reference )
         else:
             return decl_wrappers.return_internal_reference()
-            
+
+class variable_accessors_resolver_t( resolver_t ):
+    def __init__( self ):    
+        resolver_t.__init__( self )
+    
+    def __init__( self, variable ):
+        if not isinstance( variable, declarations.variable_t ):
+            return None
+        
+        if not declarations.is_reference( variable.type ):
+            return None
+        
+        no_ref = declarations.remove_reference( self.declaration.type )
+        base_type = declarations.remove_const( no_ref )
+        if declarations.is_fundamental( base_type ) or declarations.is_enum( base_type ):
+            #the relevant code creator will generate code, that will return this member variable
+            #by value
+            return decl_wrappers.default_call_policies()
+        
+        
+            return self.declaration.type
+
+
 class built_in_resolver_t(resolver_t):
     def __init__( self, config=None):
         resolver_t.__init__( self )

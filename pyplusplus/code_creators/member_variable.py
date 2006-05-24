@@ -464,7 +464,7 @@ class mem_var_ref_wrapper_t( declaration_based.declaration_based_t ):
     
     indent = declaration_based.declaration_based_t.indent
     GET_TEMPLATE = os.linesep.join([
-          'static %(type)s get_%(name)s(%(class_type)s& inst) {'
+          'static %(type)s get_%(name)s( %(class_type)s& inst ) {'
         , indent( 'return inst.%(name)s;' )
         , '}' 
         , ''
@@ -489,9 +489,17 @@ class mem_var_ref_wrapper_t( declaration_based.declaration_based_t ):
     def _get_class_inst_type( self ):
         return declarations.declarated_t( self.declaration.parent )
 
+    def _get_exported_var_type( self ):
+        type_ = declarations.remove_reference( self.declaration.type )
+        type_ = declarations.remove_const( type_ )
+        if declarations.is_fundamental( type_ ) or declarations.is_enum( type_ ):
+            return type_
+        else:
+            return self.declaration.type
+
     def _get_getter_type(self):
         return declarations.free_function_type_t(
-                return_type=self.declaration.type
+                return_type=self._get_exported_var_type()
                 , arguments_types=[ self._get_class_inst_type() ] )
     getter_type = property( _get_getter_type )
     
@@ -501,19 +509,26 @@ class mem_var_ref_wrapper_t( declaration_based.declaration_based_t ):
     
     def _get_setter_type(self):
         return declarations.free_function_type_t(
-                return_type=self.declaration.type
-                , arguments_types=[ self._get_class_inst_type(), self.declaration.type ] )
+                return_type=declarations.void_t()
+                , arguments_types=[ self._get_class_inst_type(), self._get_exported_var_type() ] )
     setter_type = property( _get_setter_type )
 
-    def _get_has_setter( self ):
-        return not declarations.is_const( self.declaration.type )
+    def _get_has_setter( self ):  
+        if declarations.is_fundamental( self._get_exported_var_type() ):
+            return True
+        elif declarations.is_enum( self._get_exported_var_type() ):
+            return True
+        elif declarations.is_const( declarations.remove_reference( self.declaration.type ) ):
+            return False
+        else:
+            return True
     has_setter = property( _get_has_setter )
     
     def _create_impl(self):
         answer = []
         cls_type = algorithm.create_identifier( self, self.declaration.parent.decl_string )
         
-        substitutions = dict( type=self.declaration.type.decl_string
+        substitutions = dict( type=self._get_exported_var_type().decl_string
                               , class_type=cls_type
                               , name=self.declaration.name ) 
         answer.append( self.GET_TEMPLATE % substitutions )

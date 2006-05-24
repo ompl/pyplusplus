@@ -251,8 +251,8 @@ class creator_t( declarations.decl_visitor_t ):
                     return True
                 if declarations.is_pointer( member.type ):
                     return True
-                #if declarations.is_reference( member.type ):
-                    #return True
+                if declarations.is_reference( member.type ):
+                    return True
                 if declarations.is_array( member.type ):
                     return True
             if isinstance( member, declarations.class_t ):
@@ -663,9 +663,9 @@ class creator_t( declarations.decl_visitor_t ):
             elif declarations.is_pointer( self.curr_decl.type ):
                 wrapper = code_creators.member_variable_wrapper_t( variable=self.curr_decl )
                 maker = code_creators.member_variable_t( variable=self.curr_decl, wrapper=wrapper )
-            #elif declarations.is_reference( self.curr_decl.type ):
-                #wrapper = code_creators.mem_var_ref_wrapper_t( variable=self.curr_decl )
-                #maker = code_creators.mem_var_ref_t( variable=self.curr_decl, wrapper=wrapper )                
+            elif declarations.is_reference( self.curr_decl.type ):
+                wrapper = code_creators.mem_var_ref_wrapper_t( variable=self.curr_decl )
+                maker = code_creators.mem_var_ref_t( variable=self.curr_decl, wrapper=wrapper )                
             else:
                 maker = code_creators.member_variable_t( variable=self.curr_decl )                
             if wrapper:

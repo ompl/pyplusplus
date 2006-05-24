@@ -19,6 +19,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                                                                     
     def customize(self, mb ):        
         mb.variable( 'prefered_color' ).alias = 'PreferedColor'
+        mb.classes().always_expose_using_scope = True
 
     def change_default_color( self, module ):
         module.point.default_color = module.point.color.blue

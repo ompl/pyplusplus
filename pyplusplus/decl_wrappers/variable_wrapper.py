@@ -10,7 +10,25 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
     def __init__(self, *arguments, **keywords):
         declarations.variable_t.__init__(self, *arguments, **keywords )
         decl_wrapper.decl_wrapper_t.__init__( self )
+        self._call_policies = None
         
+    def _get_call_policies( self ):
+        return self._call_policies
+    def _set_call_policies( self, call_policies ):
+        self._call_policies = call_policies
+    
+    __call_policies_doc__ = \
+    """There are usecase, when exporting member variable forces pyplusplus to 
+    create accessors functions. Sometime, those functions requires call policies.
+    To be more specific: when you export member variable that has reference or
+    pointer type, you need to tell boost.python library how to manage object 
+    life-time. In all cases, pyplusplus will give reasonable default value. I am 
+    sure, that there are use cases, when you need to change it. You should use this
+    property to change it.
+    """
+    call_policies = property( _get_call_policies, _set_call_policies
+                              , doc=__call_policies_doc__ )
+
     def _exportable_impl( self ):
         if not isinstance( self.parent, declarations.class_t ):
             return ''
