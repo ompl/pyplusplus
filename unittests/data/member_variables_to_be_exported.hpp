@@ -118,6 +118,18 @@ struct fundamental_t{
     const int& m_i;
 };
 
+struct A{};
+
+
+struct B {
+ B( A& a_ ): a( a_ ){}
+ A& a;
+};
+
+struct C {
+ C( A& a_ ): a( a_ ){}
+ const A& a;
+};
 }
 
 }

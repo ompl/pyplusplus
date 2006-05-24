@@ -510,7 +510,7 @@ class mem_var_ref_wrapper_t( declaration_based.declaration_based_t ):
     def _get_getter_type(self):
         return declarations.free_function_type_t(
                 return_type=self._get_exported_var_type()
-                , arguments_types=[ self._get_class_inst_type() ] )
+                , arguments_types=[ declarations.reference_t( self._get_class_inst_type() ) ] )
     getter_type = property( _get_getter_type )
     
     def _get_setter_full_name(self):
@@ -520,7 +520,8 @@ class mem_var_ref_wrapper_t( declaration_based.declaration_based_t ):
     def _get_setter_type(self):
         return declarations.free_function_type_t(
                 return_type=declarations.void_t()
-                , arguments_types=[ self._get_class_inst_type(), self._get_exported_var_type() ] )
+                , arguments_types=[ declarations.reference_t( self._get_class_inst_type() )
+                                    , self._get_exported_var_type() ] )
     setter_type = property( _get_setter_type )
 
     def _get_has_setter( self ):  
