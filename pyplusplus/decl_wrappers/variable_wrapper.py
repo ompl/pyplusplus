@@ -10,13 +10,9 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
     def __init__(self, *arguments, **keywords):
         declarations.variable_t.__init__(self, *arguments, **keywords )
         decl_wrapper.decl_wrapper_t.__init__( self )
-        self._call_policies = None
+        self._getter_call_policies = None
+        self._setter_call_policies = None
         
-    def _get_call_policies( self ):
-        return self._call_policies
-    def _set_call_policies( self, call_policies ):
-        self._call_policies = call_policies
-    
     __call_policies_doc__ = \
     """There are usecase, when exporting member variable forces pyplusplus to 
     create accessors functions. Sometime, those functions requires call policies.
@@ -26,8 +22,20 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
     sure, that there are use cases, when you need to change it. You should use this
     property to change it.
     """
-    call_policies = property( _get_call_policies, _set_call_policies
-                              , doc=__call_policies_doc__ )
+    
+    def get_getter_call_policies( self ):
+        return self._getter_call_policies
+    def set_getter_call_policies( self, call_policies ):
+        self._getter_call_policies = call_policies
+    getter_call_policies = property( get_getter_call_policies, set_getter_call_policies
+                                     , doc=__call_policies_doc__ )
+
+    def get_setter_call_policies( self ):
+        return self._setter_call_policies
+    def set_setter_call_policies( self, call_policies ):
+        self._setter_call_policies = call_policies
+    setter_call_policies = property( get_setter_call_policies, set_setter_call_policies
+                                     , doc=__call_policies_doc__ )
 
     def _exportable_impl( self ):
         if not isinstance( self.parent, declarations.class_t ):

@@ -13,6 +13,7 @@ import smart_pointers
 import declaration_based
 import array_1_registrator
 import indexing_suites
+import member_variable
 from pygccxml import declarations
 
 class class_t( scoped.scoped_t ):
@@ -187,6 +188,9 @@ class class_t( scoped.scoped_t ):
             return True
         
         if isinstance( inst, indexing_suites.indexing_suite_t ):
+            return True
+        
+        if isinstance( inst, member_variable.mem_var_ref_t ):
             return True
         
         return False

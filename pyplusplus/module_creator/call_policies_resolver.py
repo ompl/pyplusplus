@@ -11,7 +11,7 @@ class resolver_t( object ):
     def __init__( self ):
         object.__init__( self )
 
-    def __call__(self, decl):
+    def __call__(self, decl, hint=None):
         raise NotImplementedError()
 
 class default_policy_resolver_t(resolver_t):
@@ -30,7 +30,7 @@ class default_policy_resolver_t(resolver_t):
             return decl_wrappers.default_call_policies()
         return None
 
-    def __call__(self, calldef):
+    def __call__(self, calldef, hint=None):
         if not isinstance( calldef, declarations.calldef_t ):
             return None
             
@@ -46,7 +46,7 @@ class void_pointer_resolver_t(resolver_t):
     def __init__( self ):
         resolver_t.__init__( self )
 
-    def __call__( self, calldef ):
+    def __call__( self, calldef, hint=None ):
         if not isinstance( calldef, declarations.calldef_t ):
             return None
 
@@ -66,7 +66,7 @@ class return_value_policy_resolver_t(resolver_t):
         self.__const_wchar_pointer \
             = declarations.pointer_t( declarations.const_t( declarations.wchar_t() ) )
         
-    def __call__(self, calldef):
+    def __call__(self, calldef, hint=None):
         if not isinstance( calldef, declarations.calldef_t ):
             return None
 
@@ -87,7 +87,7 @@ class return_internal_reference_resolver_t( resolver_t ):
     def __init__( self ):    
         resolver_t.__init__( self )
         
-    def __call__(self, calldef):
+    def __call__(self, calldef, hint=None):
         if not isinstance( calldef, declarations.calldef_t ):
             return None
 
@@ -112,23 +112,43 @@ class variable_accessors_resolver_t( resolver_t ):
     def __init__( self ):    
         resolver_t.__init__( self )
     
-    def __init__( self, variable ):
+    def __call__( self, variable, hint=None ):
         if not isinstance( variable, declarations.variable_t ):
             return None
+
+        assert hint in ( 'get', 'set' )
         
         if not declarations.is_reference( variable.type ):
             return None
         
-        no_ref = declarations.remove_reference( self.declaration.type )
+        no_ref = declarations.remove_reference( variable.type )
         base_type = declarations.remove_const( no_ref )
         if declarations.is_fundamental( base_type ) or declarations.is_enum( base_type ):
             #the relevant code creator will generate code, that will return this member variable
             #by value
             return decl_wrappers.default_call_policies()
         
+        if not isinstance( base_type, declarations.declarated_t ):
+            return None
         
-            return self.declaration.type
-
+        base_type = declarations.remove_alias( base_type )
+        decl = base_type.declaration
+        
+        if decl.is_abstract:
+            return None
+        if declarations.has_destructor( decl ) and not declarations.has_public_destructor( decl ): 
+            return None
+        if not declarations.has_trivial_copy(decl):
+            return None
+        if hint == 'get':
+            #if we rich this line, it means that we are able to create an obect using
+            #copy constructor. 
+            if declarations.is_const( no_ref ):
+                return decl_wrappers.return_value_policy( decl_wrappers.copy_const_reference )
+            else:
+                return decl_wrappers.return_value_policy( decl_wrappers.copy_non_const_reference )
+        else:
+            return decl_wrappers.default_call_policies()
 
 class built_in_resolver_t(resolver_t):
     def __init__( self, config=None):
@@ -139,10 +159,11 @@ class built_in_resolver_t(resolver_t):
         if not config or config.boost_python_supports_void_ptr:
             self.__resolvers.append( void_pointer_resolver_t() )
         self.__resolvers.append( return_internal_reference_resolver_t() )
+        self.__resolvers.append( variable_accessors_resolver_t() )
 
-    def __call__( self, calldef ):
+    def __call__( self, calldef, hint=None ):
         for resolver in self.__resolvers:
-            resolved = resolver( calldef )
+            resolved = resolver( calldef, hint )
             if resolved:
                 return resolved
         return None

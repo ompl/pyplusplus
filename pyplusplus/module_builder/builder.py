@@ -135,6 +135,13 @@ class module_builder_t(object):
                            , flatten_decls )
         map( lambda calldef: calldef.set_call_policies( call_policies_resolver( calldef ) )
              , calldefs )
+        mem_vars = filter( lambda decl: isinstance( decl, decls_package.variable_t )
+                                        and isinstance( decl.parent, decls_package.class_t )
+                           , flatten_decls )
+        map( lambda mem_var: mem_var.set_getter_call_policies( call_policies_resolver( mem_var, 'get' ) )
+             , mem_vars )
+        map( lambda mem_var: mem_var.set_setter_call_policies( call_policies_resolver( mem_var, 'set' ) )
+             , mem_vars )
     
     def print_declarations(self, decl=None, detailed=True, recursive=True, writer=sys.stdout.write):
         """

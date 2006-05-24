@@ -664,6 +664,10 @@ class creator_t( declarations.decl_visitor_t ):
                 wrapper = code_creators.member_variable_wrapper_t( variable=self.curr_decl )
                 maker = code_creators.member_variable_t( variable=self.curr_decl, wrapper=wrapper )
             elif declarations.is_reference( self.curr_decl.type ):
+                if None is self.curr_decl.getter_call_policies:
+                    self.curr_decl.getter_call_policies = self.__call_policies_resolver( self.curr_decl, 'get' )
+                if None is self.curr_decl.setter_call_policies:
+                    self.curr_decl.setter_call_policies = self.__call_policies_resolver( self.curr_decl, 'set' )
                 wrapper = code_creators.mem_var_ref_wrapper_t( variable=self.curr_decl )
                 maker = code_creators.mem_var_ref_t( variable=self.curr_decl, wrapper=wrapper )                
             else:

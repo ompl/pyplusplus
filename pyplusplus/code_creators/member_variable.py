@@ -416,10 +416,6 @@ class array_mv_wrapper_t( declaration_based.declaration_based_t ):
         return os.linesep.join( answer )
         
 
-
-
-
-
 class mem_var_ref_t( member_variable_base_t ):
     """
     Creates C++ code that creates accessor for class member variable, that has type reference.
@@ -429,34 +425,48 @@ class mem_var_ref_t( member_variable_base_t ):
                                          , variable=variable
                                          , wrapper=wrapper
                                          , parent=parent)
+        self.param_sep = os.linesep + self.indent( self.PARAM_SEPARATOR, 2 )
 
-    def _create_impl( self ):
-        if self.declaration.type_qualifiers.has_static:
-            add_property = 'add_static_property'
-        else:
-            add_property = 'add_property'
-        answer = [ add_property ]
+    def _create_getter( self ):
+        answer = ['def']
         answer.append( '( ' )
-        answer.append('"%s"' % self.alias)
-        answer.append( self.PARAM_SEPARATOR )
+        answer.append( '"get_%s"' % self.alias)
+        answer.append( self.param_sep )
         answer.append( '(%s)(&%s)' 
                        % ( self.wrapper.getter_type.decl_string, self.wrapper.getter_full_name ) )
-
-        if self.wrapper.has_setter:
-            answer.append( self.PARAM_SEPARATOR )
-            answer.append( '(%s)(&%s)' 
-                           % ( self.wrapper.setter_type.decl_string, self.wrapper.setter_full_name ) )
-        answer.append( ' ) ' )
-        
-        code = ''.join( answer )
-        if len( code ) <= self.LINE_LENGTH:
-            return code
+        if self.declaration.getter_call_policies:
+            answer.append( self.param_sep )            
+            answer.append( self.declaration.getter_call_policies.create( self ) )
         else:
-            for i in range( len( answer ) ):
-                if answer[i] == self.PARAM_SEPARATOR:
-                    answer[i] = os.linesep + self.indent( self.indent( self.indent( answer[i] ) ) )
-            return ''.join( answer )
-
+            answer.append( os.linesep + self.indent( '/* undefined call policies */', 2 ) )             
+        answer.append( ' )' )
+        return ''.join( answer )
+    
+    def _create_setter( self ):
+        answer = ['def']
+        answer.append( '( ' )
+        answer.append( '"set_%s"' % self.alias)
+        answer.append( self.param_sep )
+        answer.append( '(%s)(&%s)' 
+                       % ( self.wrapper.setter_type.decl_string, self.wrapper.setter_full_name ) )
+        if self.declaration.setter_call_policies:
+            answer.append( self.param_sep )            
+            answer.append( self.declaration.setter_call_policies.create( self ) )
+        else:
+            answer.append( os.linesep + self.indent( '/* undefined call policies */', 2 ) )             
+        answer.append( ' )' )
+        return ''.join( answer )
+    
+    def _create_impl( self ):
+        #TODO: fix me, should not force class scope usage
+        answer = []
+        class_var_name = self.parent.class_var_name
+        answer.append( "%s.%s;" % (class_var_name, self._create_getter() ) )
+        if self.wrapper.has_setter:
+            answer.append( os.linesep )
+            answer.append( "%s.%s;" % (class_var_name, self._create_setter() ) )
+        return ''.join( answer )
+     
 class mem_var_ref_wrapper_t( declaration_based.declaration_based_t ):
     """
     Creates C++ code that creates accessor for class member variable, that has type reference.
@@ -514,14 +524,28 @@ class mem_var_ref_wrapper_t( declaration_based.declaration_based_t ):
     setter_type = property( _get_setter_type )
 
     def _get_has_setter( self ):  
-        if declarations.is_fundamental( self._get_exported_var_type() ):
+        if declarations.is_const( declarations.remove_reference( self.declaration.type ) ):
+            return False
+        elif declarations.is_fundamental( self._get_exported_var_type() ):
             return True
         elif declarations.is_enum( self._get_exported_var_type() ):
             return True
-        elif declarations.is_const( declarations.remove_reference( self.declaration.type ) ):
-            return False
         else:
-            return True
+            pass
+        
+        no_ref = declarations.remove_reference( self.declaration.type )
+        no_const = declarations.remove_const( no_ref )        
+        base_type = declarations.remove_alias( no_const )
+        if not isinstance( base_type, declarations.declarated_t ):
+            return True #TODO ????
+        decl = base_type.declaration
+        if decl.is_abstract:
+            return False
+        if declarations.has_destructor( decl ) and not declarations.has_public_destructor( decl ): 
+            return False
+        if not declarations.has_trivial_copy(decl):
+            return False
+        return True
     has_setter = property( _get_has_setter )
     
     def _create_impl(self):
