@@ -120,15 +120,15 @@ class module_t(compound.compound_t):
                 break
         
         boost_python_header = include_directories.include_directories_t.normalize( 'boost/python.hpp' )
-        boost_python_treated = False
+        boost_python_suite_header \
+            = include_directories.include_directories_t.normalize( "boost/python/suite/indexing/vector_indexing_suite.hpp" )
         for creator in to_be_removed:
-            if not boost_python_treated:
-                boost_python_treated = True
-                if boost_python_header in creator.header: 
-                    if not leave_boost_python_header:
-                        self.remove_creator( creator )
-                else:
+            if boost_python_header in creator.header: 
+                if not leave_boost_python_header:
                     self.remove_creator( creator )
+            elif boost_python_suite_header in creator.header:
+                if not leave_boost_python_header:
+                    self.remove_creator( creator )                
             else:
                 self.remove_creator( creator )
         map( lambda header: self.adopt_include( include.include_t( header=header ) )
