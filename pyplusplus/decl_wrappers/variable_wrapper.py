@@ -42,11 +42,19 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
             return ''
         if self.bits == 0 and self.name == "":
             return "pyplusplus can not expose alignement bit."
-        type_ = declarations.remove_const( self.type )
+        type_ = declarations.remove_alias( self.type )
+        type_ = declarations.remove_const( type_ )
         if declarations.is_pointer( type_ ):
             if self.type_qualifiers.has_static:
                 return "pyplusplus, right now, can not expose static pointer member variables. This could be changed in future."
             if declarations.is_fundamental( type_.base ):
                 return "pyplusplus, right now, can not expose pointer to fundamental member variables. This could be changed in future."
+            
+            units = declarations.decompose_type( type_ )
+            ptr2functions = filter( lambda unit: isinstance( unit, declarations.calldef_type_t )
+                                    , units )
+            if ptr2functions:
+                return "boost.python can not expose variables, which are pointer to function." \
+                       + " See http://www.boost.org/libs/python/doc/v2/faq.html#funcptr for more information."
         return ''
     
