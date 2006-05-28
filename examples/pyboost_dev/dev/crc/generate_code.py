@@ -6,9 +6,7 @@
 
 
 import os
-import sys
 import time
-import shutil
 import logging
 import crc_settings
 from pygccxml import parser

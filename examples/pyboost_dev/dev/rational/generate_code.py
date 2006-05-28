@@ -6,13 +6,10 @@
 
 
 import os
-import sys
 import time
-import shutil
 import logging
 import rational_settings
 from pygccxml import parser
-from pygccxml import declarations
 from pyplusplus import module_builder
 from pyplusplus.module_builder import call_policies
 

@@ -4,15 +4,11 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-
 import os
-import sys
 import time
-import shutil
 import logging
 import random_settings
 from pygccxml import parser
-from pygccxml import declarations
 from pyplusplus import module_builder
 from pyplusplus.module_builder import call_policies
 
@@ -130,13 +126,10 @@ class code_generator_t(object):
         distribution_funcs = boost_ns.member_functions( name="distribution"
                                                         , function=lambda decl: not decl.has_const )
         distribution_funcs.call_policies = call_policies.return_internal_reference()
-
-                
         
     def customize_extmodule( self ):
         global LICENSE
         extmodule = self.__mb.code_creator
-        #beautifying include code generation
         extmodule.license = LICENSE
         extmodule.user_defined_directories.append( random_settings.boost.include )
         extmodule.user_defined_directories.append( random_settings.working_dir )
@@ -145,7 +138,6 @@ class code_generator_t(object):
         extmodule.replace_included_headers( ['boost/random.hpp', 'boost/nondet_random.hpp', 'random_export.hpp' ] )
         
     def write_files( self ):
-        #self.__mb.write_module( os.path.join( random_settings.generated_files_dir, 'random.pypp.cpp' ) )
         self.__mb.split_module( random_settings.generated_files_dir )
 
     def create(self):
