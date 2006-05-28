@@ -21,7 +21,7 @@ EasyBMP
 needed to work with Windows bitmap (BMP) image files. I took me only few minutes
 to create Python bindings for the library. Read more `here`__.
 
-  __ : ./easybmp/easybmp.html
+..  __ : ./easybmp/easybmp.html
 
 ---------------
 boost.date_time
