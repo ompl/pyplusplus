@@ -69,11 +69,10 @@ Pyste
 
 Carefully read `Pyste`_ definition - 
 
-"... The user specifies the classes and functions to be exported using a simple 
-interface file, which following the `boost.python`_'s philosophy, is simple 
-`Python`_ code. ..."
+  "... The user specifies the classes and functions to be exported using a simple 
+  interface file, which following the `boost.python`_'s philosophy, is simple 
+  `Python`_ code. ..."
 
--- Definition of `Pyste`_.
 
 Simple interface file is an advantage and a disadvantage at the same time. The 
 advantage is obvious: it is easy to start to use. The disadvantage is less 
@@ -92,10 +91,10 @@ First and second example could be solved, but it is neither easy, nor obvious.
 You should understand `Pyste`_ implementation details. Third example is solvable 
 if you are lucky and ready to write few `Python`_\\shell scripts. 
 
-"... AllFromHeader is broken in some cases. Until it is fixed, use at you own 
-risk. ..."    
+  "... AllFromHeader is broken in some cases. Until it is fixed, use at you own 
+  risk. ..."    
 
--- `Pyste`_ documentation.
+  ---`Pyste`_ documentation.
 
 I have more examples, but I think you've got the idea.
 
@@ -157,8 +156,8 @@ pyplusplus
 ----------
 
 One of the biggest weaknesses of `Pyste`_ is a lack of good `GCC-XML`_ front-end 
-and this fact cause `Pyste`_ to generate wrong or not optimal code. I will prove 
-this later. In order to avoid such weakness, before I have created `pyplusplus`_, 
+and this fact cause `Pyste`_ to generate not optimal code. I will prove this 
+later. In order to avoid such weakness, before I have created `pyplusplus`_, 
 I created `pygccxml`_. `pygccxml`_ is a stand alone project, that provides few 
 things: 
      
@@ -183,23 +182,26 @@ things:
       `boost.type_traits`_ library has been implemented. `pyplusplus`_ makes
       an extensive use of them:
       
-      * find out call policies algorithm
+      * identify "call policies" algorithm
       
       * code creator that generates body of "overridden" virtual functions:
-      
-        | *struct expensive_to_copy{...};*
-        | *...*
-        | *virtual void*
-        | *do_smth(expensive_to_copy\* x, const expensive_to_copy& y){*
-        |   *//Pyste generates next code*
-        |   *//call_method< void >(self, "do_smth", x, y);*
-        |   *//pyplusplus generates better code*
-        |   *this->get_override("do_smth")( boost::python::ptr(x), boost::ref(y) );*
-        | *}*
+        ::
+
+          struct expensive_to_copy{...};
+          
+          void do_smth( expensive_to_copy* x, const expensive_to_copy& y ){...}
+          
+          void
+          do_smth(expensive_to_copy* x, const expensive_to_copy& y){
+              //Pyste generates next code
+              //call_method< void >(self, "do_smth", x, y);
+              //pyplusplus generates next code
+              *this->get_override("do_smth")( boost::python::ptr(x), boost::ref(y) );
+              //------------------------------^^^^^^^^^^^^^^^^^^-----^^^^^^^^^^
+          }
         
-        Do you see the difference? I think that this code is better and correct.
-        This is a prove to the point I made earlier: `Pyste`_ generates wrong 
-        or not optimal code.
+        Do you see the difference? This is a prove to the point I made earlier: 
+        `Pyste`_ generates not optimal code.
     
     + Do you remember first 3 problems, I talked about? 
 
@@ -210,8 +212,10 @@ things:
       3. Maintenance. Every time you add new file\\class to your project you should
          modify\\create `Pyste`_ interface files.
 
-      They are solved by `pygccxml`_ package. 
+      They are solved by `pygccxml`_ package. Please take a look on `pygccxml`_
+      `query intrface`__ documentation.
     
+.. __ : ./../../pygccxml/query_interface.html
     
 Now about mistakes. There is a gold rule: one class, one responsibility. `Pyste`_
 breaks this rule. One more time *Exporter* class responsibilities:
@@ -281,12 +285,10 @@ depends on `pygccxml`_ project.
 Features list
 -------------
 `pyplusplus`_ supports almost all features `Pyste`_ implements. `pyplusplus`_,
-version 0.5.1, does not implements next functionality, implemented by `Pyste`_:
+version 0.8.0, does not implements next functionality, implemented by `Pyste`_:
 
     * *pow* operator
-
-    * templates
-    
+   
     * good documentation
 
 Here you can find the complete features list of `pyplusplus`_. 
@@ -324,36 +326,41 @@ generated code:
       those directories into account.
       
     * To define namespace alias. 
+      ::
 
-      | *namespace dt = boost::date_time;*
+        namespace dt = boost::date_time;
 
-      All code, that is generated after this statement, will use *dt* instead of 
-      *boost::date_time*. This allows `pyplusplus`_ to create user friendly code.
+      All code, that is generated after this statement, will use ``dt`` instead of 
+      ``boost::date_time``. This allows `pyplusplus`_ to create user friendly code.
       
     * Classes and functions support 2 modes of code generation. Example:
-      
-      | *struct world{*
-      |     *void set(std::string msg) { this->msg = msg; }*
-      |     *std::string greet() { return msg; }*      
-      |     *std::string msg;*
-      | *};*
+      ::
+
+        struct world{
+            void set(std::string msg) { this->msg = msg; }
+            std::string greet() { return msg; }
+            std::string msg;
+        };
       
       First mode:
-      
-        | *class_<world>("world")*
-        |   *.def("greet", &world::greet)*
-        |   *.def("set", &world::set)*
-        | *;*
+      ::
+
+        class_<world>("world")
+           .def("greet", &world::greet)
+           .def("set", &world::set)
+        ;
+
 
       Second mode:
-      
-        | *if( true ){*
-        |     *typedef class_<world> world_exposer_t;*
-        |     *world_exposer_t world_exposer;*
-        |     *boost::python::scope world_scope( exposer );*
-        |     *world_exposer.def( "greet", ( std::string ( world::\* )() )( &world::greet ) );* 
-        |     *world_exposer.def( "set", ( void ( world::\* )(std::string) )( &world::set ) );*          
-        | *}*
+      ::
+
+        if( true ){
+            typedef class_<world> world_exposer_t;
+            world_exposer_t world_exposer;
+            boost::python::scope world_scope( exposer );
+            world_exposer.def( "greet", ( std::string ( world::* )() )( &world::greet ) );
+            world_exposer.def( "set", ( void ( world::* )(std::string) )( &world::set ) );
+        }
       
       Second mode is better then first, because:
       
@@ -410,7 +417,7 @@ of time and motivation prevents him to work on `Pyste`_.
 
 .. _`screenshot` : ./../pyplusplus_demo.png
 .. _`pyplusplus` : ./../pyplusplus.html
-.. _`pygccxml` : http://pygccxml.sourceforge.net
+.. _`pygccxml` : ./../../pygccxml/pygccxml.html
 .. _`Pyste`: http://www.boost.org/libs/python/doc/index.html
 .. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
 .. _`SourceForge`: http://sourceforge.net/index.php

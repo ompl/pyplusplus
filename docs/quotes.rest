@@ -2,6 +2,12 @@
 What they say about pyplusplus?
 ===============================
 
+.. contents:: Table of contents
+
+-----------------
+What do they say?
+-----------------
+
 "... If you can, use pyplusplus over pyste. I say that for ALL users of
 pyste, pyplusplus is now mature enough to be useful as well as being
 actively developed. It can also do quite a few tricks pyste cannot. "
@@ -18,8 +24,32 @@ create it and make it available. "
 
   Allen Bierbaum, the author of `PyOpenSG`_ library
   
-  
+------------------------
+Who is using pyplusplus?
+------------------------
 
+* Matthias Baas, the author of `Python Computer Graphics Kit`_ project, is using 
+  `pyplusplus`_ to create Python bindings for `Maya C++ SDK`__. 
+    
+
+  .. __ : http://www.highend3d.com/maya
+
+* I am :-). I created Python bindings for next libraries:
+    
+  * `boost.date_time`_
+  * `boost.crc`_
+  * `boost.rational`_
+  * `boost.random`_
+
+.. _`boost.date_time` : http://boost.org/doc/html/date_time.html
+.. _`boost.crc` : http://boost.org/libs/crc/index.html
+.. _`boost.rational` : http://boost.org/libs/rational/index.html
+.. _`boost.random` : http://boost.org/libs/random/index.html
+
+  You can download the bindings from https://sourceforge.net/project/showfiles.php?group_id=118209 .
+
+.. _`pyplusplus` : ./pyplusplus.html
+.. _`Python Computer Graphics Kit` : http://cgkit.sourceforge.net/
 .. _`TnFOX`: http://www.nedprod.com/TnFOX/
 .. _`PyOpenSG`: https://realityforge.vrsource.org/view/PyOpenSG/WebHome
 
