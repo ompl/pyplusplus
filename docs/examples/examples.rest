@@ -8,9 +8,10 @@ Examples
 Graphical interface
 -------------------
 
-`pyplusplus`_ has nice, small and simple graphical interface. Please, read 
+`pyplusplus`_ has nice, small and simple `graphical interface`_. Please, read 
 `tutorials`_ for more information.
 
+.. _`graphical interface` : ./../tutorials/pyplusplus_demo.png
 .. _`tutorials` : ./../tutorials/tutorials.html
 
 -------
@@ -24,22 +25,33 @@ to create Python bindings for the library. Read more `here`__.
 ..  __ : ./easybmp/easybmp.html
 
 ---------------
-boost.date_time
+boost libraries
 ---------------
 
-I thought that running unit tests is not enough. I wanted to check `pyplusplus`_
-on big and complex projects. Also I wanted to check, whether it really simple
-to create fully working Python bindings for such projects. The short answer it is 
-not. The long answer is `here`__.
+Boost provides free peer-reviewed portable C++ source libraries. 
 
-..  __ : ./date_time/date_time.html
+Using `pyplusplus`_ I created Python bindings for few libraries:
+
+  * `boost.date_time`_
+  * `boost.crc`_
+  * `boost.rational`_
+  * `boost.random`_
+
+This is not "just another example". I went father and created new package: 
+`pyboost`_. This is fully working Python package, with almost all unit test from
+the libraries ported to Python. For more information please read `pyboost`_ 
+package documentation.
+
+.. _`pyboost` : ./boost/boost.html
+  
+.. _`boost.date_time` : http://boost.org/doc/html/date_time.html
+.. _`boost.crc` : http://boost.org/libs/crc/index.html
+.. _`boost.rational` : http://boost.org/libs/rational/index.html
+.. _`boost.random` : http://boost.org/libs/random/index.html
 
 .. _`GUI`: ./../tutorials/pyplusplus_demo.png
 .. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
 .. _`pyplusplus` : ./../pyplusplus.html
-.. _`boost.date_time` : http://www.boost.org
-.. _`py_easybmp` : ./easybmp/easybmp.html
-.. _`py_date_time` : ./date_time/date_time.html
 .. _`EasyBMP`: http://easybmp.sourceforge.net/
 
 ..

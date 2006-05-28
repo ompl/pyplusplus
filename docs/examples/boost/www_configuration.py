@@ -1,2 +1,2 @@
-name = 'boost.date_time'
+name = 'boost'
 #This directory used as place holder for pyplusplus directory
