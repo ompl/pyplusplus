@@ -1,6 +1,6 @@
-=======================
-boost.date_time example
-=======================
+===============
+boost libraries
+===============
 
 .. contents:: Table of contents
 
@@ -8,147 +8,66 @@ boost.date_time example
  Introduction
 --------------
 
-What is the boost.date_time?
-----------------------------
-
-`boost`_ is repository of free peer-reviewed portable C++ source libraries.
-
-`date_time`_ is a cross-platform and open source C++ library designed to provide 
-a basis for performing efficient time calculations. The `date_time`_  library has
-been created by Jeff Garland.
-
 What is the `pyplusplus`_?
 --------------------------
 
 .. include:: ./../../definition.rest
 
+What is the Boost?
+------------------
+
+`Boost`_ is repository of free peer-reviewed portable C++ source libraries. 
+
+`Boost`_ works on almost any modern operating system, including UNIX and Windows 
+variants. 
+
 Abstract
 --------
 
+`Boost`_ libraries have good interface, documentation and unit tests.
+A lot of people contributed thier knowledge and expirience to those libraries.
+Ten `Boost`_ libraries are already included in the `C++ Standards Committee's`_
+Library Technical Report ( `TR1`_ ) as a step toward becoming part of a future 
+C++ Standard. More Boost libraries are proposed for the upcoming `TR2`_.
+
+.. _`C++ Standards Committee's` : http://www.open-std.org/jtc1/sc22/wg21/
+.. _`TR1` : http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1745.pdf
+.. _`TR2` : http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1810.html
+
+
 I believe that `pyplusplus`_ is ready for hard work. It is quick, stable and 
-flexible. In order to prove this, I decided to create `Python`_ bindings for a 
-few libraries. One of them is the `date_time`_. I choose the `date_time`_ library for
-the next reasons:
- 
-    + In my opinion, `Python`_ is missing good date\\time library.
-    
-    + The `date_time`_ is a library with
-       
-      * good documentation
-  
-      * well defined interfaces
+flexible. `pyplusplus`_ is a new tool and in my opinion I should prove its 
+usefulness. Using `pyplusplus`_, I exposed next libraries to Python:
 
-      * clear concepts 
+  * `boost.date_time`_
+  * `boost.crc`_
+  * `boost.rational`_
+  * `boost.random`_
 
-      * comprehensive unit tests
-       
-      All this made working with library to be a pleasure.
-    
-    + The `date_time`_ implementation uses next C++ techniques and patterns: 
-        
-       * extensive use of templates
-        
-       * template meta-programming ( MPL )
-        
-       * preprocessor meta-programming ( PPL )
-        
-       * operator overloading
-        
-       * implicit conversion
-        
-       * smart pointers
-        
-       * ...
-        
-      The `date_time`_ example fully demonstrates the capabilities of `pyplusplus`_.
+There are few reasons I choose to expose those libraries. 
 
-It took me one week, evenings only, to expose the `date_time`_ library to `Python`_.
-I have added few missing features to `pyplusplus`_, polished existing ones. Most of
-the time I spent translating tests from C++ to `Python`_. This examples consist
-few files and directories:
+1. I used those libraries at my work. 
 
-    1. environment.py - contains different environment settings
-    
-    2. customization_data.py - contains a table of aliases and other data
-    
-    3. generate_code.py - main file
-    
-    4. sconstruct - build configuration file
+2. All those libraries have:
 
-    5. generated - directory that contains all generated code and only it
-    
-    6. unittests - directory that contains some test, that has been ported from
-       C++
+  * good documentation
+  * well defined interfaces
+  * clear concepts 
+  * comprehensive unit tests
 
-Files and directories located under "pyplusplus-x.y.z/examples/py_date_time".
-Where x.y.z is the version of `pyplusplus`_ you are using.
+3. I think, that Python is missing functionality provided by `boost.date_time`_
+   and `boost.random`_ libraries. 
 
-------------------------
-What should be exportes?
-------------------------
-The result of this step should be set of declarations I want to export to Python.
-There were few problems I should have solved at this stage.
+I spent different amount of time on each library. It took me one week, to expose 
+the `boost.date_time`_ library. I added few missing features to `pyplusplus`_,
+polished the existing ones. Most of the time I spent translating tests from C++ 
+to `Python`_. It took me 3 days to expose all other libraries.
 
-    1. Compilation of the `date_time`_ library takes some time. Fortunately 
-       `pygccxml`_ allows to create, save  and read `GCC-XML`_ generated file. 
-       Instead of parsing source files each time, `pygccxml`_ parses xml files only.
-       Now, it takes only few seconds to read declarations. 
-       
-    2. The `date_time`_ library makes an extensive use of an other C++ libraries.
-       Filtering was the second problem I had to deal with. It was easy.
-       I wanted to export all declarations, defined under namespaces by the `date_time`_
-       library: date_time, posix_time, local_time, gregorian. I do not want to 
-       export functionality related to facet, parsing, formatting. Well, this 
-       way I filtered out most of the declarations I do not need.
+---------------
+pyboost package
+---------------
 
-----------------------
-Configure declarations
-----------------------
-There is a lot of configuration have been applied on declarations:
 
-1. Every template instantiation class has been renamed. The result: `Python`_ 
-   bindings have exactly the same names as in C++. This also solves an other very 
-   important issue: original library documentation and examples - they could be 
-   reused, without any changes. You can take a look on py_date_time/unittests 
-   directory content.
-
-2. Namespace aliases have been introduced. ``bpt`` is shorter then 
-   ``boost::posix_time``. As a result, generated code is more readable.
-
-3. Operators. The `date_time`_ library is using `boost.operators`_ framework to
-   implement operators overloading. This causes a small problem in `Python`_
-   code. Operators, defined in based class, were not visible while using
-   derived class. After small conversation with people, from boost.python 
-   list, the solution was found - to redefine all operators in derived class. 
-   This functionality was missing in `pyplusplus`_. It took me one hour to 
-   implement it. *code_creator.class_t* class from now has new property
-   called *redefine_operators*. All I needed to do, in order to export 
-   operators in derived class, is to turn the flag on.
-    
----------------------
-Writing code to files
----------------------
-Functionality provided by `pyplusplus`_ was good enough for this use case. More 
-over, `pyplusplus`_ writes code into file only in case the code is different.
-This functionality was specially useful - small compilation time.
-
------------
-Small bonus
------------
-`boost.date_time`_ library is under development. There were a lot of changes
-from version 1.33 to 1.34. Nevertheless I almost did not spend time to change
-or update my script. The main reason is of course the script I wrote. Instead
-of working on every single class/function/file, `pyplusplus`_ allowed me to 
-create a set of rules, that work on whole set of declarations. 
-
-----------
-Conclusion
-----------
-As for me, `pyplusplus`_ is ready for hard work! 
-* Big and complex C++ library has been exposed to `Python`_ in few days only.
-* You can see from script, that there is no need in deep knowledge of `boost.python`_ library.
-* Python gain an excelent functionality for dealing with date/time.
-* Real world, 3rd party project is used in testing of `pyplusplus`_.
 
 --------
 Download
@@ -159,6 +78,13 @@ http://sourceforge.net/project/showfiles.php?group_id=118209.
 I am going to continue development of the `Python`_ bindings for 
 `boost.date_time`_ library.
 
+
+.. _`boost.date_time` : http://boost.org/doc/html/date_time.html
+.. _`boost.crc` : http://boost.org/libs/crc/index.html
+.. _`boost.rational` : http://boost.org/libs/rational/index.html
+.. _`boost.random` : http://boost.org/libs/random/index.html
+
+
 .. _`environment.py`: http://cvs.sourceforge.net/viewcvs.py/pygccxml/source/pyplusplus/examples/py_easybmp/environment.py?view=markup
 .. _`sconstruct`: http://cvs.sourceforge.net/viewcvs.py/pygccxml/source/pyplusplus/examples/py_easybmp/sconstruct?view=markup
 .. _`Python`: http://www.python.org
@@ -166,6 +92,7 @@ I am going to continue development of the `Python`_ bindings for
 .. _`boost.date_time`: http://boost.org/doc/html/date_time.html
 .. _`date_time`: http://boost.org/doc/html/date_time.html
 .. _`boost`: http://www.boost.org
+.. _`Boost`: http://www.boost.org
 .. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
 .. _`boost.operators`: http://www.boost.org/
 .. _`GCC-XML`: http://www.gccxml.org
