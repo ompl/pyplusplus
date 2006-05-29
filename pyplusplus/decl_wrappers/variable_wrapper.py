@@ -40,6 +40,8 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
     def _exportable_impl( self ):
         if not isinstance( self.parent, declarations.class_t ):
             return ''
+        if not self.name:
+            return "pyplusplus can not expose unnamed variables"
         if self.bits == 0 and self.name == "":
             return "pyplusplus can not expose alignement bit."
         type_ = declarations.remove_alias( self.type )
