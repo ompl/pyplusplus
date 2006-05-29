@@ -14,9 +14,9 @@ Graphical interface
 .. _`graphical interface` : ./../tutorials/pyplusplus_demo.png
 .. _`tutorials` : ./../tutorials/tutorials.html
 
--------
-EasyBMP
--------
+---------
+pyeasybmp
+---------
 
 `EasyBMP`_ is a small cross-platform library that provide you functionality
 needed to work with Windows bitmap (BMP) image files. I took me only few minutes
