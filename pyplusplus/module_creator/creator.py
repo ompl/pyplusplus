@@ -17,6 +17,15 @@ VIRTUALITY_TYPES = declarations.VIRTUALITY_TYPES
 
 #TODO: don't export functions that returns non const pointer to fundamental types
 #TODO: add print decl_wrapper.readme messages
+#class Foo{
+#      union {
+#           struct {
+#                   float r,g,b,a;
+#           };
+#           float val[4];
+#       };
+#};
+
 
 class creator_t( declarations.decl_visitor_t ):
     """Creating code creators.
