@@ -51,6 +51,28 @@ public:
     static char get_dd(){ return 'D'; }        
 };
 
+struct e_t{
+    virtual void do_smth() = 0;
+private:
+    c_t c;    
+};
+
+struct f_t{
+    f_t() : i(0){}
+    virtual void do_smth() = 0;
+private:
+    const int i;    
+};
+
+struct g_t{    
+    enum E{e};
+    g_t() : e_(e){}
+    virtual void do_smth() = 0;
+private:
+    const E e_;    
+};
+
+
 }
 
 #endif//__noncopyable_to_be_exported_hpp__

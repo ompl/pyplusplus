@@ -80,7 +80,7 @@ class class_t( scoped.scoped_t ):
         return operator_creators
         
     def _generate_noncopyable(self):
-        if declarations.is_noncopyable( self.declaration ):
+        if self.declaration.noncopyable:
             return algorithm.create_identifier( self, '::boost::noncopyable' )
 
     def _generate_bases(self, base_creators):       

@@ -565,7 +565,7 @@ class creator_t( declarations.decl_visitor_t ):
             if declarations.has_trivial_copy( self.curr_decl ):
                 #I don't know but sometimes boost.python requieres
                 #to construct wrapper from wrapped classe
-                if not declarations.is_noncopyable( self.curr_decl ):
+                if not self.curr_decl.noncopyable:
                     scons = code_creators.special_constructor_wrapper_t( class_inst=self.curr_decl )
                     wrapper.adopt_creator( scons )    
                 trivial_constr = declarations.find_trivial_constructor(self.curr_decl)

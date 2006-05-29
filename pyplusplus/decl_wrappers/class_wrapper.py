@@ -29,7 +29,7 @@ class class_t(scopedef_wrapper.scopedef_t, declarations.class_t):
         self._always_expose_using_scope = False
         self._redefine_operators = False        
         self._held_type = None
-        self._noncopyable = False
+        self._noncopyable = None
         self._wrapper_alias = self._generate_valid_name() + "_wrapper"
         self._user_code = []
         self._wrapper_user_code = []
@@ -54,6 +54,8 @@ class class_t(scopedef_wrapper.scopedef_t, declarations.class_t):
     held_type = property( _get_held_type, _set_held_type )
 
     def _get_noncopyable(self):
+        if self._noncopyable is None:
+            self._noncopyable = declarations.is_noncopyable( self )
         return self._noncopyable
     def _set_noncopyable(self, noncopyable):
         self._noncopyable= noncopyable
