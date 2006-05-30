@@ -62,7 +62,23 @@ class tester_t(unittest.TestCase):
             self.fail( "Runtime error has not been raised." )
         except RuntimeError:
             pass
+    
+    def test__getitem__( self ):
+        mb = module_builder.module_builder_t( self._get_files()
+                                              , gccxml_path=autoconfig.gccxml.executable
+                                              , include_paths=[autoconfig.boost.include]
+                                              , undefine_symbols=['__MINGW32__'] )
         
+        public_bases = mb.classes( 'public_base_t' )
+        self.failUnless( 1 == len( public_bases ) )
+
+        public_bases.include()
+        self.failUnless( public_bases[0].ignore == False )
+            
+        mb.global_ns[ 'public_base_t' ].exclude()
+                
+        self.failUnless( public_bases[0].ignore == True )
+
 def create_suite():
     suite = unittest.TestSuite()    
     suite.addTest( unittest.makeSuite(tester_t))
