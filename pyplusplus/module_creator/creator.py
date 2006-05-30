@@ -82,6 +82,7 @@ class creator_t( declarations.decl_visitor_t ):
             self.__types_db = types_database.types_database_t()
         
         self.__extmodule = code_creators.module_t()        
+        self.__extmodule.add_system_header( "boost/python.hpp" )
         self.__extmodule.adopt_creator( code_creators.include_t( header="boost/python.hpp" ) )
         self.__create_castinig_constructor = create_castinig_constructor
         if boost_python_ns_name:
@@ -100,7 +101,7 @@ class creator_t( declarations.decl_visitor_t ):
         self.__cr_array_1_included = False
         self.__array_1_registered = set() #(type.decl_string,size)
         self.__free_operators = []
-        
+    
     def _prepare_decls( self, decls ):
         #leave only declarations defined under namespace, but remove namespaces
         decls = filter( lambda x: not isinstance( x, declarations.namespace_t ) \
@@ -382,6 +383,7 @@ class creator_t( declarations.decl_visitor_t ):
             if not isinstance( cls, decl_wrappers.class_t ):
                 continue
             if cls.indexing_suites:
+                self.__extmodule.add_system_header( "boost/python/suite/indexing/vector_indexing_suite.hpp" )
                 include = code_creators.include_t( header="boost/python/suite/indexing/vector_indexing_suite.hpp" )
                 self.__extmodule.adopt_include(include)
                 break
@@ -642,6 +644,7 @@ class creator_t( declarations.decl_visitor_t ):
         
         if declarations.is_array( self.curr_decl.type ):
             if not self.__cr_array_1_included:
+                self.__extmodule.add_system_header( code_repository.array_1.file_name )
                 self.__extmodule.adopt_creator( code_creators.include_t( code_repository.array_1.file_name )
                                                 , self.__extmodule.first_include_index() + 1)
                 self.__cr_array_1_included = True

@@ -21,8 +21,13 @@ class module_t(compound.compound_t):
     def __init__(self):
         """Constructor.
         """
-        compound.compound_t.__init__(self, None)    
+        compound.compound_t.__init__(self, None)
+        self.__system_headers = []
     
+    def add_system_header( self, header ):
+        normalize = include_directories.include_directories_t.normalize
+        self.__system_headers.append( normalize( header ) )
+        
     def _get_include_dirs(self):
         include_dirs = algorithm.creator_finder.find_by_class_instance( 
             what=include_directories.include_directories_t
@@ -111,7 +116,7 @@ class module_t(compound.compound_t):
         else:
             raise RuntimeError( "include_t creator has not been found." )
     
-    def replace_included_headers( self, headers, leave_boost_python_header=True ):
+    def replace_included_headers( self, headers, leave_system_headers=True ):
         to_be_removed = []
         for creator in self.creators:
             if isinstance( creator, include.include_t ):
@@ -119,16 +124,10 @@ class module_t(compound.compound_t):
             elif isinstance( creator, module_body.module_body_t ):
                 break
         
-        boost_python_header = include_directories.include_directories_t.normalize( 'boost/python.hpp' )
-        boost_python_suite_header \
-            = include_directories.include_directories_t.normalize( "boost/python/suite/indexing/vector_indexing_suite.hpp" )
         for creator in to_be_removed:
-            if boost_python_header in creator.header: 
-                if not leave_boost_python_header:
+            if creator.header in self.__system_headers: 
+                if not leave_system_headers:
                     self.remove_creator( creator )
-            elif boost_python_suite_header in creator.header:
-                if not leave_boost_python_header:
-                    self.remove_creator( creator )                
             else:
                 self.remove_creator( creator )
         map( lambda header: self.adopt_include( include.include_t( header=header ) )
