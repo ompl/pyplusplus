@@ -294,7 +294,9 @@ public:
         return x * x + y * y + z * z;
     }
 
-    void do_smth( const Vector3& x = ZERO ){}
+    Vector3 do_smth( const Vector3& x = ZERO ){
+        return x;
+    }
     // special points
     static const Vector3 ZERO;
 
