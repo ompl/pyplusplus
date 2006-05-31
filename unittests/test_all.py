@@ -52,6 +52,7 @@ import private_assign_tester
 import protected_tester
 import indexing_suites_tester
 import hierarchy3_tester
+import vector3_tester
 
 def create_suite(times):  
     testers = [ 
@@ -101,6 +102,7 @@ def create_suite(times):
         , protected_tester
         , indexing_suites_tester
         , hierarchy3_tester
+        , vector3_tester
     ]
     
     main_suite = unittest.TestSuite()    
