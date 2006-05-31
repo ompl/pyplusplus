@@ -41,7 +41,8 @@ class writer_t(object):
     
     def write_code_repository(self, dir):
         for cr in code_repository.all:
-            self.write_file( os.path.join( dir, cr.file_name ), cr.code )
+            if self.__extmodule.is_system_header( cr.file_name ):
+                self.write_file( os.path.join( dir, cr.file_name ), cr.code )
     
     def write_file( fpath, content ):
         """Write a source file.
