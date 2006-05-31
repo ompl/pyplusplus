@@ -33,7 +33,8 @@ class module_builder_t(object):
                   , compilation_verbose=False
                   , compilation_mode=None
                   , cache=None
-                  , optimize_queries=True):
+                  , optimize_queries=True
+                  , ignore_gccxml_output=False):
         """
         @param files: list of files, declarations from them you want to export
         @type files: list of strings or L{file_configuration_t} instances
@@ -60,7 +61,8 @@ class module_builder_t(object):
             , define_symbols=define_symbols
             , undefine_symbols=undefine_symbols
             , start_with_declarations=start_with_declarations
-            , verbose=compilation_verbose)
+            , verbose=compilation_verbose
+            , ignore_gccxml_output=ignore_gccxml_output)
 
         #may be in future I will add those directories to user_defined_directories
         #to self.__code_creator.
