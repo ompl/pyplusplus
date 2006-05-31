@@ -79,6 +79,26 @@ class tester_t(unittest.TestCase):
                 
         self.failUnless( public_bases[0].ignore == True )
 
+    #def test__getitem__2( self ):
+        #mb = module_builder.module_builder_t( self._get_files()
+                                              #, gccxml_path=autoconfig.gccxml.executable
+                                              #, include_paths=[autoconfig.boost.include]
+                                              #, undefine_symbols=['__MINGW32__'] )
+        
+        #mem_funs = mb.classes( 'public_base_t' ).member_functions('regular')
+        #print len(mem_funs)
+        ##self.failUnless( 1 == len( public_bases ) )
+
+        #mem_funs.include()
+        #for mf in mem_funs:
+            #self.failUnless( mf.ignore == False )
+        
+        #mb.global_ns[ 'public_base_t' ]['regular'].exclude()
+                
+        #for mf in mem_funs:
+            #self.failUnless( mf.ignore == False )
+
+
 def create_suite():
     suite = unittest.TestSuite()    
     suite.addTest( unittest.makeSuite(tester_t))
