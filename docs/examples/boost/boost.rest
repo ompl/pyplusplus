@@ -67,16 +67,100 @@ to `Python`_. It took me 3 days to expose all other libraries.
 pyboost package
 ---------------
 
-...
+Documentation
+-------------
+Right now, pyboost package does not have a documentation. In my opinion it is
+fairly simple to read original documentation and "translate" it to Python.
+
+
+Examples
+--------
+
+random
+~~~~~~
+
+* C++ code: http://boost.org/libs/random/index.html
+  
+* Python code:
+
+  ::
+
+    import time
+    from pyboost import boost_random
+    |        
+    rng = boost_random.mt19937( int( time.time() ) ) #setting initial seed
+    six = boost_random.uniform_int(1,6)
+    die = boost_random.variate_generator( rng, six )
+    |
+    print die()
+
+rational
+~~~~~~~~
+
+* C++ code: http://boost.org/libs/rational/rational_example.cpp
+
+* Python code:
+  
+  ::
+
+    import unittest
+    from pyboost import rational
+     
+     
+    half = rational.rational( 1, 2 )
+    one = rational.rational( 1 )
+    two = rational.rational( 2 )
+                
+            
+    #Some basic checks
+    assert half.numerator() == 1
+    assert half.denominator() == 2
+    assert float(half) == 0.5
+            
+            
+    #Arithmetic
+    assert half + half == one == 1
+    assert one - half == half
+    assert two * half == one == 1
+    assert one / half == two == 2
+
+
+crc
+~~~
+
+* C++ code: http://boost.org/libs/crc/crc_example.cpp
+
+* Python code:
+
+  ::
+
+    import os
+    import sys
+    from pyboost import crc
+        
+        
+    if __name__ == '__main__':
+        if sys.argv:
+            files = sys.argv
+        else:
+            files = [ sys.executable ]
+          
+        try:
+            result = crc.crc_32_type()
+            for file_name in files:
+                ifs = file( file_name, 'rb' )
+                for line in ifs:
+                    result.process_bytes( line )
+            print hex( result.checksum() ).upper()
+        except Exception, error:
+            sys.stderr.write( "Found an exception with'%s'%s" %( str( error ), os.linesep ) )
+            sys.exit( 1 )
 
 --------
 Download
 --------
 
 http://sourceforge.net/project/showfiles.php?group_id=118209. 
-
-I am going to continue development of the `Python`_ bindings for 
-`boost.date_time`_ library.
 
 
 .. _`boost.date_time` : http://boost.org/doc/html/date_time.html

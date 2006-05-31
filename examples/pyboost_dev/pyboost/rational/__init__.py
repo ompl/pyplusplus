@@ -9,6 +9,7 @@ import _rational_
 from _rational_ import rational
 from _rational_ import lcm
 from _rational_ import gcd
+from _rational_ import bad_rational
 
 rational.__abs__ = _rational_.abs
 rational.__float__ = _rational_.to_double

@@ -19,6 +19,8 @@ LICENSE = """// Copyright 2004 Roman Yakovenko.
 // http://www.boost.org/LICENSE_1_0.txt)
 """
 
+#TODO: for some reason unary - was not exported
+
 class code_generator_t(object):    
     def __init__(self):
         module_builder.set_logger_level( logging.INFO )
