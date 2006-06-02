@@ -26,6 +26,8 @@ In order to expose ``get_size`` function, an user need to create next wrapper:
 `pyplusplus`_ to generate right wrapper. Also, it will be possible to create
 a custom policies.
 
+This document describes what is *going to be implemented*.
+
 --------
 Analysis
 --------
@@ -50,9 +52,9 @@ Function-wrapper signature will be a little bit different in every case.
 
 Variable names
 --------------
-I think it should be possible to apply few |cwp| on a single function. 
-The main, ( read unresolved ) issue, is management of variable names within 
-function-wrapper. I see next problems, that we should solve, before proceeding 
+I think it should be possible to apply few |cwp| on a single function.
+The main, ( read unresolved ) issue, is management of variable names within
+function-wrapper. I see next problems, that we should solve, before proceeding
 to implementation:
 
 1. To share variable name, between different pieces of code.
@@ -198,7 +200,7 @@ Arrays size
 
       - size of array is some global/local variable
 
-      - ize of array is returned by invocation some function
+      - size of array is returned by invocation some function
 
 
 status as exception

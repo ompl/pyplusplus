@@ -90,7 +90,10 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
 
     overridable = property( get_overridable, set_overridable
                             , doc = get_overridable.__doc__ )
-
+    
+    def _exportable_impl_derived( self ):
+        return ''
+    
     def _exportable_impl( self ):
         #see http://www.boost.org/libs/python/doc/v2/faq.html#funcptr
         if len( self.arguments ) > 10:
@@ -111,7 +114,12 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
                 if isinstance( dtype.declaration.parent, declarations.class_t ):
                     if dtype.declaration not in dtype.declaration.parent.public_members:
                         return "pyplusplus can not expose fuction that takes as argument/returns instance of non public class. Generated code will not compile."
-        return ''
+            no_ref = declarations.remove_reference( some_type )
+            no_ptr = declarations.remove_pointer( no_ref )
+            no_const = declarations.remove_const( no_ptr )
+            if declarations.is_array( no_const ):
+                return "pyplusplus can not expose fuction that takes as argument/returns C++ arrays. This will be changed in near future."                
+        return self._exportable_impl_derived()
 
     def _readme_impl( self ):
         def suspicious_type( type_ ):
@@ -144,7 +152,7 @@ class constructor_t( declarations.constructor_t, calldef_t ):
         declarations.constructor_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
 
-    def _exportable_impl( self ):
+    def _exportable_impl_derived( self ):
         if self.is_artificial:
             return 'pyplusplus does not exports compiler generated constructors'
         return ''
@@ -197,7 +205,7 @@ class member_operator_t( declarations.member_operator_t, calldef_t ):
         return alias
     alias = property( _get_alias, decl_wrapper.decl_wrapper_t._set_alias )
 
-    def _exportable_impl( self ):
+    def _exportable_impl_derived( self ):
         return operators_helper.exportable( self )
 
 
@@ -275,5 +283,5 @@ class free_operator_t( declarations.free_operator_t, calldef_t ):
         declarations.free_operator_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
 
-    def _exportable_impl( self ):
+    def _exportable_impl_derived( self ):
         return operators_helper.exportable( self )

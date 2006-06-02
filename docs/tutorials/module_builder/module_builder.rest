@@ -40,7 +40,7 @@ this class.
 module_builder_t.__init__
 -------------------------
 
-First of all, what is needed in order to creates an instance of the class?
+First of all, what is needed in order to create an instance of the class?
 
 ``module_builder_t.__init__`` methods takes few arguments:
 
