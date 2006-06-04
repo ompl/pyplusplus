@@ -1,0 +1,69 @@
+====
+TODO
+====
+
+.. contents:: Table of contents
+
+-----------
+Description
+-----------
+
+This page is an official `pyplusplus`_ "TODO" page. 
+
+For small tasks( == user requests ), the description of the task will be written
+here. Big tasks will have their own page.
+
+
+---------------
+Unnamed classes
+---------------
+There is no techical reason why unnamed classes/structs/unions are not exported
+by `pyplusplus`_:
+::
+
+  class Foo{
+      union {
+          struct {
+              float r,g,b,a;
+          };
+          float val[4];
+      };
+  };
+  
+Implementation details
+----------------------
+As it seems to me, the only code that should be changed is 
+pyplusplus/module_creator/creator.py file. To be more specific: all code creators,
+for declarations in unnamed classes, should be created under named class. 
+
+The coding itself should take something like 4 - 5 hours, including unit test.
+
+---------------------
+Call wrapper policies
+---------------------
+
+Not all functions could be exposed to Python as is. This `document`__ will 
+explain how `pyplusplus`_ will help users to create wrappers around those functions.
+
+.. __ : ./call_wrapper_policies.html
+
+--------------
+Indexing suite
+--------------
+
+`pyplusplus`_ will expose C++ std containers. This `document`__ will describe 
+how it will work.
+
+
+.. _`pyplusplus` : ./../pyplusplus.html
+.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Python`: http://www.python.org
+.. _`GCC-XML`: http://www.gccxml.org
+
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:
