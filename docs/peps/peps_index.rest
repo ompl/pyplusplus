@@ -10,9 +10,8 @@ Description
 
 This page is an official `pyplusplus`_ "TODO" page. 
 
-For small tasks( == user requests ), the description of the task will be written
-here. Big tasks will have their own page.
-
+For small features, the description of the feature and it's implementation will 
+be written here. Big features will get their own page.
 
 ---------------
 Unnamed classes
@@ -54,6 +53,7 @@ Indexing suite
 `pyplusplus`_ will expose C++ std containers. This `document`__ will describe 
 how it will work.
 
+.. __ : ./indexing_suite.html
 
 .. _`pyplusplus` : ./../pyplusplus.html
 .. _`boost.python`: http://www.boost.org/libs/python/doc/index.html

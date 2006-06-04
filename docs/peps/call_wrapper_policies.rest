@@ -227,6 +227,16 @@ Why not :-)? See next FAQ: http://boost.org/libs/python/doc/v2/faq.html#threadsu
 So, how `pyplusplus`_ can help? `pyplusplus`_ can generate exception safe code,
 that will acquire and release Python global interpreter lock.
 
+-------
+Summary
+-------
+
+It still not clear to me how it should be implemented. There are also some issues
+with `boost.python`_ library before we can implement some policies. 
+
+If you can help or have some nice idea, please share: 
+https://lists.sourceforge.net/lists/listinfo/pygccxml-development 
+
 
 .. _`pyplusplus` : ./../pyplusplus.html
 .. |cwp| replace:: *"call wrapper policies"*

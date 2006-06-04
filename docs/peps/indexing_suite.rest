@@ -39,6 +39,7 @@ C++ code:
   std::vector<string> get_options(){...}
 
 ::
+
   struct my_data{...};
   std::map< int, my_data > get_data();
   
@@ -54,13 +55,13 @@ steps will describe what `pyplusplus`_ will do in this case:
    functionality provided by `boost.python`_ library or `pyplusplus`_ 
    ``code repository``.
 
-4. It will generate a code, that will use that functionality. 
+4. It will generate the code, that will use that functionality. 
 
 So far, so good. Sometimes, there are use cases, when user has to change default
 values, for example ``NoProxy`` or ``DerivedPolicies``. What interface `pyplusplus`_ 
 will provide in order to change the defaults? Well, ``std::vector< std::string >``
 is the class that could be found in declarations tree, right? User can find the
-class and to change the defaults on that class.
+class and change the defaults:
 ::
 
   mb = module_builder_t( ... )
