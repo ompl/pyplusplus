@@ -6,7 +6,7 @@
 import os
 import decl_wrapper
 from pygccxml import declarations
-
+from pyplusplus import _logging_
 ##May be in future I will enable this functionality again, right now it seems
 ##that this is useless
 ##def is_finalizable(self):
@@ -97,7 +97,11 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
     def _exportable_impl( self ):
         #see http://www.boost.org/libs/python/doc/v2/faq.html#funcptr
         if len( self.arguments ) > 10:
-            return "boost.python can not expose function with more then 10 arguments. ( impl details: boost.tuple is limited to 10 args )."
+            msg = "You have function with more then 10 arguments( %d ). "
+            msg = msg + " You should adjest BOOST_PYTHON_MAX_ARITY"
+            msg = msg + " For more information see: http://mail.python.org/pipermail/c++-sig/2002-June/001554.html"
+            _logging_.logger.info( msg % len( self.arguments ) )
+
         all_types = [ arg.type for arg in self.arguments ]
         all_types.append( self.return_type )
         for some_type in all_types:
