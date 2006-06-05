@@ -11,13 +11,14 @@
 #############################################################################
 
 import os
-from environment import settings
+import sys
+sys.path.append( '../..' )
+from environment import gccxml
 from pyplusplus import module_builder
 
 mb = module_builder.module_builder_t(
         files=['hello_world.hpp']
-        , gccxml_path=settings.gccxml_path #path to gccxml executable
-        , working_directory=settings.working_dir ) #setting working directory for gccxml
+        , gccxml_path=gccxml.executable ) #path to gccxml executable
 
 #rename enum Color to color
 Color = mb.enum( 'color' )
@@ -53,7 +54,7 @@ mb.build_code_creator( module_name='hw' )
 mb.code_creator.license = '//Boost Software License( http://boost.org/more/license_info.html )'
 
 #I don't want absolute includes within code
-mb.code_creator.user_defined_directories.append( settings.working_dir )
+mb.code_creator.user_defined_directories.append( os.path.abspath('.') )
 
 #And finally we can write code to the disk
-mb.write_module( os.path.join( settings.working_dir, 'hello_world.py.cpp' ) )
+mb.write_module( os.path.join( os.path.abspath('.'), 'hello_world.py.cpp' ) )

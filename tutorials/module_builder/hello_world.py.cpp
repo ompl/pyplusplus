@@ -2,9 +2,6 @@
 
 //Boost Software License( http://boost.org/more/license_info.html )
 
-// std directories: []
-// user defined directories: ['d:\\pygccxml_sources\\source\\pyplusplus\\examples\\tutorials']
-
 #include "boost/python.hpp"
 
 #include "hello_world.hpp"
@@ -19,12 +16,12 @@ BOOST_PYTHON_MODULE(hw){
         .export_values()
         ;
 
-    bp::class_< animal >( "animal", bp::init< bp::optional< std::string const & > >(( bp::arg("name")="" )) )    
-        .def( "get_name_ptr"
-                , &animal::get_name_ptr
+    bp::class_< animal, boost::noncopyable >( "animal", bp::init< bp::optional< std::string const & > >(( bp::arg("name")="" )) )    
+        .def("get_name_ptr"
+                , &::animal::get_name_ptr
                 , bp::return_internal_reference< 1, bp::default_call_policies >() )    
-        .def( "name"
-                , &animal::name
+        .def("name"
+                , &::animal::name
                 , bp::return_value_policy< bp::copy_const_reference, bp::default_call_policies >() );
 
     bp::implicitly_convertible< std::string const &, animal >();

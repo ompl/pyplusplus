@@ -50,13 +50,14 @@ span {
 <span class="S1"># http://www.boost.org/LICENSE_1_0.txt)</span><br />
 <br />
 <span class="S5">import</span><span class="S0"> </span>os<br />
-<span class="S5">from</span><span class="S0"> </span>environment<span class="S0"> </span><span class="S5">import</span><span class="S0"> </span>settings<br />
+<span class="S5">import</span><span class="S0"> </span>sys<br />
+sys<span class="S10">.</span>path<span class="S10">.</span>append<span class="S10">(</span><span class="S0"> </span><span class="S4">'../..'</span><span class="S0"> </span><span class="S10">)</span><br />
+<span class="S5">from</span><span class="S0"> </span>environment<span class="S0"> </span><span class="S5">import</span><span class="S0"> </span>gccxml<br />
 <span class="S5">from</span><span class="S0"> </span>pyplusplus<span class="S0"> </span><span class="S5">import</span><span class="S0"> </span>module_builder<br />
 <br />
 mb<span class="S0"> </span><span class="S10">=</span><span class="S0"> </span>module_builder<span class="S10">.</span>module_builder_t<span class="S10">(</span><br />
 <span class="S0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>files<span class="S10">=[</span><span class="S4">'hello_world.hpp'</span><span class="S10">]</span><br />
-<span class="S0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S10">,</span><span class="S0"> </span>gccxml_path<span class="S10">=</span>settings<span class="S10">.</span>gccxml_path<span class="S0"> </span><span class="S1">#path to gccxml executable</span><br />
-<span class="S0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S10">,</span><span class="S0"> </span>working_directory<span class="S10">=</span>settings<span class="S10">.</span>working_dir<span class="S0"> </span><span class="S10">)</span><span class="S0"> </span><span class="S1">#setting working directory for gccxml</span><br />
+<span class="S0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="S10">,</span><span class="S0"> </span>gccxml_path<span class="S10">=</span>gccxml<span class="S10">.</span>executable<span class="S0"> </span><span class="S10">)</span><span class="S0"> </span><span class="S1">#path to gccxml executable</span><br />
 <br />
 <span class="S1">#rename enum Color to color</span><br />
 Color<span class="S0"> </span><span class="S10">=</span><span class="S0"> </span>mb<span class="S10">.</span>enum<span class="S10">(</span><span class="S0"> </span><span class="S4">'color'</span><span class="S0"> </span><span class="S10">)</span><br />
@@ -92,9 +93,9 @@ mb<span class="S10">.</span>build_code_creator<span class="S10">(</span><span cl
 mb<span class="S10">.</span>code_creator<span class="S10">.</span>license<span class="S0"> </span><span class="S10">=</span><span class="S0"> </span><span class="S4">'//Boost Software License( http://boost.org/more/license_info.html )'</span><br />
 <br />
 <span class="S1">#I don't want absolute includes within code</span><br />
-mb<span class="S10">.</span>code_creator<span class="S10">.</span>user_defined_directories<span class="S10">.</span>append<span class="S10">(</span><span class="S0"> </span>settings<span class="S10">.</span>working_dir<span class="S0"> </span><span class="S10">)</span><br />
+mb<span class="S10">.</span>code_creator<span class="S10">.</span>user_defined_directories<span class="S10">.</span>append<span class="S10">(</span><span class="S0"> </span>os<span class="S10">.</span>path<span class="S10">.</span>abspath<span class="S10">(</span><span class="S4">'.'</span><span class="S10">)</span><span class="S0"> </span><span class="S10">)</span><br />
 <br />
 <span class="S1">#And finally we can write code to the disk</span><br />
-mb<span class="S10">.</span>write_module<span class="S10">(</span><span class="S0"> </span>os<span class="S10">.</span>path<span class="S10">.</span>join<span class="S10">(</span><span class="S0"> </span>settings<span class="S10">.</span>working_dir<span class="S10">,</span><span class="S0"> </span><span class="S4">'hello_world.py.cpp'</span><span class="S0"> </span><span class="S10">)</span><span class="S0"> </span><span class="S10">)</span></span>
+mb<span class="S10">.</span>write_module<span class="S10">(</span><span class="S0"> </span>os<span class="S10">.</span>path<span class="S10">.</span>join<span class="S10">(</span><span class="S0"> </span>os<span class="S10">.</span>path<span class="S10">.</span>abspath<span class="S10">(</span><span class="S4">'.'</span><span class="S10">),</span><span class="S0"> </span><span class="S4">'hello_world.py.cpp'</span><span class="S0"> </span><span class="S10">)</span><span class="S0"> </span><span class="S10">)</span></span>
 </body>
 </html>
