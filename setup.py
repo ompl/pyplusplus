@@ -85,7 +85,7 @@ if sys.argv[-1]=="sdist":
 
 
 setup( name = "pyplusplus",
-       version = "0.8.0",
+       version = "0.8.1",
        description="pyplusplus is a framework of components for creating C++ code generator for boost.python library",
        author="Roman Yakovenko",
        author_email="roman.yakovenko@gmail.com",
