@@ -6,32 +6,24 @@
 
 import os
 import sys
-from environment import settings
+sys.path.append( './../..' )
+import environment
 
-def get_shlibsuffix():
-    if sys.platform == 'win32':
-        return '.pyd'
-    else:
-        return '.so'
-
-def get_ccflags():
-    if sys.platform == 'win32':
-        return ['/MD', '/EHsc' , '/GR' ] 
-    else:
-        return []
-
-def get_target():
-    return os.path.join( settings.unittests_dir, settings.module_name + get_shlibsuffix() )
-
-SharedLibrary( target=get_target()
-    , source=[ 'generated/properties.py.cpp' ]
-    , LIBS=[ 'boost_python', ]
-    , LIBPATH=[ settings.boost_libs_path, settings.python_libs_path ]
-    , CPPPATH=[ settings.boost_path
-                , settings.working_dir
-                , settings.sources_path
-                , settings.python_include_path ]
-    , CCFLAGS=get_ccflags()
+env = Environment(
+      LIBS=['boost_python']
+    , LIBPATH=[ environment.boost.libs, environment.python.libs ]
+    , CPPPATH=[ environment.boost.include, environment.python.include, '#.' ]
     , SHLIBPREFIX=''
-    , SHLIBSUFFIX=get_shlibsuffix()
+    , SHLIBSUFFIX=environment.scons.suffix  
 )
+
+if sys.platform == 'win32':
+    env.Replace( no_import_lib=1 )
+    env.Append( CCFLAGS='/EHsc' )
+else:
+    env.Append( CCFLAGS=' -Os -fPIC -fvisibility=hidden' )
+
+properties = env.SharedLibrary( target='properties'
+                                , source=[ 'generated/properties.py.cpp' ] )
+
+env.Install( '#unittests', properties )

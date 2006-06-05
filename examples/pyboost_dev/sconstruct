@@ -18,6 +18,7 @@ env = Environment(
 
 if sys.platform == 'win32':
     env.Replace( no_import_lib=1 )
+    env.Append( CCFLAGS='/EHsc' )
 else:
     env.Append( CCFLAGS=' -Os -fPIC -fvisibility=hidden' )
 

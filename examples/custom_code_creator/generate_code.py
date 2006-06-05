@@ -17,7 +17,9 @@ In order to do this I created new class property_creator_t. In __init__ it takes
 """
 
 import os
-from environment import settings
+import sys
+sys.path.append( '../..' )
+from environment import gccxml
 from pygccxml import declarations
 from pyplusplus import code_creators
 from pyplusplus import module_builder
@@ -72,13 +74,13 @@ def replace_functions( class_creator ):
         class_creator.adopt_creator( prop_creator )
 
 if __name__ == '__main__':
+    module_name = 'properties'
     #1. creating module builder
     mb = module_builder.module_builder_t( files=['properties.hpp']
-                                          , gccxml_path=settings.gccxml_path
-                                          , working_directory=settings.sources_path )
+                                          , gccxml_path=gccxml.executable )
     #2. creating module code creator
-    mb.build_code_creator( module_name=settings.module_name )    
-    mb.code_creator.user_defined_directories.append( settings.working_dir )
+    mb.build_code_creator( module_name=module_name )    
+    mb.code_creator.user_defined_directories.append( os.path.abspath( '.' ) )
     
     #3. replacing get/set code creators with property code creator
     classes = filter( lambda creator: isinstance( creator, code_creators.class_t )
@@ -86,6 +88,6 @@ if __name__ == '__main__':
     map( replace_functions, classes )
     
     #4. writing module to disk
-    mb.write_module( os.path.join( settings.generated_files_dir, settings.module_name + '.py.cpp') )
+    mb.write_module( os.path.join( os.path.abspath( '.' ), 'generated', module_name + '.py.cpp') )
 
     print 'done'
