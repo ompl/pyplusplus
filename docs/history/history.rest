@@ -16,6 +16,14 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
   * Matthias Baas
   * Allen Bierbaum
   * Lakin Wecker
+  * Georgiy Dernovoy
+
+-------
+Current
+-------
+
+1. Georgiy Dernovoy contributed a patch, that allows `pyplusplus`_ GUI to save\load
+   last used header file.
 
 -------------
 Version 0.8.0

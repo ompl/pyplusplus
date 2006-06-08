@@ -16,6 +16,27 @@ from pyplusplus import module_builder
 
 import wizard
 
+
+class gui_config_t:   
+    
+    @staticmethod
+    def config_file():
+        config_path = os.getenv( 'HOME', os.path.abspath( os.getcwd() ) )
+        return os.path.join( os.path.abspath( config_path ), ".pyplusplus" )
+    
+    @staticmethod
+    def read_header_name():        
+        config_path = gui_config_t.config_file()
+        if os.path.exists(config_path):    
+            return open(config_path).read()
+        else:
+            return ''
+            
+    @staticmethod
+    def save_header_name( header_file ):
+        config_path = gui_config_t.config_file()
+        open(config_path, "w").write(header_file)        
+
 #TODO: add configuration file and ability to start\run it.
 
 class custom_frame_t(Tkinter.Frame):
@@ -135,6 +156,11 @@ class header_file_ui_t(custom_frame_t):
         
         self._header_file = Tkinter.Entry( self, width=35 )
         self._header_file.grid(row=1, column=0, sticky=Tkinter.NW + Tkinter.E)
+        
+        initial_header = gui_config_t.read_header_name()
+        if initial_header:
+            self._header_file.delete( 0, Tkinter.END )
+            self._header_file.insert( 0, initial_header )
             
         temp = Tkinter.Button( self, text="...", command=self._select_header_file )
         temp.grid( row=1, column=2)
@@ -142,7 +168,7 @@ class header_file_ui_t(custom_frame_t):
         map( lambda i:  self.rowconfigure( i, weight=1 ), range(2) )
         
         
-    def _select_header_file( self ):
+    def _select_header_file( self ):        
         file_name = tkFileDialog.askopenfilename()
         if not file_name:
             return
@@ -308,11 +334,14 @@ class main_widget_ui_t(custom_frame_t):
             self._generated_code.set_generated_code( '\n'.join( user_msg ) )
             
     def _generate_code(self):
+        global save_header_name
+        
         try:
             config = self._parser_configurator.parser_configuration()
             header_file = self._header_file_configurator.header_file()
             if not header_file or not os.path.isfile( header_file ):
                 raise RuntimeError( 'Header file "%s" does not exist or should be valid file name.' % header_file )
+            gui_config_t.save_header_name( header_file )
             config.include_paths.append( os.path.split( header_file )[0] )
             
             start_time = time.clock()        
