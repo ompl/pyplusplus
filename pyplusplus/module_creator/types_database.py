@@ -16,7 +16,8 @@ class types_database_t( object ):
         self.__smart_ptrs = [ 'shared_ptr', 'auto_ptr' ] 
         self.__fundamental_strs = declarations.FUNDAMENTAL_TYPES.keys()
         self.__normalize_data = [ ',', '<', '>', '*', '&', '(', ')', '::' ]
-        
+        self.__used_vectors = set()
+    
     def update( self, decl ):
         if isinstance( decl, declarations.calldef_t ):
             if not isinstance( decl, declarations.constructor_t ):
@@ -45,8 +46,21 @@ class types_database_t( object ):
             answer = answer.replace( data + ' ', data )
             answer = answer.replace( ' ' + data, data )
         return answer.replace( '  ', ' ' )
+
+    def _update_containers_db( self, type ):
+        #will return True is type was treated
+        type = declarations.remove_alias( type )
+        type = declarations.remove_pointer( type )
+        type = declarations.remove_reference( type )
+        may_be_vector = declarations.vector_traits.declaration_or_none( type )
+        if not ( None is may_be_vector ):
+            self.__used_vectors.add( may_be_vector )
+            return True
+        return False
         
     def _update_db( self, db, type_ ):
+        if self._update_containers_db( type_ ):
+            return
         decl_string = self._normalize( declarations.base_type( type_ ).decl_string ) 
         if not templates.is_instantiation( decl_string ):
             return 
@@ -138,3 +152,7 @@ class types_database_t( object ):
         for db in dbs:
             self._print_single_db( db )
             
+    def _get_used_vectors( self ):
+        return self.__used_vectors
+    used_vectors = property( _get_used_vectors )
+

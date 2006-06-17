@@ -25,6 +25,8 @@ struct item_t{
 };
 
 
+typedef std::vector<item_t> items_t;
+
 inline item_t get_value( const std::vector<item_t>& vec, unsigned int index ){
     return vec.at(index);
 }
@@ -33,6 +35,9 @@ inline void set_value( std::vector<item_t>& vec, unsigned int index, item_t valu
     vec.at(index);
     vec[index] = value;
 }
+
+typedef std::vector<int> ivector;
+ivector empty_ivector(){ return ivector(); }
 
 }
 

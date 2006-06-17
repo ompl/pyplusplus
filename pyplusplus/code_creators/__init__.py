@@ -88,6 +88,7 @@ from member_variable import mem_var_ref_wrapper_t
 
 from class_declaration import class_t 
 from class_declaration import class_wrapper_t
+from class_declaration import class_declaration_t
 
 from instruction import instruction_t
 

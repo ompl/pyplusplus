@@ -44,7 +44,6 @@ from calldef_wrapper import casting_operator_t
 from calldef_wrapper import free_function_t
 from calldef_wrapper import free_operator_t
 
-from class_wrapper import vector_indexing_suite_t
 from class_wrapper import class_declaration_t
 from class_wrapper import class_t
 
@@ -57,8 +56,6 @@ from typedef_wrapper import typedef_t
 from variable_wrapper import variable_t
 
 from scopedef_wrapper import scopedef_t
-
-
 
 from pygccxml import declarations
 
@@ -88,6 +85,10 @@ from decl_wrapper_printer import print_declarations
 
 from user_text import user_text_t
 from user_text import class_user_text_t
+
+from indexing_suite import indexing_suite_t
+from indexing_suite import vector_suite_t
+
 
 class dwfactory_t( declarations.decl_factory_t ):
     """

@@ -12,9 +12,70 @@ import algorithm
 import smart_pointers
 import declaration_based
 import array_1_registrator
-import indexing_suites
 import member_variable
 from pygccxml import declarations
+
+class class_declaration_t( scoped.scoped_t ):
+    def __init__(self, class_inst, parent=None ):
+        scoped.scoped_t.__init__( self
+                                  , parent=parent
+                                  , declaration=class_inst )
+
+    def _generate_class_definition(self):
+        class_identifier = algorithm.create_identifier( self, '::boost::python::class_' )
+        return declarations.templates.join( class_identifier, [self.decl_identifier] )
+
+    def _generate_code_no_scope(self):
+        result = []
+        result.append( self._generate_class_definition() )
+        for x in self.creators:
+            code = x.create()
+            tmpl = '%s.%s'
+            if self.is_comment( code ):
+                tmpl = '%s%s'
+            result.append( self.indent( tmpl % ( os.linesep, code ) ) )
+        result.append( ';' )
+        return ''.join( result )
+
+    def _get_class_var_name(self):
+        return self.alias + '_exposer'
+    class_var_name = property( _get_class_var_name )
+    
+    def _generate_code_with_scope(self):
+        result = []
+        scope_var_name = self.alias + '_scope'
+        typedef_name = self.class_var_name + '_t'
+        result.append( 'typedef ' + self._generate_class_definition() + ' ' + typedef_name + ';')
+        result.append( typedef_name + ' ' + self.class_var_name )
+        result[-1] = result[-1] + ' = '+ typedef_name + '();'
+        
+        result.append( algorithm.create_identifier( self, '::boost::python::scope' ) )
+        result[-1] = result[-1] + ' ' + scope_var_name
+        result[-1] = result[-1] + '( %s );' % self.class_var_name        
+
+        for x in self.creators:
+            if not ( x is used_init ):
+                if self._should_creator_be_exported_under_scope( x ):
+                    result.append( x.create() )
+                elif isinstance( x, custom.custom_t ) and x.works_on_instance == False:
+                    result.append( '%s;' % x.create() )
+                else:
+                    result.append( '%s.%s;' % ( self.class_var_name, x.create() ) )
+
+        code = os.linesep.join( result )
+        
+        result = [ 'if( true ){' ]
+        result.append( self.indent( code ) )
+        result.append( '}' )
+        
+        return os.linesep.join( result )
+    
+    def _create_impl(self):
+        if self.declaration.always_expose_using_scope:
+            return self._generate_code_with_scope()
+        else:
+            return self._generate_code_no_scope()
+
 
 class class_t( scoped.scoped_t ):
     """
@@ -146,6 +207,8 @@ class class_t( scoped.scoped_t ):
                 used_init = inits[0]
                 result.append( ", " )
                 result.append( used_init.create_init_code() )
+            elif self.declaration.indexing_suite:
+                pass #in this case all constructors are exposed by indexing suite
             else:#it is possible to class to have public accessed constructor
                  #that could not be exported by boost.python library
                  #for example constructor takes as argument pointer to function
@@ -185,9 +248,6 @@ class class_t( scoped.scoped_t ):
             return True
         
         if isinstance( inst, array_1_registrator.array_1_registrator_t ):
-            return True
-        
-        if isinstance( inst, indexing_suites.indexing_suite_t ):
             return True
         
         if isinstance( inst, member_variable.mem_var_ref_t ):

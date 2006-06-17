@@ -352,6 +352,20 @@ class creator_t( declarations.decl_visitor_t ):
             else:
                 pass
     
+    def _treat_indexing_suite( self ):
+        if self.__types_db.used_vectors:
+            header = "boost/python/suite/indexing/vector_indexing_suite.hpp"
+            self.__extmodule.add_system_header( header )
+            self.__extmodule.add_include( header=header )
+            for cls in self.__types_db.used_vectors:
+                cls_creator = None
+                if isinstance( cls, declarations.class_t ):
+                    cls_creator = code_creators.class_t( class_inst=cls )
+                else:
+                    cls_creator = code_creators.class_declaration_t( class_inst=cls )
+                cls_creator.adopt_creator( code_creators.vector_indexing_suite_t() )
+                self.__module_body.adopt_creator( cls_creator )
+
     def create(self, decl_headers=None):
         """Create and return the module for the extension.
         
@@ -372,6 +386,7 @@ class creator_t( declarations.decl_visitor_t ):
         for operator in self.__free_operators:
             self._adopt_free_operator( operator )
         self._treat_smart_pointers()
+        self._treat_indexing_suite()
         for creator in code_creators.make_flatten( self.__extmodule ):
             creator.target_configuration = self.__target_configuration
         #last action.
@@ -382,16 +397,10 @@ class creator_t( declarations.decl_visitor_t ):
         for cls in self.__decls:
             if not isinstance( cls, decl_wrappers.class_t ):
                 continue
-            if cls.indexing_suites:
-                self.__extmodule.add_system_header( "boost/python/suite/indexing/vector_indexing_suite.hpp" )
-                include = code_creators.include_t( header="boost/python/suite/indexing/vector_indexing_suite.hpp" )
-                self.__extmodule.adopt_include(include)
-                break
         for fn in declarations.declaration_files( self.__decls ):
             include = code_creators.include_t( header=fn )
             self.__extmodule.adopt_include(include)
 
-         
     def guess_functions_code_creators( self ):
         maker_cls = None
         fwrapper_cls = None
@@ -544,14 +553,7 @@ class creator_t( declarations.decl_visitor_t ):
 
     def visit_class_declaration(self ):
         pass
-        
-    def register_indexing_suites(self, class_decl, class_code_creator):
-        for suite in class_decl.indexing_suites:
-            assert isinstance( suite, decl_wrappers.vector_indexing_suite_t )
-            creator = code_creators.vector_indexing_suite_t( class_inst=class_decl
-                                                             , suite_configuration=suite )
-            class_code_creator.adopt_creator( creator )
-            
+
     def visit_class(self ):
         if self.curr_decl.ignore:
             return
@@ -607,8 +609,6 @@ class creator_t( declarations.decl_visitor_t ):
         
         self.curr_decl = temp_curr_decl        
         self.curr_code_creator = temp_curr_parent
-        
-        self.register_indexing_suites( self.curr_decl, self.curr_code_creator )       
         
     def visit_enumeration(self):
         if self.curr_decl.ignore:

@@ -7,6 +7,7 @@ import os
 import sys
 import unittest
 import fundamental_tester_base
+from pygccxml import declarations
 from pyplusplus import module_builder
 
 
@@ -18,10 +19,20 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             self
             , tester_t.EXTENSION_NAME
             , *args )
+
+    @staticmethod
+    def matcher( item, decl ):
+        if not declarations.vector_traits.is_vector( decl ):
+            return False
+        value_type = declarations.vector_traits.value_type(decl)
+        if item is value_type:
+            return True
+        return False
     
     def customize(self, generator):
-        item_cls = generator.class_( 'item_t' )
-        item_cls.indexing_suites.append( module_builder.vector_indexing_suite_t( 'items_t' ) )
+        item = generator.class_( 'item_t' )
+        items = generator.class_( lambda decl: self.matcher( item, decl ) )
+        items.alias = "items_t"
        
     def run_tests( self, module):
         items = module.items_t()

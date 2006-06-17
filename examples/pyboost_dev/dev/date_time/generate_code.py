@@ -139,12 +139,21 @@ class code_generator_t(object):
             ptime.add_code( 'def( bp::self %s  bp::self )' % operator )
                 
     def beautify_code( self, mb ):
+        
+        def is_vector_of_strings( decl ):
+            if not declarations.vector_traits.is_vector( decl ):
+                return False
+            return declarations.is_std_string( declarations.vector_traits.value_type(decl) )
+
+        str_vec = mb.class_( is_vector_of_strings )
+        str_vec.alias = "strings"
+            
         extmodule = mb.code_creator
         extmodule.add_namespace_usage( 'boost' )
         extmodule.add_namespace_usage( 'boost::date_time' )
         for full_ns_name, alias in customization_data.ns_aliases.items():
             extmodule.add_namespace_alias( alias, full_ns_name )
-
+            
     def customize_extmodule( self, mb ):
         extmodule = mb.code_creator
         #beautifying include code generation
