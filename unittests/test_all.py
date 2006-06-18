@@ -53,6 +53,7 @@ import protected_tester
 import indexing_suites_tester
 import hierarchy3_tester
 import vector3_tester
+import default_args_tester
 
 def create_suite(times):  
     testers = [ 
@@ -103,6 +104,7 @@ def create_suite(times):
         , indexing_suites_tester
         , hierarchy3_tester
         , vector3_tester
+        , default_args_tester
     ]
     
     main_suite = unittest.TestSuite()    
