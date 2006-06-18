@@ -3,8 +3,10 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import os
 from pygccxml import declarations
 from pyplusplus import code_creators
+from pyplusplus import _logging_
 templates = declarations.templates
 
 class types_database_t( object ):
@@ -54,8 +56,16 @@ class types_database_t( object ):
         type = declarations.remove_reference( type )
         may_be_vector = declarations.vector_traits.declaration_or_none( type )
         if not ( None is may_be_vector ):
-            self.__used_vectors.add( may_be_vector )
-            return True
+            try:
+                declarations.vector_traits.value_type( may_be_vector )
+                self.__used_vectors.add( may_be_vector )
+                return True
+            except RuntimeError, error:
+                msg = 'WARNING: pyplusplus found std::vector instantiation declaration, '
+                msg = msg + 'but can not find out value type!'
+                msg = msg + os.linesep + 'This class will not be exported!'
+                msg = msg + os.linesep + 'std::vector instantiation is: ' + may_be_vector.decl_string
+                _logging_.logger.warn( msg )
         return False
         
     def _update_db( self, db, type_ ):
