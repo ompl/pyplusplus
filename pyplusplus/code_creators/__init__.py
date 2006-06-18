@@ -68,8 +68,8 @@ from calldef import casting_operator_t
 from calldef import casting_constructor_t
 from calldef import constructor_wrapper_t
 from calldef import casting_member_operator_t
-from calldef import special_constructor_wrapper_t
-from calldef import trivial_constructor_wrapper_t
+from calldef import copy_constructor_wrapper_t
+from calldef import null_constructor_wrapper_t
 
 from global_variable import global_variable_base_t
 from global_variable import global_variable_t

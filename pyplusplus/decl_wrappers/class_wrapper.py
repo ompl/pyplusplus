@@ -47,7 +47,9 @@ class class_t(scopedef_wrapper.scopedef_t, declarations.class_t):
         self._user_code = []
         self._wrapper_user_code = []
         self._indexing_suite = None
-        
+        self._null_constructor_body = ''
+        self._copy_constructor_body = ''
+
     def _get_always_expose_using_scope( self ):
         return self._always_expose_using_scope
     def _set_always_expose_using_scope( self, value ):
@@ -108,6 +110,18 @@ class class_t(scopedef_wrapper.scopedef_t, declarations.class_t):
         return self._indexing_suite
     indexing_suite = property( _get_indexing_suite )
     
+    def _get_null_constructor_body(self):
+        return self._null_constructor_body
+    def _set_null_constructor_body(self, body):
+        self._null_constructor_body = body
+    null_constructor_body = property( _get_null_constructor_body, _set_null_constructor_body )
+
+    def _get_copy_constructor_body(self):
+        return self._copy_constructor_body
+    def _set_copy_constructor_body(self, body):
+        self._copy_constructor_body = body
+    copy_constructor_body = property( _get_copy_constructor_body, _set_copy_constructor_body )
+
     def add_code( self, code, works_on_instance=True ):
         """works_on_instance: If true, the custom code can be applied directly to obj inst.
            Ex: ObjInst."CustomCode"
@@ -116,6 +130,12 @@ class class_t(scopedef_wrapper.scopedef_t, declarations.class_t):
         
     def add_wrapper_code( self, code ):
         self.wrapper_user_code.append( user_text.user_text_t( code ) )
+
+    def set_constructors_body( self, body ):
+        """Sets the body for all constructors"""
+        self.constructors().body = body
+        self.null_constructor_body = body
+        self.copy_constructor_body = body
         
     def _exportable_impl( self ):
         if not self.name:

@@ -155,6 +155,13 @@ class constructor_t( declarations.constructor_t, calldef_t ):
     def __init__(self, *arguments, **keywords):
         declarations.constructor_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
+        self._body = ''
+
+    def _get_body(self):
+        return self._body
+    def _set_body(self, body):
+        self._body = body
+    body = property( _get_body, _set_body )
 
     def _exportable_impl_derived( self ):
         if self.is_artificial:

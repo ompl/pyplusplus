@@ -957,14 +957,16 @@ class constructor_wrapper_t( declaration_based.declaration_based_t ):
         answer = [ self._create_declaration() ]
         answer.append( ': ' + self._create_constructor_call() )
         answer.append( '  , ' +  self.parent.boost_wrapper_identifier + '()' )
-        answer.append( '{}' )
+        answer.append( '{   // Normal constructor' )
+        answer.append( self.declaration.body )
+        answer.append( '}' )
         return os.linesep.join( answer )
 
 #There is something I don't understand
 #There are usecases when boost.python requeres
 #constructor for wrapper class from exposed class
 #I should understand this more
-class special_constructor_wrapper_t( declaration_based.declaration_based_t ):
+class copy_constructor_wrapper_t( declaration_based.declaration_based_t ):
     """
     Creates wrapper class constructor from wrapped class instance.
     """
@@ -995,13 +997,16 @@ class special_constructor_wrapper_t( declaration_based.declaration_based_t ):
     def _create_impl(self):
         answer = [ self._create_declaration() ]
         answer.append( ': ' + self._create_constructor_call() )
-        answer.append( '  , ' +  self.parent.boost_wrapper_identifier + '()' )
-        answer.append( '{}' )
+        answer.append( '  , ' +  self.parent.boost_wrapper_identifier + '(){' )
+        answer.append( self.indent( '// copy constructor' ) )
+        answer.append( self.indent( self.declaration.copy_constructor_body ) )
+        answer.append( '}' )
         return os.linesep.join( answer )
 
-class trivial_constructor_wrapper_t( declaration_based.declaration_based_t ):
+
+class null_constructor_wrapper_t( declaration_based.declaration_based_t ):
     """
-    Creates trivial wrapper class constructor.
+    Creates wrapper for compiler generated null constructor.
     """    
     def __init__( self, class_inst, parent=None ):
         declaration_based.declaration_based_t.__init__( self
@@ -1017,8 +1022,10 @@ class trivial_constructor_wrapper_t( declaration_based.declaration_based_t ):
             answer[0] = answer[0] + 'PyObject*'
         answer[0] = answer[0] + ')'
         answer.append( ': ' + self._create_constructor_call() )
-        answer.append( '  , ' +  self.parent.boost_wrapper_identifier + '()' )
-        answer.append( '{}' )
+        answer.append( '  , ' +  self.parent.boost_wrapper_identifier + '(){' )
+        answer.append( self.indent( '// null constructor' ) )
+        answer.append( self.indent( self.declaration.null_constructor_body ) )
+        answer.append( '}' )
         return os.linesep.join( answer )
 
 #in python all operators are members of class, while in C++

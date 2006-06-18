@@ -579,12 +579,12 @@ class creator_t( declarations.decl_visitor_t ):
                 #I don't know but sometimes boost.python requieres
                 #to construct wrapper from wrapped classe
                 if not self.curr_decl.noncopyable:
-                    scons = code_creators.special_constructor_wrapper_t( class_inst=self.curr_decl )
-                    wrapper.adopt_creator( scons )    
-                trivial_constr = declarations.find_trivial_constructor(self.curr_decl)
-                if trivial_constr and trivial_constr.is_artificial:
+                    copy_constr = code_creators.copy_constructor_wrapper_t( class_inst=self.curr_decl )
+                    wrapper.adopt_creator( copy_constr )    
+                null_constr = declarations.find_trivial_constructor(self.curr_decl)
+                if null_constr and null_constr.is_artificial:
                     #this constructor is not going to be exposed
-                    tcons = code_creators.trivial_constructor_wrapper_t( class_inst=self.curr_decl )
+                    tcons = code_creators.null_constructor_wrapper_t( class_inst=self.curr_decl )
                     wrapper.adopt_creator( tcons )                                                  
                     
         self.curr_code_creator.adopt_creator( class_inst )
