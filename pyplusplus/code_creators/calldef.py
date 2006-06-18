@@ -75,24 +75,12 @@ class calldef_wrapper_t( declaration_based.declaration_based_t):
         else:
             return 'p%d' % index
 
-    #def args_declaration( self ):
-        #args = []
-        #for index, arg in enumerate( self.declaration.arguments ):
-            #args.append( arg.type.decl_string + ' ' + self.argument_name(index) )
-        #if len( args ) == 1:
-            #return args[ 0 ] 
-        #return ', '.join( args )
-    
     def args_declaration( self ):
         args = []
-        boost_obj = algorithm.create_identifier( self, '::boost::python::object' )
         for index, arg in enumerate( self.declaration.arguments ):
             result = arg.type.decl_string + ' ' + self.argument_name(index)
             if arg.default_value:
-                if not declarations.is_pointer( arg.type ) or arg.default_value != '0':
-                    result += '=%s' % arg.default_value
-                else:
-                    result += '=%s()' % boost_obj
+                result += '=%s' % arg.default_value
             args.append( result )
         if len( args ) == 1:
             return args[ 0 ]
