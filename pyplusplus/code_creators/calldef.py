@@ -75,12 +75,27 @@ class calldef_wrapper_t( declaration_based.declaration_based_t):
         else:
             return 'p%d' % index
 
+    #def args_declaration( self ):
+        #args = []
+        #for index, arg in enumerate( self.declaration.arguments ):
+            #args.append( arg.type.decl_string + ' ' + self.argument_name(index) )
+        #if len( args ) == 1:
+            #return args[ 0 ] 
+        #return ', '.join( args )
+    
     def args_declaration( self ):
         args = []
+        boost_obj = algorithm.create_identifier( self, '::boost::python::object' )
         for index, arg in enumerate( self.declaration.arguments ):
-            args.append( arg.type.decl_string + ' ' + self.argument_name(index) )
+            result = arg.type.decl_string + ' ' + self.argument_name(index)
+            if arg.default_value:
+                if not declarations.is_pointer( arg.type ) or arg.default_value != '0':
+                    result += '=%s' % arg.default_value
+                else:
+                    result += '=%s()' % boost_obj
+            args.append( result )
         if len( args ) == 1:
-            return args[ 0 ] 
+            return args[ 0 ]
         return ', '.join( args )
     
     def override_identifier(self):
@@ -306,15 +321,20 @@ class mem_fun_v_wrapper_t( calldef_wrapper_t ):
                 , arguments_types=map( lambda arg: arg.type, self.declaration.arguments )
                 , has_const=self.declaration.has_const )
     
-    def create_declaration(self, name): 
-        template = 'virtual %(return_type)s %(name)s( %(args)s )%(constness)s %(throw)s'
+    def create_declaration(self, name, has_virtual=True): 
+        template = '%(virtual)s%(return_type)s %(name)s( %(args)s )%(constness)s %(throw)s'
+
+        virtual = 'virtual '
+        if not has_virtual:
+            virtual = ''
         
         constness = ''
         if self.declaration.has_const:
             constness = ' const '
         
         return template % {
-            'return_type' : self.declaration.return_type.decl_string
+            'virtual' : virtual
+            , 'return_type' : self.declaration.return_type.decl_string
             , 'name' : name
             , 'args' : self.args_declaration()
             , 'constness' : constness
@@ -357,7 +377,7 @@ class mem_fun_v_wrapper_t( calldef_wrapper_t ):
         return os.linesep.join( answer )
     
     def create_default_function( self ):
-        answer = [ self.create_declaration('default_' + self.declaration.alias) + '{' ]
+        answer = [ self.create_declaration('default_' + self.declaration.alias, False) + '{' ]
         answer.append( self.indent( self.create_default_body() ) )
         answer.append( '}' )
         return os.linesep.join( answer )    
