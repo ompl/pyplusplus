@@ -11,7 +11,7 @@ import indexing_suite as container_suites
         
         
 def guess_indexing_suite( class_ ):
-    if declarations.vector_traits.is_vector( class_ ):
+    if declarations.vector_traits.is_my_case( class_ ):
         return container_suites.vector_suite_t( class_ )
 
 #this will only be exported if indexing suite is not None and only when needed

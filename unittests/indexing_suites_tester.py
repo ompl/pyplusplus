@@ -22,7 +22,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     @staticmethod
     def matcher( item, decl ):
-        if not declarations.vector_traits.is_vector( decl ):
+        if not declarations.vector_traits.is_my_case( decl ):
             return False
         value_type = declarations.vector_traits.value_type(decl)
         if item is value_type:

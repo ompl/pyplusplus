@@ -54,7 +54,7 @@ class types_database_t( object ):
         type = declarations.remove_alias( type )
         type = declarations.remove_pointer( type )
         type = declarations.remove_reference( type )        
-        if declarations.vector_traits.is_vector( type ):
+        if declarations.vector_traits.is_my_case( type ):
             vector = declarations.vector_traits.class_declaration( type )
             try:
                 declarations.vector_traits.value_type( vector )
