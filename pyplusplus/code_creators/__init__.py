@@ -107,3 +107,4 @@ from target_configuration import target_configuration_t
 from array_1_registrator import array_1_registrator_t
 
 from indexing_suites import vector_indexing_suite_t
+from indexing_suites import map_indexing_suite_t

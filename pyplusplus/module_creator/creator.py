@@ -353,19 +353,29 @@ class creator_t( declarations.decl_visitor_t ):
                 pass
     
     def _treat_indexing_suite( self ):
+        def create_cls_cc( cls ):
+            if isinstance( cls, declarations.class_t ):
+                return code_creators.class_t( class_inst=cls )
+            else:
+                return code_creators.class_declaration_t( class_inst=cls )
+
         if self.__types_db.used_vectors:
             header = "boost/python/suite/indexing/vector_indexing_suite.hpp"
             self.__extmodule.add_system_header( header )
             self.__extmodule.add_include( header=header )
             for cls in self.__types_db.used_vectors:
-                cls_creator = None
-                if isinstance( cls, declarations.class_t ):
-                    cls_creator = code_creators.class_t( class_inst=cls )
-                else:
-                    cls_creator = code_creators.class_declaration_t( class_inst=cls )
+                cls_creator = create_cls_cc( cls )
                 cls_creator.adopt_creator( code_creators.vector_indexing_suite_t() )
                 self.__module_body.adopt_creator( cls_creator )
-
+        if self.__types_db.used_maps:
+            header = "boost/python/suite/indexing/map_indexing_suite.hpp"
+            self.__extmodule.add_system_header( header )
+            self.__extmodule.add_include( header=header )
+            for cls in self.__types_db.used_maps:
+                cls_creator = create_cls_cc( cls )
+                cls_creator.adopt_creator( code_creators.map_indexing_suite_t() )
+                self.__module_body.adopt_creator( cls_creator )
+ 
     def create(self, decl_headers=None):
         """Create and return the module for the extension.
         

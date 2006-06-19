@@ -19,6 +19,7 @@ class types_database_t( object ):
         self.__fundamental_strs = declarations.FUNDAMENTAL_TYPES.keys()
         self.__normalize_data = [ ',', '<', '>', '*', '&', '(', ')', '::' ]
         self.__used_vectors = set()
+        self.__used_maps = set()
     
     def update( self, decl ):
         if isinstance( decl, declarations.calldef_t ):
@@ -54,18 +55,28 @@ class types_database_t( object ):
         type = declarations.remove_alias( type )
         type = declarations.remove_pointer( type )
         type = declarations.remove_reference( type )        
-        if declarations.vector_traits.is_my_case( type ):
-            vector = declarations.vector_traits.class_declaration( type )
-            try:
+        try:
+            if declarations.vector_traits.is_my_case( type ):
+                vector = declarations.vector_traits.class_declaration( type )
                 declarations.vector_traits.value_type( vector )
                 self.__used_vectors.add( vector )
                 return True
-            except RuntimeError, error:
-                msg = 'WARNING: pyplusplus found std::vector instantiation declaration, '
-                msg = msg + 'but can not find out value type!'
-                msg = msg + os.linesep + 'This class will not be exported!'
-                msg = msg + os.linesep + 'std::vector instantiation is: ' + vector.decl_string
-                _logging_.logger.warn( msg )
+            if declarations.map_traits.is_my_case( type ):
+                map_ = declarations.map_traits.class_declaration( type )
+                declarations.map_traits.value_type( map_ )
+                self.__used_maps.add( map_ )
+                return True
+            if declarations.hash_map_traits.is_my_case( type ):
+                map_ = declarations.hash_map_traits.class_declaration( type )
+                declarations.hash_map_traits.value_type( map_ )
+                self.__used_maps.add( map_ )
+                return True
+        except RuntimeError, error:
+            msg = 'WARNING: pyplusplus found std::vector instantiation declaration, '
+            msg = msg + 'but can not find out value type!'
+            msg = msg + os.linesep + 'This class will not be exported!'
+            msg = msg + os.linesep + 'std::vector instantiation is: ' + vector.decl_string
+            _logging_.logger.warn( msg )
         return False
         
     def _update_db( self, db, type_ ):
@@ -166,3 +177,6 @@ class types_database_t( object ):
         return self.__used_vectors
     used_vectors = property( _get_used_vectors )
 
+    def _get_used_maps( self ):
+        return self.__used_maps
+    used_maps = property( _get_used_maps )

@@ -13,6 +13,9 @@ import indexing_suite as container_suites
 def guess_indexing_suite( class_ ):
     if declarations.vector_traits.is_my_case( class_ ):
         return container_suites.vector_suite_t( class_ )
+    if declarations.map_traits.is_my_case( class_ ) \
+       or declarations.hash_map_traits.is_my_case( class_ ):
+        return container_suites.map_suite_t( class_ )
 
 #this will only be exported if indexing suite is not None and only when needed
 class class_declaration_t(decl_wrapper.decl_wrapper_t, declarations.class_declaration_t):

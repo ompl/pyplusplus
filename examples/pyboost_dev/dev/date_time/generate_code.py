@@ -141,7 +141,7 @@ class code_generator_t(object):
     def beautify_code( self, mb ):
         
         def is_vector_of_strings( decl ):
-            if not declarations.vector_traits.is_vector( decl ):
+            if not declarations.vector_traits.is_my_case( decl ):
                 return False
             return declarations.is_std_string( declarations.vector_traits.value_type(decl) )
 
