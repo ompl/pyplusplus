@@ -53,18 +53,18 @@ class types_database_t( object ):
         #will return True is type was treated
         type = declarations.remove_alias( type )
         type = declarations.remove_pointer( type )
-        type = declarations.remove_reference( type )
-        may_be_vector = declarations.vector_traits.declaration_or_none( type )
-        if not ( None is may_be_vector ):
+        type = declarations.remove_reference( type )        
+        if declarations.vector_traits.is_vector( type ):
+            vector = declarations.vector_traits.class_declaration( type )
             try:
-                declarations.vector_traits.value_type( may_be_vector )
-                self.__used_vectors.add( may_be_vector )
+                declarations.vector_traits.value_type( vector )
+                self.__used_vectors.add( vector )
                 return True
             except RuntimeError, error:
                 msg = 'WARNING: pyplusplus found std::vector instantiation declaration, '
                 msg = msg + 'but can not find out value type!'
                 msg = msg + os.linesep + 'This class will not be exported!'
-                msg = msg + os.linesep + 'std::vector instantiation is: ' + may_be_vector.decl_string
+                msg = msg + os.linesep + 'std::vector instantiation is: ' + vector.decl_string
                 _logging_.logger.warn( msg )
         return False
         
