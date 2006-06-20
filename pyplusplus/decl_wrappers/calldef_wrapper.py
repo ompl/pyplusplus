@@ -15,6 +15,9 @@ from pyplusplus import _logging_
     ##return self.declaration.virtuality != declarations.VIRTUALITY_TYPES.PURE_VIRTUAL
 
 class calldef_t(decl_wrapper.decl_wrapper_t):
+    
+    BOOST_PYTHON_MAX_ARITY = 10
+    
     def __init__(self, *arguments, **keywords):
         decl_wrapper.decl_wrapper_t.__init__( self, *arguments, **keywords )
 
@@ -96,7 +99,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
     
     def _exportable_impl( self ):
         #see http://www.boost.org/libs/python/doc/v2/faq.html#funcptr
-        if len( self.arguments ) > 10:
+        if len( self.arguments ) > calldef_t.BOOST_PYTHON_MAX_ARITY:
             msg = "You have function with more then 10 arguments( %d ). "
             msg = msg + " You should adjest BOOST_PYTHON_MAX_ARITY"
             msg = msg + " For more information see: http://mail.python.org/pipermail/c++-sig/2002-June/001554.html"
