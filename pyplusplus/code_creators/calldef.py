@@ -779,58 +779,12 @@ mem_fun_private_pv_wrapper_t = mem_fun_private_v_wrapper_t
         #return self.wclass_inst_arg_type().decl_string + ' wcls_inst'
 
 
-class constructor_t( declaration_based.declaration_based_t ):
+class constructor_t( calldef_t ):
     """
     Creates boost.python code needed to expose constructor.
     """
     def __init__(self, constructor, wrapper=None, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , declaration=constructor
-                                                        , parent=parent )
-        self._wrapper = wrapper
-        
-    def _get_wrapper( self ):
-        return self._wrapper
-    def _set_wrapper( self, new_wrapper ):
-        self._wrapper = new_wrapper
-    wrapper = property( _get_wrapper, _set_wrapper )
-        
-    def _get_call_policies(self):
-        return self.declaration.call_policies
-    def _set_call_policies(self, call_policies):
-        self.declaration.call_policies = call_policies
-    call_policies = property( _get_call_policies, _set_call_policies )
-
-    def _get_use_keywords(self):
-        return self.declaration.use_keywords
-    def _set_use_keywords(self, use_keywords):
-        self.declaration.use_keywords = use_keywords
-    use_keywords = property( _get_use_keywords, _set_use_keywords )
-
-    def _get_use_default_arguments(self):
-        return self.declaration.use_default_arguments
-    def _set_use_default_arguments(self, use_default_arguments):
-        self.declaration.use_default_arguments = use_default_arguments
-    use_default_arguments = property( _get_use_default_arguments, _set_use_default_arguments )
-        
-    def _keywords_args(self):
-        if not self.declaration.arguments:
-            return ''        
-        boost_arg = algorithm.create_identifier( self, '::boost::python::arg' )
-        boost_obj = algorithm.create_identifier( self, '::boost::python::object' )
-        result = ['( ']
-        for arg in self.declaration.arguments:
-            if 1 < len( result ):
-                result.append( ', ' )
-            result.append( boost_arg )
-            result.append( '("%s")' % arg.name )
-            if self.use_default_arguments and arg.default_value:
-                if not declarations.is_pointer( arg.type ) or arg.default_value != '0':
-                    result.append( '=%s' % arg.default_value )
-                else:
-                    result.append( '=%s()' % boost_obj )
-        result.append( ' )' )
-        return ''.join( result )        
+        calldef_t.__init__( self, function=constructor, wrapper=wrapper, parent=parent )
         
     def _create_arg_code( self, arg ):
         temp = arg.type
@@ -857,17 +811,16 @@ class constructor_t( declaration_based.declaration_based_t ):
             answer.append( optionals_str )
         return ', '.join( answer )
 
-    
     def create_init_code(self):
         init_identifier = algorithm.create_identifier( self, '::boost::python::init' )
         args = [ self._generate_definition_args() ]
         answer = [ '%s' % declarations.templates.join( init_identifier, args ) ]
-        if self.use_keywords:
-            answer.append( '(%s)' % self._keywords_args() )
+        if self.declaration.use_keywords:
+            answer.append( '(%s)' % self.keywords_args() )
         else:
             answer.append( '()' )
-        if self.call_policies:
-            answer.append('[%s]' % self.call_policies.create( self ) )
+        if self.declaration.call_policies:
+            answer.append('[%s]' % self.declaration.call_policies.create( self ) )
         #I think it better not to print next line
         #else:
         #    answer.append( '/*[ undefined call policies ]*/' )
@@ -896,22 +849,13 @@ class static_method_t( declaration_based.declaration_based_t ):
     def _create_impl( self ):
         return 'staticmethod( "%s" )' % self.function_code_creator.alias
     
-class constructor_wrapper_t( declaration_based.declaration_based_t ):
+class constructor_wrapper_t( calldef_wrapper_t ):
     """
     Creates C++ code that builds wrapper arround exposed constructor.
     """
 
     def __init__( self, constructor, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , declaration=constructor
-                                                        , parent=parent )
-
-    def argument_name( self, index ):
-        arg = self.declaration.arguments[ index ]
-        if arg.name:
-            return arg.name
-        else:
-            return 'p%d' % index
+        calldef_wrapper_t.__init__( self, function=constructor, parent=parent )
         
     def _create_declaration(self):
         result = []
@@ -920,11 +864,9 @@ class constructor_wrapper_t( declaration_based.declaration_based_t ):
         args = []
         if self.parent.held_type and not self.target_configuration.boost_python_has_wrapper_held_type:
             args.append( 'PyObject*' )
-        for index, arg in enumerate( self.declaration.arguments ):
-            arg_text = arg.type.decl_string + ' ' + self.argument_name(index)
-            if arg.default_value:
-                arg_text = arg_text + '=%s' % arg.default_value
-            args.append( arg_text )
+        args_decl = self.args_declaration()
+        if args_decl:
+            args.append( args_decl )
         result.append( ', '.join( args ) )
         result.append( ' )' )
         return ''.join( result )

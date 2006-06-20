@@ -506,8 +506,8 @@ class creator_t( declarations.decl_visitor_t ):
             cwrapper = code_creators.constructor_wrapper_t( constructor=self.curr_decl )
             class_wrapper.adopt_creator( cwrapper )
         maker = code_creators.constructor_t( constructor=self.curr_decl, wrapper=cwrapper )
-        if None is maker.call_policies:
-            maker.call_policies = self.__call_policies_resolver( self.curr_decl )
+        if None is self.curr_decl.call_policies:
+            self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
         self.curr_code_creator.adopt_creator( maker )
     
     def visit_destructor( self ):
