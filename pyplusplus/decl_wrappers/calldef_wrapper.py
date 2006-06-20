@@ -100,10 +100,10 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
     def _exportable_impl( self ):
         #see http://www.boost.org/libs/python/doc/v2/faq.html#funcptr
         if len( self.arguments ) > calldef_t.BOOST_PYTHON_MAX_ARITY:
-            msg = "You have function with more then 10 arguments( %d ). "
+            msg = "Function '%s' with more then 10 arguments( %d ). "
             msg = msg + " You should adjest BOOST_PYTHON_MAX_ARITY"
             msg = msg + " For more information see: http://mail.python.org/pipermail/c++-sig/2002-June/001554.html"
-            _logging_.logger.info( msg % len( self.arguments ) )
+            _logging_.logger.info( msg % ( self.decl_string, len( self.arguments ) ) )
 
         all_types = [ arg.type for arg in self.arguments ]
         all_types.append( self.return_type )
