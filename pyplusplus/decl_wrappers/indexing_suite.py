@@ -58,9 +58,12 @@ class indexing_suite_t( object ):
 class vector_suite_t( indexing_suite_t ):
     def __init__( self, cls ):
         indexing_suite_t.__init__( self, cls )
+        self.__traits = declarations.vector_traits
+        if declarations.list_traits.is_my_case( self.container_class ):        
+            self.__traits = declarations.list_traits
         
     def value_type( self ):
-        return declarations.vector_traits.value_type( self.container_class )
+        return self.__traits.value_type( self.container_class )
 
 class map_suite_t( indexing_suite_t ):
     def __init__( self, cls ):

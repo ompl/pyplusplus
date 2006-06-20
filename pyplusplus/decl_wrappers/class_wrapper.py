@@ -11,7 +11,8 @@ import indexing_suite as container_suites
         
         
 def guess_indexing_suite( class_ ):
-    if declarations.vector_traits.is_my_case( class_ ):
+    if declarations.vector_traits.is_my_case( class_ ) \
+       or declarations.list_traits.is_my_case( class_ ):
         return container_suites.vector_suite_t( class_ )
     if declarations.map_traits.is_my_case( class_ ) \
        or declarations.hash_map_traits.is_my_case( class_ ):

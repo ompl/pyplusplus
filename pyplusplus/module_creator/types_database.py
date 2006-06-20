@@ -61,6 +61,13 @@ class types_database_t( object ):
                 declarations.vector_traits.value_type( vector )
                 self.__used_vectors.add( vector )
                 return True
+            #the patch I submitted should be accepted, before pyplusplus will generate
+            #the code
+            #~ if declarations.list_traits.is_my_case( type ):
+                #~ list_ = declarations.list_traits.class_declaration( type )
+                #~ declarations.list_traits.value_type( list_ )
+                #~ self.__used_vectors.add( list_ )
+                #~ return True               
             if declarations.map_traits.is_my_case( type ):
                 map_ = declarations.map_traits.class_declaration( type )
                 declarations.map_traits.value_type( map_ )
