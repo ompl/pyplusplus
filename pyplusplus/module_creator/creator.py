@@ -404,9 +404,6 @@ class creator_t( declarations.decl_visitor_t ):
         return self.__extmodule
 
     def _create_includes(self):
-        for cls in self.__decls:
-            if not isinstance( cls, decl_wrappers.class_t ):
-                continue
         for fn in declarations.declaration_files( self.__decls ):
             include = code_creators.include_t( header=fn )
             self.__extmodule.adopt_include(include)
