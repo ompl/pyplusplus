@@ -353,6 +353,11 @@ class creator_t( declarations.decl_visitor_t ):
                 pass
     
     def _treat_indexing_suite( self ):
+        def create_explanation(cls):
+            msg = '//WARNING: the next line of code will not compile, because "%s" does not have operator== !'
+            msg = msg % cls.indexing_suite.value_type().decl_string
+            return code_creators.custom_text_t( msg )
+        
         def create_cls_cc( cls ):
             if isinstance( cls, declarations.class_t ):
                 return code_creators.class_t( class_inst=cls )
@@ -365,6 +370,9 @@ class creator_t( declarations.decl_visitor_t ):
             self.__extmodule.add_include( header=header )
             for cls in self.__types_db.used_vectors:
                 cls_creator = create_cls_cc( cls )
+                value_type = cls.indexing_suite.value_type() 
+                if declarations.is_class( value_type ) and not declarations.has_public_equal( value_type ):
+                    cls_creator.adopt_creator( create_explanation( cls ) )
                 cls_creator.adopt_creator( code_creators.vector_indexing_suite_t() )
                 self.__module_body.adopt_creator( cls_creator )
         if self.__types_db.used_maps:
@@ -373,6 +381,9 @@ class creator_t( declarations.decl_visitor_t ):
             self.__extmodule.add_include( header=header )
             for cls in self.__types_db.used_maps:
                 cls_creator = create_cls_cc( cls )
+                value_type = cls.indexing_suite.value_type() 
+                if declarations.is_class( value_type ) and  not declarations.has_public_equal( value_type ):
+                    cls_creator.adopt_creator( create_explanation( cls ) )
                 cls_creator.adopt_creator( code_creators.map_indexing_suite_t() )
                 self.__module_body.adopt_creator( cls_creator )
  
