@@ -27,7 +27,7 @@ class class_declaration_t( scoped.scoped_t ):
 
     def _generate_code_no_scope(self):
         result = []
-        result.append( self._generate_class_definition() )
+        result.append( self._generate_class_definition() + '("%s")' % self.declaration.alias )
         for x in self.creators:
             code = x.create()
             tmpl = '%s.%s'
@@ -47,7 +47,7 @@ class class_declaration_t( scoped.scoped_t ):
         typedef_name = self.class_var_name + '_t'
         result.append( 'typedef ' + self._generate_class_definition() + ' ' + typedef_name + ';')
         result.append( typedef_name + ' ' + self.class_var_name )
-        result[-1] = result[-1] + ' = '+ typedef_name + '();'
+        result[-1] = result[-1] + ' = '+ typedef_name + '(%s);' % self.declaration.alias
         
         result.append( algorithm.create_identifier( self, '::boost::python::scope' ) )
         result[-1] = result[-1] + ' ' + scope_var_name

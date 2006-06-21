@@ -472,3 +472,9 @@ class module_builder_t(object):
                                               , header_dir=header_dir
                                               , header_file=header_file 
                                               , recursive=recursive )
+
+    def _get_BOOST_PYTHON_MAX_ARITY( self ):
+        return decl_wrappers.calldef_t.BOOST_PYTHON_MAX_ARITY
+    def _set_BOOST_PYTHON_MAX_ARITY( self, value ):
+        decl_wrappers.calldef_t.BOOST_PYTHON_MAX_ARITY = value
+    BOOST_PYTHON_MAX_ARITY = property( _get_BOOST_PYTHON_MAX_ARITY, _set_BOOST_PYTHON_MAX_ARITY )
