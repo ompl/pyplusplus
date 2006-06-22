@@ -163,7 +163,8 @@ class module_builder_t(object):
                        , create_castinig_constructor=True
                        , call_policies_resolver_=None
                        , types_db=None
-                       , target_configuration=None ):
+                       , target_configuration=None
+                       , enable_indexing_suite=True):
         """
         Creates L{module_t} code creator.
         
@@ -184,7 +185,8 @@ class module_builder_t(object):
                                               , create_castinig_constructor
                                               , call_policies_resolver_
                                               , types_db
-                                              , target_configuration )
+                                              , target_configuration
+                                              , enable_indexing_suite)
         self.__code_creator = creator.create()
         #I think I should ask users, what they expect
         #self.__code_creator.user_defined_directories.append( self.__working_dir )

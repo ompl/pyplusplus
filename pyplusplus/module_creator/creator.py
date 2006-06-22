@@ -48,7 +48,8 @@ class creator_t( declarations.decl_visitor_t ):
                   , create_castinig_constructor=False
                   , call_policies_resolver_=None
                   , types_db=None
-                  , target_configuration=None ):
+                  , target_configuration=None
+                  , enable_indexing_suite=True):
         """Constructor.
 
         @param decls: Declarations that should be exposed in the final module.
@@ -68,6 +69,7 @@ class creator_t( declarations.decl_visitor_t ):
         """
         declarations.decl_visitor_t.__init__(self)        
 
+        self.__enable_indexing_suite = enable_indexing_suite
         self.__target_configuration = target_configuration
         if not self.__target_configuration:
             self.__target_configuration = code_creators.target_configuration_t()
@@ -407,7 +409,8 @@ class creator_t( declarations.decl_visitor_t ):
         for operator in self.__free_operators:
             self._adopt_free_operator( operator )
         self._treat_smart_pointers()
-        self._treat_indexing_suite()
+        if self.__enable_indexing_suite:
+            self._treat_indexing_suite()
         for creator in code_creators.make_flatten( self.__extmodule ):
             creator.target_configuration = self.__target_configuration
         #last action.
