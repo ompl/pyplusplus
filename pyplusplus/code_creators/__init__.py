@@ -32,7 +32,6 @@ from scoped import scoped_t
 from module_body import module_body_t
 
 from include import include_t
-from include import precompiled_header_t
 
 from unnamed_enum import unnamed_enum_t
 

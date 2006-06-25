@@ -148,34 +148,6 @@ class module_t(compound.compound_t):
         """
         self.adopt_creator( include_creator, self.last_include_index() + 1 )
 
-    def _get_precompiled_header(self):
-        first_include = self.creators[ self.first_include_index() ]
-        if isinstance( first_include, include.precompiled_header_t ):
-            return first_include
-        else:
-            return None
-        
-    def _set_precompiled_header(self, precompiled_header):
-        assert isinstance( precompiled_header, types.StringTypes ) \
-               or isinstance( precompiled_header, include.precompiled_header_t )
-        
-        if not isinstance(precompiled_header, include.precompiled_header_t):
-            precompiled_header = include.precompiled_header_t( precompiled_header )
-        #from here I deal with precompiled_header_t instance
-        
-        include_starts = self.first_include_index()
-        first_include = self.creators[ include_starts ]
-        if isinstance( first_include, include.precompiled_header_t ):
-            self.remove_creator( first_include )
-        self.adopt_creator( precompiled_header, include_starts )
-
-        includes = filter( lambda creator: isinstance( creator, include.include_t )
-                           , self.creators[include_starts+1:] )
-        for include_ in includes:
-            if include_.header == first_include.header:
-                self.remove_creator( include_ )
-    precompiled_header = property( _get_precompiled_header, _set_precompiled_header )
-
     def do_include_dirs_optimization(self):
         include_dirs = self._get_include_dirs()
         includes = filter( lambda creator: isinstance( creator, include.include_t )

@@ -38,22 +38,3 @@ class include_t(code_creator.code_creator_t):
                 return '#include <%s>' % normalize_header
             else:
                 return '#include "%s"' % normalize_header
-
-class precompiled_header_t(include_t):
-    """
-    Creates C++ code for precompiled header include directive
-    """
-
-    def __init__( self, header, parent=None ):
-        include_t.__init__(self, header, parent)
-            
-    def _create_impl(self):
-        answer = [ include_t._create_impl(self) ]
-        answer.append( '#ifdef _MSC_VER' )
-        answer.append( self.indent( '#pragma hdrstop' ) )
-        answer.append( '#endif //_MSC_VER' )
-        return os.linesep.join( answer )
-        
-        
-        
-        
