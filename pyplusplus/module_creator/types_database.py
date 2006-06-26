@@ -18,8 +18,7 @@ class types_database_t( object ):
         self.__smart_ptrs = [ 'shared_ptr', 'auto_ptr' ] 
         self.__fundamental_strs = declarations.FUNDAMENTAL_TYPES.keys()
         self.__normalize_data = [ ',', '<', '>', '*', '&', '(', ')', '::' ]
-        self.__used_vectors = set()
-        self.__used_maps = set()
+        self.__containers = set()
     
     def update( self, decl ):
         if isinstance( decl, declarations.calldef_t ):
@@ -55,29 +54,23 @@ class types_database_t( object ):
         type = declarations.remove_alias( type )
         type = declarations.remove_pointer( type )
         type = declarations.remove_reference( type )        
-        try:
-            if declarations.vector_traits.is_my_case( type ):
-                vector = declarations.vector_traits.class_declaration( type )
-                declarations.vector_traits.value_type( vector )
-                self.__used_vectors.add( vector )
-                return True
-            #the patch I submitted should be accepted, before pyplusplus will generate
-            #the code
-            #~ if declarations.list_traits.is_my_case( type ):
-                #~ list_ = declarations.list_traits.class_declaration( type )
-                #~ declarations.list_traits.value_type( list_ )
-                #~ self.__used_vectors.add( list_ )
-                #~ return True               
-            if declarations.map_traits.is_my_case( type ):
-                map_ = declarations.map_traits.class_declaration( type )
-                declarations.map_traits.value_type( map_ )
-                self.__used_maps.add( map_ )
-                return True
-            if declarations.hash_map_traits.is_my_case( type ):
-                map_ = declarations.hash_map_traits.class_declaration( type )
-                declarations.hash_map_traits.value_type( map_ )
-                self.__used_maps.add( map_ )
-                return True
+        
+        traits = None
+        if declarations.vector_traits.is_my_case( type ):
+            traits = declarations.vector_traits
+        elif declarations.map_traits.is_my_case( type ):
+            traits = declarations.map_traits
+        elif declarations.hash_map_traits.is_my_case( type ):
+            traits = declarations.hash_map_traits
+        else:
+            pass
+        if None is traits:
+            return False
+        try:            
+            cls = traits.class_declaration( type )
+            traits.value_type( cls )
+            self.__containers.add( cls )
+            return True
         except RuntimeError, error:
             msg = 'WARNING: pyplusplus found std::vector instantiation declaration, '
             msg = msg + 'but can not find out value type!'
@@ -180,10 +173,7 @@ class types_database_t( object ):
         for db in dbs:
             self._print_single_db( db )
             
-    def _get_used_vectors( self ):
-        return self.__used_vectors
-    used_vectors = property( _get_used_vectors )
-
-    def _get_used_maps( self ):
-        return self.__used_maps
-    used_maps = property( _get_used_maps )
+    def _get_used_containers( self ):
+        return self.__containers
+    used_containers = property( _get_used_containers)
+    

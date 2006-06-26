@@ -10,10 +10,9 @@ import code_creator
 from pygccxml import declarations
 
 class indexing_suite_t( code_creator.code_creator_t ):
-    def __init__(self, suite_name, parent=None ):        
+    def __init__(self, parent=None ):        
         code_creator.code_creator_t.__init__( self, parent=parent )
-        self.__suite_name = suite_name
-        
+            
     def _get_configuration( self ):
         return self.parent.declaration.indexing_suite
     configuration = property( _get_configuration )
@@ -22,8 +21,14 @@ class indexing_suite_t( code_creator.code_creator_t ):
         return self.parent.declaration 
     container = property( _get_container )
 
+    def guess_suite_name( self ):
+        if self.container.name.startswith( 'vector' ):
+            return 'boost::python::vector_indexing_suite'
+        else:
+            return 'boost::python::map_indexing_suite'
+
     def _create_suite_declaration( self ):
-        suite_identifier = algorithm.create_identifier( self, self.__suite_name )
+        suite_identifier = algorithm.create_identifier( self, self.guess_suite_name() )
         args = [ self.container.decl_string ]
         if self.configuration.derived_policies:
             if self.configuration.no_proxy:
@@ -38,27 +43,4 @@ class indexing_suite_t( code_creator.code_creator_t ):
 
     def _create_impl(self):
         return "def( %s() )" %  self._create_suite_declaration()
-
-class vector_indexing_suite_t( indexing_suite_t ):
-    """
-    Creates boost.python code that needed to export a vector of some class
-    """
-    #class_< std::vector<X> >("XVec")
-    #    .def(vector_indexing_suite<std::vector<X> >())
-    #;
-
-    def __init__(self, parent=None ):        
-        indexing_suite_t.__init__( self, 'boost::python::vector_indexing_suite', parent=parent )
-
-class map_indexing_suite_t( indexing_suite_t ):
-    """
-    Creates boost.python code that needed to export a vector of some class
-    """
-    #class_< std::vector<X> >("XVec")
-    #    .def(vector_indexing_suite<std::vector<X> >())
-    #;
-
-    def __init__(self, parent=None ):        
-        indexing_suite_t.__init__( self, 'boost::python::map_indexing_suite', parent=parent )
-
-        
+    

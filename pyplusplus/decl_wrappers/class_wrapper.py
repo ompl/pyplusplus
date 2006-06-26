@@ -9,14 +9,18 @@ import scopedef_wrapper
 from pygccxml import declarations
 import indexing_suite as container_suites
         
-        
-def guess_indexing_suite( class_ ):
-    if declarations.vector_traits.is_my_case( class_ ) \
-       or declarations.list_traits.is_my_case( class_ ):
-        return container_suites.vector_suite_t( class_ )
-    if declarations.map_traits.is_my_case( class_ ) \
-       or declarations.hash_map_traits.is_my_case( class_ ):
-        return container_suites.map_suite_t( class_ )
+
+def guess_container_traits( class_ ):
+    if declarations.vector_traits.is_my_case( class_ ):
+        return declarations.vector_traits
+    elif declarations.list_traits.is_my_case( class_ ):
+        return declarations.list_traits
+    elif declarations.map_traits.is_my_case( class_ ):
+        return declarations.map_traits
+    elif declarations.hash_map_traits.is_my_case( class_ ):
+        declarations.hash_map_traits
+    else:
+        return None
 
 #this will only be exported if indexing suite is not None and only when needed
 class class_declaration_t(decl_wrapper.decl_wrapper_t, declarations.class_declaration_t):
@@ -34,7 +38,9 @@ class class_declaration_t(decl_wrapper.decl_wrapper_t, declarations.class_declar
 
     def _get_indexing_suite( self ):
         if self._indexing_suite is None:
-            self._indexing_suite = guess_indexing_suite( self )
+            container_traits = guess_container_traits( self )
+            if container_traits:
+                self._indexing_suite = container_suites.indexing_suite_t( self, container_traits )
         return self._indexing_suite
     indexing_suite = property( _get_indexing_suite )
 
@@ -110,7 +116,10 @@ class class_t(scopedef_wrapper.scopedef_t, declarations.class_t):
 
     def _get_indexing_suite( self ):
         if self._indexing_suite is None:
-            self._indexing_suite = guess_indexing_suite( self )
+            container_traits = guess_container_traits( self )
+            if container_traits:
+                self._indexing_suite \
+                    = container_suites.indexing_suite_t( self, container_traits )
         return self._indexing_suite
     indexing_suite = property( _get_indexing_suite )
     

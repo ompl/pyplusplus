@@ -366,28 +366,32 @@ class creator_t( declarations.decl_visitor_t ):
             else:
                 return code_creators.class_declaration_t( class_inst=cls )
 
-        if self.__types_db.used_vectors:
-            header = "boost/python/suite/indexing/vector_indexing_suite.hpp"
-            self.__extmodule.add_system_header( header )
-            self.__extmodule.add_include( header=header )
-            for cls in self.__types_db.used_vectors:
-                cls_creator = create_cls_cc( cls )
-                value_type = cls.indexing_suite.value_type() 
-                if declarations.is_class( value_type ) and not declarations.has_public_equal( value_type ):
-                    cls_creator.adopt_creator( create_explanation( cls ) )
-                cls_creator.adopt_creator( code_creators.vector_indexing_suite_t() )
-                self.__module_body.adopt_creator( cls_creator )
-        if self.__types_db.used_maps:
-            header = "boost/python/suite/indexing/map_indexing_suite.hpp"
-            self.__extmodule.add_system_header( header )
-            self.__extmodule.add_include( header=header )
-            for cls in self.__types_db.used_maps:
-                cls_creator = create_cls_cc( cls )
-                value_type = cls.indexing_suite.value_type() 
-                if declarations.is_class( value_type ) and  not declarations.has_public_equal( value_type ):
-                    cls_creator.adopt_creator( create_explanation( cls ) )
-                cls_creator.adopt_creator( code_creators.map_indexing_suite_t() )
-                self.__module_body.adopt_creator( cls_creator )
+        if not self.__types_db.used_containers:
+            return 
+        
+        map_header_was_used = False
+        vector_header_was_used = False
+        
+        for cls in self.__types_db.used_containers:
+            if cls.name.startswith( 'vector' ):
+                if not vector_header_was_used:
+                    vector_header_was_used = True
+                    header = "boost/python/suite/indexing/vector_indexing_suite.hpp"
+                    self.__extmodule.add_system_header( header )
+                    self.__extmodule.add_include( header=header )
+            else:
+                if not map_header_was_used:
+                    map_header_was_used = True
+                    header = "boost/python/suite/indexing/map_indexing_suite.hpp"
+                    self.__extmodule.add_system_header( header )
+                    self.__extmodule.add_include( header=header )
+
+            cls_creator = create_cls_cc( cls )
+            value_type = cls.indexing_suite.value_type() 
+            if declarations.is_class( value_type ) and not declarations.has_public_equal( value_type ):
+                cls_creator.adopt_creator( create_explanation( cls ) )
+            cls_creator.adopt_creator( code_creators.indexing_suite_t() )
+            self.__module_body.adopt_creator( cls_creator )
  
     def create(self, decl_headers=None):
         """Create and return the module for the extension.

@@ -17,18 +17,19 @@ from pygccxml import declarations
 #   5. shared_ptr
 
 class indexing_suite_t( object ):
-    def __init__( self, container_class, no_proxy=None, derived_policies=None ):
+    def __init__( self, container_class, container_traits, no_proxy=None, derived_policies=None ):
         object.__init__( self )
         self.__no_proxy = no_proxy
         self.__derived_policies = None
         self.__container_class = container_class
+        self.__container_traits = container_traits
         
     def _get_container_class( self ):
         return self.__container_class
     container_class = property( _get_container_class )
     
     def value_type(self):
-        raise NotImplementedError()
+        return self.__container_traits.value_type( self.container_class )
     
     def _get_no_proxy( self ):
         if self.__no_proxy is None:
@@ -50,27 +51,7 @@ class indexing_suite_t( object ):
             
     def _get_derived_policies( self ):
         return self.__derived_policies
-    def _set_derived_policied( self, derived_policies ):
+    def _set_derived_policies( self, derived_policies ):
         self.__derived_policies = derived_policies
-    derived_policies = property( _get_derived_policies, _set_derived_policied )
+    derived_policies = property( _get_derived_policies, _set_derived_policies )
     
-
-class vector_suite_t( indexing_suite_t ):
-    def __init__( self, cls ):
-        indexing_suite_t.__init__( self, cls )
-        self.__traits = declarations.vector_traits
-        if declarations.list_traits.is_my_case( self.container_class ):        
-            self.__traits = declarations.list_traits
-        
-    def value_type( self ):
-        return self.__traits.value_type( self.container_class )
-
-class map_suite_t( indexing_suite_t ):
-    def __init__( self, cls ):
-        indexing_suite_t.__init__( self, cls )
-        self.__traits = declarations.map_traits
-        if declarations.hash_map_traits.is_my_case( self.container_class ):        
-            self.__traits = declarations.hash_map_traits
-        
-    def value_type( self ):
-        return self.__traits.value_type( self.container_class )
