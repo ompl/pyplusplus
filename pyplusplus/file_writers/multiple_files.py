@@ -91,15 +91,11 @@ class multiple_files_t(writer.writer_t):
         answer = []
         if self.extmodule.license:
             answer.append( self.extmodule.license.create() )
-            
-        if self.extmodule.precompiled_header:
-            answer.append( self.extmodule.precompiled_header.create() )
-            
+                        
         answer.append( '#include "%s%s"' % ( file_name, self.HEADER_EXT ) )
 
         # Include all 'global' include files...
         include_creators = filter( lambda creator: isinstance( creator, code_creators.include_t )
-                                                   and not isinstance( creator, code_creators.precompiled_header_t )
                                    , self.extmodule.creators )
         includes = map( lambda include_creator: include_creator.create()
                         , include_creators )
