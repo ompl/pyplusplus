@@ -10,25 +10,13 @@ from pygccxml import declarations
 import indexing_suite as container_suites
         
 
-def guess_container_traits( class_ ):
-    if declarations.vector_traits.is_my_case( class_ ):
-        return declarations.vector_traits
-    elif declarations.list_traits.is_my_case( class_ ):
-        return declarations.list_traits
-    elif declarations.map_traits.is_my_case( class_ ):
-        return declarations.map_traits
-    elif declarations.hash_map_traits.is_my_case( class_ ):
-        declarations.hash_map_traits
-    else:
-        return None
-
-#this will only be exported if indexing suite is not None and only when needed
-class class_declaration_t(decl_wrapper.decl_wrapper_t, declarations.class_declaration_t):
-    def __init__(self, *arguments, **keywords):
-        declarations.class_declaration_t.__init__(self, *arguments, **keywords )
-        decl_wrapper.decl_wrapper_t.__init__( self )
+class class_common_impl_details_t( object ):
+    def __init__(self):
+        object.__init__( self )
         self._always_expose_using_scope = False
         self._indexing_suite = None
+        self._equality_comparable = None
+        self._lessthan_comparable = None
 
     def _get_always_expose_using_scope( self ):
         return self._always_expose_using_scope
@@ -38,25 +26,57 @@ class class_declaration_t(decl_wrapper.decl_wrapper_t, declarations.class_declar
 
     def _get_indexing_suite( self ):
         if self._indexing_suite is None:
-            container_traits = guess_container_traits( self )
-            if container_traits:
-                self._indexing_suite = container_suites.indexing_suite_t( self, container_traits )
+            for container_traits in declarations.all_container_traits:
+                if container_traits.is_my_case( self ):
+                    self._indexing_suite = container_suites.indexing_suite_t( self, container_traits )
+                    break
         return self._indexing_suite
     indexing_suite = property( _get_indexing_suite )
+    
+    def _get_equality_comparable( self ):
+        if None is self._equality_comparable:
+            self._equality_comparable = declarations.has_public_equal( self )
+        return self._equality_comparable
+    
+    def _set_equality_comparable( self, value ):
+        self._equality_comparable = value
+        
+    equality_comparable = property( _get_equality_comparable, _set_equality_comparable )
 
-class class_t(scopedef_wrapper.scopedef_t, declarations.class_t):
+    def _get_lessthan_comparable( self ):
+        if None is self._lessthan_comparable:
+            self._lessthan_comparable = declarations.has_public_less( self )
+        return self._lessthan_comparable
+    
+    def _set_lessthan_comparable( self, value ):
+        self._lessthan_comparable = value
+        
+    lessthan_comparable = property( _get_lessthan_comparable, _set_lessthan_comparable )
+
+
+#this will only be exported if indexing suite is not None and only when needed
+class class_declaration_t( class_common_impl_details_t
+                           , decl_wrapper.decl_wrapper_t
+                           , declarations.class_declaration_t ):
     def __init__(self, *arguments, **keywords):
+        class_common_impl_details_t.__init__( self )
+        declarations.class_declaration_t.__init__(self, *arguments, **keywords )
+        decl_wrapper.decl_wrapper_t.__init__( self )
+
+class class_t( class_common_impl_details_t
+               , scopedef_wrapper.scopedef_t
+               , declarations.class_t):
+    def __init__(self, *arguments, **keywords):
+        class_common_impl_details_t.__init__( self )
         declarations.class_t.__init__(self, *arguments, **keywords )
         scopedef_wrapper.scopedef_t.__init__( self )
         
-        self._always_expose_using_scope = False
         self._redefine_operators = False        
         self._held_type = None
         self._noncopyable = None
         self._wrapper_alias = self._generate_valid_name() + "_wrapper"
         self._user_code = []
         self._wrapper_user_code = []
-        self._indexing_suite = None
         self._null_constructor_body = ''
         self._copy_constructor_body = ''
 
@@ -113,15 +133,6 @@ class class_t(scopedef_wrapper.scopedef_t, declarations.class_t):
     def _set_wrapper_user_code( self, value ):
         self._wrapper_user_code = value
     wrapper_user_code = property( _get_wrapper_user_code, _set_wrapper_user_code )
-
-    def _get_indexing_suite( self ):
-        if self._indexing_suite is None:
-            container_traits = guess_container_traits( self )
-            if container_traits:
-                self._indexing_suite \
-                    = container_suites.indexing_suite_t( self, container_traits )
-        return self._indexing_suite
-    indexing_suite = property( _get_indexing_suite )
     
     def _get_null_constructor_body(self):
         return self._null_constructor_body

@@ -54,30 +54,29 @@ class types_database_t( object ):
         type = declarations.remove_alias( type )
         type = declarations.remove_pointer( type )
         type = declarations.remove_reference( type )        
+        type = declarations.remove_cv( type )        
+        type = declarations.remove_declarated( type )        
         
-        traits = None
-        if declarations.vector_traits.is_my_case( type ):
-            traits = declarations.vector_traits
-        elif declarations.map_traits.is_my_case( type ):
-            traits = declarations.map_traits
-        elif declarations.hash_map_traits.is_my_case( type ):
-            traits = declarations.hash_map_traits
-        else:
-            pass
-        if None is traits:
+        if not declarations.is_class( type ) and not declarations.is_class_declaration( type ):
             return False
+        
+        container_cls = type
+        if None is container_cls.indexing_suite:
+            return False
+        
         try:            
-            cls = traits.class_declaration( type )
-            traits.value_type( cls )
-            self.__containers.add( cls )
-            return True
+            #checking whether value_type could be extracted
+            container_cls.indexing_suite.value_type()
         except RuntimeError, error:
-            msg = 'WARNING: pyplusplus found std::vector instantiation declaration, '
+            msg = 'WARNING: pyplusplus found "%s" instantiation declaration, ' % container_cls.name
             msg = msg + 'but can not find out value type!'
             msg = msg + os.linesep + 'This class will not be exported!'
-            msg = msg + os.linesep + 'std::vector instantiation is: ' + vector.decl_string
             _logging_.logger.warn( msg )
-        return False
+            return False
+        
+        self.__containers.add( container_cls )
+        return True
+
         
     def _update_db( self, db, type_ ):
         if self._update_containers_db( type_ ):

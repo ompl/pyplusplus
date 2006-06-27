@@ -7,6 +7,7 @@ import os
 import types
 import algorithm 
 import code_creator
+import declaration_based
 from pygccxml import declarations
 
 class indexing_suite_t( code_creator.code_creator_t ):
@@ -44,3 +45,21 @@ class indexing_suite_t( code_creator.code_creator_t ):
     def _create_impl(self):
         return "def( %s() )" %  self._create_suite_declaration()
     
+
+#class indexing_suite2_t( code_creator.code_creator_t ):
+    #class value_traits_t( declaration_based_t ):
+        #def __init__( self, container_class, parent=None ):
+            #declaration_based_t.__init__( declaration=container_class, parent=parent )
+            
+        #def _create_impl( self
+    
+    #def __init__(self, parent=None ):        
+        #code_creator.code_creator_t.__init__( self, parent=parent )
+            
+    #def _get_configuration( self ):
+        #return self.parent.declaration.indexing_suite
+    #configuration = property( _get_configuration )
+
+    #def _get_container( self ):
+        #return self.parent.declaration 
+    #container = property( _get_container )

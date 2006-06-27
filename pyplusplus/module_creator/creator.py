@@ -369,22 +369,23 @@ class creator_t( declarations.decl_visitor_t ):
         if not self.__types_db.used_containers:
             return 
         
-        map_header_was_used = False
-        vector_header_was_used = False
-        
+        #supported container : [ header file, is already used ]
+        isuite1 = { 
+            'vector<' : [ "boost/python/suite/indexing/vector_indexing_suite.hpp", False ]
+            , 'map<' : [ "boost/python/suite/indexing/map_indexing_suite.hpp", False ]
+        }
+
         for cls in self.__types_db.used_containers:
-            if cls.name.startswith( 'vector' ):
-                if not vector_header_was_used:
-                    vector_header_was_used = True
-                    header = "boost/python/suite/indexing/vector_indexing_suite.hpp"
-                    self.__extmodule.add_system_header( header )
-                    self.__extmodule.add_include( header=header )
-            else:
-                if not map_header_was_used:
-                    map_header_was_used = True
-                    header = "boost/python/suite/indexing/map_indexing_suite.hpp"
-                    self.__extmodule.add_system_header( header )
-                    self.__extmodule.add_include( header=header )
+            container_name = cls.name.split( '<' )[0] + '<'
+            if not isuite1.has_key( container_name ):
+                continue #not supported
+            if not cls.name.startswith( 'vector<') and not cls.name.startswith( 'map<'):
+                continue
+            
+            if not isuite1[ container_name ][1]:
+                isuite1[ container_name ][1] = True
+                self.__extmodule.add_system_header( isuite1[ container_name ][0] )
+                self.__extmodule.add_include( header=isuite1[ container_name ][0] )
 
             cls_creator = create_cls_cc( cls )
             value_type = cls.indexing_suite.value_type() 
