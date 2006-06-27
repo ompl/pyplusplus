@@ -10,7 +10,7 @@ import code_creator
 import declaration_based
 from pygccxml import declarations
 
-class indexing_suite_t( code_creator.code_creator_t ):
+class indexing_suite1_t( code_creator.code_creator_t ):
     def __init__(self, parent=None ):        
         code_creator.code_creator_t.__init__( self, parent=parent )
             

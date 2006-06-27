@@ -34,7 +34,8 @@ class module_builder_t(object):
                   , compilation_mode=None
                   , cache=None
                   , optimize_queries=True
-                  , ignore_gccxml_output=False):
+                  , ignore_gccxml_output=False
+                  , indexing_suite_version=1):
         """
         @param files: list of files, declarations from them you want to export
         @type files: list of strings or L{file_configuration_t} instances
@@ -76,11 +77,12 @@ class module_builder_t(object):
         self.__global_ns = self.__parse_declarations( files
                                                       , gccxml_config
                                                       , compilation_mode
-                                                      , cache )
+                                                      , cache
+                                                      , indexing_suite_version)
         self.__code_creator = None         
         if optimize_queries:
             self.run_query_optimizer()
-        
+            
     def _get_global_ns( self ):
         return self.__global_ns
     global_ns = property( _get_global_ns, doc="reference to global namespace" )
@@ -93,7 +95,7 @@ class module_builder_t(object):
         """
         self.__global_ns.init_optimizer()
     
-    def __parse_declarations( self, files, gccxml_config, compilation_mode, cache ):
+    def __parse_declarations( self, files, gccxml_config, compilation_mode, cache, indexing_suite_version ):
         if None is gccxml_config:
             gccxml_config = parser.config_t()
         if None is compilation_mode:
@@ -102,16 +104,23 @@ class module_builder_t(object):
         _logging_.logger.debug( 'parsing files - started' )
         reader = parser.project_reader_t( gccxml_config, cache, decl_wrappers.dwfactory_t() )
         decls = reader.read_files( files, compilation_mode )
+
         _logging_.logger.debug( 'parsing files - done( %f seconds )' % ( time.clock() - start_time ) )
         _logging_.logger.debug( 'settings declarations defaults- started' )
+
+        global_ns = decls_package.matcher.get_single( 
+                decls_package.namespace_matcher_t( name='::' )
+                , decls )
+        if indexing_suite_version != 1:
+            for cls in global_ns.classes():
+                cls.indexing_suite_version = indexing_suite_version
+                
         start_time = time.clock()
         self.__apply_decls_defaults(decls)
         _logging_.logger.debug( 'settings declarations defaults - done( %f seconds )'
                                 % ( time.clock() - start_time ) )
-        return decls_package.matcher.get_single( 
-                decls_package.namespace_matcher_t( name='::' )
-                , decls )
-
+        return global_ns
+    
     def __filter_by_location( self, flatten_decls ):
         for decl in flatten_decls:            
             if not decl.location:

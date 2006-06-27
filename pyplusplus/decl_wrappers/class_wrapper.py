@@ -7,8 +7,8 @@ import user_text
 import decl_wrapper
 import scopedef_wrapper
 from pygccxml import declarations
-import indexing_suite as container_suites
-        
+import indexing_suite as isuite1
+import indexing_suite2 as isuite2
 
 class class_common_impl_details_t( object ):
     def __init__(self):
@@ -17,7 +17,15 @@ class class_common_impl_details_t( object ):
         self._indexing_suite = None
         self._equality_comparable = None
         self._lessthan_comparable = None
-
+        self._isuite_version = 1
+        
+    def _get_indexing_suite_version( self ):
+        return self._isuite_version
+    def _set_indexing_suite_version( self, version ):
+        assert version in ( 1, 2 )
+        self._isuite_version = version
+    indexing_suite_version = property( _get_indexing_suite_version, _set_indexing_suite_version )
+    
     def _get_always_expose_using_scope( self ):
         return self._always_expose_using_scope
     def _set_always_expose_using_scope( self, value ):
@@ -28,7 +36,10 @@ class class_common_impl_details_t( object ):
         if self._indexing_suite is None:
             for container_traits in declarations.all_container_traits:
                 if container_traits.is_my_case( self ):
-                    self._indexing_suite = container_suites.indexing_suite_t( self, container_traits )
+                    if self._isuite_version == 1:
+                        self._indexing_suite = isuite1.indexing_suite1_t( self, container_traits )
+                    else:
+                        self._indexing_suite = isuite2.indexing_suite2_t( self, container_traits )
                     break
         return self._indexing_suite
     indexing_suite = property( _get_indexing_suite )

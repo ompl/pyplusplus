@@ -391,7 +391,7 @@ class creator_t( declarations.decl_visitor_t ):
             value_type = cls.indexing_suite.value_type() 
             if declarations.is_class( value_type ) and not declarations.has_public_equal( value_type ):
                 cls_creator.adopt_creator( create_explanation( cls ) )
-            cls_creator.adopt_creator( code_creators.indexing_suite_t() )
+            cls_creator.adopt_creator( code_creators.indexing_suite1_t() )
             self.__module_body.adopt_creator( cls_creator )
  
     def create(self, decl_headers=None):

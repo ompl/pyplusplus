@@ -16,7 +16,7 @@ from pygccxml import declarations
 #   4. std::complex
 #   5. shared_ptr
 
-class indexing_suite_t( object ):
+class indexing_suite1_t( object ):
     def __init__( self, container_class, container_traits, no_proxy=None, derived_policies=None ):
         object.__init__( self )
         self.__no_proxy = no_proxy
