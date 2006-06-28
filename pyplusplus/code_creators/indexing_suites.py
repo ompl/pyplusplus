@@ -10,16 +10,16 @@ import code_creator
 import declaration_based
 from pygccxml import declarations
 
-class indexing_suite1_t( code_creator.code_creator_t ):
-    def __init__(self, parent=None ):        
-        code_creator.code_creator_t.__init__( self, parent=parent )
+class indexing_suite1_t( declaration_based.declaration_based_t ):
+    def __init__(self, container, parent=None ):        
+        declaration_based.declaration_based_t.__init__( self, declaration=container, parent=parent )
             
     def _get_configuration( self ):
-        return self.parent.declaration.indexing_suite
+        return self.declaration.indexing_suite
     configuration = property( _get_configuration )
 
     def _get_container( self ):
-        return self.parent.declaration 
+        return self.declaration 
     container = property( _get_container )
 
     def guess_suite_name( self ):
@@ -46,20 +46,14 @@ class indexing_suite1_t( code_creator.code_creator_t ):
         return "def( %s() )" %  self._create_suite_declaration()
     
 
-#class indexing_suite2_t( code_creator.code_creator_t ):
-    #class value_traits_t( declaration_based_t ):
-        #def __init__( self, container_class, parent=None ):
-            #declaration_based_t.__init__( declaration=container_class, parent=parent )
+class indexing_suite2_t( declaration_based.declaration_based_t ):
+    def __init__(self, container, parent=None ):        
+        declaration_based.declaration_based_t.__init__( self, declaration=container, parent=parent )
+        
+    def _get_configuration( self ):
+        return self.declaration.indexing_suite
+    configuration = property( _get_configuration )
             
-        #def _create_impl( self
-    
-    #def __init__(self, parent=None ):        
-        #code_creator.code_creator_t.__init__( self, parent=parent )
-            
-    #def _get_configuration( self ):
-        #return self.parent.declaration.indexing_suite
-    #configuration = property( _get_configuration )
-
-    #def _get_container( self ):
-        #return self.parent.declaration 
-    #container = property( _get_container )
+    def _create_impl( self ):
+        container_suite = algorithm.create_identifier(self, "::boost::python::indexing::container_suite" )
+        return "def( %s< %s >() )" % ( container_suite, self.decl_identifier )

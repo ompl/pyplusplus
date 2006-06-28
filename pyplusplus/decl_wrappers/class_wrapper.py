@@ -7,7 +7,7 @@ import user_text
 import decl_wrapper
 import scopedef_wrapper
 from pygccxml import declarations
-import indexing_suite as isuite1
+import indexing_suite1 as isuite1
 import indexing_suite2 as isuite2
 
 class class_common_impl_details_t( object ):
@@ -27,7 +27,11 @@ class class_common_impl_details_t( object ):
     indexing_suite_version = property( _get_indexing_suite_version, _set_indexing_suite_version )
     
     def _get_always_expose_using_scope( self ):
-        return self._always_expose_using_scope
+        #I am almost sure this logic should be moved to code_creators
+        if isinstance( self.indexing_suite, isuite2.indexing_suite2_t ) \
+           and ( self.indexing_suite.disable_methods or self.indexing_suite.disabled_methods_groups ):
+            return True
+        return self._always_expose_using_scope    
     def _set_always_expose_using_scope( self, value ):
         self._always_expose_using_scope = value
     always_expose_using_scope = property( _get_always_expose_using_scope, _set_always_expose_using_scope )
@@ -90,12 +94,6 @@ class class_t( class_common_impl_details_t
         self._wrapper_user_code = []
         self._null_constructor_body = ''
         self._copy_constructor_body = ''
-
-    def _get_always_expose_using_scope( self ):
-        return self._always_expose_using_scope
-    def _set_always_expose_using_scope( self, value ):
-        self._always_expose_using_scope = value
-    always_expose_using_scope = property( _get_always_expose_using_scope, _set_always_expose_using_scope )
 
     def _get_redefine_operators( self ):
         return self._redefine_operators

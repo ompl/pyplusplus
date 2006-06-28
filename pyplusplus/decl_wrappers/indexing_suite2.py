@@ -4,30 +4,53 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 from pygccxml import declarations
 
-#NoProxy
-#By default indexed elements have Python reference semantics and are returned by 
-#proxy. This can be disabled by supplying true in the NoProxy template parameter.
-#When we want to disable is:
-#1. We deal with immutable objects:
-#   1. fundamental types
-#   2. enum type
-#   3. std::[w]string
-#   4. std::complex
-#   5. shared_ptr
+"""
+method_len            
+method_iter           
+method_getitem        
+method_getitem_slice  
+method_index          
+method_contains       
+method_count          
+method_has_key        
+method_setitem        
+method_setitem_slice  
+method_delitem        
+method_delitem_slice  
+method_reverse        
+method_append         
+method_insert         
+method_extend         
+method_sort
+
+slice_methods = method_getitem_slice | method_setitem_slice | method_delitem_slice
+search_methods = method_index | method_contains | method_count | method_has_key
+reorder_methods = method_sort | method_reverse
+insert_methods = method_append | method_insert | method_extend
+"""
+
 
 class indexing_suite2_t( object ):
+    METHODS = ( 'len', 'iter', 'getitem', 'getitem_slice', 'index', 'contains'
+                , 'count', 'has_key', 'setitem', 'setitem_slice', 'delitem'
+                , 'delitem_slice', 'reverse', 'append', 'insert', 'extend', 'sort' )
+    
+    METHOD_GROUPS = {
+        'slice_methods' : ( 'method_getitem_slice', 'method_setitem_slice', 'method_delitem_slice' )
+        , 'search_methods' : ( 'method_index', 'method_contains', 'method_count', 'method_has_key' )
+        , 'reorder_methods' : ( 'method_sort', 'method_reverse' )
+        , 'insert_methods' : ( 'method_append', 'method_insert', 'method_extend' )
+    }
+    
     def __init__( self, container_class, container_traits ):
         object.__init__( self )
         self.__call_policies = None
         self.__container_class = container_class
         self.__container_traits = container_traits
-        self.__disable_len = None 
-        self.__disable_slices = None  
-        self.__disable_search = None
-        self.__disable_reorder = None  
-        self.__disable_extend = None  
-        self.__disable_insert = None
-            
+        self._disabled_methods = set()
+        self._disabled_groups = set()
+        self._default_applied = False
+
     def _get_container_class( self ):
         return self.__container_class
     container_class = property( _get_container_class )
@@ -43,46 +66,42 @@ class indexing_suite2_t( object ):
         self.__call_policies = call_policies
     call_policies = property( _get_call_policies, _set_call_policies )
 
-    def _get_disable_len( self ):
-        return self.__disable_len
-    def _set_disable_len( self, value ):
-        self.__disable_len = value
-    disable_len = property( _get_disable_len, _set_disable_len )
+    def __apply_defaults_if_needed( self ):
+        if self._default_applied:
+            return 
+        self._default_applied = True
+        #find out what operators are supported by value_type and
+        #then configure the _disable_[methods|groups]
+        pass
+        
+    def disable_method( self, method_name ):
+        assert method_name in self.METHODS
+        self.__apply_defaults_if_needed()
+        self._disabled_methods.add( method_name )
+        
+    def enable_method( self, method_name ):
+        assert method_name in self.METHODS
+        self.__apply_defaults_if_needed()
+        if method_name in self._disabled_methods:
+            self._disabled_methods.remove( method_name )
     
-    def _get_disable_slices( self ):
-        return self.__disable_slices
-    def _set_disable_slices( self, value ):
-        self.__disable_slices = value
-    disable_slices = property( _get_disable_slices, _set_disable_slices )
-    
-    def _get_disable_search( self ): #need operator==
-        if None is self.__disable_search:
-            value_type = self.container_traits.value_type( self.container_class )
-            if not declarations.has_public_equal( value_type ):
-                self.__disable_search = True
-        return self.__disable_search
-    def _set_disable_search( self, value ):
-        self.__disable_search = value
-    disable_search = property( _get_disable_search, _set_disable_search )
-    
-    def _get_disable_reorder( self ): #need operator<
-        if None is self.__disable_reorder:
-            value_type = self.container_traits.value_type( self.container_class )
-            if not declarations.has_public_less( value_type ):
-                self.__disable_reorder = True
-        return self.__disable_reorder
-    def _set_disable_reorder( self, value ):
-        self.__disable_reorder = value
-    disable_reorder = property( _get_disable_reorder, _set_disable_reorder )
+    def _get_disabled_methods( self ): 
+        self.__apply_defaults_if_needed()
+        return self._disabled_methods
+    disable_methods = property( _get_disabled_methods )
 
-    def _get_disable_extend( self ):
-        return self.__disable_extend
-    def _set_disable_extend( self, value ):
-        self.__disable_extend = value
-    disable_extend = property( _get_disable_extend, _set_disable_extend )
-
-    def _get_disable_insert( self ):
-        return self.__disable_insert
-    def _set_disable_insert( self, value ):
-        self.__disable_insert = value
-    disable_insert = property( _get_disable_insert, _set_disable_insert )
+    def disable_methods_group( self, group_name ):
+        assert group_name in self.METHOD_GROUPS
+        self.__apply_defaults_if_needed()
+        self._disabled_groups.add( group_name )
+        
+    def enable_methods_group( self, group_name ):
+        assert group_name in self.METHOD_GROUPS
+        self.__apply_defaults_if_needed()
+        if group_name in self._disabled_groups:
+            self._disabled_groups.remove( group_name )
+    
+    def _get_disabled_methods_groups( self ): 
+        self.__apply_defaults_if_needed()
+        return self._disabled_groups
+    disabled_methods_groups = property( _get_disabled_methods_groups )

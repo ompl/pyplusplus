@@ -5,6 +5,8 @@
 import sys
 import unittest
 
+import classes_tester
+import abstract_classes_tester
 import algorithms_tester
 import module_body_tester
 import enums_tester
@@ -105,6 +107,8 @@ def create_suite(times):
         , hierarchy3_tester
         , vector3_tester
         , default_args_tester
+        , abstract_classes_tester
+        , classes_tester
     ]
     
     main_suite = unittest.TestSuite()    

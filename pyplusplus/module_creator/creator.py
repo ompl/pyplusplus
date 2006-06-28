@@ -370,28 +370,49 @@ class creator_t( declarations.decl_visitor_t ):
             return 
         
         #supported container : [ header file, is already used ]
+        
         isuite1 = { 
             'vector<' : [ "boost/python/suite/indexing/vector_indexing_suite.hpp", False ]
             , 'map<' : [ "boost/python/suite/indexing/map_indexing_suite.hpp", False ]
         }
 
+        #include <boost/python/suite/indexing/vector.hpp>
+
+        container_suite_header_was_used = False     
+        container_suite_header = "boost/python/suite/indexing/container_suite.hpp"
+        isuite2 = {
+            'vector<' : [ "boost/python/suite/indexing/vector.hpp", False ]
+        }
+        
         for cls in self.__types_db.used_containers:
             container_name = cls.name.split( '<' )[0] + '<'
+
+            if isinstance( cls.indexing_suite, decl_wrappers.indexing_suite1_t ):
+                isuite = isuite1
+            else:
+                isuite = isuite2
+
             if not isuite1.has_key( container_name ):
                 continue #not supported
-            if not cls.name.startswith( 'vector<') and not cls.name.startswith( 'map<'):
-                continue
             
-            if not isuite1[ container_name ][1]:
+            if isuite is isuite2 and not container_suite_header_was_used:
+                container_suite_header_was_used = True
+                self.__extmodule.add_system_header( container_suite_header )
+                self.__extmodule.add_include( container_suite_header )
+
+            if not isuite[ container_name ][1]:
                 isuite1[ container_name ][1] = True
-                self.__extmodule.add_system_header( isuite1[ container_name ][0] )
-                self.__extmodule.add_include( header=isuite1[ container_name ][0] )
+                self.__extmodule.add_system_header( isuite[ container_name ][0] )
+                self.__extmodule.add_include( header=isuite[ container_name ][0] )
 
             cls_creator = create_cls_cc( cls )
-            value_type = cls.indexing_suite.value_type() 
-            if declarations.is_class( value_type ) and not declarations.has_public_equal( value_type ):
-                cls_creator.adopt_creator( create_explanation( cls ) )
-            cls_creator.adopt_creator( code_creators.indexing_suite1_t() )
+            if isuite is isuite1:
+                value_type = cls.indexing_suite.value_type() 
+                if declarations.is_class( value_type ) and not declarations.has_public_equal( value_type ):
+                    cls_creator.adopt_creator( create_explanation( cls ) )            
+                cls_creator.adopt_creator( code_creators.indexing_suite1_t(cls) )
+            else:
+                cls_creator.adopt_creator( code_creators.indexing_suite2_t(cls) )
             self.__module_body.adopt_creator( cls_creator )
  
     def create(self, decl_headers=None):

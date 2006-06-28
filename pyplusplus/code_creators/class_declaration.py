@@ -13,6 +13,7 @@ import smart_pointers
 import declaration_based
 import array_1_registrator
 import member_variable
+import indexing_suites
 from pygccxml import declarations
 
 class class_declaration_t( scoped.scoped_t ):
@@ -64,9 +65,9 @@ class class_declaration_t( scoped.scoped_t ):
 
         code = os.linesep.join( result )
         
-        result = [ 'if( true ){' ]
+        result = [ '{ //scope begin' ]
         result.append( self.indent( code ) )
-        result.append( '}' )
+        result.append( '} //scope end' )
         
         return os.linesep.join( result )
     
@@ -239,6 +240,8 @@ class class_t( scoped.scoped_t ):
         return ''.join( result )
 
     def _should_creator_be_exported_under_scope(self, inst ):
+        if isinstance( inst, ( indexing_suites.indexing_suite1_t, indexing_suites.indexing_suite2_t ) ):
+            return False
         if isinstance( inst, declaration_based.declaration_based_t ) \
            and isinstance( inst.declaration
                            , ( declarations.enumeration_t, declarations.class_t ) ):
@@ -290,9 +293,9 @@ class class_t( scoped.scoped_t ):
 
         code = os.linesep.join( result )
         
-        result = [ 'if( true ){' ]
+        result = [ '{ //scope begin' ]
         result.append( self.indent( code ) )
-        result.append( '}' )
+        result.append( '} //scope end' )
         
         return os.linesep.join( result )
 
