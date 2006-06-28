@@ -59,6 +59,9 @@ class indexing_suite2_t( object ):
         return self._get_container_traits()
     container_traits = property( _get_container_traits )
     
+    def value_type( self ):
+        return self.__container_traits.value_type( self.container_class )
+    
     def _get_call_policies( self ):
         #TODO find out call policies
         return self.__call_policies

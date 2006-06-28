@@ -17,7 +17,7 @@ LICENSE = """// Copyright 2004 Roman Yakovenko.
 class fundamental_tester_base_t( unittest.TestCase ):
     SUFFIX_TO_BE_EXPORTED = '_to_be_exported.hpp'
     
-    def __init__(self, module_name, *args ):
+    def __init__(self, module_name, indexing_suite_version=1, *args ):
         unittest.TestCase.__init__(self, *args)
         self.__module_name = module_name
         self.__to_be_exported_header \
@@ -28,7 +28,8 @@ class fundamental_tester_base_t( unittest.TestCase ):
                                                           , self.__module_name + '.cpp' )
         self.__generated_scons_file_name = os.path.join( autoconfig.build_dir
                                                           , self.__module_name + '.scons' )
-
+        self.__indexing_suite_version = indexing_suite_version
+        
     def failIfRaisesAny(self, callableObj, *args, **kwargs):
         try:
             callableObj(*args, **kwargs)
@@ -53,7 +54,8 @@ class fundamental_tester_base_t( unittest.TestCase ):
         mb = module_builder.module_builder_t( [self.__to_be_exported_header]
                                               , gccxml_path=autoconfig.gccxml.executable
                                               , include_paths=[autoconfig.boost.include]
-                                              , undefine_symbols=['__MINGW32__'] )
+                                              , undefine_symbols=['__MINGW32__']
+                                              , indexing_suite_version=self.__indexing_suite_version)
         self.customize( mb )
         if not mb.has_code_creator():
             mb.build_code_creator( self.__module_name )
