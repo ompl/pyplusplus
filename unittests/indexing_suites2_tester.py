@@ -18,8 +18,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         fundamental_tester_base.fundamental_tester_base_t.__init__( 
             self
             , tester_t.EXTENSION_NAME
-            , 2
-            , *args )
+            , indexing_suite_version=2
+            , *args)
 
     #~ @staticmethod
     #~ def matcher( item, decl ):
@@ -30,10 +30,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             #~ return True
         #~ return False
     
-    #~ def customize(self, generator):
-        #~ item = generator.class_( 'item_t' )
-        #~ items = generator.class_( lambda decl: self.matcher( item, decl ) )
-        #~ items.alias = "items_t"
+    def customize(self, generator):
+        ivector = generator.global_ns.typedef( 'ivector' )
+        ivector = declarations.remove_declarated( ivector.type )
+        ivector.indexing_suite.disable_method( 'extend' )
+        ivector.indexing_suite.disable_methods_group( 'reorder' )
+        #ivector.indexing_suite.call_policies = module_builder.call_policies.default_call_policies()
        
     def run_tests( self, module):
         iv = module.ivector()

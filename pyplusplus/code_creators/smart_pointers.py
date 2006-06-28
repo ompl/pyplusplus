@@ -42,6 +42,7 @@ class smart_pointer_registrator_t( declaration_based.declaration_based_t ):
         declaration_based.declaration_based_t.__init__( self, class_creator.declaration, parent )
         self._smart_ptr = smart_ptr
         self._class_creator = class_creator
+        self.works_on_instance = False
         
     def _get_smart_ptr( self ):
         return self._smart_ptr
@@ -76,6 +77,7 @@ class smart_pointers_converter_t( declaration_based.declaration_based_t ):
         declaration_based.declaration_based_t.__init__( self, source, parent )
         self._target = target
         self._smart_ptr = smart_ptr
+        self.works_on_instance = False
 
     def _get_target(self):
         return self._target

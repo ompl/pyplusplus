@@ -18,6 +18,7 @@ class array_1_registrator_t( code_creator.code_creator_t ):
         code_creator.code_creator_t.__init__(self, parent=parent)
         self._array_type = array_type
         self._call_policies = self._guess_call_policies()
+        self.works_on_instance = False
         
     def _get_array_type( self ):
         return self._array_type

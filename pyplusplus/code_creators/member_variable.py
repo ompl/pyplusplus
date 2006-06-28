@@ -426,6 +426,7 @@ class mem_var_ref_t( member_variable_base_t ):
                                          , wrapper=wrapper
                                          , parent=parent)
         self.param_sep = os.linesep + self.indent( self.PARAM_SEPARATOR, 2 )
+        self.works_on_instance = False
 
     def _create_getter( self ):
         answer = ['def']

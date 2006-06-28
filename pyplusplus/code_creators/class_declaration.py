@@ -6,14 +6,10 @@
 import os
 import types
 import scoped
-import custom
 import calldef
 import algorithm 
 import smart_pointers
 import declaration_based
-import array_1_registrator
-import member_variable
-import indexing_suites
 from pygccxml import declarations
 
 class class_declaration_t( scoped.scoped_t ):
@@ -21,6 +17,7 @@ class class_declaration_t( scoped.scoped_t ):
         scoped.scoped_t.__init__( self
                                   , parent=parent
                                   , declaration=class_inst )
+        self.works_on_instance = False
 
     def _generate_class_definition(self):
         class_identifier = algorithm.create_identifier( self, '::boost::python::class_' )
@@ -41,6 +38,12 @@ class class_declaration_t( scoped.scoped_t ):
     def _get_class_var_name(self):
         return self.alias + '_exposer'
     class_var_name = property( _get_class_var_name )
+        
+    def is_exposed_using_scope(self):
+        if self.declaration.always_expose_using_scope:
+            return True
+        return bool( filter( lambda cc: not cc.works_on_instance, self.creators ) ) 
+
     
     def _generate_code_with_scope(self):
         result = []
@@ -54,14 +57,13 @@ class class_declaration_t( scoped.scoped_t ):
         result[-1] = result[-1] + ' ' + scope_var_name
         result[-1] = result[-1] + '( %s );' % self.class_var_name        
 
-        for x in self.creators:
-            if not ( x is used_init ):
-                if self._should_creator_be_exported_under_scope( x ):
-                    result.append( x.create() )
-                elif isinstance( x, custom.custom_t ) and x.works_on_instance == False:
-                    result.append( '%s;' % x.create() )
-                else:
-                    result.append( '%s.%s;' % ( self.class_var_name, x.create() ) )
+        for x in creators:
+            if x is used_init:
+                continue
+            if not x.works_on_instance:
+                result.append( x.create() )
+            else:
+                result.append( '%s.%s;' % ( self.class_var_name, x.create() ) )
 
         code = os.linesep.join( result )
         
@@ -72,7 +74,7 @@ class class_declaration_t( scoped.scoped_t ):
         return os.linesep.join( result )
     
     def _create_impl(self):
-        if self.declaration.always_expose_using_scope:
+        if self.is_exposed_using_scope:
             return self._generate_code_with_scope()
         else:
             return self._generate_code_no_scope()
@@ -87,6 +89,7 @@ class class_t( scoped.scoped_t ):
                                   , parent=parent
                                   , declaration=class_inst )
         self._wrapper = wrapper
+        self.works_on_instance = False
         
     def _get_wrapper( self ):
         return self._wrapper
@@ -239,25 +242,6 @@ class class_t( scoped.scoped_t ):
         result.append( ';' )
         return ''.join( result )
 
-    def _should_creator_be_exported_under_scope(self, inst ):
-        if isinstance( inst, ( indexing_suites.indexing_suite1_t, indexing_suites.indexing_suite2_t ) ):
-            return False
-        if isinstance( inst, declaration_based.declaration_based_t ) \
-           and isinstance( inst.declaration
-                           , ( declarations.enumeration_t, declarations.class_t ) ):
-            return True
-        # If there is a custom text that won't apply as call on instance
-        if isinstance( inst, custom.custom_t ) and inst.works_on_instance == False:
-            return True
-        
-        if isinstance( inst, array_1_registrator.array_1_registrator_t ):
-            return True
-        
-        if isinstance( inst, member_variable.mem_var_ref_t ):
-            return True
-        
-        return False
-
     def _get_class_var_name(self):
         return self.alias + '_exposer'
     class_var_name = property( _get_class_var_name )
@@ -283,13 +267,12 @@ class class_t( scoped.scoped_t ):
             creators = self.creators + self._get_base_operators(base_classes, base_creators)
         
         for x in creators:
-            if not ( x is used_init ):
-                if self._should_creator_be_exported_under_scope( x ):
-                    result.append( x.create() )
-                elif isinstance( x, custom.custom_t ) and x.works_on_instance == False:
-                    result.append( '%s;' % x.create() )
-                else:
-                    result.append( '%s.%s;' % ( self.class_var_name, x.create() ) )
+            if x is used_init:
+                continue
+            if not x.works_on_instance:
+                result.append( x.create() )
+            else:
+                result.append( '%s.%s;' % ( self.class_var_name, x.create() ) )
 
         code = os.linesep.join( result )
         
@@ -300,9 +283,9 @@ class class_t( scoped.scoped_t ):
         return os.linesep.join( result )
 
     def is_exposed_using_scope(self):
-        scoped_exporters = filter( lambda x: self._should_creator_be_exported_under_scope( x )
-                                   , self.creators )
-        return bool( self.declaration.always_expose_using_scope or scoped_exporters )
+        if self.declaration.always_expose_using_scope:
+            return True
+        return bool( filter( lambda cc: not cc.works_on_instance, self.creators ) ) 
     
     def _create_impl(self):
         if self.is_exposed_using_scope():

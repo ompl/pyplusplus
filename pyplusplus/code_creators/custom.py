@@ -12,13 +12,7 @@ class custom_t(code_creator.code_creator_t):
             Ex: ObjInst."CustomCode"
         """
         code_creator.code_creator_t.__init__(self, parent)
-        self._works_on_instance = works_on_instance
-
-    def _get_works_on_instance(self):
-        return self._works_on_instance
-    def _set_works_on_instance(self, works_on_instance):
-        self._works_on_instance = works_on_instance
-    works_on_instance = property( _get_works_on_instance, _set_works_on_instance )
+        self.works_on_instance = works_on_instance
     
     def _create_impl(self):
         raise NotImplementedError()

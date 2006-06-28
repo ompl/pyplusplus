@@ -15,6 +15,7 @@ class enum_t( declaration_based.declaration_based_t ):
         declaration_based.declaration_based_t.__init__( self
                                                         , parent=parent
                                                         , declaration=enum)
+        self.works_on_instance = False
 
     def _get_value_aliases(self):
         return self.declaration.value_aliases

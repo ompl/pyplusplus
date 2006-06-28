@@ -34,6 +34,14 @@ class code_creator_t(object):
             assert isinstance( parent, code_creator_t )
         self._parent = parent
         self._target_configuration = None
+        self._works_on_instance = True
+        
+
+    def _get_works_on_instance(self):
+        return self._works_on_instance
+    def _set_works_on_instance(self, works_on_instance):
+        self._works_on_instance = works_on_instance
+    works_on_instance = property( _get_works_on_instance, _set_works_on_instance )
         
     def _get_parent( self ):
         return self._parent 

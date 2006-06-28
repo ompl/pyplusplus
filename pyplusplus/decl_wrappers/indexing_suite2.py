@@ -36,10 +36,10 @@ class indexing_suite2_t( object ):
                 , 'delitem_slice', 'reverse', 'append', 'insert', 'extend', 'sort' )
     
     METHOD_GROUPS = {
-        'slice_methods' : ( 'method_getitem_slice', 'method_setitem_slice', 'method_delitem_slice' )
-        , 'search_methods' : ( 'method_index', 'method_contains', 'method_count', 'method_has_key' )
-        , 'reorder_methods' : ( 'method_sort', 'method_reverse' )
-        , 'insert_methods' : ( 'method_append', 'method_insert', 'method_extend' )
+        'slice' : ( 'method_getitem_slice', 'method_setitem_slice', 'method_delitem_slice' )
+        , 'search' : ( 'method_index', 'method_contains', 'method_count', 'method_has_key' )
+        , 'reorder' : ( 'method_sort', 'method_reverse' )
+        , 'insert' : ( 'method_append', 'method_insert', 'method_extend' )
     }
     
     def __init__( self, container_class, container_traits ):

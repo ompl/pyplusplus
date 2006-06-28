@@ -49,11 +49,60 @@ class indexing_suite1_t( declaration_based.declaration_based_t ):
 class indexing_suite2_t( declaration_based.declaration_based_t ):
     def __init__(self, container, parent=None ):        
         declaration_based.declaration_based_t.__init__( self, declaration=container, parent=parent )
+        self.__method_mask_var_name = "methods_mask"
+        self.works_on_instance = not self.does_user_disable_methods()
         
-    def _get_configuration( self ):
-        return self.declaration.indexing_suite
-    configuration = property( _get_configuration )
-            
+    def does_user_disable_methods( self ):
+        return bool( self.declaration.indexing_suite.disabled_methods_groups ) \
+               or bool( self.declaration.indexing_suite.disable_methods )
+
+    def generate_algorithm_mask( self ):
+        indexing = algorithm.create_identifier(self, "::boost::python::indexing" )
+        disable = []
+        for group in self.declaration.indexing_suite.disabled_methods_groups:
+            group_id = algorithm.create_identifier(self, "::boost::python::indexing::%s_methods" % group )
+            disable.append( group_id )
+        for method in self.declaration.indexing_suite.disable_methods:
+            method_id = algorithm.create_identifier(self, "::boost::python::indexing::method_" + method )
+            disable.append( method_id )
+        answer = [ 'unsigned long const %s = ' % self.__method_mask_var_name ]
+        answer.append( algorithm.create_identifier(self, "::boost::python::indexing::all_methods" ) )
+        answer.append( ' & ~' )
+        if 1 == len ( disable ):
+            answer.append( disable[0] )
+        else:
+            answer.append( '( ' )
+            answer.append( ' |  '.join( disable ) )
+            answer.append( ' ) ' )
+        answer.append( ';' )
+        return ''.join( answer )
+        
     def _create_impl( self ):
-        container_suite = algorithm.create_identifier(self, "::boost::python::indexing::container_suite" )
-        return "def( %s< %s >() )" % ( container_suite, self.decl_identifier )
+        answer = []
+        if self.does_user_disable_methods():
+            answer.append( self.generate_algorithm_mask() )
+            answer.append( os.linesep )
+        if not self.works_on_instance:
+            answer.append( '%s.def( ' % self.parent.class_var_name)
+        else:
+            answer.append( 'def( ' )
+        answer.append( algorithm.create_identifier(self, "::boost::python::indexing::container_suite" ) )
+        answer.append( '< ' )
+        answer.append( self.decl_identifier )
+        if self.does_user_disable_methods():
+            answer.append( self.PARAM_SEPARATOR )
+            answer.append( self.__method_mask_var_name )
+        answer.append( ' >' )
+        if self.declaration.indexing_suite.call_policies:
+            answer.append( '::with_policies(%s)' 
+                           % self.declaration.indexing_suite.call_policies.create( self )  )
+        else:
+            answer.append( '()' )
+        answer.append( ' )' )
+        if not self.works_on_instance:
+            answer.append( ';' )
+        return ''.join( answer )
+
+
+
+

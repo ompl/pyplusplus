@@ -109,7 +109,6 @@ def create_suite(times):
         , vector3_tester
         , default_args_tester
         , abstract_classes_tester
-        , classes_tester
         , indexing_suites2_tester
     ]
     

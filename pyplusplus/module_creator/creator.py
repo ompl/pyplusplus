@@ -358,7 +358,7 @@ class creator_t( declarations.decl_visitor_t ):
         def create_explanation(cls):
             msg = '//WARNING: the next line of code will not compile, because "%s" does not have operator== !'
             msg = msg % cls.indexing_suite.value_type().decl_string
-            return code_creators.custom_text_t( msg )
+            return code_creators.custom_text_t( msg, False )
         
         def create_cls_cc( cls ):
             if isinstance( cls, declarations.class_t ):

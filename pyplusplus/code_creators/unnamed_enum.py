@@ -13,7 +13,8 @@ class unnamed_enum_t( declaration_based.declaration_based_t ):
         declaration_based.declaration_based_t.__init__( self
                                                         , parent=parent
                                                         , declaration=unnamed_enum)
-
+        self.works_on_instance = False
+        
     def _get_value_aliases(self):
         return self.declaration.value_aliases
     def _set_value_aliases(self, value_aliases):
