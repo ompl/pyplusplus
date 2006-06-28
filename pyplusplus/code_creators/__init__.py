@@ -107,3 +107,4 @@ from array_1_registrator import array_1_registrator_t
 
 from indexing_suites import indexing_suite1_t
 from indexing_suites import indexing_suite2_t
+from indexing_suites import value_traits_t

@@ -89,7 +89,6 @@ from user_text import class_user_text_t
 from indexing_suite1 import indexing_suite1_t
 from indexing_suite2 import indexing_suite2_t
 
-
 class dwfactory_t( declarations.decl_factory_t ):
     """
     declarations factory class

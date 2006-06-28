@@ -103,6 +103,51 @@ class indexing_suite2_t( declaration_based.declaration_based_t ):
             answer.append( ';' )
         return ''.join( answer )
 
+class value_traits_t( declaration_based.declaration_based_t ):
+    def __init__( self, value_class, parent=None ):
+        declaration_based.declaration_based_t.__init__( self, declaration=value_class, parent=parent )
+
+    def generate_value_traits( self ):
+        tmpl = os.linesep.join([
+              "namespace boost { namespace python { namespace indexing {"
+            , ""
+            , "template<>"
+            , "struct value_traits<%(value_class)s>{"
+            , ""
+            , self.indent( "static bool const equality_comparable = %(has_equal)s;" )
+            , self.indent( "static bool const less_than_comparable = %(has_lessthan)s;" )
+            , ""
+            , self.indent( "template<typename PythonClass, typename Policy>" )
+            , self.indent( "static void visit_container_class(PythonClass &, Policy const &){" )    
+            , self.indent( "%(visitor_helper_body)s", 2 )
+            , self.indent( "}" )
+            , ""
+            , "};"
+            , ""
+            , "}/*indexing*/ } /*python*/ } /*boost*/"
+        ])
+
+        return tmpl % { 'value_class' : self.decl_identifier
+                        , 'has_equal' : str( bool( self.declaration.equality_comparable ) ) .lower()
+                        , 'has_lessthan' : str( bool( self.declaration.less_than_comparable ) ).lower()
+                        , 'visitor_helper_body' : '' }
+
+    def generate_value_class_fwd_declaration( self ):
+        pass # for inner class this code will generate error :-((((
+    
+    def _create_impl( self ):
+        return self.generate_value_traits()
+
+
+
+
+
+
+
+
+
+
+
 
 
 

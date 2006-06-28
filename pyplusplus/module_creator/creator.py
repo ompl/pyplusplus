@@ -392,7 +392,7 @@ class creator_t( declarations.decl_visitor_t ):
             else:
                 isuite = isuite2
 
-            if not isuite1.has_key( container_name ):
+            if not isuite.has_key( container_name ):
                 continue #not supported
             
             if isuite is isuite2 and not container_suite_header_was_used:
@@ -401,17 +401,23 @@ class creator_t( declarations.decl_visitor_t ):
                 self.__extmodule.add_include( container_suite_header )
 
             if not isuite[ container_name ][1]:
-                isuite1[ container_name ][1] = True
+                isuite[ container_name ][1] = True
                 self.__extmodule.add_system_header( isuite[ container_name ][0] )
                 self.__extmodule.add_include( header=isuite[ container_name ][0] )
 
             cls_creator = create_cls_cc( cls )
+            value_type = cls.indexing_suite.value_type() 
             if isuite is isuite1:
-                value_type = cls.indexing_suite.value_type() 
                 if declarations.is_class( value_type ) and not declarations.has_public_equal( value_type ):
                     cls_creator.adopt_creator( create_explanation( cls ) )            
                 cls_creator.adopt_creator( code_creators.indexing_suite1_t(cls) )
             else:
+                class_traits = declarations.class_traits
+                if class_traits.is_my_case( value_type ):
+                    value_cls = class_traits.get_declaration( value_type )
+                    if not ( value_cls.equality_comparable and value_cls.less_than_comparable ):
+                        value_type_cc = code_creators.value_traits_t( value_cls )
+                        self.__extmodule.adopt_creator( value_type_cc, self.__extmodule.creators.index( self.__module_body ) )                        
                 cls_creator.adopt_creator( code_creators.indexing_suite2_t(cls) )
             self.__module_body.adopt_creator( cls_creator )
  

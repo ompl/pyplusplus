@@ -16,7 +16,7 @@ class class_common_impl_details_t( object ):
         self._always_expose_using_scope = False
         self._indexing_suite = None
         self._equality_comparable = None
-        self._lessthan_comparable = None
+        self._less_than_comparable = None
         self._isuite_version = 1
         
     def _get_indexing_suite_version( self ):
@@ -49,6 +49,7 @@ class class_common_impl_details_t( object ):
     indexing_suite = property( _get_indexing_suite )
     
     def _get_equality_comparable( self ):
+        return False
         if None is self._equality_comparable:
             self._equality_comparable = declarations.has_public_equal( self )
         return self._equality_comparable
@@ -58,15 +59,16 @@ class class_common_impl_details_t( object ):
         
     equality_comparable = property( _get_equality_comparable, _set_equality_comparable )
 
-    def _get_lessthan_comparable( self ):
-        if None is self._lessthan_comparable:
-            self._lessthan_comparable = declarations.has_public_less( self )
-        return self._lessthan_comparable
+    def _get_less_than_comparable( self ):
+        return False
+        if None is self._less_than_comparable:
+            self._less_than_comparable = declarations.has_public_less( self )
+        return self._less_than_comparable
     
-    def _set_lessthan_comparable( self, value ):
-        self._lessthan_comparable = value
+    def _set_less_than_comparable( self, value ):
+        self._less_than_comparable = value
         
-    lessthan_comparable = property( _get_lessthan_comparable, _set_lessthan_comparable )
+    less_than_comparable = property( _get_less_than_comparable, _set_less_than_comparable )
 
 
 #this will only be exported if indexing suite is not None and only when needed

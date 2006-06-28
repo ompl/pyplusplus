@@ -31,14 +31,17 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         #~ return False
     
     def customize(self, generator):
-        ivector = generator.global_ns.typedef( 'ivector' )
-        ivector = declarations.remove_declarated( ivector.type )
-        ivector.indexing_suite.disable_method( 'extend' )
-        ivector.indexing_suite.disable_methods_group( 'reorder' )
-        #ivector.indexing_suite.call_policies = module_builder.call_policies.default_call_policies()
+        fvector = generator.global_ns.typedef( 'fvector' )
+        fvector = declarations.remove_declarated( fvector.type )
+        fvector.indexing_suite.disable_method( 'extend' )
+        fvector.indexing_suite.disable_methods_group( 'reorder' )
+        #fvector.indexing_suite.call_policies = module_builder.call_policies.default_call_policies()
        
     def run_tests( self, module):
-        iv = module.ivector()
+        fv = module.fvector()
+        self.failUnless( not hasattr( fv, 'extend' ) )
+        self.failUnless( not hasattr( fv, 'sort' ) )
+        self.failUnless( not hasattr( fv, 'reverse' ) )
         #~ items = module.items_t()
         #~ item = module.item_t()
         #~ item.value = 1977
