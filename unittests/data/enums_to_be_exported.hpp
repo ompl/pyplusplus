@@ -13,6 +13,9 @@ enum color{
     , green = 2
     , blue = 4 }; 
 
+inline int to_int( int x=red ){ return x; }
+
 }
+
 
 #endif//__enums_to_be_exported_hpp__
