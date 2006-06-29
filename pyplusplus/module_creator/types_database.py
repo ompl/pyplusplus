@@ -57,10 +57,16 @@ class types_database_t( object ):
         type = declarations.remove_cv( type )        
         type = declarations.remove_declarated( type )        
         
-        if not declarations.is_class( type ) and not declarations.is_class_declaration( type ):
+        class_traits = declarations.class_traits
+        class_declaration_traits = declarations.class_declaration_traits
+        if not class_traits.is_my_case( type ) and not class_declaration_traits.is_my_case( type ):
             return False
         
-        container_cls = type
+        if class_traits.is_my_case( type ):
+            container_cls = class_traits.get_declaration( type )
+        else:
+            container_cls = class_declaration_traits.get_declaration( type )
+            
         if None is container_cls.indexing_suite:
             return False
         

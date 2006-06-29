@@ -55,9 +55,7 @@ class class_declaration_t( scoped.scoped_t ):
         result[-1] = result[-1] + ' ' + scope_var_name
         result[-1] = result[-1] + '( %s );' % self.class_var_name        
 
-        for x in creators:
-            if x is used_init:
-                continue
+        for x in self.creators:
             if not x.works_on_instance:
                 result.append( x.create() )
             else:

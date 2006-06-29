@@ -202,9 +202,9 @@ class multiple_files_t(writer.writer_t):
         Write the value_traits class to header file, that will be included
         from files, that uses indexing suite 2
         """
-        code = value_traits.create()
-        self.create_header( self.create_value_traits_header_name( value_traits.declaration )
-                            , code )
+        header_name = self.create_value_traits_header_name( value_traits.declaration ) 
+        file_path = os.path.join( self.directory_path, header_name )
+        self.write_file( file_path, self.create_header( header_name, value_traits.create() ) )
         value_traits.create = lambda: ''
 
     def split_creators( self, creators, pattern, function_name, registrator_pos ):
@@ -280,7 +280,8 @@ class multiple_files_t(writer.writer_t):
 
         value_traits_classes = filter( lambda x: isinstance(x, code_creators.value_traits_t )
                                        , self.extmodule.creators )
-
+        map( self.split_value_traits, value_traits_classes )
+        
         # Obtain a list of all class creators...
         class_creators = filter( lambda x: isinstance(x, ( code_creators.class_t, code_creators.class_declaration_t ) )
                                  , self.extmodule.body.creators )
