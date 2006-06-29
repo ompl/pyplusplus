@@ -97,7 +97,7 @@ class calldef_wrapper_t( declaration_based.declaration_based_t):
                  and not declarations.is_enum( arg_base_type ):
                 params.append( 'boost::ref(%s)' % self.argument_name( index ) )
             elif declarations.is_pointer( arg_type ) \
-                 and not( declarations.is_pointer( arg_type.base ) \
+                 and not declarations.is_pointer( arg_type.base ) \
                  and not declarations.is_fundamental( arg_type.base ) \
                  and not declarations.is_enum( arg_base_type ):
                 params.append( 'boost::python::ptr(%s)' % self.argument_name( index ) )
