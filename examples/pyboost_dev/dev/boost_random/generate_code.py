@@ -30,7 +30,8 @@ class code_generator_t(object):
                         , gccxml_path=random_settings.gccxml.executable
                         , include_paths=[random_settings.boost.include]
                         , define_symbols=random_settings.defined_symbols
-                        , undefine_symbols=random_settings.undefined_symbols)
+                        , undefine_symbols=random_settings.undefined_symbols
+                        , indexing_suite_version=2)
         self.generators = [   "ecuyer1988"
                               , "hellekalek1995"
                               , "kreutzer1986"

@@ -42,7 +42,8 @@ class code_generator_t(object):
                                               , include_paths=[date_time_settings.boost.include]
                                               , define_symbols=date_time_settings.defined_symbols
                                               , undefine_symbols=date_time_settings.undefined_symbols
-                                              , optimize_queries=False)
+                                              , optimize_queries=False
+                                              , indexing_suite_version=2)
         if sys.platform == 'win32':
             linux_name = "time_duration<boost::posix_time::time_duration, boost::date_time::time_resolution_traits<boost::date_time::time_resolution_traits_adapted64_impl, (boost::date_time::time_resolutions)5, (long long)1000000, 6, int> >"
             win_name = "time_duration<boost::posix_time::time_duration, boost::date_time::time_resolution_traits<boost::date_time::time_resolution_traits_adapted64_impl, (boost::date_time::time_resolutions)5, (long long)1000000, 6, long> >"

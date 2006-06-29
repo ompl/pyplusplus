@@ -6,6 +6,8 @@
 import os
 import writer
 from sets import Set as set
+from pygccxml import declarations
+from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
 from pyplusplus import _logging_
 
@@ -49,8 +51,11 @@ class multiple_files_t(writer.writer_t):
                                doc="""The name of the output directory.
                                @type: str
                                """ )
-    
-    def create_header( self, file_name, function_name ):
+
+    def create_function_code( self, function_name ):
+        return "void %s();" % function_name
+
+    def create_header( self, file_name, code ):
         """Return the content of a header file.
 
         @param file_name: A string that uniquely identifies the file name
@@ -64,17 +69,30 @@ class multiple_files_t(writer.writer_t):
                     "#ifndef __%(file_name)s_hpp__pyplusplus_wrapper__"
                   , "#define __%(file_name)s_hpp__pyplusplus_wrapper__"
                   , ''
-                  , "void %(function_name)s();"
+                  , "%(code)s;"
                   , ''
                   , "#endif//__%(file_name)s_hpp__pyplusplus_wrapper__" ])
         
         content = ''
         if self.extmodule.license:
             content = self.extmodule.license.create() + os.linesep
-        content = content + tmpl % { 'file_name' : file_name
-                                     , 'function_name' : function_name }
+        content = content + tmpl % { 'file_name' : file_name, 'code' : code }
         return content
 
+    def find_out_value_traits_header( self, code_creator ):
+        if not isinstance( code_creator, ( code_creators.class_t, code_creators.class_declaration_t ) ):
+            return None
+        if None is code_creator.declaration.indexing_suite:
+            return None
+        if not isinstance( code_creator.declaration.indexing_suite, decl_wrappers.indexing_suite2_t ):
+            return None
+        value_type = code_creator.declaration.indexing_suite.value_type()
+        class_traits = declarations.class_traits
+        if not class_traits.is_my_case( value_type ):
+            return None
+        value_class = class_traits.get_declaration( value_type )
+        return self.create_value_traits_header_name( value_class )
+    
     def create_source( self, file_name, function_name, creators ):
         """Return the content of a cpp file.
 
@@ -99,7 +117,11 @@ class multiple_files_t(writer.writer_t):
                                    , self.extmodule.creators )
         includes = map( lambda include_creator: include_creator.create()
                         , include_creators )
-        answer.append( os.linesep.join(includes) )
+        for creator in creators:
+            value_traits_header = self.find_out_value_traits_header( creator )
+            if value_traits_header:
+                includes.append( '#include "%s"' % value_traits_header )
+        answer.append( os.linesep.join(includes) )                
 
         # Write all 'global' namespace_alias_t and namespace_using_t creators first...
         affect_creators = filter( lambda x: isinstance( x, code_creators.namespace_alias_t )
@@ -136,13 +158,14 @@ class multiple_files_t(writer.writer_t):
         # Write the .h file...
         header_name = file_path + self.HEADER_EXT
         self.write_file( header_name
-                         , self.create_header( class_creator.alias, function_name ) )
+                         , self.create_header( class_creator.alias
+                                               , self.create_function_code( function_name ) ) )
         # Write the .cpp file...
         self.write_file( file_path + self.SOURCE_EXT
                          , self.create_source( class_creator.alias
                                                , function_name
                                                , [class_creator] ))
-        if class_creator.wrapper:
+        if isinstance( class_creator, code_creators.class_t ) and class_creator.wrapper:
             # The wrapper has already been written above, so replace the create()
             # method with a new 'method' that just returns an empty string because
             # this method is later called again for the main source file.
@@ -171,6 +194,19 @@ class multiple_files_t(writer.writer_t):
             _logging_.logger.error( msg )
             raise
 
+    def create_value_traits_header_name( self, value_class ):
+        return "_" + value_class.alias + "__value_traits" + self.HEADER_EXT
+
+    def split_value_traits( self, value_traits ):
+        """
+        Write the value_traits class to header file, that will be included
+        from files, that uses indexing suite 2
+        """
+        code = value_traits.create()
+        self.create_header( self.create_value_traits_header_name( value_traits.declaration )
+                            , code )
+        value_traits.create = lambda: ''
+
     def split_creators( self, creators, pattern, function_name, registrator_pos ):
         """Write non-class creators into a particular .h/.cpp file.
 
@@ -189,7 +225,7 @@ class multiple_files_t(writer.writer_t):
         file_path = os.path.join( self.directory_path, file_pattern )
         header_name = file_path + self.HEADER_EXT
         self.write_file( header_name
-                         , self.create_header( file_pattern, function_name ) )
+                         , self.create_header( file_pattern, self.create_function_code( function_name ) ) )
         self.write_file( file_path + self.SOURCE_EXT
                          , self.create_source( file_pattern
                                                , function_name
@@ -242,8 +278,11 @@ class multiple_files_t(writer.writer_t):
 
         self.extmodule.do_include_dirs_optimization()
 
+        value_traits_classes = filter( lambda x: isinstance(x, code_creators.value_traits_t )
+                                       , self.extmodule.creators )
+
         # Obtain a list of all class creators...
-        class_creators = filter( lambda x: isinstance(x, code_creators.class_t )
+        class_creators = filter( lambda x: isinstance(x, ( code_creators.class_t, code_creators.class_declaration_t ) )
                                  , self.extmodule.body.creators )
         # ...and write a .h/.cpp file for each class
         map( self.split_class, class_creators )
