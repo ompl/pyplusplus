@@ -17,10 +17,8 @@ class global_variable_base_t( declaration_based.declaration_based_t ):
     Base class for all global variables code creators. Mainly exists to 
     simplify file writers algorithms.
     """
-    def __init__(self, variable, wrapper=None, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , parent=parent
-                                                        , declaration=variable)
+    def __init__(self, variable, wrapper=None ):
+        declaration_based.declaration_based_t.__init__( self, declaration=variable)
         self._wrapper = wrapper 
 
     def _get_wrapper( self ):
@@ -33,10 +31,8 @@ class global_variable_t( global_variable_base_t ):
     """
     Creates boost.python code that exposes global variable.
     """
-    def __init__(self, variable, parent=None ):
-        global_variable_base_t.__init__( self
-                                         , variable=variable
-                                         , parent=parent )
+    def __init__(self, variable ):
+        global_variable_base_t.__init__( self, variable=variable )
     
     def _create_impl(self):
         assert isinstance( self.declaration, pygccxml.declarations.variable_t )
@@ -53,11 +49,8 @@ class array_gv_t( global_variable_base_t ):
     """
 
     _PARAM_SEPARATOR = ', '
-    def __init__(self, variable, wrapper, parent=None ):
-        global_variable_base_t.__init__( self
-                                         , variable=variable
-                                         , wrapper=wrapper
-                                         , parent=parent )
+    def __init__(self, variable, wrapper ):
+        global_variable_base_t.__init__( self, variable=variable, wrapper=wrapper )
     
     def _create_impl( self ):
         answer = []
@@ -73,10 +66,8 @@ class array_gv_wrapper_t( declaration_based.declaration_based_t ):
     Creates C++ code that register array class.
     """
 
-    def __init__(self, variable, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , parent=parent
-                                                        , declaration=variable)
+    def __init__(self, variable ):
+        declaration_based.declaration_based_t.__init__( self, declaration=variable)
 
     def _get_wrapper_type( self ):
         ns_name = code_repository.array_1.namespace

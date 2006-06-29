@@ -14,8 +14,8 @@ class array_1_registrator_t( code_creator.code_creator_t ):
     """
     This class creates code that register static sized array
     """
-    def __init__( self, array_type, parent=None ):
-        code_creator.code_creator_t.__init__(self, parent=parent)
+    def __init__( self, array_type ):
+        code_creator.code_creator_t.__init__( self )
         self._array_type = array_type
         self._call_policies = self._guess_call_policies()
         self.works_on_instance = False

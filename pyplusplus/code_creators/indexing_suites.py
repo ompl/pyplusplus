@@ -11,8 +11,8 @@ import declaration_based
 from pygccxml import declarations
 
 class indexing_suite1_t( declaration_based.declaration_based_t ):
-    def __init__(self, container, parent=None ):        
-        declaration_based.declaration_based_t.__init__( self, declaration=container, parent=parent )
+    def __init__(self, container ):        
+        declaration_based.declaration_based_t.__init__( self, declaration=container )
             
     def _get_configuration( self ):
         return self.declaration.indexing_suite
@@ -47,8 +47,8 @@ class indexing_suite1_t( declaration_based.declaration_based_t ):
     
 
 class indexing_suite2_t( declaration_based.declaration_based_t ):
-    def __init__(self, container, parent=None ):        
-        declaration_based.declaration_based_t.__init__( self, declaration=container, parent=parent )
+    def __init__(self, container ):        
+        declaration_based.declaration_based_t.__init__( self, declaration=container )
         self.__method_mask_var_name = "methods_mask"
         self.works_on_instance = not self.does_user_disable_methods()
         
@@ -104,15 +104,15 @@ class indexing_suite2_t( declaration_based.declaration_based_t ):
         return ''.join( answer )
 
 class value_traits_t( declaration_based.declaration_based_t ):
-    def __init__( self, value_class, parent=None ):
-        declaration_based.declaration_based_t.__init__( self, declaration=value_class, parent=parent )
+    def __init__( self, value_class ):
+        declaration_based.declaration_based_t.__init__( self, declaration=value_class )
 
     def generate_value_traits( self ):
         tmpl = os.linesep.join([
               "namespace boost { namespace python { namespace indexing {"
             , ""
             , "template<>"
-            , "struct value_traits<%(value_class)s>{"
+            , "struct value_traits< %(value_class)s >{"
             , ""
             , self.indent( "static bool const equality_comparable = %(has_equal)s;" )
             , self.indent( "static bool const less_than_comparable = %(has_lessthan)s;" )

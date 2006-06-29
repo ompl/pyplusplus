@@ -16,10 +16,8 @@ class member_variable_base_t( declaration_based.declaration_based_t ):
     simplify file writers algorithms.
     """
 
-    def __init__(self, variable, wrapper=None, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , parent=parent
-                                                        , declaration=variable)
+    def __init__(self, variable, wrapper=None ):
+        declaration_based.declaration_based_t.__init__( self, declaration=variable)
         self._wrapper = wrapper 
 
     def _get_wrapper( self ):
@@ -32,8 +30,8 @@ class member_variable_t( member_variable_base_t ):
     """
     Creates boost.python code that exposes member variable.
     """
-    def __init__(self, variable, wrapper=None, parent=None ):
-        member_variable_base_t.__init__( self, variable=variable, wrapper=wrapper, parent=parent)
+    def __init__(self, variable, wrapper=None ):
+        member_variable_base_t.__init__( self, variable=variable, wrapper=wrapper )
 
     #>    On Wednesday, 19. April 2006 23:05, Ralf W. Grosse-Kunstleve wrote:
     #>   .add_property("p", make_function(&A::get_p, return_value_policy<reference_existing_object>()))
@@ -159,10 +157,8 @@ class member_variable_wrapper_t( declaration_based.declaration_based_t ):
         , ''        
     ])
 
-    def __init__(self, variable, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , parent=parent
-                                                        , declaration=variable)
+    def __init__(self, variable ):
+        declaration_based.declaration_based_t.__init__( self, declaration=variable)
 
     def _get_getter_full_name(self):
         return self.parent.full_name + '::' + 'get_' + self.declaration.name
@@ -232,11 +228,8 @@ class bit_field_t( member_variable_base_t ):
     """
     Creates boost.python code that exposes bit fields member variables
     """
-    def __init__(self, variable, wrapper, parent=None ):
-        member_variable_base_t.__init__( self
-                                         , variable=variable
-                                         , wrapper=wrapper
-                                         , parent=parent)
+    def __init__(self, variable, wrapper ):
+        member_variable_base_t.__init__( self, variable=variable, wrapper=wrapper )
 
     def _create_impl( self ):
         if self.declaration.type_qualifiers.has_static:
@@ -285,10 +278,8 @@ class bit_field_wrapper_t( declaration_based.declaration_based_t ):
         , ''        
     ])
 
-    def __init__(self, variable, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , parent=parent
-                                                        , declaration=variable)
+    def __init__(self, variable ):
+        declaration_based.declaration_based_t.__init__( self, declaration=variable)
 
     def _get_getter_full_name(self):
         return self.parent.full_name + '::' + 'get_' + self.declaration.name
@@ -331,11 +322,8 @@ class array_mv_t( member_variable_base_t ):
     """
     Creates boost.python code that exposes array member variable.
     """
-    def __init__(self, variable, wrapper, parent=None ):
-        member_variable_base_t.__init__( self
-                                         , variable=variable
-                                         , wrapper=wrapper
-                                         , parent=parent )
+    def __init__(self, variable, wrapper ):
+        member_variable_base_t.__init__( self, variable=variable, wrapper=wrapper )
    
     def _create_impl( self ):
         assert isinstance( self.wrapper, array_mv_wrapper_t )
@@ -366,10 +354,8 @@ class array_mv_wrapper_t( declaration_based.declaration_based_t ):
     Creates C++ code that register array class.
     """
     
-    def __init__(self, variable, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , parent=parent
-                                                        , declaration=variable)
+    def __init__(self, variable ):
+        declaration_based.declaration_based_t.__init__( self, declaration=variable)
 
     def _get_wrapper_type( self ):
         ns_name = code_repository.array_1.namespace
@@ -420,11 +406,8 @@ class mem_var_ref_t( member_variable_base_t ):
     """
     Creates C++ code that creates accessor for class member variable, that has type reference.
     """
-    def __init__(self, variable, wrapper, parent=None ):
-        member_variable_base_t.__init__( self
-                                         , variable=variable
-                                         , wrapper=wrapper
-                                         , parent=parent)
+    def __init__(self, variable, wrapper ):
+        member_variable_base_t.__init__( self, variable=variable, wrapper=wrapper )
         self.param_sep = os.linesep + self.indent( self.PARAM_SEPARATOR, 2 )
         self.works_on_instance = False
 
@@ -488,10 +471,8 @@ class mem_var_ref_wrapper_t( declaration_based.declaration_based_t ):
         , ''        
     ])
 
-    def __init__(self, variable, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , parent=parent
-                                                        , declaration=variable)
+    def __init__(self, variable ):
+        declaration_based.declaration_based_t.__init__( self, declaration=variable)
 
     def _get_getter_full_name(self):
         return self.parent.full_name + '::' + 'get_' + self.declaration.name

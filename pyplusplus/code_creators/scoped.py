@@ -8,11 +8,9 @@ import compound
 import declaration_based
 
 class scoped_t(declaration_based.declaration_based_t, compound.compound_t):
-    def __init__( self, declaration, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , parent=parent
-                                                        , declaration=declaration)
-        compound.compound_t.__init__( self, parent )
+    def __init__( self, declaration ):
+        declaration_based.declaration_based_t.__init__( self, declaration=declaration)
+        compound.compound_t.__init__( self )
         
     def _create_impl(self):
         #template method pattern should be used.

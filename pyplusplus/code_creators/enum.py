@@ -11,10 +11,8 @@ class enum_t( declaration_based.declaration_based_t ):
     """
     Creates boost.python code that expose C++ enum
     """
-    def __init__(self, enum, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , parent=parent
-                                                        , declaration=enum)
+    def __init__(self, enum ):
+        declaration_based.declaration_based_t.__init__( self, declaration=enum)
         self.works_on_instance = False
 
     def _get_value_aliases(self):

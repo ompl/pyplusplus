@@ -13,10 +13,8 @@ import declaration_based
 from pygccxml import declarations
 
 class class_declaration_t( scoped.scoped_t ):
-    def __init__(self, class_inst, parent=None ):
-        scoped.scoped_t.__init__( self
-                                  , parent=parent
-                                  , declaration=class_inst )
+    def __init__(self, class_inst ):
+        scoped.scoped_t.__init__( self, declaration=class_inst )
         self.works_on_instance = False
 
     def _generate_class_definition(self):
@@ -84,10 +82,8 @@ class class_t( scoped.scoped_t ):
     """
     Creates boost.python code that needed to export a class
     """
-    def __init__(self, class_inst, wrapper=None, parent=None ):
-        scoped.scoped_t.__init__( self
-                                  , parent=parent
-                                  , declaration=class_inst )
+    def __init__(self, class_inst, wrapper=None ):
+        scoped.scoped_t.__init__( self, declaration=class_inst )
         self._wrapper = wrapper
         self.works_on_instance = False
         
@@ -299,10 +295,8 @@ class class_wrapper_t( scoped.scoped_t ):
     Creates C++ code that creates wrapper arround some class
     """
 
-    def __init__(self, declaration, class_creator, parent=None ):
-        scoped.scoped_t.__init__( self
-                                  , parent=parent
-                                  , declaration=declaration )
+    def __init__(self, declaration, class_creator ):
+        scoped.scoped_t.__init__( self, declaration=declaration )
         self._class_creator = class_creator
         self._base_wrappers = []
     

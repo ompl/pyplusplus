@@ -9,7 +9,7 @@ import code_creator
 class declaration_based_t(code_creator.code_creator_t):
     """Code creator that is based on a declaration.
     """
-    def __init__(self, declaration, parent=None ):
+    def __init__(self, declaration ):
         """Constructor.
 
         @param declaration: Declaration object
@@ -17,7 +17,7 @@ class declaration_based_t(code_creator.code_creator_t):
         @param parent: Parent code creator.
         @type parent: code_creator_t
         """
-        code_creator.code_creator_t.__init__(self, parent)
+        code_creator.code_creator_t.__init__(self)
         self._decl = declaration
         
     def _create_impl(self):

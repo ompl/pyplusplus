@@ -37,9 +37,9 @@ class smart_pointer_registrator_t( declaration_based.declaration_based_t ):
         Lets boost python know that it can use smart_ptr to hold a an object.
         See: http://www.boost.org/libs/python/doc/v2/register_ptr_to_python.html
     """
-    def __init__( self, smart_ptr, class_creator, parent=None ):
+    def __init__( self, smart_ptr, class_creator ):
         """ smart_ptr: string of ptr type.  Ex: 'boost::shared_ptr'  """
-        declaration_based.declaration_based_t.__init__( self, class_creator.declaration, parent )
+        declaration_based.declaration_based_t.__init__( self, class_creator.declaration )
         self._smart_ptr = smart_ptr
         self._class_creator = class_creator
         self.works_on_instance = False
@@ -73,8 +73,8 @@ class smart_pointers_converter_t( declaration_based.declaration_based_t ):
         conversion from source to target.
         See: http://www.boost.org/libs/python/doc/v2/implicit.html
     """
-    def __init__( self, smart_ptr, source, target, parent=None ):
-        declaration_based.declaration_based_t.__init__( self, source, parent )
+    def __init__( self, smart_ptr, source, target ):
+        declaration_based.declaration_based_t.__init__( self, source )
         self._target = target
         self._smart_ptr = smart_ptr
         self.works_on_instance = False

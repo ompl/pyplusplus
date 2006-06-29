@@ -9,10 +9,8 @@ import algorithm
 import declaration_based
 
 class unnamed_enum_t( declaration_based.declaration_based_t ):
-    def __init__(self, unnamed_enum, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , parent=parent
-                                                        , declaration=unnamed_enum)
+    def __init__(self, unnamed_enum ):
+        declaration_based.declaration_based_t.__init__( self, declaration=unnamed_enum)
         self.works_on_instance = False
         
     def _get_value_aliases(self):

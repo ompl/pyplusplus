@@ -10,8 +10,8 @@ class license_t(code_creator.code_creator_t):
     This class allows user to put his license on the top of every generated file.
     License text will be generated as is.
     """
-    def __init__(self, text, parent=None):
-        code_creator.code_creator_t.__init__(self, parent)
+    def __init__(self, text ):
+        code_creator.code_creator_t.__init__(self)
         self._text = text
 
     def _get_text(self):

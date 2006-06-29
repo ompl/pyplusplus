@@ -12,8 +12,8 @@ class include_t(code_creator.code_creator_t):
     """
     Creates C++ code for include directive
     """
-    def __init__( self, header, parent=None ):
-        code_creator.code_creator_t.__init__(self, parent)
+    def __init__( self, header ):
+        code_creator.code_creator_t.__init__(self)
         self._header = include_directories.include_directories_t.normalize( header )
         self._include_dirs_optimization = None #This parameter will be set from module_t.create function
     

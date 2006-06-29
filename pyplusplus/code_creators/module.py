@@ -21,7 +21,7 @@ class module_t(compound.compound_t):
     def __init__(self):
         """Constructor.
         """
-        compound.compound_t.__init__(self, None)
+        compound.compound_t.__init__(self)
         self.__system_headers = []
     
     def add_system_header( self, header ):
@@ -38,7 +38,7 @@ class module_t(compound.compound_t):
             , where=self.creators
             , recursive=False)        
         if 0 == len( include_dirs ):
-            include_dirs = include_directories.include_directories_t(parent=self)
+            include_dirs = include_directories.include_directories_t()
             if self.license:
                 self.adopt_creator( include_dirs, 1 )
             else:

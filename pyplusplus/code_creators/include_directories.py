@@ -13,8 +13,8 @@ class include_directories_t(instruction.instruction_t):
     L{include_t} and {precompiled_header_t} code creators use it to generate
     relative include directives.
     """
-    def __init__(self, parent=None ):
-        instruction.instruction_t.__init__(self, parent)
+    def __init__(self):
+        instruction.instruction_t.__init__(self)
         self._user_defined = []
         self._std = []
 

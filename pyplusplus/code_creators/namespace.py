@@ -6,8 +6,8 @@
 import code_creator
 
 class namespace_alias_t(code_creator.code_creator_t):
-    def __init__( self, alias, full_namespace_name, parent=None ):
-        code_creator.code_creator_t.__init__(self, parent)
+    def __init__( self, alias, full_namespace_name ):
+        code_creator.code_creator_t.__init__( self )
         self._alias = alias
         self._full_namespace_name = full_namespace_name
 
@@ -27,8 +27,8 @@ class namespace_alias_t(code_creator.code_creator_t):
         return 'namespace %s = %s;' % ( self.alias, self.full_namespace_name )
 
 class namespace_using_t(code_creator.code_creator_t):
-    def __init__( self, namespace_name, parent=None ):
-        code_creator.code_creator_t.__init__(self, parent)
+    def __init__( self, namespace_name ):
+        code_creator.code_creator_t.__init__(self )
         self._namespace_name = namespace_name
 
     def _get_namespace_name( self ):

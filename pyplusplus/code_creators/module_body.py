@@ -7,8 +7,8 @@ import os
 import compound
 
 class module_body_t(compound.compound_t):
-    def __init__( self, name, parent=None ):
-        compound.compound_t.__init__(self, parent)
+    def __init__( self, name ):
+        compound.compound_t.__init__(self )
         self._name = name
     
     def _get_name(self):

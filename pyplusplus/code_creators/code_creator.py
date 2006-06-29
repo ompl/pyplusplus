@@ -23,16 +23,14 @@ class code_creator_t(object):
     __INDENTATION = '    '
     LINE_LENGTH = 80
     PARAM_SEPARATOR = ', '
-    def __init__(self, parent=None):
+    def __init__(self):
         """Constructor.
 
         @param parent: Parent code creator.
         @type parent: code_creator_t
         """
         object.__init__(self)
-        if parent:
-            assert isinstance( parent, code_creator_t )
-        self._parent = parent
+        self._parent = None
         self._target_configuration = None
         self._works_on_instance = True
         

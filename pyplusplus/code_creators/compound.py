@@ -7,13 +7,13 @@ import os
 import code_creator
 
 class compound_t(code_creator.code_creator_t):
-    def __init__(self, parent=None):
+    def __init__(self ):
         """Constructor.
 
         @param parent: Parent code creator.
         @type parent: L{code_creator_t}
         """
-        code_creator.code_creator_t.__init__( self, parent ) 
+        code_creator.code_creator_t.__init__( self ) 
         self._creators = []
         
     def _get_creators(self):

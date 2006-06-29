@@ -24,10 +24,8 @@ from pygccxml import declarations
 #private - override 
 
 class calldef_t( declaration_based.declaration_based_t):
-    def __init__(self, function, wrapper=None, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , declaration=function
-                                                        , parent=parent )
+    def __init__(self, function, wrapper=None ):
+        declaration_based.declaration_based_t.__init__( self, declaration=function )
         self._wrapper = wrapper   
             
     def _get_wrapper( self ):
@@ -63,10 +61,8 @@ class calldef_t( declaration_based.declaration_based_t):
         return ''.join( result )
     
 class calldef_wrapper_t( declaration_based.declaration_based_t):    
-    def __init__(self, function, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , declaration=function
-                                                        , parent=parent )
+    def __init__(self, function ):
+        declaration_based.declaration_based_t.__init__( self, declaration=function )
 
     def argument_name( self, index ):
         arg = self.declaration.arguments[ index ]
@@ -125,8 +121,8 @@ class calldef_wrapper_t( declaration_based.declaration_based_t):
         return ' throw( ' + self.PARAM_SEPARATOR.join( exceptions ) + ' )'
     
 class free_function_t( calldef_t ):   
-    def __init__( self, function, parent=None ):
-        calldef_t.__init__( self, function=function, parent=parent )
+    def __init__( self, function ):
+        calldef_t.__init__( self, function=function )
     
     def _create_impl(self):
         param_sep = self.param_sep()
@@ -154,8 +150,8 @@ class free_function_t( calldef_t ):
         return ''.join( result )
 
 class mem_fun_t( calldef_t ):   
-    def __init__( self, function, parent=None ):
-        calldef_t.__init__( self, function=function, parent=parent )
+    def __init__( self, function ):
+        calldef_t.__init__( self, function=function )
     
     def _create_impl(self):
         param_sep = self.param_sep()
@@ -184,8 +180,8 @@ class mem_fun_t( calldef_t ):
 
 
 class mem_fun_pv_t( calldef_t ):   
-    def __init__( self, function, wrapper, parent=None ):
-        calldef_t.__init__( self, function=function, wrapper=wrapper, parent=parent )
+    def __init__( self, function, wrapper ):
+        calldef_t.__init__( self, function=function, wrapper=wrapper )
     
     def _create_impl(self):
         param_sep = self.param_sep()
@@ -216,8 +212,8 @@ class mem_fun_pv_t( calldef_t ):
         return ''.join( result )
 
 class mem_fun_pv_wrapper_t( calldef_wrapper_t ):
-    def __init__( self, function, parent=None):
-        calldef_wrapper_t.__init__( self, function=function, parent=parent )
+    def __init__( self, function ):
+        calldef_wrapper_t.__init__( self, function=function )
 
     def create_declaration(self): 
         template = 'virtual %(return_type)s %(name)s( %(args)s )%(constness)s%(throw)s'
@@ -260,8 +256,8 @@ class mem_fun_pv_wrapper_t( calldef_wrapper_t ):
         return os.linesep.join( answer )
 
 class mem_fun_v_t( calldef_t ):   
-    def __init__( self, function, wrapper=None, parent=None ):
-        calldef_t.__init__( self, function=function, wrapper=wrapper, parent=parent )
+    def __init__( self, function, wrapper=None ):
+        calldef_t.__init__( self, function=function, wrapper=wrapper )
     
     def _create_impl(self):
         param_sep = self.param_sep()
@@ -296,8 +292,8 @@ class mem_fun_v_t( calldef_t ):
         return ''.join( result )
 
 class mem_fun_v_wrapper_t( calldef_wrapper_t ):
-    def __init__( self, function, parent=None):
-        calldef_wrapper_t.__init__( self, function=function, parent=parent )
+    def __init__( self, function ):
+        calldef_wrapper_t.__init__( self, function=function )
 
     def default_full_name(self):
         return self.parent.full_name + '::default_' + self.declaration.alias
@@ -378,8 +374,8 @@ class mem_fun_v_wrapper_t( calldef_wrapper_t ):
 
 
 class mem_fun_protected_t( calldef_t ):   
-    def __init__( self, function, wrapper, parent=None ):
-        calldef_t.__init__( self, function=function, wrapper=wrapper, parent=parent )
+    def __init__( self, function, wrapper ):
+        calldef_t.__init__( self, function=function, wrapper=wrapper )
     
     def _create_impl(self):
         param_sep = self.param_sep()
@@ -407,8 +403,8 @@ class mem_fun_protected_t( calldef_t ):
         return ''.join( result )
 
 class mem_fun_protected_wrapper_t( calldef_wrapper_t ):
-    def __init__( self, function, parent=None):
-        calldef_wrapper_t.__init__( self, function=function, parent=parent )
+    def __init__( self, function ):
+        calldef_wrapper_t.__init__( self, function=function )
 
     def full_name(self):
         return '::'.join( [self.parent.full_name, self.declaration.name] )
@@ -461,8 +457,8 @@ class mem_fun_protected_wrapper_t( calldef_wrapper_t ):
 
 
 class mem_fun_protected_s_t( calldef_t ):   
-    def __init__( self, function, wrapper, parent=None ):
-        calldef_t.__init__( self, function=function, wrapper=wrapper, parent=parent )
+    def __init__( self, function, wrapper ):
+        calldef_t.__init__( self, function=function, wrapper=wrapper )
     
     def _create_impl(self):
         param_sep = self.param_sep()
@@ -490,8 +486,8 @@ class mem_fun_protected_s_t( calldef_t ):
         return ''.join( result )
 
 class mem_fun_protected_s_wrapper_t( calldef_wrapper_t ):
-    def __init__( self, function, parent=None):
-        calldef_wrapper_t.__init__( self, function=function, parent=parent )
+    def __init__( self, function ):
+        calldef_wrapper_t.__init__( self, function=function )
 
     def full_name(self):
         return '::'.join( [self.parent.full_name, self.declaration.name] )
@@ -535,8 +531,8 @@ class mem_fun_protected_s_wrapper_t( calldef_wrapper_t ):
         return self.create_function()
 
 class mem_fun_protected_v_t( calldef_t ):   
-    def __init__( self, function, wrapper, parent=None ):
-        calldef_t.__init__( self, function=function, wrapper=wrapper, parent=parent )
+    def __init__( self, function, wrapper ):
+        calldef_t.__init__( self, function=function, wrapper=wrapper )
     
     def _create_impl(self):
         param_sep = self.param_sep()
@@ -564,8 +560,8 @@ class mem_fun_protected_v_t( calldef_t ):
 
 
 class mem_fun_protected_v_wrapper_t( calldef_wrapper_t ):
-    def __init__( self, function, parent=None):
-        calldef_wrapper_t.__init__( self, function=function, parent=parent )
+    def __init__( self, function):
+        calldef_wrapper_t.__init__( self, function=function )
 
     def full_name(self):
         return self.parent.full_name + '::' + self.declaration.name
@@ -623,8 +619,8 @@ class mem_fun_protected_v_wrapper_t( calldef_wrapper_t ):
         return self.create_function()
 
 class mem_fun_protected_pv_t( calldef_t ):   
-    def __init__( self, function, wrapper,parent=None ):
-        calldef_t.__init__( self, function=function, wrapper=wrapper, parent=parent )
+    def __init__( self, function, wrapper ):
+        calldef_t.__init__( self, function=function, wrapper=wrapper )
     
     def _create_impl(self):
         param_sep = self.param_sep()
@@ -652,8 +648,8 @@ class mem_fun_protected_pv_t( calldef_t ):
         return ''.join( result )
 
 class mem_fun_protected_pv_wrapper_t( calldef_wrapper_t ):
-    def __init__( self, function, parent=None):
-        calldef_wrapper_t.__init__( self, function=function, parent=parent )
+    def __init__( self, function):
+        calldef_wrapper_t.__init__( self, function=function )
 
     def full_name(self):
         return self.parent.full_name + '::' + self.declaration.name
@@ -707,8 +703,8 @@ class mem_fun_protected_pv_wrapper_t( calldef_wrapper_t ):
         return os.linesep.join( answer )
 
 class mem_fun_private_v_wrapper_t( calldef_wrapper_t ):
-    def __init__( self, function, parent=None):
-        calldef_wrapper_t.__init__( self, function=function, parent=parent )
+    def __init__( self, function):
+        calldef_wrapper_t.__init__( self, function=function )
 
     def full_name(self):
         return self.parent.full_name + '::' + self.declaration.name
@@ -783,8 +779,8 @@ class constructor_t( calldef_t ):
     """
     Creates boost.python code needed to expose constructor.
     """
-    def __init__(self, constructor, wrapper=None, parent=None ):
-        calldef_t.__init__( self, function=constructor, wrapper=wrapper, parent=parent )
+    def __init__(self, constructor, wrapper=None ):
+        calldef_t.__init__( self, function=constructor, wrapper=wrapper )
         
     def _create_arg_code( self, arg ):
         temp = arg.type
@@ -833,10 +829,8 @@ class static_method_t( declaration_based.declaration_based_t ):
     """
     Creates boost.python code that expose member function as static function.
     """
-    def __init__(self, function, function_code_creator=None, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , declaration=function
-                                                        , parent=parent )
+    def __init__(self, function, function_code_creator=None ):
+        declaration_based.declaration_based_t.__init__( self, declaration=function )
 
         self._function_code_creator = function_code_creator
         
@@ -854,8 +848,8 @@ class constructor_wrapper_t( calldef_wrapper_t ):
     Creates C++ code that builds wrapper arround exposed constructor.
     """
 
-    def __init__( self, constructor, parent=None ):
-        calldef_wrapper_t.__init__( self, function=constructor, parent=parent )
+    def __init__( self, constructor ):
+        calldef_wrapper_t.__init__( self, function=constructor )
         
     def _create_declaration(self):
         result = []
@@ -900,10 +894,8 @@ class copy_constructor_wrapper_t( declaration_based.declaration_based_t ):
     """
     Creates wrapper class constructor from wrapped class instance.
     """
-    def __init__( self, class_inst, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , declaration=class_inst
-                                                        , parent=parent )
+    def __init__( self, class_inst ):
+        declaration_based.declaration_based_t.__init__( self, declaration=class_inst )
 
     def _create_declaration(self):
         result = []
@@ -938,10 +930,8 @@ class null_constructor_wrapper_t( declaration_based.declaration_based_t ):
     """
     Creates wrapper for compiler generated null constructor.
     """    
-    def __init__( self, class_inst, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , declaration=class_inst
-                                                        , parent=parent )
+    def __init__( self, class_inst ):
+        declaration_based.declaration_based_t.__init__( self, declaration=class_inst )
 
     def _create_constructor_call( self ):
         return algorithm.create_identifier( self, self.parent.declaration.decl_string ) + '()'
@@ -969,10 +959,10 @@ class operator_t( declaration_based.declaration_based_t ):
         SECOND = 'second'
         BOTH = 'both'
         
-    def __init__(self, operator, parent=None ):
+    def __init__(self, operator ):
         declaration_based.declaration_based_t.__init__( self
                                                         , declaration=operator
-                                                        , parent=parent )
+                                                         )
     
     def _call_type_constructor( self, type ):
         x = declarations.remove_reference( type )
@@ -1038,10 +1028,8 @@ class casting_operator_t( declaration_based.declaration_based_t ):
     """
     Creates boost.python code needed to register type conversions( implicitly_convertible )
     """
-    def __init__( self, operator, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , declaration=operator
-                                                        , parent=parent )
+    def __init__( self, operator ):
+        declaration_based.declaration_based_t.__init__( self, declaration=operator )
 
     def _create_impl(self):
         #TODO add comment in case of non const operator
@@ -1061,10 +1049,8 @@ class casting_member_operator_t( declaration_based.declaration_based_t ):
     operators Pythonic name is given: __int__, __long__, __float__, __str__
     """
       
-    def __init__( self, operator, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , declaration=operator
-                                                        , parent=parent )
+    def __init__( self, operator ):
+        declaration_based.declaration_based_t.__init__( self, declaration=operator )
         self._call_policies = None
 
     def _create_impl(self):
@@ -1089,10 +1075,8 @@ class casting_constructor_t( declaration_based.declaration_based_t ):
     This case treat situation when class has public non explicit constuctor from
     another type.
     """
-    def __init__( self, constructor, parent=None ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , declaration=constructor
-                                                        , parent=parent )
+    def __init__( self, constructor ):
+        declaration_based.declaration_based_t.__init__( self, declaration=constructor )
 
     def _create_impl(self):
         implicitly_convertible = algorithm.create_identifier( self, '::boost::python::implicitly_convertible' )

@@ -371,19 +371,24 @@ class creator_t( declarations.decl_visitor_t ):
         
         #supported container : [ header file, is already used ]
         
+        used_headers = set()
         isuite1 = { 
-            'vector<' : [ "boost/python/suite/indexing/vector_indexing_suite.hpp", False ]
-            , 'map<' : [ "boost/python/suite/indexing/map_indexing_suite.hpp", False ]
+            'vector<' : "boost/python/suite/indexing/vector_indexing_suite.hpp" 
+            , 'map<' : "boost/python/suite/indexing/map_indexing_suite.hpp" 
         }
 
-        #include <boost/python/suite/indexing/vector.hpp>
-
-        container_suite_header_was_used = False     
-        container_suite_header = "boost/python/suite/indexing/container_suite.hpp"
         isuite2 = {
-            'vector<' : [ "boost/python/suite/indexing/vector.hpp", False ]
+              'vector<' : "boost/python/suite/indexing/vector.hpp"
+            , 'deque<' : "boost/python/suite/indexing/deque.hpp"
+            , 'list<' : "boost/python/suite/indexing/list.hpp"
+            , 'map<' : "boost/python/suite/indexing/map.hpp"
+            , 'hash_map<' : "boost/python/suite/indexing/map.hpp"
+            , 'set<' : "boost/python/suite/indexing/set.hpp"
+            , 'hash_set<' : "boost/python/suite/indexing/set.hpp"
+            #TODO: queue, priority, stack, multimap, hash_multimap, multiset, hash_multiset
         }
         
+        container_suite_header = "boost/python/suite/indexing/container_suite.hpp"
         for cls in self.__types_db.used_containers:
             container_name = cls.name.split( '<' )[0] + '<'
 
@@ -395,15 +400,10 @@ class creator_t( declarations.decl_visitor_t ):
             if not isuite.has_key( container_name ):
                 continue #not supported
             
-            if isuite is isuite2 and not container_suite_header_was_used:
-                container_suite_header_was_used = True
-                self.__extmodule.add_system_header( container_suite_header )
-                self.__extmodule.add_include( container_suite_header )
+            if isuite is isuite2:
+                used_headers.add( container_suite_header ) 
 
-            if not isuite[ container_name ][1]:
-                isuite[ container_name ][1] = True
-                self.__extmodule.add_system_header( isuite[ container_name ][0] )
-                self.__extmodule.add_include( header=isuite[ container_name ][0] )
+            used_headers.add( isuite[ container_name ] )
 
             cls_creator = create_cls_cc( cls )
             value_type = cls.indexing_suite.value_type() 
@@ -420,7 +420,17 @@ class creator_t( declarations.decl_visitor_t ):
                         self.__extmodule.adopt_creator( value_type_cc, self.__extmodule.creators.index( self.__module_body ) )                        
                 cls_creator.adopt_creator( code_creators.indexing_suite2_t(cls) )
             self.__module_body.adopt_creator( cls_creator )
- 
+
+        if container_suite_header in used_headers:
+            #I want this header to be the first one.
+            used_headers.remove( container_suite_header )
+            self.__extmodule.add_system_header( container_suite_header )
+            self.__extmodule.add_include( container_suite_header )
+            
+        for header in used_headers:
+            self.__extmodule.add_system_header( header )
+            self.__extmodule.add_include( header )
+
     def create(self, decl_headers=None):
         """Create and return the module for the extension.
         

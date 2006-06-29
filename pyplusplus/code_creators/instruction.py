@@ -11,8 +11,8 @@ class instruction_t(code_creator.code_creator_t):
     This class is used as a base class for different instruction for code creators.    
     """
     #TODO: add silent option and make it default
-    def __init__(self, parent, silent=True):
-        code_creator.code_creator_t.__init__(self, parent)
+    def __init__(self, silent=True):
+        code_creator.code_creator_t.__init__(self)
         self._silent = silent
         
     def get_silent(self):
