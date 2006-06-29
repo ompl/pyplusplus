@@ -49,7 +49,7 @@ class class_declaration_t( scoped.scoped_t ):
         typedef_name = self.class_var_name + '_t'
         result.append( 'typedef ' + self._generate_class_definition() + ' ' + typedef_name + ';')
         result.append( typedef_name + ' ' + self.class_var_name )
-        result[-1] = result[-1] + ' = '+ typedef_name + '(%s);' % self.declaration.alias
+        result[-1] = result[-1] + ' = '+ typedef_name + '("%s");' % self.declaration.alias
         
         result.append( algorithm.create_identifier( self, '::boost::python::scope' ) )
         result[-1] = result[-1] + ' ' + scope_var_name
