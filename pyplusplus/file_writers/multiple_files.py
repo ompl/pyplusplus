@@ -204,7 +204,9 @@ class multiple_files_t(writer.writer_t):
         """
         header_name = self.create_value_traits_header_name( value_traits.declaration ) 
         file_path = os.path.join( self.directory_path, header_name )
-        self.write_file( file_path, self.create_header( header_name, value_traits.create() ) )
+        self.write_file( file_path
+                        , self.create_header( header_name.replace( '.', '_' )
+                                              , value_traits.create() ) )
         value_traits.create = lambda: ''
 
     def split_creators( self, creators, pattern, function_name, registrator_pos ):
