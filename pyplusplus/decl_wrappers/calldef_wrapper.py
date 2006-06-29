@@ -98,6 +98,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         return ''
     
     def _exportable_impl( self ):
+        #TODO: functions that takes as argument pointer to pointer to smth, could not be exported
         #see http://www.boost.org/libs/python/doc/v2/faq.html#funcptr
         if len( self.arguments ) > calldef_t.BOOST_PYTHON_MAX_ARITY:
             msg = "Function '%s' with more then 10 arguments( %d ). "
