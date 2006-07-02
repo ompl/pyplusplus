@@ -1,4 +1,4 @@
-# Copyright 2004 Roman Yakovenko.
+# Copyright 2004 Roman Yakovenko
 # Distributed under the Boost Software License, Version 1.0. (See
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
@@ -54,7 +54,13 @@ class calldef_t( declaration_based.declaration_based_t):
             result.append( '("%s")' % arg.name )
             if self.declaration.use_default_arguments and arg.default_value:
                 if not declarations.is_pointer( arg.type ) or arg.default_value != '0':
-                    result.append( '=%s' % arg.default_value )
+                    arg_type_no_alias = declarations.remove_alias( arg.type )
+                    if declarations.is_fundamental( arg_type_no_alias ) \
+                       and declarations.is_integral( arg_type_no_alias ) \
+                       and not arg.default_value.startswith( arg_type_no_alias.decl_string ):
+                        result.append( '=(%s)(%s)' % ( arg_type_no_alias.decl_string, arg.default_value ) )
+                    else:
+                        result.append( '=%s' % arg.default_value )
                 else:
                     result.append( '=%s()' % boost_obj )
         result.append( ' )' )

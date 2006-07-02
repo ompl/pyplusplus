@@ -18,13 +18,6 @@ class unnamed_enums_tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , unnamed_enums_tester_t.EXTENSION_NAME
             , *args )
 
-    def customize( self, mb ):
-        return 
-        #for f in mb.class_( 'enum_user_t' ).member_functions():
-            #for arg in f.arguments:
-                #if arg.default_value:
-                    #arg.default_value = "%s(%s)" % ( arg.type.decl_string, arg.default_value )
-
     def run_tests(self, module):        
         self.failUnless( module.OK == 1 )
         self.failUnless( module.CANCEL == 0 )
