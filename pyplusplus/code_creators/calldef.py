@@ -66,6 +66,29 @@ class calldef_t( declaration_based.declaration_based_t):
         result.append( ' )' )
         return ''.join( result )
     
+    def append_def_code( self, result ):
+        result.append( 'def( ' )
+    
+    def append_def_end_code( self, result ):
+        result.append( ' )' )
+    
+    def append_alias_code( self, result ):
+        result.append( '"%s"' % self.alias )
+        
+    def append_use_keywords_code( self, result ):
+        if not self.declaration.use_keywords:
+            return 
+        result.append( self.param_sep() )            
+        result.append( self.keywords_args() )
+    
+    def append_call_policies_code( self, result ):
+        if self.declaration.call_policies:
+            result.append( self.param_sep() )            
+            result.append( self.declaration.call_policies.create( self ) )
+        else:
+            result.append( os.linesep + self.indent( '/* undefined call policies */', 2 ) ) 
+
+
 class calldef_wrapper_t( declaration_based.declaration_based_t):    
     def __init__(self, function ):
         declaration_based.declaration_based_t.__init__( self, declaration=function )
@@ -136,7 +159,9 @@ class free_function_t( calldef_t ):
         
         result = [ self.def_identifier() ]
         result.append( '(' )
-        result.append( '"%s"' % self.alias )
+        
+        self.append_alias_code( result )
+        
         result.append( param_sep )
         if self.declaration.create_with_signature:
             result.append( '(%s)( &%s )' 
@@ -145,14 +170,9 @@ class free_function_t( calldef_t ):
         else:
             result.append( '&%s' % declarations.full_name( self.declaration ) )
         
-        if self.declaration.use_keywords:
-            result.append( param_sep )            
-            result.append( self.keywords_args() )
-        if self.declaration.call_policies:
-            result.append( param_sep )            
-            result.append( self.declaration.call_policies.create( self ) )
-        else:
-            result.append( os.linesep + self.indent( '/* undefined call policies */', 2 ) )             
+        self.append_use_keywords_code( result )
+        self.append_call_policies_code( result )
+
         result.append( ' );' )
         return ''.join( result )
 
@@ -163,9 +183,11 @@ class mem_fun_t( calldef_t ):
     def _create_impl(self):
         param_sep = self.param_sep()
         
-        result = [ 'def' ]
-        result.append( '(' )
-        result.append( '"%s"' % self.alias )
+        result = []
+        
+        self.append_def_code( result )
+        self.append_alias_code( result )
+        
         result.append( param_sep )
         if self.declaration.create_with_signature:
             result.append( '(%s)( &%s )' 
@@ -173,16 +195,12 @@ class mem_fun_t( calldef_t ):
                               , declarations.full_name( self.declaration ) ) )
         else:
             result.append( '&%s' % declarations.full_name( self.declaration ) )
+
+        self.append_use_keywords_code( result )
+        self.append_call_policies_code( result )
+
+        self.append_def_end_code( result )
         
-        if self.declaration.use_keywords:
-            result.append( param_sep )            
-            result.append( self.keywords_args() )
-        if self.declaration.call_policies:
-            result.append( param_sep )            
-            result.append( self.declaration.call_policies.create( self ) )
-        else:
-            result.append( os.linesep + self.indent( '/* undefined call policies */', 2 ) )             
-        result.append( ' )' )
         return ''.join( result )
 
 
@@ -193,9 +211,11 @@ class mem_fun_pv_t( calldef_t ):
     def _create_impl(self):
         param_sep = self.param_sep()
         
-        result = [ 'def' ]
-        result.append( '(' )
-        result.append( '"%s"' % self.alias )
+        result = []
+        
+        self.append_def_code( result )
+        self.append_alias_code( result )
+
         result.append( param_sep )
         if self.declaration.create_with_signature:
             result.append( '%s( (%s)(&%s) )'
@@ -207,15 +227,11 @@ class mem_fun_pv_t( calldef_t ):
                            % ( self.pure_virtual_identifier()
                                , declarations.full_name( self.declaration ) ) )
             
-        if self.declaration.use_keywords:
-            result.append( param_sep )            
-            result.append( self.keywords_args() )
-        if self.declaration.call_policies:
-            result.append( param_sep )            
-            result.append( self.declaration.call_policies.create( self ) )
-        else:
-            result.append( os.linesep + self.indent( '/* undefined call policies */', 2 ) )             
-        result.append( ' )' )
+        self.append_use_keywords_code( result )
+        self.append_call_policies_code( result )
+
+        self.append_def_end_code( result )
+        
         return ''.join( result )
 
 class mem_fun_pv_wrapper_t( calldef_wrapper_t ):
@@ -269,9 +285,11 @@ class mem_fun_v_t( calldef_t ):
     def _create_impl(self):
         param_sep = self.param_sep()
         
-        result = [ 'def' ]
-        result.append( '(' )
-        result.append( '"%s"' % self.alias )
+        result = []
+        
+        self.append_def_code( result )
+        self.append_alias_code( result )
+        
         result.append( param_sep )
         if self.declaration.create_with_signature:
             result.append( '(%s)(&%s)'
@@ -287,15 +305,11 @@ class mem_fun_v_t( calldef_t ):
                 result.append( param_sep )
                 result.append( '&%s' % self.wrapper.default_full_name() )
             
-        if self.declaration.use_keywords:
-            result.append( param_sep )            
-            result.append( self.keywords_args() )
-        if self.declaration.call_policies:
-            result.append( param_sep )            
-            result.append( self.declaration.call_policies.create( self ) )
-        else:
-            result.append( os.linesep + self.indent( '/* undefined call policies */', 2 ) )             
-        result.append( ' )' )
+        self.append_use_keywords_code( result )
+        self.append_call_policies_code( result )
+
+        self.append_def_end_code( result )
+        
         return ''.join( result )
 
 class mem_fun_v_wrapper_t( calldef_wrapper_t ):
@@ -387,9 +401,11 @@ class mem_fun_protected_t( calldef_t ):
     def _create_impl(self):
         param_sep = self.param_sep()
         
-        result = [ 'def' ]
-        result.append( '(' )
-        result.append( '"%s"' % self.alias )
+        result = []
+        
+        self.append_def_code( result )
+        self.append_alias_code( result )
+        
         result.append( param_sep )
         if self.declaration.create_with_signature:
             result.append( '(%s)(&%s)' 
@@ -398,15 +414,12 @@ class mem_fun_protected_t( calldef_t ):
         else:
             result.append( '&%s' % self.wrapper.full_name() )
             
-        if self.declaration.use_keywords:
-            result.append( param_sep )            
-            result.append( self.keywords_args() )
-        if self.declaration.call_policies:
-            result.append( param_sep )            
-            result.append( self.declaration.call_policies.create( self ) )
-        else:
-            result.append( os.linesep + self.indent( '/* undefined call policies */', 2 ) )             
-        result.append( ' )' )
+            
+        self.append_use_keywords_code( result )
+        self.append_call_policies_code( result )
+
+        self.append_def_end_code( result )
+        
         return ''.join( result )
 
 class mem_fun_protected_wrapper_t( calldef_wrapper_t ):
@@ -470,9 +483,11 @@ class mem_fun_protected_s_t( calldef_t ):
     def _create_impl(self):
         param_sep = self.param_sep()
         
-        result = [ 'def' ]
-        result.append( '(' )
-        result.append( '"%s"' % self.alias )
+        result = []
+        
+        self.append_def_code( result )
+        self.append_alias_code( result )
+        
         result.append( param_sep )
         if self.declaration.create_with_signature:
             result.append( '(%s)(&%s)' 
@@ -481,15 +496,11 @@ class mem_fun_protected_s_t( calldef_t ):
         else:
             result.append( '&%s' % self.wrapper.full_name() )
             
-        if self.declaration.use_keywords:
-            result.append( param_sep )            
-            result.append( self.keywords_args() )
-        if self.declaration.call_policies:
-            result.append( param_sep )            
-            result.append( self.declaration.call_policies.create( self ) )
-        else:
-            result.append( os.linesep + self.indent( '/* undefined call policies */', 2 ) )             
-        result.append( ' )' )
+        self.append_use_keywords_code( result )
+        self.append_call_policies_code( result )
+
+        self.append_def_end_code( result )
+        
         return ''.join( result )
 
 class mem_fun_protected_s_wrapper_t( calldef_wrapper_t ):
@@ -544,9 +555,11 @@ class mem_fun_protected_v_t( calldef_t ):
     def _create_impl(self):
         param_sep = self.param_sep()
         
-        result = [ 'def' ]
-        result.append( '(' )
-        result.append( '"%s"' % self.alias )
+        result = []
+        
+        self.append_def_code( result )
+        self.append_alias_code( result )
+        
         result.append( param_sep )
         if self.declaration.create_with_signature:
             result.append( '(%s)(&%s)' 
@@ -554,15 +567,12 @@ class mem_fun_protected_v_t( calldef_t ):
         else:
             result.append( '&%s' % self.wrapper.full_name() )
             
-        if self.declaration.use_keywords:
-            result.append( param_sep )            
-            result.append( self.keywords_args() )
-        if self.declaration.call_policies:
-            result.append( param_sep )            
-            result.append( self.declaration.call_policies.create( self ) )
-        else:
-            result.append( os.linesep + self.indent( '/* undefined call policies */', 2 ) )             
-        result.append( ' )' )
+            
+        self.append_use_keywords_code( result )
+        self.append_call_policies_code( result )
+
+        self.append_def_end_code( result )
+        
         return ''.join( result )
 
 
@@ -632,9 +642,11 @@ class mem_fun_protected_pv_t( calldef_t ):
     def _create_impl(self):
         param_sep = self.param_sep()
         
-        result = [ 'def' ]
-        result.append( '(' )
-        result.append( '"%s"' % self.alias )
+        result = []
+        
+        self.append_def_code( result )
+        self.append_alias_code( result )
+        
         result.append( param_sep )
         if self.declaration.create_with_signature:
             result.append( '(%s)(&%s)'
@@ -643,15 +655,12 @@ class mem_fun_protected_pv_t( calldef_t ):
         else:
             result.append( '&%s' % self.wrapper.full_name() )
             
-        if self.declaration.use_keywords:
-            result.append( param_sep )            
-            result.append( self.keywords_args() )
-        if self.declaration.call_policies:
-            result.append( param_sep )            
-            result.append( self.declaration.call_policies.create( self ) )
-        else:
-            result.append( os.linesep + self.indent( '/* undefined call policies */', 2 ) )             
-        result.append( ' )' )
+            
+        self.append_use_keywords_code( result )
+        self.append_call_policies_code( result )
+
+        self.append_def_end_code( result )
+        
         return ''.join( result )
 
 class mem_fun_protected_pv_wrapper_t( calldef_wrapper_t ):
