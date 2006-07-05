@@ -357,7 +357,7 @@ class creator_t( declarations.decl_visitor_t ):
     def _treat_indexing_suite( self ):
         def create_explanation(cls):
             msg = '//WARNING: the next line of code will not compile, because "%s" does not have operator== !'
-            msg = msg % cls.indexing_suite.value_type().decl_string
+            msg = msg % cls.indexing_suite.element_type.decl_string
             return code_creators.custom_text_t( msg, False )
         
         def create_cls_cc( cls ):
@@ -406,18 +406,18 @@ class creator_t( declarations.decl_visitor_t ):
             used_headers.add( isuite[ container_name ] )
 
             cls_creator = create_cls_cc( cls )
-            value_type = cls.indexing_suite.value_type() 
+            element_type = cls.indexing_suite.element_type
             if isuite is isuite1:
-                if declarations.is_class( value_type ) and not declarations.has_public_equal( value_type ):
+                if declarations.is_class( element_type ) and not declarations.has_public_equal( element_type ):
                     cls_creator.adopt_creator( create_explanation( cls ) )            
                 cls_creator.adopt_creator( code_creators.indexing_suite1_t(cls) )
             else:
                 class_traits = declarations.class_traits
-                if class_traits.is_my_case( value_type ):
-                    value_cls = class_traits.get_declaration( value_type )
+                if class_traits.is_my_case( element_type ):
+                    value_cls = class_traits.get_declaration( element_type )
                     if not ( value_cls.equality_comparable and value_cls.less_than_comparable ):
-                        value_type_cc = code_creators.value_traits_t( value_cls )
-                        self.__extmodule.adopt_creator( value_type_cc, self.__extmodule.creators.index( self.__module_body ) )                        
+                        element_type_cc = code_creators.value_traits_t( value_cls )
+                        self.__extmodule.adopt_creator( element_type_cc, self.__extmodule.creators.index( self.__module_body ) )                        
                 cls_creator.adopt_creator( code_creators.indexing_suite2_t(cls) )
             self.__module_body.adopt_creator( cls_creator )
 

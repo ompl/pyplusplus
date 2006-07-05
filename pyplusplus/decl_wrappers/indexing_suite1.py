@@ -28,17 +28,18 @@ class indexing_suite1_t( object ):
         return self.__container_class
     container_class = property( _get_container_class )
     
-    def value_type(self):
-        return self.__container_traits.value_type( self.container_class )
+    def _get_element_type(self):
+        return self.__container_traits.element_type( self.container_class )
+    element_type = property( _get_element_type )
     
     def _get_no_proxy( self ):
         if self.__no_proxy is None:
-            value_type = self.value_type()
-            if declarations.is_fundamental( value_type ) \
-               or declarations.is_enum( value_type )    \
-               or declarations.is_std_string( value_type ) \
-               or declarations.is_std_wstring( value_type ) \
-               or declarations.smart_pointer_traits.is_smart_pointer( value_type ):
+            element_type = self.element_type
+            if declarations.is_fundamental( element_type ) \
+               or declarations.is_enum( element_type )    \
+               or declarations.is_std_string( element_type ) \
+               or declarations.is_std_wstring( element_type ) \
+               or declarations.smart_pointer_traits.is_smart_pointer( element_type ):
                 self.__no_proxy = True
             else:
                 self.__no_proxy = False

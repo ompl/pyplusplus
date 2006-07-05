@@ -144,7 +144,7 @@ class code_generator_t(object):
         def is_vector_of_strings( decl ):
             if not declarations.vector_traits.is_my_case( decl ):
                 return False
-            return declarations.is_std_string( declarations.vector_traits.value_type(decl) )
+            return declarations.is_std_string( declarations.vector_traits.element_type(decl) )
 
         str_vec = mb.class_( is_vector_of_strings )
         str_vec.alias = "strings"

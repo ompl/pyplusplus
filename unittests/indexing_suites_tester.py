@@ -24,8 +24,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def matcher( item, decl ):
         if not declarations.vector_traits.is_my_case( decl ):
             return False
-        value_type = declarations.vector_traits.value_type(decl)
-        if item is value_type:
+        element_type = declarations.vector_traits.element_type(decl)
+        if item is element_type:
             return True
         return False
     

@@ -30,7 +30,6 @@ class decl_wrapper_t(object):
     this class are never created by the user, instead they are
     returned by the API.
     """
-
     def __init__(self):
         object.__init__(self)
         self._alias = None
@@ -46,8 +45,10 @@ class decl_wrapper_t(object):
     def _get_alias(self):
         if not self._alias:
             if declarations.templates.is_instantiation( self.name ):
+                container_aliases = [ 'value_type', 'key_type' ]        
                 if isinstance( self, declarations.class_t ) \
-                    and 1 == len( set( map( lambda typedef: typedef.name, self.aliases ) ) ):
+                    and 1 == len( set( map( lambda typedef: typedef.name, self.aliases ) ) ) \
+                    and self.aliases[0].name not in container_aliases:
                         self._alias = self.aliases[0].name
                 else:
                     self._alias = self._generate_valid_name()

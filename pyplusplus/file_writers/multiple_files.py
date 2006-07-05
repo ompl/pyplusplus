@@ -86,11 +86,11 @@ class multiple_files_t(writer.writer_t):
             return None
         if not isinstance( code_creator.declaration.indexing_suite, decl_wrappers.indexing_suite2_t ):
             return None
-        value_type = code_creator.declaration.indexing_suite.value_type()
+        element_type = code_creator.declaration.indexing_suite.element_type
         class_traits = declarations.class_traits
-        if not class_traits.is_my_case( value_type ):
+        if not class_traits.is_my_case( element_type ):
             return None
-        value_class = class_traits.get_declaration( value_type )
+        value_class = class_traits.get_declaration( element_type )
         return self.create_value_traits_header_name( value_class )
     
     def create_source( self, file_name, function_name, creators ):
