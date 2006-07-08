@@ -10,22 +10,53 @@ class enumeration_t(decl_wrapper.decl_wrapper_t, declarations.enumeration_t):
     def __init__(self, *arguments, **keywords):
         declarations.enumeration_t.__init__(self, *arguments, **keywords )
         decl_wrapper.decl_wrapper_t.__init__( self )
-        
+
+        # A dict with new names for particular enumeration values
+        # Key: Original name as it appears in the C++ source file
+        # Value: New name as it should appear in the Python bindings
         self._value_aliases = {}
-        #by default export all values
+
+        # A list of enumeration names (C++ names, not aliases!) that should be
+        # exported.
+        # By default, export all values
         self._export_values = None
 
     def _get_value_aliases(self):
         return self._value_aliases
     def _set_value_aliases(self, value_aliases):
         self._value_aliases = value_aliases
-    value_aliases = property( _get_value_aliases, _set_value_aliases )
+    value_aliases = property( _get_value_aliases, _set_value_aliases, doc=
+                              """A translation table from C++ enumeration value names to desired Python names.
+                              @type: dict""")
 
     def _get_export_values(self):
         if self._export_values is None:
-            return self.values.keys()
+            return map(lambda x: x[0], self.values)
         else:
             return self._export_values
     def _set_export_values(self, export_values):
         self._export_values = export_values
-    export_values = property( _get_export_values, _set_export_values )
+    export_values = property( _get_export_values, _set_export_values, doc=
+                              """A list of (C++) enumeration names that should be exported.
+                              @type: list""")
+
+    def _get_no_export_values(self):
+        all_values = map(lambda x: x[0], self.values)
+        export_values = self.export_values
+        res = []
+        for name in all_values:
+            if name not in export_values:
+                res.append(name)
+        return res
+                
+    def _set_no_export_values(self, no_export_values):
+        all_values = map(lambda x: x[0], self.values)
+        export_values = []
+        for name in all_values:
+            if name not in no_export_values:
+                export_values.append(name)
+        self.export_values = export_values
+        
+    no_export_values = property( _get_no_export_values, _set_export_values, doc=
+                              """A list of (C++) enumeration names that should not be exported.
+                              @type: list""")

@@ -39,16 +39,19 @@ class enum_t( declaration_based.declaration_based_t ):
                    % { 'bpl::enum_' : algorithm.create_identifier( self, '::boost::python::enum_' )
                        , 'name' : algorithm.create_identifier( self, self.declaration.decl_string )
                        , 'alias' : self.alias }
-        values = []                
-        for value_name in self.export_values:
+
+        values = []
+        # Add the values that should be exported
+        for value_name in self.declaration.export_values:
             values.append( self._generate_value_code( value_name ) )
-            
-        if self.export_values:
+
+        # Export the values
+        if len(self.declaration.export_values)>0:
             values.append( '.export_values()' )
-            
-        for name in self.declaration.values.keys():
-            if name not in self.export_values:
-                values.append( self._generate_value_code( name ) )
+
+        # Add the values that should not be exported
+        for name in self.declaration.no_export_values:
+            values.append( self._generate_value_code( name ) )
 
         values.append( ';' )
         

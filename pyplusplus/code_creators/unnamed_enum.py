@@ -23,7 +23,7 @@ class unnamed_enum_t( declaration_based.declaration_based_t ):
         tmpl = algorithm.create_identifier( self, '::boost::python::scope' ) + '().attr("%s") = (int)%s;'
         full_name = pygccxml.declarations.full_name( self.declaration )
         result = []
-        for name, value in self.declaration.values.items():
+        for name, value in self.declaration.values:
             result.append( tmpl % ( self.value_aliases.get( name, name )
                                     , algorithm.create_identifier( self, full_name + '::' + name ) ) )
         return os.linesep.join( result )
