@@ -263,6 +263,10 @@ class class_t( scoped.scoped_t ):
         for x in creators:
             if x is used_init:
                 continue
+            if isinstance( x, calldef.calldef_t ):
+                x.works_on_instance = False
+                result.append( x.create() )
+                continue
             if not x.works_on_instance:
                 result.append( x.create() )
             else:
@@ -270,9 +274,9 @@ class class_t( scoped.scoped_t ):
 
         code = os.linesep.join( result )
         
-        result = [ '{ //scope begin' ]
+        result = [ '{ //%s' % declarations.full_name( self.declaration ) ]
         result.append( self.indent( code ) )
-        result.append( '} //scope end' )
+        result.append( '}' )
         
         return os.linesep.join( result )
 

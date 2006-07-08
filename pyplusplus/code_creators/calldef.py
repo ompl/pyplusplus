@@ -41,7 +41,7 @@ class calldef_t( declaration_based.declaration_based_t):
         return algorithm.create_identifier( self, '::boost::python::pure_virtual' )
 
     def param_sep(self):
-        return os.linesep + self.indent( self.PARAM_SEPARATOR, 2 )
+        return os.linesep + self.indent( self.PARAM_SEPARATOR )
 
     def keywords_args(self):
         boost_arg = algorithm.create_identifier( self, '::boost::python::arg' )
@@ -67,20 +67,33 @@ class calldef_t( declaration_based.declaration_based_t):
         return ''.join( result )
     
     def create_def_code( self ):
-        return 'def'
+        if not self.works_on_instance:
+            return '%s.def' % self.parent.class_var_name
+        else:
+            return 'def'
         
-    def create_function_ref_code( self ):
+    def create_function_ref_code( self, use_function_alias=False ):
+        raise NotImplementedError()
+
+    def _get_function_type_alias( self ):
+        return 'function_ptr_t'
+    function_type_alias = property( _get_function_type_alias )
+    
+    def create_function_type_alias_code( self ):
         raise NotImplementedError()
     
     def _create_impl( self ):        
         result = []
         
-        result.append( self.create_def_code() )
-        result.append( '( ' )
-        result.append( os.linesep + self.indent( '"%s"' % self.alias, 2 ) )
+        if False == self.works_on_instance:
+            result.append( self.create_function_type_alias_code() )
+            result.append( os.linesep * 2 )
+            
+        result.append( self.create_def_code() + '( ' )
+        result.append( os.linesep + self.indent( '"%s"' % self.alias ) )
         result.append( self.param_sep() )
         
-        result.append( self.create_function_ref_code() )
+        result.append( self.create_function_ref_code( not self.works_on_instance ) )
 
         if self.declaration.use_keywords:
             result.append( self.param_sep() )            
@@ -95,6 +108,15 @@ class calldef_t( declaration_based.declaration_based_t):
         result.append( ' )' )
         if not self.works_on_instance:
             result.append( ';' )
+        
+        if not self.works_on_instance:
+            #indenting and adding scope
+            code = ''.join( result )
+            result = [ '{ //%s' % declarations.full_name( self.declaration ) ]
+            result.append( os.linesep * 2 )
+            result.append( self.indent( code ) )
+            result.append( os.linesep * 2 )
+            result.append( '}' )
         
         return ''.join( result )
 
@@ -164,12 +186,18 @@ class free_function_t( calldef_t ):
     def __init__( self, function ):
         calldef_t.__init__( self, function=function )
         self.works_on_instance = False
-
+        
     def create_def_code( self ):
         return self.def_identifier()
 
-    def create_function_ref_code(self):
-        if self.declaration.create_with_signature:
+    def create_function_type_alias_code( self ):
+        return 'typedef ' + self.declaration.function_type().create_typedef( self.function_type_alias ) + ';'
+
+    def create_function_ref_code(self, use_function_alias=False):
+        if use_function_alias:
+            return '%s( &%s )' \
+                   % ( self.function_type_alias, declarations.full_name( self.declaration ) )
+        elif self.declaration.create_with_signature:
             return '(%s)( &%s )' \
                    % ( self.declaration.function_type().decl_string
                        , declarations.full_name( self.declaration ) )
@@ -179,9 +207,15 @@ class free_function_t( calldef_t ):
 class mem_fun_t( calldef_t ):   
     def __init__( self, function ):
         calldef_t.__init__( self, function=function )
-    
-    def create_function_ref_code(self):
-        if self.declaration.create_with_signature:
+        
+    def create_function_type_alias_code( self ):
+        return 'typedef ' + self.declaration.function_type().create_typedef( self.function_type_alias ) + ';'
+
+    def create_function_ref_code(self, use_function_alias=False):
+        if use_function_alias:
+            return '%s( &%s )' \
+                   % ( self.function_type_alias, declarations.full_name( self.declaration ) )
+        elif self.declaration.create_with_signature:
             return '(%s)( &%s )' \
                    % ( self.declaration.function_type().decl_string
                        , declarations.full_name( self.declaration ) )
@@ -192,9 +226,17 @@ class mem_fun_t( calldef_t ):
 class mem_fun_pv_t( calldef_t ):   
     def __init__( self, function, wrapper ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
-    
-    def create_function_ref_code(self):
-        if self.declaration.create_with_signature:
+        
+    def create_function_type_alias_code( self ):
+        return 'typedef ' + self.declaration.function_type().create_typedef( self.function_type_alias ) + ';'
+
+    def create_function_ref_code(self, use_function_alias=False):
+        if use_function_alias:
+            return '%s( %s(&%s) )' \
+                   % ( self.pure_virtual_identifier()
+                       , self.function_type_alias
+                       , declarations.full_name( self.declaration ) )
+        elif self.declaration.create_with_signature:
             return '%s( (%s)(&%s) )' \
                    % ( self.pure_virtual_identifier()
                        , self.declaration.function_type().decl_string
@@ -251,10 +293,26 @@ class mem_fun_pv_wrapper_t( calldef_wrapper_t ):
 class mem_fun_v_t( calldef_t ):   
     def __init__( self, function, wrapper=None ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
-    
-    def create_function_ref_code(self):        
+        self.default_function_type_alias = 'default_' + self.function_type_alias
+        
+    def create_function_type_alias_code( self ):
         result = []
-        if self.declaration.create_with_signature:
+        result.append( 'typedef ' + self.declaration.function_type().create_typedef( self.function_type_alias ) + ';' )
+        if self.wrapper:
+            result.append( os.linesep )
+            result.append( 'typedef ' + self.wrapper.function_type().create_typedef( self.default_function_type_alias ) + ';' )
+        return ''.join( result )
+    
+    def create_function_ref_code(self, use_function_alias=False):
+        result = []
+        if use_function_alias:
+            result.append( '%s(&%s)'
+                           % ( self.function_type_alias, declarations.full_name( self.declaration ) ) )
+            if self.wrapper:
+                result.append( self.param_sep() )
+                result.append( '%s(&%s)' 
+                                % ( self.default_function_type_alias, self.wrapper.default_full_name() ) )
+        elif self.declaration.create_with_signature:
             result.append( '(%s)(&%s)'
                            % ( self.declaration.function_type().decl_string
                                , declarations.full_name( self.declaration ) ) )
@@ -355,8 +413,14 @@ class mem_fun_protected_t( calldef_t ):
     def __init__( self, function, wrapper ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
     
-    def create_function_ref_code(self):
-        if self.declaration.create_with_signature:
+    def create_function_type_alias_code( self ):
+        return 'typedef ' + self.wrapper.function_type().create_typedef( self.function_type_alias ) + ';'
+
+    def create_function_ref_code(self, use_function_alias=False):
+        if use_function_alias:
+            return '%s( &%s )' \
+                   % ( self.function_type_alias, self.wrapper.full_name() )
+        elif self.declaration.create_with_signature:
             return '(%s)(&%s)' \
                    % ( self.wrapper.function_type().decl_string, self.wrapper.full_name() )
         else:
@@ -419,9 +483,15 @@ class mem_fun_protected_wrapper_t( calldef_wrapper_t ):
 class mem_fun_protected_s_t( calldef_t ):   
     def __init__( self, function, wrapper ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
-    
-    def create_function_ref_code(self):
-        if self.declaration.create_with_signature:
+
+    def create_function_type_alias_code( self ):
+        return 'typedef ' + self.wrapper.function_type().create_typedef( self.function_type_alias ) + ';'
+
+    def create_function_ref_code(self, use_function_alias=False):
+        if use_function_alias:
+            return '%s( &%s )' \
+                   % ( self.function_type_alias, self.wrapper.full_name() )
+        elif self.declaration.create_with_signature:
             return '(%s)(&%s)' \
                    % ( self.wrapper.function_type().decl_string, self.wrapper.full_name() )
         else:
@@ -475,9 +545,15 @@ class mem_fun_protected_s_wrapper_t( calldef_wrapper_t ):
 class mem_fun_protected_v_t( calldef_t ):   
     def __init__( self, function, wrapper ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
-    
-    def create_function_ref_code(self):
-        if self.declaration.create_with_signature:
+
+    def create_function_type_alias_code( self ):
+        return 'typedef ' + self.wrapper.function_type().create_typedef( self.function_type_alias ) + ';'
+
+    def create_function_ref_code(self, use_function_alias=False):
+        if use_function_alias:
+            return '%s( &%s )' \
+                   % ( self.function_type_alias, self.wrapper.full_name() )
+        elif self.declaration.create_with_signature:
             return '(%s)(&%s)' \
                    % ( self.wrapper.function_type().decl_string, self.wrapper.full_name() )
         else:
@@ -545,9 +621,15 @@ class mem_fun_protected_v_wrapper_t( calldef_wrapper_t ):
 class mem_fun_protected_pv_t( calldef_t ):   
     def __init__( self, function, wrapper ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
+
+    def create_function_type_alias_code( self ):
+        return 'typedef ' + self.wrapper.function_type().create_typedef( self.function_type_alias ) + ';'
     
-    def create_function_ref_code(self):
-        if self.declaration.create_with_signature:
+    def create_function_ref_code(self, use_function_alias=False):
+        if use_function_alias:
+            return '%s( &%s )' \
+                   % ( self.function_type_alias, self.wrapper.full_name() )
+        elif self.declaration.create_with_signature:
             return '(%s)(&%s)' \
                    % ( self.wrapper.function_type().decl_string, self.wrapper.full_name() )
         else:
@@ -729,7 +811,10 @@ class constructor_t( calldef_t ):
         return ''.join( answer )
     
     def _create_impl( self ):
-        return 'def( %s )' % self.create_init_code()
+        code = 'def( %s )' % self.create_init_code()
+        if not self.works_on_instance:
+            code = self.parent.class_var_name + '.' + code + ';'
+        return code
 
 class static_method_t( declaration_based.declaration_based_t ):
     """

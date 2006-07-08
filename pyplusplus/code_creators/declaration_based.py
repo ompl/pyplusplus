@@ -45,3 +45,4 @@ class declaration_based_t(code_creator.code_creator_t):
     def _get_decl_identifier( self ):
         return algorithm.create_identifier( self, self.declaration.decl_string )
     decl_identifier = property( _get_decl_identifier )
+    
