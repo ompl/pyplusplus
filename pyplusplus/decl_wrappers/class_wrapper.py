@@ -49,7 +49,6 @@ class class_common_impl_details_t( object ):
     indexing_suite = property( _get_indexing_suite )
     
     def _get_equality_comparable( self ):
-        return False
         if None is self._equality_comparable:
             self._equality_comparable = declarations.has_public_equal( self )
         return self._equality_comparable
@@ -60,7 +59,6 @@ class class_common_impl_details_t( object ):
     equality_comparable = property( _get_equality_comparable, _set_equality_comparable )
 
     def _get_less_than_comparable( self ):
-        return False
         if None is self._less_than_comparable:
             self._less_than_comparable = declarations.has_public_less( self )
         return self._less_than_comparable
