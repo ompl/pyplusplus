@@ -150,6 +150,10 @@ struct private_derived_t : public private_base_t{
     virtual int pure_virtual_const_overloaded( int x, int y ) const { return x * y; }
 };
 
+struct callable_t{
+    int operator()( int i, int j ) const { return i + j; }
+    int operator()( int i, int j, int k ) const { return i + j + k; }
+};
 
 }
 
