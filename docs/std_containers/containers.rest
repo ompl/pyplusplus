@@ -78,21 +78,57 @@ method:
 
 Every declarated class has ``indexing_suite`` property. If the class is an 
 instantiation of stl container, this property containes reference to an instance
-of ``indexing_suite1_t`` or ``indexing_suite2_t`` class. How does `pyplusplus`_
-know that the class represents stl container instantiation? Well, it uses
-``pygccxml.declarations.container_traits`` to find out this. This class, provides
-all functionality needed to identify container and to find out its ``value_type``
-( ``mapped_type`` ). May I give you small tip? You can use 
-``pygccxml.declarations.container_traits`` class in search functionality.
+of ``indexing_suite1_t`` or ``indexing_suite2_t`` class. 
+
+
+How does `pyplusplus`_ know that a class represents stl container instantiation? 
+Well, it uses ``pygccxml.declarations.container_traits`` to find out this. 
+``pygccxml.declarations.container_traits`` class, provides all functionality 
+needed to identify container and to find out its ``value_type``( ``mapped_type`` ).
     
 
-Built-in indexing suite
------------------------
-..
+Built-in indexing suite API
+---------------------------
+
+`pyplusplus`_ defines ``indexing_suite1_t`` class. This class allows configure
+any detail of generated code:
+
+* ``no_proxy`` - a boolean, if value type is one of the next types
+  * fundamental type
+  * enumeration
+  * [w]string          
+  * boost::shared_ptr<?>
+   
+  then, ``no_proxy`` will be set to ``True``, otherwise to ``False``.
+
+* ``derived_policies`` - a string, that will be added as is to generated code
+
+* ``element_type`` - is a reference to container ``value_type`` or ``mapped_type``.
 
 
-Indexing suite v1
------------------
+Next version of indexing suite API
+----------------------------------
+
+In this case there is no single place, where you can configure exported container
+functionality. Please take a look on next C++ code:
+::
+
+  struct item{ ... };
+  
+  struct my_data{
+      std::vector<item> items;
+      std::map< std::string, item > name2item_mapping;
+  };
+
+
+`pyplusplus`_ declarations tree will contains ``item``, ``my_data``, 
+``vector<item>`` and ``map<string,item>`` class declarations. Next version of 
+indexing suite allows you to configure what set of operation will be supported,
+based on functionality provided by container ``value_type`` ( ``mapped_type`` ).
+To be more specific, you can create ``value_traits`` and set ``equality_comparable``
+or ``less_than_comparable`` to ``True`` if the type has `operator==` or ``False``
+
+
 In this case, `pyplusplus`
 
 Generated code
