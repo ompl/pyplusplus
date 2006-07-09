@@ -407,6 +407,12 @@ class creator_t( declarations.decl_visitor_t ):
 
             cls_creator = create_cls_cc( cls )
             element_type = cls.indexing_suite.element_type
+            if declarations.is_class( element_type ):
+                class_traits = declarations.class_traits
+                value_cls = class_traits.get_declaration( element_type )
+                if value_cls.ignore:
+                    continue #this collection could not be exported, because
+                             #the value_type of collection is not exported
             if isuite is isuite1:
                 if declarations.is_class( element_type ) and not declarations.has_public_equal( element_type ):
                     cls_creator.adopt_creator( create_explanation( cls ) )            
