@@ -115,7 +115,10 @@ class value_traits_t( declaration_based.declaration_based_t ):
             , "struct value_traits< %(value_class)s >{"
             , ""
             , self.indent( "static bool const equality_comparable = %(has_equal)s;" )
+            , self.indent( "%(equal_to)s" )
+            , ""
             , self.indent( "static bool const less_than_comparable = %(has_lessthan)s;" )
+            , self.indent( "%(less)s" )
             , ""
             , self.indent( "template<typename PythonClass, typename Policy>" )
             , self.indent( "static void visit_container_class(PythonClass &, Policy const &){" )    
@@ -127,9 +130,19 @@ class value_traits_t( declaration_based.declaration_based_t ):
             , "}/*indexing*/ } /*python*/ } /*boost*/"
         ])
 
+        less = ''
+        if self.declaration.less_than_comparable:
+            less = "typedef std::less< %s > less;" % self.decl_identifier
+
+        equal_to = ''
+        if self.declaration.equality_comparable:
+            equal_to = "typedef std::equal_to< %s > equal_to;" % self.decl_identifier
+
         return tmpl % { 'value_class' : self.decl_identifier
                         , 'has_equal' : str( bool( self.declaration.equality_comparable ) ) .lower()
+                        , 'equal_to' : equal_to
                         , 'has_lessthan' : str( bool( self.declaration.less_than_comparable ) ).lower()
+                        , 'less' : less
                         , 'visitor_helper_body' : '' }
 
     def generate_value_class_fwd_declaration( self ):

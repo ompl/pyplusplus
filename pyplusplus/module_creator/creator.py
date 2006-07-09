@@ -415,9 +415,8 @@ class creator_t( declarations.decl_visitor_t ):
                 class_traits = declarations.class_traits
                 if class_traits.is_my_case( element_type ):
                     value_cls = class_traits.get_declaration( element_type )
-                    if not ( value_cls.equality_comparable and value_cls.less_than_comparable ):
-                        element_type_cc = code_creators.value_traits_t( value_cls )
-                        self.__extmodule.adopt_creator( element_type_cc, self.__extmodule.creators.index( self.__module_body ) )                        
+                    element_type_cc = code_creators.value_traits_t( value_cls )
+                    self.__extmodule.adopt_creator( element_type_cc, self.__extmodule.creators.index( self.__module_body ) )                        
                 cls_creator.adopt_creator( code_creators.indexing_suite2_t(cls) )
             self.__module_body.adopt_creator( cls_creator )
 
