@@ -8,7 +8,7 @@ C++ containers support
 Introduction
 ------------
 
-C++ has a bunch of containers classes:
+C++ has a bunch of container classes:
 
     * list
     * deque
@@ -40,9 +40,14 @@ way to add support for custom ones. You'd better read his `post`_ to
 `boost.python`_ mailing list or `documentation`_ for the new indexing suite.
 
 
-If this suite is soo good, why it is not in the main branch? You can find the 
-answer here(http://mail.python.org/pipermail/c++-sig/2006-June/010830.html) and
-here(http://mail.python.org/pipermail/c++-sig/2006-June/010835.html).
+Now, I am sure you have next question: if this suite is soo good, why it is not
+in the main branch? The short answer is that this suite has some problems on 
+MSVC 6.0 compiler and there are few users, that still use that compiler.
+The long answer is here:
+
+* http://mail.python.org/pipermail/c++-sig/2006-June/010830.html
+* http://mail.python.org/pipermail/c++-sig/2006-June/010835.html
+
 
 .. _`documentation` : ./indexing_suite_v2.html
 .. _`post` : http://mail.python.org/pipermail/c++-sig/2003-October/005802.html
@@ -62,7 +67,7 @@ How does it work?
 In both cases, `pyplusplus`_ provides almost "hands free" solution. `pyplusplus`_
 keeps track of all exported functions and variables, and if it sees that there is
 a usage of stl container, it exports the container. In both cases, `pyplusplus`_
-analizes the container ``value_type`` ( or in case of mapping containers 
+analizes the container ``value_type`` ( or in case of mapping container 
 ``mapped_type`` ), in order to set reasonable defaults, when it generates the code.
 
 -----------------------
@@ -84,7 +89,8 @@ of ``indexing_suite1_t`` or ``indexing_suite2_t`` class.
 How does `pyplusplus`_ know that a class represents stl container instantiation? 
 Well, it uses ``pygccxml.declarations.container_traits`` to find out this. 
 ``pygccxml.declarations.container_traits`` class, provides all functionality 
-needed to identify container and to find out its ``value_type``( ``mapped_type`` ).
+needed to identify container and to find out its ``value_type`` 
+( ``mapped_type`` ).
     
 
 Built-in indexing suite API
@@ -93,10 +99,14 @@ Built-in indexing suite API
 `pyplusplus`_ defines ``indexing_suite1_t`` class. This class allows configure
 any detail of generated code:
 
-* ``no_proxy`` - a boolean, if value type is one of the next types
+* ``no_proxy`` - a boolean, if ``value_type`` is one of the next types
+
   * fundamental type
+  
   * enumeration
-  * [w]string          
+
+  * std::string or std::wstring
+
   * boost::shared_ptr<?>
    
   then, ``no_proxy`` will be set to ``True``, otherwise to ``False``.
@@ -113,7 +123,12 @@ In this case there is no single place, where you can configure exported containe
 functionality. Please take a look on next C++ code:
 ::
 
-  struct item{ ... };
+  struct item{
+      ...  
+  private:
+      bool operator==( const item& ) const;
+      bool operator<( const item& ) const;
+  };
   
   struct my_data{
       std::vector<item> items;
@@ -122,12 +137,41 @@ functionality. Please take a look on next C++ code:
 
 
 `pyplusplus`_ declarations tree will contains ``item``, ``my_data``, 
-``vector<item>`` and ``map<string,item>`` class declarations. Next version of 
-indexing suite allows you to configure what set of operation will be supported,
-based on functionality provided by container ``value_type`` ( ``mapped_type`` ).
-To be more specific, you can create ``value_traits`` and set ``equality_comparable``
-or ``less_than_comparable`` to ``True`` if the type has `operator==` or ``False``
+``vector<item>`` and ``map<string,item>`` class declarations. 
 
+If ``value_type`` does not support "equal" or "less than" functionality, sort 
+and search functionality could not be exported.
+
+`pyplusplus`_ class declaration has two properties: ``equality_comparable`` and 
+``less_than_comparable``. The value of those properties is calculated on first 
+invocation. If `pyplusplus`_ can find ``operator==``, that works on ``value_type``, 
+then, ``equality_comparable`` property value will be set to ``True``, otherwise 
+to ``False``. Same process is applied on ``less_than_comparable`` property.
+
+In our case, `pyplusplus`_ will set both properties to ``False``, thus sort and
+search functionality will not be exported.
+
+It is the time to introduce ``indexing_suite2_t`` class:
+
+* ``container_class`` - read only property, returns reference to container class
+  declaration
+  
+* ``container_traits`` - read only property, returns reference to the relevant
+  container traits class. Container traits classes are defined in 
+  ``pygccxml.declarations`` package.
+  
+* ``element_type`` - is a reference to container ``value_type`` or ``mapped_type``.
+
+* ``call_policies`` - read/write property, in near future I will add code to 
+  `pyplusplus`_ that will analize container ``value_type`` and will decide about
+  default call policies. Just an example: for non copy constructable classes
+  ``call_policies`` should be set to ``return_internal_reference``. 
+  
+* ``[disable|enable]_method`` - new indexing suite, allows to configure 
+  functionality exported to Python, using simple bitwise operations on predefined
+  flags. `pyplusplus`_ allows you to specify what methods you want to disable
+  or enable. ``indexing_suite2_t.METHODS`` containes names of all supported methods.
+        
 
 In this case, `pyplusplus`
 
