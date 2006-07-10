@@ -62,7 +62,6 @@ class module_builder_t(object):
             , define_symbols=define_symbols
             , undefine_symbols=undefine_symbols
             , start_with_declarations=start_with_declarations
-            , verbose=compilation_verbose
             , ignore_gccxml_output=ignore_gccxml_output)
 
         #may be in future I will add those directories to user_defined_directories
