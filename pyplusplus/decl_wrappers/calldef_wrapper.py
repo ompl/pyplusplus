@@ -197,8 +197,9 @@ class operators_helper:
         if isinstance( oper, declarations.member_operator_t ) and oper.symbol in ( '()', '[]' ):
             return ''
         if not operators_helper.is_supported( oper ):
-            #see http://www.boost.org/libs/python/doc/v2/operators.html#introduction
-            return 'operator %s is not supported. Please take a look on http://www.boost.org/libs/python/doc/v2/operators.html#introduction.'
+            msg = [ '"operator%s" is not supported. ' % oper.symbol ]
+            msg.append( 'See Boost.Python documentation: http://www.boost.org/libs/python/doc/v2/operators.html#introduction.' )
+            return os.linesep.join( msg )
         return ''
     exportable = staticmethod( exportable )
 

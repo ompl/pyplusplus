@@ -48,9 +48,9 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
         type_ = declarations.remove_const( type_ )
         if declarations.is_pointer( type_ ):
             if self.type_qualifiers.has_static:
-                return "pyplusplus, right now, can not expose static pointer member variables. This could be changed in future."
+                return "pyplusplus can not expose static pointer member variables. This could be changed in future."
             if declarations.is_fundamental( type_.base ):
-                return "pyplusplus, right now, can not expose pointer to fundamental member variables. This could be changed in future."
+                return "pyplusplus can not expose pointer to fundamental member variables. This could be changed in future."
             
             units = declarations.decompose_type( type_ )
             ptr2functions = filter( lambda unit: isinstance( unit, declarations.calldef_type_t )
@@ -62,6 +62,6 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
         if declarations.class_traits.is_my_case( type_ ):
             cls = declarations.class_traits.get_declaration( type_ )
             if not cls.name:
-                return "pyplusplus, right now, can not expose variables of with unnamed type."
+                return "pyplusplus can not expose variables of with unnamed type."
         return ''
     

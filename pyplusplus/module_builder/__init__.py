@@ -53,4 +53,5 @@ from pyplusplus import _logging_ as __pyplusplus_logging
 def set_logger_level( level ):
     for l in __pygccxml_utils.loggers.all:
         l.setLevel( level )
-    __pyplusplus_logging.logger.setLevel( level )
+    for l in __pyplusplus_logging.loggers.all:
+        l.setLevel( level )

@@ -9,13 +9,14 @@ This package contains logging configuration for pyplusplus. Default log level
 is DEBUG. Default log messages destination is sys.stdout.
 """
 
+import os
 import sys
 import logging
 
 def _create_logger_( name ):    
     logger = logging.getLogger(name)
     __handler = logging.StreamHandler(sys.stdout)
-    __handler.setFormatter( logging.Formatter( '%(levelname)s %(message)s' ) )
+    __handler.setFormatter( logging.Formatter( os.linesep + '%(levelname)s %(message)s' ) )
     logger.addHandler(__handler) 
     logger.setLevel(logging.INFO)
     return logger

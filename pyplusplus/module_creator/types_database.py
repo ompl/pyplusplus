@@ -73,7 +73,7 @@ class types_database_t( object ):
         try:            
             check_extraction = container_cls.indexing_suite.element_type
         except RuntimeError, error:
-            msg = 'WARNING: pyplusplus found "%s" instantiation declaration, ' % container_cls.name
+            msg = 'pyplusplus found "%s" instantiation declaration, ' % container_cls.name
             msg = msg + 'but can not find out value type!'
             msg = msg + os.linesep + 'This class will not be exported!'
             _logging_.loggers.declarations.warn( msg )

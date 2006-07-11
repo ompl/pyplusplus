@@ -3,19 +3,13 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import os
 import sys
 import algorithm
 from pyplusplus import _logging_
 from pygccxml import declarations
 
 
-
-__REPOTED_REPLACES = []
-def report_msg_once( msg ):
-    global __REPOTED_REPLACES
-    if msg not in __REPOTED_REPLACES:
-        print 'pyplusplus: ', msg
-        __REPOTED_REPLACES.append( msg )
 
 class ERROR_BEHAVIOR:
     PRINT = 'print'
@@ -30,6 +24,10 @@ class decl_wrapper_t(object):
     this class are never created by the user, instead they are
     returned by the API.
     """
+    
+    DO_NOT_REPORT_MSGS = [ "pyplusplus does not exports compiler generated constructors" ]
+    ALREADY_REPORTED_MSGS = set()
+    
     def __init__(self):
         object.__init__(self)
         self._alias = None
@@ -68,7 +66,20 @@ class decl_wrapper_t(object):
     def rename( self, new_name ):
         self.alias = new_name
     
+    def __report_warning( self, reason ):
+        if reason in decl_wrapper_t.DO_NOT_REPORT_MSGS:
+            return 
+        if reason in decl_wrapper_t.ALREADY_REPORTED_MSGS:
+            return
+        decl_wrapper_t.ALREADY_REPORTED_MSGS.add( reason )
+        msg = [ 'Declaration "%s" could not be exported.' % declarations.full_name( self ) ]
+        reason = reason.replace( os.linesep, os.linesep + '\t' )
+        msg.append( '\tReason: %s' % reason )
+        self.logger.warn( os.linesep.join( msg ) )
+    
     def _get_ignore( self ):
+        if False == self._ignore and not self.exportable:
+            self.__report_warning( self.why_not_exportable() )
         return self._ignore or not self.exportable
     
     def _set_ignore( self, value ):
