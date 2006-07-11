@@ -60,6 +60,9 @@ class class_organizer_t(object):
                     continue
                 top_class_inst = self.__get_top_class_inst( base_type.declaration )
                 i_depend_on_them.add( full_name( top_class_inst ) )
+        
+        i_depend_on_them = list( i_depend_on_them )
+        i_depend_on_them.sort()
         return i_depend_on_them
 
     def __get_top_class_inst( self, decl ):
@@ -72,7 +75,7 @@ class class_organizer_t(object):
         self._dfs()
     
     def _dfs( self ):
-        for class_ in self.__dependencies_graph:
+        for class_ in sorted( self.__dependencies_graph.keys() ):
             if self.__colors[class_] == COLOR.WHITE:
                 self._dfs_visit(class_)
                 
