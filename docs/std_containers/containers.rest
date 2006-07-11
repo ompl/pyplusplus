@@ -75,7 +75,7 @@ Indexing suites API
 -------------------
 
 By default, `pyplusplus`_ works with built-in indexing suite. If you want to use
-next version of indexing suite, you should tell this to ``module_builder_t.__init__``
+next version of indexing suite, you should tell this to the ``module_builder_t.__init__``
 method:
 ::
 
@@ -86,12 +86,12 @@ instantiation of stl container, this property containes reference to an instance
 of ``indexing_suite1_t`` or ``indexing_suite2_t`` class. 
 
 
-How does `pyplusplus`_ know that a class represents stl container instantiation? 
+How does `pyplusplus`_ know, that a class represents stl container instantiation? 
 Well, it uses ``pygccxml.declarations.container_traits`` to find out this. 
 ``pygccxml.declarations.container_traits`` class, provides all functionality 
-needed to identify container and to find out its ``value_type`` 
-( ``mapped_type`` ).
-    
+needed to identify container and to find out its ``value_type``
+( ``mapped_type`` ). 
+
 
 Built-in indexing suite API
 ---------------------------
@@ -172,74 +172,20 @@ It is the time to introduce ``indexing_suite2_t`` class:
   flags. `pyplusplus`_ allows you to specify what methods you want to disable
   or enable. ``indexing_suite2_t.METHODS`` containes names of all supported methods.
         
+* ``[disable|enable]_methods_group`` - almost same as above, but allows you
+  to specify what group of methods you want to disable or enable. 
+  ``indexing_suite2_t.METHOD_GROUPS`` containes names of all supported groups.
 
-In this case, `pyplusplus`
+Small tips/hints
+----------------
 
-Generated code
---------------
-All generated code will have next form:
-::
+1. If you set ``equality_comparable`` or ``less_than_comparable`` to ``False``.
+   The indexing suite will disable relevant functionality. You don't have 
+   explicitly to disable method or mothods group.
 
-  class_< container, other class parameters >(name)
-        .def( concrete indexing suite class< container, proxy, derived policies >() )
-  ;
-  
-Usage example
--------------
-C++ code:
-::
-
-  #include <map>
-  #include <vector>
-
-::
-
-  std::vector<string> get_options(){...}
-
-::
-
-  struct my_data{...};
-  std::map< int, my_data > get_data();
-  
-Assumption: user wants to use ``get_options`` and ``get_data`` functions. Next 
-steps will describe what `pyplusplus`_ will do in this case:
-
-1. `pyplusplus`_ will analyze functions return type and arguments. 
-
-2. It will understand that ``std::vector< std::string >`` and ``std::map< int, my_data >`` 
-   classes should be exported too. 
-   
-3. It will understand that those classes should be exported using indexing suite 
-   functionality provided by `boost.python`_ library or `pyplusplus`_ 
-   ``code repository``.
-
-4. It will generate the code, that will use that functionality. 
-
-So far, so good. Sometimes, there are use cases, when user has to change default
-values, for example ``NoProxy`` or ``DerivedPolicies``. What interface `pyplusplus`_ 
-will provide in order to change the defaults? Well, ``std::vector< std::string >``
-is the class that could be found in declarations tree, right? User can find the
-class and change the defaults:
-::
-
-  mb = module_builder_t( ... )
-  #the next line will not work, because the real name of std::vector< std::string >
-  #is platform dependent and much longer. It is there for simplicity.
-  vector_of_strings = mb.class_( "std::vector< std::string >" )
-  vector_of_strings.alias = "StringVector"
-  vector_of_strings.held_type = ...
-  vector_of_strings.indexing_suite.no_proxy = False
-
-
-Please, pay attention to the next line:
-::
-
-  vector_of_strings.indexing_suite.no_proxy = False
-  
-Every class, that represents instantiation of some std container will have
-class variable ``indexing_suite``, that will be intitialized with relevant
-indexing suite class.
-
+2. The documentation of new indexing suite containes few small mistakes. 
+   I hope, I will have time to fix them. Any way, `pyplusplus`_ generates 
+   correct code.
 
 
 .. _`pyplusplus` : ./../pyplusplus.html
