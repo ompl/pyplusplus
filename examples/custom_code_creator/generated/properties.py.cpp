@@ -7,17 +7,31 @@
 namespace bp = boost::python;
 
 BOOST_PYTHON_MODULE(properties){
-    bp::class_< geometry::point_t >( "point_t", bp::init< bp::optional< int, int > >(( bp::arg("x")=0, bp::arg("y")=0 ))[bp::default_call_policies()] )    
+    bp::class_< geometry::point_t >( "point_t", bp::init< bp::optional< int, int > >(( bp::arg("x")=(int)(0), bp::arg("y")=(int)(0) ))[bp::default_call_policies()] )    
         .add_property( "y", &::geometry::point_t::get_y, &::geometry::point_t::set_y )    
         .add_property( "x", &::geometry::point_t::get_x, &::geometry::point_t::set_x );
 
-    bp::def("extract_y"
-            , &::geometry::extract_y
+    { //::geometry::extract_x
+    
+        typedef int ( *function_ptr_t )( ::geometry::point_t const & );
+        
+        bp::def( 
+            "extract_x"
+            , function_ptr_t( &::geometry::extract_x )
             , ( bp::arg("pt") )
             , bp::default_call_policies() );
+    
+    }
 
-    bp::def("extract_x"
-            , &::geometry::extract_x
+    { //::geometry::extract_y
+    
+        typedef int ( *function_ptr_t )( ::geometry::point_t const & );
+        
+        bp::def( 
+            "extract_y"
+            , function_ptr_t( &::geometry::extract_y )
             , ( bp::arg("pt") )
             , bp::default_call_policies() );
+    
+    }
 }

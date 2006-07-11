@@ -70,9 +70,9 @@ a usage of stl container, it exports the container. In both cases, `pyplusplus`_
 analizes the container ``value_type`` ( or in case of mapping container 
 ``mapped_type`` ), in order to set reasonable defaults, when it generates the code.
 
------------------------
-Code, show me the code!
------------------------
+-------------------
+Indexing suites API
+-------------------
 
 By default, `pyplusplus`_ works with built-in indexing suite. If you want to use
 next version of indexing suite, you should tell this to ``module_builder_t.__init__``

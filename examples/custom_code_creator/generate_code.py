@@ -25,9 +25,9 @@ from pyplusplus import code_creators
 from pyplusplus import module_builder
 
 class property_creator_t( code_creators.code_creator_t ):
-    def __init__( self, get_function, set_function, parent=None ):
+    def __init__( self, get_function, set_function ):
         #get/set functions are references to relevant declarations
-        code_creators.code_creator_t.__init__( self, parent )
+        code_creators.code_creator_t.__init__( self )
         self.__get_function = get_function
         self.__set_function = set_function
     
