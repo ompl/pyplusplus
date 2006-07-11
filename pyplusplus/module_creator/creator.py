@@ -410,7 +410,11 @@ class creator_t( declarations.decl_visitor_t ):
         }
         
         container_suite_header = "boost/python/suite/indexing/container_suite.hpp"
-        for cls in self.__types_db.used_containers:
+        
+        cmp_by_name = lambda cls1, cls2: cmp( cls1.decl_string, cls2.decl_string )
+        used_containers = list( self.__types_db.used_containers )
+        used_containers.sort( cmp_by_name )
+        for cls in used_containers:
             container_name = cls.name.split( '<' )[0] + '<'
 
             if isinstance( cls.indexing_suite, decl_wrappers.indexing_suite1_t ):
