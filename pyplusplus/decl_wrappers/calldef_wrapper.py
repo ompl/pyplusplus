@@ -100,8 +100,8 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         #TODO: functions that takes as argument pointer to pointer to smth, could not be exported
         #see http://www.boost.org/libs/python/doc/v2/faq.html#funcptr
         if len( self.arguments ) > calldef_t.BOOST_PYTHON_MAX_ARITY:
-            msg = "Function '%s' with more then 10 arguments( %d ). "
-            msg = msg + " You should adjest BOOST_PYTHON_MAX_ARITY"
+            msg = "Function '%s' has more then 10 arguments ( %d ). "
+            msg = msg + " You should adjust BOOST_PYTHON_MAX_ARITY."
             msg = msg + " For more information see: http://mail.python.org/pipermail/c++-sig/2002-June/001554.html"
             self.logger.info( msg % ( self.decl_string, len( self.arguments ) ) )
 
