@@ -6,7 +6,6 @@
 import os
 import decl_wrapper
 from pygccxml import declarations
-from pyplusplus import _logging_
 ##May be in future I will enable this functionality again, right now it seems
 ##that this is useless
 ##def is_finalizable(self):
@@ -104,7 +103,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
             msg = "Function '%s' with more then 10 arguments( %d ). "
             msg = msg + " You should adjest BOOST_PYTHON_MAX_ARITY"
             msg = msg + " For more information see: http://mail.python.org/pipermail/c++-sig/2002-June/001554.html"
-            _logging_.logger.info( msg % ( self.decl_string, len( self.arguments ) ) )
+            self.logger.info( msg % ( self.decl_string, len( self.arguments ) ) )
 
         all_types = [ arg.type for arg in self.arguments ]
         all_types.append( self.return_type )

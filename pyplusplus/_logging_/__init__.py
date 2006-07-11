@@ -12,8 +12,18 @@ is DEBUG. Default log messages destination is sys.stdout.
 import sys
 import logging
 
-logger = logging.getLogger('pyplusplus')
-__handler = logging.StreamHandler(sys.stdout)
-__handler.setFormatter( logging.Formatter('%(message)s') )
-logger.addHandler(__handler) 
-logger.setLevel(logging.DEBUG)
+def _create_logger_( name ):    
+    logger = logging.getLogger(name)
+    __handler = logging.StreamHandler(sys.stdout)
+    __handler.setFormatter( logging.Formatter( '%(levelname)s %(message)s' ) )
+    logger.addHandler(__handler) 
+    logger.setLevel(logging.INFO)
+    return logger
+
+class loggers:
+    file_writer = _create_logger_( 'pyplusplus.file_writer' )
+    declarations = _create_logger_( 'pyplusplus.declarations' )
+    module_builder = _create_logger_( 'pyplusplus.module_builder' )
+    #root logger exists for configuration purpose only
+    root = logging.getLogger( 'pyplusplus' )
+    all = [ root, file_writer, module_builder ]

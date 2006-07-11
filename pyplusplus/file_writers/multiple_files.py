@@ -9,8 +9,6 @@ from sets import Set as set
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
-from pyplusplus import _logging_
-
 
 #TODO: to add namespace_alias_t classes
 class multiple_files_t(writer.writer_t):
@@ -189,9 +187,10 @@ class multiple_files_t(writer.writer_t):
         try:
             self.__split_class_impl( class_creator )
         except IOError, error:
-            msg = 'ERROR: Failed to write code for class "%s" into file. May be the class name is too long?. Error: %s'
-            msg = msg % ( class_creator.declaration.name, str(error) )
-            _logging_.logger.error( msg )
+            msg = [ 'Failed to write code for class "%s" into file.' % class_creator.declaration.name ]
+            msg.append( "May be the class name is too long?." )
+            msg.append( "Error: %s'" % str(error) )
+            self.logger.error( os.linesep.join( msg ) )
             raise
 
     def create_value_traits_header_name( self, value_class ):

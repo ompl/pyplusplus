@@ -37,6 +37,10 @@ class decl_wrapper_t(object):
         self._exportable = None
         self._exportable_reason = None
         
+    @property
+    def logger( self ):
+        return _logging_.loggers.declarations
+        
     def _generate_valid_name(self, name=None):
         if name == None:
             name = self.name

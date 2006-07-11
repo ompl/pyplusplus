@@ -55,6 +55,7 @@ class module_builder_t(object):
         @param undefine_symbols: list of strings
         """
         object.__init__( self )
+        self.logger = _logging_.loggers.module_builder
         gccxml_config = parser.config_t( 
             gccxml_path=gccxml_path
             , working_directory=working_directory
@@ -100,12 +101,12 @@ class module_builder_t(object):
         if None is compilation_mode:
             compilation_mode = parser.COMPILATION_MODE.FILE_BY_FILE
         start_time = time.clock()
-        _logging_.logger.debug( 'parsing files - started' )
+        self.logger.debug( 'parsing files - started' )
         reader = parser.project_reader_t( gccxml_config, cache, decl_wrappers.dwfactory_t() )
         decls = reader.read_files( files, compilation_mode )
 
-        _logging_.logger.debug( 'parsing files - done( %f seconds )' % ( time.clock() - start_time ) )
-        _logging_.logger.debug( 'settings declarations defaults- started' )
+        self.logger.debug( 'parsing files - done( %f seconds )' % ( time.clock() - start_time ) )
+        self.logger.debug( 'settings declarations defaults- started' )
 
         global_ns = decls_package.matcher.get_single( 
                 decls_package.namespace_matcher_t( name='::' )
@@ -116,8 +117,8 @@ class module_builder_t(object):
                 
         start_time = time.clock()
         self.__apply_decls_defaults(decls)
-        _logging_.logger.debug( 'settings declarations defaults - done( %f seconds )'
-                                % ( time.clock() - start_time ) )
+        self.logger.debug( 'settings declarations defaults - done( %f seconds )'
+                           % ( time.clock() - start_time ) )
         return global_ns
     
     def __filter_by_location( self, flatten_decls ):

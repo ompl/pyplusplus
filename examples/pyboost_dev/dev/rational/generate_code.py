@@ -22,9 +22,7 @@ LICENSE = """// Copyright 2004 Roman Yakovenko.
 #TODO: for some reason unary - was not exported
 
 class code_generator_t(object):    
-    def __init__(self):
-        module_builder.set_logger_level( logging.INFO )
-        
+    def __init__(self):      
         self.__file = os.path.join( rational_settings.working_dir, 'rational_export.hpp' )
         
         self.__mb = module_builder.module_builder_t( 
@@ -35,7 +33,8 @@ class code_generator_t(object):
                         , include_paths=[rational_settings.boost.include]
                         , define_symbols=rational_settings.defined_symbols
                         , undefine_symbols=rational_settings.undefined_symbols
-                        , optimize_queries=False )
+                        , optimize_queries=False
+                        , indexing_suite_version=2 )
         
         for f_decl in self.__mb.free_functions():
             f_decl.alias = f_decl.name

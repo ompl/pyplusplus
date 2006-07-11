@@ -78,15 +78,24 @@ class calldef_t( declaration_based.declaration_based_t):
     def _get_function_type_alias( self ):
         return 'function_ptr_t'
     function_type_alias = property( _get_function_type_alias )
-    
-    def create_function_type_alias_code( self ):
+
+    def _get_exported_class_alias( self ):
+        return 'exported_class_t'
+    exported_class_alias = property( _get_exported_class_alias )
+
+    def create_function_type_alias_code( self, exported_class_alias=None ):
         raise NotImplementedError()
     
     def _create_impl( self ):        
         result = []
         
         if False == self.works_on_instance:
-            result.append( self.create_function_type_alias_code() )
+            exported_class_alias = None
+            if declarations.templates.is_instantiation( self.declaration.parent.name ):
+                exported_class_alias = self.exported_class_alias
+                result.append( 'typedef %s %s;' % ( self.parent.decl_identifier, exported_class_alias ) )
+                result.append( os.linesep )
+            result.append( self.create_function_type_alias_code(exported_class_alias) )
             result.append( os.linesep * 2 )
             
         result.append( self.create_def_code() + '( ' )
@@ -190,7 +199,7 @@ class free_function_t( calldef_t ):
     def create_def_code( self ):
         return self.def_identifier()
 
-    def create_function_type_alias_code( self ):
+    def create_function_type_alias_code( self, exported_class_alias=None  ):
         return 'typedef ' + self.declaration.function_type().create_typedef( self.function_type_alias ) + ';'
 
     def create_function_ref_code(self, use_function_alias=False):
@@ -208,8 +217,9 @@ class mem_fun_t( calldef_t ):
     def __init__( self, function ):
         calldef_t.__init__( self, function=function )
         
-    def create_function_type_alias_code( self ):
-        return 'typedef ' + self.declaration.function_type().create_typedef( self.function_type_alias ) + ';'
+    def create_function_type_alias_code( self, exported_class_alias=None  ):
+        ftype = self.declaration.function_type()
+        return 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias ) 
 
     def create_function_ref_code(self, use_function_alias=False):
         if use_function_alias:
@@ -227,8 +237,9 @@ class mem_fun_pv_t( calldef_t ):
     def __init__( self, function, wrapper ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
         
-    def create_function_type_alias_code( self ):
-        return 'typedef ' + self.declaration.function_type().create_typedef( self.function_type_alias ) + ';'
+    def create_function_type_alias_code( self, exported_class_alias=None  ):
+        ftype = self.declaration.function_type()
+        return 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias ) 
 
     def create_function_ref_code(self, use_function_alias=False):
         if use_function_alias:
@@ -295,12 +306,15 @@ class mem_fun_v_t( calldef_t ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
         self.default_function_type_alias = 'default_' + self.function_type_alias
         
-    def create_function_type_alias_code( self ):
+    def create_function_type_alias_code( self, exported_class_alias=None ):
         result = []
-        result.append( 'typedef ' + self.declaration.function_type().create_typedef( self.function_type_alias ) + ';' )
+        
+        ftype = self.declaration.function_type()
+        result.append( 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias )  )
         if self.wrapper:
             result.append( os.linesep )
-            result.append( 'typedef ' + self.wrapper.function_type().create_typedef( self.default_function_type_alias ) + ';' )
+            ftype = self.wrapper.function_type()
+            result.append( 'typedef %s;' % ftype.create_typedef( self.default_function_type_alias ) )
         return ''.join( result )
     
     def create_function_ref_code(self, use_function_alias=False):
@@ -413,8 +427,9 @@ class mem_fun_protected_t( calldef_t ):
     def __init__( self, function, wrapper ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
     
-    def create_function_type_alias_code( self ):
-        return 'typedef ' + self.wrapper.function_type().create_typedef( self.function_type_alias ) + ';'
+    def create_function_type_alias_code( self, exported_class_alias=None  ):
+        ftype = self.wrapper.function_type()
+        return 'typedef ' + ftype.create_typedef( self.function_type_alias ) + ';'
 
     def create_function_ref_code(self, use_function_alias=False):
         if use_function_alias:
@@ -484,8 +499,9 @@ class mem_fun_protected_s_t( calldef_t ):
     def __init__( self, function, wrapper ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
 
-    def create_function_type_alias_code( self ):
-        return 'typedef ' + self.wrapper.function_type().create_typedef( self.function_type_alias ) + ';'
+    def create_function_type_alias_code( self, exported_class_alias=None  ):
+        ftype = self.wrapper.function_type()
+        return 'typedef %s;' % ftype.create_typedef( self.function_type_alias )
 
     def create_function_ref_code(self, use_function_alias=False):
         if use_function_alias:
@@ -546,8 +562,9 @@ class mem_fun_protected_v_t( calldef_t ):
     def __init__( self, function, wrapper ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
 
-    def create_function_type_alias_code( self ):
-        return 'typedef ' + self.wrapper.function_type().create_typedef( self.function_type_alias ) + ';'
+    def create_function_type_alias_code( self, exported_class_alias=None  ):
+        ftype = self.wrapper.function_type()
+        return 'typedef %s;' % ftype.create_typedef( self.function_type_alias )
 
     def create_function_ref_code(self, use_function_alias=False):
         if use_function_alias:
@@ -622,8 +639,9 @@ class mem_fun_protected_pv_t( calldef_t ):
     def __init__( self, function, wrapper ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
 
-    def create_function_type_alias_code( self ):
-        return 'typedef ' + self.wrapper.function_type().create_typedef( self.function_type_alias ) + ';'
+    def create_function_type_alias_code( self, exported_class_alias=None  ):
+        ftype = self.wrapper.function_type()
+        return 'typedef %s;' % ftype.create_typedef( self.function_type_alias )
     
     def create_function_ref_code(self, use_function_alias=False):
         if use_function_alias:

@@ -21,7 +21,6 @@ LICENSE = """// Copyright 2004 Roman Yakovenko.
 
 class code_generator_t(object):    
     def __init__(self):
-        module_builder.set_logger_level( logging.INFO )
         self.__file = os.path.join( crc_settings.working_dir, 'crc_export.hpp' )
         
         self.__mb = module_builder.module_builder_t( 
@@ -31,7 +30,8 @@ class code_generator_t(object):
                         , gccxml_path=crc_settings.gccxml.executable
                         , include_paths=[crc_settings.boost.include]
                         , define_symbols=crc_settings.defined_symbols
-                        , undefine_symbols=crc_settings.undefined_symbols)
+                        , undefine_symbols=crc_settings.undefined_symbols
+                        , indexing_suite_version=2)
         
     def filter_declarations(self ):
         self.__mb.global_ns.exclude()

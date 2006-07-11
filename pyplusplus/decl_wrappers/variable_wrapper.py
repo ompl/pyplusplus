@@ -38,8 +38,8 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
                                      , doc=__call_policies_doc__ )
 
     def _exportable_impl( self ):
-        if not isinstance( self.parent, declarations.class_t ):
-            return ''
+        #if not isinstance( self.parent, declarations.class_t ):
+        #    return ''
         if not self.name:
             return "pyplusplus can not expose unnamed variables"
         if self.bits == 0 and self.name == "":
@@ -58,5 +58,10 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
             if ptr2functions:
                 return "boost.python can not expose variables, which are pointer to function." \
                        + " See http://www.boost.org/libs/python/doc/v2/faq.html#funcptr for more information."
+        type_ = declarations.remove_pointer( type_ )
+        if declarations.class_traits.is_my_case( type_ ):
+            cls = declarations.class_traits.get_declaration( type_ )
+            if not cls.name:
+                return "pyplusplus, right now, can not expose variables of with unnamed type."
         return ''
     

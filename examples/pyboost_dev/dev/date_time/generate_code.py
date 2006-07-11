@@ -18,7 +18,6 @@ from pyplusplus import module_builder
 
 class code_generator_t(object):    
     def __init__(self):
-        module_builder.set_logger_level( logging.INFO )
         self.__file = os.path.join( date_time_settings.date_time_pypp_include, 'date_time.pypp.hpp' )                        
 
     def _create_xml_file( self ):

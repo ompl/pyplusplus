@@ -21,7 +21,6 @@ LICENSE = """// Copyright 2004 Roman Yakovenko.
 
 class code_generator_t(object):    
     def __init__(self):
-        module_builder.set_logger_level( logging.INFO )
         self.__file = os.path.join( random_settings.working_dir, 'random_export.hpp' )
         self.__mb = module_builder.module_builder_t( 
                         [ parser.create_cached_source_fc( 
