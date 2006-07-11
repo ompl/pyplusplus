@@ -11,11 +11,14 @@ class COLOR:
     GRAY = 1
     BLACK = 2
 
+
 class class_organizer_t(object):      
     def __init__( self, decls ):
         object.__init__( self )    
+
         self.__classes = filter( lambda x: isinstance( x, declarations.class_t )
                                  , decls )
+        self.__classes.sort( lambda cls1, cls2: cmp( cls1.decl_string, cls2.decl_string ) )
         self.__dependencies_graph = self._build_graph()
         self.__time = 0
         self.__colors = dict( zip( self.__dependencies_graph.keys()

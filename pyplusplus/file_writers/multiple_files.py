@@ -294,6 +294,7 @@ class multiple_files_t(writer.writer_t):
         self.split_free_functions()
         
         if write_main:
+            self.__include_creators.sort( cmp=lambda ic1, ic2: cmp( ic1.header, ic2.header ) )
             map( lambda creator: self.extmodule.adopt_include( creator )
                  , self.__include_creators )
             main_cpp = os.path.join( self.directory_path, self.extmodule.body.name + '.main.cpp' )

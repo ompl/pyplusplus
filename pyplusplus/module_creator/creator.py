@@ -127,14 +127,32 @@ class creator_t( declarations.decl_visitor_t ):
         variables = []
         enums = []
         others = []
+        classes = []
+        constructors = []
         for inst in ordered:
             if isinstance( inst, declarations.variable_t ):
                 variables.append( inst )
             elif isinstance( inst, declarations.enumeration_t ):
                 enums.append( inst )
+            elif isinstance( inst, ( declarations.class_t, declarations.class_declaration_t ) ):
+                classes.append( inst )
+            elif isinstance( inst, declarations.constructor_t ):
+                constructors.append( inst )
             else:
                 others.append( inst )
-        new_ordered = enums
+        #this will prevent from py++ to change the order of generated code
+        cmp_by_name = lambda d1, d2: cmp( d1.name, d2.name ) 
+        cmp_by_line = lambda d1, d2: cmp( d1.location.line, d2.location.line ) 
+
+        enums.sort( cmp=cmp_by_name )
+        others.sort( cmp=cmp_by_name )
+        variables.sort( cmp=cmp_by_name )
+        constructors.sort( cmp=cmp_by_line )
+        
+        new_ordered = []
+        new_ordered.extend( enums )
+        new_ordered.extend( classes )
+        new_ordered.extend( constructors )
         new_ordered.extend( others )
         new_ordered.extend( variables )
         return new_ordered #
@@ -168,7 +186,7 @@ class creator_t( declarations.decl_visitor_t ):
         return ordered_members
     
     def _does_class_have_smth_to_export(self, exportable_members ):
-        return bool( self._filter_decls( self._reorder_decls( exportable_members ) ) )
+        return bool( self._filter_decls( exportable_members ) )
     
     def _is_constructor_of_abstract_class( self, decl ):
         assert isinstance( decl, declarations.constructor_t )
@@ -243,7 +261,10 @@ class creator_t( declarations.decl_visitor_t ):
                                 break
                         else:
                             not_reimplemented_funcs.add( f )
-        return not_reimplemented_funcs
+        functions = list( not_reimplemented_funcs )
+        functions.sort( cmp=lambda f1, f2: cmp( ( f1.name, f1.location.as_tuple() )
+                                                , ( f2.name, f2.location.as_tuple() ) ) )
+        return functions
     
     def _is_wrapper_needed(self, class_inst, exportable_members):
         if isinstance( self.curr_decl, declarations.class_t ) \
@@ -657,7 +678,7 @@ class creator_t( declarations.decl_visitor_t ):
                     
         self.curr_code_creator.adopt_creator( class_inst )
         self.curr_code_creator = class_inst
-        for decl in self._filter_decls( self._reorder_decls( exportable_members ) ):
+        for decl in exportable_members:
             self.curr_decl = decl
             declarations.apply_visitor( self, decl )
 
