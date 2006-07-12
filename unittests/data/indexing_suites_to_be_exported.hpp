@@ -7,8 +7,13 @@
 #define __indexing_suites_to_be_exported_hpp__
 
 #include <vector>
+#include <string>
 
 namespace indexing_suites {
+
+typedef std::vector< std::string > strings_t;
+
+inline void do_nothing( const strings_t& ){}
 
 struct item_t{    
     item_t() : value( -1 ){}

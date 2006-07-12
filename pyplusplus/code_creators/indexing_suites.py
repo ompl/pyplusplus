@@ -31,15 +31,16 @@ class indexing_suite1_t( declaration_based.declaration_based_t ):
     def _create_suite_declaration( self ):
         suite_identifier = algorithm.create_identifier( self, self.guess_suite_name() )
         args = [ self.container.decl_string ]
+        try:
+            no_proxy = str( self.configuration.no_proxy ).lower()
+        except:
+            no_proxy = 'false'
         if self.configuration.derived_policies:
-            if self.configuration.no_proxy:
-                args.append( 'true' )
-            else:
-                args.append( 'false' )
+            args.append( no_proxy )
             args.append( self.configuration.derived_policies )
         else:
-            if self.configuration.no_proxy:
-                args.append( 'true' )        
+            if 'true' == no_proxy:
+                args.append( no_proxy)        
         return declarations.templates.join( suite_identifier, args )        
 
     def _create_impl(self):
