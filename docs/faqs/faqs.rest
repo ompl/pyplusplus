@@ -1,0 +1,73 @@
+======================
+C++ containers support
+======================
+
+.. contents:: Table of contents
+
+----------------------------------------
+How to add custom exception translation?
+----------------------------------------
+::
+
+  struct my_exception{
+    ...
+    const std::string& error() const;
+    ...
+  }
+
+Generate exception translation function.
+----------------------------------------
+
+First of all you have to generate a header file, that will contain exception 
+translation function:
+::
+
+  void translate(const my_exception &exception){
+      PyErr_SetString( PyExc_RuntimeError, exception.error().c_str() );
+  }
+
+Register exception translation function.
+----------------------------------------
+
+::
+
+  from pyplusplus import code_creators
+
+::
+
+  mb.build_code_creator( ... )
+  mb.code_creator.add_include( generated header file name )
+
+::
+
+  code = "boost::python::register_exception_translator<my_exception>(&translate);"
+  my_exc_translator = code_creators.custom_text_t( code )
+  mb.code_creator.body.adopt_creator( my_exc_translator )
+
+Small usage advice.
+-------------------
+
+`pyplusplus`_ allows you to define a query that will return you all exception classes:
+
+::
+
+  mb = module_builder_t( ... )
+  exception_classes = mb.decls( lambda decl: decl.name.endswith( 'exception' ) )
+
+Now you can iterate on ``exception_classes``, generate and register translate 
+code for every class.
+
+That's all.
+
+.. _`pyplusplus` : ./../pyplusplus.html
+.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Python`: http://www.python.org
+.. _`GCC-XML`: http://www.gccxml.org
+
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:
