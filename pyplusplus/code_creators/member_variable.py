@@ -36,9 +36,12 @@ class member_variable_t( member_variable_base_t ):
     #>    On Wednesday, 19. April 2006 23:05, Ralf W. Grosse-Kunstleve wrote:
     #>   .add_property("p", make_function(&A::get_p, return_value_policy<reference_existing_object>()))
     def _generate_for_pointer( self ):    
+        doc = '' #static property does not support documentation
         if self.declaration.type_qualifiers.has_static:
             add_property = 'add_static_property'
         else:
+            if self.documentation:
+                doc = self.documentation
             add_property = 'add_property'
         answer = [ add_property ]
         answer.append( '( ' )
@@ -66,6 +69,9 @@ class member_variable_t( member_variable_base_t ):
                            , 'setter_type' : self.wrapper.setter_type
                            , 'wfname' : self.wrapper.setter_full_name
                            , 'call_pol' : call_pol } )
+        if doc:
+            answer.append( self.PARAM_SEPARATOR )
+            answer.append( doc )
         answer.append( ' ) ' )
         
         code = ''.join( answer )
@@ -80,18 +86,21 @@ class member_variable_t( member_variable_base_t ):
     def _generate_for_none_pointer( self ):
         tmpl = None
         if self.declaration.type_qualifiers.has_static:
-            tmpl = '%(access)s( "%(alias)s", %(name)s )'            
+            tmpl = '%(access)s( "%(alias)s", %(name)s%(doc)s )'            
         else:
-            tmpl = '%(access)s( "%(alias)s", &%(name)s )'
+            tmpl = '%(access)s( "%(alias)s", &%(name)s%(doc)s )'
         
         access = 'def_readwrite'
         if self.is_read_only():
             access = 'def_readonly'
-            
+        doc = ''
+        if self.documentation:
+            doc = ', %s' % self.documentation 
         result = tmpl % { 
                     'access' : access
                     , 'alias' : self.alias
-                    , 'name' : algorithm.create_identifier( self, self.declaration.decl_string ) }
+                    , 'name' : algorithm.create_identifier( self, self.declaration.decl_string )
+                    , 'doc' : doc }
         
         return result
 
@@ -232,9 +241,12 @@ class bit_field_t( member_variable_base_t ):
         member_variable_base_t.__init__( self, variable=variable, wrapper=wrapper )
 
     def _create_impl( self ):
+        doc = ''
         if self.declaration.type_qualifiers.has_static:
             add_property = 'add_static_property'
         else:
+            if self.documentation:
+                doc = self.documentation
             add_property = 'add_property'
         answer = [ add_property ]
         answer.append( '( ' )
@@ -247,6 +259,9 @@ class bit_field_t( member_variable_base_t ):
             answer.append( self.PARAM_SEPARATOR )
             answer.append( '(%s)(&%s)' 
                            % ( self.wrapper.setter_type, self.wrapper.setter_full_name ) )
+        if doc:
+            answer.append( self.PARAM_SEPARATOR )
+            answer.append( doc )
         answer.append( ' ) ' )
         
         code = ''.join( answer )
@@ -327,9 +342,12 @@ class array_mv_t( member_variable_base_t ):
    
     def _create_impl( self ):
         assert isinstance( self.wrapper, array_mv_wrapper_t )
+        doc = ''
         if self.declaration.type_qualifiers.has_static:
             answer = [ 'add_static_property' ]
         else:
+            if self.documentation:
+                doc = self.documentation
             answer = [ 'add_property' ]
         answer.append( '( ' )
         answer.append('"%s"' % self.declaration.name )
@@ -344,6 +362,9 @@ class array_mv_t( member_variable_base_t ):
             temp.append( call_policies.with_custodian_and_ward_postcall( 0, 1 ).create(self) )
         temp.append( ' )' )
         answer.append( ''.join( temp ) )
+        if doc:
+            answer.append( self.PARAM_SEPARATOR )
+            answer.append( doc )
         answer.append( ' );' )        
         return ''.join( answer )
     
@@ -423,6 +444,9 @@ class mem_var_ref_t( member_variable_base_t ):
             answer.append( self.declaration.getter_call_policies.create( self ) )
         else:
             answer.append( os.linesep + self.indent( '/* undefined call policies */', 2 ) )             
+        if self.documentation:
+            answer.append( self.param_sep )
+            answer.append( self.documentation )
         answer.append( ' )' )
         return ''.join( answer )
     

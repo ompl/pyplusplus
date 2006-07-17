@@ -71,7 +71,10 @@ class calldef_t( declaration_based.declaration_based_t):
             return '%s.def' % self.parent.class_var_name
         else:
             return 'def'
-        
+    
+    def create_doc(self):
+        return self.documentation
+    
     def create_function_ref_code( self, use_function_alias=False ):
         raise NotImplementedError()
 
@@ -100,8 +103,8 @@ class calldef_t( declaration_based.declaration_based_t):
             
         result.append( self.create_def_code() + '( ' )
         result.append( os.linesep + self.indent( '"%s"' % self.alias ) )
+
         result.append( self.param_sep() )
-        
         result.append( self.create_function_ref_code( not self.works_on_instance ) )
 
         if self.declaration.use_keywords:
@@ -114,6 +117,11 @@ class calldef_t( declaration_based.declaration_based_t):
         else:
             result.append( os.linesep + self.indent( '/* undefined call policies */', 2 ) ) 
 
+        doc = self.create_doc()
+        if doc:
+            result.append( self.param_sep() )
+            result.append( doc )
+            
         result.append( ' )' )
         if not self.works_on_instance:
             result.append( ';' )
@@ -316,6 +324,9 @@ class mem_fun_v_t( calldef_t ):
             ftype = self.wrapper.function_type()
             result.append( 'typedef %s;' % ftype.create_typedef( self.default_function_type_alias ) )
         return ''.join( result )
+
+    def create_doc(self):
+        return None
     
     def create_function_ref_code(self, use_function_alias=False):
         result = []
@@ -817,10 +828,16 @@ class constructor_t( calldef_t ):
         init_identifier = algorithm.create_identifier( self, '::boost::python::init' )
         args = [ self._generate_definition_args() ]
         answer = [ '%s' % declarations.templates.join( init_identifier, args ) ]
+        answer.append( '(' )
+        keywords_args = None
         if self.declaration.use_keywords:
-            answer.append( '(%s)' % self.keywords_args() )
-        else:
-            answer.append( '()' )
+            keywords_args = self.keywords_args()
+            answer.append( '%s' % keywords_args )
+        if self.documentation:
+            if keywords_args:
+                answer.append( ', ' )
+            answer.append( self.documentation )
+        answer.append( ')' )
         if self.declaration.call_policies:
             answer.append('[%s]' % self.declaration.call_policies.create( self ) )
         #I think it better not to print next line
@@ -1063,7 +1080,7 @@ class casting_member_operator_t( declaration_based.declaration_based_t ):
         self._call_policies = None
 
     def _create_impl(self):
-        template = 'def( "%(function_name)s", &%(class_name)s::operator %(destination_type)s %(call_policies)s )'
+        template = 'def( "%(function_name)s", &%(class_name)s::operator %(destination_type)s %(call_policies)s%(doc)s )'
         
         class_name = algorithm.create_identifier( self
                                                 , declarations.full_name( self.declaration.parent ) )
@@ -1071,11 +1088,16 @@ class casting_member_operator_t( declaration_based.declaration_based_t ):
         policies = '/*, undefined call policies */' 
         if self.declaration.call_policies:
             policies = ',' + self.declaration.call_policies.create( self )
-        
+            
+        doc = ''
+        if self.documentation:
+            doc = ', %s' % self.documentation 
+            
         return template % { 'function_name' : self.declaration.alias
                             , 'class_name' : class_name
                             , 'destination_type' : self.declaration.return_type.decl_string
                             , 'call_policies' : policies
+                            , 'doc' : doc
                }
 
 class casting_constructor_t( declaration_based.declaration_based_t ):

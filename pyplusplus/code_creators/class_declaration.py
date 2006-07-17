@@ -190,6 +190,8 @@ class class_t( scoped.scoped_t ):
         result = []
         result.append( '(' )
         result.append( ' "%s"' % self.alias )
+        if self.documentation:
+            result.append( ', %s' % self.documentation )
         used_init = None
         inits = filter( lambda x: isinstance( x, calldef.constructor_t ), self.creators )
         if ( self.declaration.is_abstract \

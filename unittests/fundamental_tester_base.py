@@ -57,6 +57,8 @@ class fundamental_tester_base_t( unittest.TestCase ):
                                               , include_paths=[autoconfig.boost.include]
                                               , undefine_symbols=['__MINGW32__']
                                               , indexing_suite_version=self.__indexing_suite_version)
+        for decl in mb.decls():
+            decl.documentation = '"documentation"'
         self.customize( mb )
         if not mb.has_code_creator():
             mb.build_code_creator( self.__module_name )

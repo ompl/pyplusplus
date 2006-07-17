@@ -34,11 +34,20 @@ class decl_wrapper_t(object):
         self._ignore = False
         self._exportable = None
         self._exportable_reason = None
+        self._documentation = None
         
     @property
     def logger( self ):
         return _logging_.loggers.declarations
-        
+
+    def _get_documentation( self ):
+        return self._documentation
+    
+    def _set_documentation( self, value ):
+        self._documentation = value
+    documentation = property( _get_documentation, _set_documentation
+                             , doc="Using this property you can set documentatio of exported declaration." )    
+    
     def _generate_valid_name(self, name=None):
         if name == None:
             name = self.name
