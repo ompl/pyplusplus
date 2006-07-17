@@ -60,8 +60,9 @@ class fundamental_tester_base_t( unittest.TestCase ):
         for decl in mb.decls():
             decl.documentation = '"documentation"'
         self.customize( mb )
+        doc_extractor = lambda decl: decl.documentation
         if not mb.has_code_creator():
-            mb.build_code_creator( self.__module_name )
+            mb.build_code_creator( self.__module_name, doc_extractor=doc_extractor )
         mb.code_creator.std_directories.extend( autoconfig.scons_config.cpppath )
         mb.code_creator.user_defined_directories.append( autoconfig.data_directory )
         mb.code_creator.precompiled_header = "boost/python.hpp" 

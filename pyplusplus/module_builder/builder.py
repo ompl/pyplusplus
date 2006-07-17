@@ -173,7 +173,8 @@ class module_builder_t(object):
                        , call_policies_resolver_=None
                        , types_db=None
                        , target_configuration=None
-                       , enable_indexing_suite=True):
+                       , enable_indexing_suite=True
+                       , doc_extractor=None):
         """
         Creates L{module_t} code creator.
         
@@ -187,6 +188,10 @@ class module_builder_t(object):
         @param call_policies_resolver_: callable, that will be invoked on every
         calldef object. It should return call policies.
         @type call_policies_resolver_: callable
+        
+        @param doc_extractor: callable, that takes as argument reference to declaration 
+            and returns documentation string
+        @type doc_extractor: callable or None
         """
         creator = mcreator_package.creator_t( self.global_ns
                                               , module_name
@@ -195,7 +200,8 @@ class module_builder_t(object):
                                               , call_policies_resolver_
                                               , types_db
                                               , target_configuration
-                                              , enable_indexing_suite)
+                                              , enable_indexing_suite
+                                              , doc_extractor)
         self.__code_creator = creator.create()
         #I think I should ask users, what they expect
         #self.__code_creator.user_defined_directories.append( self.__working_dir )

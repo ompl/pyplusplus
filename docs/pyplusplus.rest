@@ -175,6 +175,9 @@ Features list
 
     * user license is written at the top of every file 
     
+    * extracting documentation from source files and integrating it with generated
+      source code
+    
     * ...
 
 -------

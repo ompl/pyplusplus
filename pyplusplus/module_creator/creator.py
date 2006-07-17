@@ -3,14 +3,15 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-from pygccxml import declarations
-from pyplusplus import code_creators
+import time
+import types_database
 import class_organizer
 import call_policies_resolver 
-import types_database
-from pyplusplus import code_repository
-from sets import Set as set
+from pygccxml import declarations
 from pyplusplus import decl_wrappers
+from pyplusplus import code_creators
+from pyplusplus import code_repository
+from pyplusplus import _logging_
 
 ACCESS_TYPES = declarations.ACCESS_TYPES
 VIRTUALITY_TYPES = declarations.VIRTUALITY_TYPES
@@ -67,7 +68,8 @@ class creator_t( declarations.decl_visitor_t ):
                   , call_policies_resolver_=None
                   , types_db=None
                   , target_configuration=None
-                  , enable_indexing_suite=True):
+                  , enable_indexing_suite=True
+                  , doc_extractor=None):
         """Constructor.
 
         @param decls: Declarations that should be exposed in the final module.
@@ -77,6 +79,7 @@ class creator_t( declarations.decl_visitor_t ):
         @param call_policies_resolver_: Callable that takes one declaration (calldef_t) as input and returns a call policy object which should be used for this declaration.
         @param types_db: ...todo...
         @param target_configuration: A target configuration object can be used to customize the generated source code to a particular compiler or a particular version of Boost.Python.
+        @param doc_extractor: callable, that takes as argument declaration reference and returns documentation string
         @type decls: list of declaration_t
         @type module_name: str
         @type boost_python_ns_name: str
@@ -84,9 +87,11 @@ class creator_t( declarations.decl_visitor_t ):
         @type call_policies_resolver_: callable
         @type types_db: L{types_database_t<types_database.types_database_t>}
         @type target_configuration: L{target_configuration_t<code_creators.target_configuration_t>}
+        @type doc_extractor: callable
         """
         declarations.decl_visitor_t.__init__(self)        
-
+        self.logger = _logging_.loggers.module_builder
+        
         self.__enable_indexing_suite = enable_indexing_suite
         self.__target_configuration = target_configuration
         if not self.__target_configuration:
@@ -113,22 +118,32 @@ class creator_t( declarations.decl_visitor_t ):
         self.__module_body = code_creators.module_body_t( name=module_name )
         self.__extmodule.adopt_creator( self.__module_body )        
         
-        decls = declarations.make_flatten( decls )
-        self.__decls = self._filter_decls( self._reorder_decls( self._prepare_decls( decls ) ) )
+        prepared_decls = self._prepare_decls( decls, doc_extractor )
+        self.__decls = self._filter_decls( self._reorder_decls( prepared_decls ) )
             
         self.curr_code_creator = self.__module_body
         self.curr_decl = None
         self.__cr_array_1_included = False
         self.__array_1_registered = set() #(type.decl_string,size)
         self.__free_operators = []
-    
-    def _prepare_decls( self, decls ):
+        
+    def _prepare_decls( self, decls, doc_extractor ):
+        decls = declarations.make_flatten( decls )
         #leave only declarations defined under namespace, but remove namespaces
         decls = filter( lambda x: not isinstance( x, declarations.namespace_t ) \
                                    and isinstance( x.parent, declarations.namespace_t )
                          , decls )
         #leave only decls that should be exported
         decls = filter( lambda x: not x.ignore, decls )
+        if doc_extractor:
+            start_time = time.clock()
+            self.logger.debug( 'Documentation extraction process started.' )
+
+            for decl in decls:
+                decl.documentation = doc_extractor( decl )
+
+            self.logger.debug( 'Documentation extraction process finished in %F seconds'
+                               % ( time.clock() - start_time ) )
         return decls
 
     def _reorder_decls(self, decls ):
