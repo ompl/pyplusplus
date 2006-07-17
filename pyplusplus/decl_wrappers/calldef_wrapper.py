@@ -103,7 +103,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
             msg = "Function '%s' has more than %d arguments ( %d ). "
             msg = msg + " You should adjust BOOST_PYTHON_MAX_ARITY."
             msg = msg + " For more information see: http://mail.python.org/pipermail/c++-sig/2002-June/001554.html"
-            self.logger.info( msg % ( self.decl_string, calldef_t.BOOST_PYTHON_MAX_ARITY, len( self.arguments ) ) )
+            self.logger.warning( msg % ( self.decl_string, calldef_t.BOOST_PYTHON_MAX_ARITY, len( self.arguments ) ) )
 
         all_types = [ arg.type for arg in self.arguments ]
         all_types.append( self.return_type )
