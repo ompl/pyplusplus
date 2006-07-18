@@ -91,7 +91,7 @@ class multiple_files_t(writer.writer_t):
         value_class = class_traits.get_declaration( element_type )
         return self.create_value_traits_header_name( value_class )
     
-    def create_source( self, file_name, function_name, creators ):
+    def create_source( self, file_name, function_name, registration_creators, declaration_creators=None ):
         """Return the content of a cpp file.
 
         @param file_name: The base name of the corresponding include file (without extension)
@@ -104,6 +104,10 @@ class multiple_files_t(writer.writer_t):
         @rtype: str
         """
         
+        if None is declaration_creators:
+            declaration_creators = []
+        creators = registration_creators + declaration_creators
+        
         answer = []
         if self.extmodule.license:
             answer.append( self.extmodule.license.create() )
@@ -115,7 +119,8 @@ class multiple_files_t(writer.writer_t):
                                    , self.extmodule.creators )
         includes = map( lambda include_creator: include_creator.create()
                         , include_creators )
-        for creator in creators:
+                        
+        for creator in registration_creators:
             value_traits_header = self.find_out_value_traits_header( creator )
             if value_traits_header:
                 includes.append( '#include "%s"' % value_traits_header )
@@ -136,21 +141,20 @@ class multiple_files_t(writer.writer_t):
             answer.append( os.linesep.join(namespace_aliases) )
 
         # Write wrapper classes...
-        for creator in creators:
-            if isinstance( creator, code_creators.class_t ) and creator.wrapper:
-                answer.append( '' )
-                answer.append( creator.wrapper.create() )
+        for creator in declaration_creators:
+            answer.append( '' )
+            answer.append( creator.create() )
 
         # Write the register() function...
         answer.append( '' )
         answer.append( 'void %s(){' % function_name )
-        for creator in creators:
+        for creator in registration_creators:
             answer.append( code_creators.code_creator_t.indent( creator.create() ) )
             answer.append( '' )
         answer.append( '}' )
         return os.linesep.join( answer )
     
-    def __split_class_impl( self, class_creator):
+    def split_class_impl( self, class_creator):
         function_name = 'register_%s_class' % class_creator.alias
         file_path = os.path.join( self.directory_path, class_creator.alias )
         # Write the .h file...
@@ -158,16 +162,22 @@ class multiple_files_t(writer.writer_t):
         self.write_file( header_name
                          , self.create_header( class_creator.alias
                                                , self.create_function_code( function_name ) ) )
-        # Write the .cpp file...
-        self.write_file( file_path + self.SOURCE_EXT
-                         , self.create_source( class_creator.alias
-                                               , function_name
-                                               , [class_creator] ))
+        class_wrapper = None
+        decl_creators = None
         if isinstance( class_creator, code_creators.class_t ) and class_creator.wrapper:
+            class_wrapper = class_creator.wrapper
+            decl_creators = [ class_creator.wrapper ]
+        # Write the .cpp file...
+        cpp_code = self.create_source( class_creator.alias
+                                       , function_name
+                                       , [class_creator]
+                                       , decl_creators )
+        self.write_file( file_path + self.SOURCE_EXT, cpp_code )
+        if class_wrapper:
             # The wrapper has already been written above, so replace the create()
             # method with a new 'method' that just returns an empty string because
             # this method is later called again for the main source file.
-            class_creator.wrapper.create = lambda: ''
+            class_wrapper.create = lambda: ''
         # Replace the create() method so that only the register() method is called
         # (this is called later for the main source file).
         class_creator.create = lambda: function_name +'();'
@@ -185,7 +195,7 @@ class multiple_files_t(writer.writer_t):
         @type class_creator: class_t
         """
         try:
-            self.__split_class_impl( class_creator )
+            self.split_class_impl( class_creator )
         except IOError, error:
             msg = [ 'Failed to write code for class "%s" into file.' % class_creator.declaration.name ]
             msg.append( "May be the class name is too long?." )
