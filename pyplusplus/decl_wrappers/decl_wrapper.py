@@ -24,10 +24,7 @@ class decl_wrapper_t(object):
     this class are never created by the user, instead they are
     returned by the API.
     """
-    
-    DO_NOT_REPORT_MSGS = [ "pyplusplus does not exports compiler generated constructors" ]
-    ALREADY_REPORTED_MSGS = set()
-    
+       
     def __init__(self):
         object.__init__(self)
         self._alias = None
@@ -75,21 +72,8 @@ class decl_wrapper_t(object):
     def rename( self, new_name ):
         self.alias = new_name
     
-    def __report_warning( self, reason ):
-        if reason in decl_wrapper_t.DO_NOT_REPORT_MSGS:
-            return 
-        if reason in decl_wrapper_t.ALREADY_REPORTED_MSGS:
-            return
-        decl_wrapper_t.ALREADY_REPORTED_MSGS.add( reason )
-        msg = [ 'Declaration "%s" could not be exported.' % declarations.full_name( self ) ]
-        reason = reason.replace( os.linesep, os.linesep + '\t' )
-        msg.append( '\tReason: %s' % reason )
-        self.logger.warn( os.linesep.join( msg ) )
-    
     def _get_ignore( self ):
-        if False == self._ignore and not self.exportable:
-            self.__report_warning( self.why_not_exportable() )
-        return self._ignore or not self.exportable
+        return self._ignore 
     
     def _set_ignore( self, value ):
         self._ignore = value
@@ -129,23 +113,6 @@ class decl_wrapper_t(object):
     exportable = property( get_exportable, set_exportable
                           , doc="Returns True if declaration could be exported to Python, otherwise False" )
     
-    #TODO:
-    #I think that almost every declaration could have some wrapper. This is the
-    #main reason why those 3 functions does not have some well defined interface.
-    #def has_wrapper( self ):
-        #return False
-    
-    #def _finalize_impl( self, error_behavior ):
-        #pass
-    
-    #def finalize( self, error_behavior=None):
-        #try:
-            #self._finalize_impl( self )
-        #except Exception, error:
-            #if None is error_behavior or error_behavior == ERROR_BEHAVIOR.PRINT:
-                #print 'Unable to finalize declaration: ', str( error )
-            #else:
-                #raise
     def _readme_impl( self ):
         return []
     
@@ -157,6 +124,6 @@ class decl_wrapper_t(object):
         """
         text = []
         if not self.exportable:
-            text.append( 'WARNING: ' + self.why_not_exportable() )
+            text.append( self.why_not_exportable() )
         text.extend( self._readme_impl() ) 
         return text

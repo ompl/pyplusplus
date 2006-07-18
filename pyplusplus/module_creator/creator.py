@@ -3,6 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import os
 import time
 import types_database
 import class_organizer
@@ -45,6 +46,7 @@ INDEXING_SUITE_2_CONTAINERS = {
 
 INDEXING_SUITE_2_MAIN_HEADER = "boost/python/suite/indexing/container_suite.hpp"
 
+DO_NOT_REPORT_MSGS = [ "pyplusplus does not exports compiler generated constructors" ]
 
 class creator_t( declarations.decl_visitor_t ):
     """Creating code creators.
@@ -91,6 +93,7 @@ class creator_t( declarations.decl_visitor_t ):
         """
         declarations.decl_visitor_t.__init__(self)        
         self.logger = _logging_.loggers.module_builder
+        self.decl_logger = _logging_.loggers.declarations
         
         self.__enable_indexing_suite = enable_indexing_suite
         self.__target_configuration = target_configuration
@@ -128,23 +131,40 @@ class creator_t( declarations.decl_visitor_t ):
         self.__free_operators = []
         
     def _prepare_decls( self, decls, doc_extractor ):
+        global DO_NOT_REPORT_MSGS
         decls = declarations.make_flatten( decls )
         #leave only declarations defined under namespace, but remove namespaces
         decls = filter( lambda x: not isinstance( x, declarations.namespace_t ) \
                                    and isinstance( x.parent, declarations.namespace_t )
                          , decls )
-        #leave only decls that should be exported
+        #leave only decls that user wants to export
         decls = filter( lambda x: not x.ignore, decls )
-        if doc_extractor:
-            start_time = time.clock()
-            self.logger.debug( 'Documentation extraction process started.' )
 
-            for decl in decls:
+        for decl in decls:
+            if doc_extractor and decl.exportable:
                 decl.documentation = doc_extractor( decl )
 
-            self.logger.debug( 'Documentation extraction process finished in %F seconds'
-                               % ( time.clock() - start_time ) )
-        return decls
+            readme = decl.readme()
+            if not readme:
+                continue
+            #Now we should print what py++ has to say to user
+            full_name = declarations.full_name( decl )
+            if not decl.name:
+                full_name = full_name + '::{unnamed}'
+            
+            if not decl.exportable:
+                reason = readme[0]
+                if reason in DO_NOT_REPORT_MSGS:
+                    continue
+                readme = readme[1:]
+                msg = [ 'Declaration "%s" could not be exported.' % full_name ]
+                msg.append( reason.replace( os.linesep, os.linesep + '\t' ) )
+                self.decl_logger.warn( os.linesep.join( msg ) )
+            
+            for msg in readme:
+                self.decl_logger.warn( 'Declaration "%s": %s' % ( full_name, msg ) )
+        
+        return filter( lambda x: x.exportable, decls )
 
     def _reorder_decls(self, decls ):
         classes = filter( lambda x: isinstance( x, declarations.class_t )
@@ -192,7 +212,7 @@ class creator_t( declarations.decl_visitor_t ):
     
     def _exportable_class_members( self, class_decl ):
         assert isinstance( class_decl, declarations.class_t )
-        members = filter( lambda mv: mv.ignore == False, class_decl.public_members )
+        members = filter( lambda mv: mv.ignore == False and mv.exportable, class_decl.public_members )
         #protected and private virtual functions that not overridable and not pure
         #virtual should not be exported
         for member in class_decl.protected_members:
@@ -214,7 +234,7 @@ class creator_t( declarations.decl_visitor_t ):
         members = filter( lambda decl: not isinstance( decl, declarations.constructor_t )
                                        or not decl.is_artificial
                           , members )
-        members = filter( lambda member: not member.ignore, members )
+        members = filter( lambda member: member.ignore == False and member.exportable, members )
         ordered_members = self._reorder_decls( members )
         return ordered_members
     
@@ -253,7 +273,7 @@ class creator_t( declarations.decl_visitor_t ):
         return True
             
     def redefined_funcs( self, cls ):
-        all_included = declarations.custom_matcher_t( lambda decl: decl.ignore == False )
+        all_included = declarations.custom_matcher_t( lambda decl: decl.ignore == False and decl.exportable )
         all_protected = declarations.access_type_matcher_t( 'protected' ) & all_included
         all_pure_virtual = declarations.virtuality_type_matcher_t( VIRTUALITY_TYPES.PURE_VIRTUAL )
         all_not_pure_virtual = ~all_pure_virtual
@@ -567,8 +587,6 @@ class creator_t( declarations.decl_visitor_t ):
         return ( maker_cls, fwrapper_cls )
     
     def visit_member_function( self ):
-        if self.curr_decl.ignore:
-            return
         fwrapper = None
         self.__types_db.update( self.curr_decl )
         if None is self.curr_decl.call_policies:
@@ -601,9 +619,6 @@ class creator_t( declarations.decl_visitor_t ):
                 self.curr_code_creator.adopt_creator( static_method )
         
     def visit_constructor( self ):
-        if self.curr_decl.ignore:
-            return
-
         if self.curr_decl.is_copy_constructor:
             return             
         self.__types_db.update( self.curr_decl )
@@ -629,9 +644,6 @@ class creator_t( declarations.decl_visitor_t ):
         pass
     
     def visit_member_operator( self ):
-        if self.curr_decl.ignore:
-            return
-
         if self.curr_decl.symbol in ( '()', '[]' ):
             self.visit_member_function()
         else:
@@ -640,9 +652,6 @@ class creator_t( declarations.decl_visitor_t ):
             self.curr_code_creator.adopt_creator( maker )
         
     def visit_casting_operator( self ):
-        if self.curr_decl.ignore:
-            return
-
         if not declarations.is_fundamental( self.curr_decl.return_type ) \
            and not self.curr_decl.has_const:
             return #only const casting operators can generate implicitly_convertible
@@ -661,8 +670,6 @@ class creator_t( declarations.decl_visitor_t ):
             self.curr_code_creator.adopt_creator( maker )
             
     def visit_free_function( self ):
-        if self.curr_decl.ignore:
-            return
         self.__types_db.update( self.curr_decl )
         maker = code_creators.free_function_t( function=self.curr_decl )
         if None is self.curr_decl.call_policies:
@@ -670,9 +677,6 @@ class creator_t( declarations.decl_visitor_t ):
         self.curr_code_creator.adopt_creator( maker )
     
     def visit_free_operator( self ):
-        if self.curr_decl.ignore:
-            return
-
         self.__types_db.update( self.curr_decl )
         self.__free_operators.append( self.curr_decl )
 
@@ -680,8 +684,6 @@ class creator_t( declarations.decl_visitor_t ):
         pass
 
     def visit_class(self ):
-        if self.curr_decl.ignore:
-            return
         assert isinstance( self.curr_decl, declarations.class_t )
         temp_curr_decl = self.curr_decl        
         temp_curr_parent = self.curr_code_creator       
@@ -736,9 +738,6 @@ class creator_t( declarations.decl_visitor_t ):
         self.curr_code_creator = temp_curr_parent
         
     def visit_enumeration(self):
-        if self.curr_decl.ignore:
-            return
-
         assert isinstance( self.curr_decl, declarations.enumeration_t )
         maker = None
         if self.curr_decl.name:
@@ -762,9 +761,6 @@ class creator_t( declarations.decl_visitor_t ):
             return True    
     
     def visit_variable(self):
-        if self.curr_decl.ignore:
-            return
-
         self.__types_db.update( self.curr_decl )
         
         if declarations.is_array( self.curr_decl.type ):
