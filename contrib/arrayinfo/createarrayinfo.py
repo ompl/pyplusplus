@@ -153,11 +153,17 @@ if len(args)==0:
     sys.exit(1)
 
 if options.output!=None:
+    print >>sys.stderr, "Output file: %s"%options.output
     output = file(options.output, "wt")
 
-cppargs = options.cppargs
-
 headerpath = args[0]
-headers = glob.glob(os.path.join(headerpath, "*.h"))
+headernames = os.path.join(headerpath, "*.h")
+print >>sys.stderr, "Input files: %s"%headernames
+
+cppargs = options.cppargs
+print >>sys.stderr, "Preprocessor args: %s"%cppargs
+
+headers = glob.glob(headernames)
+print >>sys.stderr, "%d header files found"%len(headers)
 for header in headers:
     parseHeader(header, cpp, cppargs, output)
