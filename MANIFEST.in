@@ -15,4 +15,5 @@ include docs/logos/*
 include docs/tutorials/*
 prune docs/*/.svn
 prune docs/*/*/.svn
-recursive-include examples/*
+recursive-include examples *
+recursive-include contrib *.py *.txt
