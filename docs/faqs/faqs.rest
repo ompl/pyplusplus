@@ -18,6 +18,7 @@ How to add custom exception translation?
 First of all lets define ``translate`` function:
 
 ::
+
   translate_code = \
   """   
     void translate(const my_exception &exception){
@@ -28,6 +29,7 @@ First of all lets define ``translate`` function:
 ::
 
   mb.add_declaration_code( translate_code )
+
 
 Now we should register it:
 
