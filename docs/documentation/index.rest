@@ -1,20 +1,29 @@
-=============
-Documentation
-=============
+========================
+pyplusplus documentation
+========================
 
 .. contents:: Table of contents
 
-----
-XXXX
-----
+------------
+Help needed!
+------------
 
- ???
+`pyplusplus`_ documentation is always under active development. It is not an easy
+task to create and maintain it. I will appriciate any help! 
+
+How can you help?
+
+* Lets face it: today it is not possible to use `pyplusplus`_ without looking
+  into source code. `pyplusplus`_ uses `Epydoc`_ to generate documentation from
+  source files. So, if you found some undocumented piece of code and you understand
+  what it does, please write documentation string and send it to me.
+  
+* You are reading documentation and my English cause you to scream? Please, fix
+  those errors and send me new version of document. I will integrate the changes.
+  
 
 
-.. _`STL Containers` : ./containers.html
-      
-
-
+.. _`Epydoc` : http://epydoc.sourceforge.net/
 .. _`pyplusplus` : ./../pyplusplus.html
 .. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
