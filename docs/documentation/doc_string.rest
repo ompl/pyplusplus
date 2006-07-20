@@ -1,0 +1,75 @@
+====================
+Documentation string
+====================
+
+.. contents:: Table of contents
+
+------------
+Introduction
+------------
+
+`pyplusplus`_ provides a convenient way to export documentation from C++ source
+files as `Python`_ `documentation string`_
+
+---------------
+API description
+---------------
+
+::
+
+  mb = module_builder_t( ... )
+  my_class = mb.class_( 'my_class' )
+  my_class.documentation = '"very helpful documentation string"'
+  my_class.member_function( "do_nothing" ).documentation = \
+      '"This function does nothing."'
+
+In `pyplusplus`_ every class, that describes C++ declarations has ``documentation``
+property. This property should contain valid C++ string or ``None``.
+
+`boost.python`_ not always provides functionality, that exports documentation string.
+In those cases, `pyplusplus`_ will not generate documentation string.
+
+Also the previous method is pretty clear, it is not practical. There should be a
+better way, to complete the task. Lets take a look on
+``module_builder_t.build_code_creator`` method. One of the arguments of this method
+is ``doc_extractor``.
+
+
+``doc_extractor`` is a callable object, that takes one argument - reference to declaration.
+
+::
+
+  def doc_extractor( decl ):
+    ...
+
+How it could help? Every declaration has location information:
+
+   * ``decl.location.file_name`` - absolute file name, where this declaration
+     has been declared.
+
+   * ``decl.location.line`` - line number.
+
+So, you can go to the source file and to extract declaration from it.
+`pyplusplus`_ will call ``doc_extractor`` on every exported declaration.
+
+Now, when I think you understand what functionality `pyplusplus`_ provides.
+It is a time to say what functionality is missing. `pyplusplus`_ does not
+provide any documentation extractor. It is not completely true. You can find
+document extractor for `doxygen`_ format in ``contrib/doc_extractors`` directory.
+It has been contributed by Georgiy Dernovoy.
+
+
+.. _`doxygen` : http://www.stack.nl/~dimitri/doxygen/
+.. _`documentation string` : http://docs.python.org/tut/node6.html#SECTION006760000000000000000
+.. _`pyplusplus` : ./../pyplusplus.html
+.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Python`: http://www.python.org
+.. _`GCC-XML`: http://www.gccxml.org
+
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:
