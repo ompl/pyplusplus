@@ -8,7 +8,7 @@ pyplusplus tutorials
 What is pyplusplus?
 -------------------
 
-.. include:: ./../../definition.rest 
+.. include:: ./../../../definition.rest 
 
 --------
 Preamble
@@ -151,8 +151,8 @@ Result
 
 That's all. I hope you enjoyed. 
 
-.. _`pyplusplus` : ./../../pyplusplus.html
-.. _`pygccxml` : ./../../../pygccxml/pygccxml.html
+.. _`pyplusplus` : ./../../../pyplusplus.html
+.. _`pygccxml` : ./../../../../pygccxml/pygccxml.html
 .. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
 .. _`SourceForge`: http://sourceforge.net/index.php
 .. _`Python`: http://www.python.org

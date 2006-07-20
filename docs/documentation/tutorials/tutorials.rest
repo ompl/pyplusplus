@@ -48,8 +48,8 @@ creator's tree. Meanwhile you can take a look on the content of
 to create your own code creator. To be more specific, it exposes ``get*`` and 
 ``set*`` methods as a single property.
 
-.. _`pyplusplus` : ./../pyplusplus.html
-.. _`pygccxml` : ./../../pygccxml/pygccxml.html
+.. _`pyplusplus` : ./../../pyplusplus.html
+.. _`pygccxml` : ./../....//pygccxml/pygccxml.html
 .. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
 .. _`SourceForge`: http://sourceforge.net/index.php
 .. _`Python`: http://www.python.org
