@@ -54,9 +54,11 @@ def generate_doc():
     html_writer = HTMLWriter( docindex
                               , prj_name='pyplusplus'
                               , prj_url='http://www.language-binding.net'
-                              , include_sourcecode=True )
+                              , include_sourcecode=False #This will decrease the size of generated documentation
+                              , show_private=False
+                              , show_frames=False  )
     
-    html_writer.write( os.path.join('docs', 'apidocs') )
+    html_writer.write( os.path.join('docs', 'documentation', 'apidocs') )
 
 
 class doc_cmd(Command):
