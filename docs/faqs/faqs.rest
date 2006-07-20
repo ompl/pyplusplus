@@ -1,6 +1,6 @@
-======================
-C++ containers support
-======================
+============
+How to ... ?
+============
 
 .. contents:: Table of contents
 
@@ -15,34 +15,26 @@ How to add custom exception translation?
     ...
   }
 
-Generate exception translation function.
-----------------------------------------
+First of all lets define ``translate`` function:
 
-First of all you have to generate a header file, that will contain exception 
-translation function:
 ::
-
-  void translate(const my_exception &exception){
-      PyErr_SetString( PyExc_RuntimeError, exception.error().c_str() );
-  }
-
-Register exception translation function.
-----------------------------------------
+  translate_code = \
+  """   
+    void translate(const my_exception &exception){
+        PyErr_SetString( PyExc_RuntimeError, exception.error().c_str() );
+    }
+  """
 
 ::
 
-  from pyplusplus import code_creators
+  mb.add_declaration_code( translate_code )
+
+Now we should register it:
 
 ::
 
-  mb.build_code_creator( ... )
-  mb.code_creator.add_include( generated header file name )
-
-::
-
-  code = "boost::python::register_exception_translator<my_exception>(&translate);"
-  my_exc_translator = code_creators.custom_text_t( code )
-  mb.code_creator.body.adopt_creator( my_exc_translator )
+  registration_code = "boost::python::register_exception_translator<my_exception>(&translate);"
+  mb.add_registration_code( registration_code )
 
 Small usage advice.
 -------------------
@@ -93,7 +85,8 @@ could be integrated with `pyplusplus`_.
 
 ::
 
-  wrapper_code = """
+  wrapper_code = \
+  """
      static boost::python::tuple get_size( const window_t& win ){
         int height(0), width( 0 );
         win.get_size( height, widht );
