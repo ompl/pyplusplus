@@ -5,6 +5,7 @@
 
 import os
 import types
+import custom
 import license
 import include
 import namespace    
@@ -180,8 +181,13 @@ class module_t(compound.compound_t):
                                 alias=alias
                                 , full_namespace_name=full_namespace_name )
                             , self.last_include_index() + 1 )
-        
-        
+
+    def adopt_declaration_creator( self, creator ):
+        self.adopt_creator( creator, self.creators.index( self.body ) )
+
+    def add_declaration_code( self, code, position ):
+        creator = custom.custom_text_t( code )
+        self.adopt_creator( creator, min( position, self.creators.index( self.body ) ) )
         
         
         

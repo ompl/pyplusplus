@@ -7,13 +7,17 @@ import os
 import sys
 import time
 import types
+
 from sets import Set as set
+
 from pygccxml import parser
 from pygccxml import declarations as decls_package
-from pyplusplus import decl_wrappers
-from pyplusplus import module_creator as mcreator_package
-from pyplusplus import file_writers
+
 from pyplusplus import _logging_
+from pyplusplus import decl_wrappers
+from pyplusplus import file_writers
+from pyplusplus import code_creators
+from pyplusplus import module_creator as mcreator_package
 
 class module_builder_t(object):
     """
@@ -495,3 +499,17 @@ class module_builder_t(object):
     def _set_BOOST_PYTHON_MAX_ARITY( self, value ):
         decl_wrappers.calldef_t.BOOST_PYTHON_MAX_ARITY = value
     BOOST_PYTHON_MAX_ARITY = property( _get_BOOST_PYTHON_MAX_ARITY, _set_BOOST_PYTHON_MAX_ARITY )
+    
+    def add_declaration_code( self, code, tail=True ):
+        position = 0
+        if tail:
+            position = -1
+        self.code_creator.add_declaration_code( code, position )
+        
+    def add_registration_code( self, code, tail=True ):
+        position = 0
+        if tail:
+            position = -1
+        creator = code_creators.custom_text_t( code )
+        self.code_creator.body.adopt_creator( creator, position )
+        

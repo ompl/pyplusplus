@@ -97,14 +97,6 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         return ''
     
     def _exportable_impl( self ):
-        #TODO: functions that takes as argument pointer to pointer to smth, could not be exported
-        #see http://www.boost.org/libs/python/doc/v2/faq.html#funcptr
-        if len( self.arguments ) > calldef_t.BOOST_PYTHON_MAX_ARITY:
-            msg = "Function '%s' has more than %d arguments ( %d ). "
-            msg = msg + " You should adjust BOOST_PYTHON_MAX_ARITY."
-            msg = msg + " For more information see: http://mail.python.org/pipermail/c++-sig/2002-June/001554.html"
-            self.logger.warning( msg % ( self.decl_string, calldef_t.BOOST_PYTHON_MAX_ARITY, len( self.arguments ) ) )
-
         all_types = [ arg.type for arg in self.arguments ]
         all_types.append( self.return_type )
         for some_type in all_types:
@@ -135,19 +127,28 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
             type_no_ref = declarations.remove_reference( type_ )
             return not declarations.is_const( type_no_ref ) \
                    and declarations.is_fundamental( type_no_ref )
-        msg = []
+        msgs = []
+        #TODO: functions that takes as argument pointer to pointer to smth, could not be exported
+        #see http://www.boost.org/libs/python/doc/v2/faq.html#funcptr
+        if len( self.arguments ) > calldef_t.BOOST_PYTHON_MAX_ARITY:
+            tmp = [ "Function '%s' has more than %d arguments ( %d ). " ]
+            tmp.append( os.linesep + "\tYou should adjust BOOST_PYTHON_MAX_ARITY." )
+            tmp.append( os.linesep + "\tFor more information see: http://mail.python.org/pipermail/c++-sig/2002-June/001554.html" )
+            tmp = ''.join( tmp )
+            msgs.append( tmp % ( self.decl_string, calldef_t.BOOST_PYTHON_MAX_ARITY, len( self.arguments ) ) )
+        
         if suspicious_type( self.return_type ) and None is self.call_policies:
-            msg.append( 'WARNING: Function "%s" returns non-const reference to C++ fundamental type - value can not be modified from Python.' % str( self ) )
+            msgs.append( 'Function "%s" returns non-const reference to C++ fundamental type - value can not be modified from Python.' % str( self ) )
         for index, arg in enumerate( self.arguments ):
             if suspicious_type( arg.type ):
-                tmpl = 'WARNING: Function "%s" takes as argument (name=%s, pos=%d ) ' \
+                tmpl = 'Function "%s" takes as argument (name=%s, pos=%d ) ' \
                        + 'non-const reference to C++ fundamental type - ' \
                        + 'function could not be called from Python.'
-                msg.append( tmpl % ( str( self ), arg.name, index ) )
+                msgs.append( tmpl % ( str( self ), arg.name, index ) )
 
         if False == self.overridable:
-            msg.append( self.get_overridable.__doc__ )
-        return msg
+            msgs.append( self.get_overridable.__doc__ )
+        return msgs
 
 class member_function_t( declarations.member_function_t, calldef_t ):
     def __init__(self, *arguments, **keywords):

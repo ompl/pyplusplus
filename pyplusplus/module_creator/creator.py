@@ -488,7 +488,7 @@ class creator_t( declarations.decl_visitor_t ):
                    and class_traits.is_my_case( element_type ):
                     value_cls = class_traits.get_declaration( element_type )
                     element_type_cc = code_creators.value_traits_t( value_cls )
-                    self.__extmodule.adopt_creator( element_type_cc, self.__extmodule.creators.index( self.__module_body ) )                        
+                    self.__extmodule.adopt_declaration_creator( element_type_cc )                        
                 cls_creator.adopt_creator( code_creators.indexing_suite2_t(cls) )
 
         if INDEXING_SUITE_2_MAIN_HEADER in used_headers:
@@ -701,7 +701,7 @@ class creator_t( declarations.decl_visitor_t ):
                 #we deal with internal class
                 self.curr_code_creator.wrapper.adopt_creator( wrapper )
             else:
-                self.__extmodule.adopt_creator( wrapper, self.__extmodule.creators.index( self.__module_body ) )
+                self.__extmodule.adopt_declaration_creator( wrapper )
             if declarations.has_trivial_copy( self.curr_decl ):
                 #I don't know but sometimes boost.python requieres
                 #to construct wrapper from wrapped classe
@@ -782,8 +782,7 @@ class creator_t( declarations.decl_visitor_t ):
             else:
                 maker = code_creators.global_variable_t( variable=self.curr_decl )
             if wrapper:
-                self.__extmodule.adopt_creator( wrapper
-                                                , self.__extmodule.creators.index( self.__module_body ) )
+                self.__extmodule.adopt_declaration_creator( wrapper )
         else:
             maker = None
             wrapper = None
