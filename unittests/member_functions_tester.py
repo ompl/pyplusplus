@@ -32,6 +32,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.classes( lambda decl: decl.name in names ).always_expose_using_scope = True
         #will reporoduce bug
         mb.class_('callable_t').always_expose_using_scope = True
+        mb.BOOST_PYTHON_MAX_ARITY = 1
         
     def create_test_class_inst(self, class_ ):
         class tester_impl_t( class_ ):

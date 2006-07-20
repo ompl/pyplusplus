@@ -132,15 +132,13 @@ class creator_t( declarations.decl_visitor_t ):
         
     def _prepare_decls( self, decls, doc_extractor ):
         global DO_NOT_REPORT_MSGS
+
         decls = declarations.make_flatten( decls )
-        #leave only declarations defined under namespace, but remove namespaces
-        decls = filter( lambda x: not isinstance( x, declarations.namespace_t ) \
-                                   and isinstance( x.parent, declarations.namespace_t )
-                         , decls )
-        #leave only decls that user wants to export
-        decls = filter( lambda x: not x.ignore, decls )
 
         for decl in decls:
+            if decl.ignore:
+                continue
+            
             if doc_extractor and decl.exportable:
                 decl.documentation = doc_extractor( decl )
 
@@ -164,7 +162,14 @@ class creator_t( declarations.decl_visitor_t ):
             for msg in readme:
                 self.decl_logger.warn( 'Declaration "%s": %s' % ( full_name, msg ) )
         
-        return filter( lambda x: x.exportable, decls )
+        #leave only declarations defined under namespace, but remove namespaces
+        decls = filter( lambda x: not isinstance( x, declarations.namespace_t ) \
+                                   and isinstance( x.parent, declarations.namespace_t )
+                         , decls )
+        #leave only decls that user wants to export and that could be exported
+        decls = filter( lambda x: x.ignore == False and x.exportable == True, decls )
+        
+        return decls
 
     def _reorder_decls(self, decls ):
         classes = filter( lambda x: isinstance( x, declarations.class_t )
