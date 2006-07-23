@@ -235,14 +235,19 @@ class module_builder_t(object):
         """
         file_writers.write_file( self.code_creator, file_name )
         
-    def split_module(self, dir_name):
+    def split_module(self, dir_name, huge_classes=None):
         """
         Writes module to multiple files
         
         @param dir_name: directory name
         @type dir_name: string
+        
+        @param huge_classes: list that contains reference to classes, that should be split
         """
-        file_writers.write_multiple_files( self.code_creator, dir_name )
+        if None is huge_classes:
+            file_writers.write_multiple_files( self.code_creator, dir_name )
+        else:
+            file_writers.write_class_multiple_files( self.code_creator, dir_name, huge_classes )
 
     #select decl(s) interfaces
     def decl( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):     

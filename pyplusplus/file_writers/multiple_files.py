@@ -29,19 +29,19 @@ class multiple_files_t(writer.writer_t):
         """
         writer.writer_t.__init__(self, extmodule)
         self.__directory_path = directory_path
-        self._create_dir()
-        self.__include_creators = []  # List of include_t creators that contain the generated headers
+        self.create_dir( directory_path )
+        self.include_creators = []  # List of include_t creators that contain the generated headers
         self.split_header_names = []  # List of include file names for split files
         self.split_method_names = []  # List of methods from the split files
 
         
-    def _create_dir( self ):
+    def create_dir( self, directory_path ):
         """Create the output directory if it doesn't already exist.
         """
-        if os.path.exists( self.__directory_path ) and not os.path.isdir(self.__directory_path):
+        if os.path.exists( directory_path ) and not os.path.isdir(directory_path):
             raise RuntimeError( 'directory_path should contain path to directory.' )
-        if not os.path.exists( self.__directory_path ):
-            os.makedirs( self.__directory_path )
+        if not os.path.exists( directory_path ):
+            os.makedirs( directory_path )
 
     def _get_directory_path(self):
         return self.__directory_path
@@ -181,7 +181,7 @@ class multiple_files_t(writer.writer_t):
         # Replace the create() method so that only the register() method is called
         # (this is called later for the main source file).
         class_creator.create = lambda: function_name +'();'
-        self.__include_creators.append( code_creators.include_t( header_name ) )
+        self.include_creators.append( code_creators.include_t( header_name ) )
         self.split_header_names.append(header_name)
         self.split_method_names.append(function_name)
 
@@ -246,7 +246,7 @@ class multiple_files_t(writer.writer_t):
         self.extmodule.body.adopt_creator( 
             code_creators.custom_text_t( function_name + '();' )
             , registrator_pos)
-        self.__include_creators.append( code_creators.include_t( header_name ) )        
+        self.include_creators.append( code_creators.include_t( header_name ) )        
         self.split_header_names.append(header_name)
         self.split_method_names.append(function_name)
 
@@ -304,8 +304,8 @@ class multiple_files_t(writer.writer_t):
         self.split_free_functions()
         
         if write_main:
-            self.__include_creators.sort( cmp=lambda ic1, ic2: cmp( ic1.header, ic2.header ) )
+            self.include_creators.sort( cmp=lambda ic1, ic2: cmp( ic1.header, ic2.header ) )
             map( lambda creator: self.extmodule.adopt_include( creator )
-                 , self.__include_creators )
+                 , self.include_creators )
             main_cpp = os.path.join( self.directory_path, self.extmodule.body.name + '.main.cpp' )
             self.write_file( main_cpp, self.extmodule.create() + os.linesep )

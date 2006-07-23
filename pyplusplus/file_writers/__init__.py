@@ -19,6 +19,7 @@ import types
 from writer import writer_t
 from single_file import single_file_t
 from multiple_files import multiple_files_t
+from class_multiple_files import class_multiple_files_t
 
 def write_file( data, file_path ):
     if isinstance( data, types.StringTypes ):
@@ -30,3 +31,7 @@ def write_file( data, file_path ):
 def write_multiple_files( extmodule, dir_path ):
     mfs = multiple_files_t( extmodule, dir_path )
     mfs.write()
+    
+def write_class_multiple_files( extmodule, dir_path, huge_classes ):
+    mfs = class_multiple_files_t( extmodule, dir_path, huge_classes )
+    mfs.write()    

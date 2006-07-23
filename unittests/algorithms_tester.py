@@ -100,13 +100,42 @@ class exclude_function_with_array_arg_tester_t( unittest.TestCase ):
         for x in mem_funs:
             self.failUnless( x.exportable == False )
 
+class class_multiple_files_tester_t(unittest.TestCase):
+    CLASS_DEF = \
+    """
+    namespace tester{
+    struct X{
+        enum EColor{ red, blue };
+        enum EFruit{ apple, orange };
+        
+        X(){}
+        X( int ){}
+        
+        void do_nothing(){}
+        
+        int do_somghing(){ return 1; }
+        
+        int m_dummy;       
+    };
+    }
+    """
+    def test(self):
+        mb = module_builder.module_builder_t( 
+                [ module_builder.create_text_fc( self.CLASS_DEF ) ]
+                , gccxml_path=autoconfig.gccxml.executable )
+        mb.namespace( name='::tester' ).include()
+        mb.build_code_creator('dummy')
+        mb.split_module( autoconfig.build_dir, [ mb.class_( '::tester::X' ) ]  )
+
 def create_suite():
     suite = unittest.TestSuite()    
-    suite.addTest( unittest.makeSuite(class_organizer_tester_t))
-    suite.addTest( unittest.makeSuite(indent_tester_t))
-    suite.addTest( unittest.makeSuite(make_flatten_tester_t))
-    suite.addTest( unittest.makeSuite(creator_finder_tester_t))
-    suite.addTest( unittest.makeSuite(exclude_function_with_array_arg_tester_t))
+    #~ suite.addTest( unittest.makeSuite(class_organizer_tester_t))
+    #~ suite.addTest( unittest.makeSuite(indent_tester_t))
+    #~ suite.addTest( unittest.makeSuite(make_flatten_tester_t))
+    #~ suite.addTest( unittest.makeSuite(creator_finder_tester_t))
+    #~ suite.addTest( unittest.makeSuite(exclude_function_with_array_arg_tester_t))
+    suite.addTest( unittest.makeSuite(class_multiple_files_tester_t))
+    
     
     return suite
 
