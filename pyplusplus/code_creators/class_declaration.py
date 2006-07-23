@@ -42,14 +42,16 @@ class class_declaration_t( scoped.scoped_t ):
             return True
         return bool( filter( lambda cc: not cc.works_on_instance, self.creators ) ) 
 
+    @property
+    def typedef_name( self ):
+        return self.class_var_name + '_t'
     
     def _generate_code_with_scope(self):
         result = []
         scope_var_name = self.alias + '_scope'
-        typedef_name = self.class_var_name + '_t'
-        result.append( 'typedef ' + self._generate_class_definition() + ' ' + typedef_name + ';')
-        result.append( typedef_name + ' ' + self.class_var_name )
-        result[-1] = result[-1] + ' = '+ typedef_name + '("%s");' % self.declaration.alias
+        result.append( 'typedef ' + self._generate_class_definition() + ' ' + self.typedef_name + ';')
+        result.append( self.typedef_name + ' ' + self.class_var_name )
+        result[-1] = result[-1] + ' = '+ self.typedef_name + '("%s");' % self.declaration.alias
         
         result.append( algorithm.create_identifier( self, '::boost::python::scope' ) )
         result[-1] = result[-1] + ' ' + scope_var_name
@@ -241,17 +243,25 @@ class class_t( scoped.scoped_t ):
     def _get_class_var_name(self):
         return self.alias + '_exposer'
     class_var_name = property( _get_class_var_name )
+
+    @property
+    def typedef_name( self ):
+        return self.class_var_name + '_t'
+    
+    def create_typedef_code( self ):
+        base_classes, base_creators = self._exported_base_classes()
+        return 'typedef ' + self._generate_class_definition(base_creators) + ' ' + self.typedef_name + ';'
+        
     
     def _generate_code_with_scope(self):
         result = []
         scope_var_name = self.alias + '_scope'
-        typedef_name = self.class_var_name + '_t'
         base_classes, base_creators = self._exported_base_classes()
-        result.append( 'typedef ' + self._generate_class_definition(base_creators) + ' ' + typedef_name + ';')
-        result.append( typedef_name + ' ' + self.class_var_name )
+        result.append( 'typedef ' + self._generate_class_definition(base_creators) + ' ' + self.typedef_name + ';')
+        result.append( self.typedef_name + ' ' + self.class_var_name )
         result[-1] = result[-1] + ' = '
         class_constructor, used_init = self._generate_constructor()
-        result[-1] = result[-1] + typedef_name + class_constructor
+        result[-1] = result[-1] + self.typedef_name + class_constructor
         result[-1] = result[-1] + ';'
                
         result.append( algorithm.create_identifier( self, '::boost::python::scope' ) )

@@ -68,12 +68,39 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         self.split_method_names.append(function_name)
 
     def write_wrapper( self, class_creator ):
-        code = ''
+        answer = []
+        if self.extmodule.license:
+            answer.append( self.extmodule.license.create() )
+                        
+        # Include all 'global' include files...
+        include_creators = filter( lambda creator: isinstance( creator, code_creators.include_t )
+                                   , self.extmodule.creators )
+        includes = map( lambda include_creator: include_creator.create()
+                        , include_creators )
+                        
+        # Write all 'global' namespace_alias_t and namespace_using_t creators first...
+        affect_creators = filter( lambda x: isinstance( x, code_creators.namespace_alias_t )
+                                    or isinstance( x, code_creators.namespace_using_t )
+                                  , self.extmodule.creators )
+
+        affect_creators.extend( filter( lambda x: isinstance( x, code_creators.namespace_alias_t )
+                                    or isinstance( x, code_creators.namespace_using_t )
+                                  , self.extmodule.body.creators ) )
+        
+        namespace_aliases = map( lambda creator: creator.create(), affect_creators )
+        if namespace_aliases:
+            answer.append( '' )
+            answer.append( os.linesep.join(namespace_aliases) )
+
         if class_creator.wrapper:
-            code = class_creator.wrapper.create()
+            answer.append( class_creator.wrapper.create() )
             class_creator.wrapper.create = lambda: ''
         
-        wrapper_code = self.create_header( class_creator.alias + '_wrapper', code ) 
+        answer.append( '' )
+        answer.append( class_creator.create_typedef_code() )
+        
+        code = os.linesep.join( answer )
+        wrapper_code = self.create_header( class_creator.alias + '_wrapper', code )
         header_file = os.path.join( self.directory_path, class_creator.alias, 'wrapper' + self.HEADER_EXT )
         self.write_file( header_file, wrapper_code )
         
@@ -133,8 +160,9 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         if not class_creator.declaration in self.huge_classes:
             return super( class_multiple_files_t, self ).split_class_impl( class_creator )
         
+        class_creator.declaration.always_expose_using_scope = True
         extmodule = class_creator.top_parent
-        
+               
         self.create_dir( os.path.join( self.directory_path, class_creator.alias ) )
         
         function_name = 'register_%s_class' % class_creator.alias
