@@ -145,22 +145,18 @@ class creator_t( declarations.decl_visitor_t ):
             readme = decl.readme()
             if not readme:
                 continue
-            #Now we should print what py++ has to say to user
-            full_name = declarations.full_name( decl )
-            if not decl.name:
-                full_name = full_name + '::{unnamed}'
             
             if not decl.exportable:
                 reason = readme[0]
                 if reason in DO_NOT_REPORT_MSGS:
                     continue
                 readme = readme[1:]
-                msg = [ 'Declaration "%s" could not be exported.' % full_name ]
+                msg = [ 'Declaration "%s" could not be exported.' % decl ]
                 msg.append( reason.replace( os.linesep, os.linesep + '\t' ) )
                 self.decl_logger.warn( os.linesep.join( msg ) )
             
             for msg in readme:
-                self.decl_logger.warn( 'Declaration "%s": %s' % ( full_name, msg ) )
+                self.decl_logger.warn( 'Declaration "%s": %s' % ( decl, msg ) )
         
         #leave only declarations defined under namespace, but remove namespaces
         decls = filter( lambda x: not isinstance( x, declarations.namespace_t ) \
