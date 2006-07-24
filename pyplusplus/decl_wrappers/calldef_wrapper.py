@@ -122,7 +122,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
 
     def _readme_impl( self ):
         def suspicious_type( type_ ):
-            if not declarations.is_reference( self.return_type ):
+            if not declarations.is_reference( type_ ):
                 return False
             type_no_ref = declarations.remove_reference( type_ )
             return not declarations.is_const( type_no_ref ) \

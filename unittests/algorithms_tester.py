@@ -107,7 +107,7 @@ class readme_tester_t( unittest.TestCase ):
         int do_smth(int); 
         typedef int Int;
         struct data_t{
-            int operator--();
+            data_t& operator--(int a);
         };
     }
     """
@@ -119,7 +119,7 @@ class readme_tester_t( unittest.TestCase ):
         fun = xxx.calldef( 'do_smth' )
         self.failUnless( fun.readme() == [] )
         minus_minus = xxx.operator( symbol='--' )
-        self.failUnless( 1 == len( minus_minus.readme() ) )
+        self.failUnless( 1 == len( minus_minus.readme() ), os.linesep.join( minus_minus.readme() ) )
 
 class class_multiple_files_tester_t(unittest.TestCase):
     CLASS_DEF = \
