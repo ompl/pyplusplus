@@ -151,12 +151,12 @@ class creator_t( declarations.decl_visitor_t ):
                 if reason in DO_NOT_REPORT_MSGS:
                     continue
                 readme = readme[1:]
-                msg = [ 'Declaration "%s" could not be exported.' % decl ]
-                msg.append( reason.replace( os.linesep, os.linesep + '\t' ) )
-                self.decl_logger.warn( os.linesep.join( msg ) )
+                msgstr = "%s;%s"%(decl, reason.replace(os.linesep, " "))
+                self.decl_logger.warn( msgstr )
             
             for msg in readme:
-                self.decl_logger.warn( 'Declaration "%s": %s' % ( decl, msg ) )
+                msgstr = "%s;%s"%(decl, msg.replace(os.linesep, " "))
+                self.decl_logger.warn( msgstr )
         
         #leave only declarations defined under namespace, but remove namespaces
         decls = filter( lambda x: not isinstance( x, declarations.namespace_t ) \
