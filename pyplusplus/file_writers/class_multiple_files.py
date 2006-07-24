@@ -31,9 +31,9 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         self.internal_splitters = [
             self.split_internal_enums
             , self.split_internal_unnamed_enums
-            #, self.split_internal_member_functions
+            , self.split_internal_member_functions
             , self.split_internal_classes
-            #, self.split_internal_member_variables
+            , self.split_internal_member_variables
         ]
  
     def split_class_impl( self, class_creator):
@@ -67,30 +67,17 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         self.split_header_names.append(header_name)
         self.split_method_names.append(function_name)
 
+    def wrapper_header( self, class_creator ):
+        return os.path.join( class_creator.alias, 'wrapper' + self.HEADER_EXT )
+
     def write_wrapper( self, class_creator ):
         answer = []
         if self.extmodule.license:
             answer.append( self.extmodule.license.create() )
-                        
-        # Include all 'global' include files...
-        include_creators = filter( lambda creator: isinstance( creator, code_creators.include_t )
-                                   , self.extmodule.creators )
-        includes = map( lambda include_creator: include_creator.create()
-                        , include_creators )
-                        
-        # Write all 'global' namespace_alias_t and namespace_using_t creators first...
-        affect_creators = filter( lambda x: isinstance( x, code_creators.namespace_alias_t )
-                                    or isinstance( x, code_creators.namespace_using_t )
-                                  , self.extmodule.creators )
-
-        affect_creators.extend( filter( lambda x: isinstance( x, code_creators.namespace_alias_t )
-                                    or isinstance( x, code_creators.namespace_using_t )
-                                  , self.extmodule.body.creators ) )
         
-        namespace_aliases = map( lambda creator: creator.create(), affect_creators )
-        if namespace_aliases:
-            answer.append( '' )
-            answer.append( os.linesep.join(namespace_aliases) )
+        answer.append( self.create_include_code( [class_creator] ) )
+        answer.append( '' )
+        answer.append( self.create_namespaces_code( [class_creator] ) )
 
         if class_creator.wrapper:
             answer.append( class_creator.wrapper.create() )
@@ -101,28 +88,54 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         
         code = os.linesep.join( answer )
         wrapper_code = self.create_header( class_creator.alias + '_wrapper', code )
-        header_file = os.path.join( self.directory_path, class_creator.alias, 'wrapper' + self.HEADER_EXT )
+        header_file = os.path.join( self.directory_path, self.wrapper_header(class_creator) )
         self.write_file( header_file, wrapper_code )
         
     def split_internal_creators( self, class_creator, creators, pattern ):
         file_path = os.path.join( self.directory_path
                                   , class_creator.alias
                                   , pattern )
-                                  
-        function_name = 'register_%s_%s' % ( class_creator.alias, pattern )
-        
+         
+        function_name = 'register_%(cls_alias)s_%(pattern)s' \
+                        % { 'cls_alias' : class_creator.alias, 'pattern' : pattern }
+                            
+        function_decl = 'void %(fname)s( %(exposer_type)s& %(var_name)s )' \
+                        % { 'fname' : function_name
+                            , 'exposer_type' : class_creator.typedef_name
+                            , 'var_name' : class_creator.class_var_name }
+            
+        #writting header file
+        header_code = [ '#include "%s"' % self.wrapper_header( class_creator ) ]
+        header_code.append( '' )
+        header_code.append( function_decl + ';' )
         self.write_file( file_path + self.HEADER_EXT
-                         , self.create_header( pattern, self.create_function_code( function_name ) ) )
+                         , self.create_header( pattern, os.linesep.join(header_code) ) )
+        
+        #writting source file        
+        source_code = []
+        if self.extmodule.license:
+            source_code.append( self.extmodule.license.create() )
+        
+        head_headers = [ file_path + self.HEADER_EXT ]#relevant header file
+        tail_headers = [ self.wrapper_header(class_creator) ]
+        source_code.append( self.create_include_code( creators, head_headers, tail_headers ) )
 
-        self.write_file( file_path + self.SOURCE_EXT
-                         , self.create_source( pattern
-                                               , function_name
-                                               , creators ))
+        source_code.append( '' )
+        source_code.append( self.create_namespaces_code( creators ) )
+
+        # Write the register() function...
+        source_code.append( '' )
+        source_code.append( '%s{' % function_decl )
+        source_code.append( '' )
         for index, creator in enumerate( creators ):
+            source_code.append( code_creators.code_creator_t.indent( creator.create() ) )
+            source_code.append( '' )
             if 0 == index:
-                creator.create = lambda: function_name + '();'
+                creator.create = lambda: function_name + '(%s);' % class_creator.class_var_name
             else:
                 creator.create = lambda: ''
+        source_code.append( '}' )
+        self.write_file( file_path + self.SOURCE_EXT, os.linesep.join( source_code ) )
 
     def split_internal_enums( self, class_creator ):
         """Write all enumerations into a separate .h/.cpp file.
@@ -174,30 +187,32 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
                                                , self.create_function_code( function_name ) ) )
             
         self.write_wrapper( class_creator )
-        wrapper_include = code_creators.include_t( os.path.join( class_creator.alias, 'wrapper' + self.HEADER_EXT ) )
         
-        extmodule.adopt_include( wrapper_include )
-
-        include_creators = [ wrapper_include ]
-        splitter_includes = []
+        tail_headers = []
         for splitter in self.internal_splitters:
             pattern = splitter( class_creator )
-            include_creator = code_creators.include_t( os.path.join( class_creator.alias, pattern + self.HEADER_EXT ) )
-            splitter_includes.append( include_creator )
+            tail_headers.append( os.path.join( class_creator.alias, pattern + self.HEADER_EXT ) )
         
-        for creator in splitter_includes:
-            extmodule.adopt_include( creator )
+        #writting source file        
+        source_code = []
+        if self.extmodule.license:
+            source_code.append( self.extmodule.license.create() )
+        
+        source_code.append( self.create_include_code( [class_creator], tail_headers=tail_headers ) )
 
-        # Write the .cpp file...
-        cpp_code = self.create_source( class_creator.alias
-                                       , function_name
-                                       , [class_creator] )
-                                       
-        self.write_file( file_path + self.SOURCE_EXT, cpp_code )                                       
-        
-        extmodule.remove_creator( wrapper_include )
-        for creator in splitter_includes:
-            extmodule.remove_creator( creator )
+        source_code.append( '' )
+        source_code.append( self.create_namespaces_code( [class_creator] ) )
+
+        # Write the register() function...
+        source_code.append( '' )
+        source_code.append( 'void %s{' % function_name )
+        source_code.append( '' )
+        for creator in class_creator.creators:
+            source_code.append( code_creators.code_creator_t.indent( creator.create() ) )
+            source_code.append( '' )
+        source_code.append( '}' )
+        self.write_file( file_path + self.SOURCE_EXT, os.linesep.join( source_code ) )
+      
         # Replace the create() method so that only the register() method is called
         # (this is called later for the main source file).
         class_creator.create = lambda: function_name +'();'

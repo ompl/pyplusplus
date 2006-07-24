@@ -91,6 +91,37 @@ class multiple_files_t(writer.writer_t):
         value_class = class_traits.get_declaration( element_type )
         return self.create_value_traits_header_name( value_class )
     
+    def create_include_code( self, creators, head_headers=None, tail_headers=None ):      
+        answer = []
+        if head_headers:
+            answer.extend( map( lambda header: '#include "%s"' % header, head_headers ) )
+
+        # Include all 'global' include files...
+        includes = filter( lambda creator: isinstance( creator, code_creators.include_t )
+                           , self.extmodule.creators )
+        answer.extend( map( lambda creator: creator.create(), includes ) )
+        
+        for creator in creators:
+            header = self.find_out_value_traits_header( creator )
+            if header:
+                answer.append( '#include "%s"' % header )
+    
+        if tail_headers:
+            answer.extend( map( lambda header: '#include "%s"' % header, tail_headers ) )
+        
+        return os.linesep.join( answer )
+    
+    def create_namespaces_code( self, creators ):    
+        # Write all 'global' namespace_alias_t and namespace_using_t creators first...
+        ns_types = ( code_creators.namespace_alias_t, code_creators.namespace_using_t )
+        ns_creators = filter( lambda x: isinstance( x, ns_types ), self.extmodule.creators )
+
+        ns_creators.extend( filter( lambda x: isinstance( x, ns_types ), self.extmodule.body.creators ) )
+        if not ns_creators:
+            return ''
+        else:
+            return os.linesep.join( map( lambda creator: creator.create(), ns_creators ) )
+
     def create_source( self, file_name, function_name, registration_creators, declaration_creators=None ):
         """Return the content of a cpp file.
 
@@ -111,34 +142,12 @@ class multiple_files_t(writer.writer_t):
         answer = []
         if self.extmodule.license:
             answer.append( self.extmodule.license.create() )
-                        
-        answer.append( '#include "%s%s"' % ( file_name, self.HEADER_EXT ) )
-
-        # Include all 'global' include files...
-        include_creators = filter( lambda creator: isinstance( creator, code_creators.include_t )
-                                   , self.extmodule.creators )
-        includes = map( lambda include_creator: include_creator.create()
-                        , include_creators )
-                        
-        for creator in registration_creators:
-            value_traits_header = self.find_out_value_traits_header( creator )
-            if value_traits_header:
-                includes.append( '#include "%s"' % value_traits_header )
-        answer.append( os.linesep.join(includes) )                
-
-        # Write all 'global' namespace_alias_t and namespace_using_t creators first...
-        affect_creators = filter( lambda x: isinstance( x, code_creators.namespace_alias_t )
-                                    or isinstance( x, code_creators.namespace_using_t )
-                                  , self.extmodule.creators )
-
-        affect_creators.extend( filter( lambda x: isinstance( x, code_creators.namespace_alias_t )
-                                    or isinstance( x, code_creators.namespace_using_t )
-                                  , self.extmodule.body.creators ) )
         
-        namespace_aliases = map( lambda creator: creator.create(), affect_creators )
-        if namespace_aliases:
-            answer.append( '' )
-            answer.append( os.linesep.join(namespace_aliases) )
+        head_headers = [ file_name + self.HEADER_EXT ]
+        answer.append( self.create_include_code( creators, head_headers ) )
+
+        answer.append( '' )
+        answer.append( self.create_namespaces_code( creators ) )
 
         # Write wrapper classes...
         for creator in declaration_creators:
@@ -148,6 +157,7 @@ class multiple_files_t(writer.writer_t):
         # Write the register() function...
         answer.append( '' )
         answer.append( 'void %s(){' % function_name )
+        answer.append( '' )
         for creator in registration_creators:
             answer.append( code_creators.code_creator_t.indent( creator.create() ) )
             answer.append( '' )
