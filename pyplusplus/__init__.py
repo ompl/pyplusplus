@@ -32,6 +32,8 @@ import utils
 import decl_wrappers
 import module_builder
 
+from _logging_ import multi_line_formatter_t
+
 __version__ = '0.7.1'
 
 #Known issues:
