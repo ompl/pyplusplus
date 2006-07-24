@@ -1,0 +1,132 @@
+=====================
+pyplusplus feedback
+=====================
+
+.. contents:: Table of contents
+
+------------
+Introduction
+------------
+
+`pyplusplus`_ has been created with few goals in mind:
+
+* to allow users create `Python`_ bindings for big projects, using `boost.python`_
+  library
+
+* to minimize maintenance time to minimum
+
+* to surve as a user guide for `boost.python`_ library
+
+
+Those goals have something common. In order to achive them, `pyplusplus`_ should
+give some kind of feedback to user. `pyplusplus`_ actually understands the 
+declarations it exports. It scans a declaration for potential problems, reports 
+them and in some cases prints hints how they could be solved. Few examples:
+
+*
+  ::
+
+     struct Y{ ... };    
+     
+     struct X{
+         ...
+         virtual Y& do_smth();
+         ...
+     };
+
+  Member function ``do_smth`` could not be overriden in Python. 
+
+*
+  ::
+
+      struct window{
+          ...
+          void get_size( int& heght, int& widht ) const;
+          ...
+      };
+      
+  Member function ``get_size`` can be exposed to Python, but it will not be callable.
+  
+* In order to expose free/member function that takes more than 10 arguments user
+  should define ``BOOST_PYTHON_MAX_ARITY`` macro.
+  
+For all those problems and many other `pyplusplus`_ gives a nice explanation
+and sometimes a link to the relevant information on the internet.
+
+I hope, that from now you will read every `pyplusplus`_ message :-).
+
+-------------
+How it works?
+-------------
+
+In previous paragraph, I described pretty usefull functionality. What should be
+done in order to enable it? - *Nothing!* By default, `pyplusplus`_ prints only 
+important messages to ``stdout``. 
+
+`pyplusplus`_ uses standard `logging`_ package to write all user messages. By 
+default, messages with ``DEBUG`` level will be skipped, all other messages will
+be reported.
+
+---------------
+API Description
+---------------
+If you are here, it means that you are not pleased with default configuration
+and want to change it, right? 
+
+1. You want to change logged messages level:
+
+   ::
+
+     import logging
+     from pyplusplus import module_builder
+
+   ::
+
+     module_builder.set_logger_level( logging.INFO )
+
+2. May be do you want to disable some messages and leave others? It is possible.
+   `pyplusplus`_ and `pygccxml`_ do not use one logger. Almost every package
+   has its own logger. So you can enable one logger and disable another one.
+   
+   `pygccxml`_ package defines all loggers in ``pygccxml.utils`` package.
+   
+   `pyplusplus`_ package defines all logers in ``pyplusplus._logging_`` package.
+   
+   Both packages defines ``loggers`` class. Those classes keep references to 
+   different loggers. ``loggers`` classes look very similar to the next class:
+   
+   ::
+
+      def _create_logger_( name ):
+          logger = logging.getLogger(name)
+          ...
+          return logger
+
+
+   ::
+
+      class loggers:
+           file_writer = _create_logger_( 'pyplusplus.file_writer' )
+           declarations = _create_logger_( 'pyplusplus.declarations' )
+           module_builder = _create_logger_( 'pyplusplus.module_builder' )  
+           root = logging.getLogger( 'pyplusplus' )
+           all = [ root, file_writer, module_builder ]
+   
+    s
+
+
+
+.. _`logging` : http://docs.python.org/lib/module-logging.html
+.. _`pyplusplus` : ./../pyplusplus.html
+.. _`pygccxml` : ./../../pygccxml/pygccxml.html
+.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Python`: http://www.python.org
+.. _`GCC-XML`: http://www.gccxml.org
+
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:
