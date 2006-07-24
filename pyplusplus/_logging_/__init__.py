@@ -17,7 +17,6 @@ from multilineformatter import multi_line_formatter_t
 def _create_logger_( name ):    
     logger = logging.getLogger(name)
     __handler = logging.StreamHandler(sys.stdout)
-#    __handler.setFormatter( logging.Formatter( os.linesep + '%(levelname)s %(message)s' ) )
     __handler.setFormatter( multi_line_formatter_t( os.linesep + '%(levelname)s: %(message)s' ) )
     logger.addHandler(__handler) 
     logger.setLevel(logging.INFO)

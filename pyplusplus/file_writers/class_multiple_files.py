@@ -33,7 +33,8 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
             , self.split_internal_unnamed_enums
             , self.split_internal_member_functions
             , self.split_internal_classes
-            , self.split_internal_member_variables
+            #not supported yet
+            #, self.split_internal_member_variables
         ]
  
     def split_class_impl( self, class_creator):
@@ -109,16 +110,17 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         header_code.append( '' )
         header_code.append( function_decl + ';' )
         self.write_file( file_path + self.HEADER_EXT
-                         , self.create_header( pattern, os.linesep.join(header_code) ) )
+                         , self.create_header( class_creator.alias + '_' + pattern
+                                               , os.linesep.join(header_code) ) )
         
         #writting source file        
         source_code = []
         if self.extmodule.license:
             source_code.append( self.extmodule.license.create() )
         
-        head_headers = [ file_path + self.HEADER_EXT ]#relevant header file
-        tail_headers = [ self.wrapper_header(class_creator) ]
-        source_code.append( self.create_include_code( creators, head_headers, tail_headers ) )
+        #relevant header file
+        head_headers = [ os.path.join( class_creator.alias, pattern + self.HEADER_EXT) ]
+        source_code.append( self.create_include_code( creators, head_headers ) )
 
         source_code.append( '' )
         source_code.append( self.create_namespaces_code( creators ) )
@@ -154,6 +156,8 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
     def split_internal_member_functions( self, class_creator ):
         creators = filter( lambda x: isinstance(x, code_creators.mem_fun_t )
                            , class_creator.creators )
+        for creator in creators:
+            creator.works_on_instance = False
         self.split_internal_creators( class_creator, creators, 'memfuns' )
         return 'memfuns'
 

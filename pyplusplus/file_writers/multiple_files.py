@@ -67,7 +67,7 @@ class multiple_files_t(writer.writer_t):
                     "#ifndef __%(file_name)s_hpp__pyplusplus_wrapper__"
                   , "#define __%(file_name)s_hpp__pyplusplus_wrapper__"
                   , ''
-                  , "%(code)s;"
+                  , "%(code)s"
                   , ''
                   , "#endif//__%(file_name)s_hpp__pyplusplus_wrapper__" ])
         
@@ -93,8 +93,10 @@ class multiple_files_t(writer.writer_t):
     
     def create_include_code( self, creators, head_headers=None, tail_headers=None ):      
         answer = []
+        normalize = code_creators.include_directories_t.normalize
         if head_headers:
-            answer.extend( map( lambda header: '#include "%s"' % header, head_headers ) )
+            answer.extend( map( lambda header: '#include "%s"' % normalize( header )
+                                , head_headers ) )
 
         # Include all 'global' include files...
         includes = filter( lambda creator: isinstance( creator, code_creators.include_t )
@@ -107,7 +109,8 @@ class multiple_files_t(writer.writer_t):
                 answer.append( '#include "%s"' % header )
     
         if tail_headers:
-            answer.extend( map( lambda header: '#include "%s"' % header, tail_headers ) )
+            answer.extend( map( lambda header: '#include "%s"' % normalize( header )
+                                , tail_headers ) )
         
         return os.linesep.join( answer )
     
