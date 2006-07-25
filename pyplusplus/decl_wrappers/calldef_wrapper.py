@@ -6,12 +6,6 @@
 import os
 import decl_wrapper
 from pygccxml import declarations
-##May be in future I will enable this functionality again, right now it seems
-##that this is useless
-##def is_finalizable(self):
-    ##if not self.wrapper:
-        ##return False
-    ##return self.declaration.virtuality != declarations.VIRTUALITY_TYPES.PURE_VIRTUAL
 
 class calldef_t(decl_wrapper.decl_wrapper_t):
     
@@ -131,20 +125,20 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         #TODO: functions that takes as argument pointer to pointer to smth, could not be exported
         #see http://www.boost.org/libs/python/doc/v2/faq.html#funcptr
         if len( self.arguments ) > calldef_t.BOOST_PYTHON_MAX_ARITY:
-            tmp = [ "Function '%s' has more than %d arguments ( %d ). " ]
-            tmp.append( os.linesep + "\tYou should adjust BOOST_PYTHON_MAX_ARITY." )
-            tmp.append( os.linesep + "\tFor more information see: http://mail.python.org/pipermail/c++-sig/2002-June/001554.html" )
-            tmp = ''.join( tmp )
-            msgs.append( tmp % ( self.decl_string, calldef_t.BOOST_PYTHON_MAX_ARITY, len( self.arguments ) ) )
+            tmp = [ "The function has more than %d arguments ( %d ). " ]
+            tmp.append( "You should adjust BOOST_PYTHON_MAX_ARITY macro." )
+            tmp.append( "For more information see: http://mail.python.org/pipermail/c++-sig/2002-June/001554.html" )
+            tmp = ' '.join( tmp )
+            msgs.append( tmp % ( calldef_t.BOOST_PYTHON_MAX_ARITY, len( self.arguments ) ) )
         
         if suspicious_type( self.return_type ) and None is self.call_policies:
-            msgs.append( 'Function "%s" returns non-const reference to C++ fundamental type - value can not be modified from Python.' % str( self ) )
+            msgs.append( 'The function "%s" returns non-const reference to C++ fundamental type - value can not be modified from Python.' % str( self ) )
         for index, arg in enumerate( self.arguments ):
             if suspicious_type( arg.type ):
-                tmpl = 'Function "%s" takes as argument (name=%s, pos=%d ) ' \
-                       + 'non-const reference to C++ fundamental type - ' \
-                       + 'function could not be called from Python.'
-                msgs.append( tmpl % ( str( self ), arg.name, index ) )
+                tmpl = [ 'The function takes as argument (name=%s, pos=%d ) ' ]
+                tmpl.append( 'non-const reference to C++ fundamental type - ' )
+                tmpl.append( 'function could not be called from Python.' )
+                msgs.append( ''.join( tmpl ) % ( arg.name, index ) )
 
         if False == self.overridable:
             msgs.append( self.get_overridable.__doc__ )
@@ -200,7 +194,7 @@ class operators_helper:
         if not operators_helper.is_supported( oper ):
             msg = [ '"operator%s" is not supported. ' % oper.symbol ]
             msg.append( 'See Boost.Python documentation: http://www.boost.org/libs/python/doc/v2/operators.html#introduction.' )
-            return os.linesep.join( msg )
+            return ' '.join( msg )
         return ''
     exportable = staticmethod( exportable )
 

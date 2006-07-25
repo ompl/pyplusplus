@@ -151,12 +151,10 @@ class creator_t( declarations.decl_visitor_t ):
                 if reason in DO_NOT_REPORT_MSGS:
                     continue
                 readme = readme[1:]
-                msgstr = "%s;%s"%(decl, reason.replace(os.linesep, " "))
-                self.decl_logger.warn( msgstr )
+                self.decl_logger.warn( "%s;%s" % ( decl, reason ) )
             
             for msg in readme:
-                msgstr = "%s;%s"%(decl, msg.replace(os.linesep, " "))
-                self.decl_logger.warn( msgstr )
+                self.decl_logger.warn( "%s;%s" % ( decl, msg ) )
         
         #leave only declarations defined under namespace, but remove namespaces
         decls = filter( lambda x: not isinstance( x, declarations.namespace_t ) \

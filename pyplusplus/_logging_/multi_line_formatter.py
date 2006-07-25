@@ -69,21 +69,17 @@ class multi_line_formatter_t(logging.Formatter):
         """
         txts = msgline.split(";")
         # Ensure that there are no more than two items in txts
-        if len(txts)>2:
-            txts = [txts[0], ";".join(txts[1:])]
-
+        if len( txts ) != 2:
+            #If message is not in format we expected, just return it
+            return os.linesep.join( textwrap.wrap( msgline, width ) )
+            
+        lines = [ txts[0] ] #I don't want to break declaration string to few lines
+        
         # Insert a separator if there are two parts (=decl and msg)
-        if len(txts)==2:
-            txts.insert(1, "->")
-
         # Apply the text wrapper to shorten the maximum line length
-        lines = []
-        for txt in txts:
-            txt = txt.strip().replace(os.linesep, " ")
-            lines.extend(textwrap.wrap(txt, width))
-
-        # Indent the text (except for the first line)
-        lines[1:] = map(lambda s: (2*" ")+s, lines[1:])
+        wrapped_lines = textwrap.wrap( txts[1], width )
+        lines.extend( map( lambda s: "> " + s.strip(), wrapped_lines ) )
+        
         return os.linesep.join(lines)
 
 

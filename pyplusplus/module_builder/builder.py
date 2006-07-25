@@ -110,7 +110,7 @@ class module_builder_t(object):
         decls = reader.read_files( files, compilation_mode )
 
         self.logger.debug( 'parsing files - done( %f seconds )' % ( time.clock() - start_time ) )
-        self.logger.debug( 'settings declarations defaults- started' )
+        self.logger.debug( 'settings declarations defaults - started' )
 
         global_ns = decls_package.matcher.get_single( 
                 decls_package.namespace_matcher_t( name='::' )

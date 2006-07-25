@@ -73,12 +73,13 @@ class types_database_t( object ):
         try:            
             check_extraction = container_cls.indexing_suite.element_type
         except RuntimeError, error:
-            msg = []
-            msg.append( 'pyplusplus found template class instantiation "%s" declaration ( not definition ). ' % container_cls.name )
-            msg.append( '\tpyplusplus can not find out container value_type( mapped_type )!' )
-            msg.append( '\tThis class will be exported, but there is a posiblity, that generated code will not compile.' )
-            msg.append( '\tThe solution to the problem is to create a variable of the class.' )
-            _logging_.loggers.declarations.warn( os.linesep.join( msg ) )
+            msg = "%s;%s" \
+                  % ( str(container_cls)
+                      , "pyplusplus can not find out container value_type( mapped_type )."
+                        "The container class is template instantiation declaration and not definition."
+                        "This container class will be exported, but there is a posiblity, that generated code will not compile."
+                        "The solution to the problem is to create a variable of the class." )
+            _logging_.loggers.declarations.warn( msg )
         
         self.__containers.add( container_cls )
         return True

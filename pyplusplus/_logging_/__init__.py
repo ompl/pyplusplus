@@ -12,13 +12,13 @@ is DEBUG. Default log messages destination is sys.stdout.
 import os
 import sys
 import logging
-from multilineformatter import multi_line_formatter_t
+from multi_line_formatter import multi_line_formatter_t
 
 def _create_logger_( name ):    
     logger = logging.getLogger(name)
-    __handler = logging.StreamHandler(sys.stdout)
-    __handler.setFormatter( multi_line_formatter_t( os.linesep + '%(levelname)s: %(message)s' ) )
-    logger.addHandler(__handler) 
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setFormatter( multi_line_formatter_t( os.linesep + '%(levelname)s: %(message)s' ) )
+    logger.addHandler(handler) 
     logger.setLevel(logging.INFO)
     return logger
 
