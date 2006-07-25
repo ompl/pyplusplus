@@ -277,10 +277,14 @@ class class_t( scoped.scoped_t ):
                 continue
             if isinstance( x, calldef.calldef_t ):
                 x.works_on_instance = False
-                result.append( x.create() )
+                code = x.create()
+                if code:
+                    result.append( code )
                 continue
             if not x.works_on_instance:
-                result.append( x.create() )
+                code = x.create()
+                if code:
+                    result.append( code )
             else:
                 result.append( '%s.%s;' % ( self.class_var_name, x.create() ) )
 

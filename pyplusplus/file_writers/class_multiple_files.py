@@ -31,8 +31,11 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         self.internal_splitters = [
             self.split_internal_enums
             , self.split_internal_unnamed_enums
-            , self.split_internal_member_functions
             , self.split_internal_classes
+            , self.split_internal_memfuns
+            , self.split_internal_v_memfuns
+            , self.split_internal_pv_memfuns
+            , self.split_internal_protected_memfuns
             #not supported yet
             #, self.split_internal_member_variables
         ]
@@ -69,7 +72,9 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         self.split_method_names.append(function_name)
 
     def wrapper_header( self, class_creator ):
-        return os.path.join( class_creator.alias, 'wrapper' + self.HEADER_EXT )
+        normalize = code_creators.include_directories_t.normalize
+        tmp = os.path.join( class_creator.alias, 'wrapper' + self.HEADER_EXT )
+        return normalize( tmp )
 
     def write_wrapper( self, class_creator ):
         answer = []
@@ -153,13 +158,34 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         self.split_internal_creators( class_creator, creators, 'unnamed_enums' )
         return 'unnamed_enums'
 
-    def split_internal_member_functions( self, class_creator ):
-        creators = filter( lambda x: isinstance(x, code_creators.mem_fun_t )
-                           , class_creator.creators )
+    def split_internal_calldefs( self, class_creator, calldef_types, pattern ):           
+        creators = filter( lambda x: isinstance(x, calldef_types ), class_creator.creators )
         for creator in creators:
             creator.works_on_instance = False
-        self.split_internal_creators( class_creator, creators, 'memfuns' )
-        return 'memfuns'
+        self.split_internal_creators( class_creator, creators, pattern )
+        return pattern
+
+    def split_internal_memfuns( self, class_creator ):
+        calldef_types = ( code_creators.mem_fun_t )           
+        return self.split_internal_calldefs( class_creator, calldef_types, 'memfuns' )
+
+    def split_internal_v_memfuns( self, class_creator ):
+        calldef_types = ( code_creators.mem_fun_v_t )           
+        return self.split_internal_calldefs( class_creator, calldef_types, 'memfuns_virtual' )
+
+    def split_internal_pv_memfuns( self, class_creator ):
+        calldef_types = ( code_creators.mem_fun_pv_t )           
+        return self.split_internal_calldefs( class_creator, calldef_types, 'memfuns_pvirtual' )
+
+    def split_internal_protected_memfuns( self, class_creator ):
+        calldef_types = (  
+            code_creators.mem_fun_protected_t
+            , code_creators.mem_fun_protected_s_t
+            , code_creators.mem_fun_protected_v_t
+            , code_creators.mem_fun_protected_pv_t )
+            
+        return self.split_internal_calldefs( class_creator, calldef_types, 'protected_memfuns' )
+
 
     def split_internal_classes( self, class_creator ):
         class_types = ( code_creators.class_t, code_creators.class_declaration_t )
@@ -209,11 +235,10 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
 
         # Write the register() function...
         source_code.append( '' )
-        source_code.append( 'void %s{' % function_name )
+        source_code.append( 'void %s(){' % function_name )
         source_code.append( '' )
-        for creator in class_creator.creators:
-            source_code.append( code_creators.code_creator_t.indent( creator.create() ) )
-            source_code.append( '' )
+        source_code.append( class_creator.create() )
+        source_code.append( '' )
         source_code.append( '}' )
         self.write_file( file_path + self.SOURCE_EXT, os.linesep.join( source_code ) )
       
