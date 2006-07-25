@@ -60,10 +60,8 @@ class multi_line_formatter_t(logging.Formatter):
         module or it can be of the form <decl>;<msg> where <decl> is the
         declaration string and <msg> an arbitrary message. Lines of this
         form will be separated so that the declaration and the message
-        appear in individual text blocks separated by the string '->'.
-
-        In any case the return string will be indented except for the first
-        line.
+        appear in individual text blocks, where every line of message will start
+        with '>' character.
 
         width is the maximum width of any text blocks (without indendation).
         """
