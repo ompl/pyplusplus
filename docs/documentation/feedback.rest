@@ -70,6 +70,10 @@ be reported.
 ---------------
 API Description
 ---------------
+
+Logging API
+-----------
+
 If you are here, it means that you are not pleased with default configuration
 and want to change it, right? 
 
@@ -82,11 +86,12 @@ and want to change it, right?
 
    ::
 
-     module_builder.set_logger_level( logging.INFO )
+     module_builder.set_logger_level( logging.DEBUG )
+
 
 2. May be do you want to disable some messages and leave others? It is possible.
-   `pyplusplus`_ and `pygccxml`_ do not use one logger. Almost every package
-   has its own logger. So you can enable one logger and disable another one.
+   `pyplusplus`_ and `pygccxml`_ do not use one logger. Almost every internal 
+   package has its own logger. So you can enable one logger and disable another one.
    
    `pygccxml`_ package defines all loggers in ``pygccxml.utils`` package.
    
@@ -94,7 +99,11 @@ and want to change it, right?
    
    Both packages defines ``loggers`` class. Those classes keep references to 
    different loggers. ``loggers`` classes look very similar to the next class:
-   
+
+   ::
+
+      import logging #standard Python package
+
    ::
 
       def _create_logger_( name ):
@@ -111,11 +120,39 @@ and want to change it, right?
            module_builder = _create_logger_( 'pyplusplus.module_builder' )  
            root = logging.getLogger( 'pyplusplus' )
            all = [ root, file_writer, module_builder ]
+
+   Now, you can use the functionality provided by ``logging`` package to complete
+   your task. 
    
-    s
+   One more thing. `pyplusplus`_ splits long message to few lines, where line 
+   length is 70 characters. Thus it is very convinient to read them on your screen.
+   If you want to use different tools to monitor those messages, consider to use 
+   standard `Formatter`_ class, instead of ``multi_line_formatter_t`` one.
 
 
+Declarations API
+----------------
 
+Every declaration class has next methods:
+
+* ``why_not_exportable( self )``
+
+  This method explains why a declaration could not be exported. The return value 
+  type is string or ``None``. ``None`` will be returned if declaration is 
+  exportable.
+
+  Property ``exportable`` will be set to ``True`` if declaration is exportable, 
+  and to ``False`` otherwise. 
+
+* ``readme( self )``
+
+  This method gives you access to all tips/hints/warnings `pyplusplus`_ has about
+  the declaration. This methods returns a list of strings. If the declaration is 
+  not exportable, than first message within the list is an explanation, why it 
+  is not exportable.
+
+
+.. _`Formatter` : http://docs.python.org/lib/node357.html
 .. _`logging` : http://docs.python.org/lib/module-logging.html
 .. _`pyplusplus` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html
