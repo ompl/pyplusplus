@@ -1,0 +1,109 @@
+=============
+Inerting code
+=============
+
+.. contents:: Table of contents
+
+------------
+Introduction
+------------
+
+`pyplusplus`_ is not a magician! Sometimes there is a need to modify or add code
+to generated file(s). This document will describe how you can insert your code
+to almost any place.
+
+-----------
+Source code
+-----------
+
+I am going to introduce C++ class ``world_t``. I will use it for all explanations.
+
+::
+
+  struct world_t {
+    void set(std::string msg) { this->msg = msg; }
+    std::string greet() { return msg; }
+    
+    std::string msg;
+  };
+
+If run `pyplusplus`_ on this code it will generate next `boost.python`_ code:
+
+::
+
+  bp::class_< world_t, boost::noncopyable >( "world_t" )    
+      .def( 
+          "greet"
+          , &::world_t::greet
+          , bp::default_call_policies() )    
+      .def( 
+          "set"
+          , &::world_t::set
+          , ( bp::arg("msg") )
+          , bp::default_call_policies() )    
+      .def_readwrite( "msg", &world_t::msg );
+
+It is possible, that `pyplusplus`_ will generate code, that expose class 
+``world_t``, that will look different. The second form is more verbose, but it 
+provides solution for few problems. 
+
+::
+
+  { //::world_t
+      typedef bp::class_< world_t, boost::noncopyable > world_t_exposer_t;
+      world_t_exposer_t world_t_exposer = world_t_exposer_t( "world_t" );
+      bp::scope world_t_scope( world_t_exposer );
+      { //::world_t::greet
+      
+          typedef ::std::string ( ::world_t::*function_ptr_t )(  ) ;
+          
+          world_t_exposer.def( 
+              "greet"
+              , function_ptr_t( &::world_t::greet )
+              , bp::default_call_policies() );
+      
+      }
+      { //::world_t::set
+      
+          typedef void ( ::world_t::*function_ptr_t )( ::std::string ) ;
+          
+          world_t_exposer.def( 
+              "set"
+              , function_ptr_t( &::world_t::set )
+              , ( bp::arg("msg") )
+              , bp::default_call_policies() );
+      
+      }
+      world_t_exposer.def_readwrite( "msg", &world_t::msg );
+  }
+
+
+--------------------
+Insert code to class
+--------------------
+
+``class_t`` declaration defines ``add_code( self, code, works_on_instance=True )``
+method.
+
+::
+
+  mb = module_builder_t( ... )
+  my_class = mb.class_( 'my_class' )
+  my_class.add_code( C++ code )
+
+
+
+
+.. _`pyplusplus` : ./../pyplusplus.html
+.. _`pygccxml` : ./../../pygccxml/pygccxml.html
+.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Python`: http://www.python.org
+.. _`GCC-XML`: http://www.gccxml.org
+
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:

@@ -4,4 +4,5 @@ files_to_skip = ['indexing_suite_v2.html']
 names = { 'containers' : 'STL containers'
           , 'how_to' : 'how to ... ?'
           , 'doc_string' : 'documentation string'
+          , 'inserting_code' : 'inserting code'
 }
