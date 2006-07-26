@@ -13,6 +13,11 @@ enum color{
     , green = 2
     , blue = 4 }; 
 
+enum numbers{
+    zero = 0
+    , noll = 0
+};
+    
 inline int to_int( int x=red ){ return x; }
 
 }

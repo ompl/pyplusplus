@@ -60,3 +60,14 @@ class enumeration_t(decl_wrapper.decl_wrapper_t, declarations.enumeration_t):
     no_export_values = property( _get_no_export_values, _set_export_values, doc=
                               """A list of (C++) enumeration names that should not be exported.
                               @type: list""")
+                              
+    def _readme_impl( self ):
+        msgs = []
+        if self.name:
+            name2value = self.get_name2value_dict()
+            if len( set( name2value.keys() ) ) != len( set( name2value.values() ) ):
+                msgs.append( "Boost.Python does not support enums with duplicate values. "
+                             "You can read more about this here: http://boost.org/libs/python/todo.html#support-for-enums-with-duplicate-values . "
+                             "The quick work around is to add new class variable to the exported enum, from Python. " ) 
+        return msgs
+
