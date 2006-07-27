@@ -61,7 +61,8 @@ How it works?
 
 In previous paragraph, I described pretty usefull functionality. What should be
 done in order to enable it? - *Nothing!* By default, `pyplusplus`_ prints only 
-important messages to ``stdout``. 
+important messages to ``stdout``. More over it prints them onle for declarations
+that are going to be exported.
 
 `pyplusplus`_ uses standard `logging`_ package to write all user messages. By 
 default, messages with ``DEBUG`` level will be skipped, all other messages will

@@ -28,4 +28,4 @@ class loggers:
     module_builder = _create_logger_( 'pyplusplus.module_builder' )
     #root logger exists for configuration purpose only
     root = logging.getLogger( 'pyplusplus' )
-    all = [ root, file_writer, module_builder ]
+    all = [ root, file_writer, module_builder, declarations ]
