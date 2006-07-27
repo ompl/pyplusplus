@@ -14,7 +14,7 @@ class multi_line_formatter_t(logging.Formatter):
     its messages to stdout.
     """
 
-    def __init__(self, fmt=None, datefmt=None, width=70):
+    def __init__(self, fmt=None, datefmt=None, width=None):
         """Constructor.
 
         See the Python standard library reference for a documentation
@@ -22,7 +22,13 @@ class multi_line_formatter_t(logging.Formatter):
         width is the maximum width of the generated text blocks.
         """
         logging.Formatter.__init__(self, fmt, datefmt)
-        self._width = width
+        if None == width:
+            try:
+                import curses
+                curses.setupterm()
+                self._width = curses.tigetnum('cols')
+            except:
+                self._width = 70   # default to 70
 
     def format(self, record):
         """This method overwrites the original one.
