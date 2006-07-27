@@ -10,6 +10,7 @@ from sets import Set as set
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
+from pyplusplus import utils as pypp_utils
 
 #TODO: to add namespace_alias_t classes
 class class_multiple_files_t(multiple_files.multiple_files_t):
@@ -25,9 +26,10 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
        alias + _main h/cpp this class will contain main registration function.
     """ 
 
-    def __init__(self, extmodule, directory_path, huge_classes):
+    def __init__(self, extmodule, directory_path, huge_classes, num_of_functions_per_file=25):
         multiple_files.multiple_files_t.__init__(self, extmodule, directory_path)
         self.huge_classes = huge_classes
+        self.num_of_functions_per_file = num_of_functions_per_file
         self.internal_splitters = [
             self.split_internal_enums
             , self.split_internal_unnamed_enums
@@ -160,10 +162,21 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
 
     def split_internal_calldefs( self, class_creator, calldef_types, pattern ):           
         creators = filter( lambda x: isinstance(x, calldef_types ), class_creator.creators )
-        for creator in creators:
-            creator.works_on_instance = False
-        self.split_internal_creators( class_creator, creators, pattern )
-        return pattern
+        grouped_creators = pypp_utils.split_sequence( creators, self.num_of_functions_per_file )
+        if len( grouped_creators ) == 1:
+            for creator in creators:
+                creator.works_on_instance = False
+            self.split_internal_creators( class_creator, creators, pattern )
+            return pattern
+        else:   
+            patterns = []            
+            for index, group in enumerate( grouped_creators ):
+                pattern_tmp = pattern + str( index )
+                patterns.append( pattern_tmp )
+                for creator in group:
+                    creator.works_on_instance = False
+                self.split_internal_creators( class_creator, group, pattern_tmp )
+            return patterns
 
     def split_internal_memfuns( self, class_creator ):
         calldef_types = ( code_creators.mem_fun_t )           
@@ -221,8 +234,14 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         tail_headers = []
         for splitter in self.internal_splitters:
             pattern = splitter( class_creator )
-            tail_headers.append( os.path.join( class_creator.alias, pattern + self.HEADER_EXT ) )
-        
+            if not pattern:
+                continue
+            if isinstance( pattern, str ):
+                tail_headers.append( os.path.join( class_creator.alias, pattern + self.HEADER_EXT ) )
+            else:
+                assert( isinstance( pattern, list ) )
+                for p in pattern:
+                    tail_headers.append( os.path.join( class_creator.alias, p + self.HEADER_EXT ) )
         #writting source file        
         source_code = []
         if self.extmodule.license:

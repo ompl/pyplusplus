@@ -13,6 +13,7 @@ from pygccxml import declarations
 from pyplusplus import code_creators 
 from pyplusplus import module_creator
 from pyplusplus import module_builder
+from pyplusplus import utils as pypp_utils
 
 class indent_tester_t(unittest.TestCase):
     def test( self ):
@@ -148,6 +149,16 @@ class class_multiple_files_tester_t(unittest.TestCase):
         mb.build_code_creator('dummy')
         mb.split_module( autoconfig.build_dir, [ mb.class_( '::tester::X' ) ]  )
 
+
+class split_sequence_tester_t(unittest.TestCase):
+    def test(self):
+        seq = [ 1,2,3 ]
+        split = pypp_utils.split_sequence
+        self.failUnless( [[1],[2],[3]] == split( seq, 1 ) )
+        self.failUnless( [[1,2],[3]] == split( seq, 2 ) )
+        self.failUnless( [[1,2,3]] == split( seq, 3 ) )
+        self.failUnless( [[1,2,3]] == split( seq, 4 ) )
+
 def create_suite():
     suite = unittest.TestSuite()    
     suite.addTest( unittest.makeSuite(class_organizer_tester_t))
@@ -157,6 +168,7 @@ def create_suite():
     suite.addTest( unittest.makeSuite(exclude_function_with_array_arg_tester_t))
     suite.addTest( unittest.makeSuite(class_multiple_files_tester_t))
     suite.addTest( unittest.makeSuite(readme_tester_t))
+    suite.addTest( unittest.makeSuite(split_sequence_tester_t))
     
     
     return suite

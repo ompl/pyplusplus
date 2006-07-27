@@ -7,7 +7,7 @@
 This module is a collection of unrelated algorithms, that works on code creators
 tree.
 """
-
+import math
 from pygccxml import declarations
 from pyplusplus import code_creators
     
@@ -38,6 +38,18 @@ class missing_call_policies:
         for creator in creators:
             creator.parent.remove_creator( creator )
     exclude = staticmethod( exclude )
+
+
+def split_sequence(seq, bucket_size):
+    #split sequence to buclets, where every will contain maximum bucket_size items
+    seq_len = len( seq )
+    if seq_len <= bucket_size:
+        return [ seq ] 
+    buckets = []
+    num_of_buckets = int( math.ceil( float( seq_len ) / bucket_size ) )
+    for i in range(num_of_buckets):
+        from_ = i * bucket_size
+        to = min( ( i + 1) * bucket_size, seq_len )
+        buckets.append( seq[ from_ : to ] )
+    return buckets
         
-    
-    
