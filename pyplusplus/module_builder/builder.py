@@ -198,10 +198,7 @@ class module_builder_t(object):
         @type call_policies_resolver_: callable
         @param doc_extractor: callable, that takes as argument reference to declaration 
             and returns documentation string
-        @type doc_extractor: callable or None
-        @param decl_headers: If None the headers for the wrapped decls are automatically found.
-        But you can pass a list of headers here to override that search.
-        @type decl_headers: list of strings
+        @type doc_extractor: callable or None        
         """
         creator = mcreator_package.creator_t( self.global_ns
                                               , module_name
