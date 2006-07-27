@@ -39,7 +39,8 @@ class module_builder_t(object):
                   , cache=None
                   , optimize_queries=True
                   , ignore_gccxml_output=False
-                  , indexing_suite_version=1):
+                  , indexing_suite_version=1
+                  , cflags=""):
         """
         @param files: list of files, declarations from them you want to export
         @type files: list of strings or L{file_configuration_t} instances
@@ -57,6 +58,8 @@ class module_builder_t(object):
         
         @param undefine_symbols: list of symbols to be undefined for preprocessor.
         @param undefine_symbols: list of strings
+        
+        @param cflags: Raw string to be added to gccxml command line.
         """
         object.__init__( self )
         self.logger = _logging_.loggers.module_builder
@@ -67,7 +70,8 @@ class module_builder_t(object):
             , define_symbols=define_symbols
             , undefine_symbols=undefine_symbols
             , start_with_declarations=start_with_declarations
-            , ignore_gccxml_output=ignore_gccxml_output)
+            , ignore_gccxml_output=ignore_gccxml_output
+            , cflags=cflags)
 
         #may be in future I will add those directories to user_defined_directories
         #to self.__code_creator.
@@ -192,10 +196,12 @@ class module_builder_t(object):
         @param call_policies_resolver_: callable, that will be invoked on every
         calldef object. It should return call policies.
         @type call_policies_resolver_: callable
-        
         @param doc_extractor: callable, that takes as argument reference to declaration 
             and returns documentation string
         @type doc_extractor: callable or None
+        @param decl_headers: If None the headers for the wrapped decls are automatically found.
+        But you can pass a list of headers here to override that search.
+        @type decl_headers: list of strings
         """
         creator = mcreator_package.creator_t( self.global_ns
                                               , module_name
@@ -207,6 +213,7 @@ class module_builder_t(object):
                                               , enable_indexing_suite
                                               , doc_extractor)
         self.__code_creator = creator.create()
+        self.__code_creator.replace_included_headers(self.__parsed_files)
         #I think I should ask users, what they expect
         #self.__code_creator.user_defined_directories.append( self.__working_dir )
         #map( self.__code_creator.user_defined_directories.append
@@ -517,4 +524,3 @@ class module_builder_t(object):
             position = -1
         creator = code_creators.custom_text_t( code )
         self.code_creator.body.adopt_creator( creator, position )
-        
