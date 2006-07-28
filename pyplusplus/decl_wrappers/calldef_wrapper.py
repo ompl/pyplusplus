@@ -106,12 +106,12 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
                 dtype = units[-1]
                 if isinstance( dtype.declaration.parent, declarations.class_t ):
                     if dtype.declaration not in dtype.declaration.parent.public_members:
-                        return "pyplusplus can not expose fuction that takes as argument/returns instance of non public class. Generated code will not compile."
+                        return "pyplusplus can not expose function that takes as argument/returns instance of non public class. Generated code will not compile."
             no_ref = declarations.remove_reference( some_type )
             no_ptr = declarations.remove_pointer( no_ref )
             no_const = declarations.remove_const( no_ptr )
             if declarations.is_array( no_const ):
-                return "pyplusplus can not expose fuction that takes as argument/returns C++ arrays. This will be changed in near future."                
+                return "pyplusplus can not expose function that takes as argument/returns C++ arrays. This will be changed in near future."                
         return self._exportable_impl_derived()
 
     def _readme_impl( self ):
