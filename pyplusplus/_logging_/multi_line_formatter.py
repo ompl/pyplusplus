@@ -27,6 +27,9 @@ class multi_line_formatter_t(logging.Formatter):
                 import curses
                 curses.setupterm()
                 self._width = curses.tigetnum('cols')
+                # Leave a border of two blanks to prevent that full lines
+                # wrap to the next line
+                self._width -= 2
             except:
                 self._width = 70   # default to 70
 
