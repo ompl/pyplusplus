@@ -10,18 +10,18 @@ Introduction
 
 `pyplusplus`_ has been created with few goals in mind:
 
-* to allow users create `Python`_ bindings for big projects, using `boost.python`_
+* to allow users create `Python`_ bindings for large projects using the `boost.python`_
   library
 
-* to minimize maintenance time to minimum
+* to minimize maintenance time
 
-* to surve as a user guide for `boost.python`_ library
+* to serve as a user's guide for `boost.python`_ library
 
 
-Those goals have something common. In order to achive them, `pyplusplus`_ should
-give some kind of feedback to user. `pyplusplus`_ actually understands the 
-declarations it exports. It scans a declaration for potential problems, reports 
-them and in some cases prints hints how they could be solved. Few examples:
+Those goals all have something in common. In order to achive them, `pyplusplus`_ must
+give useful feedback to the user.  Because `pyplusplus`_ understands the 
+declarations it exports, it can scan declarations for potential problems, report 
+them and in some cases provide hints about how to resolve the problem. Few examples:
 
 *
   ::
@@ -34,7 +34,7 @@ them and in some cases prints hints how they could be solved. Few examples:
          ...
      };
 
-  Member function ``do_smth`` could not be overriden in Python. 
+  Member function ``do_smth`` can not be overriden in Python because... [FILL IN HERE].
 
 *
   ::
@@ -45,26 +45,26 @@ them and in some cases prints hints how they could be solved. Few examples:
           ...
       };
       
-  Member function ``get_size`` can be exposed to Python, but it will not be callable.
+  Member function ``get_size`` can be exposed to Python, but it will not be callable because [FILL IN HERE].
   
 * In order to expose free/member function that takes more than 10 arguments user
   should define ``BOOST_PYTHON_MAX_ARITY`` macro.
   
-For all those problems and many other `pyplusplus`_ gives a nice explanation
-and sometimes a link to the relevant information on the internet.
+For these problems and many other `pyplusplus`_ gives a nice explanation
+and sometimes a link to the relevant information on the Internet.
 
-I hope, that from now you will read every `pyplusplus`_ message :-).
+I hope, that from now you will find it helpful to read every `pyplusplus`_ message :-).
 
 -------------
 How it works?
 -------------
 
-In previous paragraph, I described pretty usefull functionality. What should be
-done in order to enable it? - *Nothing!* By default, `pyplusplus`_ prints only 
+In previous paragraph, I described some pretty useful functionality but what should you
+do to enable it? - *Nothing!* By default, `pyplusplus`_ only prints the
 important messages to ``stdout``. More over it prints them onle for declarations
 that are going to be exported.
 
-`pyplusplus`_ uses standard `logging`_ package to write all user messages. By 
+`pyplusplus`_ uses the python  `logging`_ package to write all user messages. By 
 default, messages with ``DEBUG`` level will be skipped, all other messages will
 be reported.
 
@@ -75,10 +75,10 @@ API Description
 Logging API
 -----------
 
-If you are here, it means that you are not pleased with default configuration
+If you are here, it probably means that you are not pleased with default configuration
 and want to change it, right? 
 
-1. You want to change logged messages level:
+1. If you simply want to change the logging message level:
 
    ::
 
@@ -90,16 +90,16 @@ and want to change it, right?
      module_builder.set_logger_level( logging.DEBUG )
 
 
-2. May be do you want to disable some messages and leave others? It is possible.
-   `pyplusplus`_ and `pygccxml`_ do not use one logger. Almost every internal 
+2. But what if you want to disable some messages and leave others? This is also possible.
+   `pyplusplus`_ and `pygccxml`_ do not use a single logger. Almost every internal 
    package has its own logger. So you can enable one logger and disable another one.
    
-   `pygccxml`_ package defines all loggers in ``pygccxml.utils`` package.
+   The `pygccxml`_ package defines all loggers in the ``pygccxml.utils`` package.
    
-   `pyplusplus`_ package defines all logers in ``pyplusplus._logging_`` package.
+   The `pyplusplus`_ package defines all logers in the ``pyplusplus._logging_`` package.
    
-   Both packages defines ``loggers`` class. Those classes keep references to 
-   different loggers. ``loggers`` classes look very similar to the next class:
+   Both packages define a ``loggers`` class. Those classes keep references to 
+   different loggers. The ``loggers`` classes look very similar to the next class:
 
    ::
 
@@ -122,11 +122,11 @@ and want to change it, right?
            root = logging.getLogger( 'pyplusplus' )
            all = [ root, file_writer, module_builder ]
 
-   Now, you can use the functionality provided by ``logging`` package to complete
-   your task. 
+   You can use these references in the ``logging`` package to complete
+   your task of adjusting individual loggers.
    
-   One more thing. `pyplusplus`_ splits long message to few lines, where line 
-   length is 70 characters. Thus it is very convinient to read them on your screen.
+   One more thing, `pyplusplus`_ automatically splits long message, where line 
+   length defaults to 70 characters. Thus it is very convinient to read them on your screen.
    If you want to use different tools to monitor those messages, consider to use 
    standard `Formatter`_ class, instead of ``multi_line_formatter_t`` one.
 
@@ -134,13 +134,12 @@ and want to change it, right?
 Declarations API
 ----------------
 
-Every declaration class has next methods:
+Every declaration class has the following methods:
 
 * ``why_not_exportable( self )``
 
   This method explains why a declaration could not be exported. The return value 
-  type is string or ``None``. ``None`` will be returned if declaration is 
-  exportable.
+  is a string or ``None``. ``None`` is returned if the declaration is exportable.
 
   Property ``exportable`` will be set to ``True`` if declaration is exportable, 
   and to ``False`` otherwise. 
