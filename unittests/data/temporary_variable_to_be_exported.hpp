@@ -3,12 +3,12 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef __temprorary_variable_to_be_exported_hpp__
-#define __temprorary_variable_to_be_exported_hpp__
+#ifndef __temporary_variable_to_be_exported_hpp__
+#define __temporary_variable_to_be_exported_hpp__
 
 #include <string>
 
-namespace temprorary_variables{ 
+namespace temporary_variables{ 
 
 struct named_item_t{  
     
@@ -87,4 +87,4 @@ std::string& get_name_ref( virtual_t& ni ){
 
 }
 
-#endif//__temprorary_variable_to_be_exported_hpp__
+#endif//__temporary_variable_to_be_exported_hpp__

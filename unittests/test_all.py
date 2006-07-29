@@ -32,7 +32,7 @@ import smart_pointers_tester
 import special_operators_tester
 import module_properties_tester
 import internal_classes_tester
-import temprorary_variable_tester
+import temporary_variable_tester
 import recursive_tester
 import class_order_tester
 import class_order2_tester
@@ -85,7 +85,7 @@ def create_suite(times):
         , special_operators_tester
         , module_properties_tester
         , internal_classes_tester
-        , temprorary_variable_tester
+        , temporary_variable_tester
         , recursive_tester
         , class_order_tester
         , noncopyable_tester

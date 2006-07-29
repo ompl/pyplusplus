@@ -11,7 +11,7 @@ from pyplusplus import code_creators
 from pyplusplus import module_builder
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
-    EXTENSION_NAME = 'temprorary_variable'
+    EXTENSION_NAME = 'temporary_variable'
     
     def __init__( self, *args ):
         fundamental_tester_base.fundamental_tester_base_t.__init__( 
