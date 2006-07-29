@@ -66,19 +66,25 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
 
     def get_overridable( self ):
         """
-        Virtual functions, that returns const reference, could not be overriden
-        from Python. The reason is simple: in boost::python::override::operator(...)
-        result of marshaling (Python 2 C++) is saved on stack, after function
-        exit, the result will be reference to no where - access violetion.
-        For example see temporal variable tester
+        Check if the method can be overridden.
         """
         if None is self._overridable:
             if isinstance( self, declarations.member_calldef_t ) \
                and self.virtuality != declarations.VIRTUALITY_TYPES.NOT_VIRTUAL \
                and declarations.is_reference( self.return_type ):
                 self._overridable = False
+                self._non_overridable_reason = "Virtual functions that return "\
+                           "const reference can not be overriden from Python. "\
+                           "Ther is current no way for them to return a reference "\
+                           "to C++ code that calls them because in "\
+                           "boost::python::override::operator(...) the result of "\
+                           "marshaling (Python to C++) is saved on stack, after function "\
+                           "exit, thus the resulting reference would be a reference to "\
+                           "a temporary variable and would cause an access violation. "\
+                           "For an example of this see the temporary_variable_tester."
             else:
                 self._overridable = True
+                self._non_overridable_reason = ""
         return self._overridable
 
     def set_overridable( self, overridable ):
@@ -141,7 +147,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
                 msgs.append( ''.join( tmpl ) % ( arg.name, index ) )
 
         if False == self.overridable:
-            msgs.append( self.get_overridable.__doc__ )
+            msgs.append( self._non_overridable_reason)
         return msgs
 
 class member_function_t( declarations.member_function_t, calldef_t ):
