@@ -8,91 +8,153 @@ Inerting code
 Introduction
 ------------
 
-`pyplusplus`_ is not a magician! Sometimes there is a need to modify or add code
-to generated file(s). This document will describe how you can insert your code
-to almost any place.
+`pyplusplus`_ is not a magician! Sometimes there is a need to add code to 
+generated file(s). This document will describe how you can insert your code to 
+almost any place. 
 
------------
-Source code
------------
+---------------------
+Insert code to module
+---------------------
 
-I am going to introduce C++ class ``world_t``. I will use it for all explanations.
-
-::
-
-  struct world_t {
-    void set(std::string msg) { this->msg = msg; }
-    std::string greet() { return msg; }
-    
-    std::string msg;
-  };
-
-If run `pyplusplus`_ on this code it will generate next `boost.python`_ code:
+Almost every ``boost.python`` module has next structure:
 
 ::
 
-  bp::class_< world_t, boost::noncopyable >( "world_t" )    
-      .def( 
-          "greet"
-          , &::world_t::greet
-          , bp::default_call_policies() )    
-      .def( 
-          "set"
-          , &::world_t::set
-          , ( bp::arg("msg") )
-          , bp::default_call_policies() )    
-      .def_readwrite( "msg", &world_t::msg );
-
-It is possible, that `pyplusplus`_ will generate code, that expose class 
-``world_t``, that will look different. The second form is more verbose, but it 
-provides solution for few problems. 
-
-::
-
-  { //::world_t
-      typedef bp::class_< world_t, boost::noncopyable > world_t_exposer_t;
-      world_t_exposer_t world_t_exposer = world_t_exposer_t( "world_t" );
-      bp::scope world_t_scope( world_t_exposer );
-      { //::world_t::greet
-      
-          typedef ::std::string ( ::world_t::*function_ptr_t )(  ) ;
-          
-          world_t_exposer.def( 
-              "greet"
-              , function_ptr_t( &::world_t::greet )
-              , bp::default_call_policies() );
-      
-      }
-      { //::world_t::set
-      
-          typedef void ( ::world_t::*function_ptr_t )( ::std::string ) ;
-          
-          world_t_exposer.def( 
-              "set"
-              , function_ptr_t( &::world_t::set )
-              , ( bp::arg("msg") )
-              , bp::default_call_policies() );
-      
-      }
-      world_t_exposer.def_readwrite( "msg", &world_t::msg );
+  //declarations code
+  ...
+  BOOST_PYTHON_MODULE(X)
+  {
+    //registration code
+    ...
   }
+  
+Using ``module_builder_t`` you can add code to declaration and registration 
+sections. More over you can add the code to head or tail of the section. 
+``module_builder_t`` class provides API, that will help you to complete the task:
 
+* ``add_declaration_code( self, code, tail=True )``
+
+  This function will add a code to the declaration section. If you want to add
+  the code to the head of the section, pass ``tail=False`` to the method.
+  
+* ``add_registration_code( self, code, tail=True )``
+
+  This function will ass a code to the registration section. If you want to add
+  the code to the head of the section, pass ``tail=False`` to the method.
+  
+Both these methods have same precondition: they should be called after 
+``build_code_creator`` method has been called. Both these methods work directly
+with code creators tree, hence the precondition.
+
+Example
+-------
+
+::
+
+  mb = module_builder_t( ... )
+  mb.build_code_creator( ... )
+  mb.add_declaration_code( '//just a comment' )
+  mb.add_registration_code( '//another comment', False ) #adding code to the head
+  
 
 --------------------
 Insert code to class
 --------------------
 
-``class_t`` declaration defines ``add_code( self, code, works_on_instance=True )``
-method.
+``class_t`` declaration defines few methods adds user code to the generated one.
+Lets take a look on next use case:
 
 ::
 
+  struct window_t{
+      ...
+      void get_size( int& height, int& width ) const;
+      ...
+  };
+
+
+  ``int`` is immutable type in Python. So you can not expose ``get_size`` member 
+  function as is. You need to create a wrapper and expose it.
+
+  In the near future ``pyplusplus`` will eliminate the need of creating hand 
+  written wrapper for this use case.
+  
+::
+
+  boost::python::tuple get_window_size( const window_t& win ){
+      int h(0), w(0);
+      win.get_size( h, w );
+      return boost::python::make_tuple( h, w );
+  }
+
+Now you have to register it:
+
+::
+
+  using boost::python;
+  class_< window_t >( ... )
+      .def( "get_size", &::get_window_size )
+      ...
+  ;
+
+How it could be achieved with `pyplusplus`_? Class declaration, has also two 
+functions:
+
+* ``add_declaration_code( self, code )``
+
+  **Not implemented.**
+  **Feedback is wanted.**
+  **Please consider the relationship between this code and class wrapper code.**
+
+  This method will add the code to the declaration section within the module.
+  If you split your module to few files, `pyplusplus`_ will generate code, in a 
+  way, that declarations you added, will be visible to registration code.
+  
+* ``add_registration_code( self, code, works_on_instance=True )``
+
+  This method will add the code to the registration section of the class. 
+  
+  What is ``works_on_instance`` argument for? In our case, we added new method 
+  to the class. The first argument of the call will be ``self``. 
+  ::
+
+    #From Python user can call this method like this:
+    win = window_t( )
+    height, width = win.get_size()
+    
+  If you will pass ``works_on_instance=False`` next code will be generated:
+  ::
+
+    {
+        class_< window_t > window_exporter( "window_t" );
+        scope window_scope( window_exporter );
+        ...
+        def( "get_size", &::get_window_size );
+    }
+    
+  And in this case, user will be forced to pass reference to ``window_t`` object:
+  
+  ::
+
+    win = window_t()
+    height, width = window_t.get_size( win )
+
+Example
+-------
+::
+
   mb = module_builder_t( ... )
-  my_class = mb.class_( 'my_class' )
-  my_class.add_code( C++ code )
+  window = mb.class_( 'window_t' )
+  window.add_declaration_code( get_window_size definition )
+  window.add_registration_code( 'def( "get_size", &::get_window_size )' )
+  #pyplusplus will add ';' if needed
 
+----------------------------
+Insert code to class wrapper
+----------------------------
 
-
+I don't know what about you, but I don't like to create free functions in global
+namespace.I prefer to add ``get_window_size`` function to 
 
 .. _`pyplusplus` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html

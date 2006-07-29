@@ -120,7 +120,7 @@ and want to change it, right?
            declarations = _create_logger_( 'pyplusplus.declarations' )
            module_builder = _create_logger_( 'pyplusplus.module_builder' )  
            root = logging.getLogger( 'pyplusplus' )
-           all = [ root, file_writer, module_builder ]
+           all = [ root, file_writer, module_builder, declarations ]
 
    You can use these references in the ``logging`` package to complete
    your task of adjusting individual loggers.
