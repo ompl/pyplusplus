@@ -20,7 +20,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def customize(self, mb):
         mb.build_code_creator( self.EXTENSION_NAME )
         mb.add_declaration_code( "int get1(){ return 1;} ")
+        mb.add_declaration_code( "//this is a comment", False )
         mb.add_registration_code( 'bp::def( "get1", &get1 );' )
+        mb.add_registration_code( '//this is another comment', False )
 
     def run_tests(self, module):        
         self.failUnless( 1 == module.get1() )

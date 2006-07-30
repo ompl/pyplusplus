@@ -24,7 +24,7 @@ Almost every ``boost.python`` module has next structure:
   ...
   BOOST_PYTHON_MODULE(X)
   {
-    //registration code
+    //registrations code
     ...
   }
   
@@ -41,10 +41,6 @@ sections. More over you can add the code to head or tail of the section.
 
   This function will ass a code to the registration section. If you want to add
   the code to the head of the section, pass ``tail=False`` to the method.
-  
-Both these methods have same precondition: they should be called after 
-``build_code_creator`` method has been called. Both these methods work directly
-with code creators tree, hence the precondition.
 
 Example
 -------
@@ -72,13 +68,12 @@ Lets take a look on next use case:
       ...
   };
 
+``int`` is immutable type in Python. So you can not expose ``get_size`` member 
+function as is. You need to create a wrapper and expose it.
 
-  ``int`` is immutable type in Python. So you can not expose ``get_size`` member 
-  function as is. You need to create a wrapper and expose it.
+In the near future ``pyplusplus`` will eliminate the need of creating hand 
+written wrapper for this use case.
 
-  In the near future ``pyplusplus`` will eliminate the need of creating hand 
-  written wrapper for this use case.
-  
 ::
 
   boost::python::tuple get_window_size( const window_t& win ){
@@ -103,7 +98,9 @@ functions:
 * ``add_declaration_code( self, code )``
 
   **Not implemented.**
+  
   **Feedback is wanted.**
+  
   **Please consider the relationship between this code and class wrapper code.**
 
   This method will add the code to the declaration section within the module.
@@ -121,7 +118,7 @@ functions:
     #From Python user can call this method like this:
     win = window_t( )
     height, width = win.get_size()
-    
+
   If you will pass ``works_on_instance=False`` next code will be generated:
   ::
 
@@ -131,7 +128,7 @@ functions:
         ...
         def( "get_size", &::get_window_size );
     }
-    
+
   And in this case, user will be forced to pass reference to ``window_t`` object:
   
   ::
@@ -154,7 +151,22 @@ Insert code to class wrapper
 ----------------------------
 
 I don't know what about you, but I don't like to create free functions in global
-namespace.I prefer to add ``get_window_size`` function to 
+namespace. I prefer to add ``get_window_size`` function to ``window_t`` 
+`class wrapper`__. Class declaration exposes ``add_wrapper_code( self, code )`` 
+method. This method will add the code to the end of the class declaration.
+
+Example
+-------
+
+::
+
+  mb = module_builder_t( ... )
+  window = mb.class_( 'window_t' )
+  window.add_wrapper_code( get_window_size definition )
+  window.add_registration_code( 'def( "get_size", &%s::get_window_size )' % window.wrapper_alias )
+
+.. __ : http://boost.org/libs/python/doc/tutorial/doc/html/python/exposing.html#python.class_virtual_functions
+
 
 .. _`pyplusplus` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html

@@ -90,7 +90,13 @@ class module_builder_t(object):
         self.__code_creator = None         
         if optimize_queries:
             self.run_query_optimizer()
-            
+        
+        self.__declarations_code_head = []
+        self.__declarations_code_tail = []
+
+        self.__registrations_code_head = []
+        self.__registrations_code_tail = []
+
     def _get_global_ns( self ):
         return self.__global_ns
     global_ns = property( _get_global_ns, doc="reference to global namespace" )
@@ -161,7 +167,27 @@ class module_builder_t(object):
              , mem_vars )
         map( lambda mem_var: mem_var.set_setter_call_policies( call_policies_resolver( mem_var, 'set' ) )
              , mem_vars )
+
+    @property
+    def declarations_code_head( self ):
+        "List of user code, that will be added to the head of the declarations section."
+        return self.__declarations_code_head
     
+    @property
+    def declarations_code_tail( self ):
+        "List of user code, that will be added to the tail of the declarations section."
+        return self.__declarations_code_tail
+
+    @property
+    def registrations_code_head( self ):
+        "List of user code, that will be added to the head of the registrations section."
+        return self.__registrations_code_head
+
+    @property
+    def registrations_code_tail( self ):
+        "List of user code, that will be added to the tail of the registrations section."
+        return self.__registrations_code_tail
+
     def print_declarations(self, decl=None, detailed=True, recursive=True, writer=sys.stdout.write):
         """
         This function will print detailed description of all declarations or
@@ -230,13 +256,42 @@ class module_builder_t(object):
         called and False otherwise
         """
         return not ( None is self.__code_creator )
-    
+
+    def add_declaration_code( self, code, tail=True ):
+        if tail:
+            self.__declarations_code_tail.append( code )
+        else:
+            self.__declarations_code_head.append( code )
+
+    def add_registration_code( self, code, tail=True ):
+        if tail:
+            self.__registrations_code_tail.append( code )
+        else:
+            self.__registrations_code_head.append( code )
+
+    def __merge_user_code( self ):
+        for code in self.__declarations_code_tail:
+            self.code_creator.add_declaration_code( code, -1 )
+        
+        for code in self.__declarations_code_head:
+            self.code_creator.add_declaration_code( code, 0 )
+        
+        body = self.code_creator.body
+
+        for code in self.__registrations_code_tail:
+            body.adopt_creator( code_creators.custom_text_t( code ), -1 )
+
+        for code in self.__registrations_code_head:
+            body.adopt_creator( code_creators.custom_text_t( code ), 0 )
+
+
     def write_module( self, file_name ):
         """
         Writes module to single file
         @param file_name: file name
         @type file_name: string
         """
+        self.__merge_user_code()
         file_writers.write_file( self.code_creator, file_name )
         
     def split_module(self, dir_name, huge_classes=None):
@@ -248,6 +303,7 @@ class module_builder_t(object):
         
         @param huge_classes: list that contains reference to classes, that should be split
         """
+        self.__merge_user_code()
         if None is huge_classes:
             file_writers.write_multiple_files( self.code_creator, dir_name )
         else:
@@ -508,16 +564,3 @@ class module_builder_t(object):
     def _set_BOOST_PYTHON_MAX_ARITY( self, value ):
         decl_wrappers.calldef_t.BOOST_PYTHON_MAX_ARITY = value
     BOOST_PYTHON_MAX_ARITY = property( _get_BOOST_PYTHON_MAX_ARITY, _set_BOOST_PYTHON_MAX_ARITY )
-    
-    def add_declaration_code( self, code, tail=True ):
-        position = 0
-        if tail:
-            position = -1
-        self.code_creator.add_declaration_code( code, position )
-        
-    def add_registration_code( self, code, tail=True ):
-        position = 0
-        if tail:
-            position = -1
-        creator = code_creators.custom_text_t( code )
-        self.code_creator.body.adopt_creator( creator, position )

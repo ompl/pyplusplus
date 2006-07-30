@@ -187,7 +187,10 @@ class module_t(compound.compound_t):
 
     def add_declaration_code( self, code, position ):
         creator = custom.custom_text_t( code )
-        self.adopt_creator( creator, min( position, self.creators.index( self.body ) ) )
+        last_include = self.last_include_index()
+        pos = max( last_include + 1, position )
+        pos = min( pos, self.creators.index( self.body ) )
+        self.adopt_creator( creator, pos )
         
         
         
