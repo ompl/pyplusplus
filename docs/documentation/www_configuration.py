@@ -5,4 +5,5 @@ names = { 'containers' : 'STL containers'
           , 'how_to' : 'how to ... ?'
           , 'doc_string' : 'documentation string'
           , 'inserting_code' : 'inserting code'
+          , 'best_practices' : 'best practices' 
 }

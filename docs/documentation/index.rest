@@ -14,14 +14,16 @@ task to create and maintain it. I will appriciate any help!
 How can you help?
 
 * Lets face it: today it is not possible to use `pyplusplus`_ without looking
-  into source code. `pyplusplus`_ uses `Epydoc`_ to generate documentation from
-  source files. So, if you found some undocumented piece of code and you understand
-  what it does, please write documentation string and send it to me.
+  into source code sometimes. `pyplusplus`_ uses `Epydoc`_ to generate 
+  documentation from source files. So, if you found some undocumented piece of 
+  code and you understand what it does, please write documentation string.
   
 * You are reading documentation and my English cause you to scream? Please, fix
-  those errors and send me new version of document. I will integrate the changes.
-  
+  those errors and send me new version of the document. I will integrate the 
+  changes.
 
+* Do you think, that the documentation is not clear, I will be glad to improve it,
+  just point me to the place.
 
 .. _`Epydoc` : http://epydoc.sourceforge.net/
 .. _`pyplusplus` : ./../pyplusplus.html
