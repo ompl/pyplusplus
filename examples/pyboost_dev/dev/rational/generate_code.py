@@ -76,7 +76,6 @@ class code_generator_t(object):
         extmodule.user_defined_directories.append( rational_settings.boost.include )
         extmodule.user_defined_directories.append( rational_settings.working_dir )
         extmodule.user_defined_directories.append( rational_settings.generated_files_dir )
-        extmodule.precompiled_header = 'boost/python.hpp'
         extmodule.replace_included_headers( ['boost/rational.hpp'] )
 
     def write_files( self ):

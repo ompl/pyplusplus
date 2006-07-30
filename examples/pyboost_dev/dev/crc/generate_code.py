@@ -79,9 +79,7 @@ class code_generator_t(object):
         extmodule.user_defined_directories.append( crc_settings.boost.include )
         extmodule.user_defined_directories.append( crc_settings.working_dir )
         extmodule.user_defined_directories.append( crc_settings.generated_files_dir )
-        extmodule.precompiled_header = 'boost/python.hpp'
         self.__mb.code_creator.replace_included_headers( ['boost/crc.hpp'] )
-        #self.__mb.code_creator.add_namespace_usage( 'boost' )
 
     def write_files( self ):
         self.__mb.write_module( os.path.join( crc_settings.generated_files_dir, 'crc.pypp.cpp' ) )

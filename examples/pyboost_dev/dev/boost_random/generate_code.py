@@ -134,7 +134,6 @@ class code_generator_t(object):
         extmodule.user_defined_directories.append( random_settings.boost.include )
         extmodule.user_defined_directories.append( random_settings.working_dir )
         extmodule.user_defined_directories.append( random_settings.generated_files_dir )
-        extmodule.precompiled_header = 'boost/python.hpp'
         extmodule.replace_included_headers( ['boost/random.hpp', 'boost/nondet_random.hpp', 'random_export.hpp' ] )
         
     def write_files( self ):
