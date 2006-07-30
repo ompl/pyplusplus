@@ -7,6 +7,7 @@
 #define __operators_to_be_exported_hpp__
 
 #include "boost/rational.hpp"
+#include <iostream>
 
 namespace pyplusplus{ namespace rational{
 
@@ -18,6 +19,7 @@ struct helper{
         sizeof( pyrational );
         boost::gcd<long int>( 1, 1);
         boost::lcm<long int>( 1, 1);
+        std::cout << pyrational( 1,1);        
     }
 };
 

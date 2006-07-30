@@ -198,7 +198,7 @@ class operators_helper:
         if isinstance( oper, declarations.member_operator_t ) and oper.symbol in ( '()', '[]' ):
             return ''
         if not operators_helper.is_supported( oper ):
-            msg = [ '"operator%s" is not supported. ' % oper.symbol ]
+            msg = [ '"%s" is not supported. ' % oper.name ]
             msg.append( 'See Boost.Python documentation: http://www.boost.org/libs/python/doc/v2/operators.html#introduction.' )
             return ' '.join( msg )
         return ''

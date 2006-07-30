@@ -25,6 +25,23 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         rational.include()
         rational.alias = "pyrational"
         
+        #Test query api.
+        rational.operator( '=' )
+        rational.operator( name='operator=' )
+        rational.operator( symbol='=' )
+        rational.operators( '=' )
+        rational.operators( name='operator=' )
+        rational.operators( symbol='=' )
+        rational.member_operator( '=' )
+        rational.member_operator( name='operator=' )
+        rational.member_operator( symbol='=' )
+        rational.member_operators( '=' )
+        rational.member_operators( name='operator=' )
+        rational.member_operators( symbol='=' )
+        mb.global_ns.free_operators( '<<' )
+        mb.global_ns.free_operators( name='operator<<' )
+        mb.global_ns.free_operators( symbol='<<' )
+        
         r_assign = rational.calldef( 'assign', recursive=False )
         r_assign.call_policies = call_policies.return_self()
 
