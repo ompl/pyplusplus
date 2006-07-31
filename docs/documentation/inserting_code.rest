@@ -150,22 +150,48 @@ Example
 Insert code to class wrapper
 ----------------------------
 
-I don't know what about you, but I don't like to create free functions in global
-namespace. I prefer to add ``get_window_size`` function to ``window_t`` 
-`class wrapper`__. Class declaration exposes ``add_wrapper_code( self, code )`` 
-method. This method will add the code to the end of the class declaration.
+There are use cases, when you have to add code to `class wrapper`_. Please take a 
+look on next thread: http://mail.python.org/pipermail/c++-sig/2006-June/010791.html .
 
-Example
--------
+
+.. _`class wrapper` : http://boost.org/libs/python/doc/tutorial/doc/html/python/exposing.html#python.class_virtual_functions
+
+
+The short description is next: there are classes with parent/child relationship.
+Parent keeps child class instances using raw pointer. When parent die, it also
+destroys children classes. It is not an option to switch to ``boost::shared_ptr``.
+
+The solution Niall Douglas found was to implement small life time manager. For
+this solution he needed:
+
+* to add to every constructor of class wrapper some code that registers the 
+  instance of the class within the manager
+  
+* to add to destructor of class wrapper some code, that will destroy the instance 
+  if needed.
+
+* to add to class wrapper new variable
+
+Solution
+--------
 
 ::
 
-  mb = module_builder_t( ... )
-  window = mb.class_( 'window_t' )
-  window.add_wrapper_code( get_window_size definition )
-  window.add_registration_code( 'def( "get_size", &%s::get_window_size )' % window.wrapper_alias )
+  def inject_code( cls ):
+      constructors = cls.constructors()
+      constructors.body = class instance registration code
+      cls.null_constructor_body = class instance registration code
+      cls.copy_constructor_body = class instance registration code
+      
+      cls.add_wrapper_code( destructor declaration and definition code )
+      cls.add_wrapper_code( the new class variable definition code )
+      
+::
 
-.. __ : http://boost.org/libs/python/doc/tutorial/doc/html/python/exposing.html#python.class_virtual_functions
+  mb = module_builder_t( ... )
+  for cls in mb.classes( relevant classes only ):  
+    inject_code( cls )
+
 
 
 .. _`pyplusplus` : ./../pyplusplus.html
