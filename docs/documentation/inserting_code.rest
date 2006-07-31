@@ -1,6 +1,6 @@
-=============
-Inerting code
-=============
+==============
+Inserting code
+==============
 
 .. contents:: Table of contents
 
