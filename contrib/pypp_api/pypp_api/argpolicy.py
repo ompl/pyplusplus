@@ -19,7 +19,7 @@ class ArgPolicyManager:
     Before the code creator tree is created, setArgPolicy() has to be
     called on any method that requires this decoration.
     After the decoration is done and the code creator tree has been
-    built, the updateCreators() method has be called to update the tree.
+    built, the updateCreators() method has to be called to update the tree.
     Finally, the writeFiles() method can be called to write the additional
     wrapper files.    
     """
@@ -210,20 +210,64 @@ class ArgTransformerBase:
 #        pass
 
     def prepareWrapper(self, wm):
+        """Wrapper initialization.
+
+        This method is called before the actual wrapper source code is
+        generated. This is the place where you can modify the signature
+        of the C++ wrapper function or allocate local variables.
+
+        @param wm: Wrapper manager instance
+        @type wm: WrapperManager
+        """
         pass
 
     def preCall(self, wm):
+        """Generate the C++ code that should be executed before the actual function call.
+        
+        @param wm: Wrapper manager instance
+        @type wm: WrapperManager
+        """
         pass
 
     def postCall(self, wm):
+        """Generate the C++ code that should be executed after the actual function call.
+
+        @param wm: Wrapper manager instance
+        @type wm: WrapperManager
+        """
         pass
 
     def cleanup(self, wm):
+        """Generate code that should be executed in the case of an error.
+
+        This method has to assume that the preCall code was executed but
+        the postCall code won't be executed because something went wrong.
+        
+        <not used yet>
+        
+        @param wm: Wrapper manager instance
+        @type wm: WrapperManager
+        """
         pass
 
 # Output
 class Output(ArgTransformerBase):
+    """Handles a single output variable.
+
+    The specified variable is removed from the argument list and is turned
+    into a return value.
+
+    void getSize(int& width, int& height)
+      ->
+    (width,height) = getSize()
+    """
+    
     def __init__(self, idx):
+        """Constructor.
+
+        @param idx: Index of the argument that is an output value (the first arg has index 1).
+        @type idx: int
+        """
         ArgTransformerBase.__init__(self)
         self.idx = idx
 
@@ -246,6 +290,13 @@ class Output(ArgTransformerBase):
 
 # InputArray
 class InputArray(ArgTransformerBase):
+    """Handle an input array with fixed size.
+
+    void setVec3(double* v)
+    ->
+    setVec3(object v)   # v must be a sequence with 3 floats
+    """
+    
     def __init__(self, idx, size):
         ArgTransformerBase.__init__(self)
         self.idx = idx
@@ -293,6 +344,13 @@ class InputArray(ArgTransformerBase):
 
 # OutputArray
 class OutputArray(ArgTransformerBase):
+    """Handle an output array with a fixed size.
+
+    void getVec3(double* v)
+    ->
+    v = getVec3()   # v will be a list with 3 floats    
+    """
+    
     def __init__(self, idx, size):
         ArgTransformerBase.__init__(self)
         self.idx = idx
