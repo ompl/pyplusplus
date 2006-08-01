@@ -14,9 +14,9 @@ What is pyplusplus?
 Preamble
 --------
 
-This introduction will describe code generation process using `pyplusplus`_. 
+This introduction will describe code generation process using pyplusplus. 
 I hope, that after you finished to read it, you will understand how powerful
-`pyplusplus`_ is. 
+pyplusplus is. 
 
 -----------------------
 Code generation process
@@ -24,20 +24,20 @@ Code generation process
 
 `boost.python`_ library allows you to expose C++ code to `Python`_ in quick and 
 elegant way. Almost the whole process of exposing declarations can be automated
-by use of `pyplusplus`_. Code generation process, using `pyplusplus`_ consists
+by use of pyplusplus. Code generation process, using pyplusplus consists
 from few steps. Next paragraphs will tell you more about every step.
 
 *"read declarations"*
 ---------------------
 
-`pyplusplus`_ does not reinvent the wheel. `pyplusplus`_ uses `GCC C++ compiler`_
+pyplusplus does not reinvent the wheel. pyplusplus uses `GCC C++ compiler`_
 to parse C++ source files. To be more precision, the tool chain looks like this:
 
 1. source code is passed to `GCC-XML`_
 2. `GCC-XML`_ passes it to `GCC C++ compiler`_
 3. `GCC-XML`_ generates an XML description of a C++ program from GCC's internal 
    representation.
-4. `pyplusplus`_ uses `pygccxml`_ package to read `GCC-XML`_ generated file.
+4. pyplusplus uses `pygccxml`_ package to read `GCC-XML`_ generated file.
 
 The bottom line - you can be sure, that all your declarations are read correctly.
 
@@ -55,10 +55,10 @@ answer:
        a question, what code should be written in order I get access from Python
        to that functionality
 
-Of course, `pyplusplus`_ can not answer those question, but it provides maximum
+Of course, pyplusplus can not answer those question, but it provides maximum
 help to implement an user requirements. 
 
-How can `pyplusplus`_ help you with first question? `pyplusplus`_ provides very 
+How can pyplusplus help you with first question? pyplusplus provides very 
 powerful and simple query interface. 
 
 For example in one line of code you can select all free functions that have 
@@ -88,16 +88,16 @@ Please, note the way queries were built. You can think about those queries as
 the rules, that will continue to work even after exported C++ code was changed. 
 It means that you don't have to change code generator source code every time. 
 
-So far, so good what about second question? Well, by default `pyplusplus`_ 
-generates a code that will satisfy almost all developers. `pyplusplus`_ relevant 
+So far, so good what about second question? Well, by default pyplusplus 
+generates a code that will satisfy almost all developers. pyplusplus relevant 
 classes could be configured in many ways to satisfy your needs. But sometimes 
 this is still not enough. There are use cases when you need full control over 
 generated code. One of the biggest problems, with code generators in general, is 
 modifying generated code and preserving changes. How many code generators did 
 you use or know, that allow you to put your code any where or to reorder generated 
-code as you wish? `pyplusplus`_ allows you to do that. 
+code as you wish? pyplusplus allows you to do that. 
 
-`pyplusplus`_ introduces new concept: code creator and code creator's tree. 
+pyplusplus introduces new concept: code creator and code creator's tree. 
 You can think about code creator's tree as some kind of `AST`_. The only difference
 is that code creator's tree has higher interface. For example ``include_t`` code
 creator is responsible to create C++ ``include`` directive code. You have full 
@@ -112,11 +112,11 @@ to disc.
 
 *"write code to files"* 
 -----------------------
-During this step `pyplusplus`_ reads code creators tree and writes code to the 
+During this step pyplusplus reads code creators tree and writes code to the 
 disc.The result of code generation process should not be different from the one, 
 that would be achieved by human. For small project writing all code into single 
 file is good approach, for big ones code should be written into multiple files.
-`pyplusplus`_ implements both strategies. 
+pyplusplus implements both strategies. 
 
 -------------
 Features list
