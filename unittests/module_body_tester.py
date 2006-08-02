@@ -24,6 +24,11 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.add_registration_code( 'bp::def( "get1", &get1 );' )
         mb.add_registration_code( '//this is another comment', False )
 
+        item = mb.class_( 'item_t' )
+        item.add_declaration_code( "int get11( const mb::item_t& item ){ return 11;}" )
+        item.add_registration_code( 'def( "get11", &get11 )' )
+        item.add_wrapper_code( '//this is wrapper code' )
+
     def run_tests(self, module):        
         self.failUnless( 1 == module.get1() )
     

@@ -22,10 +22,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         vec3 = mb.class_( 'Vector3' )
         vec3.always_expose_using_scope = True
         #mb.calldefs().use_keywords = False
-        vec3.add_code( 'add_property( "val", &vector3::Vector3::val)' )
-        vec3.add_code( 'add_property( "x", &vector3::Vector3::x)' )
-        vec3.add_code( 'add_property( "y", &vector3::Vector3::y)' )
-        vec3.add_code( 'add_property( "z", &vector3::Vector3::z)' )
+        vec3.add_registration_code( 'add_property( "val", &vector3::Vector3::val)' )
+        vec3.add_registration_code( 'add_property( "x", &vector3::Vector3::x)' )
+        vec3.add_registration_code( 'add_property( "y", &vector3::Vector3::y)' )
+        vec3.add_registration_code( 'add_property( "z", &vector3::Vector3::z)' )
 
         
     def run_tests( self, module):

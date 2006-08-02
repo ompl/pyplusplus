@@ -90,8 +90,9 @@ class class_t( class_common_impl_details_t
         self._held_type = None
         self._noncopyable = None
         self._wrapper_alias = self._generate_valid_name() + "_wrapper"
-        self._user_code = []
-        self._wrapper_user_code = []
+        self._registration_code = []
+        self._declaration_code = []
+        self._wrapper_code = []
         self._null_constructor_body = ''
         self._copy_constructor_body = ''
 
@@ -131,17 +132,29 @@ class class_t( class_common_impl_details_t
         for decl in self.declarations:
             decl.finalize( error_behavior )
     
-    def _get_user_code( self ):
-        return self._user_code
-    def _set_user_code( self, value ):
-        self._user_code = value
-    user_code = property( _get_user_code, _set_user_code )
+    @property
+    def declaration_code( self ):
+        """
+        List of strings, that contains valid C++ code, that will be added to 
+        the class registration section
+        """
+        return self._declaration_code
+    
+    @property
+    def registration_code( self ):
+        """
+        List of strings, that contains valid C++ code, that will be added to 
+        the class registration section
+        """
+        return self._registration_code
 
-    def _get_wrapper_user_code( self ):
-        return self._wrapper_user_code
-    def _set_wrapper_user_code( self, value ):
-        self._wrapper_user_code = value
-    wrapper_user_code = property( _get_wrapper_user_code, _set_wrapper_user_code )
+    @property
+    def wrapper_code( self ):
+        """
+        List of strings, that contains valid C++ code, that will be added to 
+        the class wrapper.
+        """
+        return self._wrapper_code
     
     def _get_null_constructor_body(self):
         return self._null_constructor_body
@@ -155,14 +168,19 @@ class class_t( class_common_impl_details_t
         self._copy_constructor_body = body
     copy_constructor_body = property( _get_copy_constructor_body, _set_copy_constructor_body )
 
-    def add_code( self, code, works_on_instance=True ):
+    def add_declaration_code( self, code ):
+        self.declaration_code.append( user_text.user_text_t( code ) )
+
+    def add_registration_code( self, code, works_on_instance=True ):
         """works_on_instance: If true, the custom code can be applied directly to obj inst.
            Ex: ObjInst."CustomCode"
         """
-        self.user_code.append( user_text.class_user_text_t( code, works_on_instance ) )
-        
+        self.registration_code.append( user_text.class_user_text_t( code, works_on_instance ) )
+    #preserving backward computability
+    add_code = add_registration_code
+    
     def add_wrapper_code( self, code ):
-        self.wrapper_user_code.append( user_text.user_text_t( code ) )
+        self.wrapper_code.append( user_text.user_text_t( code ) )
 
     def set_constructors_body( self, body ):
         """Sets the body for all constructors"""

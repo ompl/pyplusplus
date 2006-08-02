@@ -6,5 +6,9 @@
 #ifndef __module_body_to_be_exported_hpp__
 #define __module_body_to_be_exported_hpp__
 
+namespace mb{
+    struct item_t{};    
+}
+
 #endif//__module_body_to_be_exported_hpp__
 

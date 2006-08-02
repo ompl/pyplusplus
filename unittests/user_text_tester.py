@@ -20,7 +20,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def customize(self, mb ):
         data = mb.class_( 'data' )
         class_code = "/*class code*/"
-        data.add_code( class_code, False )
+        data.add_registration_code( class_code, False )
         wrapper_code = "/*wrapper code*/" 
         data.add_wrapper_code( wrapper_code )
         mb.build_code_creator( self.EXTENSION_NAME )

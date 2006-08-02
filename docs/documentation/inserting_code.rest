@@ -97,16 +97,11 @@ functions:
 
 * ``add_declaration_code( self, code )``
 
-  **Not implemented.**
-  
-  **Feedback is wanted.**
-  
-  **Please consider the relationship between this code and class wrapper code.**
-
   This method will add the code to the declaration section within the module.
-  If you split your module to few files, `pyplusplus`_ will generate code, in a 
-  way, that declarations you added, will be visible to registration code.
   
+  If you split your module to few files, `pyplusplus`_ will add this code to the 
+  cpp file, class registration code will be written in.
+
 * ``add_registration_code( self, code, works_on_instance=True )``
 
   This method will add the code to the registration section of the class. 

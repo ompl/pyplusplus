@@ -320,10 +320,10 @@ class creator_t( declarations.decl_visitor_t ):
     
     def _is_wrapper_needed(self, class_inst, exportable_members):
         if isinstance( self.curr_decl, declarations.class_t ) \
-           and self.curr_decl.wrapper_user_code:
+           and self.curr_decl.wrapper_code:
             return True
         elif isinstance( self.curr_code_creator, declarations.class_t ) \
-           and self.curr_code_creator.wrapper_user_code:
+           and self.curr_code_creator.wrapper_code:
             return True
         else:
             pass
@@ -417,12 +417,12 @@ class creator_t( declarations.decl_visitor_t ):
         ctext_t = code_creators.custom_text_t
         for creator in code_creators.make_flatten( self.__extmodule ):
             if isinstance( creator, code_creators.class_t ):
-                for user_code in creator.declaration.user_code:
+                for user_code in creator.declaration.registration_code:
                     creator.adopt_creator( 
                         ctext_t( user_code.text
                                  , works_on_instance=user_code.works_on_instance ) )
             elif isinstance( creator, code_creators.class_wrapper_t ):
-                for user_code in creator.declaration.wrapper_user_code:
+                for user_code in creator.declaration.wrapper_code:
                     creator.adopt_creator( ctext_t( user_code.text ) )
             else:
                 pass
