@@ -146,6 +146,8 @@ class class_multiple_files_tester_t(unittest.TestCase):
                 [ module_builder.create_text_fc( self.CLASS_DEF ) ]
                 , gccxml_path=autoconfig.gccxml.executable )
         mb.namespace( name='::tester' ).include()
+        X = mb.class_( 'X' )
+        X.add_declaration_code( '//hello world' )
         mb.build_code_creator('dummy')
         mb.split_module( autoconfig.build_dir, [ mb.class_( '::tester::X' ) ]  )
 

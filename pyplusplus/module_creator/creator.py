@@ -414,19 +414,28 @@ class creator_t( declarations.decl_visitor_t ):
                     registrators_db.append(r)
     
     def _append_user_code( self ):
+        find_classes = code_creators.creator_finder.find_by_class_instance
+        class_creators = find_classes( what=code_creators.class_t
+                                       , where=self.__extmodule.body.creators
+                                       , recursive=True )
+
         ctext_t = code_creators.custom_text_t
-        for creator in code_creators.make_flatten( self.__extmodule ):
-            if isinstance( creator, code_creators.class_t ):
-                for user_code in creator.declaration.registration_code:
-                    creator.adopt_creator( 
-                        ctext_t( user_code.text
-                                 , works_on_instance=user_code.works_on_instance ) )
-            elif isinstance( creator, code_creators.class_wrapper_t ):
-                for user_code in creator.declaration.wrapper_code:
-                    creator.adopt_creator( ctext_t( user_code.text ) )
-            else:
-                pass
-    
+        for cls_creator in class_creators:
+            cls_decl = cls_creator.declaration
+            #uc = user code
+            uc_creators = map( lambda uc: ctext_t( uc.text, uc.works_on_instance ) 
+                                      , cls_decl.registration_code )
+            cls_creator.adopt_creators( uc_creators )
+            
+            uc_creators = map( lambda uc: ctext_t( uc.text ), cls_decl.wrapper_code )
+            if uc_creators:
+                cls_creator.wrapper.adopt_creators( uc_creators )
+            
+            uc_creators = map( lambda uc: ctext_t( uc.text ), cls_decl.declaration_code )
+            insert_pos = self.__extmodule.creators.index( self.__module_body )
+            self.__extmodule.adopt_creators( uc_creators, insert_pos )
+            cls_creator.user_declarations.extend( uc_creators )
+                
     def _treat_indexing_suite( self ):
         global INDEXING_SUITE_1_CONTAINERS
         global INDEXING_SUITE_2_CONTAINERS

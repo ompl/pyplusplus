@@ -39,7 +39,7 @@ sections. More over you can add the code to head or tail of the section.
   
 * ``add_registration_code( self, code, tail=True )``
 
-  This function will ass a code to the registration section. If you want to add
+  This function will add a code to the registration section. If you want to add
   the code to the head of the section, pass ``tail=False`` to the method.
 
 Example
@@ -101,6 +101,10 @@ functions:
   
   If you split your module to few files, `pyplusplus`_ will add this code to the 
   cpp file, class registration code will be written in.
+  
+  Attention: there is no defined order between wrapper code and declaration section
+  code. If you have dependencies between code from declaration section and class
+  wrapper, consider to move declaration code to class wrapper. 
 
 * ``add_registration_code( self, code, works_on_instance=True )``
 
