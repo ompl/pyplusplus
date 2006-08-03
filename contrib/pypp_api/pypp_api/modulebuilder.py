@@ -51,7 +51,7 @@ class ModuleBuilder:
                 cacheFile = None,
                 cacheDir = None,
                 moduleName = None,
-                output = "bindings",
+                output = None,
                 multiFile = False,
                 useScope = False,
                 maxArity = None,
@@ -106,6 +106,13 @@ class ModuleBuilder:
       self.mCacheFile    = cacheFile      # File to use for caching gccxml output
       self.mCacheDir     = cacheDir       # Directory to use for caching
       self.mModuleName = moduleName       # Name of the Python extension module
+      if output==None:
+         if moduleName==None:
+            output = "bindings"
+         else:
+            output = moduleName
+         if not multiFile:
+            output += ".cpp"
       self.mOutput = output               # Output file or directory name
       self.mMultiFile = multiFile         # Multi file flag
       self.mUseScope = useScope           # Use scope 
