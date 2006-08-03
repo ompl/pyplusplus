@@ -106,9 +106,27 @@ could be integrated with `pyplusplus`_.
   window = mb.class_( "window_t" )
   window.member_function( "get_size" ).exclude()
   window.add_wrapper_code( wrapper_code )
-  window.add_code( registration_code )
+  window.registration_code( registration_code )
 
 That's all. 
+
+------------------------------------------------------------
+Fatal error C1204:Compiler limit:internal structure overflow
+------------------------------------------------------------
+
+If you get this error, that the generated file is too big. You will have to split
+it to few files. Well, not you but `pyplusplus`_ you will only have to tell that 
+to it.
+
+If you are using ``module_builder_t.write_module`` method, consider to switch
+to ``module_builder_t.split_module``. 
+
+If you are using ``split_method``, but still generated code for some specific 
+class could not be compiled because of error, you can ask `pyplusplus`_ to split
+class registration code to few cpp files.
+
+For more information, please read the documentation.
+
 
 .. _`pyplusplus` : ./../pyplusplus.html
 .. _`boost.python`: http://www.boost.org/libs/python/doc/index.html

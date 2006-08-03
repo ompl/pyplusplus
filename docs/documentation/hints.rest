@@ -1,0 +1,52 @@
+=====
+Hints 
+=====
+
+.. contents:: Table of contents
+
+----------------------------------
+Class template instantiation alias
+----------------------------------
+
+`pyplusplus`_ has nice feature. If you define ``typedef`` for instantiated class 
+template, than `pyplusplus`_ will use it as a `Python`_ class name.
+
+For example:
+::
+
+  #include <vector>
+
+::
+
+  typedef std::vector< int > numbers;
+
+::
+
+  numbers generate_n(){
+      ...
+  }
+
+`pyplusplus`_ will use "numbers" as Python class name:
+
+::
+
+  using boost::python;
+  class_< std::vector< int > >( "numbers" )
+      ...
+  ;
+  
+This feature will work only in case there is only one such ``typedef``. Using class
+property ``aliases`` you can get access to all ``typedef``'s of the class.
+
+.. _`pyplusplus` : ./../pyplusplus.html
+.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Python`: http://www.python.org
+.. _`GCC-XML`: http://www.gccxml.org
+
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:
