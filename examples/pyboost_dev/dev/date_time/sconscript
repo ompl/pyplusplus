@@ -25,7 +25,7 @@ def get_source_files():
 def get_libs():
     libs = []
     if sys.platform == 'linux2':
-        libs.append('libboost_date_time-gcc-1_34')
+        libs.append('libboost_date_time-gcc-1_35')
     return libs
 
 def get_target():
@@ -41,9 +41,9 @@ _date_time_ = local_env.SharedLibrary( target=date_time_settings.module_name
                                        , source=get_source_files() )
 
 if sys.platform == 'win32':
-    boost_date_time_so_dll = os.path.join( date_time_settings.boost.libs, 'boost_date_time-vc71-mt-1_34.dll' )
+    boost_date_time_so_dll = os.path.join( date_time_settings.boost.libs, 'boost_date_time-vc71-mt-1_35.dll' )
 else:
-    boost_date_time_so_dll = os.path.join( date_time_settings.boost.libs, 'libboost_date_time-gcc-1_34.so' )
+    boost_date_time_so_dll = os.path.join( date_time_settings.boost.libs, 'libboost_date_time-gcc-1_35.so' )
 
 
 local_env.Install( '#pyboost/date_time', [_date_time_, boost_date_time_so_dll ] )
