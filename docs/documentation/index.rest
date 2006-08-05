@@ -13,10 +13,10 @@ task to create and maintain it. I will appriciate any help!
 
 How can you help?
 
-* Lets face it: today it is not possible to use `pyplusplus`_ without looking
-  into source code sometimes. `pyplusplus`_ uses `Epydoc`_ to generate 
-  documentation from source files. So, if you found some undocumented piece of 
-  code and you understand what it does, please write documentation string.
+* Lets face it: today it is not possible to use `pyplusplus`_ without eventually
+  looking into source code. `pyplusplus`_ uses `Epydoc`_ to generate documentation 
+  from source files. So, if you found some undocumented piece of code and you 
+  understand what it does, please write documentation string.
   
 * You are reading documentation and my English cause you to scream? Please, fix
   those errors and send me new version of the document. I will integrate the 

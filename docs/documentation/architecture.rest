@@ -1,0 +1,68 @@
+============
+Architecture
+============
+
+.. contents:: Table of contents
+
+------------
+Introduction
+------------
+
+This document will describe an architecture behind `pyplusplus`_. If you just 
+started with `pyplusplus`_ you don't have to read this document.
+
+--------
+pygccxml
+--------
+
+What is exactly `pygccxml`_ for `pyplusplus`_. `pygccxml`_ provides next services:
+
+* definition of classes, that describe C++ declaration and types
+* C++ source files parsing and caching functionality
+* C++ class and type analizers( type traits )
+
+`pyplusplus`_ uses those services to:
+
+* extract declarations from source files
+
+* find out declaration default configuration:
+
+  * call policies for functions
+
+  * indexing suite parameters
+
+  * generate warnings/hints
+  
+  * ...
+
+* provide powerful query interface
+
+In general, `pygccxml`_ does all dirty work.
+
+---------------------
+decl_wrappers package
+---------------------
+
+This is the most important package in `pyplusplus`_. Why? Because this package
+contains interface, that configure code generator engine. For example
+
+
+pygccxml & decl_wrappers integration
+------------------------------------
+
+Almost every class in the ``decl_wrappers`` package derives from relevant class
+defined in ``pygccxml.declarations` package.
+  
+
+.. _`pyplusplus` : ./../pyplusplus.html
+.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Python`: http://www.python.org
+.. _`GCC-XML`: http://www.gccxml.org
+
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:
