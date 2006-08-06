@@ -9,17 +9,31 @@ Introduction
 ------------
 
 This document will describe an architecture behind `pyplusplus`_. If you just 
-started with `pyplusplus`_ you don't have to read this document.
+started with `pyplusplus`_ you don't have to read this document. 
 
---------
-pygccxml
---------
+---
+C++
+---
 
-What is exactly `pygccxml`_ for `pyplusplus`_. `pygccxml`_ provides next services:
+C++ is very powerful programming language. The power brings complexity. It is 
+not an easy task to parse C++ source files and to create in memory representation 
+of declarations tree. Lets say that I've managed to do it. It is not enough.
+Declarations tree is worth nothing, if user is not able to explorer it, to run
+queries against it, to find out traits of a declaration or a type.
+
+On the earlier stage of development, I realized, that all this functionality does 
+not belong to code generator and should be implemented out side of it. `pygccxml`_ 
+project was born. By the way, implementing all this functionality out side of
+code generator, made it to be C++ parser independent. 
+
+`pygccxml`_ provides next services:
 
 * definition of classes, that describe C++ declaration and types
+
 * C++ source files parsing and caching functionality
-* C++ class and type analizers( type traits )
+
+* C++ declaration and type analizers( type traits )
+
 
 `pyplusplus`_ uses those services to:
 
@@ -37,24 +51,101 @@ What is exactly `pygccxml`_ for `pyplusplus`_. `pygccxml`_ provides next service
 
 * provide powerful query interface
 
-In general, `pygccxml`_ does all dirty work.
+pyplusplus & pygccxml integration
+---------------------------------
 
----------------------
-decl_wrappers package
----------------------
+In general `pygccxml`_ provides two main services "parsing" and "declarations tree".
+`pyplusplus`_ uses different approaches to exposes those services to the user.
 
-This is the most important package in `pyplusplus`_. Why? Because this package
-contains interface, that configure code generator engine. For example
+Parsing integration
+-------------------
+`pyplusplus`_ provides it's own API to configure and run `pygccxml`_ parsing
+services. The "API" I am talking about, is arguments to ``module_builder.__init__``
+method. This method takes all arguments needed to envoke "parsing" services.
+This has been done to simplify usage of `pyplusplus`_.
 
 
-pygccxml & decl_wrappers integration
-------------------------------------
+Declarations tree integration
+-----------------------------
 
-Almost every class in the ``decl_wrappers`` package derives from relevant class
-defined in ``pygccxml.declarations` package.
+Declarations tree API consists from 3 parts:
+
+* interface definition:
+
+  * ``declaration_t`` and all classes that derive from it
+
+  * ``type_t`` and all classes that derive from it
+
+* type traits
+
+* query engine API
+
+
+The user should be familiar with those part and relevant API. You may ask "why"?
+The answer is simple: in my opinion, wrapping/hidding/modifying the API will not 
+give any value. 
+
+The question I should answer is how this API integrated? Before I start to 
+explain, lets take a look on next source code:
+
+::
+
+  mb = module_builder_t( ... )
+
+::
+
+  details = mb.namespace( 'details' )
+  details.exclude()
+
+
+What you see here, is an example of code, that will be\\is written in all projects
+that use `pyplusplus`_:
+
+* find declaration(s)
+
+* apply code generator engine configuration changes
+
+What is the main point of this example? It is perfectly good, it makes a lot of 
+sence to the user to configure code generation engine using declarations tree 
+hierarchy. Now, I think you understand the problem: how does `pyplusplus`_ add
+missinig functionality to ``pygccxml.declarations`` classes? There were few 
+possible solutions to the problem. `pyplusplus`_ implements the solution using
+factory design pattern. 
+
+1. ``pygccxml.parser`` package interface was extendent. Instead of creating
+   a concrete instance of declaration class or type, ``pygccxml.parser`` package
+   uses factory.
+   
+2. ``pyplusplus.decl_wrappers`` package defines classes, that derives from
+   ``pygccxml.declarations`` classes and defines the factory.
+
+Also, this solution is not the simplest one, it provides an additional value to
+the project:
+
+* code generation engine configuration and declarations tree are tightly coupled
+
+* all functionality provided by ``pygccxml.declarations`` and ``pygccxml.parser``
+  packages is available for ``pyplusplus.decl_wrappers`` classes
+
+* classes defined in ``pyplusplus.decl_wrappers`` package implement next 
+  functionality:
   
+  * setting reasonable defaults for code generation engine( call policies, 
+    indexing suite, ... )
+    
+  * provides user with additional information( warnings and hints )
+  
+* as a bonus, `pygccxml`_ remained to be stand-alone project
+
+----------------------
+Code generation engine
+----------------------
+
+Code generation for `boost.python`_ library is a difficult process. 
+
 
 .. _`pyplusplus` : ./../pyplusplus.html
+.. _`pygccxml` : ./../../pygccxml/pygccxml.html
 .. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
