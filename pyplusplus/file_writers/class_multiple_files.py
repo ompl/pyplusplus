@@ -42,41 +42,11 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
             #, self.split_internal_member_variables
         ]
  
-    def split_class_impl( self, class_creator):
-        function_name = 'register_%s_class' % class_creator.alias
-        file_path = os.path.join( self.directory_path, class_creator.alias )
-        # Write the .h file...
-        header_name = file_path + self.HEADER_EXT
-        self.write_file( header_name
-                         , self.create_header( class_creator.alias
-                                               , self.create_function_code( function_name ) ) )
-        class_wrapper = None
-        decl_creators = None
-        if isinstance( class_creator, code_creators.class_t ) and class_creator.wrapper:
-            class_wrapper = class_creator.wrapper
-            decl_creators = [ class_creator.wrapper ]
-        # Write the .cpp file...
-        cpp_code = self.create_source( class_creator.alias
-                                       , function_name
-                                       , [class_creator]
-                                       , decl_creators )
-        self.write_file( file_path + self.SOURCE_EXT, cpp_code )
-        if class_wrapper:
-            # The wrapper has already been written above, so replace the create()
-            # method with a new 'method' that just returns an empty string because
-            # this method is later called again for the main source file.
-            class_wrapper.create = lambda: ''
-        # Replace the create() method so that only the register() method is called
-        # (this is called later for the main source file).
-        class_creator.create = lambda: function_name +'();'
-        self.__include_creators.append( code_creators.include_t( header_name ) )
-        self.split_header_names.append(header_name)
-        self.split_method_names.append(function_name)
+    def create_base_fname( self, class_creator, pattern ):
+        return "_%s__%s" % ( class_creator.alias, pattern )
 
     def wrapper_header( self, class_creator ):
-        normalize = code_creators.include_directories_t.normalize
-        tmp = os.path.join( class_creator.alias, 'wrapper' + self.HEADER_EXT )
-        return normalize( tmp )
+        return self.create_base_fname( class_creator, 'wrapper' + self.HEADER_EXT )
 
     def write_wrapper( self, class_creator ):
         answer = []
@@ -95,14 +65,13 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         answer.append( class_creator.create_typedef_code() )
         
         code = os.linesep.join( answer )
-        wrapper_code = self.create_header( class_creator.alias + '_wrapper', code )
+        wrapper_code = self.create_header( self.create_base_fname(class_creator, 'wrapper'), code )
         header_file = os.path.join( self.directory_path, self.wrapper_header(class_creator) )
         self.write_file( header_file, wrapper_code )
         
     def split_internal_creators( self, class_creator, creators, pattern ):
         file_path = os.path.join( self.directory_path
-                                  , class_creator.alias
-                                  , pattern )
+                                  , self.create_base_fname( class_creator, pattern ) )
          
         function_name = 'register_%(cls_alias)s_%(pattern)s' \
                         % { 'cls_alias' : class_creator.alias, 'pattern' : pattern }
@@ -126,7 +95,7 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
             source_code.append( self.extmodule.license.create() )
         
         #relevant header file
-        head_headers = [ os.path.join( class_creator.alias, pattern + self.HEADER_EXT) ]
+        head_headers = [ self.create_base_fname( class_creator, pattern + self.HEADER_EXT ) ]
         source_code.append( self.create_include_code( creators, head_headers ) )
 
         source_code.append( '' )
@@ -219,7 +188,6 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         class_creator.declaration.always_expose_using_scope = True
         extmodule = class_creator.top_parent
                
-        self.create_dir( os.path.join( self.directory_path, class_creator.alias ) )
         
         function_name = 'register_%s_class' % class_creator.alias
         file_path = os.path.join( self.directory_path, class_creator.alias )
@@ -237,11 +205,11 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
             if not pattern:
                 continue
             if isinstance( pattern, str ):
-                tail_headers.append( os.path.join( class_creator.alias, pattern + self.HEADER_EXT ) )
+                tail_headers.append( self.create_base_fname( class_creator, pattern + self.HEADER_EXT ) )
             else:
                 assert( isinstance( pattern, list ) )
                 for p in pattern:
-                    tail_headers.append( os.path.join( class_creator.alias, p + self.HEADER_EXT ) )
+                    tail_headers.append( self.create_base_fname( class_creator, p + self.HEADER_EXT ) )
         #writting source file        
         source_code = []
         if self.extmodule.license:
