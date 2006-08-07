@@ -176,10 +176,12 @@ class multiple_files_t(writer.writer_t):
                          , self.create_header( class_creator.alias
                                                , self.create_function_code( function_name ) ) )
         class_wrapper = None
-        decl_creators = class_creator.user_declarations[:]
-        if isinstance( class_creator, code_creators.class_t ) and class_creator.wrapper:
-            class_wrapper = class_creator.wrapper
-            decl_creators.append( class_creator.wrapper )
+        decl_creators = []
+        if isinstance( class_creator, code_creators.class_t ):
+            decl_creators.extend( class_creator.user_declarations )
+            if  class_creator.wrapper:
+                class_wrapper = class_creator.wrapper
+                decl_creators.append( class_creator.wrapper )
         
         # Write the .cpp file...
         cpp_code = self.create_source( class_creator.alias
@@ -211,7 +213,7 @@ class multiple_files_t(writer.writer_t):
         try:
             self.split_class_impl( class_creator )
         except IOError, error:
-            msg = [ 'Failed to write code for class "%s" into file.' % class_creator.declaration.name ]
+            msg = [ 'Failed to write code for class "%s" into file.;' % class_creator.declaration.name ]
             msg.append( "May be the class name is too long?." )
             msg.append( "Error: %s'" % str(error) )
             self.logger.error( os.linesep.join( msg ) )
