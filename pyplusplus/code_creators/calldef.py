@@ -59,6 +59,10 @@ class calldef_t( declaration_based.declaration_based_t):
                        and declarations.is_integral( arg_type_no_alias ) \
                        and not arg.default_value.startswith( arg_type_no_alias.decl_string ):
                         result.append( '=(%s)(%s)' % ( arg_type_no_alias.decl_string, arg.default_value ) )
+                    elif declarations.is_enum( arg.type ):
+                        #Work around for bug/missing functionality in boost.python.
+                        #registration order
+                        result.append( '=(long)(%s)' % arg.default_value )
                     else:
                         result.append( '=%s' % arg.default_value )
                 else:
