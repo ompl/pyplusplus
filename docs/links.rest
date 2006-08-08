@@ -1,0 +1,47 @@
+=====
+Links
+=====
+
+.. contents:: Table of contents
+
+----
+Wiki
+----
+
+Thanks to Allen Bierbaum `pyplusplus`_ now has `wiki`_. We use it primary to
+discuss new features, that will be introduced in future versions.
+
+-------
+Reading
+-------
+
+* `Building Hybrid Systems with Boost.Python`_
+
+* `A rationale for semantically enhanced library languages`_
+
+  ".. A Semantically Enhanced Library Language (a SEL language or a SELL) is a 
+  dialect created by supersetting a language using a library and then subsetting
+  the result using a tool that `understands` the syntax and semantics of both 
+  the underlying language and the library. ..."
+  
+  `pyplusplus`_ + boost.python is a SELL!
+  
+
+* `Aspect oriented programming`_
+ 
+  `pyplusplus`_ borrowed few ideas from this programming paradigm.
+
+
+.. _`Aspect oriented programming` : http://en.wikipedia.org/wiki/Aspect-oriented_programming
+.. _`A rationale for semantically enhanced library languages` : http://www.research.att.com/~bs/SELLrationale.pdf
+.. _`Building Hybrid Systems with Boost.Python` : http://www.boost-consulting.com/writing/bpl.html
+.. _`wiki` : https://realityforge.vrsource.org/view/PyppApi/WebHome
+.. _`pyplusplus` : ./pyplusplus.html
+
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:
