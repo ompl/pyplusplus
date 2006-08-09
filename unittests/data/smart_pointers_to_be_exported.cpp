@@ -28,5 +28,17 @@ int val_shared_base_value( base_s_ptr a ){ return a->get_base_value(); }
 int const_ref_auto_base_value( const base_a_ptr& a ){ return a->get_base_value(); }
 int const_ref_shared_base_value( const base_s_ptr& a ){ return a->get_base_value(); }
    
-    
+
+
+int ref_auto_some_value( base_a_ptr& a ){ return a->get_some_value(); }
+int ref_shared_some_value( base_s_ptr& a ){ return a->get_some_value(); }
+
+int val_auto_some_value( base_a_ptr a ){ return a->get_some_value(); }
+int val_shared_some_value( base_s_ptr a ){ return a->get_some_value(); }
+
+int const_ref_auto_some_value( const base_a_ptr& a ){ return a->get_some_value(); }
+int const_ref_shared_some_value( const base_s_ptr& a ){ return a->get_some_value(); }
+
+
+
 }    

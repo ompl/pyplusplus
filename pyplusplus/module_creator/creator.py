@@ -406,7 +406,8 @@ class creator_t( declarations.decl_visitor_t ):
         registrators_db = []
         for creator in class_creators:
             if None is creator.held_type:
-                creator.held_type = self.__types_db.create_holder( creator.declaration )
+                if not creator.declaration.is_abstract:
+                    creator.held_type = self.__types_db.create_holder( creator.declaration )
             registrators = self.__types_db.create_registrators( creator )
             for r in registrators:
                 if not self._is_registered_smart_pointer_creator( r, registrators_db ):

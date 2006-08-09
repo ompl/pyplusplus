@@ -141,7 +141,77 @@ the project:
 Code generation engine
 ----------------------
 
-Code generation for `boost.python`_ library is a difficult process. 
+Code generation for `boost.python`_ library is a difficult process. I don't know 
+what about you, but when I have to solve some complex task, I prefer to use 
+`divide and conquer`_ paradigm. There are 2 different problems code generation
+engine should solve:
+
+* What code should be created in order to export a declaration?
+
+  I mean what `boost.python`_ code should be generated if you want to export this
+  or that declaration.
+
+  Code creators is the solution to this problem.
+  
+* How it should be written to files?
+
+  Remember, `pyplusplus`_ is targeting big projects. It can not generate all code
+  in one file - this will not work, not at all.
+  
+  Code creators and file writers provides solution to this problem.
+
+
+.. _`divide and conquer` : http://en.wikipedia.org/wiki/Divide_and_conquer_algorithm
+
+
+Code creators
+-------------
+
+Do you know how many ways exist to export member function? It is up to you to 
+find the answer to the question. Please consider next use cases:
+
+* function is non virtual, virtual or pure virtual
+
+* function is public, protected or private
+
+* function could be static
+
+* function could be an ``operator()`` or  an ``operator[]``
+
+As you see, there are a lot of use cases. How does code creators solves the 
+problem? There is almost a direct mapping between code creators and use cases.
+Code creator knows what code should be generated, in order to export this or that
+declaration. That is the only job of code creators. For example:
+
+* ``code_creators.enum_t`` generates code, that will export named enum
+  
+* ``code_creators.indexing_suite2_t`` generates code, that will export stl container
+
+There are primary 2 kinds of code creators: declaration based and others.
+Declaration based code creator creates code or part of it, that will export the
+declaration. For example: in order to export virtual function, `pyplusplus`_
+creates 3 code creators: 
+
+( I will reuse example from `boost.python`_ `tutorials`__.)
+
+.. __ : http://boost.org/libs/python/doc/tutorial/doc/html/python/exposing.html#python.virtual_functions_with_default_implementations
+
+1. ``BaseWrap::f``
+
+2. ``BaseWrap::default_f``
+
+3. ``f`` registration code
+
+Now when you understand, what code creator is, it is a time to move on - composite 
+code creator. Composite code creator is a creator, that contains other creators.
+For example: ``code_creators.class_t`` or ``code_creators.module_t``. They embed
+the code created by internal code creators within the code they create. 
+
+
+
+
+
+
 
 
 .. _`pyplusplus` : ./../pyplusplus.html

@@ -14,12 +14,14 @@ struct base{
     base() : base_value(19) {}
     int base_value;
     virtual int get_base_value(){ return base_value; }
+    virtual int get_some_value() = 0;
 };
 
 struct data : base{
     data() : value(11){}
     int value;
     virtual int get_value(){ return value; }
+    virtual int get_some_value(){ return 23; }
 };
 
 typedef std::auto_ptr< base > base_a_ptr;
@@ -48,7 +50,17 @@ int val_shared_base_value( base_s_ptr a );
 
 int const_ref_auto_base_value( const base_a_ptr& a );
 int const_ref_shared_base_value( const base_s_ptr& a );
-    
+
+int ref_auto_some_value( base_a_ptr& a );
+int ref_shared_some_value( base_s_ptr& a );
+
+int val_auto_some_value( base_a_ptr a );
+int val_shared_some_value( base_s_ptr a );
+
+int const_ref_auto_some_value( const base_a_ptr& a );
+int const_ref_shared_some_value( const base_s_ptr& a );
+
+
 }    
 
 #endif//__smart_pointers_to_be_exported_hpp__

@@ -18,14 +18,33 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , tester_t.EXTENSION_NAME
             , *args )
    
+    def customize( self, mb ):
+        base = mb.class_( 'base' )
+        #base.held_type = ''
+   
+    def create_py_derived( self, module ):
+        class py_derived_t( module.base ):
+            def __init__( self ):
+                module.base.__init__( self )
+            
+            def get_some_value( self ):
+                return 28
+        
+        return py_derived_t()
+        
     def run_tests( self, module):
         da = module.create_auto()
+        py_derived = self.create_py_derived( module )
+        
         self.failUnless( 11 == da.value )
         ds = module.create_shared()
         self.failUnless( 11 == ds.value )
         
         self.failUnless( 11 == module.ref_auto(da) )
         self.failUnless( 11 == module.ref_shared(ds) )
+        
+        #why? because in this case held type could not be set
+        #self.failUnless( 11 == module.ref_shared(py_derived) )
 
         self.failUnless( 11 == module.val_auto(da) )
         self.failUnless( 11 == module.val_shared(ds) )
@@ -43,12 +62,25 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
         self.failUnless( 19 == module.const_ref_auto_base_value(da) )
         self.failUnless( 19 == module.const_ref_shared_base_value(ds) )
+        self.failUnless( 19 == module.const_ref_shared_base_value(py_derived) )
 
         da = module.create_auto()
 
         self.failUnless( 19 == module.val_auto_base_value(da) )
         self.failUnless( 19 == module.val_shared_base_value(ds) )
-    
+        self.failUnless( 19 == module.val_shared_base_value(py_derived) )
+        
+        da = module.create_auto()
+        
+        self.failUnless( 23 == module.val_auto_some_value(da) )
+        self.failUnless( 28 == module.val_shared_some_value(py_derived) )
+
+        da = module.create_auto()
+
+        self.failUnless( 23 == module.const_ref_auto_some_value(da) )
+        self.failUnless( 28 == module.const_ref_shared_some_value(py_derived) )
+
+
 def create_suite():
     suite = unittest.TestSuite()    
     suite.addTest( unittest.makeSuite(tester_t))
