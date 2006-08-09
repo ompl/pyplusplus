@@ -11,13 +11,19 @@ Wiki
 Thanks to Allen Bierbaum `pyplusplus`_ now has `wiki`_. We use it primary to
 discuss new features, that will be introduced in future versions.
 
+.. _`wiki` : https://realityforge.vrsource.org/view/PyppApi/WebHome
+
 -------
 Reading
 -------
 
 * `Building Hybrid Systems with Boost.Python`_
 
+  .. _`Building Hybrid Systems with Boost.Python` : http://www.boost-consulting.com/writing/bpl.html
+
 * `A rationale for semantically enhanced library languages`_
+
+  .. _`A rationale for semantically enhanced library languages` : http://www.research.att.com/~bs/SELLrationale.pdf
 
   ".. A Semantically Enhanced Library Language (a SEL language or a SELL) is a 
   dialect created by supersetting a language using a library and then subsetting
@@ -28,14 +34,43 @@ Reading
   
 
 * `Aspect oriented programming`_
- 
+
+  .. _`Aspect oriented programming` : http://en.wikipedia.org/wiki/Aspect-oriented_programming
+
   `pyplusplus`_ borrowed few ideas from this programming paradigm.
 
+--------------
+Help resources
+--------------
 
-.. _`Aspect oriented programming` : http://en.wikipedia.org/wiki/Aspect-oriented_programming
-.. _`A rationale for semantically enhanced library languages` : http://www.research.att.com/~bs/SELLrationale.pdf
-.. _`Building Hybrid Systems with Boost.Python` : http://www.boost-consulting.com/writing/bpl.html
-.. _`wiki` : https://realityforge.vrsource.org/view/PyppApi/WebHome
+* http://www.google.com :-)
+
+* http://boost.org/libs/python/doc/index.html - tutorials, FAQs, reference 
+  manuals
+  
+* `boost.python wiki`_
+
+  .. _`boost.python wiki` : http://wiki.python.org/moin/boost%2epython?action=show&redirect=boost+2epython
+
+* http://boost.cvs.sourceforge.net/boost/boost/libs/python/test/ - `boost.python`_ 
+  unit tests. They could be very, very helpful.
+
+* http://svn.sourceforge.net/viewvc/pygccxml/pyplusplus_dev/unittests/ - `pyplusplus`_ 
+  unit tests. They could be even more helpful!
+  
+-------------
+Mailing lists
+-------------
+
+* `C++-sig`_ - development of Python/C++ bindings
+
+  .. _`C++-sig` : http://mail.python.org/mailman/listinfo/c++-sig/
+
+* `pyplusplus mailing list`_
+
+  .. _`pyplusplus mailing list` : http://sourceforge.net/mail/?group_id=118209
+
+.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
 .. _`pyplusplus` : ./pyplusplus.html
 
 ..

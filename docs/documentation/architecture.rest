@@ -168,7 +168,8 @@ Code creators
 -------------
 
 Do you know how many ways exist to export member function? It is up to you to 
-find the answer to the question. Please consider next use cases:
+find the answer to the question. Please consider next function properties and
+mix of them:
 
 * function is non virtual, virtual or pure virtual
 
@@ -178,19 +179,33 @@ find the answer to the question. Please consider next use cases:
 
 * function could be an ``operator()`` or  an ``operator[]``
 
-As you see, there are a lot of use cases. How does code creators solves the 
-problem? There is almost a direct mapping between code creators and use cases.
-Code creator knows what code should be generated, in order to export this or that
-declaration. That is the only job of code creators. For example:
+* function could be overloaded
 
-* ``code_creators.enum_t`` generates code, that will export named enum
+As you see, there are a lot of use cases. How does ``code creator``s solves the 
+problem? There is almost a direct mapping between ``code creator``s and use cases.
+``Code creator`` knows what code should be generated, in order to export a 
+declaration. That is the only job of ``code creator``s. For example:
+
+* ``code_creators.enum_t`` generates registration code for an enumeration
   
-* ``code_creators.indexing_suite2_t`` generates code, that will export stl container
+* ``code_creators.indexing_suite2_t`` generates registration code for an stl container
 
-There are primary 2 kinds of code creators: declaration based and others.
-Declaration based code creator creates code or part of it, that will export the
-declaration. For example: in order to export virtual function, `pyplusplus`_
-creates 3 code creators: 
+* ``code_creators.mem_fun_pv_t`` generates registration code for public, pure 
+  virtual function
+  
+* ``code_creators.mem_fun_pv_wrapper_t`` generates declaration code for public, 
+  pure virtual function
+  
+* ``code_creators.include_t`` generates include directives
+
+* ``code_creators.custom_text_t`` adds some custom( read user ) text\\code to 
+  the generated code
+
+As you can see, there are primary 2 kinds of ``code creator``s: declaration based 
+and others. Declaration based creator generate code, that is needed to export the
+declaration. There a lot of use cases, where in order to export a declaration,
+`pyplusplus`_ builds more then one ``code creator``. For example: in order to 
+export virtual function 3 ``code creator``s are built: 
 
 ( I will reuse example from `boost.python`_ `tutorials`__.)
 
@@ -202,7 +217,12 @@ creates 3 code creators:
 
 3. ``f`` registration code
 
-Now when you understand, what code creator is, it is a time to move on - composite 
+Reminder: classes, defined in ``pyplusplus.decl_wrappers`` package, are used as
+configuration to ``code creator``. So, ``code creator`` keeps reference to 
+declaration and when it is requested to generate code, it does this according
+to declaration configuration.
+
+Now when you understand, what ``code creator`` is, it is a time to move on - composite 
 code creator. Composite code creator is a creator, that contains other creators.
 For example: ``code_creators.class_t`` or ``code_creators.module_t``. They embed
 the code created by internal code creators within the code they create. 
