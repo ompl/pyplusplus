@@ -128,6 +128,124 @@ class registration code to few cpp files.
 For more information, please read the documentation.
 
 
+------------------------------------------------------
+How to automatically export template functions\\class?
+------------------------------------------------------
+
+Lets say you have next C++ function:
+::
+
+  //file point.h
+
+::
+
+  namespace geometry{
+
+::
+
+  template< class T>
+  struct point_t{
+      T x, y;
+  };
+
+::
+
+  template <class T> 
+  double distance( const point_t<T>& point ){
+      return sqrt( point.x * point.x + point.y*point.y );
+  }
+
+::
+
+  } //namespace geometry
+
+
+You should understand, that you can not export template itself, but only its
+instantiations. The solution is built using next facts:
+
+* ``sizeof( class name )`` causes a compiler to instantiate the class
+
+* free function invocation causes a compiler to instantiate the function
+
+Lets say that we need to exprort the class and the function template 
+instantiations for ``int`` and ``cutom_type`` types. There are few ways to do it.
+
+Simple and straightforward
+--------------------------
+
+Open your favorite editor and create a header file with the content:
+
+::
+
+  #include "point.h"
+
+::
+
+  namespace  py_details{
+      inline void instantiate(){
+          using namespace geometry;
+          sizeof( point_t<int> );
+          sizeof( point_t<cutom_type> );
+          distance( point_t<int>(0,0) );
+          distance( point_t<cutom_type>(0,0) );
+      }
+  }
+
+Now, you add this file to the list of files you pass as input to 
+``module_builder_t.__init__`` method and excludes the ``py_details`` namespace 
+declarations from being exported:
+
+::
+
+  mb = module_builder_t( [..., just created file ], ... )
+  mb.namespace( 'py_details' ).exclude()
+
+"Dynamic" instantiation
+-----------------------
+
+Lets say you are less lucky than I, and you have to create ``X`` instantiations 
+of the class\\function. Obviously, the previous approach will not work for you.
+The solution is to build your own code generator, that will generate code similar 
+to the one, in the previous paragragh. 
+
+::
+
+  from module_builder import module_builder_t, create_text_fc
+
+::
+
+  def generate_instantiations_string( ... ):
+      ...
+
+::
+
+  code = generate_instantiations_string( ... )
+
+::
+
+  mb = module_builder_t( [ ..., create_text_fc( code ) ], ... )
+  mb.namespace( 'py_details' ).exclude()
+
+
+`pyplusplus`_ allows you to extract declarations from string, that contains
+valid C++ code. It creates temporal header file and compiles it. At the end of
+the compilation process it will remove it. You can read mode about ``create_text_fc``
+function `here`__.
+
+.. __ : ./../../pygccxml/design.html#parser-configuration-classes
+
+
+
+I understand that the provided solution is not perfect. I understand that something
+better and simpler should be done, but a priority of this is low. There are few 
+tasks, that have much higher priority. Allen Bierbaum wants to fix the situation.
+He created a `wiki page`_, that discuss possible solutions. Your contribution is
+welcome too!
+
+.. _`wiki page` : https://realityforge.vrsource.org/view/PyppApi/TemplateSupport
+
+
+
 .. _`pyplusplus` : ./../pyplusplus.html
 .. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
