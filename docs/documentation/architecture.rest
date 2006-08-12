@@ -23,22 +23,19 @@ queries against it, to find out traits of a declaration or a type.
 On the earlier stage of the development, I realized, that all this functionality 
 does not belong to code generator and should be implemented out side of it. 
 `pygccxml`_ project was born. `pygccxml`_ made the code generator to be smaller 
-and C++ parser independent. 
+and C++ parser independent. It provides next services:
 
-`pygccxml`_ provides next services:
-
-* definition of classes, that describe C++ declaration and types
-
-* C++ declaration and type analizers( type traits )
+* definition of classes, that describe C++ declaration and types, and their 
+  analizers ( type traits )
 
 * C++ source files parsing and caching functionality
 
 
 `pyplusplus`_ uses those services to:
 
-* extract declarations from source files
+* extract declarations from source files and to provide powerful query interface
 
-* find out declaration default configuration:
+* find out a declaration default configuration:
 
   * call policies for functions
 
@@ -48,26 +45,22 @@ and C++ parser independent.
   
   * ...
 
-* provide powerful query interface
-
 
 pyplusplus & pygccxml integration
 ---------------------------------
 
-In general `pygccxml`_ provides two main services "parsing" and "declarations tree".
-`pyplusplus`_ uses different approaches to exposes those services to the user.
+`pyplusplus`_ uses different approaches to expose these services to the user.
 
 Parsing integration
 -------------------
-`pyplusplus`_ provides it's own API to configure and run `pygccxml`_ parsing
+`pyplusplus`_ provides it's own "API" to configure and run `pygccxml`_ parsing
 services. The "API" I am talking about, is arguments to ``module_builder.__init__``
-method. This method takes all arguments needed to envoke "parsing" services.
-This has been done to simplify usage of `pyplusplus`_.
+method. This method takes all arguments needed to envoke parsing services. This 
+has been done to simplify the usage of `pyplusplus`_.
 
 
 Declarations tree integration
 -----------------------------
-
 Declarations tree API consists from 3 parts:
 
 * interface definition:
@@ -81,11 +74,12 @@ Declarations tree API consists from 3 parts:
 * query engine API
 
 
-The user should be familiar with those part and relevant API. You may ask "why"?
-The answer is simple: in my opinion, wrapping/hidding/modifying the API will not 
-give any value.
+The user should be familiar with these part and relevant API of `pygccxml`_ project. 
+The reason is simple: in my opinion, wrapping/hidding/modifying the API will not 
+provide an additonal value. The interface of all those services is pretty simple 
+and well polished.
 
-The question you should ask is: how is this API integrated? Before I start to 
+The question you should ask now is: how is this API integrated? Before I start to 
 explain, lets take a look on next source code:
 
 ::
@@ -106,22 +100,23 @@ explain, lets take a look on next source code:
 What you see here, is a common pattern, that will appear in all projects, that 
 use `pyplusplus`_:
 
-* find declaration(s)
+* find the declaration(s)
 
-* give instruction(s) to code generator engine
+* give the instruction(s) to the code generator engine
 
 What is the point of this example? From the user point of view it is perfectly 
-good, it makes a lot of sence to configure the engine, using declarations tree. 
-Now, the desired solution is clear: we should use declarations tree to configure
-the engine. So, lets re-formulate the question: how does `pyplusplus`_ add missinig 
-functionality to ``pygccxml.declarations`` classes? There were few possible 
-solutions to the problem. The next one was implemented:
+good, it makes a lot of sence to configure the code generation engine, using 
+the declarations tree. Now, the desired solution is clear: we should use 
+declarations tree to configure the engine. So, let me to re-formulate the 
+question: how does `pyplusplus`_ add missinig functionality to 
+``pygccxml.declarations`` classes? There were few possible solutions to the 
+problem. The next one was implemented:
 
 1. ``pygccxml.parser`` package interface was extendent. Instead of creating
-   a concrete instance of declaration class , ``pygccxml.parser`` package uses 
+   a concrete instance of declaration classes, ``pygccxml.parser`` package uses 
    factory.
    
-2. ``pyplusplus.decl_wrappers`` package defines classes, that derives from
+2. ``pyplusplus.decl_wrappers`` package defines classes, that derive from
    ``pygccxml.declarations`` classes and defines the factory.
 
 Also, this solution is not the simplest one, it provides an additional value to
@@ -135,7 +130,7 @@ the project:
 * classes defined in ``pyplusplus.decl_wrappers`` package implement next 
   functionality:
   
-  * setting reasonable defaults for code generation engine( call policies, 
+  * setting reasonable defaults for the code generation engine( call policies, 
     indexing suite, ... )
     
   * provides user with additional information( warnings and hints )
@@ -148,7 +143,7 @@ Code generation engine
 
 Code generation for `boost.python`_ library is a difficult process. I don't know 
 what about you, but when I have to solve some complex task, I prefer to use 
-`divide and conquer`_ paradigm. There are 2 different problems code generation
+`divide and conquer`_ paradigm. There are 2 different problems the code generation
 engine should solve:
 
 .. _`divide and conquer` : http://en.wikipedia.org/wiki/Divide_and_conquer_algorithm
@@ -185,7 +180,7 @@ their mix:
 
 * function could be overloaded
 
-As you see, there are a lot of use cases. How does ``code creator`` solves the 
+As you see, there are a lot of use cases. How does ``code creator``'s solve the 
 problem? There is almost a direct mapping between ``code creator``'s and use cases.
 ``Code creator`` knows what code should be generated, in order to export a 
 declaration. That is the only job of ``code creator``. For example:
@@ -220,10 +215,13 @@ export virtual function 2 ``code creator``'s are built:
 
 2. ``f`` registration code - ``code_creators.mem_fun_v_t``
 
+
 Reminder: classes, defined in ``pyplusplus.decl_wrappers`` package, are used as
 configuration to ``code creator``. So, ``code creator`` keeps reference to 
 declaration and when it is requested to generate code, it does this according
 to the declaration configuration.
+
+``Code creator``'s are the only classes, that generate the code!
 
 Now when you understand, what ``code creator`` is, it is a time to move on - 
 composite code creator. Composite ``code creator`` is a creator, that contains 
@@ -248,10 +246,71 @@ other creators. Composite ``code creator`` embeds the code, created by internal
         result.append( "}" )
         return os.linesep.join( result )
 
-Sometimes, I will use termine ``code creators tree``. What is it? There is top
-level ``code creator`` - ``code_creators.module_t``. It keeps reference to
-other ``code creator``'s. It is also composite ``code creator``. All 
-``code creator``'s organized in a tree structure.
+
+Code creators tree
+~~~~~~~~~~~~~~~~~~
+
+``code_creators.module_t`` code creator is a top level code creator. It is a 
+composite ``code creator`` too. Take a look on next possible "snapshot" of the
+code creators structure:
+
+::
+
+  <module_t ...>
+      <license_t ...>
+      <include_t ...>
+      <include_t ...>
+      <class_wrapper_t ...>
+          <mem_fun_v_wrapper_t ...>
+          <mem_fun_v_wrapper_t ...>
+      <module_body_t ...>
+          <enum_t ...>
+          <class_t ...>
+              <mem_fun_v_t ...>
+              <member_variable_t ...>
+          <free_function_t ...>
+          <...>
+
+I hope, now you understand the termine ``code creators tree``.
+
+Code creators tree construction
+-------------------------------
+
+``pygccxml.declarations`` package defines declarations visitor class. 
+``pyplusplus.module_creator.creator_t`` class derives from this class. Its main
+job is to create ``code creators tree``. You can think about this class as a
+big "switch-case" statement. This is the only class that fully "understands"
+declarations and ``code creators``. It reads a declaration and then constructs
+one or more ``code creator``'s and put them into the tree. 
+
+There is one interesting thing about this class you should know: this is the only
+class that "sees" all declarations. It monitors all exported functions and 
+variables. Thus it knows that class ``X`` is used with ``boost::shared_ptr``,
+so it will set ``class_`` ``HeldType`` to be ``boost::shared_ptr`` or will register
+the usage of it. Another interesting example is std containers. You don't have 
+to say to `pyplusplus`_ to export them, it will do it by itself. You may ask
+why this detail is interesting? Because the user does not have to specify all
+set of declarations he wants to export! Because, it is possible to implement
+( and we will be implemented ) next feature. `pyplusplus`_ will generate warning
+if an user exports functon ``f``, that uses non-exported class ``Y``.
+``pyplusplus.module_creator.types_database_t`` will have this functionality.
+
+
+
+File writers
+------------
+
+``File writer``'s classes is responcible for writting `code creators tree`` into
+files. `pyplusplus`_ was built to deal with big projects, nevetherless it handles
+small projects very well too. Do you want to see how ``file_writers.single_file_t``
+code looks that writes created code to file? 
+
+::
+
+  ...
+  #write_file will write the code to file only if needed.
+  #extmodule is an instance of code_creators.module_t class
+  self.write_file( self.file_name, self.extmodule.create() )
 
 
 
