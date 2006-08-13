@@ -6,6 +6,7 @@
 #ifndef __member_variables_to_be_exported_hpp__
 #define __member_variables_to_be_exported_hpp__
 #include <memory>
+#include <string>
 
 namespace member_variables{ 
 
@@ -130,6 +131,16 @@ struct C {
  C( A& a_ ): a( a_ ){}
  const A& a;
 };
+
+}
+
+namespace statics{
+
+struct mem_var_str_t{
+    static std::string class_name;
+    std::string identity(std::string x){ return x; }
+};
+
 }
 
 }

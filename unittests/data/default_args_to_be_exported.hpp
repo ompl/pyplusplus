@@ -10,7 +10,7 @@ namespace default_args{
 
 struct data{
     int sum( int i=0 ){ return i; }
-    int sum( int i, int j, int k=3 ){ return i + j + k; }
+    int sum( int a, int b, int c=1, int d=2 ){ return a + b + c + d; }
 };
 
 }

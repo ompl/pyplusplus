@@ -34,6 +34,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( module.RED )
         self.failUnless( module.BLUE )
         self.failIfNotRaisesAny( lambda: self.get_green( module ) )
+        self.failUnless( 1 == module.to_int( 1 ) )
 
 def create_suite():
     suite = unittest.TestSuite()    

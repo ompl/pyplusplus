@@ -38,5 +38,8 @@ std::auto_ptr<tree_node_t> create_tree(){
 
 }
 
+namespace statics{ 
+    std::string mem_var_str_t::class_name( "mem_var_str_t" );
+}
 }
 

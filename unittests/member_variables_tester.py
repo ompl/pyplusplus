@@ -85,6 +85,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         #self.failUnless( tree.right.left )
         #self.failUnless( tree.right.left.data.value == 1 )
         
+        mem_var_str = module.mem_var_str_t()
+        mem_var_str.identity( module.mem_var_str_t.class_name )
         
 def create_suite():
     suite = unittest.TestSuite()    
