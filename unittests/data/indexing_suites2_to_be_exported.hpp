@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 namespace indexing_suites2 {
 
@@ -43,6 +44,16 @@ inline void set_value( std::vector<item_t>& vec, unsigned int index, item_t valu
 
 typedef std::vector<float> fvector;
 fvector empty_fvector(){ return fvector(); }
+
+typedef std::map< std::string, std::string > name2value_t;
+inline std::string get_first_name( name2value_t const * names ){
+    if( !names ){
+        return "";
+    }
+    else{
+        return names->begin()->first;
+    }
+}
 
 }
 

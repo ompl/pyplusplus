@@ -21,15 +21,6 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , indexing_suite_version=2
             , *args)
 
-    #~ @staticmethod
-    #~ def matcher( item, decl ):
-        #~ if not declarations.vector_traits.is_my_case( decl ):
-            #~ return False
-        #~ value_type = declarations.vector_traits.value_type(decl)
-        #~ if item is value_type:
-            #~ return True
-        #~ return False
-    
     def customize(self, generator):
         fvector = generator.global_ns.typedef( 'fvector' )
         fvector = declarations.remove_declarated( fvector.type )
@@ -42,13 +33,17 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( not hasattr( fv, 'extend' ) )
         self.failUnless( not hasattr( fv, 'sort' ) )
         self.failUnless( not hasattr( fv, 'reverse' ) )
-        #~ items = module.items_t()
-        #~ item = module.item_t()
-        #~ item.value = 1977
-        #~ items.append( item )
-        #~ self.failUnless( module.get_value( items, 0 ).value == 1977 )
-        #~ self.failUnless( len( items ) == 1 )
-    
+        items = module.items_t()
+        item = module.item_t()
+        item.value = 1977
+        items.append( item )
+        self.failUnless( module.get_value( items, 0 ).value == 1977 )
+        self.failUnless( len( items ) == 1 )
+        
+        name2value = module.name2value_t()
+        name2value[ "x" ] = "y"
+        self.failUnless( "x" == module.get_first_name( name2value ) )
+        
 def create_suite():
     suite = unittest.TestSuite()    
     suite.addTest( unittest.makeSuite(tester_t))
