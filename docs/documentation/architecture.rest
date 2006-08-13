@@ -8,7 +8,7 @@ Architecture
 Introduction
 ------------
 
-This document will describe an architecture behind `pyplusplus`_.
+This document will describe an architecture behind `pyplusplus`_. 
 
 ---
 C++
@@ -55,8 +55,8 @@ Parsing integration
 -------------------
 `pyplusplus`_ provides it's own "API" to configure and run `pygccxml`_ parsing
 services. The "API" I am talking about, is arguments to ``module_builder.__init__``
-method. This method takes all arguments needed to envoke parsing services. This 
-has been done to simplify the usage of `pyplusplus`_.
+method. The method takes all arguments, needed to envoke parsing services. It
+has been done this way to simplify the usage of `pyplusplus`_.
 
 
 Declarations tree integration
@@ -114,7 +114,7 @@ problem. The next one was implemented:
 
 1. ``pygccxml.parser`` package interface was extendent. Instead of creating
    a concrete instance of declaration classes, ``pygccxml.parser`` package uses 
-   factory.
+   a factory.
    
 2. ``pyplusplus.decl_wrappers`` package defines classes, that derive from
    ``pygccxml.declarations`` classes and defines the factory.
@@ -122,7 +122,8 @@ problem. The next one was implemented:
 Also, this solution is not the simplest one, it provides an additional value to
 the project:
 
-* code generation engine configuration and declarations tree are tightly coupled
+* the code generation engine configuration and declarations tree are tightly 
+  coupled
 
 * all functionality provided by ``pygccxml.declarations`` and ``pygccxml.parser``
   packages is available for ``pyplusplus.decl_wrappers`` classes
@@ -141,10 +142,9 @@ the project:
 Code generation engine
 ----------------------
 
-Code generation for `Boost.Python`_ library is a difficult process. I don't know 
-what about you, but when I have to solve some complex task, I prefer to use 
-`divide and conquer`_ paradigm. There are 2 different problems the code generation
-engine should solve:
+Code generation for `Boost.Python`_ library is a difficult process. It is very 
+difficult to solve it as is. I prefer to apply `divide and conquer`_ paradigm. 
+There are 2 different problems the engine should solve:
 
 .. _`divide and conquer` : http://en.wikipedia.org/wiki/Divide_and_conquer_algorithm
 
@@ -159,7 +159,7 @@ engine should solve:
 
   Remember, `pyplusplus`_ is targeting big projects. It can not generate all code
   in one file - this will not work, not at all.
-  
+
   Code creators and file writers provides solution to this problem.
 
 
@@ -201,11 +201,11 @@ declaration. That is the only job of ``code creator``. For example:
 * ``code_creators.custom_text_t`` adds some custom( read user ) text\\code to 
   the generated code
 
-As you can see, there are primary 2 kinds of ``code creator``'s: declaration based 
-and others. Declaration based creator generates code, that is needed to export 
-the declaration. There a lot of use cases, where in order to export a declaration,
-`pyplusplus`_ builds more then one ``code creator``. For example: in order to 
-export virtual function 2 ``code creator``'s are built: 
+As you can see, there are primary 2 kinds of ``code creator``'s: declaration 
+based and others. Declaration based creator generates code, that is needed to 
+export the declaration. There a lot of use cases, where in order to export a 
+declaration, `pyplusplus`_ builds more then one ``code creator``. For example: 
+in order to export virtual function 2 ``code creator``'s are built: 
 
 ( I will reuse example from `Boost.Python`_ `tutorials`__.)
 
@@ -223,10 +223,9 @@ to the declaration configuration.
 
 ``Code creator``'s are the only classes, that generate the code!
 
-Now when you understand, what ``code creator`` is, it is a time to move on - 
-composite code creator. Composite ``code creator`` is a creator, that contains 
-other creators. Composite ``code creator`` embeds the code, created by internal 
-``code creator``'s, within the code it creates. For example:
+Composite ``code creator`` is a creator, that contains other creators. Composite 
+``code creator`` embeds the code, created by internal ``code creator``'s, within 
+the code it creates. For example:
 
 * ``code_creators.class_t``:
 
@@ -252,7 +251,7 @@ Code creators tree
 
 ``code_creators.module_t`` code creator is a top level code creator. It is a 
 composite ``code creator`` too. Take a look on next possible "snapshot" of the
-code creators structure:
+``code creators tree``:
 
 ::
 
@@ -286,14 +285,14 @@ one or more ``code creator``'s and put them into the tree.
 There is one interesting thing about this class you should know: this is the only
 class that "sees" all declarations. It monitors all exported functions and 
 variables. Thus it knows that class ``X`` is used with ``boost::shared_ptr``,
-so it will set ``class_`` ``HeldType`` to be ``boost::shared_ptr`` or will register
-the usage of it. Another interesting example is std containers. You don't have 
+so it will set ``class_<X>`` ``HeldType`` to be ``boost::shared_ptr`` or will 
+register its usage. Another interesting example is std containers. You don't have 
 to say to `pyplusplus`_ to export them, it will do it by itself. You may ask
-why this detail is interesting? Because the user does not have to specify all
-set of declarations he wants to export! Because, it is possible to implement
-( and we will be implemented ) next feature. `pyplusplus`_ will generate warning
-if an user exports functon ``f``, that uses non-exported class ``Y``.
-``pyplusplus.module_creator.types_database_t`` will have this functionality.
+why this detail is so interesting? Because the user does not have to specify all
+set of declarations he wants to export! Because, in near future, `pyplusplus`_
+will analize declarations dependency graph of exported declarations. If some 
+declaration should be exported and it is not, then `pyplusplus`_ will warn the
+user.
 
 
 
@@ -301,9 +300,8 @@ File writers
 ------------
 
 ``File writer``'s classes is responcible for writting `code creators tree`` into
-files. `pyplusplus`_ was built to deal with big projects, nevetherless it handles
-small projects very well too. Do you want to see how ``file_writers.single_file_t``
-code looks that writes created code to file? 
+files. Lets take a look on few lines of code from ``file_writers.single_file_t`` 
+class.
 
 ::
 
@@ -311,8 +309,11 @@ code looks that writes created code to file?
   #write_file will write the code to file only if needed.
   #extmodule is an instance of code_creators.module_t class
   self.write_file( self.file_name, self.extmodule.create() )
+  #                                ^^^^^^^^^^^^^^^^^^^^^^^
 
+``single_file_t`` does not know any ``code creator``, except the ``module_t``!
 
+``File writer``'s do not know and will not know all ``code creator``'s.
 
 
 
