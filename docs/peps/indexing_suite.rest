@@ -52,7 +52,7 @@ steps will describe what `pyplusplus`_ will do in this case:
    classes should be exported too. 
    
 3. It will understand that those classes should be exported using indexing suite 
-   functionality provided by `boost.python`_ library or `pyplusplus`_ 
+   functionality provided by `Boost.Python`_ library or `pyplusplus`_ 
    ``code repository``.
 
 4. It will generate the code, that will use that functionality. 
@@ -85,7 +85,7 @@ indexing suite class.
 
 
 .. _`pyplusplus` : ./../pyplusplus.html
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
 

@@ -39,7 +39,7 @@ This feature will work only in case there is only one such ``typedef``. Using cl
 property ``aliases`` you can get access to all ``typedef``'s of the class.
 
 .. _`pyplusplus` : ./../pyplusplus.html
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
 

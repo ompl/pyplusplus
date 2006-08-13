@@ -247,7 +247,7 @@ welcome too!
 
 
 .. _`pyplusplus` : ./../pyplusplus.html
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
 

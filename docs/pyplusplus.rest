@@ -22,7 +22,7 @@ pyplusplus is.
 Code generation process
 -----------------------
 
-`boost.python`_ library allows you to expose C++ code to `Python`_ in quick and 
+`Boost.Python`_ library allows you to expose C++ code to `Python`_ in quick and 
 elegant way. Almost the whole process of exposing declarations can be automated
 by use of pyplusplus. Code generation process, using pyplusplus consists
 from few steps. Next paragraphs will tell you more about every step.
@@ -188,7 +188,7 @@ License
     
 .. _`pyplusplus` : ./pyplusplus.html
 .. _`pygccxml` : ./../pygccxml/pygccxml.html
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
 .. _`Boost Software License`: http://boost.org/more/license_info.html

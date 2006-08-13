@@ -8,7 +8,7 @@ Compare pyplusplus to ...
 Pyste
 -----
 
-`Pyste`_ is the boost.python code generator, that is not under active development
+`Pyste`_ is the Boost.Python code generator, that is not under active development
 any more. Nevertheless, users request to compare `pyplusplus`_ and `Pyste`_. You
 can read `here`_ the comparison.
 
@@ -30,7 +30,7 @@ source project(s) "to talk":
 
   .. _`Python-OGRE` : http://lakin.weckers.net/index_ogre_python.html
 
-Some other links, that compare boost.python, SWIG, SIP and other tools:
+Some other links, that compare Boost.Python, SWIG, SIP and other tools:
 
 * `Evaluation of Python/C++ interfacing packages`_
 

@@ -57,7 +57,7 @@ Code generators:
  * SIP - PyQt, PyKDE ( extending only )
  * Robin - ?
  * pyplusplus - an object-oriented framework for creating a code generator for 
-   boost.python library. ( TnFOX, boost.date_time )
+   Boost.Python library. ( TnFOX, boost.date_time )
  
 Libraries: 
  

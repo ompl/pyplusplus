@@ -10,12 +10,12 @@ Introduction
 
 `pyplusplus`_ has been created with few goals in mind:
 
-* to allow users create `Python`_ bindings for large projects using the `boost.python`_
+* to allow users create `Python`_ bindings for large projects using the `Boost.Python`_
   library
 
 * to minimize maintenance time
 
-* to serve as a user's guide for `boost.python`_ library
+* to serve as a user's guide for `Boost.Python`_ library
 
 
 Those goals all have something in common. In order to achive them, `pyplusplus`_ must
@@ -156,7 +156,7 @@ Every declaration class has the following methods:
 .. _`logging` : http://docs.python.org/lib/module-logging.html
 .. _`pyplusplus` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
 

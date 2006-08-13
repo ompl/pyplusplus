@@ -33,7 +33,7 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
    
    * user messages are clear
 
-3. Support for boost.python indexing suite version 2 was implemented.
+3. Support for Boost.Python indexing suite version 2 was implemented.
 
 4. Every code creator class took ``parent`` argument in ``__init__`` method.
    This argument was removed. ``adopt_creator`` and ``remove_creator`` will 

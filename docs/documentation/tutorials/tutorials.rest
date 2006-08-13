@@ -20,10 +20,10 @@ from the ``scripts`` subdirectory of the `Python`_ installation directory.
 
 My advise to you - start with `graphical interface`_, because:
   * you don't have to learn new API
-  * few clicks with mouse and you have `boost.python`_ code for your file(s)
+  * few clicks with mouse and you have `Boost.Python`_ code for your file(s)
   * it is very easy to evaluate `pyplusplus`_ using it
   * you can check whether `GCC-XML`_ is able to compile your code or not
-  * you can use it as a guide to `boost.python`_ library
+  * you can use it as a guide to `Boost.Python`_ library
   * it is able to generate `pyplusplus`_ code for you
 
 .. _`graphical interface` : ./pyplusplus_demo.png
@@ -50,7 +50,7 @@ to create your own code creator. To be more specific, it exposes ``get*`` and
 
 .. _`pyplusplus` : ./../../pyplusplus.html
 .. _`pygccxml` : ./../....//pygccxml/pygccxml.html
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`SourceForge`: http://sourceforge.net/index.php
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

@@ -73,7 +73,7 @@ requirement.
 Call policies
 -------------
 I don't have any solution to the next problem.
-I am going to change a little an example, from `boost.python`_ tutorials:
+I am going to change a little an example, from `Boost.Python`_ tutorials:
 http://www.boost.org/libs/python/doc/tutorial/doc/html/python/functions.html#python.call_policies
 ::
 
@@ -90,7 +90,7 @@ http://www.boost.org/libs/python/doc/tutorial/doc/html/python/functions.html#pyt
       return y.x;
   }
 
-  //boost.python code
+  //Boost.Python code
   def("f", f, return_internal_reference<1, with_custodian_and_ward<1, 2> >() );
 
 What is the difference? Function ``f`` now takes 3rd argument - ``int&``. This
@@ -101,7 +101,7 @@ an user need to create a wrapper. And now he has a problem: how to wrap the func
 I see only one solution user have to change signature of function ``f``.
 Now some speculations:
 
-1. May be it is possible with `boost.python`_ library to set call policies on the
+1. May be it is possible with `Boost.Python`_ library to set call policies on the
    part of the return value?
    ::
 
@@ -113,7 +113,7 @@ Now some speculations:
 
     def("f", f_wrapper, smart call policies that will work only on first element within the tuple );
 
-2. May be it is possible to create boost.python ``object`` with life-time management
+2. May be it is possible to create Boost.Python ``object`` with life-time management
    hint?
    ::
 
@@ -124,7 +124,7 @@ Now some speculations:
          return boost::python::make_tuple( x_obj, error );
      }
 
-Anyway, I think we will just ignore the problem - software ( == boost.python )
+Anyway, I think we will just ignore the problem - software ( == Boost.Python )
 should not be perfect - it should work in most ( != all ) cases!
 
 ------------
@@ -232,7 +232,7 @@ Summary
 -------
 
 It still not clear to me how it should be implemented. There are also some issues
-with `boost.python`_ library before we can implement some policies. 
+with `Boost.Python`_ library before we can implement some policies. 
 
 If you can help or have some nice idea, please share: 
 https://lists.sourceforge.net/lists/listinfo/pygccxml-development 
@@ -240,7 +240,7 @@ https://lists.sourceforge.net/lists/listinfo/pygccxml-development
 
 .. _`pyplusplus` : ./../pyplusplus.html
 .. |cwp| replace:: *"call wrapper policies"*
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
 

@@ -37,7 +37,7 @@ containers. In October 2003, Raoul Gough implemented support for the rest of
 containers. Well, actually he did much more - he implemented new framework. 
 This framework provides support for almost all C++ containers and also an easy 
 way to add support for custom ones. You'd better read his `post`_ to 
-`boost.python`_ mailing list or `documentation`_ for the new indexing suite.
+`Boost.Python`_ mailing list or `documentation`_ for the new indexing suite.
 
 
 Now, I am sure you have next question: if this suite is soo good, why it is not
@@ -57,7 +57,7 @@ pyplusplus and indexing suites
 ------------------------------
 `pyplusplus`_ implements support for both indexing suites. More over, you can 
 freely mix indexing suites. For example you can expose ``std::vector<int>`` using
-`boost.python`_ built-in indexing suite and ``std::map< int, std::string>`` using
+`Boost.Python`_ built-in indexing suite and ``std::map< int, std::string>`` using
 Raoul Gough's indexing suite. 
 
 -----------------
@@ -189,7 +189,7 @@ Small tips/hints
 
 
 .. _`pyplusplus` : ./../pyplusplus.html
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
 

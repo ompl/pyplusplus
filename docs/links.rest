@@ -30,7 +30,7 @@ Reading
   the result using a tool that `understands` the syntax and semantics of both 
   the underlying language and the library. ..."
   
-  `pyplusplus`_ + boost.python is a SELL!
+  `pyplusplus`_ + Boost.Python is a SELL!
   
 
 * `Aspect oriented programming`_
@@ -48,11 +48,11 @@ Help resources
 * http://boost.org/libs/python/doc/index.html - tutorials, FAQs, reference 
   manuals
   
-* `boost.python wiki`_
+* `Boost.Python wiki`_
 
-  .. _`boost.python wiki` : http://wiki.python.org/moin/boost%2epython?action=show&redirect=boost+2epython
+  .. _`Boost.Python wiki` : http://wiki.python.org/moin/boost%2epython?action=show&redirect=boost+2epython
 
-* http://boost.cvs.sourceforge.net/boost/boost/libs/python/test/ - `boost.python`_ 
+* http://boost.cvs.sourceforge.net/boost/boost/libs/python/test/ - `Boost.Python`_ 
   unit tests. They could be very, very helpful.
 
 * http://svn.sourceforge.net/viewvc/pygccxml/pyplusplus_dev/unittests/ - `pyplusplus`_ 
@@ -70,7 +70,7 @@ Mailing lists
 
   .. _`pyplusplus mailing list` : http://sourceforge.net/mail/?group_id=118209
 
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`pyplusplus` : ./pyplusplus.html
 
 ..

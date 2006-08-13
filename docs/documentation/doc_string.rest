@@ -26,7 +26,7 @@ API description
 In `pyplusplus`_ every class, that describes C++ declarations has ``documentation``
 property. This property should contain valid C++ string or ``None``.
 
-`boost.python`_ not always provides functionality, that exports documentation string.
+`Boost.Python`_ not always provides functionality, that exports documentation string.
 In those cases, `pyplusplus`_ will not generate documentation string.
 
 Also the previous method is pretty clear, it is not practical. There should be a
@@ -62,7 +62,7 @@ It has been contributed by Georgiy Dernovoy.
 .. _`doxygen` : http://www.stack.nl/~dimitri/doxygen/
 .. _`documentation string` : http://docs.python.org/tut/node6.html#SECTION006760000000000000000
 .. _`pyplusplus` : ./../pyplusplus.html
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
 

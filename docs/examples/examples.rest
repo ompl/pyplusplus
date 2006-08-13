@@ -50,7 +50,7 @@ package documentation.
 .. _`boost.random` : http://boost.org/libs/random/index.html
 
 .. _`GUI`: ./../tutorials/pyplusplus_demo.png
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`pyplusplus` : ./../pyplusplus.html
 .. _`EasyBMP`: http://easybmp.sourceforge.net/
 

@@ -298,7 +298,7 @@ http://sourceforge.net/project/showfiles.php?group_id=118209.
 .. _`date_time`: http://boost.org/doc/html/date_time.html
 .. _`boost`: http://www.boost.org
 .. _`Boost`: http://www.boost.org
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`boost.operators`: http://www.boost.org/
 .. _`GCC-XML`: http://www.gccxml.org
 .. _`pyplusplus` : ./../../pyplusplus.html

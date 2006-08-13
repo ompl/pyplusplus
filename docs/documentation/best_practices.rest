@@ -71,7 +71,7 @@ Tips
     
   ``precompiled_header`` argument could be ``None`` or string, that contains 
   name of precompiled header file, that will be created in the directory. 
-  `pyplusplus`_ will add to it header files from `boost.python`_ library and 
+  `pyplusplus`_ will add to it header files from `Boost.Python`_ library and 
   your header files. 
   
   What is ``huge_classes`` argument for? ``huge_classes`` could be ``None`` or
@@ -94,7 +94,7 @@ Tips
 
 .. _`pyplusplus` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
 

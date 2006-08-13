@@ -16,7 +16,7 @@ almost any place.
 Insert code to module
 ---------------------
 
-Almost every ``boost.python`` module has next structure:
+Almost every ``Boost.Python`` module has next structure:
 
 ::
 
@@ -195,7 +195,7 @@ Solution
 
 .. _`pyplusplus` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
 

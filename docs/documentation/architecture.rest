@@ -141,7 +141,7 @@ the project:
 Code generation engine
 ----------------------
 
-Code generation for `boost.python`_ library is a difficult process. I don't know 
+Code generation for `Boost.Python`_ library is a difficult process. I don't know 
 what about you, but when I have to solve some complex task, I prefer to use 
 `divide and conquer`_ paradigm. There are 2 different problems the code generation
 engine should solve:
@@ -150,7 +150,7 @@ engine should solve:
 
 * What code should be created in order to export a declaration?
 
-  I mean what `boost.python`_ code should be generated if you want to export this
+  I mean what `Boost.Python`_ code should be generated if you want to export this
   or that declaration.
 
   Code creators is the solution to this problem.
@@ -207,7 +207,7 @@ the declaration. There a lot of use cases, where in order to export a declaratio
 `pyplusplus`_ builds more then one ``code creator``. For example: in order to 
 export virtual function 2 ``code creator``'s are built: 
 
-( I will reuse example from `boost.python`_ `tutorials`__.)
+( I will reuse example from `Boost.Python`_ `tutorials`__.)
 
 .. __ : http://boost.org/libs/python/doc/tutorial/doc/html/python/exposing.html#python.virtual_functions_with_default_implementations
 
@@ -318,7 +318,7 @@ code looks that writes created code to file?
 
 .. _`pyplusplus` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
 

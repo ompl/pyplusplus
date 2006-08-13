@@ -34,7 +34,7 @@ consist few files and directories:
     1. environment.py - contains different environment settings
 
     2. generate_code.py - contains source code needed to generate
-       `boost.python`_ bindings for `EasyBMP`_ library.
+       `Boost.Python`_ bindings for `EasyBMP`_ library.
 
     3. sconstruct - build configuration file
 
@@ -76,7 +76,7 @@ http://sourceforge.net/project/showfiles.php?group_id=118209.
 .. _`Python`: http://www.python.org
 .. _`pygccxml`: http://www.language-binding.net/pygccxml/pygccxml.html
 .. _`EasyBMP`: http://easybmp.sourceforge.net/
-.. _`boost.python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 
 ..
    Local Variables:
