@@ -39,10 +39,10 @@ I believe that `pyplusplus`_ is ready for hard work. It is quick, stable and
 flexible. `pyplusplus`_ is a new tool and in my opinion I should prove its
 usefulness. Using `pyplusplus`_, I exposed next libraries to Python:
 
-  * `boost.date_time`_
-  * `boost.crc`_
-  * `boost.rational`_
-  * `boost.random`_
+  * `Boost.Date_Time`_
+  * `Boost.CRC`_
+  * `Boost.Rational`_
+  * `Boost.Random`_
 
 There are few reasons I choose to expose those libraries.
 
@@ -55,11 +55,11 @@ There are few reasons I choose to expose those libraries.
   * clear concepts
   * comprehensive unit tests
 
-3. I think, that Python is missing functionality provided by `boost.date_time`_
-   and `boost.random`_ libraries.
+3. I think, that Python is missing functionality provided by `Boost.Date_Time`_
+   and `Boost.Random`_ libraries.
 
 I spent different amount of time on each library. It took me one week, to expose
-the `boost.date_time`_ library. I added few missing features to `pyplusplus`_,
+the `Boost.Date_Time`_ library. I added few missing features to `pyplusplus`_,
 polished the existing ones. Most of the time I spent translating tests from C++
 to `Python`_. It took me 3 days to expose all other libraries.
 

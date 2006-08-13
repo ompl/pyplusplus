@@ -51,10 +51,10 @@ Who is using pyplusplus?
 
 * I am :-). I created Python bindings for next libraries:
     
-  * `boost.date_time`_
-  * `boost.crc`_
-  * `boost.rational`_
-  * `boost.random`_
+  * `Boost.Date_Time`_
+  * `Boost.CRC`_
+  * `Boost.Rational`_
+  * `Boost.Random`_
 
 .. _`boost.date_time` : http://boost.org/doc/html/date_time.html
 .. _`boost.crc` : http://boost.org/libs/crc/index.html

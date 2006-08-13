@@ -32,10 +32,10 @@ Boost provides free peer-reviewed portable C++ source libraries.
 
 Using `pyplusplus`_ I created Python bindings for few libraries:
 
-  * `boost.date_time`_
-  * `boost.crc`_
-  * `boost.rational`_
-  * `boost.random`_
+  * `Boost.Date_Time`_
+  * `Boost.CRC`_
+  * `Boost.Rational`_
+  * `Boost.Random`_
 
 This is not "just another example". I went father and created new package: 
 `pyboost`_. This is fully working Python package, with almost all unit test from
