@@ -97,9 +97,9 @@ modifying generated code and preserving changes. How many code generators did
 you use or know, that allow you to put your code any where or to reorder generated 
 code as you wish? Py++ allows you to do that. 
 
-Py++ introduces new concept: code creator and code creator's tree. 
-You can think about code creator's tree as some kind of `AST`_. The only difference
-is that code creator's tree has higher interface. For example ``include_t`` code
+Py++ introduces new concept: code creator and code creators tree. You can think 
+about code creators tree as some kind of `AST`_. The only difference is that code 
+creators tree provides more specific functionality. For example ``include_t`` code
 creator is responsible to create C++ ``include`` directive code. You have full 
 control over code creators tree, before it is written to disc. Here you 
 can find UML diagram of almost all code creators: `class diagram`_.

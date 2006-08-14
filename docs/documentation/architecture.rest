@@ -16,9 +16,9 @@ C++
 
 C++ is very powerful programming language. The power brings complexity. It is 
 not an easy task to parse C++ source files and to create in memory representation 
-of declarations tree. Lets say that I've managed to do it. It is not enough.
-Declarations tree is worth nothing, if a user is not able to explorer it, to run
-queries against it, to find out traits of a declaration or a type.
+of declarations tree. Lets say that I've managed to do it. It is not enough. The
+declarations tree is worth nothing, if a user is not able to explorer it, to run
+queries against it or to find out traits of a declaration or a type.
 
 On the earlier stage of the development, I realized, that all this functionality 
 does not belong to code generator and should be implemented out side of it. 
@@ -53,14 +53,15 @@ Py++ & pygccxml integration
 
 Parsing integration
 -------------------
-`Py++`_ provides it's own "API" to configure and run `pygccxml`_ parsing
-services. The "API" I am talking about, is arguments to ``module_builder.__init__``
-method. The method takes all arguments, needed to envoke parsing services. It
-has been done this way to simplify the usage of `Py++`_.
+
+`Py++`_ provides it's own "API" to configure `pygccxml`_ parsing services. The 
+"API" I am talking about, is arguments to ``module_builder.__init__`` method. 
+We think, that exposing those services via `Py++`_ simplifies its usage.
 
 
 Declarations tree integration
 -----------------------------
+
 Declarations tree API consists from 3 parts:
 
 * interface definition:
@@ -74,13 +75,11 @@ Declarations tree API consists from 3 parts:
 * query engine API
 
 
-The user should be familiar with these part and relevant API of `pygccxml`_ project. 
-The reason is simple: in my opinion, wrapping/hidding/modifying the API will not 
-provide an additonal value. The interface of all those services is pretty simple 
-and well polished.
+The user should be familiar with these parts and relevant API. In my opinion, 
+wrapping\\hidding\\modifying the API will not provide an additonal value. The 
+interface of all those services is pretty simple and well polished.
 
-The question you should ask now is: how is this API integrated? Before I start to 
-explain, lets take a look on next source code:
+Please take a look on next source code:
 
 ::
 
@@ -106,9 +105,7 @@ use `Py++`_:
 
 What is the point of this example? From the user point of view it is perfectly 
 good, it makes a lot of sence to configure the code generation engine, using 
-the declarations tree. Now, the desired solution is clear: we should use 
-declarations tree to configure the engine. So, let me to re-formulate the 
-question: how does `Py++`_ add missinig functionality to 
+the declarations tree. How does `Py++`_ add missinig functionality to 
 ``pygccxml.declarations`` classes? There were few possible solutions to the 
 problem. The next one was implemented:
 
@@ -119,8 +116,8 @@ problem. The next one was implemented:
 2. ``pyplusplus.decl_wrappers`` package defines classes, that derive from
    ``pygccxml.declarations`` classes and defines the factory.
 
-Also, this solution is not the simplest one, it provides an additional value to
-the project:
+The implemented solution is not the simplest one, it provides an additional value 
+to the project:
 
 * the code generation engine configuration and declarations tree are tightly 
   coupled
@@ -142,25 +139,19 @@ the project:
 Code generation engine
 ----------------------
 
-Code generation for `Boost.Python`_ library is a difficult process. It is very 
-difficult to solve it as is. I prefer to apply `divide and conquer`_ paradigm. 
-There are 2 different problems the engine should solve:
+Code generation for `Boost.Python`_ library is a difficult process. After small
+analizes I understood, that there are 2 different problems the engine should solve:
 
 .. _`divide and conquer` : http://en.wikipedia.org/wiki/Divide_and_conquer_algorithm
 
 * What code should be created in order to export a declaration?
 
-  I mean what `Boost.Python`_ code should be generated if you want to export this
-  or that declaration.
-
-  Code creators is the solution to this problem.
-  
 * How it should be written to files?
 
   Remember, `Py++`_ is targeting big projects. It can not generate all code
   in one file - this will not work, not at all.
 
-  Code creators and file writers provides solution to this problem.
+Code creators and file writers provides solution to both problems.
 
 
 Code creators
@@ -182,7 +173,7 @@ their mix:
 
 As you see, there are a lot of use cases. How does ``code creator``'s solve the 
 problem? There is almost a direct mapping between ``code creator``'s and use cases.
-``Code creator`` knows what code should be generated, in order to export a 
+``Code creator`` knows what code should be created, in order to export a 
 declaration. That is the only job of ``code creator``. For example:
 
 * ``code_creators.enum_t`` generates registration code for an enumeration
@@ -211,15 +202,18 @@ in order to export virtual function 2 ``code creator``'s are built:
 
 .. __ : http://boost.org/libs/python/doc/tutorial/doc/html/python/exposing.html#python.virtual_functions_with_default_implementations
 
-1. ``BaseWrap::f``, ``BaseWrap::default_f`` - ``code_creators.mem_fun_v_wrapper_t``
+1. ``BaseWrap::f``, ``BaseWrap::default_f`` - declaration code is created by 
+   ``code_creators.mem_fun_v_wrapper_t``
 
-2. ``f`` registration code - ``code_creators.mem_fun_v_t``
+2. ``f`` registration code is created by ``code_creators.mem_fun_v_t``. This
+   code creator also keeps reference to the relevant instance of 
+   ``code_creators.mem_fun_v_wrapper_t`` class.
 
 
-Reminder: classes, defined in ``pyplusplus.decl_wrappers`` package, are used as
-configuration to ``code creator``. So, ``code creator`` keeps reference to 
-declaration and when it is requested to generate code, it does this according
-to the declaration configuration.
+Declaration based ``code creator`` keeps reference to the declaration (
+``pyplusplus.decl_wrapper.*`` class instance ). During code creation process,
+``code creator`` reads its settings( the code generation engine instructions )
+from the declaration.
 
 ``Code creator``'s are the only classes, that generate the code!
 
@@ -270,30 +264,29 @@ composite ``code creator`` too. Take a look on next possible "snapshot" of the
           <free_function_t ...>
           <...>
 
-I hope, now you understand the termine ``code creators tree``.
+I hope, now you understand the termine ``code creators tree``. You can think 
+about code creator's tree as some kind of `AST`_. 
+
+.. _`AST`: http://en.wikipedia.org/wiki/Abstract_syntax_tree
 
 Code creators tree construction
 -------------------------------
 
-``pygccxml.declarations`` package defines declarations visitor class. 
-``pyplusplus.module_creator.creator_t`` class derives from this class. Its main
-job is to create ``code creators tree``. You can think about this class as a
-big "switch-case" statement. This is the only class that fully "understands"
-declarations and ``code creators``. It reads a declaration and then constructs
-one or more ``code creator``'s and put them into the tree. 
+``pyplusplus.module_creator.creator_t`` class is responsible for the task. As 
+input it gets whole declarations tree. Extracts all declarations that should be
+exported and sorts them. After this it constructs ``code creators tree``.
 
-There is one interesting thing about this class you should know: this is the only
-class that "sees" all declarations. It monitors all exported functions and 
-variables. Thus it knows that class ``X`` is used with ``boost::shared_ptr``,
-so it will set ``class_<X>`` ``HeldType`` to be ``boost::shared_ptr`` or will 
-register its usage. Another interesting example is std containers. You don't have 
-to say to `Py++`_ to export them, it will do it by itself. You may ask
-why this detail is so interesting? Because the user does not have to specify all
-set of declarations he wants to export! Because, in near future, `Py++`_
-will analize declarations dependency graph of exported declarations. If some 
-declaration should be exported and it is not, then `Py++`_ will warn the
-user.
+Another responsibility of the class, is to analize declarations and their 
+dependency graphs. Today, only limited subset of the functionality is implemented:
 
+* find out a class ``HeldType``
+
+* find out smart pointers conversion, that should be registered
+
+* find out std containers, that should be exported
+
+Next functionality is still missing: if some declaration is not exported and 
+it used somewhere in exported declarations, `Py++`_ will warn user.
 
 
 File writers
