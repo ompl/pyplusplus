@@ -7,10 +7,6 @@
 import os
 import sys
 import unittest
-from sets import Set as set
-
-
-#sys.path.append( os.path.join( os.curdir, '..' ) )
 
 #__pychecker__ = 'limit=1000'
 #import pychecker.checker
@@ -28,6 +24,7 @@ class scons_config:
     cpppath = [ boost.include, python.include ]    
     include_dirs = cpppath + [data_directory]
     
+    @staticmethod
     def create_sconstruct():
         code = [
             "SharedLibrary( target=r'%(target)s'"
@@ -40,7 +37,6 @@ class scons_config:
           , "    , SHLIBSUFFIX='%s'" % scons.suffix #explicit better then implicit
           , ")" ]
         return os.linesep.join( code )
-    create_sconstruct = staticmethod(create_sconstruct)
     
 #I need this in order to allow Python to load just compiled modules    
 sys.path.append( build_dir )

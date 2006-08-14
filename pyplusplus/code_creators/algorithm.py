@@ -12,7 +12,6 @@ from pyplusplus.decl_wrappers.algorithm import *
 
 
 import types 
-import pygccxml
 import namespace
 
 def _make_flatten_list( creator_or_creators ):
@@ -69,6 +68,8 @@ class creator_finder:
     This class is used as container for different find algorithms.
     """
     "creator_finder - this class used as namespace"
+    
+    @staticmethod
     def find_by_declaration( declaration_matcher, where, recursive=True ):
         """Finds code creator by declaration. 
         declaration_matcher should be callable, that takes single argument 
@@ -83,18 +84,17 @@ class creator_finder:
         return filter( lambda inst: isinstance( inst, declaration_based.declaration_based_t ) \
                                     and declaration_matcher( inst.declaration )
                        , search_area )
-    find_by_declaration = staticmethod( find_by_declaration )
-
+    
+    @staticmethod
     def find_by_declaration_single( declaration_matcher, where, recursive=True ):
         answer = creator_finder.find_by_declaration( declaration_matcher, where, recursive )
         if len( answer ) == 1:
             return answer[0]
         return None
-    find_by_declaration_single = staticmethod( find_by_declaration_single )
     
+    @staticmethod
     def find_by_class_instance( what, where, recursive=True ):
         search_area = where
         if recursive:
             search_area = make_flatten( where )
         return filter( lambda inst: isinstance( inst, what ), search_area )
-    find_by_class_instance = staticmethod( find_by_class_instance )

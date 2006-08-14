@@ -72,7 +72,7 @@ class class_declaration_t( scoped.scoped_t ):
         return os.linesep.join( result )
     
     def _create_impl(self):
-        if self.is_exposed_using_scope:
+        if self.is_exposed_using_scope():
             return self._generate_code_with_scope()
         else:
             return self._generate_code_no_scope()

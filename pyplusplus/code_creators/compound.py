@@ -60,6 +60,7 @@ class compound_t(code_creator.code_creator_t):
         creator.parent = None
         del self._creators[ self._creators.index( creator ) ]    
 
+    @staticmethod
     def create_internal_code( creators ):
         """Concatenate the code from a list of code creators.
 
@@ -74,4 +75,3 @@ class compound_t(code_creator.code_creator_t):
         for index in range( len( internals ) - 1):
             internals[index] = internals[index] + os.linesep
         return os.linesep.join( internals )
-    create_internal_code = staticmethod( create_internal_code )

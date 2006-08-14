@@ -5,7 +5,6 @@
 
 import os
 import writer
-from sets import Set as set
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
@@ -19,7 +18,7 @@ class multiple_files_t(writer.writer_t):
     HEADER_EXT = '.pypp.hpp'
     SOURCE_EXT = '.pypp.cpp'
 
-    def __init__(self, extmodule, directory_path):
+    def __init__(self, extmodule, directory_path, write_main=True):
         """Constructor.
 
         @param extmodule: The root of a code creator tree
@@ -33,6 +32,7 @@ class multiple_files_t(writer.writer_t):
         self.include_creators = []  # List of include_t creators that contain the generated headers
         self.split_header_names = []  # List of include file names for split files
         self.split_method_names = []  # List of methods from the split files
+        self.write_main = write_main
 
         
     def create_dir( self, directory_path ):
@@ -291,7 +291,7 @@ class multiple_files_t(writer.writer_t):
         self.split_creators( creators, '_free_functions', 'register_free_functions', -1 )
 
     #TODO: move write_main to __init__
-    def write(self, write_main=True):
+    def write(self):
         """ Write out the module.
             Creates a separate source/header combo for each class and for enums, globals,
             and free functions.
@@ -319,7 +319,7 @@ class multiple_files_t(writer.writer_t):
         self.split_global_variables()
         self.split_free_functions()
         
-        if write_main:
+        if self.write_main:
             self.include_creators.sort( cmp=lambda ic1, ic2: cmp( ic1.header, ic2.header ) )
             map( lambda creator: self.extmodule.adopt_include( creator )
                  , self.include_creators )

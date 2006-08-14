@@ -3,8 +3,6 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-import os
-import sys
 import algorithm
 from pyplusplus import _logging_
 from pygccxml import declarations

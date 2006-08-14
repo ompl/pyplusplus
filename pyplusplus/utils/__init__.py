@@ -13,6 +13,8 @@ from pyplusplus import code_creators
     
 
 class missing_call_policies:
+
+    @staticmethod
     def _selector( creator ):
         if not isinstance( creator, code_creators.declaration_based_t ):
             return False
@@ -21,8 +23,8 @@ class missing_call_policies:
         if isinstance( creator.declaration, declarations.constructor_t ):
             return False
         return hasattr(creator, 'call_policies') and not creator.call_policies
-    _selector = staticmethod( _selector )
-    
+
+    @staticmethod    
     def print_( extmodule ):
         creators = filter( missing_call_policies._selector
                            , code_creators.make_flatten( extmodule.creators ) )
@@ -30,15 +32,14 @@ class missing_call_policies:
             print creator.declaration.__class__.__name__, ': ', declarations.full_name( creator.declaration )
             print '  *** MISSING CALL POLICY', creator.declaration.function_type().decl_string
             print 
-    print_ = staticmethod( print_ )
-    
+
+    @staticmethod    
     def exclude( extmodule ):
         creators = filter( missing_call_policies._selector
                            , code_creators.make_flatten( extmodule.creators ) )
         for creator in creators:
             creator.parent.remove_creator( creator )
-    exclude = staticmethod( exclude )
-
+    
 
 def split_sequence(seq, bucket_size):
     #split sequence to buclets, where every will contain maximum bucket_size items

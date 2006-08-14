@@ -20,10 +20,10 @@ class settings:
     generated_files_dir = ''
     unittests_dir = ''
     
+    @staticmethod
     def setup_environment():
         sys.path.append( settings.pygccxml_path )
         sys.path.append( settings.pyplusplus_path )
-    setup_environment = staticmethod(setup_environment)
    
 if sys.platform == 'linux2':
     settings.boost_path = '/home/roman/boost_cvs'

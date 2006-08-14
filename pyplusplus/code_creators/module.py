@@ -173,7 +173,7 @@ class module_t(compound.compound_t):
         self.adopt_include( include.include_t( header=header ) )
     
     def add_namespace_usage( self, namespace_name ):
-        self.adopt_creator( namespace.namespace_using_t( 'boost' )
+        self.adopt_creator( namespace.namespace_using_t( namespace_name )
                             , self.last_include_index() + 1 )
 
     def add_namespace_alias( self, alias, full_namespace_name ):

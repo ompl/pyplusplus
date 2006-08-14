@@ -34,6 +34,7 @@ class writer_t(object):
         """ Main write method.  Should be overridden by derived classes. """
         raise NotImplementedError()
        
+    @staticmethod
     def create_backup(fpath):
         if not os.path.exists( fpath ):
             return         
@@ -41,13 +42,13 @@ class writer_t(object):
         if os.path.exists( backup_fpath ):
             os.remove( backup_fpath )
         os.rename( fpath, backup_fpath )
-    create_backup = staticmethod( create_backup )
     
     def write_code_repository(self, dir):
         for cr in code_repository.all:
             if self.__extmodule.is_system_header( cr.file_name ):
                 self.write_file( os.path.join( dir, cr.file_name ), cr.code )
     
+    @staticmethod
     def write_file( fpath, content ):
         """Write a source file.
 
@@ -87,5 +88,3 @@ class writer_t(object):
         f.write( fcontent_new )
         f.close()
         writer_t.logger.info( 'file "%s" - updated( %f seconds )' % ( fname, time.clock() - start_time ) )
-
-    write_file = staticmethod( write_file )

@@ -58,7 +58,6 @@ class indexing_suite2_t( declaration_based.declaration_based_t ):
                or bool( self.declaration.indexing_suite.disable_methods )
 
     def generate_algorithm_mask( self ):
-        indexing = algorithm.create_identifier(self, "::boost::python::indexing" )
         disable = []
         for group in self.declaration.indexing_suite.disabled_methods_groups:
             group_id = algorithm.create_identifier(self, "::boost::python::indexing::%s_methods" % group )

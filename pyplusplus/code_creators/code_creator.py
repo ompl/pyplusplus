@@ -111,6 +111,7 @@ class code_creator_t(object):
         assert isinstance( code, types.StringTypes )
         return code.strip()
     
+    @staticmethod
     def indent( code, size=1 ):
         """
         function that implements code indent algorithm.
@@ -126,8 +127,8 @@ class code_creator_t(object):
         return code_creator_t.__INDENTATION * size\
                + code.replace( os.linesep
                                , os.linesep + code_creator_t.__INDENTATION * size )
-    indent = staticmethod( indent ) 
     
+    @staticmethod
     def unindent( code ):
         """
         function that implements code unindent algorithm. 
@@ -141,8 +142,8 @@ class code_creator_t(object):
             code = code[ len( code_creator_t.__INDENTATION ):]
         return code.replace( os.linesep + code_creator_t.__INDENTATION
                                , os.linesep )
-    unindent = staticmethod( unindent ) 
-    
+
+    @staticmethod   
     def is_comment( line ):
         """
         function that returns true if content of the line is comment, otherwise
@@ -155,4 +156,3 @@ class code_creator_t(object):
         assert isinstance( line, types.StringTypes )
         l = line.lstrip()
         return l.startswith( '//' ) or l.startswith( '/*' )
-    is_comment = staticmethod( is_comment )

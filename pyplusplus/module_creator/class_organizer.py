@@ -4,7 +4,6 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 from pygccxml import declarations
-from sets import Set as set
 
 class COLOR:
     WHITE = 0

@@ -6,9 +6,6 @@
 import os
 import sys
 import time
-import types
-
-from sets import Set as set
 
 from pygccxml import parser
 from pygccxml import declarations as decls_package
@@ -34,7 +31,6 @@ class module_builder_t(object):
                   , define_symbols=None
                   , undefine_symbols=None
                   , start_with_declarations=None
-                  , compilation_verbose=False
                   , compilation_mode=None
                   , cache=None
                   , optimize_queries=True
@@ -444,7 +440,7 @@ class module_builder_t(object):
                                             , header_file=header_file
                                             , recursive=recursive)
     
-    def member_operator( self, name=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+    def member_operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.scopedef_t} class documentation"""
         return self.global_ns.member_operator( name=name
                                                , symbol=symbol
@@ -455,7 +451,7 @@ class module_builder_t(object):
                                                , header_file=header_file 
                                                , recursive=recursive )
 
-    def member_operators( self, name=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+    def member_operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.scopedef_t} class documentation"""
         return self.global_ns.member_operators( name=name
                                                 , symbol=symbol

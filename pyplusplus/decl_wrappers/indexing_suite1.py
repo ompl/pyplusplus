@@ -20,7 +20,7 @@ class indexing_suite1_t( object ):
     def __init__( self, container_class, container_traits, no_proxy=None, derived_policies=None ):
         object.__init__( self )
         self.__no_proxy = no_proxy
-        self.__derived_policies = None
+        self.__derived_policies = derived_policies
         self.__container_class = container_class
         self.__container_traits = container_traits
         

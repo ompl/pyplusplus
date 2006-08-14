@@ -187,13 +187,14 @@ class operators_helper:
 
     all = inplace + comparison + non_member + unary
 
+    @staticmethod
     def is_supported( oper ):
         if oper.symbol == '*' and len( oper.arguments ) == 0:
             #dereference does not make sense
             return False
         return oper.symbol in operators_helper.all
-    is_supported = staticmethod( is_supported )
-
+    
+    @staticmethod
     def exportable( oper ):
         if isinstance( oper, declarations.member_operator_t ) and oper.symbol in ( '()', '[]' ):
             return ''
@@ -202,8 +203,7 @@ class operators_helper:
             msg.append( 'See Boost.Python documentation: http://www.boost.org/libs/python/doc/v2/operators.html#introduction.' )
             return ' '.join( msg )
         return ''
-    exportable = staticmethod( exportable )
-
+    
 class member_operator_t( declarations.member_operator_t, calldef_t ):
     def __init__(self, *arguments, **keywords):
         declarations.member_operator_t.__init__( self, *arguments, **keywords )

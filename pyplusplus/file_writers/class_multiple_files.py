@@ -6,7 +6,6 @@
 import os
 import writer
 import multiple_files
-from sets import Set as set
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
@@ -186,8 +185,6 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
             return super( class_multiple_files_t, self ).split_class_impl( class_creator )
         
         class_creator.declaration.always_expose_using_scope = True
-        extmodule = class_creator.top_parent
-               
         
         function_name = 'register_%s_class' % class_creator.alias
         file_path = os.path.join( self.directory_path, class_creator.alias )

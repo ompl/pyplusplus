@@ -96,7 +96,7 @@ class calldef_t( declaration_based.declaration_based_t):
     def _create_impl( self ):        
         result = []
         
-        if False == self.works_on_instance:
+        if not self.works_on_instance:
             exported_class_alias = None
             if declarations.templates.is_instantiation( self.declaration.parent.name ):
                 exported_class_alias = self.exported_class_alias
@@ -1021,7 +1021,7 @@ class operator_t( declaration_based.declaration_based_t ):
         elif arg0 != arg1 and arg1 == parent_decl_string:
             return operator_t.SELF_POSITION.SECOND
         else:
-            assert 0 #I have bug some where
+            assert not "Unable to find out boost::python::self position. " + str( self.declaration )
 
     def _create_binary_operator(self):
         answer = [ None, self.declaration.symbol, None ]

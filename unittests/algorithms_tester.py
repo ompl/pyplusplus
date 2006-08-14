@@ -7,7 +7,6 @@ import os
 import sys
 import unittest
 import autoconfig
-from sets import Set as set
 from pygccxml import parser
 from pygccxml import declarations
 from pyplusplus import code_creators 

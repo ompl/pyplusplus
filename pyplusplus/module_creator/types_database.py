@@ -3,7 +3,6 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-import os
 from pygccxml import declarations
 from pyplusplus import code_creators
 from pyplusplus import _logging_
@@ -29,7 +28,7 @@ class types_database_t( object ):
         elif isinstance( decl, declarations.variable_t ):
             self._update_db( self.__variables, decl.type )
         else:
-            assert 0
+            assert not "types_database_t class can not process " + str( decl )
             
     def _is_relevant(self, decl_string):
         for smart_ptr in self.__smart_ptrs:
@@ -49,30 +48,31 @@ class types_database_t( object ):
             answer = answer.replace( ' ' + data, data )
         return answer.replace( '  ', ' ' )
 
-    def _update_containers_db( self, type ):
+    def _update_containers_db( self, type_ ):
         #will return True is type was treated
-        type = declarations.remove_alias( type )
-        type = declarations.remove_pointer( type )
-        type = declarations.remove_reference( type )        
-        type = declarations.remove_cv( type )        
-        type = declarations.remove_declarated( type )        
+        type_ = declarations.remove_alias( type_ )
+        type_ = declarations.remove_pointer( type_ )
+        type_ = declarations.remove_reference( type_ )        
+        type_ = declarations.remove_cv( type_ )        
+        type_ = declarations.remove_declarated( type_ )        
         
         class_traits = declarations.class_traits
         class_declaration_traits = declarations.class_declaration_traits
-        if not class_traits.is_my_case( type ) and not class_declaration_traits.is_my_case( type ):
+        if not class_traits.is_my_case( type_ ) and not class_declaration_traits.is_my_case( type_ ):
             return False
         
-        if class_traits.is_my_case( type ):
-            container_cls = class_traits.get_declaration( type )
+        if class_traits.is_my_case( type_ ):
+            container_cls = class_traits.get_declaration( type_ )
         else:
-            container_cls = class_declaration_traits.get_declaration( type )
+            container_cls = class_declaration_traits.get_declaration( type_ )
             
         if None is container_cls.indexing_suite:
             return False
         
         try:            
-            check_extraction = container_cls.indexing_suite.element_type
-        except RuntimeError, error:
+            #check extraction of element type from container
+            container_cls.indexing_suite.element_type
+        except RuntimeError:
             msg = "%s;%s" \
                   % ( str(container_cls)
                       , "pyplusplus can not find out container value_type( mapped_type )."

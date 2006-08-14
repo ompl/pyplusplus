@@ -3,8 +3,6 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-import os
-import time
 import types_database
 import class_organizer
 import call_policies_resolver 
@@ -364,7 +362,7 @@ class creator_t( declarations.decl_visitor_t ):
             elif not creator:
                 pass
             else:
-                assert 0
+                assert not "Found %d class code creators" % len(creator)
         find = code_creators.creator_finder.find_by_declaration
         if isinstance( operator.parent, declarations.class_t ):
             found = find( lambda decl: operator.parent is decl
@@ -393,7 +391,7 @@ class creator_t( declarations.decl_visitor_t ):
                    and ( creator.target is registered.target ):
                     return True
             else:
-                assert 0 #unknown instace of registrator
+                assert not "unknown instace of registrator: " % str( registered )
                 
     def _treat_smart_pointers( self ):
         """ Go to all class creators and apply held_type and creator registrators

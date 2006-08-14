@@ -18,9 +18,9 @@ class include_directories_t(instruction.instruction_t):
         self._user_defined = []
         self._std = []
 
+    @staticmethod
     def normalize( path ):
         return os.path.normpath( os.path.normcase( path ) )
-    normalize = staticmethod( normalize )
     
     def _get_user_defined(self):
         self._user_defined = map( self.normalize, self._user_defined )

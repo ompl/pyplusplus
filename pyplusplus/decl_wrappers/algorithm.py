@@ -9,7 +9,6 @@ tree.
 """
 
 import re
-import pygccxml
 
 def creators_affect_on_me( me ):
     """This algorithm finds all code creators that can influence on code generated
