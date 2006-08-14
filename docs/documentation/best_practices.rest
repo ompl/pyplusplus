@@ -8,9 +8,9 @@ Best practices
 Introduction
 ------------
 
-`pyplusplus`_ has reach interface and a lot of functionality. Sometimes reach
+`Py++`_ has reach interface and a lot of functionality. Sometimes reach
 interface helps, but sometimes it can confuse. This document will describe how 
-effectivly to use `pyplusplus`_.
+effectivly to use `Py++`_.
 
 ------------
 Big projects
@@ -20,9 +20,9 @@ Definition
 ----------
 
 First of all, let me to define "big project". "Big project" is a project with 
-few handred of header files. `pyplusplus`_ was born to create `Python`_ bindings
+few handred of header files. `Py++`_ was born to create `Python`_ bindings
 for such projects. If you take a look `here`__ you will find few such projects,
-that use `pyplusplus`_.  
+that use `Py++`_.  
 
 .. __ : ./../../pygccxml/quotes.html
 
@@ -49,7 +49,7 @@ Tips
     
 * Single header file, will also improve performance compiling the generated bindings.
 
-  When `pyplusplus`_ generated the bindings, you have a lot of .cpp files to 
+  When `Py++`_ generated the bindings, you have a lot of .cpp files to 
   compile. The project you are working on is big. I am sure it takes a lot of
   time to compile projects that depend on it. Generated code also depend on it, 
   more over this code contains a lot of template isnstantiations. So it could 
@@ -71,12 +71,12 @@ Tips
     
   ``precompiled_header`` argument could be ``None`` or string, that contains 
   name of precompiled header file, that will be created in the directory. 
-  `pyplusplus`_ will add to it header files from `Boost.Python`_ library and 
+  `Py++`_ will add to it header files from `Boost.Python`_ library and 
   your header files. 
   
   What is ``huge_classes`` argument for? ``huge_classes`` could be ``None`` or
   list of references to class declarations. It is there to provide a solution to 
-  `this error`_. ``pyplusplus`` will automaticly split generated code for the 
+  `this error`_. `Py++`_ will automaticly split generated code for the 
   huge classes to few files:
   
   ::
@@ -92,7 +92,7 @@ Tips
   
   
 
-.. _`pyplusplus` : ./../pyplusplus.html
+.. _`Py++` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org

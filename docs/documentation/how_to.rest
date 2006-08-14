@@ -41,7 +41,7 @@ Now we should register it:
 Small usage advice.
 -------------------
 
-`pyplusplus`_ allows you to define a query that will return you all exception classes:
+`Py++`_ allows you to define a query that will return you all exception classes:
 
 ::
 
@@ -82,7 +82,7 @@ Python. So, we need to create a wrapper to the function:
   ;
 
 Now, after you know how this problem is solved. I will show how this solution 
-could be integrated with `pyplusplus`_.
+could be integrated with `Py++`_.
 
 
 ::
@@ -115,14 +115,14 @@ Fatal error C1204:Compiler limit:internal structure overflow
 ------------------------------------------------------------
 
 If you get this error, that the generated file is too big. You will have to split
-it to few files. Well, not you but `pyplusplus`_ you will only have to tell that 
+it to few files. Well, not you but `Py++`_ you will only have to tell that 
 to it.
 
 If you are using ``module_builder_t.write_module`` method, consider to switch
 to ``module_builder_t.split_module``. 
 
 If you are using ``split_method``, but still generated code for some specific 
-class could not be compiled because of error, you can ask `pyplusplus`_ to split
+class could not be compiled because of error, you can ask `Py++`_ to split
 class registration code to few cpp files.
 
 For more information, please read the documentation.
@@ -227,7 +227,7 @@ to the one, in the previous paragragh.
   mb.namespace( 'py_details' ).exclude()
 
 
-`pyplusplus`_ allows you to extract declarations from string, that contains
+`Py++`_ allows you to extract declarations from string, that contains
 valid C++ code. It creates temporal header file and compiles it. At the end of
 the compilation process it will remove it. You can read mode about ``create_text_fc``
 function `here`__.
@@ -246,7 +246,7 @@ welcome too!
 
 
 
-.. _`pyplusplus` : ./../pyplusplus.html
+.. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

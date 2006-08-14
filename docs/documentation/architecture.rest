@@ -8,7 +8,7 @@ Architecture
 Introduction
 ------------
 
-This document will describe an architecture behind `pyplusplus`_. 
+This document will describe an architecture behind `Py++`_. 
 
 ---
 C++
@@ -31,7 +31,7 @@ and C++ parser independent. It provides next services:
 * C++ source files parsing and caching functionality
 
 
-`pyplusplus`_ uses those services to:
+`Py++`_ uses those services to:
 
 * extract declarations from source files and to provide powerful query interface
 
@@ -46,17 +46,17 @@ and C++ parser independent. It provides next services:
   * ...
 
 
-pyplusplus & pygccxml integration
----------------------------------
+Py++ & pygccxml integration
+---------------------------
 
-`pyplusplus`_ uses different approaches to expose these services to the user.
+`Py++`_ uses different approaches to expose these services to the user.
 
 Parsing integration
 -------------------
-`pyplusplus`_ provides it's own "API" to configure and run `pygccxml`_ parsing
+`Py++`_ provides it's own "API" to configure and run `pygccxml`_ parsing
 services. The "API" I am talking about, is arguments to ``module_builder.__init__``
 method. The method takes all arguments, needed to envoke parsing services. It
-has been done this way to simplify the usage of `pyplusplus`_.
+has been done this way to simplify the usage of `Py++`_.
 
 
 Declarations tree integration
@@ -98,7 +98,7 @@ explain, lets take a look on next source code:
 
 
 What you see here, is a common pattern, that will appear in all projects, that 
-use `pyplusplus`_:
+use `Py++`_:
 
 * find the declaration(s)
 
@@ -108,7 +108,7 @@ What is the point of this example? From the user point of view it is perfectly
 good, it makes a lot of sence to configure the code generation engine, using 
 the declarations tree. Now, the desired solution is clear: we should use 
 declarations tree to configure the engine. So, let me to re-formulate the 
-question: how does `pyplusplus`_ add missinig functionality to 
+question: how does `Py++`_ add missinig functionality to 
 ``pygccxml.declarations`` classes? There were few possible solutions to the 
 problem. The next one was implemented:
 
@@ -157,7 +157,7 @@ There are 2 different problems the engine should solve:
   
 * How it should be written to files?
 
-  Remember, `pyplusplus`_ is targeting big projects. It can not generate all code
+  Remember, `Py++`_ is targeting big projects. It can not generate all code
   in one file - this will not work, not at all.
 
   Code creators and file writers provides solution to this problem.
@@ -204,7 +204,7 @@ declaration. That is the only job of ``code creator``. For example:
 As you can see, there are primary 2 kinds of ``code creator``'s: declaration 
 based and others. Declaration based creator generates code, that is needed to 
 export the declaration. There a lot of use cases, where in order to export a 
-declaration, `pyplusplus`_ builds more then one ``code creator``. For example: 
+declaration, `Py++`_ builds more then one ``code creator``. For example: 
 in order to export virtual function 2 ``code creator``'s are built: 
 
 ( I will reuse example from `Boost.Python`_ `tutorials`__.)
@@ -287,11 +287,11 @@ class that "sees" all declarations. It monitors all exported functions and
 variables. Thus it knows that class ``X`` is used with ``boost::shared_ptr``,
 so it will set ``class_<X>`` ``HeldType`` to be ``boost::shared_ptr`` or will 
 register its usage. Another interesting example is std containers. You don't have 
-to say to `pyplusplus`_ to export them, it will do it by itself. You may ask
+to say to `Py++`_ to export them, it will do it by itself. You may ask
 why this detail is so interesting? Because the user does not have to specify all
-set of declarations he wants to export! Because, in near future, `pyplusplus`_
+set of declarations he wants to export! Because, in near future, `Py++`_
 will analize declarations dependency graph of exported declarations. If some 
-declaration should be exported and it is not, then `pyplusplus`_ will warn the
+declaration should be exported and it is not, then `Py++`_ will warn the
 user.
 
 
@@ -317,7 +317,7 @@ class.
 
 
 
-.. _`pyplusplus` : ./../pyplusplus.html
+.. _`Py++` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org

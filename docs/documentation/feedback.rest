@@ -1,6 +1,6 @@
-=====================
-pyplusplus feedback
-=====================
+=============
+Py++ feedback
+=============
 
 .. contents:: Table of contents
 
@@ -8,7 +8,7 @@ pyplusplus feedback
 Introduction
 ------------
 
-`pyplusplus`_ has been created with few goals in mind:
+`Py++`_ has been created with few goals in mind:
 
 * to allow users create `Python`_ bindings for large projects using the `Boost.Python`_
   library
@@ -18,8 +18,8 @@ Introduction
 * to serve as a user's guide for `Boost.Python`_ library
 
 
-Those goals all have something in common. In order to achive them, `pyplusplus`_ must
-give useful feedback to the user.  Because `pyplusplus`_ understands the 
+Those goals all have something in common. In order to achive them, `Py++`_ must
+give useful feedback to the user.  Because `Py++`_ understands the 
 declarations it exports, it can scan declarations for potential problems, report 
 them and in some cases provide hints about how to resolve the problem. Few examples:
 
@@ -50,21 +50,21 @@ them and in some cases provide hints about how to resolve the problem. Few examp
 * In order to expose free/member function that takes more than 10 arguments user
   should define ``BOOST_PYTHON_MAX_ARITY`` macro.
   
-For these problems and many other `pyplusplus`_ gives a nice explanation
+For these problems and many other `Py++`_ gives a nice explanation
 and sometimes a link to the relevant information on the Internet.
 
-I hope, that from now you will find it helpful to read every `pyplusplus`_ message :-).
+I hope, that from now you will find it helpful to read every `Py++`_ message :-).
 
 -------------
 How it works?
 -------------
 
 In previous paragraph, I described some pretty useful functionality but what should you
-do to enable it? - *Nothing!* By default, `pyplusplus`_ only prints the
+do to enable it? - *Nothing!* By default, `Py++`_ only prints the
 important messages to ``stdout``. More over it prints them onle for declarations
 that are going to be exported.
 
-`pyplusplus`_ uses the python  `logging`_ package to write all user messages. By 
+`Py++`_ uses the python  `logging`_ package to write all user messages. By 
 default, messages with ``DEBUG`` level will be skipped, all other messages will
 be reported.
 
@@ -91,12 +91,12 @@ and want to change it, right?
 
 
 2. But what if you want to disable some messages and leave others? This is also possible.
-   `pyplusplus`_ and `pygccxml`_ do not use a single logger. Almost every internal 
+   `Py++`_ and `pygccxml`_ do not use a single logger. Almost every internal 
    package has its own logger. So you can enable one logger and disable another one.
    
    The `pygccxml`_ package defines all loggers in the ``pygccxml.utils`` package.
    
-   The `pyplusplus`_ package defines all logers in the ``pyplusplus._logging_`` package.
+   The `Py++`_ package defines all logers in the ``pyplusplus._logging_`` package.
    
    Both packages define a ``loggers`` class. Those classes keep references to 
    different loggers. The ``loggers`` classes look very similar to the next class:
@@ -125,7 +125,7 @@ and want to change it, right?
    You can use these references in the ``logging`` package to complete
    your task of adjusting individual loggers.
    
-   One more thing, `pyplusplus`_ automatically splits long message, where line 
+   One more thing, `Py++`_ automatically splits long message, where line 
    length defaults to 70 characters. Thus it is very convinient to read them on your screen.
    If you want to use different tools to monitor those messages, consider to use 
    standard `Formatter`_ class, instead of ``multi_line_formatter_t`` one.
@@ -146,7 +146,7 @@ Every declaration class has the following methods:
 
 * ``readme( self )``
 
-  This method gives you access to all tips/hints/warnings `pyplusplus`_ has about
+  This method gives you access to all tips/hints/warnings `Py++`_ has about
   the declaration. This methods returns a list of strings. If the declaration is 
   not exportable, than first message within the list is an explanation, why it 
   is not exportable.
@@ -154,7 +154,7 @@ Every declaration class has the following methods:
 
 .. _`Formatter` : http://docs.python.org/lib/node357.html
 .. _`logging` : http://docs.python.org/lib/module-logging.html
-.. _`pyplusplus` : ./../pyplusplus.html
+.. _`Py++` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org

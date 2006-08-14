@@ -14,7 +14,7 @@ http://boost.org/libs/python/doc/v2/indexing.html
 The way to go
 -------------
 The generated code should work, even if it contains usage of std containers
-classes. There are few ways to implement indexing suite support within `pyplusplus`_.
+classes. There are few ways to implement indexing suite support within `Py++`_.
 I will describe, how I think it should be implemented and used by user.
 
 Generated code
@@ -44,21 +44,21 @@ C++ code:
   std::map< int, my_data > get_data();
   
 Assumption: user wants to use ``get_options`` and ``get_data`` functions. Next 
-steps will describe what `pyplusplus`_ will do in this case:
+steps will describe what `Py++`_ will do in this case:
 
-1. `pyplusplus`_ will analyze functions return type and arguments. 
+1. `Py++`_ will analyze functions return type and arguments. 
 
 2. It will understand that ``std::vector< std::string >`` and ``std::map< int, my_data >`` 
    classes should be exported too. 
    
 3. It will understand that those classes should be exported using indexing suite 
-   functionality provided by `Boost.Python`_ library or `pyplusplus`_ 
+   functionality provided by `Boost.Python`_ library or `Py++`_ 
    ``code repository``.
 
 4. It will generate the code, that will use that functionality. 
 
 So far, so good. Sometimes, there are use cases, when user has to change default
-values, for example ``NoProxy`` or ``DerivedPolicies``. What interface `pyplusplus`_ 
+values, for example ``NoProxy`` or ``DerivedPolicies``. What interface `Py++`_ 
 will provide in order to change the defaults? Well, ``std::vector< std::string >``
 is the class that could be found in declarations tree, right? User can find the
 class and change the defaults:
@@ -84,7 +84,7 @@ indexing suite class.
 
 
 
-.. _`pyplusplus` : ./../pyplusplus.html
+.. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

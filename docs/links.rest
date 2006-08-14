@@ -8,7 +8,7 @@ Links
 Wiki
 ----
 
-Thanks to Allen Bierbaum `pyplusplus`_ now has `wiki`_. We use it primary to
+Thanks to Allen Bierbaum `Py++`_ now has `wiki`_. We use it primary to
 discuss new features, that will be introduced in future versions.
 
 .. _`wiki` : https://realityforge.vrsource.org/view/PyppApi/WebHome
@@ -30,14 +30,14 @@ Reading
   the result using a tool that `understands` the syntax and semantics of both 
   the underlying language and the library. ..."
   
-  `pyplusplus`_ + Boost.Python is a SELL!
+  `Py++`_ + Boost.Python is a SELL!
   
 
 * `Aspect oriented programming`_
 
   .. _`Aspect oriented programming` : http://en.wikipedia.org/wiki/Aspect-oriented_programming
 
-  `pyplusplus`_ borrowed few ideas from this programming paradigm.
+  `Py++`_ borrowed few ideas from this programming paradigm.
 
 --------------
 Help resources
@@ -55,7 +55,7 @@ Help resources
 * http://boost.cvs.sourceforge.net/boost/boost/libs/python/test/ - `Boost.Python`_ 
   unit tests. They could be very, very helpful.
 
-* http://svn.sourceforge.net/viewvc/pygccxml/pyplusplus_dev/unittests/ - `pyplusplus`_ 
+* http://svn.sourceforge.net/viewvc/pygccxml/pyplusplus_dev/unittests/ - `Py++`_ 
   unit tests. They could be even more helpful!
   
 -------------
@@ -66,12 +66,12 @@ Mailing lists
 
   .. _`C++-sig` : http://mail.python.org/mailman/listinfo/c++-sig/
 
-* `pyplusplus mailing list`_
+* `Py++ mailing list`_
 
-  .. _`pyplusplus mailing list` : http://sourceforge.net/mail/?group_id=118209
+  .. _`Py++ mailing list` : http://sourceforge.net/mail/?group_id=118209
 
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
-.. _`pyplusplus` : ./pyplusplus.html
+.. _`Py++` : ./pyplusplus.html
 
 ..
    Local Variables:

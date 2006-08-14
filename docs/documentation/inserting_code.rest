@@ -8,7 +8,7 @@ Inserting code
 Introduction
 ------------
 
-`pyplusplus`_ is not a magician! Sometimes there is a need to add code to 
+`Py++`_ is not a magician! Sometimes there is a need to add code to 
 generated file(s). This document will describe how you can insert your code to 
 almost any place. 
 
@@ -71,7 +71,7 @@ Lets take a look on next use case:
 ``int`` is immutable type in Python. So you can not expose ``get_size`` member 
 function as is. You need to create a wrapper and expose it.
 
-In the near future ``pyplusplus`` will eliminate the need of creating hand 
+In the near future `Py++`_ will eliminate the need of creating hand 
 written wrapper for this use case.
 
 ::
@@ -92,14 +92,14 @@ Now you have to register it:
       ...
   ;
 
-How it could be achieved with `pyplusplus`_? Class declaration, has also two 
+How it could be achieved with `Py++`_? Class declaration, has also two 
 functions:
 
 * ``add_declaration_code( self, code )``
 
   This method will add the code to the declaration section within the module.
   
-  If you split your module to few files, `pyplusplus`_ will add this code to the 
+  If you split your module to few files, `Py++`_ will add this code to the 
   cpp file, class registration code will be written in.
   
   Attention: there is no defined order between wrapper code and declaration section
@@ -143,7 +143,7 @@ Example
   window = mb.class_( 'window_t' )
   window.add_declaration_code( get_window_size definition )
   window.add_registration_code( 'def( "get_size", &::get_window_size )' )
-  #pyplusplus will add ';' if needed
+  #Py++ will add ';' if needed
 
 ----------------------------
 Insert code to class wrapper
@@ -193,7 +193,7 @@ Solution
 
 
 
-.. _`pyplusplus` : ./../pyplusplus.html
+.. _`Py++` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org

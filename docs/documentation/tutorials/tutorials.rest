@@ -4,9 +4,9 @@ tutorials
 
 .. contents:: Table of contents
 
--------------------
-What is pyplusplus?
--------------------
+-------------
+What is Py++?
+-------------
 
 .. include:: ./../../definition.rest 
 
@@ -14,17 +14,17 @@ What is pyplusplus?
 Graphical interface
 ------------------- 
 
-`pyplusplus`_ includes a `graphical interface`_. `Graphical interface`_ 
+`Py++`_ includes a `graphical interface`_. `Graphical interface`_ 
 is invoked with the ``pyplusplus_gui`` command, or with ``pyplusplus_gui.pyw``
 from the ``scripts`` subdirectory of the `Python`_ installation directory.
 
 My advise to you - start with `graphical interface`_, because:
   * you don't have to learn new API
   * few clicks with mouse and you have `Boost.Python`_ code for your file(s)
-  * it is very easy to evaluate `pyplusplus`_ using it
+  * it is very easy to evaluate `Py++`_ using it
   * you can check whether `GCC-XML`_ is able to compile your code or not
   * you can use it as a guide to `Boost.Python`_ library
-  * it is able to generate `pyplusplus`_ code for you
+  * it is able to generate `Py++`_ code for you
 
 .. _`graphical interface` : ./pyplusplus_demo.png
 .. _`Graphical interface` : ./pyplusplus_demo.png
@@ -33,7 +33,7 @@ My advise to you - start with `graphical interface`_, because:
 Getting started
 ---------------
 
-I suppose you decided to do some coding with `pyplusplus`_. `Module builder`_ 
+I suppose you decided to do some coding with `Py++`_. `Module builder`_ 
 tutorials will help you. 
 
 .. _`Module builder` : ./module_builder/module_builder.html
@@ -48,7 +48,7 @@ creator's tree. Meanwhile you can take a look on the content of
 to create your own code creator. To be more specific, it exposes ``get*`` and 
 ``set*`` methods as a single property.
 
-.. _`pyplusplus` : ./../../pyplusplus.html
+.. _`Py++` : ./../../pyplusplus.html
 .. _`pygccxml` : ./../....//pygccxml/pygccxml.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`SourceForge`: http://sourceforge.net/index.php

@@ -1,18 +1,18 @@
-===================
-pyplusplus download
-===================
+=============
+Py++ download
+=============
 
 .. contents:: Table of contents
 
--------------------------
-pyplusplus on SourceForge
--------------------------
+-------------------
+Py++ on SourceForge
+-------------------
 
-`pyplusplus`_ project is hosted on SourceForge. Using SourceForge services you
+`Py++`_ project is hosted on SourceForge. Using SourceForge services you
 can:
 
 1) get access to source code
-2) get access to latest release version of pyplusplus
+2) get access to latest release version of `Py++`_
 
 
 -----------------
@@ -32,11 +32,11 @@ Installation
 ------------
 
 In command prompt or shell change current directory to be "pyplusplus-X.Y.Z".
-"X.Y.Z" is version of `pyplusplus`_. Type next command: 
+"X.Y.Z" is version of `Py++`_. Type next command: 
 
 | ``python setup.py install``
 
-After this command complete, you should have installed `pyplusplus`_ package. 
+After this command complete, you should have installed `Py++`_ package. 
 
 ------------
 Dependencies
@@ -45,7 +45,7 @@ Dependencies
 * `pygccxml`_
 
 
-.. _`pyplusplus` : ./pyplusplus.html
+.. _`Py++` : ./pyplusplus.html
 .. _`pygccxml` : ./../pygccxml/pygccxml.html
 
 ..

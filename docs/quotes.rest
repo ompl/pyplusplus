@@ -1,6 +1,6 @@
-===============================
-What they say about pyplusplus?
-===============================
+=========================
+What they say about Py++?
+=========================
 
 .. contents:: Table of contents
 
@@ -35,17 +35,17 @@ to the PyOgre bindings (when I last used them). "
 
   Lakin Wecker, the author of `Python-OGRE`_ project
 
-------------------------
-Who is using pyplusplus?
-------------------------
+------------------
+Who is using Py++?
+------------------
 
 * Matthias Baas, the author of `Python Computer Graphics Kit`_ project, is using 
-  `pyplusplus`_ to create Python bindings for `Maya C++ SDK`__. 
+  `Py++`_ to create Python bindings for `Maya C++ SDK`__. 
 
 
   .. __ : http://www.highend3d.com/maya
 
-* Lakin Wecker, the author of `Python-OGRE`_ project, is using `pyplusplus`_ to
+* Lakin Wecker, the author of `Python-OGRE`_ project, is using `Py++`_ to
   create Python bindings for `OGRE`_.
 
 
@@ -63,7 +63,7 @@ Who is using pyplusplus?
 
   You can download the bindings from https://sourceforge.net/project/showfiles.php?group_id=118209 .
 
-.. _`pyplusplus` : ./pyplusplus.html
+.. _`Py++` : ./pyplusplus.html
 .. _`Python Computer Graphics Kit` : http://cgkit.sourceforge.net/
 .. _`TnFOX`: http://www.nedprod.com/TnFOX/
 .. _`PyOpenSG`: https://realityforge.vrsource.org/view/PyOpenSG/WebHome

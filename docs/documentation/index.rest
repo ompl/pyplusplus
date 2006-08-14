@@ -1,6 +1,6 @@
-========================
-pyplusplus documentation
-========================
+==================
+Py++ documentation
+==================
 
 .. contents:: Table of contents
 
@@ -8,13 +8,13 @@ pyplusplus documentation
 Help needed!
 ------------
 
-`pyplusplus`_ documentation is always under active development. It is not an easy
+`Py++`_ documentation is always under active development. It is not an easy
 task to create and maintain it. I will appriciate any help! 
 
 How can you help?
 
-* Lets face it: today it is not possible to use `pyplusplus`_ without eventually
-  looking into source code. `pyplusplus`_ uses `Epydoc`_ to generate documentation 
+* Lets face it: today it is not possible to use `Py++`_ without eventually
+  looking into source code. `Py++`_ uses `Epydoc`_ to generate documentation 
   from source files. So, if you found some undocumented piece of code and you 
   understand what it does, please write documentation string.
   
@@ -26,7 +26,7 @@ How can you help?
   just point me to the place.
 
 .. _`Epydoc` : http://epydoc.sourceforge.net/
-.. _`pyplusplus` : ./../pyplusplus.html
+.. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

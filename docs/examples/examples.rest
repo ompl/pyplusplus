@@ -8,7 +8,7 @@ Examples
 Graphical interface
 -------------------
 
-`pyplusplus`_ has nice, small and simple `graphical interface`_. Please, read 
+`Py++`_ has nice, small and simple `graphical interface`_. Please, read 
 `tutorials`_ for more information.
 
 .. _`graphical interface` : ./../tutorials/pyplusplus_demo.png
@@ -30,7 +30,7 @@ boost libraries
 
 Boost provides free peer-reviewed portable C++ source libraries. 
 
-Using `pyplusplus`_ I created Python bindings for few libraries:
+Using `Py++`_ I created Python bindings for few libraries:
 
   * `Boost.Date_Time`_
   * `Boost.CRC`_
@@ -51,7 +51,7 @@ package documentation.
 
 .. _`GUI`: ./../tutorials/pyplusplus_demo.png
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
-.. _`pyplusplus` : ./../pyplusplus.html
+.. _`Py++` : ./../pyplusplus.html
 .. _`EasyBMP`: http://easybmp.sourceforge.net/
 
 ..

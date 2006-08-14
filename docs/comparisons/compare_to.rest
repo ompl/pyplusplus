@@ -1,6 +1,6 @@
-=========================
-Compare pyplusplus to ...
-=========================
+===================
+Compare Py++ to ...
+===================
 
 .. contents:: Table of contents
 
@@ -9,7 +9,7 @@ Pyste
 -----
 
 `Pyste`_ is the Boost.Python code generator, that is not under active development
-any more. Nevertheless, users request to compare `pyplusplus`_ and `Pyste`_. You
+any more. Nevertheless, users request to compare `Py++`_ and `Pyste`_. You
 can read `here`_ the comparison.
 
 .. _`here` : ./Pyste.html
@@ -18,7 +18,7 @@ can read `here`_ the comparison.
 SWIG & SIP
 ----------
 
-The document, that compares SIP, SWIG and `pyplusplus`_ is under construction.
+The document, that compares SIP, SWIG and `Py++`_ is under construction.
 May be you are editing it right now, by evaluating these tools :-). I did not use 
 SWIG and SIP, so I can not provide you with fair comparison. I will let the open 
 source project(s) "to talk":
@@ -26,7 +26,7 @@ source project(s) "to talk":
 * `Python-OGRE`_:
 
   The impression of Lakin Wecker, after spending 30 hours working working with
-  `pyplusplus`_: http://www.ogre3d.org/phpBB2addons/viewtopic.php?t=1478&sid=4d77585146aabbc54f4b31ec50874d86
+  `Py++`_: http://www.ogre3d.org/phpBB2addons/viewtopic.php?t=1478&sid=4d77585146aabbc54f4b31ec50874d86
 
   .. _`Python-OGRE` : http://lakin.weckers.net/index_ogre_python.html
 
@@ -42,7 +42,7 @@ Some other links, that compare Boost.Python, SWIG, SIP and other tools:
 
 
 
-.. _`pyplusplus` : ./../pyplusplus.html
+.. _`Py++` : ./../pyplusplus.html
 .. _`Pyste`: http://www.boost.org/libs/python/doc/index.html
 
 

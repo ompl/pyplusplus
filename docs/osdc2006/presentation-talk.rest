@@ -56,7 +56,7 @@ Code generators:
    ( wxWidgets, wxPython ) ( extending only )
  * SIP - PyQt, PyKDE ( extending only )
  * Robin - ?
- * pyplusplus - an object-oriented framework for creating a code generator for 
+ * Py++ - an object-oriented framework for creating a code generator for 
    Boost.Python library. ( TnFOX, boost.date_time )
  
 Libraries: 

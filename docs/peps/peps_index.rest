@@ -8,7 +8,7 @@ TODO
 Description
 -----------
 
-This page is an official `pyplusplus`_ "TODO" page. 
+This page is an official `Py++`_ "TODO" page. 
 
 For small features, the description of the feature and it's implementation will 
 be written here. Big features will get their own page.
@@ -17,7 +17,7 @@ be written here. Big features will get their own page.
 Unnamed classes
 ---------------
 There is no techical reason why unnamed classes/structs/unions are not exported
-by `pyplusplus`_:
+by `Py++`_:
 ::
 
   class Foo{
@@ -32,7 +32,7 @@ by `pyplusplus`_:
 Implementation details
 ----------------------
 As it seems to me, the only code that should be changed is 
-pyplusplus/module_creator/creator.py file. To be more specific: all code creators,
+"pyplusplus/module_creator/creator.py" file. To be more specific: all code creators,
 for declarations in unnamed classes, should be created under named class. 
 
 The coding itself should take something like 4 - 5 hours, including unit test.
@@ -42,7 +42,7 @@ Call wrapper policies
 ---------------------
 
 Not all functions could be exposed to Python as is. This `document`__ will 
-explain how `pyplusplus`_ will help users to create wrappers around those functions.
+explain how `Py++`_ will help users to create wrappers around those functions.
 
 .. __ : ./call_wrapper_policies.html
 
@@ -50,12 +50,12 @@ explain how `pyplusplus`_ will help users to create wrappers around those functi
 Indexing suite
 --------------
 
-`pyplusplus`_ will expose C++ std containers. This `document`__ will describe 
+`Py++`_ will expose C++ std containers. This `document`__ will describe 
 how it will work.
 
 .. __ : ./indexing_suite.html
 
-.. _`pyplusplus` : ./../pyplusplus.html
+.. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
