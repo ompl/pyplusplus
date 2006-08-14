@@ -58,7 +58,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         if not isinstance( self, declarations.member_calldef_t ):
             pass
         elif self.virtuality == declarations.VIRTUALITY_TYPES.PURE_VIRTUAL:
-            raise RuntimeError( "In order to expose pure virtual function, you should allow to pyplusplus to create wrapper." )
+            raise RuntimeError( "In order to expose pure virtual function, you should allow to Py++ to create wrapper." )
         elif self.access_type == declarations.ACCESS_TYPES.PROTECTED:
             self.ignore = True
         else:
@@ -112,12 +112,12 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
                 dtype = units[-1]
                 if isinstance( dtype.declaration.parent, declarations.class_t ):
                     if dtype.declaration not in dtype.declaration.parent.public_members:
-                        return "pyplusplus can not expose function that takes as argument/returns instance of non public class. Generated code will not compile."
+                        return "Py++ can not expose function that takes as argument/returns instance of non public class. Generated code will not compile."
             no_ref = declarations.remove_reference( some_type )
             no_ptr = declarations.remove_pointer( no_ref )
             no_const = declarations.remove_const( no_ptr )
             if declarations.is_array( no_const ):
-                return "pyplusplus can not expose function that takes as argument/returns C++ arrays. This will be changed in near future."                
+                return "Py++ can not expose function that takes as argument/returns C++ arrays. This will be changed in near future."                
         return self._exportable_impl_derived()
 
     def _readme_impl( self ):
@@ -169,7 +169,7 @@ class constructor_t( declarations.constructor_t, calldef_t ):
 
     def _exportable_impl_derived( self ):
         if self.is_artificial:
-            return 'pyplusplus does not exports compiler generated constructors'
+            return 'Py++ does not exports compiler generated constructors'
         return ''
 
 

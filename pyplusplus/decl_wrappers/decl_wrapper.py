@@ -97,9 +97,9 @@ class decl_wrapper_t(object):
     def get_exportable( self ):
         if self._exportable is None:
             if self.name.startswith( '__' ):
-                self._exportable_reason = 'pyplusplus, by default, does not expose internal compilers declarations. Names of those declarations usually start with "__".'
+                self._exportable_reason = 'Py++, by default, does not expose internal compilers declarations. Names of those declarations usually start with "__".'
             elif self.location and self.location.file_name == "<internal>":
-                self._exportable_reason = 'pyplusplus, by default, does not expose internal declarations (those that gccxml say belong to "<internal>" header).'
+                self._exportable_reason = 'Py++, by default, does not expose internal declarations (those that gccxml say belong to "<internal>" header).'
             else:
                 self._exportable_reason = self._exportable_impl( )
             self._exportable = not bool( self._exportable_reason )

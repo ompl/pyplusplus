@@ -5,7 +5,7 @@
 
 """Declaration decorators.
 
-This sub-package contains the pyplusplus specific declaration objects
+This sub-package contains the Py++ specific declaration objects
 that are the nodes of the declaration tree. In addition to the
 interface of the declarations in the pygccxml package the objects in
 this package also provide a I{decoration} interface. This interface

@@ -128,7 +128,7 @@ class parser_configuration_ui_t(custom_frame_t):
         map( self._include_paths.delete, selected )
 
     def _add_define( self ):
-        symbol = tkSimpleDialog.askstring(title='pyplusplus - code generator demo'
+        symbol = tkSimpleDialog.askstring(title='Py++ - code generator demo'
                                              , prompt="Define symbol ( example 'max(a,b)=a<b?b:a' ):")
         if symbol:
             self._defines.insert( Tkinter.END, symbol )
@@ -195,7 +195,7 @@ class actions_ui_t(custom_frame_t):
         temp.grid( row=0, columnspan=3, sticky=Tkinter.NW + Tkinter.E )
 
         temp = Tkinter.Button( self
-                               , text="generate pyplusplus code"
+                               , text="generate Py++ code"
                                , command=on_generate_pyplusplus )
         temp.grid( row=1, sticky=Tkinter.NW + Tkinter.E)
 
@@ -270,7 +270,7 @@ class main_widget_ui_t(custom_frame_t):
         top.rowconfigure( 0, weight=1 )
         top.columnconfigure( 0, weight=1 )
         
-        self.master.title('pyplusplus - code generator demo')
+        self.master.title('Py++ - code generator demo')
 
         self._header_file_configurator = header_file_ui_t( self )
         self._header_file_configurator.grid( row=0, column=0, sticky=Tkinter.NW, padx=2, pady=2)

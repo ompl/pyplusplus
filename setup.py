@@ -50,9 +50,9 @@ def generate_doc():
 
     print "Generating epydoc files..."                
 
-    docindex = build_doc_index(['pyplusplus', 'pygccxml'])
+    docindex = build_doc_index(['Py++', 'pygccxml'])
     html_writer = HTMLWriter( docindex
-                              , prj_name='pyplusplus'
+                              , prj_name='Py++'
                               , prj_url='http://www.language-binding.net'
                               , include_sourcecode=False #This will decrease the size of generated documentation
                               , show_private=False
@@ -86,9 +86,9 @@ if sys.argv[-1]=="sdist":
     generate_doc()
 
 
-setup( name = "pyplusplus",
+setup( name = "Py++",
        version = "0.8.1",
-       description="pyplusplus is a framework of components for creating C++ code generator for boost.python library",
+       description="Py++ is a framework of components for creating C++ code generator for Boost.Python library",
        author="Roman Yakovenko",
        author_email="roman.yakovenko@gmail.com",
        url='http://www.language-binding.net/pyplusplus/pyplusplus.html',

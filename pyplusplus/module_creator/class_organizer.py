@@ -88,7 +88,7 @@ class class_organizer_t(object):
             else:
                 pass
                 #there is usecase where base class defined within some class
-                #but his derives defined out of the class. right now pyplusplus
+                #but his derives defined out of the class. right now Py++
                 #doesn't supports this situation. 
 
         self.__colors[base] = COLOR.BLACK

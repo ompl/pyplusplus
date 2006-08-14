@@ -5,7 +5,7 @@
 #TODO: find better place for it
 
 """
-This package contains logging configuration for pyplusplus. Default log level
+This package contains logging configuration for Py++. Default log level
 is DEBUG. Default log messages destination is sys.stdout.
 """
 

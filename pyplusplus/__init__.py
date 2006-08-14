@@ -3,7 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""pyplusplus - Boost.Python code generator
+"""Py++ - Boost.Python code generator
 ========================================
 
 This package (together with the accompanying pygccxml package and
@@ -19,7 +19,7 @@ code befor it is written to disk. As a last step, these source code blocks are
 finally written into one or more C++ source files, which can then be compiled to 
 generate the final Python module.
 
-If you are just starting with U{pyplusplus<http://www.language-binding.net>}, 
+If you are just starting with U{Py++<http://www.language-binding.net>}, 
 then consider to read documentation of L{module_builder} package.
 """
 
@@ -37,12 +37,8 @@ from _logging_ import multi_line_formatter_t
 __version__ = '0.7.1'
 
 #Known issues:
-#1. Generated code for exporting function of template intsantiated classes could not be compiled
-#  with visual studio 7.1
-#2. Add logging of some statistics
-#
 #3.
-#~ > > 2. An other difference: when pyplusplus creates bindings for a set of
+#~ > > 2. An other difference: when Py++ creates bindings for a set of
 #~ > > declarations, it
 #~ > > should (?) see all declarations that are going to be exported:
 #~ > >     reasons:

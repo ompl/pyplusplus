@@ -44,7 +44,7 @@ INDEXING_SUITE_2_CONTAINERS = {
 
 INDEXING_SUITE_2_MAIN_HEADER = "boost/python/suite/indexing/container_suite.hpp"
 
-DO_NOT_REPORT_MSGS = [ "pyplusplus does not exports compiler generated constructors" ]
+DO_NOT_REPORT_MSGS = [ "Py++ does not exports compiler generated constructors" ]
 
 class creator_t( declarations.decl_visitor_t ):
     """Creating code creators.
@@ -221,7 +221,7 @@ class creator_t( declarations.decl_visitor_t ):
         vfunction_selector = lambda member: isinstance( member, declarations.member_function_t ) \
                                             and member.virtuality == VIRTUALITY_TYPES.PURE_VIRTUAL 
         members.extend( filter( vfunction_selector, class_decl.private_members ) )
-        #now lets filter out none public operators: pyplusplus does not support them right now
+        #now lets filter out none public operators: Py++ does not support them right now
         members = filter( lambda decl: not isinstance( decl, declarations.member_operator_t )
                                        or decl.access_type == ACCESS_TYPES.PUBLIC 
                           , members )

@@ -18,8 +18,8 @@ from pyplusplus import module_creator as mcreator_package
 
 class module_builder_t(object):
     """
-    This class provides users with simple and intuitive interface to pyplusplus
-    and/or pygccxml functionality. If this is your first attempt to use pyplusplus
+    This class provides users with simple and intuitive interface to Py++
+    and/or pygccxml functionality. If this is your first attempt to use Py++
     consider to read tutorials. You can find them on U{web site<http://www.language-binding.net>}.
     """
     

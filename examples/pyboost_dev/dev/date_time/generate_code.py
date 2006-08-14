@@ -102,7 +102,7 @@ class code_generator_t(object):
         boost_ns.classes( lambda decl: decl.alias.endswith( 'formatter' ) ).exclude()        
 
         #boost.date_time has problem to create local_[micro]sec_clock
-        #variable, it has nothing to do with pyplusplus
+        #variable, it has nothing to do with Py++
         empty_classes = ['local_microsec_clock', 'local_sec_clock']
         for alias in empty_classes:
             class_ = boost_ns.class_( lambda decl: decl.alias == alias )

@@ -190,10 +190,10 @@ class class_t( class_common_impl_details_t
         
     def _exportable_impl( self ):
         if not self.name:
-            return 'pyplusplus can not expose unnamed classes.'
+            return 'Py++ can not expose unnamed classes.'
             #it is possible to do so, but not for unnamed classes defined under namespace.
         if isinstance( self.parent, declarations.namespace_t ):
             return ''
         if not self in self.parent.public_members:
-            return 'pyplusplus can not expose private class.'
+            return 'Py++ can not expose private class.'
         return ''

@@ -14,11 +14,11 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
         self._setter_call_policies = None
         
     __call_policies_doc__ = \
-    """There are usecase, when exporting member variable forces pyplusplus to 
+    """There are usecase, when exporting member variable forces Py++ to 
     create accessors functions. Sometime, those functions requires call policies.
     To be more specific: when you export member variable that has reference or
     pointer type, you need to tell boost.python library how to manage object 
-    life-time. In all cases, pyplusplus will give reasonable default value. I am 
+    life-time. In all cases, Py++ will give reasonable default value. I am 
     sure, that there are use cases, when you need to change it. You should use this
     property to change it.
     """
@@ -41,16 +41,16 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
         #if not isinstance( self.parent, declarations.class_t ):
         #    return ''
         if not self.name:
-            return "pyplusplus can not expose unnamed variables"
+            return "Py++ can not expose unnamed variables"
         if self.bits == 0 and self.name == "":
-            return "pyplusplus can not expose alignement bit."
+            return "Py++ can not expose alignement bit."
         type_ = declarations.remove_alias( self.type )
         type_ = declarations.remove_const( type_ )
         if declarations.is_pointer( type_ ):
             if self.type_qualifiers.has_static:
-                return "pyplusplus can not expose static pointer member variables. This could be changed in future."
+                return "Py++ can not expose static pointer member variables. This could be changed in future."
             if declarations.is_fundamental( type_.base ):
-                return "pyplusplus can not expose pointer to fundamental member variables. This could be changed in future."
+                return "Py++ can not expose pointer to fundamental member variables. This could be changed in future."
             
             units = declarations.decompose_type( type_ )
             ptr2functions = filter( lambda unit: isinstance( unit, declarations.calldef_type_t )
@@ -62,6 +62,6 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
         if declarations.class_traits.is_my_case( type_ ):
             cls = declarations.class_traits.get_declaration( type_ )
             if not cls.name:
-                return "pyplusplus can not expose variables of with unnamed type."
+                return "Py++ can not expose variables of with unnamed type."
         return ''
     
