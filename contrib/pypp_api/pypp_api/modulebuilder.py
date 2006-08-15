@@ -409,8 +409,8 @@ class ModuleBuilder:
          # Let the arg policy manager write its files...
          self.mArgPolicyManager.writeFiles(os.path.dirname(filename))
       else:
-         mfs = file_writers.multiple_files_t(extmodule, filename)
-         mfs.write(write_main=multiCreateMain)         
+         mfs = file_writers.multiple_files_t(extmodule, filename, write_main=multiCreateMain)
+         mfs.write()
          self.split_header_names = mfs.split_header_names
          self.split_method_names = mfs.split_method_names
 
