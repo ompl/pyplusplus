@@ -40,7 +40,7 @@ way to add support for custom ones. You'd better read his `post`_ to
 `Boost.Python`_ mailing list or `documentation`_ for the new indexing suite.
 
 
-Now, I am sure you have next question: if this suite is soo good, why it is not
+Now, I am sure you have next question: if this suite is so good, why it is not
 in the main branch? The short answer is that this suite has some problems on 
 MSVC 6.0 compiler and there are few users, that still use that compiler.
 The long answer is here:
@@ -51,10 +51,10 @@ The long answer is here:
 
 .. _`documentation` : ./indexing_suite_v2.html
 .. _`post` : http://mail.python.org/pipermail/c++-sig/2003-October/005802.html
-
-------------------------
-Py++ and indexing suites
-------------------------
+
+------------------------
+Py++ and indexing suites
+------------------------
 `Py++`_ implements support for both indexing suites. More over, you can 
 freely mix indexing suites. For example you can expose ``std::vector<int>`` using
 `Boost.Python`_ built-in indexing suite and ``std::map< int, std::string>`` using
@@ -67,7 +67,7 @@ How does it work?
 In both cases, `Py++`_ provides almost "hands free" solution. `Py++`_
 keeps track of all exported functions and variables, and if it sees that there is
 a usage of stl container, it exports the container. In both cases, `Py++`_
-analizes the container ``value_type`` ( or in case of mapping container 
+analyzes the container ``value_type`` ( or in case of mapping container 
 ``mapped_type`` ), in order to set reasonable defaults, when it generates the code.
 
 -------------------
@@ -81,12 +81,12 @@ method:
 
   mb = module_builder_t( ..., indexing_suite_version=2 )
 
-Every declarated class has ``indexing_suite`` property. If the class is an 
-instantiation of stl container, this property containes reference to an instance
+Every declared class has ``indexing_suite`` property. If the class is an 
+instantiation of STL container, this property contains reference to an instance
 of ``indexing_suite1_t`` or ``indexing_suite2_t`` class. 
 
 
-How does `Py++`_ know, that a class represents stl container instantiation? 
+How does `Py++`_ know, that a class represents STL container instantiation? 
 Well, it uses ``pygccxml.declarations.container_traits`` to find out this. 
 ``pygccxml.declarations.container_traits`` class, provides all functionality 
 needed to identify container and to find out its ``value_type``
@@ -164,17 +164,17 @@ It is the time to introduce ``indexing_suite2_t`` class:
 
 * ``call_policies`` - read/write property, in near future I will add code to 
   `Py++`_ that will analize container ``value_type`` and will decide about
-  default call policies. Just an example: for non copy constructable classes
+  default call policies. Just an example: for non-copy constructable classes
   ``call_policies`` should be set to ``return_internal_reference``. 
   
 * ``[disable|enable]_method`` - new indexing suite, allows to configure 
   functionality exported to Python, using simple bitwise operations on predefined
   flags. `Py++`_ allows you to specify what methods you want to disable
-  or enable. ``indexing_suite2_t.METHODS`` containes names of all supported methods.
+  or enable. ``indexing_suite2_t.METHODS`` contains names of all supported methods.
         
 * ``[disable|enable]_methods_group`` - almost same as above, but allows you
   to specify what group of methods you want to disable or enable. 
-  ``indexing_suite2_t.METHOD_GROUPS`` containes names of all supported groups.
+  ``indexing_suite2_t.METHOD_GROUPS`` contains names of all supported groups.
 
 Small tips/hints
 ----------------
@@ -183,7 +183,7 @@ Small tips/hints
    The indexing suite will disable relevant functionality. You don't have 
    explicitly to disable method or mothods group.
 
-2. The documentation of new indexing suite containes few small mistakes. 
+2. The documentation of new indexing suite contains few small mistakes. 
    I hope, I will have time to fix them. Any way, `Py++`_ generates 
    correct code.
 
@@ -200,3 +200,4 @@ Small tips/hints
    sentence-end-double-space: t
    fill-column: 70
    End:
+

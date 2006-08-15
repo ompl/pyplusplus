@@ -30,7 +30,7 @@ Almost every ``Boost.Python`` module has next structure:
   
 Using ``module_builder_t`` you can add code to declaration and registration 
 sections. More over you can add the code to head or tail of the section. 
-``module_builder_t`` class provides API, that will help you to complete the task:
+``module_builder_t`` class provides API, which will help you to complete the task:
 
 * ``add_declaration_code( self, code, tail=True )``
 
@@ -57,7 +57,7 @@ Example
 Insert code to class
 --------------------
 
-``class_t`` declaration defines few methods adds user code to the generated one.
+``class_t`` declaration defines few methods, which add user code to the generated one.
 Lets take a look on next use case:
 
 ::
@@ -68,7 +68,7 @@ Lets take a look on next use case:
       ...
   };
 
-``int`` is immutable type in Python. So you can not expose ``get_size`` member 
+``int`` is immutable type in Python. So you cannot expose ``get_size`` member 
 function as is. You need to create a wrapper and expose it.
 
 In the near future `Py++`_ will eliminate the need of creating hand 
@@ -160,7 +160,7 @@ The short description is next: there are classes with parent/child relationship.
 Parent keeps child class instances using raw pointer. When parent die, it also
 destroys children classes. It is not an option to switch to ``boost::shared_ptr``.
 
-The solution Niall Douglas found was to implement small life time manager. For
+The solution Niall Douglas found was to implement small lifetime manager. For
 this solution he needed:
 
 * to add to every constructor of class wrapper some code that registers the 

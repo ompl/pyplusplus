@@ -51,7 +51,7 @@ There are few reasons I choose to expose those libraries.
 2. All those libraries have:
 
   * good documentation
-  * well defined interfaces
+  * well-defined interfaces
   * clear concepts
   * comprehensive unit tests
 
@@ -69,14 +69,14 @@ pyboost package
 
 Documentation
 -------------
-Right now, pyboost package does not have a documentation. In my opinion it is
+Right now, pyboost package does not have documentation. In my opinion it is
 fairly simple to read original documentation and "translate" it to Python.
 
 
 Examples
 --------
 
-One picture worth thousends words.
+One picture worth thousands words.
 
 random
 ~~~~~~
@@ -310,3 +310,4 @@ http://sourceforge.net/project/showfiles.php?group_id=118209.
    sentence-end-double-space: t
    fill-column: 70
    End:
+

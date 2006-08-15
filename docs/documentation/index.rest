@@ -9,7 +9,7 @@ Help needed!
 ------------
 
 `Py++`_ documentation is always under active development. It is not an easy
-task to create and maintain it. I will appriciate any help! 
+task to create and maintain it. I will appreciate any help! 
 
 How can you help?
 

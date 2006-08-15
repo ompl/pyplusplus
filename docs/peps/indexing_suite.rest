@@ -7,82 +7,82 @@ Indexing suite support
 -------------------
 What is useful for?
 -------------------
-
-http://boost.org/libs/python/doc/v2/indexing.html
-
--------------
-The way to go
--------------
-The generated code should work, even if it contains usage of std containers
-classes. There are few ways to implement indexing suite support within `Py++`_.
-I will describe, how I think it should be implemented and used by user.
-
-Generated code
---------------
-All generated code will have next form:
+
+http://boost.org/libs/python/doc/v2/indexing.html
+
+-------------
+The way to go
+-------------
+The generated code should work, even if it contains usage of STD containers
+classes. There are few ways to implement indexing suite support within `Py++`_.
+I will describe, how I think it should be implemented and used by user.
+
+Generated code
+--------------
+All generated code will have next form:
+::
+
+  class_< container, other class parameters >(name)
+        .def( concrete indexing suite class< container, proxy, derived policies >() )
+  ;
+  
+Usage example
+-------------
+C++ code:
+::
+
+  #include <map>
+  #include <vector>
+
+::
+
+  std::vector<string> get_options(){...}
+
 ::
-
-  class_< container, other class parameters >(name)
-        .def( concrete indexing suite class< container, proxy, derived policies >() )
-  ;
-  
-Usage example
--------------
-C++ code:
-::
-
-  #include <map>
-  #include <vector>
-
-::
-
-  std::vector<string> get_options(){...}
-
-::
-
-  struct my_data{...};
+
+  struct my_data{...};
   std::map< int, my_data > get_data();
-  
-Assumption: user wants to use ``get_options`` and ``get_data`` functions. Next 
-steps will describe what `Py++`_ will do in this case:
+  
+Assumption: user wants to use ``get_options`` and ``get_data`` functions. Next 
+steps will describe what `Py++`_ will do in this case:
+
+1. `Py++`_ will analyze functions return type and arguments. 
+
+2. It will understand that ``std::vector< std::string >`` and ``std::map< int, my_data >`` 
+   classes should be exported too. 
+   
+3. It will understand that those classes should be exported using indexing suite 
+   functionality provided by `Boost.Python`_ library or `Py++`_ 
+   ``code repository``.
+
+4. It will generate the code, which will use that functionality. 
+
+So far, so good. Sometimes, there are use cases, when user has to change default
+values, for example ``NoProxy`` or ``DerivedPolicies``. What interface `Py++`_ 
+will provide in order to change the defaults? Well, ``std::vector< std::string >``
+is the class that could be found in declarations tree, right? User can find the
+class and change the defaults:
+::
+
+  mb = module_builder_t( ... )
+  #the next line will not work, because the real name of std::vector< std::string >
+  #is platform dependent and much longer. It is there for simplicity.
+  vector_of_strings = mb.class_( "std::vector< std::string >" )
+  vector_of_strings.alias = "StringVector"
+  vector_of_strings.held_type = ...
+  vector_of_strings.indexing_suite.no_proxy = False
+
+
+Please, pay attention to the next line:
+::
+
+  vector_of_strings.indexing_suite.no_proxy = False
+  
+Every class, which represents instantiation of some STD container will have
+class variable ``indexing_suite``, that will be initialized with relevant
+indexing suite class.
 
-1. `Py++`_ will analyze functions return type and arguments. 
-
-2. It will understand that ``std::vector< std::string >`` and ``std::map< int, my_data >`` 
-   classes should be exported too. 
-   
-3. It will understand that those classes should be exported using indexing suite 
-   functionality provided by `Boost.Python`_ library or `Py++`_ 
-   ``code repository``.
-
-4. It will generate the code, that will use that functionality. 
-
-So far, so good. Sometimes, there are use cases, when user has to change default
-values, for example ``NoProxy`` or ``DerivedPolicies``. What interface `Py++`_ 
-will provide in order to change the defaults? Well, ``std::vector< std::string >``
-is the class that could be found in declarations tree, right? User can find the
-class and change the defaults:
-::
-
-  mb = module_builder_t( ... )
-  #the next line will not work, because the real name of std::vector< std::string >
-  #is platform dependent and much longer. It is there for simplicity.
-  vector_of_strings = mb.class_( "std::vector< std::string >" )
-  vector_of_strings.alias = "StringVector"
-  vector_of_strings.held_type = ...
-  vector_of_strings.indexing_suite.no_proxy = False
-
-
-Please, pay attention to the next line:
-::
-
-  vector_of_strings.indexing_suite.no_proxy = False
-  
-Every class, that represents instantiation of some std container will have
-class variable ``indexing_suite``, that will be intitialized with relevant
-indexing suite class.
-
-
+
 
 .. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
@@ -96,3 +96,4 @@ indexing suite class.
    sentence-end-double-space: t
    fill-column: 70
    End:
+

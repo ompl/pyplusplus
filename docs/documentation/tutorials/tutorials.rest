@@ -3,50 +3,50 @@ tutorials
 =========
 
 .. contents:: Table of contents
-
+
 -------------
 What is Py++?
 -------------
 
 .. include:: ./../../definition.rest 
-
--------------------
-Graphical interface
+
+-------------------
+Graphical interface
 ------------------- 
-
-`Py++`_ includes a `graphical interface`_. `Graphical interface`_ 
-is invoked with the ``pyplusplus_gui`` command, or with ``pyplusplus_gui.pyw``
-from the ``scripts`` subdirectory of the `Python`_ installation directory.
-
-My advise to you - start with `graphical interface`_, because:
-  * you don't have to learn new API
-  * few clicks with mouse and you have `Boost.Python`_ code for your file(s)
-  * it is very easy to evaluate `Py++`_ using it
-  * you can check whether `GCC-XML`_ is able to compile your code or not
-  * you can use it as a guide to `Boost.Python`_ library
-  * it is able to generate `Py++`_ code for you
-
-.. _`graphical interface` : ./pyplusplus_demo.png
-.. _`Graphical interface` : ./pyplusplus_demo.png
-
----------------
-Getting started
----------------
-
-I suppose you decided to do some coding with `Py++`_. `Module builder`_ 
-tutorials will help you. 
-
-.. _`Module builder` : ./module_builder/module_builder.html
-
---------
-Advanced
---------
-
-To be written. I think I should cover here the usage of code creators and code
-creator's tree. Meanwhile you can take a look on the content of 
-``examples/custom_code_creator`` directory. It contains example, that shows how 
+
+`Py++`_ includes a `graphical interface`_. `Graphical interface`_ 
+is invoked with the ``pyplusplus_gui`` command, or with ``pyplusplus_gui.pyw``
+from the ``scripts`` subdirectory, of the `Python`_ installation directory.
+
+My advise to you - start with `graphical interface`_, because:
+  * you don't have to learn new API
+  * few clicks with mouse and you have `Boost.Python`_ code for your file(s)
+  * it is very easy to evaluate `Py++`_ using it
+  * you can check whether `GCC-XML`_ is able to compile your code or not
+  * you can use it as a guide to `Boost.Python`_ library
+  * it is able to generate `Py++`_ code for you
+
+.. _`graphical interface` : ./pyplusplus_demo.png
+.. _`Graphical interface` : ./pyplusplus_demo.png
+
+---------------
+Getting started
+---------------
+
+I suppose you decided to do some coding with `Py++`_. `Module builder`_ 
+tutorials will help you. 
+
+.. _`Module builder` : ./module_builder/module_builder.html
+
+--------
+Advanced
+--------
+
+To be written. I think I should cover here the usage of code creators and code
+creators tree. Meanwhile you can take a look on the content of 
+``examples/custom_code_creator`` directory. It contains example, which shows how 
 to create your own code creator. To be more specific, it exposes ``get*`` and 
-``set*`` methods as a single property.
+``set*`` methods as a single property.
 
 .. _`Py++` : ./../../pyplusplus.html
 .. _`pygccxml` : ./../....//pygccxml/pygccxml.html
@@ -62,3 +62,4 @@ to create your own code creator. To be more specific, it exposes ``get*`` and
    sentence-end-double-space: t
    fill-column: 70
    End:
+

@@ -15,10 +15,10 @@ Preamble
 --------
 
 I guess you decided to try `Py++`_ API. Good! Lets start. First of all,
-please take a look on two files:
+please take a look on two files:
 
 * `hello_world.hpp`_ - C++ source code, that we want to export to Python
-
+
 * `generate_code.py`_ - Python code, that uses `Py++`_ to export 
   declarations from the source file
 
@@ -42,15 +42,15 @@ module_builder_t.__init__
 
 First of all, what is needed in order to create an instance of the class?
 
-``module_builder_t.__init__`` methods takes few arguments:
+``module_builder_t.__init__`` methods take few arguments:
 
-1. ``files`` - list of all C++ source files, that declarations from them you want
-   to export. This is the only required parameter.
+1. ``files`` - list of all C++ source files, that declarations from them, you want
+   to expose. This is the only required parameter.
    
 2. ``gccxml_path`` - path to `GCC-XML`_ binary. If you don't supply this argument
    `pygccxml`_ will look for it using your environment variable ``PATH``.
    
-There some other arguments: 
+There are some other arguments: 
 
 * additional include  directories
 * [un]defined symbols ( macros )
@@ -94,61 +94,61 @@ you could/should/may change `Py++`_ defaults:
 * to include/exclude declarations
 * to set call policies
 * ...
-
-I think it is critical for beginers to see what is going on, right? 
-``module_builder_t`` class has ``print_declarations`` method. You can print whole
-declarations tree or some specific declaration. Very convinient, very useful.
-
+
+I think it is critical for beginners to see what is going on, right? 
+``module_builder_t`` class has ``print_declarations`` method. You can print whole
+declarations tree or some specific declaration. Very convenient, very useful.
+
 -----------------------------------
 module_builder_t.build_code_creator
 -----------------------------------
 
-Now it is a time to create module code creator. Do you remember, in inroduction
-to `Py++`_, I told you that before writing code to disc, `Py++`_ will 
-create some kind of `AST`_. Well this is done by calling 
-``module_builder_t.build_code_creator`` function. Right now, the only important 
-argument to the function is ``module_name``. Self explained, is it? 
-
-What is the main value of code creators? Code creators allow you to modify 
-code before it has been written to disk. For example one common requirement for
-open source projects it to have license text within every source file. You can 
-do it with one line of code only:
-::
-
-  mb.code_creator.license = your license text 
-
-After you call this function, I recommend you not to change declarations 
-configuration. In most cases the change will take effect, in some cases it will 
-not! 
-
-This tutorials is not cover code creators and how you should work with them.
-I will write an other tutorial. 
-
-.. _`AST`: http://en.wikipedia.org/wiki/Abstract_syntax_tree
-
------------------------------
-module_builder_t.write_module
------------------------------
-You have almost created your module. The last things left is to write module
-code to file(s). You can do it with 
-
-* ``module_builder_t.write_module`` - you should provide file name, the code
-  will be written in.
-
-* ``module_builder_t.split_module`` - you should provide directory name.
-  For big projects it is a must to minimize compilation time. So `Py++`_
-  splits your module source code to different files within the directory.
-  
-
-------
-Result
-------
-
-`View generated file`_
-
-.. _`View generated file` : ./result.html
-
-
+Now it is a time to create module code creator. Do you remember, in introduction
+to `Py++`_, I told you that before writing code to disc, `Py++`_ will 
+create some kind of `AST`_. Well this is done by calling 
+``module_builder_t.build_code_creator`` function. Right now, the only important 
+argument to the function is ``module_name``. Self explained, is it? 
+
+What is the main value of code creators? Code creators allow you to modify 
+code before it has been written to disk. For example one common requirement for
+open source projects it to have license text within every source file. You can 
+do it with one line of code only:
+::
+
+  mb.code_creator.license = your license text 
+
+After you call this function, I recommend you not to change declarations 
+configuration. In most cases the change will take effect, in some cases it will 
+not! 
+
+This tutorial is not cover code creators and how you should work with them.
+I will write another tutorial. 
+
+.. _`AST`: http://en.wikipedia.org/wiki/Abstract_syntax_tree
+
+-----------------------------
+module_builder_t.write_module
+-----------------------------
+You have almost created your module. The last things left is to write module
+code to file(s). You can do it with 
+
+* ``module_builder_t.write_module`` - you should provide file name, the code
+  will be written in.
+
+* ``module_builder_t.split_module`` - you should provide directory name.
+  For big projects it is a must to minimize compilation time. So `Py++`_
+  splits your module source code to different files within the directory.
+  
+
+------
+Result
+------
+
+`View generated file`_
+
+.. _`View generated file` : ./result.html
+
+
 That's all. I hope you enjoyed. 
 
 .. _`Py++` : ./../../../pyplusplus.html
@@ -165,3 +165,4 @@ That's all. I hope you enjoyed.
    sentence-end-double-space: t
    fill-column: 70
    End:
+

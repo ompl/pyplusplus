@@ -29,7 +29,7 @@ does not belong to code generator and should be implemented out side of it.
 and C++ parser independent. It provides next services:
 
 * definition of classes, that describe C++ declaration and types, and their 
-  analizers ( type traits )
+  analyzers ( type traits )
 
 * C++ source files parsing and caching functionality
 
@@ -79,7 +79,7 @@ Declarations tree API consists from 3 parts:
 
 
 The user should be familiar with these parts and relevant API. In my opinion, 
-wrapping or hidding the API will not provide an additonal value. The interface 
+wrapping or hiding the API will not provide an additional value. The interface 
 of all those services is pretty simple and well polished.
 
 Before I explain how these services are integrated, take a look on next source 
@@ -108,16 +108,16 @@ use `Py++`_:
 * give the instruction(s) to the code generator engine
 
 What is the point of this example? From the user point of view it is perfectly 
-good, it makes a lot of sence to configure the code generation engine, using 
-the declarations tree. How does `Py++`_ add missinig functionality to 
+good, it makes a lot of sense to configure the code generation engine, using 
+the declarations tree. How does `Py++`_ add missing functionality to 
 ``pygccxml.declarations`` classes? There were few possible solutions to the 
 problem. The next one was implemented:
 
-1. ``pygccxml.parser`` package interface was extendent. Instead of creating
+1. ``pygccxml.parser`` package interface was extended. Instead of creating
    a concrete instance of declaration classes, ``pygccxml.parser`` package uses 
    a factory.
    
-2. ``pyplusplus.decl_wrappers`` package defines classes, that derive from
+2. ``pyplusplus.decl_wrappers`` package defines classes, which derive from
    ``pygccxml.declarations`` classes and defines the factory.
 
 The implemented solution is not the simplest one, but it provides an additional 
@@ -152,7 +152,7 @@ different problems the engine should solve:
 
 * How it should be written to files?
 
-  Remember, `Py++`_ is targeting big projects. It can not generate all code
+  Remember, `Py++`_ is targeting big projects. It cannot generate all code
   in one file - this will not work, not at all.
 
 ``Code creators`` and file writers provides solution for both problems.
@@ -216,7 +216,7 @@ I will reuse `this example`__, from `Boost.Python`_ tutorials.
    code creator also keeps reference to the relevant instance of 
    ``code_creators.mem_fun_v_wrapper_t`` class.
 
-Composite ``code creator`` is a creator, that contains other creators. Composite 
+Composite ``code creator`` is a creator, which contains other creators. Composite 
 ``code creator`` embeds the code, created by internal ``code creators``, within 
 the code it creates. For example:
 
@@ -279,14 +279,14 @@ creates the tree in few steps:
 3. It creates ``code creators`` and put them into the right place within the tree.
 4. If a declaration describes C++ class, it applies these steps to it.
 
-Another responsibility of ``creator_t`` class, is to analize declarations and 
+Another responsibility of ``creator_t`` class, is to analyze declarations and 
 their dependency graphs. As a result, this class can:
 
 * find out a class ``HeldType``
 
-* find out smart pointers conversion, that should be registered
+* find out smart pointers conversion, which should be registered
 
-* find out std containers, that should be exported
+* find out STD containers, which should be exported
 
 * warn user, if some declaration is not exported and it used somewhere in 
   exported declarations ( **not implemented** )
@@ -295,8 +295,8 @@ their dependency graphs. As a result, this class can:
 ``File writers``
 ----------------
 
-``File writers`` classes are responsible for writting ``code creators tree`` into 
-the files. `Py++`_ implements next strategies of writting ``code creators tree`` 
+``File writers`` classes are responsible for writing ``code creators tree`` into 
+the files. `Py++`_ implements next strategies of writing ``code creators tree`` 
 into files:
 
 * single file

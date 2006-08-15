@@ -53,8 +53,8 @@ Function-wrapper signature will be a little bit different in every case.
 Variable names
 --------------
 I think it should be possible to apply few |cwp| on a single function.
-The main, ( read unresolved ) issue, is management of variable names within
-function-wrapper. I see next problems, that we should solve, before proceeding
+The main, (read unresolved) issue, is management of variable names within
+function-wrapper. I see next problems, which we should solve, before proceeding
 to implementation:
 
 1. To share variable name, between different pieces of code.
@@ -67,7 +67,7 @@ to implementation:
 
 3. To give meaningful name.
 
-I think, that is it very easy to solve the problem, if I remove "readability"
+I think that is it very easy to solve the problem, if I remove "readability"
 requirement.
 
 Call policies
@@ -94,7 +94,7 @@ http://www.boost.org/libs/python/doc/tutorial/doc/html/python/functions.html#pyt
   def("f", f, return_internal_reference<1, with_custodian_and_ward<1, 2> >() );
 
 What is the difference? Function ``f`` now takes 3rd argument - ``int&``. This
-function could not be called from `Python`_. ( Hint: numbers are immutable
+function could not be called from `Python`_. (Hint: numbers are immutable
 objects in `Python`_ ). So in order to expose function ``f`` to `Python`_,
 an user need to create a wrapper. And now he has a problem: how to wrap the function?
 
@@ -251,3 +251,4 @@ https://lists.sourceforge.net/lists/listinfo/pygccxml-development
    sentence-end-double-space: t
    fill-column: 70
    End:
+

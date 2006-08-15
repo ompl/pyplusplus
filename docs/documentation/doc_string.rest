@@ -23,10 +23,10 @@ API description
   my_class.member_function( "do_nothing" ).documentation = \
       '"This function does nothing."'
 
-In `Py++`_ every class, that describes C++ declarations has ``documentation``
+In `Py++`_ every class, which describes C++ declarations has ``documentation``
 property. This property should contain valid C++ string or ``None``.
 
-`Boost.Python`_ not always provides functionality, that exports documentation string.
+`Boost.Python`_ not always provides functionality, which exports documentation string.
 In those cases, `Py++`_ will not generate documentation string.
 
 Also the previous method is pretty clear, it is not practical. There should be a
@@ -35,7 +35,7 @@ better way, to complete the task. Lets take a look on
 is ``doc_extractor``.
 
 
-``doc_extractor`` is a callable object, that takes one argument - reference to declaration.
+``doc_extractor`` is a callable object, which takes one argument - reference to declaration.
 
 ::
 
@@ -56,7 +56,7 @@ Now, when I think you understand what functionality `Py++`_ provides.
 It is a time to say what functionality is missing. `Py++`_ does not
 provide any documentation extractor. It is not completely true. You can find
 document extractor for `doxygen`_ format in ``contrib/doc_extractors`` directory.
-It has been contributed by Georgiy Dernovoy.
+Georgiy Dernovoy has contributed it.
 
 
 .. _`doxygen` : http://www.stack.nl/~dimitri/doxygen/

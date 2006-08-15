@@ -9,7 +9,7 @@ Wiki
 ----
 
 Thanks to Allen Bierbaum `Py++`_ now has `wiki`_. We use it primary to
-discuss new features, that will be introduced in future versions.
+discuss new features, which will be introduced in future versions.
 
 .. _`wiki` : https://realityforge.vrsource.org/view/PyppApi/WebHome
 
@@ -80,3 +80,4 @@ Mailing lists
    sentence-end-double-space: t
    fill-column: 70
    End:
+

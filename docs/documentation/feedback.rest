@@ -18,7 +18,7 @@ Introduction
 * to serve as a user's guide for `Boost.Python`_ library
 
 
-Those goals all have something in common. In order to achive them, `Py++`_ must
+Those goals all have something in common. In order to achieve them, `Py++`_ must
 give useful feedback to the user.  Because `Py++`_ understands the 
 declarations it exports, it can scan declarations for potential problems, report 
 them and in some cases provide hints about how to resolve the problem. Few examples:
@@ -34,7 +34,7 @@ them and in some cases provide hints about how to resolve the problem. Few examp
          ...
      };
 
-  Member function ``do_smth`` can not be overriden in Python because... [FILL IN HERE].
+  Member function ``do_smth`` can not be overridden in Python because... [FILL IN HERE].
 
 *
   ::
@@ -61,7 +61,7 @@ How it works?
 
 In previous paragraph, I described some pretty useful functionality but what should you
 do to enable it? - *Nothing!* By default, `Py++`_ only prints the
-important messages to ``stdout``. More over it prints them onle for declarations
+important messages to ``stdout``. More over it prints them only for declarations
 that are going to be exported.
 
 `Py++`_ uses the python  `logging`_ package to write all user messages. By 
@@ -96,7 +96,7 @@ and want to change it, right?
    
    The `pygccxml`_ package defines all loggers in the ``pygccxml.utils`` package.
    
-   The `Py++`_ package defines all logers in the ``pyplusplus._logging_`` package.
+   The `Py++`_ package defines all loggers in the ``pyplusplus._logging_`` package.
    
    Both packages define a ``loggers`` class. Those classes keep references to 
    different loggers. The ``loggers`` classes look very similar to the next class:
@@ -126,7 +126,7 @@ and want to change it, right?
    your task of adjusting individual loggers.
    
    One more thing, `Py++`_ automatically splits long message, where line 
-   length defaults to 70 characters. Thus it is very convinient to read them on your screen.
+   length defaults to 70 characters. Thus it is very convenient to read them on your screen.
    If you want to use different tools to monitor those messages, consider to use 
    standard `Formatter`_ class, instead of ``multi_line_formatter_t`` one.
 

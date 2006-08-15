@@ -28,7 +28,7 @@ Description
 library. Before proceeding with this example, I should say, that I did not work
 with `EasyBMP`_ at all. I have seen it's announcement on www.freshmeat.org site
 and decided to test `Py++`_ with "real world" project. It took me 30
-minutes to create full working python version of this library. This examples
+minutes, to create full working python version of this library. These examples
 consist few files and directories:
 
     1. environment.py - contains different environment settings
@@ -85,3 +85,4 @@ http://sourceforge.net/project/showfiles.php?group_id=118209.
    sentence-end-double-space: t
    fill-column: 70
    End:
+

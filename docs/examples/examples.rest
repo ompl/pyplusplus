@@ -7,7 +7,7 @@ Examples
 -------------------
 Graphical interface
 -------------------
-
+
 `Py++`_ has nice, small and simple `graphical interface`_. Please, read 
 `tutorials`_ for more information.
 
@@ -16,18 +16,18 @@ Graphical interface
 
 ---------
 pyeasybmp
----------
-
-`EasyBMP`_ is a small cross-platform library that provide you functionality
-needed to work with Windows bitmap (BMP) image files. I took me only few minutes
-to create Python bindings for the library. Read more `here`__.
-
-..  __ : ./easybmp/easybmp.html
-
----------------
-boost libraries
----------------
-
+---------
+
+`EasyBMP`_ is a small cross-platform library that provide you functionality
+needed to work with Windows bitmap (BMP) image files. I took me only few minutes
+to create Python bindings for the library. Read more `here`__.
+
+..  __ : ./easybmp/easybmp.html
+
+---------------
+boost libraries
+---------------
+
 Boost provides free peer-reviewed portable C++ source libraries. 
 
 Using `Py++`_ I created Python bindings for few libraries:
@@ -61,3 +61,4 @@ package documentation.
    sentence-end-double-space: t
    fill-column: 70
    End:
+
