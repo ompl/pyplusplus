@@ -157,8 +157,8 @@ different problems the engine should solve:
 
 ``Code creators`` and file writers provides solution for both problems.
 
-Code creators
--------------
+``Code creators``
+-----------------
 
 Do you know how many ways exist to export member function? If you will try to 
 answer the question, consider next function characteristics and their mix:
@@ -239,8 +239,8 @@ the code it creates. For example:
         return os.linesep.join( result )
 
 
-Code creators tree
-~~~~~~~~~~~~~~~~~~
+``Code creators tree``
+~~~~~~~~~~~~~~~~~~~~~~
 
 ``code_creators.module_t`` class is a top level ``code creator``. Take a look on 
 next possible "snapshot" of the ``code creators tree``:
@@ -266,8 +266,8 @@ You can think about ``code creators tree`` as some kind of `AST`_.
 
 .. _`AST`: http://en.wikipedia.org/wiki/Abstract_syntax_tree
 
-Code creators tree construction
--------------------------------
+``Code creators tree`` construction
+-----------------------------------
 
 ``pyplusplus.module_creator`` package is responsible for the tree construction.
 ``pyplusplus.module_creator.creator_t`` is the main class of the package. It 
@@ -289,25 +289,44 @@ their dependency graphs. As a result, this class can:
 * find out std containers, that should be exported
 
 * warn user, if some declaration is not exported and it used somewhere in 
-  exported declarations ( **to be implemented pretty soon** )
+  exported declarations ( **not implemented** )
 
 
-File writers
-------------
+``File writers``
+----------------
 
-``File writers`` classes are responsible for writting ``code creators tree`` into
-files. `Py++`_ implements few strategies of writting ``code creators tree``
-into file(s):
+``File writers`` classes are responsible for writting ``code creators tree`` into 
+the files. `Py++`_ implements next strategies of writting ``code creators tree`` 
+into files:
 
-* all source code will be written in single file
+* single file
 
-* all source code will be written in multiple files
+* multiple files - provides a solution to `compilation time and memory usage problem`_
 
-  * huge classes will be written in multiple files
+  .. _`compilation time and memory usage problem` : http://www.boost.org/libs/python/doc/v2/faq.html#slow_compilation
+
+* multiple files, with huge classes are written into multiple files - provides a
+  solution for `compiler limit`_ problem.
+  
+  .. _`compiler limit` : http://www.boost.org/libs/python/doc/v2/faq.html#c1204
+
+The more sophisticated approach, the better understanding of ``code creators``
+is required from the ``file writers``.
 
 
+--------------------------
+``module_builder`` package
+--------------------------
 
+This package provides an interface to all code generator engine services.
 
+----------
+Conclusion
+----------
+
+It safe to use `Py++`_ for big and small projects!
+
+.. _`open-closed principle` : http://www.google.com/search?sourceid=gmail&q=open%20closed%20principle
 
 .. _`Py++` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html
