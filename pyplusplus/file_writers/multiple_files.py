@@ -88,14 +88,23 @@ class multiple_files_t(writer.writer_t):
             return None
         if not isinstance( code_creator.declaration.indexing_suite, decl_wrappers.indexing_suite2_t ):
             return None
-        element_type = code_creator.declaration.indexing_suite.element_type
-        class_traits = declarations.class_traits
-        if not class_traits.is_my_case( element_type ):
-            return None
-        value_class = class_traits.get_declaration( element_type )
-        return self.create_value_traits_header_name( value_class )
-    
-    def create_include_code( self, creators, head_headers=None, tail_headers=None ):      
+        try:
+            element_type = code_creator.declaration.indexing_suite.element_type
+            class_traits = declarations.class_traits
+            if not class_traits.is_my_case( element_type ):
+                return None
+            value_class = class_traits.get_declaration( element_type )
+            return self.create_value_traits_header_name( value_class )
+        except RuntimeError, error:
+            msg = "%s;%s" \
+                  % ( str(code_creator.declaration)
+                      , "Py++ can not find out container value_type( mapped_type )."
+                        "The container class is template instantiation declaration and not definition."
+                        "This container class will be exported, but there is a posiblity, that generated code will not compile."
+                        "The solution to the problem is to create a variable of the class." )
+            self.logger.warn( msg )
+
+    def create_include_code( self, creators, head_headers=None, tail_headers=None ):
         answer = []
         normalize = code_creators.include_directories_t.normalize
         if head_headers:
@@ -160,6 +169,7 @@ class multiple_files_t(writer.writer_t):
         for creator in declaration_creators:
             answer.append( '' )
             answer.append( creator.create() )
+            creator.create = lambda: ''
 
         # Write the register() function...
         answer.append( '' )
@@ -193,11 +203,7 @@ class multiple_files_t(writer.writer_t):
                                        , [class_creator]
                                        , decl_creators )
         self.write_file( file_path + self.SOURCE_EXT, cpp_code )
-        if class_wrapper:
-            # The wrapper has already been written above, so replace the create()
-            # method with a new 'method' that just returns an empty string because
-            # this method is later called again for the main source file.
-            class_wrapper.create = lambda: ''
+
         # Replace the create() method so that only the register() method is called
         # (this is called later for the main source file).
         class_creator.create = lambda: function_name +'();'
@@ -298,10 +304,11 @@ class multiple_files_t(writer.writer_t):
     def write(self):
         """ Write out the module.
             Creates a separate source/header combo for each class and for enums, globals,
-            and free functions. Post-condition: split_header_names and split_method_names 
-            variables, will contain all the header files and registration methods 
-            used. This can be used by user code to create custom registration 
-            methods if main is not written.
+            and free functions.
+            If write_main is True it writes out a main file that calls all the registration methods.
+            After this call split_header_names and split_method_names will contain
+            all the header files and registration methods used.  This can be used by
+            user code to create custom registration methods if main is not written.
         """
 
         self.write_code_repository( self.__directory_path )
