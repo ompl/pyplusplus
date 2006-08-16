@@ -23,14 +23,14 @@ a great tool and I can't thank Roman enough for taking the time to
 create it and make it available. "
 
   Allen Bierbaum, the author of `PyOpenSG`_ library
-  
-"... This rule based approach is amazing for maintenance, as it reduces the 
-turnaround for binding new code. If the new Ogre API's follow similar rules and 
-standards as previously defined, the same set of rules will appropriately bind 
+
+"... This rule based approach is amazing for maintenance, as it reduces the
+turnaround for binding new code. If the new Ogre API's follow similar rules and
+standards as previously defined, the same set of rules will appropriately bind
 the new API without any effort on the part of the maintainers. "
 
-" ... In general, I've really liked working with pyplusplus. I've probably spent 
-20-30 hours working on these bindings, and they are very close to being equivalent 
+" ... In general, I've really liked working with pyplusplus. I've probably spent
+20-30 hours working on these bindings, and they are very close to being equivalent
 to the PyOgre bindings (when I last used them). "
 
   Lakin Wecker, the author of `Python-OGRE`_ project
@@ -39,27 +39,25 @@ to the PyOgre bindings (when I last used them). "
 Who is using Py++?
 ------------------
 
-* Matthias Baas, the author of `Python Computer Graphics Kit`_ project, is using 
-  `Py++`_ to create Python bindings for `Maya C++ SDK`__. 
-
+* Matthias Baas, the author of `Python Computer Graphics Kit`_ project, is using
+  `Py++`_ to create Python bindings for `Maya C++ SDK`__.
 
   .. __ : http://www.highend3d.com/maya
 
 * Lakin Wecker, the author of `Python-OGRE`_ project, is using `Py++`_ to
   create Python bindings for `OGRE`_.
 
-
 * I am :-). I created Python bindings for next libraries:
-    
+
   * `Boost.Date_Time`_
   * `Boost.CRC`_
   * `Boost.Rational`_
   * `Boost.Random`_
 
-.. _`boost.date_time` : http://boost.org/doc/html/date_time.html
-.. _`boost.crc` : http://boost.org/libs/crc/index.html
-.. _`boost.rational` : http://boost.org/libs/rational/index.html
-.. _`boost.random` : http://boost.org/libs/random/index.html
+  .. _`boost.date_time` : http://boost.org/doc/html/date_time.html
+  .. _`boost.crc` : http://boost.org/libs/crc/index.html
+  .. _`boost.rational` : http://boost.org/libs/rational/index.html
+  .. _`boost.random` : http://boost.org/libs/random/index.html
 
   You can download the bindings from https://sourceforge.net/project/showfiles.php?group_id=118209 .
 

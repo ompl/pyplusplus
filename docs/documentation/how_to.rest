@@ -110,9 +110,9 @@ could be integrated with `Py++`_.
 
 That's all. 
 
-------------------------------------------------------------
+-------------------------------------------------------------
 Fatal error C1204:Compiler limit: internal structure overflow
-------------------------------------------------------------
+-------------------------------------------------------------
 
 If you get this error, that the generated file is too big. You will have to split
 it to few files. Well, not you but `Py++`_ you will only have to tell that 
