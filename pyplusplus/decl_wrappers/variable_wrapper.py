@@ -7,6 +7,9 @@ from pygccxml import declarations
 import decl_wrapper
 
 class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
+    
+    """This class helps user to expose member and global variables."""
+    
     def __init__(self, *arguments, **keywords):
         declarations.variable_t.__init__(self, *arguments, **keywords )
         decl_wrapper.decl_wrapper_t.__init__( self )
@@ -38,8 +41,6 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
                                      , doc=__call_policies_doc__ )
 
     def _exportable_impl( self ):
-        #if not isinstance( self.parent, declarations.class_t ):
-        #    return ''
         if not self.name:
             return "Py++ can not expose unnamed variables"
         if self.bits == 0 and self.name == "":

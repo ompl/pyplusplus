@@ -25,6 +25,10 @@ class multiple_files_t(writer.writer_t):
         @type extmodule: module_t
         @param directory_path: The output directory where the source files are written
         @type directory_path: str
+        
+        @param write_main:  if it is True, the class will write out a main file 
+            that calls all the registration methods. 
+        @type write_main: boolean
         """
         writer.writer_t.__init__(self, extmodule)
         self.__directory_path = directory_path
@@ -294,11 +298,10 @@ class multiple_files_t(writer.writer_t):
     def write(self):
         """ Write out the module.
             Creates a separate source/header combo for each class and for enums, globals,
-            and free functions.
-            If write_main is True it writes out a main file that calls all the registration methods.
-            After this call split_header_names and split_method_names will contain
-            all the header files and registration methods used.  This can be used by
-            user code to create custom registration methods if main is not written.
+            and free functions. Post-condition: split_header_names and split_method_names 
+            variables, will contain all the header files and registration methods 
+            used. This can be used by user code to create custom registration 
+            methods if main is not written.
         """
 
         self.write_code_repository( self.__directory_path )
