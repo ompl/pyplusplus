@@ -119,4 +119,3 @@ def print_declarations( decls, detailed=True, recursive=True, writer=sys.stdout.
        prn.level = 0
        prn.instance = d
        declarations.apply_visitor(prn, d)
-

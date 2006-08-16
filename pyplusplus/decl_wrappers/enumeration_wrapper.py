@@ -70,4 +70,3 @@ class enumeration_t(decl_wrapper.decl_wrapper_t, declarations.enumeration_t):
                              "You can read more about this here: http://boost.org/libs/python/todo.html#support-for-enums-with-duplicate-values . "
                              "The quick work around is to add new class variable to the exported enum, from Python. " ) 
         return msgs
-

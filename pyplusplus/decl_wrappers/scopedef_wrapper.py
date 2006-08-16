@@ -24,4 +24,3 @@ class scopedef_t(decl_wrapper.decl_wrapper_t):
         """Include "self" and child declarations to be exposed."""
         self.ignore = False
         map( lambda decl: decl.include(), self.declarations )
-

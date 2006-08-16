@@ -68,4 +68,3 @@ phx_arrival = phx_departure + flight_length
 #//convert the phx time to a nyz time
 nyc_arrival = phx_arrival.local_time_in(nyc_tz, posix_time.time_duration() )
 print "New York arrival: ", nyc_arrival.to_string() #//2005-Apr-03 06:30:00 EDT
-

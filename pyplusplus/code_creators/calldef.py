@@ -1125,4 +1125,3 @@ class casting_constructor_t( declaration_based.declaration_based_t ):
                + '();'
 
 
-

@@ -163,4 +163,3 @@ class value_traits_t( declaration_based.declaration_based_t ):
 
 
 
-

@@ -69,4 +69,3 @@ class ArrayInfo:
         else:
             return args[idx]
 
-

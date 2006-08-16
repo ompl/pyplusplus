@@ -89,4 +89,3 @@ class multi_line_formatter_t(logging.Formatter):
         
         return os.linesep.join(lines)
 
-

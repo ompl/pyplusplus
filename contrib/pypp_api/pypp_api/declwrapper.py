@@ -745,4 +745,3 @@ class IDecl:
                 
 # This value is used to determine if a declaration was already visited or not
 _timestamp = 0
-

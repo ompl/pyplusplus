@@ -53,4 +53,3 @@ __version__ = '0.7.1'
 #~ > shared_ptrs.  That is very rare -- it only happens when users want to
 #~ > replace one shared_ptr with another (possibly NULL) shared_ptr.
 
-

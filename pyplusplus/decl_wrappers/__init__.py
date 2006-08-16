@@ -134,4 +134,3 @@ class dwfactory_t( declarations.decl_factory_t ):
         
     def create_variable( self, *arguments, **keywords ):
         return variable_t(*arguments, **keywords)
-
