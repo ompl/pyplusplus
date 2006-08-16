@@ -18,20 +18,22 @@ class class_common_impl_details_t( object ):
         self._equality_comparable = None
         self._less_than_comparable = None
         self._isuite_version = 1
-        
+
     def _get_indexing_suite_version( self ):
         return self._isuite_version
     def _set_indexing_suite_version( self, version ):
         assert version in ( 1, 2 )
-        self._isuite_version = version
+        if self._isuite_version != version:
+            self._isuite_version = version
+            self._indexing_suite = None
     indexing_suite_version = property( _get_indexing_suite_version, _set_indexing_suite_version )
-    
+
     def _get_always_expose_using_scope( self ):
         #I am almost sure this logic should be moved to code_creators
         if isinstance( self.indexing_suite, isuite2.indexing_suite2_t ) \
            and ( self.indexing_suite.disable_methods or self.indexing_suite.disabled_methods_groups ):
             return True
-        return self._always_expose_using_scope    
+        return self._always_expose_using_scope
     def _set_always_expose_using_scope( self, value ):
         self._always_expose_using_scope = value
     always_expose_using_scope = property( _get_always_expose_using_scope, _set_always_expose_using_scope )
@@ -47,25 +49,25 @@ class class_common_impl_details_t( object ):
                     break
         return self._indexing_suite
     indexing_suite = property( _get_indexing_suite )
-    
+
     def _get_equality_comparable( self ):
         if None is self._equality_comparable:
             self._equality_comparable = declarations.has_public_equal( self )
         return self._equality_comparable
-    
+
     def _set_equality_comparable( self, value ):
         self._equality_comparable = value
-        
+
     equality_comparable = property( _get_equality_comparable, _set_equality_comparable )
 
     def _get_less_than_comparable( self ):
         if None is self._less_than_comparable:
             self._less_than_comparable = declarations.has_public_less( self )
         return self._less_than_comparable
-    
+
     def _set_less_than_comparable( self, value ):
         self._less_than_comparable = value
-        
+
     less_than_comparable = property( _get_less_than_comparable, _set_less_than_comparable )
 
 
@@ -85,8 +87,8 @@ class class_t( class_common_impl_details_t
         class_common_impl_details_t.__init__( self )
         declarations.class_t.__init__(self, *arguments, **keywords )
         scopedef_wrapper.scopedef_t.__init__( self )
-        
-        self._redefine_operators = False        
+
+        self._redefine_operators = False
         self._held_type = None
         self._noncopyable = None
         self._wrapper_alias = self._generate_valid_name() + "_wrapper"
@@ -131,19 +133,19 @@ class class_t( class_common_impl_details_t
     def _finalize_impl( self, error_behavior ):
         for decl in self.declarations:
             decl.finalize( error_behavior )
-    
+
     @property
     def declaration_code( self ):
         """
-        List of strings, that contains valid C++ code, that will be added to 
+        List of strings, that contains valid C++ code, that will be added to
         the class registration section
         """
         return self._declaration_code
-    
+
     @property
     def registration_code( self ):
         """
-        List of strings, that contains valid C++ code, that will be added to 
+        List of strings, that contains valid C++ code, that will be added to
         the class registration section
         """
         return self._registration_code
@@ -151,11 +153,11 @@ class class_t( class_common_impl_details_t
     @property
     def wrapper_code( self ):
         """
-        List of strings, that contains valid C++ code, that will be added to 
+        List of strings, that contains valid C++ code, that will be added to
         the class wrapper.
         """
         return self._wrapper_code
-    
+
     def _get_null_constructor_body(self):
         return self._null_constructor_body
     def _set_null_constructor_body(self, body):
@@ -178,7 +180,7 @@ class class_t( class_common_impl_details_t
         self.registration_code.append( user_text.class_user_text_t( code, works_on_instance ) )
     #preserving backward computability
     add_code = add_registration_code
-    
+
     def add_wrapper_code( self, code ):
         self.wrapper_code.append( user_text.user_text_t( code ) )
 
@@ -187,7 +189,7 @@ class class_t( class_common_impl_details_t
         self.constructors().body = body
         self.null_constructor_body = body
         self.copy_constructor_body = body
-        
+
     def _exportable_impl( self ):
         if not self.name:
             return 'Py++ can not expose unnamed classes.'
