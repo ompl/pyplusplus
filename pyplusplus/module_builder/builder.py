@@ -22,11 +22,11 @@ class module_builder_t(object):
     and/or pygccxml functionality. If this is your first attempt to use Py++
     consider to read tutorials. You can find them on U{web site<http://www.language-binding.net>}.
     """
-    
+
     def __init__( self
-                  , files 
-                  , gccxml_path='' 
-                  , working_directory='.' 
+                  , files
+                  , gccxml_path=''
+                  , working_directory='.'
                   , include_paths=None
                   , define_symbols=None
                   , undefine_symbols=None
@@ -40,26 +40,26 @@ class module_builder_t(object):
         """
         @param files: list of files, declarations from them you want to export
         @type files: list of strings or L{file_configuration_t} instances
-        
+
         @param gccxml_path: path to gccxml binary. If you don't pass this argument,
         pygccxml parser will try to locate it using you environment PATH variable
         @type gccxml_path: str
-        
+
         @param include_paths: additional header files location. You don't have to
         specify system and standard directories.
         @type include_paths: list of strings
-        
+
         @param define_symbols: list of symbols to be defined for preprocessor.
         @param define_symbols: list of strings
-        
+
         @param undefine_symbols: list of symbols to be undefined for preprocessor.
         @param undefine_symbols: list of strings
-        
+
         @param cflags: Raw string to be added to gccxml command line.
         """
         object.__init__( self )
         self.logger = _logging_.loggers.module_builder
-        gccxml_config = parser.config_t( 
+        gccxml_config = parser.config_t(
             gccxml_path=gccxml_path
             , working_directory=working_directory
             , include_paths=include_paths
@@ -77,16 +77,16 @@ class module_builder_t(object):
                                    , parser.project_reader_t.get_os_file_names( files ) )
         tmp = map( lambda file_: os.path.split( file_ )[0], self.__parsed_files )
         self.__parsed_dirs = filter( None, tmp )
-        
+
         self.__global_ns = self.__parse_declarations( files
                                                       , gccxml_config
                                                       , compilation_mode
                                                       , cache
                                                       , indexing_suite_version)
-        self.__code_creator = None         
+        self.__code_creator = None
         if optimize_queries:
             self.run_query_optimizer()
-        
+
         self.__declarations_code_head = []
         self.__declarations_code_tail = []
 
@@ -96,7 +96,7 @@ class module_builder_t(object):
     def _get_global_ns( self ):
         return self.__global_ns
     global_ns = property( _get_global_ns, doc="reference to global namespace" )
-    
+
     def run_query_optimizer(self):
         """
         It is possible to optimze time that takes to execute queries. In most cases
@@ -104,7 +104,7 @@ class module_builder_t(object):
         to disable optimizer at __init__ and run it later.
         """
         self.__global_ns.init_optimizer()
-    
+
     def __parse_declarations( self, files, gccxml_config, compilation_mode, cache, indexing_suite_version ):
         if None is gccxml_config:
             gccxml_config = parser.config_t()
@@ -118,21 +118,23 @@ class module_builder_t(object):
         self.logger.debug( 'parsing files - done( %f seconds )' % ( time.clock() - start_time ) )
         self.logger.debug( 'settings declarations defaults - started' )
 
-        global_ns = decls_package.matcher.get_single( 
+        global_ns = decls_package.matcher.get_single(
                 decls_package.namespace_matcher_t( name='::' )
                 , decls )
         if indexing_suite_version != 1:
             for cls in global_ns.classes():
                 cls.indexing_suite_version = indexing_suite_version
-                
+            for cls in global_ns.decls(decl_type=decls_package.class_declaration_t):
+                cls.indexing_suite_version = indexing_suite_version
+
         start_time = time.clock()
         self.__apply_decls_defaults(decls)
         self.logger.debug( 'settings declarations defaults - done( %f seconds )'
                            % ( time.clock() - start_time ) )
         return global_ns
-    
+
     def __filter_by_location( self, flatten_decls ):
-        for decl in flatten_decls:            
+        for decl in flatten_decls:
             if not decl.location:
                 continue
             fpath = decls_package.filtering.normalize_path( decl.location.file_name )
@@ -147,7 +149,7 @@ class module_builder_t(object):
                     break
             if not found:
                 decl.exclude()
-        
+
     def __apply_decls_defaults(self, decls):
         flatten_decls = decls_package.make_flatten( decls )
         self.__filter_by_location( flatten_decls )
@@ -168,7 +170,7 @@ class module_builder_t(object):
     def declarations_code_head( self ):
         "List of user code, that will be added to the head of the declarations section."
         return self.__declarations_code_head
-    
+
     @property
     def declarations_code_tail( self ):
         "List of user code, that will be added to the tail of the declarations section."
@@ -188,14 +190,14 @@ class module_builder_t(object):
         """
         This function will print detailed description of all declarations or
         some specific one.
-        
+
         @param decl: optional, if passed, then only it will be printed
         @type decl: instance of L{decl_wrappers.decl_wrapper_t} class
         """
         if None is decl:
             decl = self.global_ns
         decl_wrappers.print_declarations( decl, detailed, recursive, writer )
-        
+
     def build_code_creator( self
                        , module_name
                        , boost_python_ns_name='bp'
@@ -207,20 +209,20 @@ class module_builder_t(object):
                        , doc_extractor=None):
         """
         Creates L{module_t} code creator.
-        
-        @param module_name: module name 
+
+        @param module_name: module name
         @type module_name: string
-        
-        @param boost_python_ns_name: boost::python namespace alias, by default 
+
+        @param boost_python_ns_name: boost::python namespace alias, by default
         it is 'bp'
         @type boost_python_ns_name: string
-        
+
         @param call_policies_resolver_: callable, that will be invoked on every
         calldef object. It should return call policies.
         @type call_policies_resolver_: callable
-        @param doc_extractor: callable, that takes as argument reference to declaration 
+        @param doc_extractor: callable, that takes as argument reference to declaration
             and returns documentation string
-        @type doc_extractor: callable or None        
+        @type doc_extractor: callable or None
         """
         creator = mcreator_package.creator_t( self.global_ns
                                               , module_name
@@ -239,16 +241,16 @@ class module_builder_t(object):
         #     , self.__parsed_dirs )
 
         return self.__code_creator
-    
+
     def _get_module( self ):
         if not self.__code_creator:
             raise RuntimeError( "self.module is equal to None. Did you forget to call build_code_creator function?" )
         return self.__code_creator
     code_creator = property( _get_module, doc="reference to L{code_creators.module_t} instance" )
-    
+
     def has_code_creator( self ):
         """
-        Function, that will return True if build_code_creator function has been 
+        Function, that will return True if build_code_creator function has been
         called and False otherwise
         """
         return not ( None is self.__code_creator )
@@ -268,10 +270,10 @@ class module_builder_t(object):
     def __merge_user_code( self ):
         for code in self.__declarations_code_tail:
             self.code_creator.add_declaration_code( code, -1 )
-        
+
         for code in self.__declarations_code_head:
             self.code_creator.add_declaration_code( code, 0 )
-        
+
         body = self.code_creator.body
 
         for code in self.__registrations_code_tail:
@@ -289,14 +291,14 @@ class module_builder_t(object):
         """
         self.__merge_user_code()
         file_writers.write_file( self.code_creator, file_name )
-        
+
     def split_module(self, dir_name, huge_classes=None):
         """
         Writes module to multiple files
-        
+
         @param dir_name: directory name
         @type dir_name: string
-        
+
         @param huge_classes: list that contains reference to classes, that should be split
         """
         self.__merge_user_code()
@@ -306,7 +308,7 @@ class module_builder_t(object):
             file_writers.write_class_multiple_files( self.code_creator, dir_name, huge_classes )
 
     #select decl(s) interfaces
-    def decl( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):     
+    def decl( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.scopedef_t} class documentation"""
         return self.global_ns.decl( name=name
                                     , function=function
@@ -319,7 +321,7 @@ class module_builder_t(object):
         return self.global_ns.decls( name=name
                                      , function=function
                                      , header_dir=header_dir
-                                     , header_file=header_file 
+                                     , header_file=header_file
                                      , recursive=recursive)
 
     def class_( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):
@@ -327,7 +329,7 @@ class module_builder_t(object):
         return self.global_ns.class_( name=name
                                       , function=function
                                       , header_dir=header_dir
-                                      , header_file=header_file 
+                                      , header_file=header_file
                                       , recursive=recursive)
 
     def classes( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):
@@ -335,16 +337,16 @@ class module_builder_t(object):
         return self.global_ns.classes( name=name
                                        , function=function
                                        , header_dir=header_dir
-                                       , header_file=header_file 
+                                       , header_file=header_file
                                        , recursive=recursive)
-    
+
     def variable( self, name=None, function=None, type=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.scopedef_t} class documentation"""
         return self.global_ns.variable( name=name
                                         , function=function
                                         , type=type
                                         , header_dir=header_dir
-                                        , header_file=header_file 
+                                        , header_file=header_file
                                         , recursive=recursive)
 
     def variables( self, name=None, function=None, type=None, header_dir=None, header_file=None, recursive=None ):
@@ -353,17 +355,17 @@ class module_builder_t(object):
                                          , function=function
                                          , type=type
                                          , header_dir=header_dir
-                                         , header_file=header_file 
+                                         , header_file=header_file
                                          , recursive=recursive)
-    
+
     def calldef( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.scopedef_t} class documentation"""
         return self.global_ns.calldef( name=name
                                        , function=function
                                        , return_type=return_type
-                                       , arg_types=arg_types 
+                                       , arg_types=arg_types
                                        , header_dir=header_dir
-                                       , header_file=header_file 
+                                       , header_file=header_file
                                        , recursive=recursive )
 
     def calldefs( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
@@ -371,11 +373,11 @@ class module_builder_t(object):
         return self.global_ns.calldefs( name=name
                                         , function=function
                                         , return_type=return_type
-                                        , arg_types=arg_types 
+                                        , arg_types=arg_types
                                         , header_dir=header_dir
                                         , header_file=header_file
                                         , recursive=recursive)
-    
+
     def operator( self, name=None, symbol=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.scopedef_t} class documentation"""
         return self.global_ns.operator( name=name
@@ -383,9 +385,9 @@ class module_builder_t(object):
                                         , function=function
                                         , decl_type=decl_type
                                         , return_type=return_type
-                                        , arg_types=arg_types 
+                                        , arg_types=arg_types
                                         , header_dir=header_dir
-                                        , header_file=header_file 
+                                        , header_file=header_file
                                         , recursive=recursive )
 
     def operators( self, name=None, symbol=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None, recursive=None ):
@@ -395,19 +397,19 @@ class module_builder_t(object):
                                          , function=function
                                          , decl_type=decl_type
                                          , return_type=return_type
-                                         , arg_types=arg_types 
+                                         , arg_types=arg_types
                                          , header_dir=header_dir
-                                         , header_file=header_file 
+                                         , header_file=header_file
                                          , recursive=recursive )
-                                         
+
     def member_function( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.scopedef_t} class documentation"""
         return self.global_ns.member_function( name=name
                                                , function=function
                                                , return_type=return_type
-                                               , arg_types=arg_types 
+                                               , arg_types=arg_types
                                                , header_dir=header_dir
-                                               , header_file=header_file 
+                                               , header_file=header_file
                                                , recursive=recursive )
 
     def member_functions( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
@@ -415,19 +417,19 @@ class module_builder_t(object):
         return self.global_ns.member_functions( name=name
                                                 , function=function
                                                 , return_type=return_type
-                                                , arg_types=arg_types 
+                                                , arg_types=arg_types
                                                 , header_dir=header_dir
                                                 , header_file=header_file
                                                 , recursive=recursive)
-    
+
     def constructor( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.scopedef_t} class documentation"""
         return self.global_ns.constructor( name=name
                                            , function=function
                                            , return_type=return_type
-                                           , arg_types=arg_types 
+                                           , arg_types=arg_types
                                            , header_dir=header_dir
-                                           , header_file=header_file 
+                                           , header_file=header_file
                                            , recursive=recursive )
 
     def constructors( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
@@ -435,20 +437,20 @@ class module_builder_t(object):
         return self.global_ns.constructors( name=name
                                             , function=function
                                             , return_type=return_type
-                                            , arg_types=arg_types 
+                                            , arg_types=arg_types
                                             , header_dir=header_dir
                                             , header_file=header_file
                                             , recursive=recursive)
-    
+
     def member_operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.scopedef_t} class documentation"""
         return self.global_ns.member_operator( name=name
                                                , symbol=symbol
                                                , function=function
                                                , return_type=return_type
-                                               , arg_types=arg_types 
+                                               , arg_types=arg_types
                                                , header_dir=header_dir
-                                               , header_file=header_file 
+                                               , header_file=header_file
                                                , recursive=recursive )
 
     def member_operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
@@ -457,19 +459,19 @@ class module_builder_t(object):
                                                 , symbol=symbol
                                                 , function=function
                                                 , return_type=return_type
-                                                , arg_types=arg_types 
+                                                , arg_types=arg_types
                                                 , header_dir=header_dir
-                                                , header_file=header_file 
-                                                , recursive=recursive ) 
-    
+                                                , header_file=header_file
+                                                , recursive=recursive )
+
     def casting_operator( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.scopedef_t} class documentation"""
         return self.global_ns.casting_operator( name=name
                                                 , function=function
                                                 , return_type=return_type
-                                                , arg_types=arg_types 
+                                                , arg_types=arg_types
                                                 , header_dir=header_dir
-                                                , header_file=header_file 
+                                                , header_file=header_file
                                                 , recursive=recursive )
 
     def casting_operators( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
@@ -477,12 +479,12 @@ class module_builder_t(object):
         return self.global_ns.casting_operators( name=name
                                                  , function=function
                                                  , return_type=return_type
-                                                 , arg_types=arg_types 
+                                                 , arg_types=arg_types
                                                  , header_dir=header_dir
                                                  , header_file=header_file
                                                  , recursive=recursive)
 
-    def enumeration( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):     
+    def enumeration( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.scopedef_t} class documentation"""
         return self.global_ns.enumeration( name=name
                                            , function=function
@@ -490,17 +492,17 @@ class module_builder_t(object):
                                            , header_file=header_file
                                            , recursive=recursive)
     enum = enumeration
-    
+
     def enumerations( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.scopedef_t} class documentation"""
         return self.global_ns.enumerations( name=name
                                             , function=function
                                             , header_dir=header_dir
-                                            , header_file=header_file 
+                                            , header_file=header_file
                                             , recursive=recursive)
-                                        
+
     enums = enumerations
-    
+
     def namespace( self, name=None, function=None, recursive=None ):
         """Please see L{decl_wrappers.namespace_t} class documentation"""
         return self.global_ns.namespace( name=name
@@ -512,15 +514,15 @@ class module_builder_t(object):
         return self.global_ns.namespaces( name=name
                                           , function=function
                                           , recursive=recursive )
-    
+
     def free_function( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.namespace_t} class documentation"""
         return self.global_ns.free_function( name=name
                                              , function=function
                                              , return_type=return_type
-                                             , arg_types=arg_types 
+                                             , arg_types=arg_types
                                              , header_dir=header_dir
-                                             , header_file=header_file 
+                                             , header_file=header_file
                                              , recursive=recursive )
 
     def free_functions( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
@@ -528,7 +530,7 @@ class module_builder_t(object):
         return self.global_ns.free_functions( name=name
                                               , function=function
                                               , return_type=return_type
-                                              , arg_types=arg_types 
+                                              , arg_types=arg_types
                                               , header_dir=header_dir
                                               , header_file=header_file
                                               , recursive=recursive)
@@ -539,9 +541,9 @@ class module_builder_t(object):
                                              , symbol=symbol
                                              , function=function
                                              , return_type=return_type
-                                             , arg_types=arg_types 
+                                             , arg_types=arg_types
                                              , header_dir=header_dir
-                                             , header_file=header_file 
+                                             , header_file=header_file
                                              , recursive=recursive )
 
     def free_operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
@@ -550,9 +552,9 @@ class module_builder_t(object):
                                               , symbol=symbol
                                               , function=function
                                               , return_type=return_type
-                                              , arg_types=arg_types 
+                                              , arg_types=arg_types
                                               , header_dir=header_dir
-                                              , header_file=header_file 
+                                              , header_file=header_file
                                               , recursive=recursive )
 
     def _get_BOOST_PYTHON_MAX_ARITY( self ):
