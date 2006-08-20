@@ -34,30 +34,30 @@ def add_pygccxml_to_PYTHONPATH():
                                  + environment_var_delimiter \
                                  + pygccxml_path
     print "Setting PYTHONPATH to", os.environ["PYTHONPATH"]
-        
 
-def generate_doc():    
+
+def generate_doc():
     """Generate the epydoc reference manual.
     """
     if not pygccxml_available:
         print "Please install pygccxml before generating the docs."
         sys.exit()
-        
+
     add_pygccxml_to_PYTHONPATH()
 
     from epydoc.docbuilder import build_doc_index
     from epydoc.docwriter.html import HTMLWriter
 
-    print "Generating epydoc files..."                
+    print "Generating epydoc files..."
 
     docindex = build_doc_index(['Py++', 'pygccxml'])
     html_writer = HTMLWriter( docindex
                               , prj_name='Py++'
                               , prj_url='http://www.language-binding.net'
-                              , include_sourcecode=False #This will decrease the size of generated documentation
+                              , include_source_code=False #This will decrease the size of generated documentation
                               , show_private=False
                               , show_frames=False  )
-    
+
     html_writer.write( os.path.join('docs', 'documentation', 'apidocs') )
 
 
@@ -71,10 +71,10 @@ class doc_cmd(Command):
 
     def initialize_options (self):
         self.no_doc = 0
-        
+
     def finalize_options (self):
         pass
-    
+
     def run(self):
         if self.no_doc:
             return
