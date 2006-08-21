@@ -50,7 +50,7 @@ def generate_doc():
 
     print "Generating epydoc files..."
 
-    docindex = build_doc_index(['Py++', 'pygccxml'])
+    docindex = build_doc_index(['pyplusplus', 'pygccxml'])
     html_writer = HTMLWriter( docindex
                               , prj_name='Py++'
                               , prj_url='http://www.language-binding.net'

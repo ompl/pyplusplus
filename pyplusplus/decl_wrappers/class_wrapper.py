@@ -3,6 +3,9 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+"""defines class that configure class definition and class declaration exposing"""
+
+import os
 import user_text
 import decl_wrapper
 import scopedef_wrapper
@@ -10,7 +13,36 @@ from pygccxml import declarations
 import indexing_suite1 as isuite1
 import indexing_suite2 as isuite2
 
-class class_common_impl_details_t( object ):
+
+always_expose_using_scope_documentation = \
+"""boolean, configures how Py++ should generate code for class.
+Py can generate code using IDL like syntax:
+
+    C{class_< ... >( ... )}
+        C{.def( ... );}
+
+Or it can generate code using more complex form:
+
+    C{typedef bp::class_< my_class > my_class_exposer_t;}
+    C{my_class_exposer_t my_class_exposer = my_class_exposer_t( "my_class" );}
+    C{boost::python::scope my_class_scope( my_class_exposer );}
+    C{my_class_exposer.def( ... );}
+
+Also, the second way is much longer, it solves few problems:
+
+    - you can not expose enums and internal classes defined within the class using first method
+    - you will get much better compilation errors
+    - the code looks like regular C++ code after all :-)
+
+By default, this property is set to False. Also, Py++ knows pretty well
+when it have to ignore this property and generate right code
+"""
+
+class class_common_details_t( object ):
+    """defines few properties that are common to
+    L{class declaration<pygccxml.declarations.class_declaration_t>} and
+    L{definition<pygccxml.declarations.class_t>} classes
+    """
     def __init__(self):
         object.__init__( self )
         self._always_expose_using_scope = False
@@ -26,17 +58,8 @@ class class_common_impl_details_t( object ):
         if self._isuite_version != version:
             self._isuite_version = version
             self._indexing_suite = None
-    indexing_suite_version = property( _get_indexing_suite_version, _set_indexing_suite_version )
-
-    def _get_always_expose_using_scope( self ):
-        #I am almost sure this logic should be moved to code_creators
-        if isinstance( self.indexing_suite, isuite2.indexing_suite2_t ) \
-           and ( self.indexing_suite.disable_methods or self.indexing_suite.disabled_methods_groups ):
-            return True
-        return self._always_expose_using_scope
-    def _set_always_expose_using_scope( self, value ):
-        self._always_expose_using_scope = value
-    always_expose_using_scope = property( _get_always_expose_using_scope, _set_always_expose_using_scope )
+    indexing_suite_version = property( _get_indexing_suite_version, _set_indexing_suite_version
+                                       , doc="indexing suite version")
 
     def _get_indexing_suite( self ):
         if self._indexing_suite is None:
@@ -48,7 +71,20 @@ class class_common_impl_details_t( object ):
                         self._indexing_suite = isuite2.indexing_suite2_t( self, container_traits )
                     break
         return self._indexing_suite
-    indexing_suite = property( _get_indexing_suite )
+    indexing_suite = property( _get_indexing_suite
+                               , doc="returns reference to indexing suite configuration class. " \
+                                    +"If the class is not STD container, returns None")
+
+    def _get_always_expose_using_scope( self ):
+        #I am almost sure this logic should be moved to code_creators
+        if isinstance( self.indexing_suite, isuite2.indexing_suite2_t ) \
+           and ( self.indexing_suite.disable_methods or self.indexing_suite.disabled_methods_groups ):
+            return True
+        return self._always_expose_using_scope
+    def _set_always_expose_using_scope( self, value ):
+        self._always_expose_using_scope = value
+    always_expose_using_scope = property( _get_always_expose_using_scope, _set_always_expose_using_scope
+                                          , doc="please see L{always_expose_using_scope_documentation} for documentation."  )
 
     def _get_equality_comparable( self ):
         if None is self._equality_comparable:
@@ -72,19 +108,19 @@ class class_common_impl_details_t( object ):
 
 
 #this will only be exported if indexing suite is not None and only when needed
-class class_declaration_t( class_common_impl_details_t
+class class_declaration_t( class_common_details_t
                            , decl_wrapper.decl_wrapper_t
                            , declarations.class_declaration_t ):
     def __init__(self, *arguments, **keywords):
-        class_common_impl_details_t.__init__( self )
+        class_common_details_t.__init__( self )
         declarations.class_declaration_t.__init__(self, *arguments, **keywords )
         decl_wrapper.decl_wrapper_t.__init__( self )
 
-class class_t( class_common_impl_details_t
+class class_t( class_common_details_t
                , scopedef_wrapper.scopedef_t
                , declarations.class_t):
     def __init__(self, *arguments, **keywords):
-        class_common_impl_details_t.__init__( self )
+        class_common_details_t.__init__( self )
         declarations.class_t.__init__(self, *arguments, **keywords )
         scopedef_wrapper.scopedef_t.__init__( self )
 

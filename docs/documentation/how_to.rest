@@ -20,7 +20,7 @@ First of all lets define ``translate`` function:
 ::
 
   translate_code = \
-  """   
+  """
     void translate(const my_exception &exception){
         PyErr_SetString( PyExc_RuntimeError, exception.error().c_str() );
     }
@@ -48,7 +48,7 @@ Small usage advice.
   mb = module_builder_t( ... )
   exception_classes = mb.decls( lambda decl: decl.name.endswith( 'exception' ) )
 
-Now you can iterate on ``exception_classes``, generate and register translate 
+Now you can iterate on ``exception_classes``, generate and register translate
 code for every class.
 
 That's all.
@@ -64,7 +64,7 @@ How to expose function, which has hand-written wrapper?
       ...
   };
 
-You can not expose ``get_size`` function as is - ``int`` is immutable type in 
+You can not expose ``get_size`` function as is - ``int`` is immutable type in
 Python. So, we need to create a wrapper to the function:
 ::
 
@@ -81,7 +81,7 @@ Python. So, we need to create a wrapper to the function:
       ...
   ;
 
-Now, after you know how this problem is solved. I will show how this solution 
+Now, after you know how this problem is solved. I will show how this solution
 could be integrated with `Py++`_.
 
 
@@ -108,25 +108,24 @@ could be integrated with `Py++`_.
   window.add_wrapper_code( wrapper_code )
   window.registration_code( registration_code )
 
-That's all. 
+That's all.
 
 -------------------------------------------------------------
 Fatal error C1204:Compiler limit: internal structure overflow
 -------------------------------------------------------------
 
-If you get this error, that the generated file is too big. You will have to split
-it to few files. Well, not you but `Py++`_ you will only have to tell that 
-to it.
+If you get this error, than the generated file is too big. You will have to split
+it to few files. Well, not you but `Py++`_, you will only have to tell it to do
+that.
 
 If you are using ``module_builder_t.write_module`` method, consider to switch
-to ``module_builder_t.split_module``. 
+to ``module_builder_t.split_module``.
 
-If you are using ``split_method``, but still generated code for some specific 
-class could not be compiled because of error, you can ask `Py++`_ to split
-class registration code to few cpp files.
+If you are using ``split_module``, but still the generated code for some class
+could not be compiled, because of the error, you can ask `Py++`_ to split the
+code generated for class to be splitted to few cpp files.
 
 For more information, please read the documentation.
-
 
 ------------------------------------------------------
 How to automatically export template functions\\class?
@@ -150,7 +149,7 @@ Lets say you have next C++ function:
 
 ::
 
-  template <class T> 
+  template <class T>
   double distance( const point_t<T>& point ){
       return sqrt( point.x * point.x + point.y*point.y );
   }
@@ -167,7 +166,7 @@ instantiations. The solution is built using next facts:
 
 * free function invocation causes a compiler to instantiate the function
 
-Lets say that we need to export the class and the function template 
+Lets say that we need to export the class and the function template
 instantiations for ``int`` and ``custom_type`` types. There are few ways to do it.
 
 Simple and straightforward
@@ -191,8 +190,8 @@ Open your favorite editor and create a header file with the content:
       }
   }
 
-Now, you add this file to the list of files you pass as input to 
-``module_builder_t.__init__`` method and excludes the ``py_details`` namespace 
+Now, you add this file to the list of files you pass as input to
+``module_builder_t.__init__`` method and excludes the ``py_details`` namespace
 declarations from being exported:
 
 ::
@@ -203,10 +202,10 @@ declarations from being exported:
 "Dynamic" instantiation
 -----------------------
 
-Lets say you are less lucky than I, and you have to create ``X`` instantiations 
+Lets say you are less lucky than I, and you have to create ``X`` instantiations
 of the class\\function. Obviously, the previous approach will not work for you.
-The solution is to build your own code generator, which will generate code similar 
-to the one, in the previous paragraph. 
+The solution is to build your own code generator, which will generate code similar
+to the one, in the previous paragraph.
 
 ::
 
@@ -237,7 +236,7 @@ function `here`__.
 
 
 I understand that the provided solution is not perfect. I understand that something
-better and simpler should be done, but a priority of this is low. There are few 
+better and simpler should be done, but a priority of this is low. There are few
 tasks, that have much higher priority. Allen Bierbaum wants to fix the situation.
 He created a `wiki page`_, that discuss possible solutions. Your contribution is
 welcome too!

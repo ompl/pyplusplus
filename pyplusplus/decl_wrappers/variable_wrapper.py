@@ -3,29 +3,29 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-from pygccxml import declarations 
+"""defines class that configure global and member variable exposing"""
+
+from pygccxml import declarations
 import decl_wrapper
 
 class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
-    
-    """This class helps user to expose member and global variables."""
-    
+    """defines a set of properties, that will instruct Py++ how to expose the variable"""
     def __init__(self, *arguments, **keywords):
         declarations.variable_t.__init__(self, *arguments, **keywords )
         decl_wrapper.decl_wrapper_t.__init__( self )
         self._getter_call_policies = None
         self._setter_call_policies = None
-        
+
     __call_policies_doc__ = \
-    """There are usecase, when exporting member variable forces Py++ to 
+    """There are usecase, when exporting member variable forces Py++ to
     create accessors functions. Sometime, those functions requires call policies.
     To be more specific: when you export member variable that has reference or
-    pointer type, you need to tell boost.python library how to manage object 
-    life-time. In all cases, Py++ will give reasonable default value. I am 
-    sure, that there are use cases, when you need to change it. You should use this
-    property to change it.
+    pointer type, you need to tell Boost.Python library how to manage object
+    life-time. In all cases, Py++ will give reasonable default value. I am
+    sure, that there are use cases, when you will have to change it. You should
+    use this property to change it.
     """
-    
+
     def get_getter_call_policies( self ):
         return self._getter_call_policies
     def set_getter_call_policies( self, call_policies ):
@@ -52,7 +52,7 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
                 return "Py++ can not expose static pointer member variables. This could be changed in future."
             if declarations.is_fundamental( type_.base ):
                 return "Py++ can not expose pointer to fundamental member variables. This could be changed in future."
-            
+
             units = declarations.decompose_type( type_ )
             ptr2functions = filter( lambda unit: isinstance( unit, declarations.calldef_type_t )
                                     , units )
@@ -65,4 +65,3 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
             if not cls.name:
                 return "Py++ can not expose variables of with unnamed type."
         return ''
-    

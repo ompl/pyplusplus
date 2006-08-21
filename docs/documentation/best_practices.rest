@@ -9,7 +9,7 @@ Introduction
 ------------
 
 `Py++`_ has reach interface and a lot of functionality. Sometimes reach
-interface helps, but sometimes it can confuse. This document will describe how 
+interface helps, but sometimes it can confuse. This document will describe how
 effectively to use `Py++`_.
 
 ------------
@@ -19,48 +19,47 @@ Big projects
 Definition
 ----------
 
-First of all, let me to define "big project". "Big project" is a project with 
+First of all, let me to define "big project". "Big project" is a project with
 few hundred of header files. `Py++`_ was born to create `Python`_ bindings
-for such projects. If you take a look `here`__ you will find few such projects,
-that use `Py++`_.  
+for such projects. If you take a look `here`__ you will find few such projects.
 
 .. __ : ./../../pygccxml/quotes.html
 
 Tips
 ----
 
-* Create one header file, which will include all project header files. 
+* Create one header file, which will include all project header files.
 
-  Doing it this way makes it so `GCC-XML`_ is only called once and it reduces the 
+  Doing it this way makes it so `GCC-XML`_ is only called once and it reduces the
   overhead that would occur if you pass `GCC-XML`_ all the files individually.
-  Namely `GCC-XML`_ would have to run hundreds of times and each call would 
-  actually end up including quite a bit of common code anyway. This way takes a 
-  `GCC-XML`_ processing time from multiple hours with gigabytes of caches to a 
+  Namely `GCC-XML`_ would have to run hundreds of times and each call would
+  actually end up including quite a bit of common code anyway. This way takes a
+  `GCC-XML`_ processing time from multiple hours with gigabytes of caches to a
   couple minutes with a reasonable cache size.
-  
+
   You can read more about different caches supported by `pygccxml`_ `here`__.
   ``module_builder_t.__init__`` methods takes reference to an instance of cache
   class or ``None``:
-  
+
   ::
 
-    from module_builder import *    
+    from module_builder import *
     mb = module_builder_t( ..., cache=file_cache_t( path to project cache file ), ... )
-    
+
 * Single header file, will also improve performance compiling the generated bindings.
 
-  When `Py++`_ generated the bindings, you have a lot of .cpp files to 
+  When `Py++`_ generated the bindings, you have a lot of .cpp files to
   compile. The project you are working on is big. I am sure it takes a lot of
-  time to compile projects that depend on it. Generated code also depend on it, 
-  more over this code contains a lot of template instantiations. So it could 
-  take a great deal of time to compile it. Allen Bierbaum investigated this 
-  problem. He found out that most of the time is really spent processing all the 
-  headers, templates, macros from the project and from the boost library. So he 
+  time to compile projects that depend on it. Generated code also depend on it,
+  more over this code contains a lot of template instantiations. So it could
+  take a great deal of time to compile it. Allen Bierbaum investigated this
+  problem. He found out that most of the time is really spent processing all the
+  headers, templates, macros from the project and from the boost library. So he
   come to conclusion, that in order to improve compilation speed, user should
-  be able to control( to be able to generate ) precompiled header file. He 
+  be able to control( to be able to generate ) precompiled header file. He
   implemented an initial version of the functionality. After small discussion,
   we agreed on next interface:
-  
+
   ::
 
     class module_builder_t( ... ):
@@ -68,17 +67,17 @@ Tips
         def split_module( self, directory_path, huge_classes=None, precompiled_header=None ):
             ...
         ...
-    
-  ``precompiled_header`` argument could be ``None`` or string, that contains 
-  name of precompiled header file, which will be created in the directory. 
-  `Py++`_ will add to it header files from `Boost.Python`_ library and 
-  your header files. 
-  
+
+  ``precompiled_header`` argument could be ``None`` or string, that contains
+  name of precompiled header file, which will be created in the directory.
+  `Py++`_ will add to it header files from `Boost.Python`_ library and
+  your header files.
+
   What is ``huge_classes`` argument for? ``huge_classes`` could be ``None`` or
-  list of references to class declarations. It is there to provide a solution to 
-  `this error`_. `Py++`_ will automatically split generated code for the 
+  list of references to class declarations. It is there to provide a solution to
+  `this error`_. `Py++`_ will automatically split generated code for the
   huge classes to few files:
-  
+
   ::
 
     mb = module_builder_t( ... )
@@ -89,8 +88,8 @@ Tips
 
 .. _`this error` : http://boost.org/libs/python/doc/v2/faq.html#c1204
 .. __ : ./../../pygccxml/design.html
-  
-  
+
+
 
 .. _`Py++` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html

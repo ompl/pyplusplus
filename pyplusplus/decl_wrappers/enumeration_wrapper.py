@@ -3,10 +3,16 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-from pygccxml import declarations 
+"""defines class that configure enumeration declaration exposing"""
+
+from pygccxml import declarations
 import decl_wrapper
 
 class enumeration_t(decl_wrapper.decl_wrapper_t, declarations.enumeration_t):
+    """defines a set of properties, that will instruct Py++ how to expose the enumeration
+
+    By default, Py++ will export all enumeration values.
+    """
     def __init__(self, *arguments, **keywords):
         declarations.enumeration_t.__init__(self, *arguments, **keywords )
         decl_wrapper.decl_wrapper_t.__init__( self )
@@ -48,7 +54,7 @@ class enumeration_t(decl_wrapper.decl_wrapper_t, declarations.enumeration_t):
             if name not in export_values:
                 res.append(name)
         return res
-                
+
     def _set_no_export_values(self, no_export_values):
         all_values = map(lambda x: x[0], self.values)
         export_values = []
@@ -56,11 +62,11 @@ class enumeration_t(decl_wrapper.decl_wrapper_t, declarations.enumeration_t):
             if name not in no_export_values:
                 export_values.append(name)
         self.export_values = export_values
-        
+
     no_export_values = property( _get_no_export_values, _set_export_values, doc=
                               """A list of (C++) enumeration names that should not be exported.
                               @type: list""")
-                              
+
     def _readme_impl( self ):
         msgs = []
         if self.name:
@@ -68,5 +74,5 @@ class enumeration_t(decl_wrapper.decl_wrapper_t, declarations.enumeration_t):
             if len( set( name2value.keys() ) ) != len( set( name2value.values() ) ):
                 msgs.append( "Boost.Python does not support enums with duplicate values. "
                              "You can read more about this here: http://boost.org/libs/python/todo.html#support-for-enums-with-duplicate-values . "
-                             "The quick work around is to add new class variable to the exported enum, from Python. " ) 
+                             "The quick work around is to add new class variable to the exported enum, from Python. " )
         return msgs

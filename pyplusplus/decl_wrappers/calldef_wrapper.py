@@ -3,14 +3,16 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+"""defines class that configure "callable" declaration exposing"""
+
 import os
 import decl_wrapper
 from pygccxml import declarations
 
 class calldef_t(decl_wrapper.decl_wrapper_t):
-    
+    """keeps configur global and member variable exposing"""
     BOOST_PYTHON_MAX_ARITY = 10
-    
+
     def __init__(self, *arguments, **keywords):
         decl_wrapper.decl_wrapper_t.__init__( self, *arguments, **keywords )
 
@@ -92,10 +94,10 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
 
     overridable = property( get_overridable, set_overridable
                             , doc = get_overridable.__doc__ )
-    
+
     def _exportable_impl_derived( self ):
         return ''
-    
+
     def _exportable_impl( self ):
         all_types = [ arg.type for arg in self.arguments ]
         all_types.append( self.return_type )
@@ -117,7 +119,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
             no_ptr = declarations.remove_pointer( no_ref )
             no_const = declarations.remove_const( no_ptr )
             if declarations.is_array( no_const ):
-                return "Py++ can not expose function that takes as argument/returns C++ arrays. This will be changed in near future."                
+                return "Py++ can not expose function that takes as argument/returns C++ arrays. This will be changed in near future."
         return self._exportable_impl_derived()
 
     def _readme_impl( self ):
@@ -136,7 +138,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
             tmp.append( "For more information see: http://mail.python.org/pipermail/c++-sig/2002-June/001554.html" )
             tmp = ' '.join( tmp )
             msgs.append( tmp % ( calldef_t.BOOST_PYTHON_MAX_ARITY, len( self.arguments ) ) )
-        
+
         if suspicious_type( self.return_type ) and None is self.call_policies:
             msgs.append( 'The function "%s" returns non-const reference to C++ fundamental type - value can not be modified from Python.' % str( self ) )
         for index, arg in enumerate( self.arguments ):
@@ -193,7 +195,7 @@ class operators_helper:
             #dereference does not make sense
             return False
         return oper.symbol in operators_helper.all
-    
+
     @staticmethod
     def exportable( oper ):
         if isinstance( oper, declarations.member_operator_t ) and oper.symbol in ( '()', '[]' ):
@@ -203,7 +205,7 @@ class operators_helper:
             msg.append( 'See Boost.Python documentation: http://www.boost.org/libs/python/doc/v2/operators.html#introduction.' )
             return ' '.join( msg )
         return ''
-    
+
 class member_operator_t( declarations.member_operator_t, calldef_t ):
     def __init__(self, *arguments, **keywords):
         declarations.member_operator_t.__init__( self, *arguments, **keywords )
