@@ -57,6 +57,7 @@ def default_call_policies():
     return default_t()
 
 class compound_policy_t( call_policy_t ):
+    """base class for all call policies, except default one"""
     def __init__( self, base=None ):
         call_policy_t.__init__( self )
         self._base = base
@@ -67,7 +68,8 @@ class compound_policy_t( call_policy_t ):
         return self._base    
     def _set_base_policy( self, new_policy ):
         self._base = new_policy
-    base_policy = property( _get_base_policy, _set_base_policy )
+    base_policy = property( _get_base_policy, _set_base_policy
+                            , doc="base call policy, by default is reference to L{default_t} call policy")
 
     def _get_args(self, function_creator):
         return []
@@ -88,6 +90,7 @@ class compound_policy_t( call_policy_t ):
         return declarations.templates.join( name, args )
         
 class return_argument_t( compound_policy_t ):
+    """implementation for ::boost::python::return_argument call policies"""
     def __init__( self, position=1, base=None):
         compound_policy_t.__init__( self, base )
         self._position = position
