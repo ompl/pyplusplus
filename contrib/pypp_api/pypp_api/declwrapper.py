@@ -93,13 +93,22 @@ class IDecl:
         if len(self.decl_handles)==0:
             return "Decl: <empty>"
         elif len(self.decl_handles)==1:
-            ds = getattr(self.decl_handles[0], "name", "?")
+#            ds = getattr(self.decl_handles[0], "name", "?")
+            ds = str(self.decl_handles[0])
             return 'Decl: "%s"'%(ds)
         else:
             return 'Decl: (%d declarations)'%(len(self.decl_handles))
 
     def __iter__(self):
-        return self.iterContained()
+        """Iterate over the matched declarations (non-recursively!).
+
+        The iterator yields IDecl objects that each contain one declaration.
+        The number of items is identical to self.decl_handles.
+        """
+        return iter(map(lambda decl: IDecl([decl], modulebuilder=self.modulebuilder), self.decl_handles))
+
+    def __len__(self):
+        return len(self.decl_handles)
 
     # iterContained
     def iterContained(self):
