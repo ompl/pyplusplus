@@ -10,8 +10,15 @@ import decl_wrapper
 from pygccxml import declarations
 
 class calldef_t(decl_wrapper.decl_wrapper_t):
-    """keeps configur global and member variable exposing"""
+    """base class for all decl_wrappers callable objects classes."""
+    
     BOOST_PYTHON_MAX_ARITY = 10
+    """Boost.Python configuration macro value.
+    
+    A function has more than BOOST_PYTHON_MAX_ARITY arguments, will not compile.
+    You should adjust BOOST_PYTHON_MAX_ARITY macro.
+    For more information see: http://mail.python.org/pipermail/c++-sig/2002-June/001554.html
+    """
 
     def __init__(self, *arguments, **keywords):
         decl_wrapper.decl_wrapper_t.__init__( self, *arguments, **keywords )
@@ -26,27 +33,41 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         return self._call_policies
     def set_call_policies(self, call_policies):
         self._call_policies = call_policies
-    call_policies = property( get_call_policies, set_call_policies )
+    call_policies = property( get_call_policies, set_call_policies
+                              , doc="reference to L{call policies<call_policy_t>} class." \
+                                   +"Default value is calculated at runtime, based on return value.")
 
     def _get_use_keywords(self):
         return self._use_keywords and bool( self.arguments )
     def _set_use_keywords(self, use_keywords):
         self._use_keywords = use_keywords
-    use_keywords = property( _get_use_keywords, _set_use_keywords )
+    use_keywords = property( _get_use_keywords, _set_use_keywords
+                             , doc="boolean, if True, allows to call function from Python using keyword arguments." \
+                                  +"Default value is True.")
 
     def _get_create_with_signature(self):
         return self._create_with_signature or bool( self.overloads )
     def _set_create_with_signature(self, create_with_signature):
         self._create_with_signature = create_with_signature
-    create_with_signature = property( _get_create_with_signature, _set_create_with_signature)
+    create_with_signature = property( _get_create_with_signature, _set_create_with_signature
+                                      , doc="boolean, if True Py++ will generate next code: def( ..., function type( function ref )"\
+                                         +"Thus, the generated code is safe, when a user creates function overloading." \
+                                         +"Default value is computed, based on information from the declarations tree" )
 
     def _get_use_default_arguments(self):
         return self._use_default_arguments
     def _set_use_default_arguments(self, use_default_arguments):
         self._use_default_arguments = use_default_arguments
-    use_default_arguments = property( _get_use_default_arguments, _set_use_default_arguments )
+    use_default_arguments = property( _get_use_default_arguments, _set_use_default_arguments
+                                      , doc="boolean, if True Py++ will generate code that will set default arguments" \
+                                           +"Default value is True.")
 
     def has_wrapper( self ):
+        """returns True, if function - wrapper is needed
+        
+        The functionality by this function is uncomplete. So please don't
+        use it in your code.
+        """
         if not isinstance( self, declarations.member_calldef_t ):
             return False
         elif self.virtuality == declarations.VIRTUALITY_TYPES.PURE_VIRTUAL:
@@ -56,20 +77,18 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         else:
             return False
 
-    def _finalize_impl( self, error_behavior ):
-        if not isinstance( self, declarations.member_calldef_t ):
-            pass
-        elif self.virtuality == declarations.VIRTUALITY_TYPES.PURE_VIRTUAL:
-            raise RuntimeError( "In order to expose pure virtual function, you should allow to Py++ to create wrapper." )
-        elif self.access_type == declarations.ACCESS_TYPES.PROTECTED:
-            self.ignore = True
-        else:
-            pass
+    #def _finalize_impl( self, error_behavior ):
+        #if not isinstance( self, declarations.member_calldef_t ):
+            #pass
+        #elif self.virtuality == declarations.VIRTUALITY_TYPES.PURE_VIRTUAL:
+            #raise RuntimeError( "In order to expose pure virtual function, you should allow to Py++ to create wrapper." )
+        #elif self.access_type == declarations.ACCESS_TYPES.PROTECTED:
+            #self.ignore = True
+        #else:
+            #pass
 
     def get_overridable( self ):
-        """
-        Check if the method can be overridden.
-        """
+        """Check if the method can be overridden."""
         if None is self._overridable:
             if isinstance( self, declarations.member_calldef_t ) \
                and self.virtuality != declarations.VIRTUALITY_TYPES.NOT_VIRTUAL \
@@ -153,11 +172,13 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         return msgs
 
 class member_function_t( declarations.member_function_t, calldef_t ):
+    """defines a set of properties, that will instruct Py++ how to expose the member function"""
     def __init__(self, *arguments, **keywords):
         declarations.member_function_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
 
 class constructor_t( declarations.constructor_t, calldef_t ):
+    """defines a set of properties, that will instruct Py++ how to expose the constructor"""
     def __init__(self, *arguments, **keywords):
         declarations.constructor_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
@@ -167,21 +188,27 @@ class constructor_t( declarations.constructor_t, calldef_t ):
         return self._body
     def _set_body(self, body):
         self._body = body
-    body = property( _get_body, _set_body )
+    body = property( _get_body, _set_body
+                     , doc="string, class-wrapper constructor body" )
 
     def _exportable_impl_derived( self ):
         if self.is_artificial:
             return 'Py++ does not exports compiler generated constructors'
         return ''
 
-
 class destructor_t( declarations.destructor_t, calldef_t ):
+    """you may ignore this class for he time being.
+
+    In future it will contain "body" property, that will allow to insert user
+    code to class-wrapper destructor.
+    """
+    #TODO: add body property
     def __init__(self, *arguments, **keywords):
         declarations.destructor_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
 
 class operators_helper:
-
+    """helps Py++ to deal with C++ operators"""
     inplace = [ '+=', '-=', '*=', '/=',  '%=', '>>=', '<<=', '&=', '^=', '|=' ]
     comparison = [ '==', '!=', '<', '>', '<=', '>=' ]
     non_member = [ '+', '-', '*', '/', '%', '&', '^', '|' ] #'>>', '<<', not implemented
@@ -191,6 +218,7 @@ class operators_helper:
 
     @staticmethod
     def is_supported( oper ):
+        """returns True if Boost.Python support the operator"""
         if oper.symbol == '*' and len( oper.arguments ) == 0:
             #dereference does not make sense
             return False
@@ -198,6 +226,7 @@ class operators_helper:
 
     @staticmethod
     def exportable( oper ):
+        """returns True if Boost.Python or Py++ know how to export the operator"""
         if isinstance( oper, declarations.member_operator_t ) and oper.symbol in ( '()', '[]' ):
             return ''
         if not operators_helper.is_supported( oper ):
@@ -207,6 +236,7 @@ class operators_helper:
         return ''
 
 class member_operator_t( declarations.member_operator_t, calldef_t ):
+    """defines a set of properties, that will instruct Py++ how to expose the member operator"""
     def __init__(self, *arguments, **keywords):
         declarations.member_operator_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
@@ -221,13 +251,15 @@ class member_operator_t( declarations.member_operator_t, calldef_t ):
             else:
                 pass
         return alias
-    alias = property( _get_alias, decl_wrapper.decl_wrapper_t._set_alias )
+    alias = property( _get_alias, decl_wrapper.decl_wrapper_t._set_alias
+                      , doc="Gives right alias for operator()( __call__ ) and operator[]( __getitem__ )" )
 
     def _exportable_impl_derived( self ):
         return operators_helper.exportable( self )
 
 
 class casting_operator_t( declarations.casting_operator_t, calldef_t ):
+    """defines a set of properties, that will instruct Py++ how to expose the casting operator"""
 
     def prepare_special_cases():
         """
@@ -289,14 +321,18 @@ class casting_operator_t( declarations.casting_operator_t, calldef_t ):
             else:
                 self._alias = 'as_' + self._generate_valid_name(self.return_type.decl_string)
         return self._alias
-    alias = property( _get_alias, decl_wrapper.decl_wrapper_t._set_alias )
+    alias = property( _get_alias, decl_wrapper.decl_wrapper_t._set_alias
+                      , doc="Gives right alias for casting operators: __int__, __long__, __str__." \
+                           +"If there is no built-in type, creates as_xxx alias" )
 
 class free_function_t( declarations.free_function_t, calldef_t ):
+    """defines a set of properties, that will instruct Py++ how to expose the free function"""
     def __init__(self, *arguments, **keywords):
         declarations.free_function_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
 
 class free_operator_t( declarations.free_operator_t, calldef_t ):
+    """defines a set of properties, that will instruct Py++ how to expose the free operator"""
     def __init__(self, *arguments, **keywords):
         declarations.free_operator_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
