@@ -51,6 +51,17 @@ explain how `Py++`_ will help users to create wrappers around those functions.
 
 .. __ : ./call_wrapper_policies.html
 
+------------------------------------------
+Domain Specific Language ( DSL ) challenge
+------------------------------------------
+
+.. include:: ./dsl_challenge_introduction.rest
+
+Please read `DSL challenge`_ document and contribute your ideas, thoughts or just
+comments.
+
+.. _`DSL challenge` : ./dsl_challenge.html
+
 
 .. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
