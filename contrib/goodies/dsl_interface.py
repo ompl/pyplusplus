@@ -26,8 +26,13 @@ from pyplusplus.decl_wrappers import print_declarations
 # Matchers
 # - Bring in all matchers but rename then without the '_t' at the end
 import pygccxml.declarations.matchers
-for n in ["matcher_base_t","or_matcher_t","and_matcher_t","not_matcher_t",
-          "declaration_matcher_t","calldef_matcher_t","namespace_matcher_t",
-          "variable_matcher_t","regex_matcher_t","access_type_matcher_t",
-          "operator_matcher_t","custom_matcher_t","virtuality_type_matcher_t"]:
-   mod_dict[n[:-2]] = pygccxml.declarations.matchers.__dict__[n]
+#for n in ["matcher_base_t","or_matcher_t","and_matcher_t","not_matcher_t",
+#          "declaration_matcher_t","calldef_matcher_t","namespace_matcher_t",
+#          "variable_matcher_t","regex_matcher_t","access_type_matcher_t",
+#          "operator_matcher_t","custom_matcher_t","virtuality_type_matcher_t"]:
+#   mod_dict[n[:-2]] = pygccxml.declarations.matchers.__dict__[n]
+
+from pygccxml.declarations import (or_matcher, and_matcher, not_matcher, declaration_matcher,
+                                   calldef_matcher, namespace_matcher, variable_matcher,
+                                   regex_matcher, access_type_matcher, operator_matcher,
+                                   custom_matcher, virtuality_type_matcher)
