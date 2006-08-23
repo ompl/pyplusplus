@@ -11,9 +11,9 @@ class COLOR:
     BLACK = 2
 
 
-class class_organizer_t(object):      
+class class_organizer_t(object):
     def __init__( self, decls ):
-        object.__init__( self )    
+        object.__init__( self )
 
         self.__classes = filter( lambda x: isinstance( x, declarations.class_t )
                                  , decls )
@@ -30,10 +30,10 @@ class class_organizer_t(object):
         self.__desired_order = []
 
         self._topological_sort()
-        
+
     def _build_graph(self):
         full_name = declarations.full_name
-        graph = {} # 
+        graph = {} #
         for class_ in self.__classes:
             assert isinstance( class_, declarations.class_t )
             fname = full_name( class_ )
@@ -50,6 +50,11 @@ class class_organizer_t(object):
                            , declarations.make_flatten( class_ ))
         for calldef in calldefs:
             for arg in calldef.arguments:
+                if declarations.is_enum( arg.type ):
+                    top_class_inst = self.__get_top_class_inst( declarations.enum_declaration( arg.type ) )
+                    if top_class_inst:
+                        i_depend_on_them.add( full_name( top_class_inst ) )
+                    continue
                 if not arg.default_value:
                     continue
                 if declarations.is_pointer( arg.type ) and arg.default_value == 0:
@@ -58,8 +63,13 @@ class class_organizer_t(object):
                 if not isinstance( base_type, declarations.declarated_t ):
                     continue
                 top_class_inst = self.__get_top_class_inst( base_type.declaration )
-                i_depend_on_them.add( full_name( top_class_inst ) )
-        
+                if top_class_inst:
+                    i_depend_on_them.add( full_name( top_class_inst ) )
+
+        for internal_cls in class_.classes(allow_empty=True):
+            internal_cls_dependencies = self.__find_out_class_dependencies( internal_cls )
+            i_depend_on_them.update( internal_cls_dependencies )
+
         i_depend_on_them = list( i_depend_on_them )
         i_depend_on_them.sort()
         return i_depend_on_them
@@ -68,16 +78,17 @@ class class_organizer_t(object):
         curr = decl
         while isinstance( curr.parent, declarations.class_t ):
             curr = curr.parent
-        return curr
+        if isinstance( curr, declarations.class_t ):
+            return curr
 
     def _topological_sort(self):
         self._dfs()
-    
+
     def _dfs( self ):
         for class_ in sorted( self.__dependencies_graph.keys() ):
             if self.__colors[class_] == COLOR.WHITE:
                 self._dfs_visit(class_)
-                
+
     def _dfs_visit(self, base):
         self.__colors[base] = COLOR.GRAY
         self.__time += 1
@@ -89,13 +100,13 @@ class class_organizer_t(object):
                 pass
                 #there is usecase where base class defined within some class
                 #but his derives defined out of the class. right now Py++
-                #doesn't supports this situation. 
+                #doesn't supports this situation.
 
         self.__colors[base] = COLOR.BLACK
         self.__time += 1
         self.__class_treated = self.__time
         self.__desired_order.append(base)
-        
+
     def desired_order(self):
         full_name = declarations.full_name
         fname2inst = {}
