@@ -18,6 +18,8 @@ import copy
 def set_recursive_default(val):
    pd.scopedef_t.RECURSIVE_DEFAULT = val
 
+def set_allow_empty_mdecl_default(val):
+   pd.scopedef_t.ALLOW_EMPTY_MDECL_WRAPPER = val
 
 def finalize(cls):
    """ Attempt to finalize a class by not exposing virtual methods.
