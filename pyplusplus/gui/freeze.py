@@ -4,6 +4,13 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+
+"""this module contains "freeze" functionality.
+
+It allows to create and distribute Py++ GUI as executable, that could be 
+run without installing Python, pygccxml and Py++.
+"""
+
 import os
 import sys
 import shutil

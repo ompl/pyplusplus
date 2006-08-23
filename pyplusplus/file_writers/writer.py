@@ -3,6 +3,8 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+"""defines interface for all classes that writes L{code_creators.module_t} to file(s)"""
+
 import os
 import time
 from pyplusplus import _logging_
@@ -16,7 +18,6 @@ class writer_t(object):
       w = writer_class(module, file, ...)
       w.write()
     """
-    
     logger = _logging_.loggers.file_writer
     
     def __init__(self, extmodule):
@@ -36,6 +37,7 @@ class writer_t(object):
        
     @staticmethod
     def create_backup(fpath):
+        """creates backup of the file, by renaming it to C{fpath + ~}"""
         if not os.path.exists( fpath ):
             return         
         backup_fpath = fpath + '~'
@@ -44,6 +46,7 @@ class writer_t(object):
         os.rename( fpath, backup_fpath )
     
     def write_code_repository(self, dir):
+        """creates files defined in L{code_repository} package"""
         for cr in code_repository.all:
             if self.__extmodule.is_system_header( cr.file_name ):
                 self.write_file( os.path.join( dir, cr.file_name ), cr.code )
@@ -88,3 +91,4 @@ class writer_t(object):
         f.write( fcontent_new )
         f.close()
         writer_t.logger.info( 'file "%s" - updated( %f seconds )' % ( fname, time.clock() - start_time ) )
+        

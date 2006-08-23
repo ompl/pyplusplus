@@ -5,6 +5,8 @@
 
 # Initial version by Matthias Baas (baas@ira.uka.de).
 
+"""defines a class that helps to format user messages"""
+
 import os, logging, textwrap
 
 class multi_line_formatter_t(logging.Formatter):

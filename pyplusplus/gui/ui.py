@@ -4,6 +4,11 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+"""this module implements GUI.
+
+TODO: It could be nice, if GUI will save the user settings beetwen runs.
+"""
+
 import os
 import time
 import Tkinter

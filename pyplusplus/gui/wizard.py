@@ -1,3 +1,5 @@
+"""generates Py++ code from the user data"""
+
 CODE_TEMPLATE = \
 """
 import os
@@ -22,6 +24,7 @@ mb.write_module( './bindings.cpp' )
 """
 
 class wizard_t( object ):
+    """code generator that creates Py++ code"""
     def __init__( self
                   , parser_configuration
                   , source_file ):
