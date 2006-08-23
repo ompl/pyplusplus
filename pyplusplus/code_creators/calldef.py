@@ -16,6 +16,7 @@ from pygccxml import declarations
 #will be reference to no where - access violetion.
 #For example see temporal variable tester
 
+use_enum_workaround = False
 
 #TODO:
 #Add to docs:
@@ -59,6 +60,10 @@ class calldef_t( declaration_based.declaration_based_t):
                        and declarations.is_integral( arg_type_no_alias ) \
                        and not arg.default_value.startswith( arg_type_no_alias.decl_string ):
                         result.append( '=(%s)(%s)' % ( arg_type_no_alias.decl_string, arg.default_value ) )
+                    elif use_enum_workaround and declarations.is_enum( arg.type ):
+                        #Work around for bug/missing functionality in boost.python.
+                        #registration order
+                        result.append( '=(long)(%s)' % arg.default_value )
                     else:
                         result.append( '=%s' % arg.default_value )
                 else:
