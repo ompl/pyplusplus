@@ -131,6 +131,8 @@ class IDecl:
         @returns: Returns self
         @see: L{ignore()}
         """
+        if not flag:
+            return self.ignore()
         self._checkLock()
         for d in self._iterContained():
             if decoration_log!=None:
@@ -150,6 +152,8 @@ class IDecl:
         @return: Returns self
         @see: L{expose()}
         """
+        if not flag:
+            return self.expose()
         self._checkLock()
         for d in self._iterContained():
             if decoration_log!=None:
