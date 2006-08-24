@@ -1,7 +1,7 @@
-pyplusplus - Boost.Python code generator
+Py++ - Boost.Python code generator
 ========================================
 
-pyplusplus is a code generator for Boost.Python that simplifies writing
+Py++ is a code generator for Boost.Python that simplifies writing
 Python bindings of a C/C++ library. The tool is implemented as a Python
 module which is controlled by a user script.
 
@@ -11,7 +11,7 @@ Homepage: http://www.language-binding.net/pyplusplus/pyplusplus.html
 Requirements
 ------------
 
-In order to use pyplusplus you need the following additional components:
+In order to use Py++ you need the following additional components:
 
 - Python v2.4 (or higher)
 - pygccxml (http://www.language-binding.net/pygccxml/pygccxml.html)
@@ -32,7 +32,7 @@ For more information about using the distutils see the Python manual
 Documentation
 -------------
 
-For examples and tutorials see the pyplusplus web site. An API reference
+For examples and tutorials see the Py++ web site. An API reference
 is available in the directory docs/apidocs in the source archive.
 
 If you obtained the source code from the subversion repository you
