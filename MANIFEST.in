@@ -15,5 +15,40 @@ include docs/logos/*
 include docs/tutorials/*
 prune docs/*/.svn
 prune docs/*/*/.svn
+
+prune examples/custom_code_creator/*/.svn
+prune examples/custom_code_creator/generated/*/.svn
+prune examples/custom_code_creator/unittests/*/.svn
+prune examples/pyboost_dev/*/.svn
+prune examples/pyboost_dev/dev/*/.svn
+prune examples/pyboost_dev/dev/boost_random/*/.svn
+prune examples/pyboost_dev/dev/crc/*/.svn
+prune examples/pyboost_dev/dev/date_time/*/.svn
+prune examples/pyboost_dev/dev/date_time/include/*/.svn
+prune examples/pyboost_dev/dev/rational/*/.svn
+prune examples/pyboost_dev/pyboost/*/.svn
+prune examples/pyboost_dev/pyboost/boost_random/*/.svn
+prune examples/pyboost_dev/pyboost/crc/*/.svn
+prune examples/pyboost_dev/pyboost/date_time/*/.svn
+prune examples/pyboost_dev/pyboost/rational/*/.svn
+prune examples/pyboost_dev/unittestst/boost_random/*/.svn
+prune examples/pyboost_dev/unittestst/crc/*/.svn
+prune examples/pyboost_dev/unittestst/date_time/*/.svn
+prune examples/pyboost_dev/unittestst/date_time/include/*/.svn
+prune examples/pyboost_dev/unittestst/rational/*/.svn
+prune examples/pyeasybmp_dev/*/.svn
+prune examples/pyeasybmp_dev/pyeasybmp/*/.svn
+prune examples/pyeasybmp_dev/pyeasybmp/generated/*/.svn
+prune examples/pyeasybmp_dev/unittests/*/.svn
+
+prune examples/indexing_suite_v2/*/.svn
+prune examples/indexing_suite_v2/docs/*/.svn
+prune examples/indexing_suite_v2/docs/indexing_suite_v2_files/*/.svn
+prune examples/indexing_suite_v2/indexing/*/.svn
+prune examples/indexing_suite_v2/src/*/.svn
+prune examples/indexing_suite_v2/src/indexing/*/.svn
+prune examples/indexing_suite_v2/unittests/*/.svn
+
+
 recursive-include examples *
 recursive-include contrib *.py *.txt
