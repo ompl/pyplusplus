@@ -32,9 +32,9 @@ There were few reasons to this:
 3. Users always changed the name of the projects. I saw at least 6 different names.
 
 
------
-0.8.1
------
+-------------
+Version 0.8.1
+-------------
 
 1. Georgiy Dernovoy contributed a patch, which allows `Py++`_ GUI to
    save\\load last used header file.
