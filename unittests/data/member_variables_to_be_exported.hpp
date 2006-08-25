@@ -143,5 +143,19 @@ struct mem_var_str_t{
 
 }
 
+namespace bugs{
+struct allocator_ {
+   void * (*alloc) (unsigned);
+   void (*dispose) (void *p);
+};
+
+typedef struct allocator_ *allocator_t;
+
+struct faulty {
+   allocator_t allocator;
+};
+
+}
+
 }
 #endif//__member_variables_to_be_exported_hpp__

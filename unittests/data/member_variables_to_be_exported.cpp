@@ -42,4 +42,3 @@ namespace statics{
     std::string mem_var_str_t::class_name( "mem_var_str_t" );
 }
 }
-
