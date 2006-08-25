@@ -207,7 +207,7 @@ class member_variable_wrapper_t( declaration_based.declaration_based_t ):
     setter_type = property( _get_setter_type )
 
     def _get_has_setter( self ):
-        return not declarations.is_const( self.declaration.type.base )
+        return not declarations.is_const( self.declaration.type )
     has_setter = property( _get_has_setter )
     
     def _create_impl(self):
