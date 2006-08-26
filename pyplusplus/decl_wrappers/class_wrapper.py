@@ -136,7 +136,8 @@ class class_t( class_common_details_t
         self._wrapper_code = []
         self._null_constructor_body = ''
         self._copy_constructor_body = ''
-
+        self._exception_translation_code = None
+        
     def _get_redefine_operators( self ):
         return self._redefine_operators
     def _set_redefine_operators( self, new_value ):
@@ -207,6 +208,43 @@ class class_t( class_common_details_t
     copy_constructor_body = property( _get_copy_constructor_body, _set_copy_constructor_body
                                       , doc="copy constructor code, that will be added as is to the copy constructor of class-wrapper")
 
+    @property
+    def exception_argument_name( self ):
+        """exception argument name for translate exception function
+        
+        If you don't understand what this argument is, please take a look on
+        Boost.Python documentation: http://www.boost.org/libs/python/doc/v2/exception_translator.html
+        """
+        return 'exc'
+
+    def _get_exception_translation_code( self ):
+        return self._exception_translation_code
+    def _set_exception_translation_code( self, code ):
+        self._exception_translation_code = code
+    exception_translation_code = property( _get_exception_translation_code, _set_exception_translation_code 
+                                           , doc="C++ exception to Python exception translation code" \
+                                                +"\nExample: PyErr_SetString(PyExc_RuntimeError, exc.what()); " \
+                                                +"\nPy++ will generate the rest of the code." \
+                                                +"\nPay attention: the exception variable name is exc." )
+
+    def translate_exception_to_string( self, python_exception_type, to_string ):
+        """registers exception translation to string
+        
+        @param python_exception_type: Python exception type, for example PyExc_RuntimeError
+        @type python_exception_type: str
+        
+        @param to_string: C++ expression that extracts information from exception. 
+                          The type of expression should be char*.
+        @type to_string: str
+        """
+        #NICE TO HAVE: 
+        #1. exception\assert\warning should be raised if python_exception_type
+        #   does not contain valid Python exception
+        #2. Py++ can validate, that member function returns char*
+        code = "PyErr_SetString( %(exception_type)s, %(to_string)s ); " \
+               % { 'exception_type' : python_exception_type, 'to_string' : to_string }
+        self.exception_translation_code = code
+    
     def add_declaration_code( self, code ):
         """adds the code to the declaration section"""
         self.declaration_code.append( user_text.user_text_t( code ) )

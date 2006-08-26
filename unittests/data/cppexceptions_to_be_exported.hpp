@@ -18,7 +18,7 @@ struct custom_exception_t{
     const std::string& what() const{
         return m_error;
     }
-    
+
 private:
     const std::string m_error;
 };

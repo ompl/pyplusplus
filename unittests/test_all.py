@@ -58,6 +58,7 @@ import hierarchy3_tester
 import vector3_tester
 import default_args_tester
 import unnamed_classes_tester
+import cppexceptions_tester
 
 def create_suite(times):  
     testers = [ 
@@ -112,6 +113,7 @@ def create_suite(times):
         , abstract_classes_tester
         , indexing_suites2_tester
         , unnamed_classes_tester
+        , cppexceptions_tester
     ]
     
     main_suite = unittest.TestSuite()    

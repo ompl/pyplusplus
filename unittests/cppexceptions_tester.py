@@ -38,25 +38,29 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , *args )
 
     def customize( self, mb ):
-        mb.class_( 'custom_exception_t' ).add_code( REGISTER_CODE, False)
-        mb.build_code_creator( tester_t.EXTENSION_NAME )
+        #mb.class_( 'custom_exception_t' ).add_code( REGISTER_CODE, False)
+        #mb.build_code_creator( tester_t.EXTENSION_NAME )
 
-        mb.code_creator.add_include( "boost/bind.hpp" )
-        mb.code_creator.add_include( "iostream" )
-        translate = code_creators.custom_text_t( TRANSLATE_CODE )
-        mb.code_creator.adopt_creator( translate, -1 )
+        #mb.code_creator.add_include( "boost/bind.hpp" )
+        #mb.code_creator.add_include( "iostream" )
+        #translate = code_creators.custom_text_t( TRANSLATE_CODE )
+        #mb.code_creator.adopt_creator( translate, -1 )
+        custom_exception = mb.class_( 'custom_exception_t' )        
+        custom_exception.translate_exception_to_string( 'PyExc_RuntimeError', 'exc.what().c_str()' )
         
     def run_tests( self, module):
-        custom_exception_t = module.custom_exception_t
-        bases = list( custom_exception_t.__bases__ ) + [RuntimeError]
-        custom_exception_t.__bases__ = tuple( bases )
-        custom_exception_t.__str__ = custom_exception_t.what
         try:
             module.throw_custom_exception()
         except RuntimeError, error:
-            self.failUnless( str(error) == "profe of concept" )
-        
-        
+            self.failUnless( "profe of concept" in str( error ) )
+        #custom_exception_t = module.custom_exception_t
+        #bases = list( custom_exception_t.__bases__ ) + [RuntimeError]
+        #custom_exception_t.__bases__ = tuple( bases )
+        #custom_exception_t.__str__ = custom_exception_t.what
+        #try:
+            #module.throw_custom_exception()
+        #except RuntimeError, error:
+            #self.failUnless( str(error) == "profe of concept" )
         
 def create_suite():
     suite = unittest.TestSuite()    

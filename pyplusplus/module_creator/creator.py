@@ -743,6 +743,14 @@ class creator_t( declarations.decl_visitor_t ):
             class_inst.remove_creator( static_method )
             class_inst.adopt_creator( static_method )
 
+        if temp_curr_decl.exception_translation_code:
+            translator = code_creators.exception_translator_t( temp_curr_decl )
+            self.__extmodule.adopt_declaration_creator( translator )
+            class_inst.user_declarations.append( translator )
+            translator_register \
+                = code_creators.exception_translator_register_t( temp_curr_decl, translator )
+            class_inst.adopt_creator( translator_register )
+
         self.curr_decl = temp_curr_decl
         self.curr_code_creator = temp_curr_parent
 
