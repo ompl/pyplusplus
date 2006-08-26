@@ -307,7 +307,8 @@ class IDecl:
         else:
             args = ['"%s"'%name, fn]
         if policies!=None:
-            pass # todo
+            policystr = policies.create(None)
+            args.append(policystr)
         if keywords!=None:
             args.append("(%s)"%", ".join(map(lambda x: "bp::"+str(x), keywords)))
         if doc!=None:
