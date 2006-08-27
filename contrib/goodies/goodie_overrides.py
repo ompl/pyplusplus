@@ -10,8 +10,9 @@
 #
 
 # --- Over ride the behavior of mdecl_wrapper ---- #
-import pygccxml.declarations.mdecl_wrapper as mdecl_wrapper
+import pygccxml.declarations
 pd = pygccxml.declarations
+mdecl_wrapper = pd.mdecl_wrapper
 
 # Define the call redirector so it can return arguments
 # This method will now return multiple arguments by
@@ -55,7 +56,7 @@ def new_mdecl_wrapper_t__getitem__(self,index):
       Else call the getitem method of the contained decls.
    """
    if isinstance(index, (int, slice)):
-      return self.decls[index]
+      return self.declarations[index]
    else:
       return self.__getattr__("__getitem__")(index)
 mdecl_wrapper.mdecl_wrapper_t.__getitem__ = new_mdecl_wrapper_t__getitem__   
