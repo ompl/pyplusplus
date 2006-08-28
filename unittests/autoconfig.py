@@ -29,10 +29,10 @@ class scons_config:
         code = [
             "SharedLibrary( target=r'%(target)s'"
           , "    , source=[ %(sources)s ]"
-          , "    , LIBS=[ %s ]" % ','.join( [ '"%s"' % lib for lib in scons_config.libs ] )
-          , "    , LIBPATH=[ %s ]" % ','.join( [ '"%s"' % path for path in scons_config.libpath ] )
-          , "    , CPPPATH=[ %s ]" % ','.join( [ '"%s"' % path for path in scons_config.include_dirs] )
-          , "    , CCFLAGS=[ %s ]" % ','.join( [ '"%s"' % flag for flag in scons.ccflags ] )
+          , "    , LIBS=[ %s ]" % ','.join( [ 'r"%s"' % lib for lib in scons_config.libs ] )
+          , "    , LIBPATH=[ %s ]" % ','.join( [ 'r"%s"' % path for path in scons_config.libpath ] )
+          , "    , CPPPATH=[ %s ]" % ','.join( [ 'r"%s"' % path for path in scons_config.include_dirs] )
+          , "    , CCFLAGS=[ %s ]" % ','.join( [ 'r"%s"' % flag for flag in scons.ccflags ] )
           , "    , SHLIBPREFIX=''"
           , "    , SHLIBSUFFIX='%s'" % scons.suffix #explicit better then implicit
           , ")" ]
