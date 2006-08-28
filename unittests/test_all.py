@@ -21,7 +21,7 @@ import member_functions_tester
 import call_policies_tester
 import pointer_to_function_as_argument
 import operators_tester
-import abstract_tester 
+import abstract_tester
 import statics_tester
 import regression1_tester
 import casting_tester
@@ -59,9 +59,10 @@ import vector3_tester
 import default_args_tester
 import unnamed_classes_tester
 import cppexceptions_tester
+import no_init_tester
 
-def create_suite(times):  
-    testers = [ 
+def create_suite(times):
+    testers = [
         algorithms_tester
         , module_body_tester
         , enums_tester
@@ -114,9 +115,10 @@ def create_suite(times):
         , indexing_suites2_tester
         , unnamed_classes_tester
         , cppexceptions_tester
+        , no_init_tester
     ]
-    
-    main_suite = unittest.TestSuite()    
+
+    main_suite = unittest.TestSuite()
     for i in range( times ):
         for tester in testers:
             main_suite.addTest( tester.create_suite() )
@@ -134,5 +136,5 @@ if __name__ == "__main__":
         except Exception, error:
             print str( error )
             print 'first argument should be integer, it says how many times to run tests.'
-        
+
     run_suite(times)
