@@ -35,7 +35,7 @@ class enum_t( declaration_based.declaration_based_t ):
                     , 'name' : algorithm.create_identifier( self, full_name + '::' + value_name ) }
     
     def _create_impl(self):
-        bpl_enum = '%(bpl::enum_)s<%(name)s>("%(alias)s")' \
+        bpl_enum = '%(bpl::enum_)s< %(name)s>("%(alias)s")' \
                    % { 'bpl::enum_' : algorithm.create_identifier( self, '::boost::python::enum_' )
                        , 'name' : algorithm.create_identifier( self, self.declaration.decl_string )
                        , 'alias' : self.alias }
