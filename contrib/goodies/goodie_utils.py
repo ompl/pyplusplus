@@ -8,6 +8,7 @@
 #
 import pygccxml.declarations as pd
 from pyplusplus.module_builder.call_policies import *
+import pyplusplus.module_builder
 import pygccxml.declarations.type_traits as tt
 import pygccxml.declarations.cpptypes as cpptypes
 import pyplusplus.code_creators as code_creators
@@ -20,6 +21,7 @@ def set_recursive_default(val):
 
 def set_allow_empty_mdecl_default(val):
    pd.scopedef_t.ALLOW_EMPTY_MDECL_WRAPPER = val
+
 
 def finalize(cls):
    """ Attempt to finalize a class by not exposing virtual methods.
