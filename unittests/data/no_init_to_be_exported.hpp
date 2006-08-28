@@ -10,17 +10,33 @@
 
 namespace no_init_ns{
 
-class controller_i{
+struct value_i{
 public:
-    virtual ~controller_i() { }
-    virtual bool get_value(void) const = 0;
-    virtual void set_value(bool value) = 0;
+    virtual ~value_i() { }
+    virtual int get_value(void) const = 0;
+};
+
+struct value_plus_x_t : value_i{
+    value_plus_x_t( int value )
+    : m_value( value )
+    {}
+
+    virtual int get_value(void) const{
+        return  m_value + get_plus_value();
+    }
+
+    virtual int get_plus_value() const{
+        return 0;
+    }
+
+private:
+    int m_value;
 };
 
 inline int
-get_value( const boost::shared_ptr< controller_i >& controller ){
-    if( controller ){
-        return controller->get_value() ? 1 : 0;
+get_value( const boost::shared_ptr< value_i >& v ){
+    if( v ){
+        return v->get_value();
     }
     else{
         return -1;
