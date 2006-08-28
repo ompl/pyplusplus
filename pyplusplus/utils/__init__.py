@@ -27,7 +27,7 @@ class missing_call_policies:
     @staticmethod    
     def print_( extmodule ):
         creators = filter( missing_call_policies._selector
-                           , code_creators.make_flatten( extmodule.creators ) )
+                           , code_creators.make_flatten_generator( extmodule.creators ) )
         for creator in creators:
             print creator.declaration.__class__.__name__, ': ', declarations.full_name( creator.declaration )
             print '  *** MISSING CALL POLICY', creator.declaration.function_type().decl_string
@@ -36,7 +36,7 @@ class missing_call_policies:
     @staticmethod    
     def exclude( extmodule ):
         creators = filter( missing_call_policies._selector
-                           , code_creators.make_flatten( extmodule.creators ) )
+                           , code_creators.make_flatten_generator( extmodule.creators ) )
         for creator in creators:
             creator.parent.remove_creator( creator )
     

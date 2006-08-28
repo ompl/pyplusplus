@@ -544,7 +544,7 @@ class creator_t( declarations.decl_visitor_t ):
         self._treat_smart_pointers()
         if self.__enable_indexing_suite:
             self._treat_indexing_suite()
-        for creator in code_creators.make_flatten( self.__extmodule ):
+        for creator in code_creators.make_flatten_generator( self.__extmodule ):
             creator.target_configuration = self.__target_configuration
         #last action.
         self._append_user_code()

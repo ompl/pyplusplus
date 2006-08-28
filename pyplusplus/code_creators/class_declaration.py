@@ -120,7 +120,7 @@ class class_t( scoped.scoped_t ):
             base_classes[ id( hierarchy_info.related_class ) ] = hierarchy_info
         base_classes_size = len( base_classes )
         creators = {}        
-        for creator in algorithm.make_flatten( self.top_parent.body.creators ):
+        for creator in algorithm.make_flatten_generator( self.top_parent.body.creators ):
             if not isinstance( creator, class_t ):
                 continue
             if id(creator.declaration) in base_classes:

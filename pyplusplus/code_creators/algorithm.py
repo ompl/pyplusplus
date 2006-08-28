@@ -37,7 +37,7 @@ def _make_flatten_list( creator_or_creators ):
         answer.extend( proceed_single( creator ) )
     return answer
 
-def _make_flatten_generator( creator_or_creators ):
+def make_flatten_generator( creator_or_creators ):
     import compound
     def proceed_single( creator ):
         yield creator
@@ -61,6 +61,7 @@ def _make_flatten_generator( creator_or_creators ):
 """
 make_flatten - function that will create flat representation of code creators tree.
 """
+make_flatten_list = _make_flatten_list
 make_flatten = _make_flatten_list
 
 class creator_finder:
@@ -80,7 +81,7 @@ class creator_finder:
         import declaration_based #prevent cyclic import
         search_area = where
         if recursive:
-            search_area = make_flatten( where )
+            search_area = make_flatten_generator( where )
         return filter( lambda inst: isinstance( inst, declaration_based.declaration_based_t ) \
                                     and declaration_matcher( inst.declaration )
                        , search_area )
@@ -96,5 +97,5 @@ class creator_finder:
     def find_by_class_instance( what, where, recursive=True ):
         search_area = where
         if recursive:
-            search_area = make_flatten( where )
+            search_area = make_flatten_generator( where )
         return filter( lambda inst: isinstance( inst, what ), search_area )

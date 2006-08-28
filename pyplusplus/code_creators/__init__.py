@@ -17,7 +17,7 @@ The base class for all code creators is L{code_creator_t}.
 from code_creator import code_creator_t
 from compound import compound_t
 
-from algorithm import make_flatten
+from algorithm import (make_flatten, make_flatten_list, make_flatten_generator)
 from algorithm import creator_finder
 from algorithm import create_identifier
 from algorithm import creators_affect_on_me
