@@ -16,6 +16,9 @@ from pyplusplus import file_writers
 from pyplusplus import code_creators
 from pyplusplus import module_creator as mcreator_package
 
+import cPickle, md5, os.path, gzip
+from pygccxml.parser.declarations_cache import file_signature, configuration_signature
+
 class module_builder_t(object):
     """
     This class provides users with simple and intuitive interface to Py++
@@ -36,7 +39,8 @@ class module_builder_t(object):
                   , optimize_queries=True
                   , ignore_gccxml_output=False
                   , indexing_suite_version=1
-                  , cflags=""):
+                  , cflags=""
+                  , module_cache=None):
         """
         @param files: list of files, declarations from them you want to export
         @type files: list of strings or L{file_configuration_t} instances
@@ -56,6 +60,9 @@ class module_builder_t(object):
         @param undefine_symbols: list of strings
 
         @param cflags: Raw string to be added to gccxml command line.
+        
+        @param module_cache: Name of a file to use as a module cache.  This will cache
+                            the processing done in __init__.
         """
         object.__init__( self )
         self.logger = _logging_.loggers.module_builder
@@ -77,21 +84,62 @@ class module_builder_t(object):
                                    , parser.project_reader_t.get_os_file_names( files ) )
         tmp = map( lambda file_: os.path.split( file_ )[0], self.__parsed_files )
         self.__parsed_dirs = filter( None, tmp )
+        
+        self.__global_ns = None
+        
+        # If we have a module_cache filename
+        # - Compute signature and check it against file
+        # - If matches, load it
+        if module_cache:
+            sig = md5.new()
+            sig.update(configuration_signature(gccxml_config))
+            for f in files:
+                sig.update(file_signature(f))
+            cur_digest = sig.hexdigest()
 
-        self.__global_ns = self.__parse_declarations( files
-                                                      , gccxml_config
-                                                      , compilation_mode
-                                                      , cache
-                                                      , indexing_suite_version)
-        self.__code_creator = None
-        if optimize_queries:
-            self.run_query_optimizer()
+            if os.path.exists(module_cache):
+                self.logger.info("Attempting to loading module cache file: %s"%module_cache)
+                cache_file = file(module_cache,'rb')
+                cache_digest = cPickle.load(cache_file)
+                if (cur_digest == cache_digest):
+                    load_start_time = time.time()
+                    self.logger.info("   Signatures matched, loading data.")
+                    self.__global_ns = cPickle.load(cache_file)
+                    self.__code_creator = None
+                    self.logger.info("   Loading complete. %ss"%(time.time()-load_start_time))
+                else:
+                    self.logger.info("   Signatures did not match. Ignoring cache.")
+                cache_file.close()
+        
+        # If didn't load global_ns from cache
+        # - Parse and optimize it
+        # - Then save to cache if requested
+        if not self.__global_ns:
+            print "Parsing data"
+            self.__global_ns = self.__parse_declarations( files
+                                                          , gccxml_config
+                                                          , compilation_mode
+                                                          , cache
+                                                          , indexing_suite_version)
+            self.__code_creator = None
+            if optimize_queries:
+                print "Running optimizer"
+                self.run_query_optimizer()
+            
+            if module_cache:
+                print "Writing module cache... ",
+                cache_file = file(module_cache,'wb')
+                cPickle.dump(cur_digest, cache_file, cPickle.HIGHEST_PROTOCOL)
+                cPickle.dump(self.__global_ns, cache_file, cPickle.HIGHEST_PROTOCOL)
+                cache_file.close()
+                print "  done."
 
         self.__declarations_code_head = []
         self.__declarations_code_tail = []
 
         self.__registrations_code_head = []
         self.__registrations_code_tail = []
+
 
     def _get_global_ns( self ):
         return self.__global_ns
@@ -150,7 +198,7 @@ class module_builder_t(object):
             if not found:
                 decl.exclude()
 
-    def __apply_decls_defaults(self, decls):
+    def __apply_decls_defaults(self, decls):        
         flatten_decls = decls_package.make_flatten( decls )
         self.__filter_by_location( flatten_decls )
         call_policies_resolver = mcreator_package.built_in_resolver_t()
