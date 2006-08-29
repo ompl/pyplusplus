@@ -8,6 +8,46 @@ import sys
 import unittest
 import fundamental_tester_base
 
+
+MODULE_SPTR_DECL_CODE = \
+"""
+namespace boost{ namespace python{
+
+    using namespace controllers;
+
+    controller_i* get_pointer( my_smart_ptr_t< controller_i > const& p ){
+        return p.get();
+    }
+
+    template <>
+    struct pointee< my_smart_ptr_t< controller_i > >{
+        typedef controller_i type;
+    };
+
+
+    add_x_t* get_pointer( my_smart_ptr_t< add_x_t > const& p ){
+        return p.get();
+    }
+
+    template <>
+    struct pointee< my_smart_ptr_t< add_x_t > >{
+        typedef add_x_t type;
+    };
+
+
+}}// namespace boost::python converter
+"""
+
+MODULE_SPTR_REG_CODE = \
+"""
+    bp::register_ptr_to_python< my_smart_ptr_t< controllers::controller_i > >();
+
+    bp::register_ptr_to_python< my_smart_ptr_t< controllers::add_x_t > >();
+
+    bp::implicitly_convertible< my_smart_ptr_t< controllers::add_x_t >, my_smart_ptr_t< controllers::controller_i > >();
+
+"""
+
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'custom_smart_ptr_classes'
 
@@ -19,9 +59,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def customize( self, mb ):
         mb.classes( lambda cls: 'ptr' in cls.name).exclude()
-        return
-        cls = mb.class_( 'value_plus_x_t' )
-        cls.add_registration_code( 'bp::register_ptr_to_python< boost::shared_ptr< no_init_ns::value_plus_x_t > >();', False )
+        mb.add_declaration_code( MODULE_SPTR_DECL_CODE )
+        mb.add_registration_code( MODULE_SPTR_REG_CODE )
 
     def create_identity_value( self, module, v ):
         class identity_value_t( module.value_i ):

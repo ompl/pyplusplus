@@ -18,25 +18,27 @@ public:
     : pRep(rep), pUseCount( new unsigned int(1) )
 	{}
 
-	my_smart_ptr_t(const my_smart_ptr_t<T>& r)
+    template<class Y>
+	my_smart_ptr_t(const my_smart_ptr_t<Y>& r)
     : pRep(0), pUseCount(0)
     {
-		pRep = r.pRep;
-		pUseCount = r.pUseCount;
+		pRep = r.get();
+		pUseCount = r.useCountPointer();
 		if(pUseCount){
 			++(*pUseCount);
 		}
     }
 
-	my_smart_ptr_t& operator=(const my_smart_ptr_t<T>& r){
+    template< class Y>
+	my_smart_ptr_t& operator=(const my_smart_ptr_t<Y>& r){
 		if( pRep == r.pRep ){
 			return *this;
 	    }
 
 		release();
 
-		pRep = r.pRep;
-		pUseCount = r.pUseCount;
+		pRep = r.get();
+		pUseCount = r.useCountPointer();
 		if(pUseCount){
 			++(*pUseCount);
 		}
@@ -59,16 +61,6 @@ public:
 	    return pRep;
 	}
 
-	inline bool unique() const {
-	    assert(pUseCount);
-	    return *pUseCount == 1;
-	}
-
-	inline unsigned int useCount() const {
-	    assert(pUseCount);
-	    return *pUseCount;
-	}
-
 	inline unsigned int* useCountPointer() const {
 	    return pUseCount;
 	}
@@ -76,18 +68,6 @@ public:
 	inline T* getPointer() const {
 	    return pRep;
 	}
-
-	inline bool isNull(void) const {
-	    return pRep == 0;
-	}
-
-    inline void setNull(void) {
-		if (pRep){
-			release();
-			pRep = 0;
-			pUseCount = 0;
-		}
-    }
 
 protected:
 
