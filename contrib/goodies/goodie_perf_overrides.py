@@ -79,8 +79,12 @@ def mb_override__init__( self
               , optimize_queries=True
               , ignore_gccxml_output=False
               , indexing_suite_version=1
-              , cflags=""):
-    """  See standard method. """
+              , cflags=""
+              , dependent_headers=[]):
+    """  See standard method. 
+       dependent_headers: A list of header files (full paths) that this module depends
+                  upon and should be made part of the cache signature.
+    """
     object.__init__( self )
     self.logger = _logging_.loggers.module_builder
     gccxml_config = parser.config_t(
@@ -110,7 +114,9 @@ def mb_override__init__( self
     if cache:
         sig = md5.new()
         sig.update(configuration_signature(gccxml_config))
-        for f in files:
+        for f in self._module_builder_t__parsed_files:  # files:
+            sig.update(file_signature(f))
+        for f in dependent_headers:
             sig.update(file_signature(f))
         cur_digest = sig.hexdigest()
 
