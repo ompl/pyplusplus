@@ -137,6 +137,14 @@ class creator_t( declarations.decl_visitor_t ):
             if decl.ignore:
                 continue
 
+            if isinstance( decl, declarations.calldef_t ) and not isinstance( decl, declarations.destructor_t ):
+                self.__types_db.update( decl )
+                if None is decl.call_policies:
+                    decl.call_policies = self.__call_policies_resolver( decl )
+
+            if isinstance( decl, declarations.variable_t ):
+                self.__types_db.update( decl )
+
             if doc_extractor and decl.exportable:
                 decl.documentation = doc_extractor( decl )
 
@@ -153,6 +161,7 @@ class creator_t( declarations.decl_visitor_t ):
 
             for msg in readme:
                 self.decl_logger.warn( "%s;%s" % ( decl, msg ) )
+
 
         #leave only declarations defined under namespace, but remove namespaces
         decls = filter( lambda x: not isinstance( x, declarations.namespace_t ) \
@@ -597,9 +606,6 @@ class creator_t( declarations.decl_visitor_t ):
 
     def visit_member_function( self ):
         fwrapper = None
-        self.__types_db.update( self.curr_decl )
-        if None is self.curr_decl.call_policies:
-            self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
 
         maker_cls, fwrapper_cls = self.guess_functions_code_creators()
 
@@ -630,7 +636,6 @@ class creator_t( declarations.decl_visitor_t ):
     def visit_constructor( self ):
         if self.curr_decl.is_copy_constructor:
             return
-        self.__types_db.update( self.curr_decl )
         if not self._is_constructor_of_abstract_class( self.curr_decl ) \
            and 1 == len( self.curr_decl.arguments ) \
            and self.__create_castinig_constructor \
@@ -656,19 +661,15 @@ class creator_t( declarations.decl_visitor_t ):
         if self.curr_decl.symbol in ( '()', '[]' ):
             self.visit_member_function()
         else:
-            self.__types_db.update( self.curr_decl )
             maker = code_creators.operator_t( operator=self.curr_decl )
             self.curr_code_creator.adopt_creator( maker )
 
     def visit_casting_operator( self ):
         if not declarations.is_fundamental( self.curr_decl.return_type ) \
            and not self.curr_decl.has_const:
+            #TODO: move this code to decl_wrappers
             return #only const casting operators can generate implicitly_convertible
 
-        if None is self.curr_decl.call_policies:
-            self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
-
-        self.__types_db.update( self.curr_decl )
         if not self.curr_decl.parent.is_abstract \
            and not declarations.is_reference( self.curr_decl.return_type ):
             maker = code_creators.casting_operator_t( operator=self.curr_decl )
@@ -679,14 +680,10 @@ class creator_t( declarations.decl_visitor_t ):
             self.curr_code_creator.adopt_creator( maker )
 
     def visit_free_function( self ):
-        self.__types_db.update( self.curr_decl )
         maker = code_creators.free_function_t( function=self.curr_decl )
-        if None is self.curr_decl.call_policies:
-            self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
         self.curr_code_creator.adopt_creator( maker )
 
     def visit_free_operator( self ):
-        self.__types_db.update( self.curr_decl )
         self.__free_operators.append( self.curr_decl )
 
     def visit_class_declaration(self ):
@@ -778,8 +775,6 @@ class creator_t( declarations.decl_visitor_t ):
             return True
 
     def visit_variable(self):
-        self.__types_db.update( self.curr_decl )
-
         if declarations.is_array( self.curr_decl.type ):
             if not self.__cr_array_1_included:
                 self.__extmodule.add_system_header( code_repository.array_1.file_name )
