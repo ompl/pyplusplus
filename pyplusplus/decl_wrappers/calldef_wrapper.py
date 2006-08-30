@@ -11,10 +11,10 @@ from pygccxml import declarations
 
 class calldef_t(decl_wrapper.decl_wrapper_t):
     """base class for all decl_wrappers callable objects classes."""
-    
+
     BOOST_PYTHON_MAX_ARITY = 10
     """Boost.Python configuration macro value.
-    
+
     A function has more than BOOST_PYTHON_MAX_ARITY arguments, will not compile.
     You should adjust BOOST_PYTHON_MAX_ARITY macro.
     For more information see: http://mail.python.org/pipermail/c++-sig/2002-June/001554.html
@@ -64,7 +64,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
 
     def has_wrapper( self ):
         """returns True, if function - wrapper is needed
-        
+
         The functionality by this function is uncomplete. So please don't
         use it in your code.
         """
@@ -176,6 +176,16 @@ class member_function_t( declarations.member_function_t, calldef_t ):
     def __init__(self, *arguments, **keywords):
         declarations.member_function_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
+        self._use_overload_macro = False
+
+    def get_use_overload_macro(self):
+        return self._use_overload_macro
+    def set_use_overload_macro(self, use_macro):
+        self._use_overload_macro = use_macro
+    use_overload_macro = property( get_use_overload_macro, set_use_overload_macro
+                             , doc="boolean, if True, will use BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS macro to expose declarations" \
+                                  +"Default value is False.")
+
 
 class constructor_t( declarations.constructor_t, calldef_t ):
     """defines a set of properties, that will instruct Py++ how to expose the constructor"""
@@ -330,6 +340,16 @@ class free_function_t( declarations.free_function_t, calldef_t ):
     def __init__(self, *arguments, **keywords):
         declarations.free_function_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
+        self._use_overload_macro = False
+
+    def get_use_overload_macro(self):
+        return self._use_overload_macro
+    def set_use_overload_macro(self, use_macro):
+        self._use_overload_macro = use_macro
+    use_overload_macro = property( get_use_overload_macro, set_use_overload_macro
+                             , doc="boolean, if True, will use BOOST_PYTHON_FUNCTION_OVERLOADS macro to expose declarations" \
+                                  +"Default value is False.")
+
 
 class free_operator_t( declarations.free_operator_t, calldef_t ):
     """defines a set of properties, that will instruct Py++ how to expose the free operator"""

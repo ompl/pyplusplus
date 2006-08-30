@@ -21,15 +21,15 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
     This class will split code, generated for huge classes, to few files.
     Next strategy will be used:
     1. New directory with class alias name will be created.
-    2. pyplusplus will generate 
+    2. pyplusplus will generate
        wrapper header - header that will contain code generated for class wrappers
        classes h/cpp - will contain registration code for internal classes
        memfun h/cpp - will contain registration code for member functions
 
        alias + _main h/cpp this class will contain main registration function.
-    """ 
+    """
 
-    def __init__(self, extmodule, directory_path, huge_classes, num_of_functions_per_file=25):
+    def __init__(self, extmodule, directory_path, huge_classes, num_of_functions_per_file=20):
         multiple_files.multiple_files_t.__init__(self, extmodule, directory_path)
         self.huge_classes = huge_classes
         self.num_of_functions_per_file = num_of_functions_per_file
@@ -44,7 +44,7 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
             #not supported yet
             #, self.split_internal_member_variables
         ]
- 
+
     def create_base_fname( self, class_creator, pattern ):
         return "_%s__%s" % ( class_creator.alias, pattern )
 
@@ -55,7 +55,7 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         answer = []
         if self.extmodule.license:
             answer.append( self.extmodule.license.create() )
-        
+
         answer.append( self.create_include_code( [class_creator] ) )
         answer.append( '' )
         answer.append( self.create_namespaces_code( [class_creator] ) )
@@ -63,27 +63,27 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         if class_creator.wrapper:
             answer.append( class_creator.wrapper.create() )
             class_creator.wrapper.create = lambda: ''
-        
+
         answer.append( '' )
         answer.append( class_creator.create_typedef_code() )
-        
+
         code = os.linesep.join( answer )
         wrapper_code = self.create_header( self.create_base_fname(class_creator, 'wrapper'), code )
         header_file = os.path.join( self.directory_path, self.wrapper_header(class_creator) )
         self.write_file( header_file, wrapper_code )
-        
+
     def split_internal_creators( self, class_creator, creators, pattern ):
         file_path = os.path.join( self.directory_path
                                   , self.create_base_fname( class_creator, pattern ) )
-         
+
         function_name = 'register_%(cls_alias)s_%(pattern)s' \
                         % { 'cls_alias' : class_creator.alias, 'pattern' : pattern }
-                            
+
         function_decl = 'void %(fname)s( %(exposer_type)s& %(var_name)s )' \
                         % { 'fname' : function_name
                             , 'exposer_type' : class_creator.typedef_name
                             , 'var_name' : class_creator.class_var_name }
-            
+
         #writting header file
         header_code = [ '#include "%s"' % self.wrapper_header( class_creator ) ]
         header_code.append( '' )
@@ -91,12 +91,12 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         self.write_file( file_path + self.HEADER_EXT
                          , self.create_header( class_creator.alias + '_' + pattern
                                                , os.linesep.join(header_code) ) )
-        
-        #writting source file        
+
+        #writting source file
         source_code = []
         if self.extmodule.license:
             source_code.append( self.extmodule.license.create() )
-        
+
         #relevant header file
         head_headers = [ self.create_base_fname( class_creator, pattern + self.HEADER_EXT ) ]
         source_code.append( self.create_include_code( creators, head_headers ) )
@@ -132,7 +132,7 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         self.split_internal_creators( class_creator, creators, 'unnamed_enums' )
         return 'unnamed_enums'
 
-    def split_internal_calldefs( self, class_creator, calldef_types, pattern ):           
+    def split_internal_calldefs( self, class_creator, calldef_types, pattern ):
         creators = filter( lambda x: isinstance(x, calldef_types ), class_creator.creators )
         grouped_creators = pypp_utils.split_sequence( creators, self.num_of_functions_per_file )
         if len( grouped_creators ) == 1:
@@ -140,8 +140,8 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
                 creator.works_on_instance = False
             self.split_internal_creators( class_creator, creators, pattern )
             return pattern
-        else:   
-            patterns = []            
+        else:
+            patterns = []
             for index, group in enumerate( grouped_creators ):
                 pattern_tmp = pattern + str( index )
                 patterns.append( pattern_tmp )
@@ -151,24 +151,24 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
             return patterns
 
     def split_internal_memfuns( self, class_creator ):
-        calldef_types = ( code_creators.mem_fun_t )           
+        calldef_types = ( code_creators.mem_fun_t )
         return self.split_internal_calldefs( class_creator, calldef_types, 'memfuns' )
 
     def split_internal_v_memfuns( self, class_creator ):
-        calldef_types = ( code_creators.mem_fun_v_t )           
+        calldef_types = ( code_creators.mem_fun_v_t )
         return self.split_internal_calldefs( class_creator, calldef_types, 'memfuns_virtual' )
 
     def split_internal_pv_memfuns( self, class_creator ):
-        calldef_types = ( code_creators.mem_fun_pv_t )           
+        calldef_types = ( code_creators.mem_fun_pv_t )
         return self.split_internal_calldefs( class_creator, calldef_types, 'memfuns_pvirtual' )
 
     def split_internal_protected_memfuns( self, class_creator ):
-        calldef_types = (  
+        calldef_types = (
             code_creators.mem_fun_protected_t
             , code_creators.mem_fun_protected_s_t
             , code_creators.mem_fun_protected_v_t
             , code_creators.mem_fun_protected_pv_t )
-            
+
         return self.split_internal_calldefs( class_creator, calldef_types, 'protected_memfuns' )
 
 
@@ -183,13 +183,13 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
                            , class_creator.creators )
         self.split_internal_creators( class_creator, creators, 'memvars' )
         return 'memvars'
-        
+
     def split_class_impl( self, class_creator):
         if not class_creator.declaration in self.huge_classes:
             return super( class_multiple_files_t, self ).split_class_impl( class_creator )
-        
+
         class_creator.declaration.always_expose_using_scope = True
-        
+
         function_name = 'register_%s_class' % class_creator.alias
         file_path = os.path.join( self.directory_path, class_creator.alias )
         # Write the .h file...
@@ -197,9 +197,9 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         self.write_file( header_name
                          , self.create_header( class_creator.alias
                                                , self.create_function_code( function_name ) ) )
-            
+
         self.write_wrapper( class_creator )
-        
+
         tail_headers = []
         for splitter in self.internal_splitters:
             pattern = splitter( class_creator )
@@ -211,16 +211,16 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
                 assert( isinstance( pattern, list ) )
                 for p in pattern:
                     tail_headers.append( self.create_base_fname( class_creator, p + self.HEADER_EXT ) )
-        #writting source file        
+        #writting source file
         source_code = []
         if self.extmodule.license:
             source_code.append( self.extmodule.license.create() )
-        
+
         source_code.append( self.create_include_code( [class_creator], tail_headers=tail_headers ) )
 
         source_code.append( '' )
         source_code.append( self.create_namespaces_code( [class_creator] ) )
-        
+
         for creator in class_creator.user_declarations:
             source_code.append( '' )
             source_code.append( creator.create() )
@@ -234,7 +234,7 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         source_code.append( '' )
         source_code.append( '}' )
         self.write_file( file_path + self.SOURCE_EXT, os.linesep.join( source_code ) )
-      
+
         # Replace the create() method so that only the register() method is called
         # (this is called later for the main source file).
         class_creator.create = lambda: function_name +'();'

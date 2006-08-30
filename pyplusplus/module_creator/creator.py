@@ -127,6 +127,7 @@ class creator_t( declarations.decl_visitor_t ):
         self.__cr_array_1_included = False
         self.__array_1_registered = set() #(type.decl_string,size)
         self.__free_operators = []
+        self.__exposed_free_fun_overloads = set()
 
     def _prepare_decls( self, decls, doc_extractor ):
         global DO_NOT_REPORT_MSGS
@@ -680,14 +681,55 @@ class creator_t( declarations.decl_visitor_t ):
             self.curr_code_creator.adopt_creator( maker )
 
     def visit_free_function( self ):
-        maker = code_creators.free_function_t( function=self.curr_decl )
-        self.curr_code_creator.adopt_creator( maker )
+        if self.curr_decl in self.__exposed_free_fun_overloads:
+            return
+        elif self.curr_decl.use_overload_macro:
+            parent_decl = self.curr_decl.parent
+            names = set( map( lambda decl: decl.name
+                              , parent_decl.free_functions( allow_empty=True, recursive=False ) ) )
+            for name in names:
+                overloads = parent_decl.free_functions( name, allow_empty=True, recursive=False )
+                overloads = filter( lambda decl: decl.use_overload_macro, overloads )
+                if not overloads:
+                    continue
+                else:
+                    self.__exposed_free_fun_overloads.update( overloads )
+
+                    overloads_cls_creator = code_creators.free_fun_overloads_class_t( overloads )
+                    self.__extmodule.adopt_declaration_creator( overloads_cls_creator )
+
+                    overloads_reg = code_creators.free_fun_overloads_t( overloads_cls_creator )
+                    self.curr_code_creator.adopt_creator( overloads_reg )
+        else:
+            maker = code_creators.free_function_t( function=self.curr_decl )
+            self.curr_code_creator.adopt_creator( maker )
 
     def visit_free_operator( self ):
         self.__free_operators.append( self.curr_decl )
 
     def visit_class_declaration(self ):
         pass
+
+    def expose_overloaded_mem_fun_using_macro( self, cls, cls_creator ):
+        #returns set of exported member functions
+        exposed = set()
+        names = set( map( lambda decl: decl.name
+                          , cls.member_functions( allow_empty=True, recursive=False ) ) )
+        for name in names:
+            overloads = cls.member_functions( name, allow_empty=True, recursive=False )
+            overloads = filter( lambda decl: decl.use_overload_macro, overloads )
+            if not overloads:
+                continue
+            else:
+                exposed.update( overloads )
+
+                overloads_cls_creator = code_creators.mem_fun_overloads_class_t( overloads )
+                self.__extmodule.adopt_declaration_creator( overloads_cls_creator )
+                cls_creator.user_declarations.append( overloads_cls_creator )
+
+                overloads_reg = code_creators.mem_fun_overloads_t( overloads_cls_creator )
+                cls_creator.adopt_creator( overloads_reg )
+        return exposed
 
     def visit_class(self ):
         assert isinstance( self.curr_decl, declarations.class_t )
@@ -720,9 +762,13 @@ class creator_t( declarations.decl_visitor_t ):
                     tcons = code_creators.null_constructor_wrapper_t( class_inst=self.curr_decl )
                     wrapper.adopt_creator( tcons )
 
+        exposed = self.expose_overloaded_mem_fun_using_macro( cls_decl, cls_cc )
+
         cls_parent_cc.adopt_creator( cls_cc )
         self.curr_code_creator = cls_cc
         for decl in exportable_members:
+            if decl in exposed:
+                continue
             self.curr_decl = decl
             declarations.apply_visitor( self, decl )
 

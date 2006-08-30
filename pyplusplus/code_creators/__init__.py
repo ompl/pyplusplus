@@ -64,9 +64,13 @@ from calldef import operator_t
 from calldef import constructor_t
 from calldef import static_method_t
 from calldef import casting_operator_t
+from calldef import mem_fun_overloads_t
+from calldef import free_fun_overloads_t
 from calldef import casting_constructor_t
 from calldef import constructor_wrapper_t
+from calldef import mem_fun_overloads_class_t
 from calldef import casting_member_operator_t
+from calldef import free_fun_overloads_class_t
 from calldef import copy_constructor_wrapper_t
 from calldef import null_constructor_wrapper_t
 
@@ -85,7 +89,7 @@ from member_variable import array_mv_wrapper_t
 from member_variable import mem_var_ref_t
 from member_variable import mem_var_ref_wrapper_t
 
-from class_declaration import class_t 
+from class_declaration import class_t
 from class_declaration import class_wrapper_t
 from class_declaration import class_declaration_t
 

@@ -7,7 +7,7 @@ import os
 import types
 import scoped
 import calldef
-import algorithm 
+import algorithm
 import smart_pointers
 import declaration_based
 from pygccxml import declarations
@@ -36,26 +36,26 @@ class class_declaration_t( scoped.scoped_t ):
     def _get_class_var_name(self):
         return self.alias + '_exposer'
     class_var_name = property( _get_class_var_name )
-        
+
     def is_exposed_using_scope(self):
         if self.declaration.always_expose_using_scope:
             return True
-        return bool( filter( lambda cc: not cc.works_on_instance, self.creators ) ) 
+        return bool( filter( lambda cc: not cc.works_on_instance, self.creators ) )
 
     @property
     def typedef_name( self ):
         return self.class_var_name + '_t'
-    
+
     def _generate_code_with_scope(self):
         result = []
         scope_var_name = self.alias + '_scope'
         result.append( 'typedef ' + self._generate_class_definition() + ' ' + self.typedef_name + ';')
         result.append( self.typedef_name + ' ' + self.class_var_name )
         result[-1] = result[-1] + ' = '+ self.typedef_name + '("%s");' % self.declaration.alias
-        
+
         result.append( algorithm.create_identifier( self, '::boost::python::scope' ) )
         result[-1] = result[-1] + ' ' + scope_var_name
-        result[-1] = result[-1] + '( %s );' % self.class_var_name        
+        result[-1] = result[-1] + '( %s );' % self.class_var_name
 
         for x in self.creators:
             if not x.works_on_instance:
@@ -64,13 +64,13 @@ class class_declaration_t( scoped.scoped_t ):
                 result.append( '%s.%s;' % ( self.class_var_name, x.create() ) )
 
         code = os.linesep.join( result )
-        
+
         result = [ '{ //scope begin' ]
         result.append( self.indent( code ) )
         result.append( '} //scope end' )
-        
+
         return os.linesep.join( result )
-    
+
     def _create_impl(self):
         if self.is_exposed_using_scope():
             return self._generate_code_with_scope()
@@ -87,7 +87,7 @@ class class_t( scoped.scoped_t ):
         self._wrapper = wrapper
         self.works_on_instance = False
         self._user_declarations = []
-        
+
     def _get_wrapper( self ):
         return self._wrapper
     def _set_wrapper( self, new_wrapper ):
@@ -109,17 +109,17 @@ class class_t( scoped.scoped_t ):
             assert held_type # should be non emptry string
         self.declaration.held_type = held_type
     held_type = property( _get_held_type, _set_held_type )
-    
+
     def _exported_base_classes(self):
         if not self.declaration.bases:
-            return {}, {} 
+            return {}, {}
         base_classes = {}
         for hierarchy_info in self.declaration.recursive_bases:
             if hierarchy_info.access_type == declarations.ACCESS_TYPES.PRIVATE:
-                continue            
+                continue
             base_classes[ id( hierarchy_info.related_class ) ] = hierarchy_info
         base_classes_size = len( base_classes )
-        creators = {}        
+        creators = {}
         for creator in algorithm.make_flatten_generator( self.top_parent.body.creators ):
             if not isinstance( creator, class_t ):
                 continue
@@ -128,7 +128,7 @@ class class_t( scoped.scoped_t ):
             if len( creators ) == base_classes_size:
                 break #all classes has been found
         return base_classes, creators
-    
+
     def _get_base_operators(self, base_classes, base_creators):
         #May be in future I will redefine operators on wrapper class
         #thus I will support [protected|private] [ [not|pure|] virtual] operators.
@@ -137,20 +137,20 @@ class class_t( scoped.scoped_t ):
             hierarchy_info = base_classes[ id( base_creator.declaration )]
             if hierarchy_info.access_type != declarations.ACCESS_TYPES.PUBLIC:
                 continue
-            base_operator_creators = filter( lambda creator: 
+            base_operator_creators = filter( lambda creator:
                                                 isinstance( creator, calldef.operator_t )
                                                 and isinstance( creator.declaration, declarations.member_operator_t )
-                                                and creator.declaration.access_type 
+                                                and creator.declaration.access_type
                                                     == declarations.ACCESS_TYPES.PUBLIC
                                              , base_creator.creators )
             operator_creators.extend( base_operator_creators )
         return operator_creators
-        
+
     def _generate_noncopyable(self):
         if self.declaration.noncopyable:
             return algorithm.create_identifier( self, '::boost::noncopyable' )
 
-    def _generate_bases(self, base_creators):       
+    def _generate_bases(self, base_creators):
         bases = []
         assert isinstance( self.declaration, declarations.class_t )
         for base_desc in self.declaration.bases:
@@ -171,11 +171,11 @@ class class_t( scoped.scoped_t ):
             return self.held_type
         else:
             return None
-        
+
     def _generate_class_definition(self, base_creators):
         class_identifier = algorithm.create_identifier( self, '::boost::python::class_' )
         args = []
-        
+
         held_type = self._generated_held_type()
         if self.wrapper:
             if held_type and not self.target_configuration.boost_python_has_wrapper_held_type:
@@ -185,8 +185,8 @@ class class_t( scoped.scoped_t ):
             args.append( algorithm.create_identifier( self, self.declaration.decl_string ) )
         bases = self._generate_bases(base_creators)
         if bases:
-            args.append( bases )       
-        
+            args.append( bases )
+
         if held_type:
             args.append( held_type )
         notcopyable = self._generate_noncopyable()
@@ -205,7 +205,7 @@ class class_t( scoped.scoped_t ):
         if ( self.declaration.is_abstract \
              or not declarations.has_any_non_copyconstructor(self.declaration) ) \
            and not self.wrapper \
-           or ( declarations.has_destructor( self.declaration ) 
+           or ( declarations.has_destructor( self.declaration )
                 and not declarations.has_public_destructor( self.declaration ) ):
             #TODO: or self.declaration has public constructor and destructor
             result.append( ", " )
@@ -253,12 +253,12 @@ class class_t( scoped.scoped_t ):
     @property
     def typedef_name( self ):
         return self.class_var_name + '_t'
-    
+
     def create_typedef_code( self ):
         base_classes, base_creators = self._exported_base_classes()
         return 'typedef ' + self._generate_class_definition(base_creators) + ' ' + self.typedef_name + ';'
-        
-    
+
+
     def _generate_code_with_scope(self):
         result = []
         scope_var_name = self.alias + '_scope'
@@ -269,19 +269,19 @@ class class_t( scoped.scoped_t ):
         class_constructor, used_init = self._generate_constructor()
         result[-1] = result[-1] + self.typedef_name + class_constructor
         result[-1] = result[-1] + ';'
-               
+
         result.append( algorithm.create_identifier( self, '::boost::python::scope' ) )
         result[-1] = result[-1] + ' ' + scope_var_name
-        result[-1] = result[-1] + '( %s );' % self.class_var_name        
+        result[-1] = result[-1] + '( %s );' % self.class_var_name
 
         creators = self.creators
         if self.declaration.redefine_operators:
             creators = self.creators + self._get_base_operators(base_classes, base_creators)
-        
+
         for x in creators:
             if x is used_init:
                 continue
-            if isinstance( x, calldef.calldef_t ):
+            if isinstance( x, ( calldef.calldef_t, calldef.calldef_overloads_t ) ):
                 x.works_on_instance = False
                 code = x.create()
                 if code:
@@ -295,18 +295,18 @@ class class_t( scoped.scoped_t ):
                 result.append( '%s.%s;' % ( self.class_var_name, x.create() ) )
 
         code = os.linesep.join( result )
-        
+
         result = [ '{ //%s' % declarations.full_name( self.declaration ) ]
         result.append( self.indent( code ) )
         result.append( '}' )
-        
+
         return os.linesep.join( result )
 
     def is_exposed_using_scope(self):
         if self.declaration.always_expose_using_scope:
             return True
-        return bool( filter( lambda cc: not cc.works_on_instance, self.creators ) ) 
-    
+        return bool( filter( lambda cc: not cc.works_on_instance, self.creators ) )
+
     def _create_impl(self):
         if self.is_exposed_using_scope():
             return self._generate_code_with_scope()
@@ -323,13 +323,13 @@ class class_wrapper_t( scoped.scoped_t ):
         scoped.scoped_t.__init__( self, declaration=declaration )
         self._class_creator = class_creator
         self._base_wrappers = []
-    
+
     def _get_wrapper_alias( self ):
         return self.declaration.wrapper_alias
     def _set_wrapper_alias( self, walias ):
         self.declaration.wrapper_alias = walias
     wrapper_alias = property( _get_wrapper_alias, _set_wrapper_alias )
-    
+
     def _get_base_wrappers( self ):
         if self.declaration.is_abstract and not self._base_wrappers:
             bases = [ hi.related_class for hi in self.declaration.bases ]
@@ -366,15 +366,15 @@ class class_wrapper_t( scoped.scoped_t ):
     def _get_held_type(self):
         return self._class_creator.held_type
     held_type = property( _get_held_type )
-    
+
     def _get_boost_wrapper_identifier(self):
         boost_wrapper = algorithm.create_identifier( self, '::boost::python::wrapper' )
-        return declarations.templates.join( boost_wrapper, [self.exposed_identifier] ) 
+        return declarations.templates.join( boost_wrapper, [self.exposed_identifier] )
     boost_wrapper_identifier = property( _get_boost_wrapper_identifier )
-    
+
     def _create_bases(self):
         return ', '.join( [self.exposed_identifier, self.boost_wrapper_identifier] )
-           
+
     def _create_impl(self):
         answer = ['struct %s : %s {' % ( self.wrapper_alias, self._create_bases() )]
         answer.append( '' )
@@ -382,12 +382,11 @@ class class_wrapper_t( scoped.scoped_t ):
         answer.append( '' )
         answer.append( '};' )
         return os.linesep.join( answer )
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+

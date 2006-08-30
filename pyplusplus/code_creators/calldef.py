@@ -5,6 +5,7 @@
 
 import os
 import algorithm
+import code_creator
 import declaration_based
 import class_declaration
 from pygccxml import declarations
@@ -84,7 +85,7 @@ class calldef_t( declaration_based.declaration_based_t):
         raise NotImplementedError()
 
     def _get_function_type_alias( self ):
-        return 'function_ptr_t'
+        return self.alias + '_function_type'
     function_type_alias = property( _get_function_type_alias )
 
     def _get_exported_class_alias( self ):
@@ -1126,3 +1127,218 @@ class casting_constructor_t( declaration_based.declaration_based_t ):
                + '();'
 
 
+
+class calldef_overloads_class_t( code_creator.code_creator_t ):
+    def __init__( self, functions ):
+        #precondition: all member functions belong to same class and
+        #they all have same alias, otherwise it does not makes sense
+        code_creator.code_creator_t.__init__( self )
+        self._functions = functions
+        self._functions.sort() #I need this for "stabble" code generation
+        self._max_fun = None #function with maximal number of arguments
+
+    @property
+    def functions( self ):
+        return self._functions
+
+    def min_max_num_of_args( self ):
+        #returns tuple( minimal, maximal ) number of arguments
+        min_ = None
+        max_ = 0
+        for f in self.functions:
+            args_ = len( f.arguments )
+            if None is min_:
+                min_ = args_
+            else:
+                min_ = min( min_, args_ )
+            max_tmp = max( max_, args_ )
+            if max_ < max_tmp:
+                max_ = max_tmp
+                self._max_fun = f
+        return ( min_, max_ )
+
+    @property
+    def max_function( self ):
+        if not self._max_fun:
+            initialize_max_fun_var = self.min_max_num_of_args()
+        return self._max_fun
+
+    @property
+    def max_function_identifier( self ):
+        return algorithm.create_identifier( self, declarations.full_name( self.max_function ) )
+
+    @property
+    def alias( self ):
+        return self.functions[0].alias
+
+    @property
+    def parent_decl( self ):
+        return self.functions[0].parent
+
+    @property
+    def name( self ):
+        return '%s_%s_overloads' % ( self.parent_decl.alias, self.alias )
+
+class mem_fun_overloads_class_t( calldef_overloads_class_t ):
+    def __init__( self, mem_funs ):
+        #precondition: all member functions belong to same class and
+        #they all have same alias, otherwise it does not makes sense
+        calldef_overloads_class_t.__init__( self, mem_funs )
+
+    def _create_impl(self):
+        min_, max_ = self.min_max_num_of_args()
+        return "BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS( %(overloads_cls)s, %(fun)s, %(min)d, %(max)d )" \
+               % {   'overloads_cls' : self.name
+                   , 'fun' : self.max_function_identifier
+                   , 'min' : min_
+                   , 'max' : max_
+               }
+
+class free_fun_overloads_class_t( calldef_overloads_class_t ):
+    def __init__( self, free_funs ):
+        #precondition: all member functions belong to same class and
+        #they all have same alias, otherwise it does not makes sense
+        calldef_overloads_class_t.__init__( self, free_funs )
+
+    def _create_impl(self):
+        min_, max_ = self.min_max_num_of_args()
+        return "BOOST_PYTHON_FUNCTION_OVERLOADS( %(overloads_cls)s, %(fun)s, %(min)d, %(max)d )" \
+               % {   'overloads_cls' : self.name
+                   , 'fun' : self.max_function_identifier
+                   , 'min' : min_
+                   , 'max' : max_
+               }
+
+class calldef_overloads_t( code_creator.code_creator_t ):
+    def __init__( self, overloads_class ):
+        code_creator.code_creator_t.__init__( self )
+        self._overloads_class = overloads_class
+
+    @property
+    def overloads_class( self ):
+        return self._overloads_class
+
+    def create_def_code( self ):
+        raise NotImplementedError()
+
+    def create_end_def_code( self ):
+        raise NotImplementedError()
+
+    def keywords_args(self):
+        result = [ algorithm.create_identifier( self, '::boost::python::args' ) ]
+        result.append( '( ' )
+        args = []
+        for arg in self.overloads_class.max_function.arguments:
+            if 0 < len( args ):
+                args.append( self.PARAM_SEPARATOR )
+            args.append( '"%s"' % arg.name )
+        result.extend( args )
+        result.append( ' )' )
+        return ''.join( result )
+
+    def _get_function_type_alias( self ):
+        return self.overloads_class.alias + '_function_type'
+    function_type_alias = property( _get_function_type_alias )
+
+    def create_function_type_alias_code( self, exported_class_alias=None ):
+        raise NotImplementedError()
+
+    def create_overloads_cls( self ):
+        result = [ self.overloads_class.name ]
+        result.append( '( ' )
+        result.append( os.linesep + self.indent( self.keywords_args(), 3 ) )
+        if self.overloads_class.max_function.documentation:
+            result.append( os.linesep + self.indent( self.PARAM_SEPARATOR, 3 ) )
+            result.append( self.overloads_class.max_function.documentation )
+        result.append( ' )' )
+        if self.overloads_class.max_function.call_policies:
+            result.append( os.linesep + self.indent('', 3) )
+            result.append('[ %s ]' % self.overloads_class.max_function.call_policies.create( self ) )
+        return ''.join( result )
+
+    def _create_impl(self):
+        result = []
+        if not self.works_on_instance:
+            exported_class_alias = None
+            if declarations.templates.is_instantiation( self.overloads_class.max_function.parent.name ):
+                exported_class_alias = self.exported_class_alias
+                result.append( 'typedef %s %s;' % ( self.parent.decl_identifier, exported_class_alias ) )
+                result.append( os.linesep )
+            result.append( self.create_function_type_alias_code(exported_class_alias) )
+            result.append( os.linesep * 2 )
+
+        result.append( self.create_def_code() + '( ' )
+        result.append( os.linesep + self.indent( '"%s"' % self.overloads_class.alias ) )
+
+        result.append( os.linesep + self.indent( self.PARAM_SEPARATOR ) )
+        result.append( self.create_function_ref_code( not self.works_on_instance ) )
+
+        result.append( os.linesep + self.indent( self.PARAM_SEPARATOR ) )
+        result.append( self.create_overloads_cls() )
+
+        result.append( ' )' )
+        result.append( self.create_end_def_code() )
+
+        if not self.works_on_instance:
+            #indenting and adding scope
+            code = ''.join( result )
+            result = [ '{ //%s' % declarations.full_name( self.overloads_class.max_function ) ]
+            result.append( os.linesep * 2 )
+            result.append( self.indent( code ) )
+            result.append( os.linesep * 2 )
+            result.append( '}' )
+
+        return ''.join( result )
+
+class mem_fun_overloads_t( calldef_overloads_t ):
+    def __init__( self, overloads_class ):
+        calldef_overloads_t.__init__( self, overloads_class )
+
+    def create_def_code( self ):
+        if not self.works_on_instance:
+            return '%s.def' % self.parent.class_var_name
+        else:
+            return 'def'
+
+    def create_end_def_code( self ):
+        if not self.works_on_instance:
+            return ';'
+        else:
+            return ''
+
+    def create_function_type_alias_code( self, exported_class_alias=None  ):
+        ftype = self.overloads_class.max_function.function_type()
+        return 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias )
+
+    def create_function_ref_code(self, use_function_alias=False):
+        fname = declarations.full_name( self.overloads_class.max_function )
+        if use_function_alias:
+            return '%s( &%s )' % ( self.function_type_alias, fname )
+        elif self.overloads_class.max_function.create_with_signature:
+            return '(%s)( &%s )' % ( self.overloads_class.max_function.function_type().decl_string, fname )
+        else:
+            return '&%s' % fname
+
+
+class free_fun_overloads_t( calldef_overloads_t ):
+    def __init__( self, overloads_class ):
+        calldef_overloads_t.__init__( self, overloads_class )
+
+    def create_def_code( self ):
+        return algorithm.create_identifier( self, '::boost::python::def' )
+
+    def create_end_def_code( self ):
+        return ';'
+
+    def create_function_type_alias_code( self, exported_class_alias=None  ):
+        ftype = self.overloads_class.max_function.function_type()
+        return 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias )
+
+    def create_function_ref_code(self, use_function_alias=False):
+        fname = declarations.full_name( self.overloads_class.max_function )
+        if use_function_alias:
+            return '%s( &%s )' % ( self.function_type_alias, fname )
+        elif self.overloads_class.max_function.create_with_signature:
+            return '(%s)( &%s )' % ( self.overloads_class.max_function.function_type().decl_string, fname )
+        else:
+            return '&%s' % fname
