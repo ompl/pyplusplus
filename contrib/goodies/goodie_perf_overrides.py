@@ -8,7 +8,7 @@
 #
 # This file defines overrides to the standard pyplusplus behavior
 #
-import time
+import time, os
 
 print "Using Goodie perf overrides:"
 
@@ -65,6 +65,79 @@ from pyplusplus import module_creator as mcreator_package
 import cPickle, md5, os.path, gzip
 from pygccxml.parser.declarations_cache import file_signature, configuration_signature
 
+class ModuleBuilderCache(object):
+    """ Wrapper for handling the caching (loading and saving) of a cache
+        For a single decl tree.
+        
+        Cache content format:
+           - tuple:
+              - md5 hex of cfg sig and file_sigs for src files
+              - md5 hex sig of implicit includes
+              - list of implicit includes)
+           - decl tree
+    """
+    def __init__(self, cacheFileName):
+        self.cacheFileName = cacheFileName   
+        self.logger = _logging_.loggers.module_builder
+        
+    def computeSrcAndCfgDigest(self, srcFiles, configSig):
+        sig = md5.new()
+        sig.update(configSig)
+        for f in srcFiles:
+            sig.update(file_signature(f))
+        return sig.hexdigest()
+        
+    
+    def getCachedTree(self, sourceFiles, configSig):
+        """ Attempt to read a cache decl tree from the cache.
+        
+            sourceFiles - A list of source files for the module builder
+            configuration - A pygccxml configuration object being used.
+            returns: None if failed sigs or none found.
+        """
+        ret_val = None
+        
+        if os.path.exists(self.cacheFileName):
+            src_and_cfg_digest = self.computeSrcAndCfgDigest(sourceFiles, configSig)
+            
+            self.logger.info("Attempting to load module cache file: %s"%self.cacheFileName)
+            cache_file = file(self.cacheFileName, 'rb')
+            (cached_src_and_cfg_digest, includes_digest, includes) = cPickle.load(cache_file)
+            
+            if (cached_src_and_cfg_digest == src_and_cfg_digest):                
+                inc_sig = md5.new()
+                for f in [ x for x in includes if os.path.isfile(x)]:
+                    inc_sig.update(file_signature(f))
+                if inc_sig.hexdigest() == includes_digest:
+                    load_start_time = time.time()
+                    self.logger.info("   Signatures matched, loading data.")
+                    ret_val = cPickle.load(cache_file)
+                    self._module_builder_t__code_creator = None
+                    self.logger.info("   Loading complete. %ss"%(time.time()-load_start_time))
+                else:
+                    self.logger.info("    Sig mis-match: Implicit include files changes.")
+            else:
+                self.logger.info("   Sig mis-match: Source files or configuration changed.")
+            cache_file.close()
+            
+            return ret_val
+
+    def dumpCachedTree(self, sourceFiles, configSig, declTree):
+        self.logger.info("Writing module cache... ")
+        cache_file = file(self.cacheFileName,'wb')
+        
+        src_and_cfg_digest = self.computeSrcAndCfgDigest(sourceFiles, configSig)
+        decl_files = [ f for f in decls_package.declaration_files(declTree) if os.path.isfile(f)]        
+        inc_sig = md5.new()
+        for f in decl_files:
+            inc_sig.update(file_signature(f))
+            
+        cPickle.dump( (src_and_cfg_digest, inc_sig.hexdigest(), decl_files), 
+                      cache_file, cPickle.HIGHEST_PROTOCOL)
+        cPickle.dump(declTree, cache_file, cPickle.HIGHEST_PROTOCOL)
+        cache_file.close()
+        self.logger.info("Complete.")
+        
 
 def mb_override__init__( self
               , files
@@ -107,32 +180,18 @@ def mb_override__init__( self
     self._module_builder_t__parsed_dirs = filter( None, tmp )
     
     self._module_builder_t__global_ns = None
+
+    # Have to do it here because the parser changes the config :(
+    config_sig = configuration_signature(gccxml_config)
     
     # If we have a cache filename
     # - Compute signature and check it against file
     # - If matches, load it
-    if cache:
-        sig = md5.new()
-        sig.update(configuration_signature(gccxml_config))
-        for f in self._module_builder_t__parsed_files:  # files:
-            sig.update(file_signature(f))
-        for f in dependent_headers:
-            sig.update(file_signature(f))
-        cur_digest = sig.hexdigest()
-
-        if os.path.exists(cache):
-            self.logger.info("Attempting to loading module cache file: %s"%cache)
-            cache_file = file(cache,'rb')
-            cache_digest = cPickle.load(cache_file)
-            if (cur_digest == cache_digest):
-                load_start_time = time.time()
-                self.logger.info("   Signatures matched, loading data.")
-                self._module_builder_t__global_ns = cPickle.load(cache_file)
-                self._module_builder_t__code_creator = None
-                self.logger.info("   Loading complete. %ss"%(time.time()-load_start_time))
-            else:
-                self.logger.info("   Signatures did not match. Ignoring cache.")
-            cache_file.close()
+    if cache and os.path.exists(cache):        
+        mb_cache = ModuleBuilderCache(cache)
+        self._module_builder_t__global_ns = \
+            mb_cache.getCachedTree(self._module_builder_t__parsed_files, config_sig)
+        self._module_builder_t__code_creator = None
     
     # If didn't load global_ns from cache
     # - Parse and optimize it
@@ -150,12 +209,9 @@ def mb_override__init__( self
             self.run_query_optimizer()
         
         if cache:
-            self.logger.info("Writing module cache... ")
-            cache_file = file(cache,'wb')
-            cPickle.dump(cur_digest, cache_file, cPickle.HIGHEST_PROTOCOL)
-            cPickle.dump(self._module_builder_t__global_ns, cache_file, cPickle.HIGHEST_PROTOCOL)
-            cache_file.close()
-            self.logger.info("Complete.")
+            mb_cache = ModuleBuilderCache(cache)
+            mb_cache.dumpCachedTree(self._module_builder_t__parsed_files,
+                                    config_sig, self._module_builder_t__global_ns)            
 
     self._module_builder_t__declarations_code_head = []
     self._module_builder_t__declarations_code_tail = []
