@@ -691,17 +691,17 @@ class creator_t( declarations.decl_visitor_t ):
 
     def visit_class(self ):
         assert isinstance( self.curr_decl, declarations.class_t )
-        temp_curr_decl = self.curr_decl
-        temp_curr_parent = self.curr_code_creator
+        cls_decl = self.curr_decl
+        cls_parent_cc = self.curr_code_creator
         exportable_members = self._exportable_class_members(self.curr_decl)
 
         wrapper = None
-        class_inst = code_creators.class_t( class_inst=self.curr_decl )
+        cls_cc = code_creators.class_t( class_inst=self.curr_decl )
 
         if self._is_wrapper_needed( self.curr_decl, exportable_members ):
             wrapper = code_creators.class_wrapper_t( declaration=self.curr_decl
-                                                     , class_creator=class_inst )
-            class_inst.wrapper = wrapper
+                                                     , class_creator=cls_cc )
+            cls_cc.wrapper = wrapper
             #insert wrapper before module body
             if isinstance( self.curr_decl.parent, declarations.class_t ):
                 #we deal with internal class
@@ -720,13 +720,13 @@ class creator_t( declarations.decl_visitor_t ):
                     tcons = code_creators.null_constructor_wrapper_t( class_inst=self.curr_decl )
                     wrapper.adopt_creator( tcons )
 
-        self.curr_code_creator.adopt_creator( class_inst )
-        self.curr_code_creator = class_inst
+        cls_parent_cc.adopt_creator( cls_cc )
+        self.curr_code_creator = cls_cc
         for decl in exportable_members:
             self.curr_decl = decl
             declarations.apply_visitor( self, decl )
 
-        for redefined_func in self.redefined_funcs( temp_curr_decl ):
+        for redefined_func in self.redefined_funcs( cls_decl ):
             if isinstance( redefined_func, declarations.operator_t ):
                 continue
             self.curr_decl = redefined_func
@@ -735,21 +735,22 @@ class creator_t( declarations.decl_visitor_t ):
         #all static_methods_t should be moved to the end
         #better approach is to move them after last def of relevant function
         static_methods = filter( lambda creator: isinstance( creator, code_creators.static_method_t )
-                                 , class_inst.creators )
+                                 , cls_cc.creators )
         for static_method in static_methods:
-            class_inst.remove_creator( static_method )
-            class_inst.adopt_creator( static_method )
+            cls_cc.remove_creator( static_method )
+            cls_cc.adopt_creator( static_method )
 
-        if temp_curr_decl.exception_translation_code:
-            translator = code_creators.exception_translator_t( temp_curr_decl )
+        if cls_decl.exception_translation_code:
+            translator = code_creators.exception_translator_t( cls_decl )
             self.__extmodule.adopt_declaration_creator( translator )
-            class_inst.user_declarations.append( translator )
+            cls_cc.user_declarations.append( translator )
             translator_register \
-                = code_creators.exception_translator_register_t( temp_curr_decl, translator )
-            class_inst.adopt_creator( translator_register )
+                = code_creators.exception_translator_register_t( cls_decl, translator )
+            cls_cc.adopt_creator( translator_register )
 
-        self.curr_decl = temp_curr_decl
-        self.curr_code_creator = temp_curr_parent
+        self.curr_decl = cls_decl
+        self.curr_code_creator = cls_parent_cc
+
 
     def visit_enumeration(self):
         assert isinstance( self.curr_decl, declarations.enumeration_t )
