@@ -443,7 +443,7 @@ class creator_t( declarations.decl_visitor_t ):
             uc_creators = map( lambda uc: ctext_t( uc.text ), cls_decl.declaration_code )
             insert_pos = self.__extmodule.creators.index( self.__module_body )
             self.__extmodule.adopt_creators( uc_creators, insert_pos )
-            cls_creator.user_declarations.extend( uc_creators )
+            cls_creator.associated_decl_creators.extend( uc_creators )
 
     def _treat_indexing_suite( self ):
         global INDEXING_SUITE_1_CONTAINERS
@@ -725,7 +725,7 @@ class creator_t( declarations.decl_visitor_t ):
 
                 overloads_cls_creator = code_creators.mem_fun_overloads_class_t( overloads )
                 self.__extmodule.adopt_declaration_creator( overloads_cls_creator )
-                cls_creator.user_declarations.append( overloads_cls_creator )
+                cls_creator.associated_decl_creators.append( overloads_cls_creator )
 
                 overloads_reg = code_creators.mem_fun_overloads_t( overloads_cls_creator )
                 cls_creator.adopt_creator( overloads_reg )
@@ -789,7 +789,7 @@ class creator_t( declarations.decl_visitor_t ):
         if cls_decl.exception_translation_code:
             translator = code_creators.exception_translator_t( cls_decl )
             self.__extmodule.adopt_declaration_creator( translator )
-            cls_cc.user_declarations.append( translator )
+            cls_cc.associated_decl_creators.append( translator )
             translator_register \
                 = code_creators.exception_translator_register_t( cls_decl, translator )
             cls_cc.adopt_creator( translator_register )

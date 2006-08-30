@@ -221,7 +221,7 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         source_code.append( '' )
         source_code.append( self.create_namespaces_code( [class_creator] ) )
 
-        for creator in class_creator.user_declarations:
+        for creator in class_creator.associated_decl_creators:
             source_code.append( '' )
             source_code.append( creator.create() )
             creator.create = lambda: ''

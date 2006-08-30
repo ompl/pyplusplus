@@ -86,7 +86,7 @@ class class_t( scoped.scoped_t ):
         scoped.scoped_t.__init__( self, declaration=class_inst )
         self._wrapper = wrapper
         self.works_on_instance = False
-        self._user_declarations = []
+        self._associated_decl_creators = []
 
     def _get_wrapper( self ):
         return self._wrapper
@@ -95,9 +95,9 @@ class class_t( scoped.scoped_t ):
     wrapper = property( _get_wrapper, _set_wrapper )
 
     @property
-    def user_declarations( self ):
+    def associated_decl_creators( self ):
         """ references to class declaration code creators. """
-        return self._user_declarations
+        return self._associated_decl_creators
 
     def _get_held_type(self):
         return self.declaration.held_type
