@@ -22,6 +22,16 @@ from pyplusplus.decl_wrappers import print_declarations
 
 
 # Type traits
+# - just import them all.  This isn't pretty, but it will work for now
+from pygccxml.declarations.type_traits import *
+
+# cpptypes
+# - import them all and leave them named X_t because they are "types" and
+#   this seems like a good way to keep that in mind.
+#   This may end up being a bad idea.  I don't know yet, so for now we will 
+#   try it and see what happens.
+from pygccxml.declarations.cpptypes import *
+from pygccxml.declarations.calldef import *
 
 # Matchers
 # - Bring in all matchers but rename then without the '_t' at the end
