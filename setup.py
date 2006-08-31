@@ -45,10 +45,14 @@ def generate_doc():
 
     add_pygccxml_to_PYTHONPATH()
 
+    import epydoc
     from epydoc.docbuilder import build_doc_index
     from epydoc.docwriter.html import HTMLWriter
 
     print "Generating epydoc files..."
+
+    # Register a logger object so that warnings/errors are shown
+    epydoc.log.register_logger(epydoc.log.SimpleLogger())
 
     docindex = build_doc_index(['pyplusplus', 'pygccxml'])
     html_writer = HTMLWriter( docindex
