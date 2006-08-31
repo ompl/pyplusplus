@@ -51,10 +51,7 @@ def wrap_method(cls, methodName, newMethod):
 def add_method(moduleBuilder, methodName, method):
    """  Add a method to the module builder. """
    code_text = 'boost::python::def("%s",%s);'%(methodName, method)
-   moduleBuilder.code_creator.body.adopt_creator( code_creators.custom_text_t( code_text ), 0 )
-   #[Roman]moduleBuilder.add_registration_code( ... ), see relevant documentation
-   #This will add have exactly same effect as a previous line, also you don't
-   #have to build code creator first
+   moduleBuilder.add_registration_code(code_text)   
 
 
 def is_const_ref(type):
@@ -113,10 +110,13 @@ def wrap_const_ref_params(cls):
             elif tt.is_const(old_arg):
                new_args[i].type = tt.remove_const(old_arg_type)
 
-         new_name = "%s_const_ref_wrapper"%c.name
+         wrapper_name = "%s_const_ref_wrapper"%c.name
          args_str = [str(a) for a in new_args]
          arg_names_str = [str(a.name) for a in new_args]
-         new_sig = "static %s %s(%s& self_arg, %s)"%(c.return_type,new_name,cls.name,",".join(args_str))
+         new_sig = "static %s %s(%s& self_arg, %s)"%(c.return_type,
+                                                     wrapper_name,
+                                                     pd.full_name(cls),
+                                                     ",".join(args_str))
          new_method = """%s
          { return self_arg.%s(%s); }
          """%(new_sig,c.name,",".join(arg_names_str))
@@ -127,9 +127,10 @@ def wrap_const_ref_params(cls):
          #[Roman] you can use cls.add_declaration_code, this could simplify the
          #wrapper you created, because it will generate the code within the source
          #file, the class is generated
-         cls.add_wrapper_code(new_method)
+         cls.add_declaration_code(new_method)
          
-         cls.add_code('def("%s", &%s::%s);'%(c.name, cls.wrapper_alias,new_name))
+         cls.add_registration_code('def("%s", &%s)'%(c.name, wrapper_name), 
+                                   works_on_instance=True)
 
 
 class TemplateWrapper:
@@ -231,8 +232,8 @@ class TemplateBuilder:
          typedef_name = t.mTypedefName
          content += """
             typedef %(template_type)s %(typedef_name)s;
-            inline void __instantiate_%(typedef_name)s()
-            { sizeof(%(typedef_name)s); }
+            inline unsigned __instantiate_%(typedef_name)s()
+            { return unsigned(sizeof(%(typedef_name)s)); }
          """ % vars()      
       
       return content
