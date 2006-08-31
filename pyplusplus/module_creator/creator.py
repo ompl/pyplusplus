@@ -24,7 +24,7 @@ VIRTUALITY_TYPES = declarations.VIRTUALITY_TYPES
 #           };
 #           float val[4];
 #       };
-#};
+# };
 
 INDEXING_SUITE_1_CONTAINERS = {
     'vector<' : "boost/python/suite/indexing/vector_indexing_suite.hpp"
