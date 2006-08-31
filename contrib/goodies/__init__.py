@@ -12,6 +12,7 @@ import goodie_overrides
 
 from goodie_utils import (set_recursive_default, set_allow_empty_mdecl_default,
                           finalize, add_member_function, wrap_method, add_method, 
-                          is_const_ref, exclude_protected, wrap_const_ref_params)
+                          is_const_ref, exclude_protected, wrap_const_ref_params,
+                          TemplateBuilder)
 
 from dsl_interface import *
