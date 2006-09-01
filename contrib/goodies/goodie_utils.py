@@ -14,6 +14,7 @@ import pygccxml.declarations.cpptypes as cpptypes
 import pyplusplus.code_creators as code_creators
 import pyplusplus.decl_wrappers as decl_wrappers
 import copy
+import re
 
 
 def set_recursive_default(val):
