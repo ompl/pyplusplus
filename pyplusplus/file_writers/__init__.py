@@ -22,6 +22,13 @@ from single_file import single_file_t
 from multiple_files import multiple_files_t
 from class_multiple_files import class_multiple_files_t
 
+def has_pypp_extenstion( fname ):
+    """returns True if file has Py++ specific extension, otherwise False"""
+    for ext in ( multiple_files_t.HEADER_EXT, multiple_files_t.SOURCE_EXT ):
+        if fname.endswith( ext ):
+            return True
+    return False
+
 def write_file( data, file_path ):
     """writes data to file"""
     if isinstance( data, types.StringTypes ):

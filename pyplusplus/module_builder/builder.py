@@ -313,9 +313,7 @@ class module_builder_t(object):
 
         all_files = os.listdir( dir_name )
         all_files = map( lambda fname: os.path.join( dir_name, fname ), all_files )
-        all_files = filter( lambda fname: os.path.isfile( fname ) \
-                                          and os.path.splitext( fname )[1] in ( '.cpp', '.hpp' )
-                            , all_files )
+        all_files = filter( file_writers.has_pypp_extenstion, all_files )
 
         unused_files = set( all_files ).difference( set( written_files ) )
         for fpath in unused_files:
