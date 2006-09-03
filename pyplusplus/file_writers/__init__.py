@@ -9,9 +9,9 @@ This package contains few classes, that writes L{code_creators.module_t} to file
 Right now 3 strategies were implemented:
 
     1. All code is written in one file
-    
+
     2. Classic strategy of deviding classes to files: one class in one header + source files.
-   
+
         2.1 Huge classes are splitten to few source files.
 
 """
@@ -29,13 +29,15 @@ def write_file( data, file_path ):
     else:
         sf = single_file_t( data, file_path )
         sf.write()
-    
+
 def write_multiple_files( extmodule, dir_path ):
     """writes extmodule to multiple files"""
     mfs = multiple_files_t( extmodule, dir_path )
     mfs.write()
-    
+    return mfs.written_files
+
 def write_class_multiple_files( extmodule, dir_path, huge_classes ):
     """writes extmodule to multiple files and splits huge classes to few source files"""
     mfs = class_multiple_files_t( extmodule, dir_path, huge_classes )
-    mfs.write()    
+    mfs.write()
+    return mfs.written_files

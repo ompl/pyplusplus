@@ -292,7 +292,7 @@ class module_builder_t(object):
         self.__merge_user_code()
         file_writers.write_file( self.code_creator, file_name )
 
-    def split_module(self, dir_name, huge_classes=None):
+    def split_module(self, dir_name, huge_classes=None, on_unused_file_found=os.remove):
         """
         Writes module to multiple files
 
@@ -300,12 +300,33 @@ class module_builder_t(object):
         @type dir_name: string
 
         @param huge_classes: list that contains reference to classes, that should be split
+
+        @param on_unused_file_found: callable object that represents the action that should be taken on
+                                     file, which is no more in use
         """
         self.__merge_user_code()
+        written_files = []
         if None is huge_classes:
-            file_writers.write_multiple_files( self.code_creator, dir_name )
+            written_files = file_writers.write_multiple_files( self.code_creator, dir_name )
         else:
-            file_writers.write_class_multiple_files( self.code_creator, dir_name, huge_classes )
+            written_files = file_writers.write_class_multiple_files( self.code_creator, dir_name, huge_classes )
+
+        all_files = os.listdir( dir_name )
+        all_files = map( lambda fname: os.path.join( dir_name, fname ), all_files )
+        all_files = filter( lambda fname: os.path.isfile( fname ) \
+                                          and os.path.splitext( fname )[1] in ( '.cpp', '.hpp' )
+                            , all_files )
+
+        unused_files = set( all_files ).difference( set( written_files ) )
+        for fpath in unused_files:
+            try:
+                if on_unused_file_found is os.remove:
+                    self.logger.info( 'removing file "%s"' % fpath )
+                on_unused_file_found( fpath )
+            except Exception, error:
+                self.logger.exception( "Exception was catched, while executing 'on_unused_file_found' function."  )
+
+        return written_files
 
     #select decl(s) interfaces
     def decl( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):

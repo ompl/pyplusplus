@@ -16,7 +16,7 @@ class multiple_files_t(writer.writer_t):
     """
     This class implements classic strategy of deviding classes to files
     one class in one header + source files.
-    """ 
+    """
     HEADER_EXT = '.pypp.hpp'
     SOURCE_EXT = '.pypp.cpp'
 
@@ -27,9 +27,9 @@ class multiple_files_t(writer.writer_t):
         @type extmodule: module_t
         @param directory_path: The output directory where the source files are written
         @type directory_path: str
-        
-        @param write_main:  if it is True, the class will write out a main file 
-            that calls all the registration methods. 
+
+        @param write_main:  if it is True, the class will write out a main file
+            that calls all the registration methods.
         @type write_main: boolean
         """
         writer.writer_t.__init__(self, extmodule)
@@ -39,8 +39,13 @@ class multiple_files_t(writer.writer_t):
         self.split_header_names = []  # List of include file names for split files
         self.split_method_names = []  # List of methods from the split files
         self.write_main = write_main
+        self.written_files = []
 
-        
+
+    def write_file( self, fpath, content ):
+        self.written_files.append( fpath )
+        writer.writer_t.write_file( fpath, content )
+
     def create_dir( self, directory_path ):
         """Create the output directory if it doesn't already exist.
         """
@@ -76,7 +81,7 @@ class multiple_files_t(writer.writer_t):
                   , "%(code)s"
                   , ''
                   , "#endif//__%(file_name)s_hpp__pyplusplus_wrapper__" ])
-        
+
         content = ''
         if self.extmodule.license:
             content = self.extmodule.license.create() + os.linesep
@@ -117,19 +122,19 @@ class multiple_files_t(writer.writer_t):
         includes = filter( lambda creator: isinstance( creator, code_creators.include_t )
                            , self.extmodule.creators )
         answer.extend( map( lambda creator: creator.create(), includes ) )
-        
+
         for creator in creators:
             header = self.find_out_value_traits_header( creator )
             if header:
                 answer.append( '#include "%s"' % header )
-    
+
         if tail_headers:
             answer.extend( map( lambda header: '#include "%s"' % normalize( header )
                                 , tail_headers ) )
-        
+
         return os.linesep.join( answer )
-    
-    def create_namespaces_code( self, creators ):    
+
+    def create_namespaces_code( self, creators ):
         # Write all 'global' namespace_alias_t and namespace_using_t creators first...
         ns_types = ( code_creators.namespace_alias_t, code_creators.namespace_using_t )
         ns_creators = filter( lambda x: isinstance( x, ns_types ), self.extmodule.creators )
@@ -152,15 +157,15 @@ class multiple_files_t(writer.writer_t):
         @returns: The content for a cpp file
         @rtype: str
         """
-        
+
         if None is declaration_creators:
             declaration_creators = []
         creators = registration_creators + declaration_creators
-        
+
         answer = []
         if self.extmodule.license:
             answer.append( self.extmodule.license.create() )
-        
+
         head_headers = [ file_name + self.HEADER_EXT ]
         answer.append( self.create_include_code( creators, head_headers ) )
 
@@ -182,7 +187,7 @@ class multiple_files_t(writer.writer_t):
             answer.append( '' )
         answer.append( '}' )
         return os.linesep.join( answer )
-    
+
     def split_class_impl( self, class_creator):
         function_name = 'register_%s_class' % class_creator.alias
         file_path = os.path.join( self.directory_path, class_creator.alias )
@@ -198,7 +203,7 @@ class multiple_files_t(writer.writer_t):
             if  class_creator.wrapper:
                 class_wrapper = class_creator.wrapper
                 decl_creators.append( class_creator.wrapper )
-        
+
         # Write the .cpp file...
         cpp_code = self.create_source( class_creator.alias
                                        , function_name
@@ -239,7 +244,7 @@ class multiple_files_t(writer.writer_t):
         Write the value_traits class to header file, that will be included
         from files, that uses indexing suite 2
         """
-        header_name = self.create_value_traits_header_name( value_traits.declaration ) 
+        header_name = self.create_value_traits_header_name( value_traits.declaration )
         file_path = os.path.join( self.directory_path, header_name )
         self.write_file( file_path
                         , self.create_header( header_name.replace( '.', '_' )
@@ -271,10 +276,10 @@ class multiple_files_t(writer.writer_t):
                                                , creators ))
         for creator in creators:
             creator.create = lambda: ''
-        self.extmodule.body.adopt_creator( 
+        self.extmodule.body.adopt_creator(
             code_creators.custom_text_t( function_name + '();' )
             , registrator_pos)
-        self.include_creators.append( code_creators.include_t( header_name ) )        
+        self.include_creators.append( code_creators.include_t( header_name ) )
         self.split_header_names.append(header_name)
         self.split_method_names.append(function_name)
 
@@ -320,17 +325,17 @@ class multiple_files_t(writer.writer_t):
         value_traits_classes = filter( lambda x: isinstance(x, code_creators.value_traits_t )
                                        , self.extmodule.creators )
         map( self.split_value_traits, value_traits_classes )
-        
+
         # Obtain a list of all class creators...
         class_creators = filter( lambda x: isinstance(x, ( code_creators.class_t, code_creators.class_declaration_t ) )
                                  , self.extmodule.body.creators )
         # ...and write a .h/.cpp file for each class
         map( self.split_class, class_creators )
-        
+
         self.split_enums()
         self.split_global_variables()
         self.split_free_functions()
-        
+
         if self.write_main:
             self.include_creators.sort( cmp=lambda ic1, ic2: cmp( ic1.header, ic2.header ) )
             map( lambda creator: self.extmodule.adopt_include( creator )

@@ -9,7 +9,7 @@ import unittest
 import autoconfig
 from pygccxml import parser
 from pygccxml import declarations
-from pyplusplus import code_creators 
+from pyplusplus import code_creators
 from pyplusplus import module_creator
 from pyplusplus import module_builder
 from pyplusplus import utils as pypp_utils
@@ -21,7 +21,7 @@ class indent_tester_t(unittest.TestCase):
 
 class make_flatten_tester_t(unittest.TestCase):
     def test(self):
-        mb = module_builder.module_builder_t( 
+        mb = module_builder.module_builder_t(
                 [ module_builder.create_text_fc( 'namespace enums{ enum { OK=1 }; }' ) ]
                 , gccxml_path=autoconfig.gccxml.executable )
         mb.namespace( name='::enums' ).include()
@@ -31,24 +31,24 @@ class make_flatten_tester_t(unittest.TestCase):
 
 class creator_finder_tester_t( unittest.TestCase ):
     def test_find_by_declaration(self):
-        mb = module_builder.module_builder_t( 
+        mb = module_builder.module_builder_t(
             [ module_builder.create_text_fc( 'namespace enums{ enum color{ red = 1}; }' )]
             , gccxml_path=autoconfig.gccxml.executable )
         mb.namespace( name='::enums' ).include()
-        enum_matcher = declarations.match_declaration_t( name='color' )        
+        enum_matcher = declarations.match_declaration_t( name='color' )
         mb.build_code_creator( 'dummy' )
-        enum_found = code_creators.creator_finder.find_by_declaration( 
+        enum_found = code_creators.creator_finder.find_by_declaration(
                         enum_matcher
                         , mb.code_creator.creators )
         self.failUnless( enum_found )
 
     def test_find_by_class_instance(self):
-        mb = module_builder.module_builder_t( 
+        mb = module_builder.module_builder_t(
             [ module_builder.create_text_fc( 'namespace enums{ enum color{ red = 1}; }' )]
             , gccxml_path=autoconfig.gccxml.executable )
         mb.namespace( name='::enums' ).include()
         mb.build_code_creator('dummy')
-        enum_found = code_creators.creator_finder.find_by_class_instance( 
+        enum_found = code_creators.creator_finder.find_by_class_instance(
             code_creators.enum_t
             , mb.code_creator.creators
             , recursive=True)
@@ -64,14 +64,14 @@ class class_organizer_tester_t(unittest.TestCase):
             answer.append( base.related_class )
             answer.extend( self._findout_base_classes( base.related_class ) )
         return answer
-   
+
     def test(self):
         config = parser.config_t( gccxml_path=autoconfig.gccxml.executable )
         code = []
         code.append('struct a{};')
         code.append('struct b{};')
         code.append('struct c{};')
-        code.append('struct d : public a{};')        
+        code.append('struct d : public a{};')
         code.append('struct e : public a, public b{};')
         code.append('struct f{};')
         code.append('struct g : public d, public f{};')
@@ -92,7 +92,7 @@ class class_organizer_tester_t(unittest.TestCase):
 
 class exclude_function_with_array_arg_tester_t( unittest.TestCase ):
     def test(self):
-        mb = module_builder.module_builder_t( 
+        mb = module_builder.module_builder_t(
             [ module_builder.create_text_fc( 'namespace arr{ struct x{ x( int arr[3][3], int ){} x( const x arr[3][3], int ){} }; }' )]
             , gccxml_path=autoconfig.gccxml.executable )
         arr = mb.namespace( name='arr' )
@@ -103,8 +103,8 @@ class exclude_function_with_array_arg_tester_t( unittest.TestCase ):
 class readme_tester_t( unittest.TestCase ):
     CODE = \
     """
-    namespace xxx{ 
-        int do_smth(int); 
+    namespace xxx{
+        int do_smth(int);
         typedef int Int;
         struct data_t{
             data_t& operator--(int a);
@@ -112,7 +112,7 @@ class readme_tester_t( unittest.TestCase ):
     }
     """
     def test(self):
-        mb = module_builder.module_builder_t( 
+        mb = module_builder.module_builder_t(
             [ module_builder.create_text_fc( self.CODE )]
             , gccxml_path=autoconfig.gccxml.executable )
         xxx = mb.namespace( name='xxx' )
@@ -128,27 +128,29 @@ class class_multiple_files_tester_t(unittest.TestCase):
     struct X{
         enum EColor{ red, blue };
         enum EFruit{ apple, orange };
-        
+
         X(){}
         X( int ){}
-        
+
         void do_nothing(){}
-        
+
         int do_somghing(){ return 1; }
-        
-        int m_dummy;       
+
+        int m_dummy;
     };
     }
     """
     def test(self):
-        mb = module_builder.module_builder_t( 
+        mb = module_builder.module_builder_t(
                 [ module_builder.create_text_fc( self.CLASS_DEF ) ]
                 , gccxml_path=autoconfig.gccxml.executable )
         mb.namespace( name='::tester' ).include()
         X = mb.class_( 'X' )
         X.add_declaration_code( '//hello world' )
         mb.build_code_creator('dummy')
-        mb.split_module( autoconfig.build_dir, [ mb.class_( '::tester::X' ) ]  )
+        mb.split_module( autoconfig.build_dir
+                        , [ mb.class_( '::tester::X' ) ]
+                        , on_unused_file_found=lambda fpath: fpath )
 
 
 class split_sequence_tester_t(unittest.TestCase):
@@ -161,7 +163,7 @@ class split_sequence_tester_t(unittest.TestCase):
         self.failUnless( [[1,2,3]] == split( seq, 4 ) )
 
 def create_suite():
-    suite = unittest.TestSuite()    
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(class_organizer_tester_t))
     suite.addTest( unittest.makeSuite(indent_tester_t))
     suite.addTest( unittest.makeSuite(make_flatten_tester_t))
@@ -170,8 +172,8 @@ def create_suite():
     suite.addTest( unittest.makeSuite(class_multiple_files_tester_t))
     suite.addTest( unittest.makeSuite(readme_tester_t))
     suite.addTest( unittest.makeSuite(split_sequence_tester_t))
-    
-    
+
+
     return suite
 
 def run_suite():
