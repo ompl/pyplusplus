@@ -32,11 +32,20 @@ Installation
 ------------
 
 In command prompt or shell change current directory to be "pyplusplus-X.Y.Z".
-"X.Y.Z" is version of `Py++`_. Type next command: 
+"X.Y.Z" is version of `Py++`_. Type next command:
 
 | ``python setup.py install``
 
-After this command complete, you should have installed `Py++`_ package. 
+After this command complete, you should have installed `Py++`_ package.
+
+Boost.Python installation
+-------------------------
+
+Users of Microsoft Windows can enjoy from simple `installer for Boost Libraries`_.
+You can find it `here`_.
+
+.. _`here` : http://www.boost-consulting.com/download.html
+.. _`installer for Boost Libraries` : http://www.boost-consulting.com/download.html
 
 ------------
 Dependencies
