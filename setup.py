@@ -107,6 +107,7 @@ setup( name = "Py++",
                   'pyplusplus.decl_wrappers',
                   'pyplusplus.module_builder',
                   'pyplusplus.utils',
+                  'pyplusplus.function_transformers',
                   'pyplusplus._logging_'],
        cmdclass = {"doc" : doc_cmd}
 )
