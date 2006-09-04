@@ -15,7 +15,9 @@ struct image_t{
       , m_width( w )
     {}
 
-    void get_size( unsigned int& h, unsigned int& w ){
+    // Made the method 'virtual' for now because func transformers
+    // are currently only taken into account on virtual functions.
+    virtual void get_size( unsigned int& h, unsigned int& w ){
         h = m_height;
         w = m_width;
     }

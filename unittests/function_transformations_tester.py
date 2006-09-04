@@ -7,6 +7,7 @@ import os
 import sys
 import unittest
 import fundamental_tester_base
+from pyplusplus.function_transformers.arg_policies import *
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'function_transformations'
@@ -19,7 +20,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def customize( self, mb ):
         image = mb.class_( "image_t" )
-        pass
+        image.member_function( "get_size" ).function_transformers.extend([Output(1), Output(2)])
 
     def run_tests(self, module):
         img = module.image_t( 2, 6)
