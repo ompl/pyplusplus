@@ -15,8 +15,8 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
   * Matthias Baas
   * Allen Bierbaum
   * Lakin Wecker
-
   * Georgiy Dernovoy
+  * Gottfried Ganssauge
 
 ------------
 Project name
@@ -31,6 +31,22 @@ There were few reasons to this:
 
 3. Users always changed the name of the projects. I saw at least 6 different names.
 
+
+-------------
+Version 0.8.*
+-------------
+
+1. Performance improvments. In some cases you can get x10 performance boost.
+   Many thanks to Allen Bierbaum!
+
+2. Convinience API for registering exception translator was introduced.
+
+3. `Py++`_ can generate code that uses ``BOOST_PYTHON_FUNCTION_OVERLOADS`` and
+   ``BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS`` macros.
+
+4. Treatment to previously generated and no more in-use files was added. By
+   default `Py++`_ will delete these files, but of course you can redefine this
+   behaviour.
 
 -------------
 Version 0.8.1
