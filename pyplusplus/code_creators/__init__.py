@@ -74,6 +74,9 @@ from calldef import free_fun_overloads_class_t
 from calldef import copy_constructor_wrapper_t
 from calldef import null_constructor_wrapper_t
 
+from calldef import mem_fun_v_transformed_t
+from calldef import mem_fun_v_transformed_wrapper_t
+
 from global_variable import global_variable_base_t
 from global_variable import global_variable_t
 from global_variable import array_gv_t
@@ -116,3 +119,49 @@ from indexing_suites import value_traits_t
 from exception_translator import exception_translator_t
 from exception_translator import exception_translator_register_t
 
+from pygccxml import declarations
+
+ACCESS_TYPES = declarations.ACCESS_TYPES
+VIRTUALITY_TYPES = declarations.VIRTUALITY_TYPES
+
+
+def guess_mem_fun_creator_classes( decl ):
+    """return tuple of ( registration, declaration ) code creator classes"""
+    maker_cls = None
+    fwrapper_cls = None
+    access_level = decl.parent.find_out_member_access_type( decl )
+    if access_level == ACCESS_TYPES.PUBLIC:
+        if decl.virtuality == VIRTUALITY_TYPES.NOT_VIRTUAL:
+            maker_cls = mem_fun_t
+        elif decl.virtuality == VIRTUALITY_TYPES.PURE_VIRTUAL:
+            fwrapper_cls = mem_fun_pv_wrapper_t
+            maker_cls = mem_fun_pv_t
+        else:
+            if decl.overridable:
+                fwrapper_cls = mem_fun_v_wrapper_t
+            maker_cls = mem_fun_v_t
+    elif access_level == ACCESS_TYPES.PROTECTED:
+        if decl.virtuality == VIRTUALITY_TYPES.NOT_VIRTUAL:
+            if decl.has_static:
+                fwrapper_cls = mem_fun_protected_s_wrapper_t
+                maker_cls = mem_fun_protected_s_t
+            else:
+                fwrapper_cls = mem_fun_protected_wrapper_t
+                maker_cls = mem_fun_protected_t
+        elif decl.virtuality == VIRTUALITY_TYPES.VIRTUAL:
+            if decl.overridable:
+                fwrapper_cls = mem_fun_protected_v_wrapper_t
+                maker_cls = mem_fun_protected_v_t
+        else:
+            fwrapper_cls = mem_fun_protected_pv_wrapper_t
+            maker_cls = mem_fun_protected_pv_t
+    else: #private
+        if decl.virtuality == VIRTUALITY_TYPES.NOT_VIRTUAL:
+            pass#in general we should not come here
+        elif decl.virtuality == VIRTUALITY_TYPES.PURE_VIRTUAL:
+            fwrapper_cls = mem_fun_private_pv_wrapper_t
+        else:
+            if decl.overridable:
+                fwrapper_cls = mem_fun_v_wrapper_t
+                maker_cls = mem_fun_v_t
+    return ( maker_cls, fwrapper_cls )

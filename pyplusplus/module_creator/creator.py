@@ -568,53 +568,13 @@ class creator_t( declarations.decl_visitor_t ):
             include = code_creators.include_t( header=fn )
             self.__extmodule.adopt_include(include)
 
-    def guess_functions_code_creators( self ):
-        maker_cls = None
-        fwrapper_cls = None
-        access_level = self.curr_decl.parent.find_out_member_access_type( self.curr_decl )
-        if access_level == ACCESS_TYPES.PUBLIC:
-            if self.curr_decl.virtuality == VIRTUALITY_TYPES.NOT_VIRTUAL:
-                maker_cls = code_creators.mem_fun_t
-            elif self.curr_decl.virtuality == VIRTUALITY_TYPES.PURE_VIRTUAL:
-                fwrapper_cls = code_creators.mem_fun_pv_wrapper_t
-                maker_cls = code_creators.mem_fun_pv_t
-            else:
-                if self.curr_decl.overridable:
-                    fwrapper_cls = code_creators.mem_fun_v_wrapper_t
-                maker_cls = code_creators.mem_fun_v_t
-        elif access_level == ACCESS_TYPES.PROTECTED:
-            if self.curr_decl.virtuality == VIRTUALITY_TYPES.NOT_VIRTUAL:
-                if self.curr_decl.has_static:
-                    fwrapper_cls = code_creators.mem_fun_protected_s_wrapper_t
-                    maker_cls = code_creators.mem_fun_protected_s_t
-                else:
-                    fwrapper_cls = code_creators.mem_fun_protected_wrapper_t
-                    maker_cls = code_creators.mem_fun_protected_t
-            elif self.curr_decl.virtuality == VIRTUALITY_TYPES.VIRTUAL:
-                if self.curr_decl.overridable:
-                    fwrapper_cls = code_creators.mem_fun_protected_v_wrapper_t
-                    maker_cls = code_creators.mem_fun_protected_v_t
-            else:
-                fwrapper_cls = code_creators.mem_fun_protected_pv_wrapper_t
-                maker_cls = code_creators.mem_fun_protected_pv_t
-        else: #private
-            if self.curr_decl.virtuality == VIRTUALITY_TYPES.NOT_VIRTUAL:
-                pass#in general we should not come here
-            elif self.curr_decl.virtuality == VIRTUALITY_TYPES.PURE_VIRTUAL:
-                fwrapper_cls = code_creators.mem_fun_private_pv_wrapper_t
-            else:
-                if self.curr_decl.overridable:
-                    fwrapper_cls = code_creators.mem_fun_v_wrapper_t
-                    maker_cls = code_creators.mem_fun_v_t
-        return ( maker_cls, fwrapper_cls )
-
     def visit_member_function( self ):
         fwrapper = None
         self.__types_db.update( self.curr_decl )
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
 
-        maker_cls, fwrapper_cls = self.guess_functions_code_creators()
+        maker_cls, fwrapper_cls = code_creators.guess_mem_fun_creator_classes( self.curr_decl )
 
         maker = None
         fwrapper = None
@@ -678,7 +638,7 @@ class creator_t( declarations.decl_visitor_t ):
            and not self.curr_decl.has_const:
             #TODO: move this code to decl_wrappers
             return #only const casting operators can generate implicitly_convertible
-        
+
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
 

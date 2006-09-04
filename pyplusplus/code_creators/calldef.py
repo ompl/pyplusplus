@@ -439,6 +439,129 @@ class mem_fun_v_wrapper_t( calldef_wrapper_t ):
         answer.append( self.create_default_function() )
         return os.linesep.join( answer )
 
+class mem_fun_v_transformed_t( calldef_t ):
+    def __init__( self, function, wrapper=None ):
+        calldef_t.__init__( self, function=function, wrapper=wrapper )
+        self.default_function_type_alias = 'default_' + self.function_type_alias
+
+    def create_function_type_alias_code( self, exported_class_alias=None ):
+        result = []
+
+        ftype = self.declaration.function_type()
+        result.append( 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias )  )
+        if self.wrapper:
+            result.append( os.linesep )
+            ftype = self.wrapper.function_type()
+            result.append( 'typedef %s;' % ftype.create_typedef( self.default_function_type_alias ) )
+        return ''.join( result )
+
+    def create_doc(self):
+        return None
+
+    def create_function_ref_code(self, use_function_alias=False):
+        result = []
+        if use_function_alias:
+            result.append( '%s(&%s)'
+                           % ( self.function_type_alias, declarations.full_name( self.declaration ) ) )
+            if self.wrapper:
+                result.append( self.param_sep() )
+                result.append( '%s(&%s)'
+                                % ( self.default_function_type_alias, self.wrapper.default_full_name() ) )
+        elif self.declaration.create_with_signature:
+            result.append( '(%s)(&%s)'
+                           % ( self.declaration.function_type().decl_string
+                               , declarations.full_name( self.declaration ) ) )
+            if self.wrapper:
+                result.append( self.param_sep() )
+                result.append( '(%s)(&%s)'
+                               % ( self.wrapper.function_type().decl_string, self.wrapper.default_full_name() ) )
+        else:
+            result.append( '&%s'% declarations.full_name( self.declaration ) )
+            if self.wrapper:
+                result.append( self.param_sep() )
+                result.append( '&%s' % self.wrapper.default_full_name() )
+        return ''.join( result )
+
+class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
+    def __init__( self, function ):
+        calldef_wrapper_t.__init__( self, function=function )
+
+    def default_full_name(self):
+        return self.parent.full_name + '::default_' + self.declaration.alias
+
+    def function_type(self):
+        return declarations.member_function_type_t(
+                return_type=self.declaration.return_type
+                , class_inst=declarations.dummy_type_t( self.parent.full_name )
+                , arguments_types=map( lambda arg: arg.type, self.declaration.arguments )
+                , has_const=self.declaration.has_const )
+
+    def create_declaration(self, name, has_virtual=True):
+        template = '%(virtual)s%(return_type)s %(name)s( %(args)s )%(constness)s %(throw)s'
+
+        virtual = 'virtual '
+        if not has_virtual:
+            virtual = ''
+
+        constness = ''
+        if self.declaration.has_const:
+            constness = ' const '
+
+        return template % {
+            'virtual' : virtual
+            , 'return_type' : self.declaration.return_type.decl_string
+            , 'name' : name
+            , 'args' : self.args_declaration()
+            , 'constness' : constness
+            , 'throw' : self.throw_specifier_code()
+        }
+
+    def create_virtual_body(self):
+        template = []
+        template.append( 'if( %(override)s func_%(alias)s = this->get_override( "%(alias)s" ) )' )
+        template.append( self.indent('%(return_)sfunc_%(alias)s( %(args)s );') )
+        template.append( 'else' )
+        template.append( self.indent('%(return_)s%(wrapped_class)s::%(name)s( %(args)s );') )
+        template = os.linesep.join( template )
+
+        return_ = ''
+        if not declarations.is_void( self.declaration.return_type ):
+            return_ = 'return '
+
+        return template % {
+            'override' : self.override_identifier()
+            , 'name' : self.declaration.name
+            , 'alias' : self.declaration.alias
+            , 'return_' : return_
+            , 'args' : self.function_call_args()
+            , 'wrapped_class' : self.wrapped_class_identifier()
+        }
+
+    def create_default_body(self):
+        function_call = declarations.call_invocation.join( self.declaration.name
+                                                           , [ self.function_call_args() ] )
+        body = self.wrapped_class_identifier() + '::' + function_call + ';'
+        if not declarations.is_void( self.declaration.return_type ):
+            body = 'return ' + body
+        return body
+
+    def create_function(self):
+        answer = [ self.create_declaration(self.declaration.name) + '{' ]
+        answer.append( self.indent( self.create_virtual_body() ) )
+        answer.append( '}' )
+        return os.linesep.join( answer )
+
+    def create_default_function( self ):
+        answer = [ self.create_declaration('default_' + self.declaration.alias, False) + '{' ]
+        answer.append( self.indent( self.create_default_body() ) )
+        answer.append( '}' )
+        return os.linesep.join( answer )
+
+    def _create_impl(self):
+        answer = [ self.create_function() ]
+        answer.append( os.linesep )
+        answer.append( self.create_default_function() )
+        return os.linesep.join( answer )
 
 class mem_fun_protected_t( calldef_t ):
     def __init__( self, function, wrapper ):
