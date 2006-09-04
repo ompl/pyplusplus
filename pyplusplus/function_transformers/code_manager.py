@@ -22,26 +22,26 @@ class code_manager_t(subst_t):
     A code block can declare a local variable using L{declare_local()}
     and it can manipulate one of the attributes that are used to
     initialize the final variables (see the documentation of the
-    instance variables below). The final variables (such as RETTYPE,
-    FUNCNAME, ARGLIST, etc.) are stored as regular attributes of the
+    instance variables below). The final variables (such as RET_TYPE,
+    FUNC_NAME, ARG_LIST, etc.) are stored as regular attributes of the
     object.    
 
     The functionality to perform a text substitution (using the
     substitution() method) is inherited
     from the class L{subst_t}.
 
-    @ivar classname: The name of the class of which the generated function is a member. A value of None or an empty string is used for free functions. This attribute is used for creating the CLASSSPEC variable.
-    @type classname: str
-    @ivar rettype: Return type. The value may be any object where str(obj) is valid C++ code. The value None corresponds to void. This will be the value of the variable RETTYPE.
-    @type rettype: str
-    @ivar arglist: The argument list. The items are pygccxml argument_t objects. This list will appear in the variables ARGLIST, ARGLISTDEF and ARGLISTTYPES.
-    @type arglist: list of argument_t
-    @ivar inputparams: A list of strings that contain the input parameter for the function call. This list is used for the INPUTPARAMS variable.
-    @type inputparams: list of str
-    @ivar resultvar: The name of the variable that will receive the result of the function call. If None, the return value is ignored. This attribute will be used for the variable RESULTVARASSIGNMENT.
-    @type resultvar: str
-    @ivar resultexpr: A string containing the expression that will be put after the "return" statement. This expression is used for the variable RETURNSTMT.
-    @type resultexpr: str
+    @ivar class_name: The name of the class of which the generated function is a member. A value of None or an empty string is used for free functions. This attribute is used for creating the CLASS_SPEC variable.
+    @type class_name: str
+    @ivar ret_type: Return type. The value may be any object where str(obj) is valid C++ code. The value None corresponds to void. This will be the value of the variable RET_TYPE.
+    @type ret_type: str
+    @ivar arg_list: The argument list. The items are pygccxml argument_t objects. This list will appear in the variables ARG_LIST, ARG_LIST_DEF and ARG_LIST_TYPES.
+    @type arg_list: list of argument_t
+    @ivar input_params: A list of strings that contain the input parameter for the function call. This list is used for the INPUT_PARAMS variable.
+    @type input_params: list of str
+    @ivar result_var: The name of the variable that will receive the result of the function call. If None, the return value is ignored. This attribute will be used for the variable RESULT_VAR_ASSIGNMENT.
+    @type result_var: str
+    @ivar result_expr: A string containing the expression that will be put after the "return" statement. This expression is used for the variable RETURN_STMT.
+    @type result_expr: str
 
     @author: Matthias Baas
     """
@@ -50,30 +50,30 @@ class code_manager_t(subst_t):
         """Constructor.
         """
         subst_t.__init__(self, blockvars=["DECLARATIONS",
-                                          "PRECALL",
-                                          "POSTCALL"])
+                                          "PRE_CALL",
+                                          "POST_CALL"])
 
         # The name of the class of which the generated function is a member
         # (pass None or an empty string if the function is a free function)
-        self.classname = None
+        self.class_name = None
 
         # Return type (the value may be any object where str(obj) is valid
         # C++ code. The value None corresponds to "void").
-        self.rettype = None
+        self.ret_type = None
         # The argument list. The items are argument_t objects.
-        self.arglist = []
+        self.arg_list = []
 
         # A list of strings that contain the input parameter for the
         # function call
-        self.inputparams = []
+        self.input_params = []
 
         # The name of the variable that will receive the result of the
         # function call. If None, the return value is ignored.
-        self.resultvar = None
+        self.result_var = None
 
         # A string containing the expression that will be put after
         # the "return" statement.
-        self.resultexpr = None
+        self.result_expr = None
 
         # Key:Variable name / Value:(type,size,default)
         self._declared_vars = {}
@@ -110,7 +110,7 @@ class code_manager_t(subst_t):
         """
         if name in self._declared_vars:
             return True
-        if filter(lambda a: a.name==name, self.arglist):
+        if filter(lambda a: a.name==name, self.arg_list):
             return True
         return False
 
@@ -140,29 +140,29 @@ class code_manager_t(subst_t):
         attributes.
         """
 
-        # CLASSSPEC
-        if (self.classname in [None, ""]):
-            self.CLASSSPEC = ""
+        # CLASS_SPEC
+        if (self.class_name in [None, ""]):
+            self.CLASS_SPEC = ""
         else:
-            self.CLASSSPEC = "%s::"%self.classname
+            self.CLASS_SPEC = "%s::"%self.class_name
 
-        # RETTYPE
-        if self.rettype==None:
-            self.RETTYPE = "void"
+        # RET_TYPE
+        if self.ret_type==None:
+            self.RET_TYPE = "void"
         else:
-            self.RETTYPE = str(self.rettype)
+            self.RET_TYPE = str(self.ret_type)
 
-        # ARGLISTDEF
-        args = map(lambda a: str(a), self.arglist)
-        self.ARGLISTDEF = ", ".join(args)
+        # ARG_LIST_DEF
+        args = map(lambda a: str(a), self.arg_list)
+        self.ARG_LIST_DEF = ", ".join(args)
 
-        # ARGLIST
+        # ARG_LIST
         args = map(lambda s: s.split("=")[0], args)
-        self.ARGLIST = ", ".join(args)
+        self.ARG_LIST = ", ".join(args)
 
-        # ARGLISTTYPES
-        args = map(lambda a: str(a.type), self.arglist)
-        self.ARGLISTTYPES = ", ".join(args)
+        # ARG_LIST_TYPES
+        args = map(lambda a: str(a.type), self.arg_list)
+        self.ARG_LIST_TYPES = ", ".join(args)
 
         # Create the declaration block -> DECLARATIONS
         vardecls = []
@@ -176,16 +176,16 @@ class code_manager_t(subst_t):
             vardecls.append(vd+";")
         self.DECLARATIONS = "\n".join(vardecls)
 
-        # RESULTVARASSIGNMENT
-        if self.resultvar!=None:
-            self.RESULTVARASSIGNMENT = "%s = "%self.resultvar
+        # RESULT_VAR_ASSIGNMENT
+        if self.result_var!=None:
+            self.RESULT_VAR_ASSIGNMENT = "%s = "%self.result_var
 
-        # INPUTPARAMS
-        self.INPUTPARAMS = ", ".join(self.inputparams)
+        # INPUT_PARAMS
+        self.INPUT_PARAMS = ", ".join(self.input_params)
 
-        # RETURNSTMT
-        if self.resultexpr!=None:
-            self.RETURNSTMT = "return %s;"%self.resultexpr
+        # RETURN_STMT
+        if self.result_expr!=None:
+            self.RETURN_STMT = "return %s;"%self.result_expr
 
     # _make_name_unique
     def _make_name_unique(self, name):
@@ -212,12 +212,12 @@ class wrapper_code_manager_t(code_manager_t):
     """The CodeManager class for the wrapper function.
 
     In contrast to a regular C++ function a Python function can return
-    several values, so this class provides the extra attribute "resultexprs"
+    several values, so this class provides the extra attribute "result_exprs"
     which is a list of individual expressions. Apart from that this
     class is identical to L{code_manager_t}.
 
-    @ivar resultexprs: Similar to resultexpr but this list variable can contain more than just one result. The items can be either strings containing the variable names (or expressions) that should be returned or it can be an argument_t object (usually from the argument list of the virtual function) whose name attribute will be used. This attribute only exists on the code manager for the wrapper function (the virtual function cannot return several values, use resultexpr instead).
-    @type resultexprs: list of str or argument_t
+    @ivar result_exprs: Similar to result_expr but this list variable can contain more than just one result. The items can be either strings containing the variable names (or expressions) that should be returned or it can be an argument_t object (usually from the argument list of the virtual function) whose name attribute will be used. This attribute only exists on the code manager for the wrapper function (the virtual function cannot return several values, use result_expr instead).
+    @type result_exprs: list of str or argument_t
     """
 
     def __init__(self):
@@ -225,41 +225,41 @@ class wrapper_code_manager_t(code_manager_t):
         """
         code_manager_t.__init__(self)
 
-        # Similar to resultexpr but now there can be more than just one result
+        # Similar to result_expr but now there can be more than just one result
         # The items can be either strings containing the variable names (or
         # expressions) that should be returned or it can be an argument_t
         # object (usually from the argument list of the virtual function)
         # whose name attribute will be used.
-        self.resultexprs = []
+        self.result_exprs = []
 
     def init_variables(self):
         """Initialize the substitution variables.
         """
 
-        # Prepare the variables for RETTYPE and RETURNSTMT...
+        # Prepare the variables for RET_TYPE and RETURN_STMT...
 
         # Convert all items into strings
-        resultexprs = []
-        for re in self.resultexprs:
+        result_exprs = []
+        for re in self.result_exprs:
             # String?
             if isinstance(re, types.StringTypes):
-                resultexprs.append(re)
+                result_exprs.append(re)
             # argument_t
             else:
-                resultexprs.append(re.name)
+                result_exprs.append(re.name)
         
         # No output values?
-        if len(resultexprs)==0:
-            self.rettype = None
-            self.resultexpr = None
+        if len(result_exprs)==0:
+            self.ret_type = None
+            self.result_expr = None
         # Exactly one output value?
-        elif len(resultexprs)==1:
-            self.rettype = "boost::python::object"
-            self.resultexpr = "boost::python::object(%s)"%resultexprs[0]
+        elif len(result_exprs)==1:
+            self.ret_type = "boost::python::object"
+            self.result_expr = "boost::python::object(%s)"%result_exprs[0]
         # More than one output value...
         else:
-            self.rettype = "boost::python::object"
-            self.resultexpr = "boost::python::make_tuple(%s)"%(", ".join(resultexprs))
+            self.ret_type = "boost::python::object"
+            self.result_expr = "boost::python::make_tuple(%s)"%(", ".join(result_exprs))
 
         # Invoke the inherited method that sets the actual variables
         code_manager_t.init_variables(self)

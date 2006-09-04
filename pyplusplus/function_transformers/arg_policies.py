@@ -29,7 +29,7 @@ class Output:
         @type idx: int
         """
         self.idx = idx
-        self.localvar = "<not initialized>"
+        self.local_var = "<not initialized>"
 
     def __str__(self):
         return "Output(%d)"%(self.idx)
@@ -46,25 +46,25 @@ class Output:
             raise ValueError, 'Output variable %d ("%s") must be a reference or a pointer (got %s)'%(self.idx, arg.name, arg.type)
 
         # Declare a local variable that will receive the output value
-        self.localvar = sm.wrapperfunc.declare_local(arg.name, str(reftype.base))
+        self.local_var = sm.wrapper_func.declare_local(arg.name, str(reftype.base))
         # Append the output to the result tuple
-        sm.wrapperfunc.resultexprs.append(self.localvar)
+        sm.wrapper_func.result_exprs.append(self.local_var)
 
         # Replace the expression in the C++ function call
         if isinstance(reftype, declarations.pointer_t):
-            sm.wrapperfunc.inputparams[self.idx-1] = "&%s"%self.localvar
+            sm.wrapper_func.input_params[self.idx-1] = "&%s"%self.local_var
         else:
-            sm.wrapperfunc.inputparams[self.idx-1] = self.localvar
+            sm.wrapper_func.input_params[self.idx-1] = self.local_var
 
     
     def virtual_post_call(self, sm):
         """Extract the C++ value after the call to the Python function.
         """
-        arg = sm.virtualfunc.arglist[self.idx-1]
+        arg = sm.virtual_func.arg_list[self.idx-1]
         res = "// Extract the C++ value for output argument '%s' (index: %d)\n"%(arg.name, self.idx)
         if isinstance(arg.type, declarations.pointer_t):
             res += "*"
-        res += "%s = boost::python::extract<%s>(%s[%d]);"%(arg.name, arg.type.base, sm.virtualfunc.resultvar, sm.wrapperfunc.resultexprs.index(self.localvar))
+        res += "%s = boost::python::extract<%s>(%s[%d]);"%(arg.name, arg.type.base, sm.virtual_func.result_var, sm.wrapper_func.result_exprs.index(self.local_var))
         return res
 
 

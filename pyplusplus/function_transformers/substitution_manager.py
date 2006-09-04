@@ -29,17 +29,17 @@ class substitution_manager_t:
     entire wrapper function. Such a template string may look like
     this::
 
-      $RETTYPE $CLASSSPEC$FUNCNAME($ARGLIST)
+      $RET_TYPE $CLASS_SPEC$FUNC_NAME($ARG_LIST)
       {
         $DECLARATIONS
         
-        $PRECALL
+        $PRE_CALL
         
-        $RESULTVARASSIGNMENT$CALLFUNCNAME($INPUTPARAMS);
+        $RESULT_VAR_ASSIGNMENT$CALL_FUNC_NAME($INPUT_PARAMS);
         
-        $POSTCALL
+        $POST_CALL
         
-        $RETURNSTMT
+        $RETURN_STMT
       }
 
     Any part of the function that is not fixed, i.e. that can be
@@ -65,17 +65,17 @@ class substitution_manager_t:
 
     In this example, the individual variables have the following values: 
 
-     - RETTYPE = C{boost::python::object}
-     - CLASSSPEC = C{Spam_wrapper::}
-     - FUNCNAME = C{foo_wrapper}
-     - ARGLIST = C{Spam& self, int mode}
+     - RET_TYPE = C{boost::python::object}
+     - CLASS_SPEC = C{Spam_wrapper::}
+     - FUNC_NAME = C{foo_wrapper}
+     - ARG_LIST = C{Spam& self, int mode}
      - DECLARATIONS = C{int result;\\nint w;\\nint h;}
-     - PRECALL = <empty> 
-     - RESULTVARASSIGNMENT = C{result =}
-     - CALLFUNCNAME = C{self.foo}
-     - INPUTPARAMS = C{w, &h, mode}
-     - POSTCALL = <empty> 
-     - RETURNSTMT = C{return boost::python::make_tuple(result, w, h);}
+     - PRE_CALL = <empty> 
+     - RESULT_VAR_ASSIGNMENT = C{result =}
+     - CALL_FUNC_NAME = C{self.foo}
+     - INPUT_PARAMS = C{w, &h, mode}
+     - POST_CALL = <empty> 
+     - RETURN_STMT = C{return boost::python::make_tuple(result, w, h);}
 
 
     Modifying the variables
@@ -84,11 +84,11 @@ class substitution_manager_t:
     In addition to the actual user of the class (who wants to do text
     substitutions), the class is also used by the arg policies (code blocks)
     to modify the variables.
-    There are two attributes L{wrapperfunc} and L{virtualfunc} that are
+    There are two attributes L{wrapper_func} and L{virtual_func} that are
     used to modify either the wrapper or the virtual function. If the
     signature of the wrapper needs modification this should be done via
     the methods L{remove_arg()} and L{insert_arg()} and not via the
-    wrapperfunc or virtualfunc attributes because this affects the
+    wrapper_func or virtual_func attributes because this affects the
     virtual function as well (because the virtual function makes a call
     to the Python function).
 
@@ -96,21 +96,21 @@ class substitution_manager_t:
     =========
 
 
-     - RETTYPE: The return type (e.g. "void", "int", "boost::python::object")
+     - RET_TYPE: The return type (e.g. "void", "int", "boost::python::object")
  
-     - CLASSSPEC: "<classname>::" or empty
+     - CLASS_SPEC: "<classname>::" or empty
 
-     - FUNCNAME: The name of the wrapper or virtual function.
+     - FUNC_NAME: The name of the wrapper or virtual function.
 
-     - ARGLIST: The parameters for $FUNCNAME (including self if required)
+     - ARG_LIST: The parameters for $FUNC_NAME (including self if required)
 
-     - ARGLISTDEF: Like ARGLIST, but including default values (if there are any)
+     - ARG_LIST_DEF: Like ARG_LIST, but including default values (if there are any)
 
-     - ARGLISTTYPES: Like ARGLIST but the variable names are left out and only the types are listed (this can identify a particular signature).
+     - ARG_LIST_TYPES: Like ARG_LIST but the variable names are left out and only the types are listed (this can identify a particular signature).
 
      - DECLARATIONS: The declaration block
 
-     - PRECALL::
+     - PRE_CALL::
 
          +--------------------------+
          | [try {]                  | 
@@ -124,14 +124,14 @@ class substitution_manager_t:
          |  Pre-call code block n   |
          +--------------------------+
 
-     - RESULTVARASSIGNMENT:  "<varname> = " or empty
+     - RESULT_VAR_ASSIGNMENT:  "<varname> = " or empty
 
-     - CALLFUNCNAME: The name of the function that should be invoked (self?).
+     - CALL_FUNC_NAME: The name of the function that should be invoked (self?).
 
-     - INPUTPARAMS:  The values or variables that will be passed to $FUNCNAME,
+     - INPUT_PARAMS:  The values or variables that will be passed to $FUNC_NAME,
                      e.g. "a, b" or "0.5, 1.5" etc
 
-     - POSTCALL::
+     - POST_CALL::
 
          +--------------------------+
          |  Post-call code block n  |
@@ -145,13 +145,13 @@ class substitution_manager_t:
          | [} catch(...) {...}]     |
          +--------------------------+
 
-     - RETURNSTMT:  "return <varname>" or "return boost::python::make_tuple(...)"
+     - RETURN_STMT:  "return <varname>" or "return boost::python::make_tuple(...)"
     
 
-    @ivar wrapperfunc: The L{code manager<code_manager_t>} object that manages the wrapper function. This is used by the arg policies to modify the wrapper function.
-    @type wrapperfunc: L{wrapper_code_manager_t}
-    @ivar virtualfunc: The L{code manager<code_manager_t>} object that manages the virtual function. This is used by the arg policies to modify the virtual function.
-    @type virtualfunc: L{code_manager_t}
+    @ivar wrapper_func: The L{code manager<code_manager_t>} object that manages the wrapper function. This is used by the arg policies to modify the wrapper function.
+    @type wrapper_func: L{wrapper_code_manager_t}
+    @ivar virtual_func: The L{code manager<code_manager_t>} object that manages the virtual function. This is used by the arg policies to modify the virtual function.
+    @type virtual_func: L{code_manager_t}
     
     @group Methods called by the user of the class: append_code_block, subst_wrapper, subst_virtual, get_includes
     @group Methods called by the arg policies: remove_arg, insert_arg, require_include
@@ -159,21 +159,21 @@ class substitution_manager_t:
     @author: Matthias Baas
     """
 
-    def __init__(self, decl, wrapperclass=None, transformers=None):
+    def __init__(self, decl, wrapper_class=None, transformers=None):
         """Constructor.
 
         @param decl: calldef declaration
         @type decl: calldef_t
-        @param wrapperclass: The name of the class the generated function should belong to (or None if the generated function should be a free function)
-        @type wrapperclass: str
+        @param wrapper_class: The name of the class the generated function should belong to (or None if the generated function should be a free function)
+        @type wrapper_class: str
         @param transformers: Function transformer objects
         @type transformers: list of function_transformer_t        
         """
 
         # Code manager for the virtual function
-        self.virtualfunc = code_manager_t()
+        self.virtual_func = code_manager_t()
         # Code manager for the wrapper function
-        self.wrapperfunc = wrapper_code_manager_t()
+        self.wrapper_func = wrapper_code_manager_t()
 
         # The declaration that represents the original C++ function
         self.decl = decl
@@ -183,7 +183,7 @@ class substitution_manager_t:
             transformers = []
         self.transformers = transformers
         
-        self.wrapperclass = wrapperclass
+        self.wrapper_class = wrapper_class
 
         # A list of required include files
         self._virtual_includes = []
@@ -192,33 +192,33 @@ class substitution_manager_t:
         # Initialize the code managers...
         
         if str(decl.return_type)=="void":
-            rettype = None
+            ret_type = None
         else:
-            rettype = decl.return_type
-            self.wrapperfunc.resultvar = self.wrapperfunc.declare_local("result", str(rettype))
-            self.wrapperfunc.resultexprs = [self.wrapperfunc.resultvar]
+            ret_type = decl.return_type
+            self.wrapper_func.result_var = self.wrapper_func.declare_local("result", str(ret_type))
+            self.wrapper_func.result_exprs = [self.wrapper_func.result_var]
 
-        self.virtualfunc.rettype = rettype
-        self.virtualfunc.arglist = decl.arguments[:]
-        self.virtualfunc.classname = wrapperclass
-        self.virtualfunc.FUNCNAME = decl.name
-        self.virtualfunc.CALLFUNCNAME = decl.name
-        self.virtualfunc.inputparams = map(lambda a: a.name, decl.arguments)
+        self.virtual_func.ret_type = ret_type
+        self.virtual_func.arg_list = decl.arguments[:]
+        self.virtual_func.class_name = wrapper_class
+        self.virtual_func.FUNC_NAME = decl.name
+        self.virtual_func.CALL_FUNC_NAME = decl.name
+        self.virtual_func.input_params = map(lambda a: a.name, decl.arguments)
 
-        self.wrapperfunc.rettype = rettype
-        self.wrapperfunc.arglist = decl.arguments[:]
-        self.wrapperfunc.classname = wrapperclass
-        self.wrapperfunc.FUNCNAME = "%s_wrapper"%decl.alias
-        self.wrapperfunc.CALLFUNCNAME = decl.name
-        self.wrapperfunc.inputparams = map(lambda a: a.name, decl.arguments)
+        self.wrapper_func.ret_type = ret_type
+        self.wrapper_func.arg_list = decl.arguments[:]
+        self.wrapper_func.class_name = wrapper_class
+        self.wrapper_func.FUNC_NAME = "%s_wrapper"%decl.alias
+        self.wrapper_func.CALL_FUNC_NAME = decl.name
+        self.wrapper_func.input_params = map(lambda a: a.name, decl.arguments)
 
         # Check if we're dealing with a member function...
-        clsdecl = self._classDecl(decl)
+        clsdecl = self._class_decl(decl)
         if clsdecl!=None:
-            selfname = self.wrapperfunc._make_name_unique("self")
+            selfname = self.wrapper_func._make_name_unique("self")
             selfarg = declarations.argument_t(selfname, "%s&"%clsdecl.name)
-            self.wrapperfunc.arglist.insert(0, selfarg)
-            self.wrapperfunc.CALLFUNCNAME = "%s.%s"%(selfname, self.wrapperfunc.CALLFUNCNAME)
+            self.wrapper_func.arg_list.insert(0, selfarg)
+            self.wrapper_func.CALL_FUNC_NAME = "%s.%s"%(selfname, self.wrapper_func.CALL_FUNC_NAME)
 
         # Argument index map
         # Original argument index ---> Input arg index  (indices are 0-based!)
@@ -257,12 +257,12 @@ class substitution_manager_t:
 
         # Create a variable that will hold the result of the Python call
         # inside the virtual function.
-        if len(self.wrapperfunc.resultexprs)>0:
-            self.virtualfunc.resultvar = self.virtualfunc.declare_local("pyresult", "boost::python::object")
-#            self.virtualfunc.resultexpr = self.virtualfunc.resultvar
+        if len(self.wrapper_func.result_exprs)>0:
+            self.virtual_func.result_var = self.virtual_func.declare_local("pyresult", "boost::python::object")
+#            self.virtual_func.result_expr = self.virtual_func.result_var
 
-        self.wrapperfunc.init_variables()
-        self.virtualfunc.init_variables()
+        self.wrapper_func.init_variables()
+        self.virtual_func.init_variables()
 
         self._funcs_initialized = True
 
@@ -273,27 +273,27 @@ class substitution_manager_t:
         src = map(lambda cb: getattr(cb, "wrapper_pre_call", defmeth)(self), transformers)
         src = filter(lambda x: x!=None, src)
         precall = "\n\n".join(src)
-        self.wrapperfunc.PRECALL = precall
+        self.wrapper_func.PRE_CALL = precall
 
         # Create the wrapper function post-call block...
         src = map(lambda cb: getattr(cb, "wrapper_post_call", defmeth)(self), transformers)
         src = filter(lambda x: x!=None, src)
         src.reverse()
         postcall = "\n\n".join(src)
-        self.wrapperfunc.POSTCALL = postcall
+        self.wrapper_func.POST_CALL = postcall
 
         # Create the virtual function pre-call block...
         src = map(lambda cb: getattr(cb, "virtual_pre_call", defmeth)(self), transformers)
         src = filter(lambda x: x!=None, src)
         precall = "\n\n".join(src)
-        self.virtualfunc.PRECALL = precall
+        self.virtual_func.PRE_CALL = precall
 
         # Create the virtual function post-call block...
         src = map(lambda cb: getattr(cb, "virtual_post_call", defmeth)(self), transformers)
         src = filter(lambda x: x!=None, src)
         src.reverse()
         postcall = "\n\n".join(src)
-        self.virtualfunc.POSTCALL = postcall
+        self.virtual_func.POST_CALL = postcall
             
 
     # remove_arg
@@ -317,23 +317,23 @@ class substitution_manager_t:
         if self._funcs_initialized:
             raise ValueError, "remove_arg() may only be called before function initialization."
         if idx<0:
-            idx += len(self.virtualfunc.arglist)+1
-        if idx>=len(self.virtualfunc.arglist)+1:
+            idx += len(self.virtual_func.arg_list)+1
+        if idx>=len(self.virtual_func.arg_list)+1:
             raise IndexError, "Index (%d) out of range."%idx
 
         # Remove original return type?
         if idx==0:
-            if id(self.wrapperfunc.rettype)==id(self.wrapperfunc.rettype):
-                self.wrapperfunc.rettype = None
+            if id(self.wrapper_func.ret_type)==id(self.wrapper_func.ret_type):
+                self.wrapper_func.ret_type = None
             else:
                 raise ValueError, 'Argument %d not found on the wrapper function'%(idx)
         # Remove argument...
         else:
             # Get the original argument...
-            arg = self.virtualfunc.arglist[idx-1]
+            arg = self.virtual_func.arg_list[idx-1]
             # ...and remove it from the wrapper
             try:
-                self.wrapperfunc.arglist.remove(arg)
+                self.wrapper_func.arg_list.remove(arg)
             except ValueError:
                 raise ValueError, 'Argument %d ("%s") not found on the wrapper function'%(idx, arg.name)
 
@@ -342,7 +342,7 @@ class substitution_manager_t:
             paramidx = self.argidxmap[idx-1]
             if paramidx==None:
                 raise ValueError, "Argument was already removed"
-            del self.virtualfunc.inputparams[paramidx]
+            del self.virtual_func.input_params[paramidx]
             self.argidxmap[idx-1] = None
             for i in range(idx,len(self.argidxmap)):
                 if self.argidxmap[i]!=None:
@@ -368,11 +368,11 @@ class substitution_manager_t:
             pass
         else:
             if idx<0:
-                idx += len(self.wrapperfunc.arglist)+2
-            self.wrapperfunc.arglist.insert(idx-1, arg)
+                idx += len(self.wrapper_func.arg_list)+2
+            self.wrapper_func.arg_list.insert(idx-1, arg)
 
             # What to insert?
-            self.virtualfunc.inputparams.insert(idx-1, "???")
+            self.virtual_func.input_params.insert(idx-1, "???")
             # Adjust the argument index map
             for i in range(idx-1,len(self.argidxmap)):
                 if self.argidxmap[i]!=None:
@@ -447,7 +447,7 @@ class substitution_manager_t:
         """
         if not self._funcs_initialized:
             self.init_funcs()
-        return self.virtualfunc.substitute(template)
+        return self.virtual_func.substitute(template)
 
     # subst_wrapper
     def subst_wrapper(self, template):
@@ -458,10 +458,10 @@ class substitution_manager_t:
         """
         if not self._funcs_initialized:
             self.init_funcs()
-        return self.wrapperfunc.substitute(template)
+        return self.wrapper_func.substitute(template)
 
-    # _classDecl
-    def _classDecl(self, decl):
+    # _class_decl
+    def _class_decl(self, decl):
         """Return the class declaration that belongs to a member declaration.
         """
         while decl.parent!=None:
@@ -482,22 +482,22 @@ class return_virtual_result_t(function_transformer_t):
 
     def __init__(self):
         function_transformer_t.__init__(self)
-        self.resultvar = "<not initialized>"
+        self.result_var = "<not initialized>"
 
     def __str__(self):
         return "ReturnVirtualResult()"%(self.idx)
 
     def init_funcs(self, sm):
-        if sm.virtualfunc.rettype==None:
+        if sm.virtual_func.ret_type==None:
             return
         
         # Declare the local variable that will hold the return value
         # for the virtual function
-        self.resultvar = sm.virtualfunc.declare_local("result", sm.virtualfunc.rettype)
+        self.result_var = sm.virtual_func.declare_local("result", sm.virtual_func.ret_type)
         # Replace the result expression if there is still the default
         # result expression (which will not work anyway)
-        if sm.virtualfunc.resultexpr==sm.virtualfunc.resultvar:
-            sm.virtualfunc.resultexpr = self.resultvar
+        if sm.virtual_func.result_expr==sm.virtual_func.result_var:
+            sm.virtual_func.result_expr = self.result_var
 
     def virtual_post_call(self, sm):
         # Search the result tuple of the wrapper function for the return
@@ -505,12 +505,12 @@ class return_virtual_result_t(function_transformer_t):
         # from the Python result tuple, converted to C++ and returned from
         # the virtual function. If it does not exist, do nothing.
         try:
-            resultidx = sm.wrapperfunc.resultexprs.index(sm.wrapperfunc.resultvar)
+            resultidx = sm.wrapper_func.result_exprs.index(sm.wrapper_func.result_var)
         except ValueError:
             return
         
         res = "// Extract the C++ return value\n"
-        res += "%s = boost::python::extract<%s>(%s[%d]);"%(self.resultvar, sm.virtualfunc.rettype, sm.virtualfunc.resultvar, resultidx)
+        res += "%s = boost::python::extract<%s>(%s[%d]);"%(self.result_var, sm.virtual_func.ret_type, sm.virtual_func.result_var, resultidx)
         return res        
 
 
@@ -532,19 +532,19 @@ if __name__=="__main__":
     spam = root[0].class_("Spam")
     foo = spam.member_function("foo")
 
-    wm = substitution_manager_t(foo, transformers=[Output(1), Output(2)], wrapperclass="Spam_wrapper")
+    wm = substitution_manager_t(foo, transformers=[Output(1), Output(2)], wrapper_class="Spam_wrapper")
 
-    template = '''$RETTYPE $CLASSSPEC$FUNCNAME($ARGLIST)
+    template = '''$RET_TYPE $CLASS_SPEC$FUNC_NAME($ARG_LIST)
 {
   $DECLARATIONS
 
-  $PRECALL
+  $PRE_CALL
 
-  $RESULTVARASSIGNMENT$CALLFUNCNAME($INPUTPARAMS);
+  $RESULT_VAR_ASSIGNMENT$CALL_FUNC_NAME($INPUT_PARAMS);
 
-  $POSTCALL
+  $POST_CALL
 
-  $RETURNSTMT
+  $RETURN_STMT
 }
 '''
     print wm.subst_virtual(template)
