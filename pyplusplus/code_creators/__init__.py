@@ -137,9 +137,13 @@ def guess_mem_fun_creator_classes( decl ):
             fwrapper_cls = mem_fun_pv_wrapper_t
             maker_cls = mem_fun_pv_t
         else:
-            if decl.overridable:
-                fwrapper_cls = mem_fun_v_wrapper_t
-            maker_cls = mem_fun_v_t
+            if decl.function_transformers:
+                fwrapper_cls = mem_fun_v_transformed_wrapper_t
+                maker_cls = mem_fun_v_transformed_t
+            else:
+                if decl.overridable:
+                    fwrapper_cls = mem_fun_v_wrapper_t
+                maker_cls = mem_fun_v_t
     elif access_level == ACCESS_TYPES.PROTECTED:
         if decl.virtuality == VIRTUALITY_TYPES.NOT_VIRTUAL:
             if decl.has_static:

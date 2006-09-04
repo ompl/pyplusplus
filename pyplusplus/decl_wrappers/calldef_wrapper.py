@@ -28,7 +28,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         self._use_default_arguments = True
         self._create_with_signature = False
         self._overridable = None
-        self._function_transformers = []
+        self._function_transformers = None
 
     def get_call_policies(self):
         return self._call_policies
@@ -121,12 +121,16 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
 
         Returns a reference to the internal list (which may be modified).
         """
+        if None is self._function_transformers:
+            #TODO: for trivial cases get_size( int&, int& ) Py++ should guess
+            #function transformers
+            self._function_transformers = []
         return self._function_transformers
-    
+
     def _set_function_transformers(self, function_transformers):
         """Set method for property 'function_transformers'."""
         self._function_transformers = function_transformers
-        
+
     function_transformers = property( _get_function_transformers, _set_function_transformers,
            doc = """A list of function transformer objects that should be applied to the generated C++ code (default: []).
            The returned list is the internal list (not a copy) which may be modified.
