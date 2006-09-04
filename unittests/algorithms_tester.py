@@ -162,8 +162,14 @@ class split_sequence_tester_t(unittest.TestCase):
         self.failUnless( [[1,2,3]] == split( seq, 3 ) )
         self.failUnless( [[1,2,3]] == split( seq, 4 ) )
 
+class doc_extractor_tester_t( unittest.TestCase ):
+    def test( self ):
+        escaped_doc = module_builder.doc_extractor_i.escape_doc('Hello "Py++"')
+        self.failUnless( escaped_doc == '"Hello \\"Py++\\""' )
+
 def create_suite():
     suite = unittest.TestSuite()
+    suite.addTest( unittest.makeSuite(doc_extractor_tester_t))
     suite.addTest( unittest.makeSuite(class_organizer_tester_t))
     suite.addTest( unittest.makeSuite(indent_tester_t))
     suite.addTest( unittest.makeSuite(make_flatten_tester_t))

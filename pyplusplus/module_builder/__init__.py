@@ -8,7 +8,7 @@ This package provides users with simple and convinient interface to Py++
 functionality.
 
 L{module_builder_t} class is the main class. Please read it's documentation first.
-Also take a look on tutorials. You can find them on Py++ 
+Also take a look on tutorials. You can find them on Py++
 U{web site<http://www.language-binding.net>}
 """
 
@@ -44,6 +44,8 @@ from pyplusplus.decl_wrappers import variable_t
 from pyplusplus.decl_wrappers import scopedef_t
 
 from pyplusplus.decl_wrappers import print_declarations
+
+from pyplusplus.decl_wrappers import doc_extractor_i
 
 import call_policies
 
