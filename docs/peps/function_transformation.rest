@@ -194,6 +194,37 @@ Somewhere we should put "function transformation" factory. This factory will
 create or give a hint to the user what transformation could\\should be applied
 on the function.
 
+-------------------------------------
+output_arg transformation example
+-------------------------------------
+::
+
+  class output_arg_t( transformer_t ):
+      def __init__( self, ordinal ):
+          self.ordinal = ordinal
+
+      def check( self, decl ):
+          if len( decl.arguments ) <= self.ordinal:
+              return user message
+          type_ = decl.arguments[self.ordinal].type
+          if not reference to immutable type:
+              raise user message
+
+      def signature_changes( self, decl ):
+          assert not self.check( decl )
+          return [ remove_arg( self.ordinal )
+                   , add_var_to_return_value( decl.arguments[ self.ordinal ].name ]
+    
+      def apply( self, sm ):
+          if sm is wrapper around C++ function:
+              sm. add declaration of variable type = decl.arguments[ self.ordinal ].type
+                  and name = decl.arguments[ self.ordinal ].type and initial value
+              sm. add variable to return expression.
+          else: #sm is a wrapper around Python function
+              sm. extract value from the tuple and assign it to the argument
+
+  def output_arg( ordinal ):
+      return output_arg_t( ordinal )
 
 -----------------
 Problems to solve
