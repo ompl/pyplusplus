@@ -1,78 +1,209 @@
-=====================
-call wrapper policies
-=====================
+========================
+Function transformation
+========================
 
 .. contents:: Table of contents
 
 -------------------
 What is useful for?
 -------------------
-Not all C++ functions could be exposed to Python as is. For example, next function
-could not be exposed:
+
+https://realityforge.vrsource.org/view/PyppApi/CodeInserter gives a nice introduction
+and the problem description. Please read it.
+
+-----------
+Terminology
+-----------
+
+Lets say that we have a function ``f``:
+
 ::
 
-  void get_size( int& size );
+  f = R f( A0 a0, ..., AN an )
 
-In order to expose ``get_size`` function, an user need to create next wrapper:
+``R`` and ``A*`` represent an arbitrary C++ types. What we want is to create
+another function ``ft`` (transformed):
+
 ::
 
-  int get_size_wrapper( ){
-      int size(0);
-      get_size( size );
-      return size;
+  ft = RT ft( AT0 at0, ..., ATM atm )
+
+such that will do an additional work before and after ``f`` call.
+
+Definitions
+-----------
+
+*Transformation* - process that defines how to create transformed function from the
+original one.
+
+For example - ``make function argument to be return value``:
+::
+
+  f = void get_last_error( int& error );
+
+::
+
+  ft = int get_last_error();
+
+The definition of ``ft`` could look like:
+::
+
+  int get_last_error_transformed(){
+      int error(0);
+      get_last_error( error );
+      return error;
   }
 
-|cwp| will provide the user with simple and intuitive way to instruct
-`Py++`_ to generate right wrapper. Also, it will be possible to create
-a custom policies.
+I modified ``f`` signature and added some code before and after ``f`` call.
 
-This document describes what is *going to be implemented*.
+*Function transformation* - group of transformations that should be applied at once
+on a function.
 
---------
-Analysis
---------
+For example a function could have two immutable arguments, passed by reference.
+Function transformation aggregates two transformations.
 
-C++ function arguments usage
-----------------------------
+A user will be able to define few function transformations for a single function.
 
-In C++ function argument can be used to:
+-----------------------
+Design & implementation
+-----------------------
 
-* to pass some data to function ( in )
+In the previous paragraph I introduced two new concepts: "transformation" and
+"function transformation". These concepts should be presented in the solution.
 
-  there is no need to return variable from the function
 
-* to return some data from function ( out )
-
-  there is no need to force Python programmer to pass the variable as argument
-  to the function
-
-* both ( in/out )
-
-Function-wrapper signature will be a little bit different in every case.
-
-Variable names
+Transformation
 --------------
-I think it should be possible to apply few |cwp| on a single function.
-The main, (read unresolved) issue, is management of variable names within
-function-wrapper. I see next problems, which we should solve, before proceeding
-to implementation:
 
-1. To share variable name, between different pieces of code.
+Transformation class has two responsibilities:
 
-   Right now I think, that every |cwp| will have ``pre-call`` and ``post-call``
-   code creators. This design will allow the user to mix few |cwp|'s within
-   single function-wrapper.
+1. to modify function signature:
 
-2. To insure name uniqueness.
+   * remove argument
+   * change argument type
+   * join arguments
+   * change return type
 
-3. To give meaningful name.
+2. to implement the transformation
 
-I think that is it very easy to solve the problem, if I remove "readability"
-requirement.
+It is important to distinct between the responsibilities. Function signature
+defines "interface" for a lot of services provided by `Py++`_. While the second
+one is "implementation details" and should be "hidden" from the rest of the world.
+
+In an ideal world we would have 2 classes, one class - one responsibility.
+In `Py++`_ it means that we would have ``transformation_t`` class:
+::
+
+  class transformation_t( object ):
+      def __init__( self ):
+          pass
+
+      def check( self, function ):
+          "checks whether the transformation could be applied on the function or not"
+          raise NotImplementedError()
+
+      def signature_changes( self, function ):
+          "returns a list of changes that should be done on function signature"
+          raise NotImplementedError()
+
+The class logically belongs to the ``decl_wrappers`` package. The ``transformer_t``
+is the second class, which logically belongs to ``code_creators`` package:
+::
+
+  class transformer_t( ast_visitor_t ):
+      def __init__( self, function, transformation ):
+          function is a reference to the declaration we want to apply transformation on
+          transformation is an instance of "concrete" transformation
+
+      def apply( self, function_body_as_tree ):
+          "integrates transformation code to function body"
+          raise NotImplementedError()
+
+What is ``ast_visitor_t`` and ``function_body_as_tree``. In an ideal world
+concrete instance of ``transformer_t`` class would work with some kind of AST
+( Abstract Syntax Tree ). Thus transformer would travel on the tree and modify it.
+
+Get the job done!
+-----------------
+
+The previously described solution will not work in our, `Py++`_ developers and
+users, world. There are mainly two reasons:
+
+1. AST approach is tooooooo complex. We don't have time to develop an AST for
+   representing, even limited subset of C++ expressions. Users will not have
+   time to learn how to use it.
+
+2. Class separation approach will not work too. In order to introduce new
+   transformation, user will have to understand the whole design of the `Py++`_
+   package.
+
+Matthias Baas provided a "real world" solution for both problems. At first I did
+not understand it, but now I appreciate it very much. It does not meant that I
+agree with the his implementation. As for me he did not stress enough the
+concepts within the code and more over he mixed them in different classes.
+
+I am going to propose another solution, which will be based on existing code.
+Small re-factoring is needed. I don't expect changes in the user code.
+
+Proposed class:
+::
+
+  class transformer_t( object ):
+      "base class for all transformation classes"
+      def __init__( self ):
+          pass
+
+      def check( self, function ):
+          "checks whether the transformation could be applied on the function or not"
+          raise NotImplementedError()
+
+      def signature_changes( self, function ):
+          "returns a list of changes that should be done on function signature"
+          raise NotImplementedError()
+
+      def apply( self, sm ): #sm is an instance of the substitution manager
+          "integrates transformation code into function transformation body"
+          raise NotImplementedError()
+
+Comments:
+
+1. ``substituion_manager_t`` class allows us to achieve same result as with AST.
+   he way it does it is pretty simple to explain and understand - string
+   substitution.
+
+2. ``transformer_t`` class allows user to introduce new transformations, without
+   understanding the whole `Py++`_ package.
+
+Function trasformation
+~~~~~~~~~~~~~~~~~~~~~~
+
+What is responcibility of the ``function_transformation_t`` class?
+
+1. To keep reference to transformations defined by the user.
+
+2. To apply every transformation on the function body. For this purpose this
+   class will keep instance of ``substituion_manager_t`` class.
+
+3. To provide interface for ``mem_fun_v_transformed_t`` and
+   ``mem_fun_v_transformed_wrapper_t`` code creators classes.
+
+4. [Nice to have]To check, whether the transformation defined by user is
+   applicable or not.
+
+Somewhere we should put "function transformation" factory. This factory will
+create or give a hint to the user what transformation could\\should be applied
+on the function.
+
+
+-----------------
+Problems to solve
+-----------------
+
+I don't have any solution to the next problems.
 
 Call policies
 -------------
-I don't have any solution to the next problem.
+
 I am going to change a little an example, from `Boost.Python`_ tutorials:
 http://www.boost.org/libs/python/doc/tutorial/doc/html/python/functions.html#python.call_policies
 ::
@@ -124,122 +255,7 @@ Now some speculations:
          return boost::python::make_tuple( x_obj, error );
      }
 
-Anyway, I think we will just ignore the problem - software ( == Boost.Python )
-should not be perfect - it should work in most ( != all ) cases!
-
-------------
-Common |cwp|
-------------
-Those names are not final and could( may be should ) be changed.
-
-immutable by reference
------------------------
-::
-
-  //function to be exported
-  something f( int& i, std::string& str )
-
-I suppose this is very common use case. More over this use case `Py++`_
-can and will treat by its own - no user action is needed. The wrapper
-generated by `Py++`_ will very similar to the next code:
-::
-
-  void f_wrapper( const int& i, const std::string& str ){
-      int i_out( i );
-      std::string str_out( str );
-      boost::python::object f_return = f( i_out, str_out );
-      return boost::python::make_tuple( f_return, i, str );
-  }
-
-
-The only customization available for user is to setup argument type:
-[in\|out\|in,out]
-
-array
------
-Arrays are a little bit different beasts. Python does not have arrays.
-So, `Py++`_, should implement arrays convertion: from/to C++/Python.
-This is not the only difference, consider next function:
-::
-
-  void fill( char* buffer, int index ){
-      buffer[ index ] = 'c';
-  }
-
-
-There are few ways to expose this function:
-::
-
-   ??? fill_wrapper( boost::python:list buffer, index ){
-      long buffer_size = boost::python::extract<long>( buffer.attr("__len__") );
-      boost::scoped_array<char> buffer_( new char[ buffer_size ] );
-      for( long i = 0; i < buffer_size; ++i ){
-          buffer_[ i ] = boost::python::extract<char>( buffer[i] );
-      }
-      fill( buffer_.get(), index );
-      //Now the question: how to return buffer_ to the caller?
-      //by constructing new list?
-      boost::python::list return_;
-      for( long i = 0; i < buffer_size; ++i ){
-        return_.insert( i, buffer_[i] );
-      }
-      return return_;
-      //or by modifying the buffer argument? In this case `Py++`_ will
-      //delete all items from buffer and will copy into it items from buffer_
-      //variable.
-  }
-
-Arrays size
-^^^^^^^^^^^
-1. static array - size of array is known at compile time.
-2. dynamic array
-
-   + size of array is one of the function arguments
-
-   + other ( will not be implemented in the first phase )
-
-      - size of array is some global/local variable
-
-      - size of array is returned by invocation some function
-
-
-status as exception
--------------------
-There a lot of code, that returns success status and/or error description by
-using one of the function arguments. It will be possible to instruct `Py++`_
-to create wrapper for those functions, that will throw exception.
-::
-
-  bool do_smth( error_description& error_desc );
-
-  bool do_smth_wrapper(){
-      error_description  error_desc;
-      bool return_ = do_smth( error_desc );
-      if( some user code that will check that error_desc contains error ){
-          throw some user code that will construct an exception from the error_desc;
-      }
-      return return_;
-  }
-
-pythread safe
--------------
-Why not :-)? See next FAQ: http://boost.org/libs/python/doc/v2/faq.html#threadsupport
-So, how `Py++`_ can help? `Py++`_ can generate exception safe code,
-that will acquire and release Python global interpreter lock.
-
--------
-Summary
--------
-
-It still not clear to me how it should be implemented. There are also some issues
-with `Boost.Python`_ library before we can implement some policies. 
-
-If you can help or have some nice idea, please share: 
-https://lists.sourceforge.net/lists/listinfo/pygccxml-development 
-
-
 .. _`Py++` : ./../pyplusplus.html
-.. |cwp| replace:: *"call wrapper policies"*
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
