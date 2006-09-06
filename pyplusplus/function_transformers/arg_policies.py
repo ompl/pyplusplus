@@ -5,13 +5,16 @@
 #
 # Initial author: Matthias Baas
 
-"""This module contains standard argument policy objects.
+"""This module contains the standard argument policy objects.
+
+ - L{output_t}
+ - L{input_t}
 """
 
 from pygccxml import declarations
 
-# Output
-class Output:
+# output_t
+class output_t:
     """Handles a single output variable.
 
     The specified variable is removed from the argument list and is turned
@@ -64,7 +67,138 @@ class Output:
         res = "// Extract the C++ value for output argument '%s' (index: %d)\n"%(arg.name, self.idx)
         if isinstance(arg.type, declarations.pointer_t):
             res += "*"
-        res += "%s = boost::python::extract<%s>(%s[%d]);"%(arg.name, arg.type.base, sm.virtual_func.result_var, sm.wrapper_func.result_exprs.index(self.local_var))
+        res += "%s = boost::python::extract<%s>(%s);"%(arg.name, arg.type.base, sm.py_result_expr(self.local_var))
         return res
 
+
+# input_t
+class input_t:
+    """Handles a single input variable.
+
+    The reference on the specified variable is removed.
+
+    void setValue(int& v) -> setValue(v)
+    """
+    
+    def __init__(self, idx):
+        """Constructor.
+
+        The specified argument must be a reference or a pointer.
+
+        @param idx: Index of the argument that is an output value (the first arg has index 1).
+        @type idx: int
+        """
+        self.idx = idx
+
+    def __str__(self):
+        return "Input(%d)"%(self.idx)
+
+    def init_funcs(self, sm):
+        # Remove the specified input argument from the wrapper function
+        arg = sm.remove_arg(self.idx)
+        
+        # Do some checks (the arg has to be a reference or a pointer)
+        reftype = arg.type
+        if not (isinstance(reftype, declarations.reference_t) or
+            isinstance(reftype, declarations.pointer_t)):
+            raise ValueError, 'Output variable %d ("%s") must be a reference or a pointer (got %s)'%(self.idx, arg.name, arg.type)
+
+        # Create an equivalent argument that is not a reference type
+        noref_arg = declarations.argument_t(name=arg.name, type=arg.type.base, default_value=arg.default_value)
+        # Insert the noref argument
+        sm.insert_arg(self.idx, noref_arg, arg.name)
+
+
+# input_array_t
+class input_array_t:
+    """Handles an input array with fixed size.
+
+    void setVec3(double* v) ->  setVec3(object v)
+    # v must be a sequence of 3 floats
+
+
+    TODO: Error handling (in the wrapper function)!
+    
+    """
+    
+    def __init__(self, idx, size):
+        """Constructor.
+
+        @param idx: Index of the argument that is an output value (the first arg has index 1).
+        @type idx: int
+        @param size: The fixed size of the input array
+        @type size: int
+        """
+        self.idx = idx
+        self.size = size
+
+        self.argname = None
+        self.basetype = None
+        self.carray = None
+        self.wrapper_ivar = None
+        self.virtual_ivar = None
+        self.pylist = None
+
+    def __str__(self):
+        return "InputArray(%d,%d)"%(self.idx, self.size)
+    
+    def init_funcs(self, sm):
+
+        # Remove the original argument...
+        arg = sm.remove_arg(self.idx)
+        
+        if not (isinstance(arg.type, declarations.pointer_t) or
+                isinstance(arg.type, declarations.array_t)):
+            raise ValueError, "Argument %d (%s) must be a pointer."%(self.idx, arg.name)
+
+        # Declare a variable that will hold the Python list
+        # (this will be the input of the Python call in the virtual function)
+        self.pylist = sm.virtual_func.declare_local("py_"+arg.name, "boost::python::list")
+
+        # Replace the removed argument with a Python object.
+        newarg = declarations.argument_t(arg.name, "boost::python::object")
+        sm.insert_arg(self.idx, newarg, self.pylist)
+
+        self.argname = arg.name
+        self.basetype = str(arg.type.base).replace("const", "").strip()
+
+        # Declare a variable that will hold the C array...
+        self.carray = sm.wrapper_func.declare_local("c_"+arg.name, self.basetype, size=self.size)
+        # and an int which is used for the loop
+        self.wrapper_ivar = sm.wrapper_func.declare_local("i", "int", default=0)
+        # and another one in the virtual function
+        self.virtual_ivar = sm.virtual_func.declare_local("i", "int", default=0)
+
+        # Replace the input parameter with the C array
+        sm.wrapper_func.input_params[self.idx-1] = self.carray
+
+
+    def wrapper_pre_call(self, sm):
+        """Wrapper function code.
+        """
+        res = ""
+        res += "// Assert that '%s' is really a sequence...\n"%self.argname
+        res += "if (!PySequence_Check(%s.ptr()))\n"%self.argname
+        res += "{\n"
+        res += '  PyErr_SetString(PyExc_ValueError, "Argument %s: sequence expected");\n'%self.argname
+        res += '  boost::python::throw_error_already_set();\n'
+        res += "}\n"
+        res += "// Copy the sequence '%s' into '%s'...\n"%(self.argname, self.carray)
+        res += 'if (%s.attr("__len__")()!=%d)\n'%(self.argname, self.size)
+        res += '{\n'
+        res += '  PyErr_SetString(PyExc_ValueError, "Invalid sequence size (expected %d)");\n'%self.size
+        res += '  boost::python::throw_error_already_set();\n'
+        res += '}\n'
+        res += "for(%s=0; %s<%d; %s++)\n"%(self.wrapper_ivar, self.wrapper_ivar, self.size, self.wrapper_ivar)
+        res += "  %s[%s] = boost::python::extract< %s >(%s[%s]);"%(self.carray, self.wrapper_ivar, self.basetype, self.argname , self.wrapper_ivar)
+        return res
+
+    def virtual_pre_call(self, sm):
+        """Virtual function code.
+        """
+        res = ""
+        res += "// Copy the array '%s' into list '%s'...\n"%(self.argname, self.pylist)
+        res += "for(%s=0; %s<%d; %s++)\n"%(self.virtual_ivar, self.virtual_ivar, self.size, self.virtual_ivar)
+        res += "  %s.append(%s[%s]);"%(self.pylist, self.argname, self.virtual_ivar)
+        return res
 
