@@ -126,6 +126,8 @@ class substitution_manager_t:
 
      - RESULT_VAR_ASSIGNMENT:  "<varname> = " or empty
 
+     - RESULT_TYPE: The type of the result variable 
+
      - CALL_FUNC_NAME: The name of the function that should be invoked (self?).
 
      - INPUT_PARAMS:  The values or variables that will be passed to $FUNC_NAME,
@@ -154,7 +156,7 @@ class substitution_manager_t:
     @type virtual_func: L{code_manager_t}
     
     @group Methods called by the user of the class: append_code_block, subst_wrapper, subst_virtual, get_includes
-    @group Methods called by the arg policies: remove_arg, insert_arg, require_include
+    @group Methods called by the function transformers: remove_arg, insert_arg, py_result_expr, require_include
 
     @author: Matthias Baas
     """
@@ -195,7 +197,8 @@ class substitution_manager_t:
             ret_type = None
         else:
             ret_type = decl.return_type
-            self.wrapper_func.result_var = self.wrapper_func.declare_local("result", str(ret_type))
+            self.wrapper_func.result_type = str(ret_type)
+            self.wrapper_func.result_var = self.wrapper_func.declare_local("result", self.wrapper_func.result_type)
             self.wrapper_func.result_exprs = [self.wrapper_func.result_var]
 
         self.virtual_func.ret_type = ret_type
@@ -212,6 +215,11 @@ class substitution_manager_t:
         self.wrapper_func.CALL_FUNC_NAME = decl.name
         self.wrapper_func.input_params = map(lambda a: a.name, decl.arguments)
 
+        # The offset that is added to the index in insert_arg()
+        # This index is either 0 for free functions or 1 for member functions
+        # because the "self" argument is not a regular argument.
+        self._insert_arg_idx_offset = 0
+
         # Check if we're dealing with a member function...
         clsdecl = self._class_decl(decl)
         if clsdecl!=None:
@@ -219,6 +227,7 @@ class substitution_manager_t:
             selfarg = declarations.argument_t(selfname, "%s&"%clsdecl.name)
             self.wrapper_func.arg_list.insert(0, selfarg)
             self.wrapper_func.CALL_FUNC_NAME = "%s.%s"%(selfname, self.wrapper_func.CALL_FUNC_NAME)
+            self._insert_arg_idx_offset = 1
 
         # Argument index map
         # Original argument index ---> Input arg index  (indices are 0-based!)
@@ -258,7 +267,8 @@ class substitution_manager_t:
         # Create a variable that will hold the result of the Python call
         # inside the virtual function.
         if len(self.wrapper_func.result_exprs)>0:
-            self.virtual_func.result_var = self.virtual_func.declare_local("pyresult", "boost::python::object")
+            self.virtual_func.result_type = "boost::python::object"
+            self.virtual_func.result_var = self.virtual_func.declare_local("pyresult", self.virtual_func.result_type)
 #            self.virtual_func.result_expr = self.virtual_func.result_var
 
         self.wrapper_func.init_variables()
@@ -312,7 +322,7 @@ class substitution_manager_t:
           if idx is 0 and the function has no return type). You must not
           modify this object as it may still be in use on the virtual
           function.
-        @rtype: argument_t
+        @rtype: L{argument_t<pygccxml.declarations.calldef.argument_t>}
         """
         if self._funcs_initialized:
             raise ValueError, "remove_arg() may only be called before function initialization."
@@ -351,7 +361,7 @@ class substitution_manager_t:
             return arg
 
     # insert_arg
-    def insert_arg(self, idx, arg):
+    def insert_arg(self, idx, arg, inputexpr):
         """Insert a new argument into the argument list of the wrapper function.
 
         This function is supposed to be called by function transformer
@@ -360,7 +370,9 @@ class substitution_manager_t:
         @param idx: New argument index (may be negative)
         @type idx: int
         @param arg: New argument object
-        @type arg: argument_t
+        @type arg: L{argument_t<pygccxml.declarations.calldef.argument_t>}
+        @param inputexpr: The expression that is used as input parameter for the Python function call inside the virtual function
+        @type inputexpr: str
         """
         if self._funcs_initialized:
             raise ValueError, "insert_arg() may only be called before function initialization."
@@ -369,14 +381,66 @@ class substitution_manager_t:
         else:
             if idx<0:
                 idx += len(self.wrapper_func.arg_list)+2
+
+            idx += self._insert_arg_idx_offset
             self.wrapper_func.arg_list.insert(idx-1, arg)
 
             # What to insert?
-            self.virtual_func.input_params.insert(idx-1, "???")
+            self.virtual_func.input_params.insert(idx-1, inputexpr)
             # Adjust the argument index map
             for i in range(idx-1,len(self.argidxmap)):
                 if self.argidxmap[i]!=None:
                     self.argidxmap[i] += 1
+
+    # py_result_expr
+    def py_result_expr(self, local_wrapper_var):
+        """Return a C++ expression that references one particular item of the result tuple in the virtual function.
+
+        This method is supposed to be used in the virtual_post_call() method
+        of function transformers when the result object of the Python call
+        is required. It relieves the transformer from having to check whether
+        its value is the only output value or not (in the former case the
+        value is an arbitrary Python object, in the latter case it is always
+        a tuple).
+
+        For example, if a function transformer allocates a variable and
+        adds it to the result expressions of the wrapper function (so that
+        the wrapper function returns the value of this variable) then
+        the corresponding virtual function has to receive this value
+        and convert it to a C++ value. Suppose the result of invoking
+        the Python function inside the virtual function is stored in
+        the variable "pyresult" (which is of type "object"). The transformer
+        object that has to access its output value has to distinguish
+        two cases:
+
+         - Its output value was the only output, then it references the
+           output value simply with "pyresult".
+         - There are also other output values, then it references its
+           output value with "pyresult[n]" where n is the position of
+           the output variable in the result tuple.
+
+        To relieve the transformer from the burden of having to perform
+        this test, py_result_expr() can be used which generates the
+        appropriate expression.        
+
+        @param local_wrapper_var: The name of the local variable inside the wrapper that is part of the result tuple
+        @type local_wrapper_var: str
+        @return: The C++ expression that references the result item
+        @rtype: str
+        """
+        # Get the name of the result variable
+        pyresult = self.virtual_func.result_var
+        # Determine the index of the requested local wrapper variable
+        try:
+            idx = self.wrapper_func.result_exprs.index(local_wrapper_var)
+        except ValueError:
+            raise ValueError, "The local variable '%s' is not returned by the wrapper function."
+
+        # Return the C++ expression
+        if len(self.wrapper_func.result_exprs)==1:
+            return pyresult
+        else:
+            return "%s[%d]"%(pyresult, idx)
 
     # require_include
     def require_include(self, include, where=None):
