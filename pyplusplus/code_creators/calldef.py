@@ -9,6 +9,7 @@ import code_creator
 import declaration_based
 import class_declaration
 from pygccxml import declarations
+import pyplusplus.function_transformers as function_transformers
 
 #virtual functions that returns const reference to something
 #could not be overriden by Python. The reason is simple:
@@ -440,6 +441,9 @@ class mem_fun_v_wrapper_t( calldef_wrapper_t ):
         return os.linesep.join( answer )
 
 class mem_fun_v_transformed_t( calldef_t ):
+    """Creates code for (public) virtual member functions.
+    """
+    
     def __init__( self, function, wrapper=None ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
         self.default_function_type_alias = 'default_' + self.function_type_alias
@@ -476,18 +480,63 @@ class mem_fun_v_transformed_t( calldef_t ):
                 result.append( '(%s)(&%s)'
                                % ( self.wrapper.function_type().decl_string, self.wrapper.default_full_name() ) )
         else:
-            result.append( '&%s'% declarations.full_name( self.declaration ) )
             if self.wrapper:
-                result.append( self.param_sep() )
                 result.append( '&%s' % self.wrapper.default_full_name() )
+            else:
+                result.append( '&%s'% declarations.full_name( self.declaration ) )
+#            result.append( '&%s'% declarations.full_name( self.declaration ) )
+#            if self.wrapper:
+#                result.append( self.param_sep() )
+#                result.append( '&%s' % self.wrapper.default_full_name() )
         return ''.join( result )
 
 class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
+    """Creates wrapper code for (public) virtual member functions.
+
+    The generated code consists of two functions: the virtual function
+    and the 'default' function.
+    """
+
     def __init__( self, function ):
+        """Constructor.
+
+        @param function: Function declaration
+        @type function: calldef_t
+        """
         calldef_wrapper_t.__init__( self, function=function )
+        
+        # Stores the name of the variable that holds the override
+        self._override_var = None
+
+    def default_name(self):
+        """Return the name of the 'default' function.
+
+        @rtype: str
+        """
+        return "default_" + self.declaration.alias
 
     def default_full_name(self):
+        """Return the full name of the 'default' function.
+
+        The returned name also includes the class name.
+
+        @rtype: str
+        """
         return self.parent.full_name + '::default_' + self.declaration.alias
+
+    def virtual_name(self):
+        """Return the name of the 'virtual' function.
+
+        @rtype: str
+        """
+        return self.declaration.name
+
+    def base_name(self):
+        """Return the name of the 'base' function.
+
+        @rtype: str
+        """
+        return "base_" + self.declaration.name
 
     def function_type(self):
         return declarations.member_function_type_t(
@@ -496,53 +545,135 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
                 , arguments_types=map( lambda arg: arg.type, self.declaration.arguments )
                 , has_const=self.declaration.has_const )
 
-    def create_declaration(self, name, has_virtual=True):
-        template = '%(virtual)s%(return_type)s %(name)s( %(args)s )%(constness)s %(throw)s'
+    def create_declaration(self, name, virtual=True):
+        """Create the function header.
 
-        virtual = 'virtual '
-        if not has_virtual:
-            virtual = ''
+        This method is used for the virtual function (and the base_ function),
+        but not for the default function.
+        """
+        template = '%(virtual)s$RET_TYPE %(name)s( $ARG_LIST_DEF )%(constness)s %(throw)s'
+
+        # Substitute the $-variables
+        template = self._subst_manager.subst_virtual(template)
+
+        virtualspec = ''
+        if virtual:
+            virtualspec = 'virtual '
 
         constness = ''
         if self.declaration.has_const:
             constness = ' const '
 
         return template % {
-            'virtual' : virtual
-            , 'return_type' : self.declaration.return_type.decl_string
+            'virtual' : virtualspec
             , 'name' : name
-            , 'args' : self.args_declaration()
             , 'constness' : constness
             , 'throw' : self.throw_specifier_code()
         }
 
-    def create_virtual_body(self):
-        template = []
-        template.append( 'if( %(override)s func_%(alias)s = this->get_override( "%(alias)s" ) )' )
-        template.append( self.indent('%(return_)sfunc_%(alias)s( %(args)s );') )
-        template.append( 'else' )
-        template.append( self.indent('%(return_)s%(wrapped_class)s::%(name)s( %(args)s );') )
-        template = os.linesep.join( template )
+    def create_base_body(self):
+        body = "%(return_)s%(wrapped_class)s::%(name)s( %(args)s );"
 
         return_ = ''
         if not declarations.is_void( self.declaration.return_type ):
             return_ = 'return '
 
-        return template % {
-            'override' : self.override_identifier()
-            , 'name' : self.declaration.name
-            , 'alias' : self.declaration.alias
-            , 'return_' : return_
+        return body % {
+              'name' : self.declaration.name
             , 'args' : self.function_call_args()
+            , 'return_' : return_
             , 'wrapped_class' : self.wrapped_class_identifier()
         }
 
+    def create_virtual_body(self):
+
+        body = """
+$DECLARATIONS
+
+if( %(override_var)s )
+{
+  $PRE_CALL
+  
+  ${RESULT_VAR_ASSIGNMENT}boost::python::call<$RESULT_TYPE>($INPUT_PARAMS);
+  
+  $POST_CALL
+  
+  $RETURN_STMT
+}
+else
+{
+  %(inherited)s
+}
+"""
+
+        vf = self._subst_manager.virtual_func
+        arg0 = "%s.ptr()"%self._override_var
+        if vf.INPUT_PARAMS=="":
+            vf.INPUT_PARAMS = arg0
+        else:
+            vf.INPUT_PARAMS = arg0+", "+vf.INPUT_PARAMS
+
+        # Replace the $-variables
+        body = self._subst_manager.subst_virtual(body)
+
+#        template = []
+#        template.append( 'if( %(override)s func_%(alias)s = this->get_override( "%(alias)s" ) )' )
+#        template.append( self.indent('%(return_)sfunc_%(alias)s( %(args)s );') )
+#        template.append( 'else' )
+#        template.append( self.indent('%(return_)s%(wrapped_class)s::%(name)s( %(args)s );') )
+#        template = os.linesep.join( template )
+
+        return body % {
+#            'override' : self.override_identifier()
+            'override_var' : self._override_var
+            , 'alias' : self.declaration.alias
+#            , 'func_var' : "func_"+self.declaration.alias
+            , 'inherited' : self.create_base_body()
+        }
+
     def create_default_body(self):
-        function_call = declarations.call_invocation.join( self.declaration.name
-                                                           , [ self.function_call_args() ] )
-        body = self.wrapped_class_identifier() + '::' + function_call + ';'
-        if not declarations.is_void( self.declaration.return_type ):
-            body = 'return ' + body
+        cls_wrapper_type = self.parent.full_name
+        cls_wrapper = self._subst_manager.wrapper_func.declare_local("cls_wrapper", cls_wrapper_type);
+        # The name of the 'self' variable (i.e. first argument)
+        selfname = self._subst_manager.wrapper_func.arg_list[0].name
+        
+        body = """$DECLARATIONS
+
+$PRE_CALL
+
+%(cls_wrapper_type)s* %(cls_wrapper)s = dynamic_cast<%(cls_wrapper_type)s*>(&%(self)s);
+if (%(cls_wrapper)s==0)
+{
+  // The following call is done on an instance created in C++,
+  // so it won't invoke Python code.
+  $RESULT_VAR_ASSIGNMENT$CALL_FUNC_NAME($INPUT_PARAMS);
+}
+else
+{
+  // The following call is done on an instance created in Python,
+  // i.e. a wrapper instance. This call might invoke Python code.
+  $RESULT_VAR_ASSIGNMENT%(cls_wrapper)s->%(base_name)s($INPUT_PARAMS);
+}
+
+$POST_CALL
+
+$RETURN_STMT
+"""
+
+        # Replace the $-variables
+        body = self._subst_manager.subst_wrapper(body)
+
+        # Replace the remaining parameters
+        body = body%{"cls_wrapper_type" : cls_wrapper_type,
+                     "cls_wrapper" : cls_wrapper,
+                     "self" : selfname,
+                     "base_name" : self.base_name() }
+        
+#        function_call = declarations.call_invocation.join( self.declaration.name
+#                                                           , [ self.function_call_args() ] )
+#        body = self.wrapped_class_identifier() + '::' + function_call + ';'
+#        if not declarations.is_void( self.declaration.return_type ):
+#            body = 'return ' + body
         return body
 
     def create_function(self):
@@ -551,17 +682,46 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
         answer.append( '}' )
         return os.linesep.join( answer )
 
-    def create_default_function( self ):
-        answer = [ self.create_declaration('default_' + self.declaration.alias, False) + '{' ]
-        answer.append( self.indent( self.create_default_body() ) )
+    def create_base_function( self ):
+        answer = [ self.create_declaration("base_"+self.declaration.name, False) + '{' ]
+        body = "%(return_)s%(wrapped_class)s::%(name)s( %(args)s );"
+        answer.append( self.indent( self.create_base_body() ) )
         answer.append( '}' )
         return os.linesep.join( answer )
 
+    def create_default_function( self ):
+
+        header = 'static $RET_TYPE %s( $ARG_LIST_DEF ) {'%self.default_name()
+        header = self._subst_manager.subst_wrapper(header)
+        
+        answer = [ header ]
+        answer.append( self.indent( self.create_default_body() ) )
+        answer.append( '}' )
+        return os.linesep.join( answer )
+      
+
     def _create_impl(self):
+        # Create the substitution manager
+        decl = self.declaration
+        sm = function_transformers.substitution_manager_t(decl, transformers=decl.function_transformers)
+        self._override_var = sm.virtual_func.declare_local(decl.alias+"_callable", "boost::python::override", default='this->get_override( "%s" )'%decl.alias)
+        self._subst_manager = sm
+    
         answer = [ self.create_function() ]
         answer.append( os.linesep )
+        answer.append( self.create_base_function() )
+        answer.append( os.linesep )
         answer.append( self.create_default_function() )
-        return os.linesep.join( answer )
+        answer = os.linesep.join( answer )
+
+        # Replace the argument list of the declaration so that in the
+        # case that keywords are created, the correct arguments will be
+        # picked up (i.e. the modified argument list and not the original
+        # argument list)
+        self.declaration.arguments = self._subst_manager.wrapper_func.arg_list
+
+        return answer
+
 
 class mem_fun_protected_t( calldef_t ):
     def __init__( self, function, wrapper ):
