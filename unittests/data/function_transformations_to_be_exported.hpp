@@ -10,7 +10,7 @@ namespace ft{
 
 struct image_t{
 
-    image_t( unsigned int& h, unsigned int& w )
+    image_t( unsigned int h, unsigned int w )
     : m_height( h )
       , m_width( w )
     {}
@@ -22,14 +22,51 @@ struct image_t{
         w = m_width;
     }
 
+    // Return only one value
+    virtual void get_one_value(unsigned int& h) {
+        h = m_height;
+    }
+
+    // Like get_size() but with a return type and an additional argument
+    // that has to be kept in the signature
+    virtual int get_size2( unsigned int& h, unsigned int& w, int noref=0 ){
+        h = m_height;
+        w = m_width;
+	return noref;
+    }
+
+    // A method with an input argument
+    virtual int input_arg(int& in){
+      return in;
+    }
+
+    // A method taking an input array of fixed size
+    virtual int fixed_input_array(int v[3]) {
+      return v[0]+v[1]+v[2];
+    }
+
     unsigned int m_width;
     unsigned int m_height;
 
 };
 
+// Provide an instance created in C++ (i.e. this is not a wrapper instance)
+image_t cpp_instance(12,13);
+image_t& get_cpp_instance() {
+  return cpp_instance;
+}
+
 inline void
 get_image_size( image_t& img, unsigned int& h, unsigned int& w ){
     img.get_size( h, w );
+}
+
+// This is used for calling img.get_one_value() on an instance passed
+// in by Python.
+unsigned int get_image_one_value( image_t& img ) {
+  unsigned int v;
+  img.get_one_value(v);
+  return v;
 }
 
 }
