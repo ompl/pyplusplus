@@ -40,6 +40,8 @@ class code_manager_t(subst_t):
     @type input_params: list of str
     @ivar result_var: The name of the variable that will receive the result of the function call. If None, the return value is ignored. This attribute will be used for the variable RESULT_VAR_ASSIGNMENT.
     @type result_var: str
+    @ivar result_type: The type of the variable 'result_var'
+    @type result_type: str
     @ivar result_expr: A string containing the expression that will be put after the "return" statement. This expression is used for the variable RETURN_STMT.
     @type result_expr: str
 
@@ -70,6 +72,9 @@ class code_manager_t(subst_t):
         # The name of the variable that will receive the result of the
         # function call. If None, the return value is ignored.
         self.result_var = None
+
+        # The type of 'result_var'
+        self.result_type = "void"
 
         # A string containing the expression that will be put after
         # the "return" statement.
@@ -179,6 +184,10 @@ class code_manager_t(subst_t):
         # RESULT_VAR_ASSIGNMENT
         if self.result_var!=None:
             self.RESULT_VAR_ASSIGNMENT = "%s = "%self.result_var
+
+        # RESULT_TYPE
+        if self.result_type!=None:
+            self.RESULT_TYPE = str(self.result_type)
 
         # INPUT_PARAMS
         self.INPUT_PARAMS = ", ".join(self.input_params)
