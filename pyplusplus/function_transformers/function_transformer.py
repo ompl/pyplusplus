@@ -37,7 +37,7 @@ class function_transformer_t:
         of the C++ wrapper function or allocate local variables.
 
         @param sm: Substitution manager instance
-        @type sm: substitution_manager_t
+        @type sm: L{substitution_manager_t}
         """
         pass
 
@@ -47,7 +47,7 @@ class function_transformer_t:
         The code from this method will be put into the wrapper function.
 
         @param sm: Substitution manager instance
-        @type sm: substitution_manager_t
+        @type sm: L{substitution_manager_t}
         @return: C++ code or None
         @rtype: str
         """
@@ -59,7 +59,7 @@ class function_transformer_t:
         The code from this method will be put into the wrapper function.
 
         @param sm: Substitution manager instance
-        @type sm: substitution_manager_t
+        @type sm: L{substitution_manager_t}
         @return: C++ code or None
         @rtype: str
         """
@@ -74,7 +74,7 @@ class function_transformer_t:
         <not used yet>
         
         @param sm: Substitution manager instance
-        @type sm: substitution_manager_t
+        @type sm: L{substitution_manager_t}
         @return: C++ code or None
         @rtype: str
         """
@@ -86,7 +86,7 @@ class function_transformer_t:
         The code from this method will be put into the virtual function.
         
         @param sm: Substitution manager instance
-        @type sm: substitution_manager_t
+        @type sm: L{substitution_manager_t}
         @return: C++ code or None
         @rtype: str
         """
@@ -98,7 +98,7 @@ class function_transformer_t:
         The code from this method will be put into the virtual function.
 
         @param sm: Substitution manager instance
-        @type sm: substitution_manager_t
+        @type sm: L{substitution_manager_t}
         @return: C++ code or None
         @rtype: str
         """
