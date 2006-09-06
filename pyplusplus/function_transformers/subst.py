@@ -108,7 +108,7 @@ class subst_t:
         code = "\n".join(lines)
 
         # Replace the non-block variables...
-        varexpr = re.compile("\$[a-zA-Z_]+")
+        varexpr = re.compile("\$[a-zA-Z_]+|\$\{[a-zA-Z_]+\}")
         while 1:
             m = varexpr.search(code)
             if m==None:
@@ -116,6 +116,8 @@ class subst_t:
             s = m.start()
             e = m.end()
             key = code[s+1:e]
+            if key[0]=="{":
+                key = key[1:-1]
             code = "%s%s%s"%(code[:s], getattr(self, key, ""), code[e:])
 
         # Replace trailing blanks on each line...
