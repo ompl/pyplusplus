@@ -26,6 +26,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         image.member_function( "get_size2" ).function_transformers.extend([output_t(1), output_t(2)])
         image.member_function( "input_arg" ).function_transformers.extend([input_t(1)])
         image.member_function( "fixed_input_array" ).function_transformers.extend([input_array_t(1,3)])
+        image.member_function( "fixed_output_array" ).function_transformers.extend([output_array_t(1,3)])
         mb.free_function("get_cpp_instance").call_policies = return_value_policy(reference_existing_object)
         mb.variable( "cpp_instance" ).exclude()
         mb.decls(lambda decl: decl.name[0]=="_").exclude()
@@ -62,15 +63,30 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.assertRaises(ValueError, lambda : img.fixed_input_array(1))
         self.assertRaises(ValueError, lambda : img.fixed_input_array(None))
 
+        # Check the fixed_output_array method
+        self.assertEqual(img.fixed_output_array(), [1,2,3])
+
         ####### Do the tests on a class derived in Python ########
         
         class py_image1_t(module.image_t):
             def __init__(self, h, w):
                 module.image_t.__init__(self, h, w)
+                self.fixed_output_array_mode = 0
 
             # Override a virtual method
             def get_one_value(self):
                 return self.m_height+1
+
+            def fixed_output_array(self):
+                # Produce a correct return value
+                if self.fixed_output_array_mode==0:
+                    return (2,5,7)
+                # Produce the wrong type
+                elif self.fixed_output_array_mode==1:
+                    return 5
+                # Produce a sequence with the wrong number of items
+                elif self.fixed_output_array_mode==2:
+                    return (2,5)
 
         pyimg1 = py_image1_t(3,7)
         
@@ -82,6 +98,13 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
         # Check if the Python class can also be passed back to C++
         self.assertEqual(module.get_image_one_value(pyimg1), 4)
+
+        # Check if fixed_output_array() is correctly called from C++
+        self.assertEqual(module.image_fixed_output_array(pyimg1), 14)
+        pyimg1.fixed_output_array_mode = 1
+        self.assertRaises(ValueError, lambda : module.image_fixed_output_array(pyimg1))
+        pyimg1.fixed_output_array_mode = 2
+        self.assertRaises(ValueError, lambda : module.image_fixed_output_array(pyimg1))
 
         class py_image2_t(module.image_t):
             def __init__(self, h, w):

@@ -45,6 +45,13 @@ struct image_t{
       return v[0]+v[1]+v[2];
     }
 
+    // A method with a output array of fixed size
+    virtual void fixed_output_array(int v[3]) {
+      v[0] = 1;
+      v[1] = 2;
+      v[2] = 3;
+    }
+
     unsigned int m_width;
     unsigned int m_height;
 
@@ -67,6 +74,14 @@ unsigned int get_image_one_value( image_t& img ) {
   unsigned int v;
   img.get_one_value(v);
   return v;
+}
+
+// This is used for calling img.fixed_output_array() on an instance passed
+// in by Python.
+int image_fixed_output_array( image_t& img) {
+  int v[3];
+  img.fixed_output_array(v);
+  return v[0]+v[1]+v[2];
 }
 
 }
