@@ -7,8 +7,12 @@
 
 """This module contains the standard argument policy objects.
 
+The following policies are available:
+
  - L{output_t}
  - L{input_t}
+ - L{input_array_t}
+ - L{output_array_t}
 """
 
 from pygccxml import declarations
@@ -124,7 +128,7 @@ class input_array_t:
     def __init__(self, idx, size):
         """Constructor.
 
-        @param idx: Index of the argument that is an output value (the first arg has index 1).
+        @param idx: Index of the argument that is an input array (the first arg has index 1).
         @type idx: int
         @param size: The fixed size of the input array
         @type size: int
@@ -202,3 +206,96 @@ class input_array_t:
         res += "  %s.append(%s[%s]);"%(self.pylist, self.argname, self.virtual_ivar)
         return res
 
+
+# output_array_t
+class output_array_t:
+    """Handles an output array of a fixed size.
+
+    void getVec3(double* v) -> v = getVec3()
+    # v will be a list with 3 floats    
+
+    TODO: Error handling (in the virtual function)!
+    
+    """
+    
+    def __init__(self, idx, size):
+        """Constructor.
+
+        @param idx: Index of the argument that is an output array (the first arg has index 1).
+        @type idx: int
+        @param size: The fixed size of the output array
+        @type size: int
+        """
+
+        self.idx = idx
+        self.size = size
+        
+        self.argname = None
+        self.basetype = None
+        self.pyval = None
+        self.cval = None
+        self.ivar = None
+
+    def __str__(self):
+        return "OutputArray(%d,%d)"%(self.idx, self.size)
+
+    def init_funcs(self, sm):
+        # Remove the original argument...
+        arg = sm.remove_arg(self.idx)
+        
+        if not (isinstance(arg.type, declarations.pointer_t) or
+                isinstance(arg.type, declarations.array_t)):
+            raise ValueError, "Argument %d (%s) must be a pointer."%(self.idx, arg.name)
+
+        self.argname = arg.name
+        self.basetype = str(arg.type.base).replace("const", "").strip()
+
+        # Wrapper:
+
+        # Declare a variable that will hold the C array...
+        self.wrapper_cval = sm.wrapper_func.declare_local("c_"+self.argname, self.basetype, size=self.size)
+        # Declare a Python list which will receive the output...
+        self.wrapper_pyval = sm.wrapper_func.declare_local(self.argname, "boost::python::list")
+        # ...and add it to the result
+        sm.wrapper_func.result_exprs.append(arg.name)
+
+        # Declare an int which is used for the loop
+        self.wrapper_ivar = sm.wrapper_func.declare_local("i", "int", default=0)
+
+        sm.wrapper_func.input_params[self.idx-1] = self.wrapper_cval
+
+        # Virtual:
+
+        # Declare a variable that will receive the Python list
+        self.virtual_pyval = sm.virtual_func.declare_local("py_"+self.argname, "boost::python::object")
+            
+        # Declare an int which is used for the loop
+        self.virtual_ivar = sm.virtual_func.declare_local("i", "int", default=0)
+
+    def wrapper_post_call(self, sm):
+        res = ""
+        res += "// Copy the sequence '%s' into '%s'...\n"%(self.wrapper_cval, self.wrapper_pyval)
+        res += "for(%s=0; %s<%d; %s++)\n"%(self.wrapper_ivar, self.wrapper_ivar, self.size, self.wrapper_ivar)
+        res += "  %s.append(%s[%s]);"%(self.wrapper_pyval, self.wrapper_cval , self.wrapper_ivar)
+        return res
+
+    def virtual_post_call(self, sm):
+        res = ""
+        res += "// Assert that the Python object corresponding to output\n"
+        res += "// argument '%s' is really a sequence.\n"%self.argname
+        res += "%s = %s;\n"%(self.virtual_pyval, sm.py_result_expr(self.argname))
+        res += "if (!PySequence_Check(%s.ptr()))\n"%self.virtual_pyval
+        res += "{\n"
+        res += '  PyErr_SetString(PyExc_ValueError, "%s: sequence expected as return value for output array \'%s\'");\n'%(sm.decl.name, self.argname)
+        res += '  boost::python::throw_error_already_set();\n'
+        res += "}\n"
+        res += "// Assert that the sequence has the correct size\n"
+        res += "if (PySequence_Length(%s.ptr())!=%s)\n"%(self.virtual_pyval, self.size)
+        res += "{\n"
+        res += '  PyErr_SetString(PyExc_ValueError, "%s: sequence with %s values expected as return value for output array \'%s\'");\n'%(sm.decl.name, self.size, self.argname)
+        res += '  boost::python::throw_error_already_set();\n'
+        res += "}\n"
+        res += "// Copy the Python sequence into '%s'\n"%self.argname
+        res += "for(%s=0; %s<%d; %s++)\n"%(self.virtual_ivar, self.virtual_ivar, self.size, self.virtual_ivar)
+        res += "  %s[%s] = boost::python::extract<%s>(%s[%s]);"%(self.argname, self.virtual_ivar, self.basetype, self.virtual_pyval, self.virtual_ivar)
+        return res
