@@ -26,9 +26,9 @@ code = \
 //1 - dimension
 namespace pyplusplus{ namespace containers{ namespace static_sized{
 
-inline void 
+inline void
 raise_on_out_of_range( long unsigned int size, long unsigned int index ){
-    if( index < 0 || size <= index ){
+    if( size <= index ){
         throw std::out_of_range("index out of range");
     }
 }
@@ -36,19 +36,20 @@ raise_on_out_of_range( long unsigned int size, long unsigned int index ){
 template< class TItemType, long unsigned int size >
 struct const_array_1_t{
 
+    typedef BOOST_DEDUCED_TYPENAME boost::call_traits<const TItemType>::param_type reference_type;
+
     const_array_1_t( TItemType const * const data )
     : m_data( data ){
         if( !data ){
             throw std::runtime_error( "const_array_1_t: pointer to null has been recieved." );
         }
     }
-       
+
     long unsigned int len() const {
         return size;
     }
-    
-    typename boost::call_traits<const TItemType>::param_type
-    item_ref( long unsigned int index ) const{
+
+    reference_type item_ref( long unsigned int index ) const{
         raise_on_out_of_range( size, index );
         return m_data[index];
     }
@@ -62,6 +63,8 @@ private:
 template< class TItemType, long unsigned int size >
 struct array_1_t{
 
+    typedef BOOST_DEDUCED_TYPENAME boost::call_traits<const TItemType>::param_type reference_type;
+
     array_1_t( TItemType * data )
     : m_data( data ){
         if( !data ){
@@ -72,49 +75,47 @@ struct array_1_t{
     long unsigned int len() const {
         return size;
     }
-    
-    typename boost::call_traits<const TItemType>::param_type
-    item_ref( long unsigned int index ) const{
+
+    reference_type item_ref( long unsigned int index ) const{
         raise_on_out_of_range( size, index );
         return m_data[index];
     }
 
     void
-    set_item( long unsigned int index
-              , typename boost::call_traits<const TItemType>::param_type new_value ){
+    set_item( long unsigned int index, reference_type new_value ){
         raise_on_out_of_range( size, index );
         m_data[index] = new_value;
     }
 
 private:
 
-    TItemType* m_data;    
+    TItemType* m_data;
 
 };
 
 template< class TItemType, long unsigned int size, typename CallPolicies >
 void register_const_array_1(const char* name){
     typedef const_array_1_t< TItemType, size > wrapper_t;
-    boost::python::class_< wrapper_t >( name, boost::python::no_init )    
+    boost::python::class_< wrapper_t >( name, boost::python::no_init )
         .def( "__getitem__"
               , &wrapper_t::item_ref
               , ( boost::python::arg("index") )
-              , CallPolicies() )    
+              , CallPolicies() )
         .def( "__len__", &wrapper_t::len );
 }
 
 template< class TItemType, long unsigned int size, typename CallPolicies >
 void register_array_1(const char* name){
     typedef array_1_t< TItemType, size > wrapper_t;
-    boost::python::class_< wrapper_t >( name, boost::python::no_init )    
+    boost::python::class_< wrapper_t >( name, boost::python::no_init )
         .def( "__getitem__"
               , &wrapper_t::item_ref
               , ( boost::python::arg("index") )
-              , CallPolicies() )    
+              , CallPolicies() )
         .def( "__setitem__"
               , &wrapper_t::set_item
               , ( boost::python::arg("index"), boost::python::arg("value") )
-              , CallPolicies()  )    
+              , CallPolicies()  )
         .def( "__len__", &wrapper_t::len );
 }
 
