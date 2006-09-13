@@ -6,6 +6,7 @@
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
+from pyplusplus.decl_wrappers import python_traits
 
 class resolver_t( object ):
     def __init__( self ):
@@ -100,7 +101,7 @@ class return_internal_reference_resolver_t( resolver_t ):
         return_type = declarations.remove_cv( calldef.return_type )
         if declarations.is_reference( return_type ): 
             return_type = declarations.remove_reference( return_type )
-        if declarations.is_fundamental( return_type ) or declarations.is_enum( return_type ):
+        if python_traits.is_immutable( return_type ):
             if declarations.is_const( calldef.return_type ):
                 return decl_wrappers.return_value_policy( decl_wrappers.copy_const_reference )
             else:
@@ -123,7 +124,7 @@ class variable_accessors_resolver_t( resolver_t ):
         
         no_ref = declarations.remove_reference( variable.type )
         base_type = declarations.remove_const( no_ref )
-        if declarations.is_fundamental( base_type ) or declarations.is_enum( base_type ):
+        if python_traits.is_immutable( base_type ):
             #the relevant code creator will generate code, that will return this member variable
             #by value
             return decl_wrappers.default_call_policies()

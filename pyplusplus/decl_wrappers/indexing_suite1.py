@@ -6,17 +6,11 @@
 """defines interface for exposing STD containers, using current version of indexing suite"""
 
 from pygccxml import declarations
-
+import python_traits
 #NoProxy
 #By default indexed elements have Python reference semantics and are returned by
 #proxy. This can be disabled by supplying true in the NoProxy template parameter.
-#When we want to disable is:
-#1. We deal with immutable objects:
-#   1. fundamental types
-#   2. enum type
-#   3. std::[w]string
-#   4. std::complex
-#   5. shared_ptr
+#We want to disable NoProxy when we deal with immutable objects.
 
 class indexing_suite1_t( object ):
     """
@@ -43,15 +37,7 @@ class indexing_suite1_t( object ):
 
     def _get_no_proxy( self ):
         if self.__no_proxy is None:
-            element_type = self.element_type
-            if declarations.is_fundamental( element_type ) \
-               or declarations.is_enum( element_type )    \
-               or declarations.is_std_string( element_type ) \
-               or declarations.is_std_wstring( element_type ) \
-               or declarations.smart_pointer_traits.is_smart_pointer( element_type ):
-                self.__no_proxy = True
-            else:
-                self.__no_proxy = False
+            self.__no_proxy = python_traits.is_immutable( self.element_type )
         return self.__no_proxy
 
     def _set_no_proxy( self, no_proxy ):

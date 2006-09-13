@@ -11,13 +11,13 @@ from pygccxml import declarations
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'member_functions'
-    
+
     def __init__( self, *args ):
-        fundamental_tester_base.fundamental_tester_base_t.__init__( 
+        fundamental_tester_base.fundamental_tester_base_t.__init__(
             self
             , tester_t.EXTENSION_NAME
             , *args )
-                                                                    
+
     def customize(self, mb ):
         names = [
             'protected_protected_derived_t'
@@ -33,7 +33,17 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         #will reporoduce bug
         mb.class_('callable_t').always_expose_using_scope = True
         mb.BOOST_PYTHON_MAX_ARITY = 1
-        
+
+    def create_py_immutable_by_ref( self, module ):
+        class py_immutable_by_ref( module.immutable_by_ref_t ):
+            def __init__( self ):
+                module.immutable_by_ref_t.__init__( self )
+
+            def identity( self, x ):
+                return x*2
+
+        return py_immutable_by_ref()
+
     def create_test_class_inst(self, class_ ):
         class tester_impl_t( class_ ):
             def __init__(self):
@@ -63,39 +73,39 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def _test_instance( self, inst, class_defined_in_cpp):
         self.failUnless( 23 == inst.regular( 23 ) )
-        self.failUnless( 9 == inst.regular_overloaded( 3 ) )    
-        self.failUnless( 15 == inst.regular_overloaded( 3, 5 ) )    
+        self.failUnless( 9 == inst.regular_overloaded( 3 ) )
+        self.failUnless( 15 == inst.regular_overloaded( 3, 5 ) )
 
         self.failUnless( 23 == inst.regular_const( 23 ) )
-        self.failUnless( 9 == inst.regular_const_overloaded( 3 ) )    
-        self.failUnless( 15 == inst.regular_const_overloaded( 3, 5 ) )    
+        self.failUnless( 9 == inst.regular_const_overloaded( 3 ) )
+        self.failUnless( 15 == inst.regular_const_overloaded( 3, 5 ) )
 
         self.failUnless( 23 == inst.virtual_( 23 ) )
-        self.failUnless( 9 == inst.virtual_overloaded( 3 ) )    
-        self.failUnless( 15 == inst.virtual_overloaded( 3, 5 ) )    
+        self.failUnless( 9 == inst.virtual_overloaded( 3 ) )
+        self.failUnless( 15 == inst.virtual_overloaded( 3, 5 ) )
 
         self.failUnless( 23 == inst.virtual_const( 23 ) )
-        self.failUnless( 9 == inst.virtual_const_overloaded( 3 ) )    
-        self.failUnless( 15 == inst.virtual_const_overloaded( 3, 5 ) )    
-        
+        self.failUnless( 9 == inst.virtual_const_overloaded( 3 ) )
+        self.failUnless( 15 == inst.virtual_const_overloaded( 3, 5 ) )
+
         if class_defined_in_cpp:
             self.failUnless( 23 == inst.pure_virtual( 23 ) )
-            self.failUnless( 9 == inst.pure_virtual_overloaded( 3 ) )    
-            self.failUnless( 15 == inst.pure_virtual_overloaded( 3, 5 ) )    
-    
+            self.failUnless( 9 == inst.pure_virtual_overloaded( 3 ) )
+            self.failUnless( 15 == inst.pure_virtual_overloaded( 3, 5 ) )
+
             self.failUnless( 23 == inst.pure_virtual_const( 23 ) )
-            self.failUnless( 9 == inst.pure_virtual_const_overloaded( 3 ) )    
-            self.failUnless( 15 == inst.pure_virtual_const_overloaded( 3, 5 ) )    
+            self.failUnless( 9 == inst.pure_virtual_const_overloaded( 3 ) )
+            self.failUnless( 15 == inst.pure_virtual_const_overloaded( 3, 5 ) )
         else:
             self.failUnless( 46 == inst.pure_virtual( 23 ) )
-            self.failUnless( 6 == inst.pure_virtual_overloaded( 3 ) )    
-            self.failUnless( 8 == inst.pure_virtual_overloaded( 3, 5 ) )    
-    
+            self.failUnless( 6 == inst.pure_virtual_overloaded( 3 ) )
+            self.failUnless( 8 == inst.pure_virtual_overloaded( 3, 5 ) )
+
             self.failUnless( 46 == inst.pure_virtual_const( 23 ) )
-            self.failUnless( 6 == inst.pure_virtual_const_overloaded( 3 ) )    
-            self.failUnless( 8 == inst.pure_virtual_const_overloaded( 3, 5 ) )    
-    
-    def run_tests(self, module):        
+            self.failUnless( 6 == inst.pure_virtual_const_overloaded( 3 ) )
+            self.failUnless( 8 == inst.pure_virtual_const_overloaded( 3, 5 ) )
+
+    def run_tests(self, module):
         derived = module.protected_public_derived_t()
         self._test_instance( derived, True )
         derived = module.protected_protected_derived_t()
@@ -106,9 +116,13 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self._test_instance( derived, False )
         derived = self.create_test_class_inst( module.public_base_t )
         self._test_instance( derived, False )
-    
+
+        x = self.create_py_immutable_by_ref(module)
+        self.failUnless( x.identity( '11' ) == '1111' )
+        self.failUnless( module.immutable_by_ref_t.call_identity(x, '11') == '1111' )
+
 def create_suite():
-    suite = unittest.TestSuite()    
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

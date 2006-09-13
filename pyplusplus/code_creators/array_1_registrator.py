@@ -9,6 +9,7 @@ import algorithm
 import code_creator
 from pyplusplus import code_repository
 from pyplusplus.decl_wrappers import call_policies
+from pyplusplus.decl_wrappers import python_traits
 from pygccxml import declarations
 
 class array_1_registrator_t( code_creator.code_creator_t ):
@@ -41,7 +42,7 @@ class array_1_registrator_t( code_creator.code_creator_t ):
 
     def _guess_call_policies(self):
         item_type = declarations.array_item_type( self.array_type )
-        if declarations.is_fundamental( item_type ) or declarations.is_enum( item_type ):
+        if python_traits.is_immutable( item_type ):
             return call_policies.default_call_policies()
         else:
             return call_policies.return_internal_reference()

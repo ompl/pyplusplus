@@ -5,8 +5,9 @@
 
 """defines class that configure global and member variable exposing"""
 
-from pygccxml import declarations
 import decl_wrapper
+from pygccxml import declarations
+from pyplusplus.decl_wrappers import python_traits
 
 class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
     """defines a set of properties, that will instruct Py++ how to expose the variable"""
@@ -50,8 +51,8 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
         if declarations.is_pointer( type_ ):
             if self.type_qualifiers.has_static:
                 return "Py++ can not expose static pointer member variables. This could be changed in future."
-            if declarations.is_fundamental( type_.base ):
-                return "Py++ can not expose pointer to fundamental member variables. This could be changed in future."
+            if python_traits.is_immutable( type_.base ):
+                return "Py++ can not expose pointer to Python immutable member variables. This could be changed in future."
 
             units = declarations.decompose_type( type_ )
             ptr2functions = filter( lambda unit: isinstance( unit, declarations.calldef_type_t )

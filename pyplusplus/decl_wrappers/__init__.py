@@ -91,6 +91,8 @@ from indexing_suite2 import indexing_suite2_t
 
 from doc_extractor import doc_extractor_i
 
+import python_traits
+
 class dwfactory_t( declarations.decl_factory_t ):
     """
     declarations factory class

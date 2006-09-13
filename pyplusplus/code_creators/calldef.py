@@ -9,6 +9,7 @@ import code_creator
 import declaration_based
 import class_declaration
 from pygccxml import declarations
+from pyplusplus.decl_wrappers import python_traits
 import pyplusplus.function_transformers as function_transformers
 
 #virtual functions that returns const reference to something
@@ -174,17 +175,19 @@ class calldef_wrapper_t( declaration_based.declaration_based_t):
         params = []
         for index in range( len( self.declaration.arguments ) ):
             arg_type = declarations.remove_alias( self.declaration.arguments[index].type )
-            arg_base_type = declarations.base_type( arg_type )
-            if declarations.is_fundamental( arg_base_type ):
+            if  python_traits.is_immutable( arg_type ):
                 params.append( self.argument_name( index ) )
-            elif declarations.is_reference( arg_type ) \
-                 and not declarations.is_const( arg_type ) \
-                 and not declarations.is_enum( arg_base_type ):
-                params.append( 'boost::ref(%s)' % self.argument_name( index ) )
+            elif declarations.is_reference( arg_type ):
+                no_ref = declarations.remove_reference( arg_type )
+                if python_traits.is_immutable( no_ref ):
+                    #pass by value
+                    params.append( self.argument_name( index ) )
+                else:
+                    #pass by ref
+                    params.append( 'boost::ref(%s)' % self.argument_name( index ) )
             elif declarations.is_pointer( arg_type ) \
                  and not declarations.is_pointer( arg_type.base ) \
-                 and not declarations.is_fundamental( arg_type.base ) \
-                 and not declarations.is_enum( arg_base_type ):
+                 and not python_traits.is_immutable( arg_type.base ):
                 params.append( 'boost::python::ptr(%s)' % self.argument_name( index ) )
             else:
                 params.append( self.argument_name( index ) )
@@ -443,7 +446,7 @@ class mem_fun_v_wrapper_t( calldef_wrapper_t ):
 class mem_fun_v_transformed_t( calldef_t ):
     """Creates code for (public) virtual member functions.
     """
-    
+
     def __init__( self, function, wrapper=None ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
         self.default_function_type_alias = 'default_' + self.function_type_alias
@@ -504,7 +507,7 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
         @type function: calldef_t
         """
         calldef_wrapper_t.__init__( self, function=function )
-        
+
         # Stores the name of the variable that holds the override
         self._override_var = None
 
@@ -593,11 +596,11 @@ $DECLARATIONS
 if( %(override_var)s )
 {
   $PRE_CALL
-  
+
   ${RESULT_VAR_ASSIGNMENT}boost::python::call<$RESULT_TYPE>($INPUT_PARAMS);
-  
+
   $POST_CALL
-  
+
   $RETURN_STMT
 }
 else
@@ -636,7 +639,7 @@ else
         cls_wrapper = self._subst_manager.wrapper_func.declare_local("cls_wrapper", cls_wrapper_type);
         # The name of the 'self' variable (i.e. first argument)
         selfname = self._subst_manager.wrapper_func.arg_list[0].name
-        
+
         body = """$DECLARATIONS
 
 $PRE_CALL
@@ -668,7 +671,7 @@ $RETURN_STMT
                      "cls_wrapper" : cls_wrapper,
                      "self" : selfname,
                      "base_name" : self.base_name() }
-        
+
 #        function_call = declarations.call_invocation.join( self.declaration.name
 #                                                           , [ self.function_call_args() ] )
 #        body = self.wrapped_class_identifier() + '::' + function_call + ';'
@@ -693,12 +696,12 @@ $RETURN_STMT
 
         header = 'static $RET_TYPE %s( $ARG_LIST_DEF ) {'%self.default_name()
         header = self._subst_manager.subst_wrapper(header)
-        
+
         answer = [ header ]
         answer.append( self.indent( self.create_default_body() ) )
         answer.append( '}' )
         return os.linesep.join( answer )
-      
+
 
     def _create_impl(self):
         # Create the substitution manager
@@ -706,7 +709,7 @@ $RETURN_STMT
         sm = function_transformers.substitution_manager_t(decl, transformers=decl.function_transformers)
         self._override_var = sm.virtual_func.declare_local(decl.alias+"_callable", "boost::python::override", default='this->get_override( "%s" )'%decl.alias)
         self._subst_manager = sm
-    
+
         answer = [ self.create_function() ]
         answer.append( os.linesep )
         answer.append( self.create_base_function() )

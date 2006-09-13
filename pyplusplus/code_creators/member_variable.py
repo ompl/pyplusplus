@@ -8,6 +8,7 @@ import algorithm
 import declaration_based
 from pyplusplus import code_repository
 from pyplusplus.decl_wrappers import call_policies
+from pyplusplus.decl_wrappers import python_traits
 from pygccxml import declarations
 
 class member_variable_base_t( declaration_based.declaration_based_t ):
@@ -508,7 +509,7 @@ class mem_var_ref_wrapper_t( declaration_based.declaration_based_t ):
     def _get_exported_var_type( self ):
         type_ = declarations.remove_reference( self.declaration.type )
         type_ = declarations.remove_const( type_ )
-        if declarations.is_fundamental( type_ ) or declarations.is_enum( type_ ):
+        if python_traits.is_immutable( type_ ):
             return type_
         else:
             return self.declaration.type
@@ -533,9 +534,7 @@ class mem_var_ref_wrapper_t( declaration_based.declaration_based_t ):
     def _get_has_setter( self ):  
         if declarations.is_const( declarations.remove_reference( self.declaration.type ) ):
             return False
-        elif declarations.is_fundamental( self._get_exported_var_type() ):
-            return True
-        elif declarations.is_enum( self._get_exported_var_type() ):
+        elif python_traits.is_immutable( self._get_exported_var_type() ):
             return True
         else:
             pass
