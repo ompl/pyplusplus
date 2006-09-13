@@ -60,6 +60,7 @@ from scopedef_wrapper import scopedef_t
 from pygccxml import declarations
 
 from call_policies import call_policy_t
+from call_policies import default_call_policies_t
 from call_policies import default_call_policies
 from call_policies import compound_policy_t
 from call_policies import return_argument_t

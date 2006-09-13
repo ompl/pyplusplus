@@ -9,31 +9,30 @@ import algorithm
 import declaration_based
 from pygccxml import declarations
 from pyplusplus import code_repository
-from pyplusplus.decl_wrappers import call_policies
 
 #TODO: if variable is not const, then export it using boost::python::ptr
 class global_variable_base_t( declaration_based.declaration_based_t ):
     """
-    Base class for all global variables code creators. Mainly exists to 
+    Base class for all global variables code creators. Mainly exists to
     simplify file writers algorithms.
     """
     def __init__(self, variable, wrapper=None ):
         declaration_based.declaration_based_t.__init__( self, declaration=variable)
-        self._wrapper = wrapper 
+        self._wrapper = wrapper
 
     def _get_wrapper( self ):
         return self._wrapper
     def _set_wrapper( self, new_wrapper ):
         self._wrapper = new_wrapper
     wrapper = property( _get_wrapper, _set_wrapper )
-    
+
 class global_variable_t( global_variable_base_t ):
     """
     Creates boost.python code that exposes global variable.
     """
     def __init__(self, variable ):
         global_variable_base_t.__init__( self, variable=variable )
-    
+
     def _create_impl(self):
         assert isinstance( self.declaration, pygccxml.declarations.variable_t )
         result = []
@@ -42,7 +41,7 @@ class global_variable_t( global_variable_base_t ):
         full_name = pygccxml.declarations.full_name( self.declaration )
         result.append( ' = %s;' % algorithm.create_identifier( self, full_name ) )
         return ''.join( result )
-    
+
 class array_gv_t( global_variable_base_t ):
     """
     Creates boost.python code that exposes array global variable.
@@ -51,7 +50,7 @@ class array_gv_t( global_variable_base_t ):
     _PARAM_SEPARATOR = ', '
     def __init__(self, variable, wrapper ):
         global_variable_base_t.__init__( self, variable=variable, wrapper=wrapper )
-    
+
     def _create_impl( self ):
         answer = []
         answer.append( algorithm.create_identifier( self, '::boost::python::scope' ) )
@@ -60,7 +59,7 @@ class array_gv_t( global_variable_base_t ):
         answer.append( self.wrapper.wrapper_creator_full_name )
         answer.append( '();' )
         return ''.join( answer )
-    
+
 class array_gv_wrapper_t( declaration_based.declaration_based_t ):
     """
     Creates C++ code that register array class.
@@ -75,22 +74,22 @@ class array_gv_wrapper_t( declaration_based.declaration_based_t ):
             class_name = 'const_array_1_t'
         else:
             class_name = 'array_1_t'
-        
-        decl_string = declarations.templates.join( 
+
+        decl_string = declarations.templates.join(
               '::'.join( [ns_name, class_name] )
             , [ declarations.array_item_type( self.declaration.type ).decl_string
                 , str( declarations.array_size( self.declaration.type ) )
         ])
-        
+
         return declarations.dummy_type_t( decl_string )
     wrapper_type = property( _get_wrapper_type )
-        
+
     def _get_wrapper_creator_type(self):
         return declarations.free_function_type_t.create_decl_string(
                 return_type=self.wrapper_type
                 , arguments_types=[] )
     wrapper_creator_type = property( _get_wrapper_creator_type )
-    
+
     def _get_wrapper_creator_name(self):
         return '_'.join( [self.declaration.name, 'wrapper'] )
     wrapper_creator_name = property( _get_wrapper_creator_name )
@@ -100,7 +99,7 @@ class array_gv_wrapper_t( declaration_based.declaration_based_t ):
         if len(ns_names) > 1 and ns_names[0] == '::':
             ns_names = ns_names[1:]
         return ns_names
-    
+
     def _get_wrapper_creator_full_name(self):
         names = self._create_namespaces()
         names.append( self.wrapper_creator_name )
@@ -112,7 +111,7 @@ class array_gv_wrapper_t( declaration_based.declaration_based_t ):
         for ns_name in self._create_namespaces():
             temp.append( ''.join( ['namespace ', ns_name, '{ '] ) )
         return ''.join( temp )
-    
+
     def _create_impl( self ):
         answer = [self._create_namespaces_name()]
         answer.append( self.wrapper_type.decl_string )
@@ -126,4 +125,3 @@ class array_gv_wrapper_t( declaration_based.declaration_based_t ):
         answer.append('}')
         answer.append( '}' * len( self._create_namespaces() ) )
         return os.linesep.join( answer )
-        

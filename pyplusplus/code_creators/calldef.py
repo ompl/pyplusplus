@@ -9,7 +9,7 @@ import code_creator
 import declaration_based
 import class_declaration
 from pygccxml import declarations
-from pyplusplus.decl_wrappers import python_traits
+from pyplusplus import decl_wrappers
 import pyplusplus.function_transformers as function_transformers
 
 #virtual functions that returns const reference to something
@@ -120,8 +120,11 @@ class calldef_t( declaration_based.declaration_based_t):
             result.append( self.keywords_args() )
 
         if self.declaration.call_policies:
-            result.append( self.param_sep() )
-            result.append( self.declaration.call_policies.create( self ) )
+            if not self.declaration.call_policies.is_default():
+                result.append( self.param_sep() )
+                result.append( self.declaration.call_policies.create( self ) )
+            else:
+                pass#don't generate default_call_policies
         else:
             result.append( os.linesep + self.indent( '/* undefined call policies */', 2 ) )
 
@@ -175,11 +178,11 @@ class calldef_wrapper_t( declaration_based.declaration_based_t):
         params = []
         for index in range( len( self.declaration.arguments ) ):
             arg_type = declarations.remove_alias( self.declaration.arguments[index].type )
-            if  python_traits.is_immutable( arg_type ):
+            if  decl_wrappers.python_traits.is_immutable( arg_type ):
                 params.append( self.argument_name( index ) )
             elif declarations.is_reference( arg_type ):
                 no_ref = declarations.remove_reference( arg_type )
-                if python_traits.is_immutable( no_ref ):
+                if decl_wrappers.python_traits.is_immutable( no_ref ):
                     #pass by value
                     params.append( self.argument_name( index ) )
                 else:
@@ -187,7 +190,7 @@ class calldef_wrapper_t( declaration_based.declaration_based_t):
                     params.append( 'boost::ref(%s)' % self.argument_name( index ) )
             elif declarations.is_pointer( arg_type ) \
                  and not declarations.is_pointer( arg_type.base ) \
-                 and not python_traits.is_immutable( arg_type.base ):
+                 and not decl_wrappers.python_traits.is_immutable( arg_type.base ):
                 params.append( 'boost::python::ptr(%s)' % self.argument_name( index ) )
             else:
                 params.append( self.argument_name( index ) )
@@ -1130,11 +1133,8 @@ class constructor_t( calldef_t ):
                 answer.append( ', ' )
             answer.append( self.documentation )
         answer.append( ')' )
-        if self.declaration.call_policies:
+        if self.declaration.call_policies and not self.declaration.call_policies.is_default():
             answer.append('[%s]' % self.declaration.call_policies.create( self ) )
-        #I think it better not to print next line
-        #else:
-        #    answer.append( '/*[ undefined call policies ]*/' )
         return ''.join( answer )
 
     def _create_impl( self ):
@@ -1369,7 +1369,6 @@ class casting_member_operator_t( declaration_based.declaration_based_t ):
 
     def __init__( self, operator ):
         declaration_based.declaration_based_t.__init__( self, declaration=operator )
-        self._call_policies = None
 
     def _create_impl(self):
         template = 'def( "%(function_name)s", &%(class_name)s::operator %(destination_type)s %(call_policies)s%(doc)s )'
@@ -1377,9 +1376,12 @@ class casting_member_operator_t( declaration_based.declaration_based_t ):
         class_name = algorithm.create_identifier( self
                                                 , declarations.full_name( self.declaration.parent ) )
 
-        policies = '/*, undefined call policies */'
+        policies = ''
         if self.declaration.call_policies:
-            policies = ',' + self.declaration.call_policies.create( self )
+            if not self.declaration.call_policies.is_default():
+                policies = ',' + self.declaration.call_policies.create( self )
+        else:
+            policies = '/*, undefined call policies */'
 
         doc = ''
         if self.documentation:
@@ -1537,7 +1539,8 @@ class calldef_overloads_t( code_creator.code_creator_t ):
             result.append( os.linesep + self.indent( self.PARAM_SEPARATOR, 3 ) )
             result.append( self.overloads_class.max_function.documentation )
         result.append( ' )' )
-        if self.overloads_class.max_function.call_policies:
+        if self.overloads_class.max_function.call_policies \
+           and not self.overloads_class.max_function.call_policies.is_default():
             result.append( os.linesep + self.indent('', 3) )
             result.append('[ %s ]' % self.overloads_class.max_function.call_policies.create( self ) )
         return ''.join( result )

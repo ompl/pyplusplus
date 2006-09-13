@@ -5,21 +5,21 @@
 
 import os
 import types
-import algorithm 
+import algorithm
 import code_creator
 import declaration_based
 from pygccxml import declarations
 
 class indexing_suite1_t( declaration_based.declaration_based_t ):
-    def __init__(self, container ):        
+    def __init__(self, container ):
         declaration_based.declaration_based_t.__init__( self, declaration=container )
-            
+
     def _get_configuration( self ):
         return self.declaration.indexing_suite
     configuration = property( _get_configuration )
 
     def _get_container( self ):
-        return self.declaration 
+        return self.declaration
     container = property( _get_container )
 
     def guess_suite_name( self ):
@@ -40,19 +40,19 @@ class indexing_suite1_t( declaration_based.declaration_based_t ):
             args.append( self.configuration.derived_policies )
         else:
             if 'true' == no_proxy:
-                args.append( no_proxy)        
-        return declarations.templates.join( suite_identifier, args )        
+                args.append( no_proxy)
+        return declarations.templates.join( suite_identifier, args )
 
     def _create_impl(self):
         return "def( %s() )" %  self._create_suite_declaration()
-    
+
 
 class indexing_suite2_t( declaration_based.declaration_based_t ):
-    def __init__(self, container ):        
+    def __init__(self, container ):
         declaration_based.declaration_based_t.__init__( self, declaration=container )
         self.__method_mask_var_name = "methods_mask"
         self.works_on_instance = not self.does_user_disable_methods()
-        
+
     def does_user_disable_methods( self ):
         return bool( self.declaration.indexing_suite.disabled_methods_groups ) \
                or bool( self.declaration.indexing_suite.disable_methods )
@@ -76,7 +76,7 @@ class indexing_suite2_t( declaration_based.declaration_based_t ):
             answer.append( ' ) ' )
         answer.append( ';' )
         return ''.join( answer )
-        
+
     def _create_impl( self ):
         answer = []
         if self.does_user_disable_methods():
@@ -93,8 +93,9 @@ class indexing_suite2_t( declaration_based.declaration_based_t ):
             answer.append( self.PARAM_SEPARATOR )
             answer.append( self.__method_mask_var_name )
         answer.append( ' >' )
-        if self.declaration.indexing_suite.call_policies:
-            answer.append( '::with_policies(%s)' 
+        if self.declaration.indexing_suite.call_policies \
+           and not self.declaration.indexing_suite.call_policies.is_default():
+            answer.append( '::with_policies(%s)'
                            % self.declaration.indexing_suite.call_policies.create( self )  )
         else:
             answer.append( '()' )
@@ -121,7 +122,7 @@ class value_traits_t( declaration_based.declaration_based_t ):
             , self.indent( "%(less)s" )
             , ""
             , self.indent( "template<typename PythonClass, typename Policy>" )
-            , self.indent( "static void visit_container_class(PythonClass &, Policy const &){" )    
+            , self.indent( "static void visit_container_class(PythonClass &, Policy const &){" )
             , self.indent( "%(visitor_helper_body)s", 2 )
             , self.indent( "}" )
             , ""
@@ -147,7 +148,7 @@ class value_traits_t( declaration_based.declaration_based_t ):
 
     def generate_value_class_fwd_declaration( self ):
         pass # for inner class this code will generate error :-((((
-    
+
     def _create_impl( self ):
         return self.generate_value_traits()
 

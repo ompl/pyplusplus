@@ -5,9 +5,9 @@
 
 """
 This modules contains definition of call policies classes. Call policies names
-are same, that used in boost.python library. 
+are same, that used in boost.python library.
 
-For every class that implements code creation of call policies, there is a 
+For every class that implements code creation of call policies, there is a
 convinience function.
 """
 
@@ -34,27 +34,35 @@ class call_policy_t(object):
         @type creation_policy: L{CREATION_POLICY}
         """
         code = self._create_impl( function_creator )
-        if creation_policy == CREATION_POLICY.AS_INSTANCE:
+        if code and creation_policy == CREATION_POLICY.AS_INSTANCE:
             code = code + '()'
         return code
 
+    def is_default( self ):
+        """Returns True is self is instance of L{default_call_policies_t} class"""
+        #Small hack that allows to write nicer code
+        return False
+
     def _create_impl( self, function_creator ):
         raise NotImplementedError()
-   
-class default_t(call_policy_t):
+
+class default_call_policies_t(call_policy_t):
     """implementation for ::boost::python::default_call_policies"""
     def __init__( self ):
         call_policy_t.__init__( self )
-    
+
     def _create_impl(self, function_creator ):
         return algorithm.create_identifier( function_creator, '::boost::python::default_call_policies' )
-    
+
+    def is_default( self ):
+        return True
+
     def __str__(self):
         return 'default_call_policies'
-    
+
 def default_call_policies():
     """create ::boost::python::default_call_policies"""
-    return default_t()
+    return default_call_policies_t()
 
 class compound_policy_t( call_policy_t ):
     """base class for all call policies, except default one"""
@@ -62,24 +70,26 @@ class compound_policy_t( call_policy_t ):
         call_policy_t.__init__( self )
         self._base = base
         if not base:
-            self._base = default_t()
-            
+            self._base = default_call_policies_t()
+
     def _get_base_policy( self ):
-        return self._base    
+        return self._base
     def _set_base_policy( self, new_policy ):
         self._base = new_policy
     base_policy = property( _get_base_policy, _set_base_policy
-                            , doc="base call policy, by default is reference to L{default_t} call policy")
+                            , doc="base call policy, by default is reference to L{default_call_policies_t} call policy")
 
     def _get_args(self, function_creator):
         return []
 
     def _get_name(self, function_creator):
         raise NotImplementedError()
-    
+
     def _create_impl( self, function_creator ):
         args = self._get_args(function_creator)
-        args.append( self._base.create( function_creator, CREATION_POLICY.AS_TEMPLATE_ARGUMENT ) )
+        base_policy_code = self._base.create( function_creator, CREATION_POLICY.AS_TEMPLATE_ARGUMENT )
+        if base_policy_code:
+            args.append( base_policy_code )
         name = algorithm.create_identifier( function_creator, self._get_name(function_creator) )
         return declarations.templates.join( name, args )
 
@@ -88,13 +98,13 @@ class compound_policy_t( call_policy_t ):
         args = map( lambda text: text.replace( '::boost::python::', '' )
                     , self._get_args( None ) )
         return declarations.templates.join( name, args )
-        
+
 class return_argument_t( compound_policy_t ):
     """implementation for ::boost::python::return_argument call policies"""
     def __init__( self, position=1, base=None):
         compound_policy_t.__init__( self, base )
         self._position = position
-        
+
     def _get_position( self ):
         return self._position
     def _set_position( self, new_position):
@@ -106,7 +116,7 @@ class return_argument_t( compound_policy_t ):
             return '::boost::python::return_self'
         else:
             return '::boost::python::return_arg'
-    
+
     def _get_args(self, function_creator):
         if self.position == 1:
             return []
@@ -123,7 +133,7 @@ class return_internal_reference_t( compound_policy_t ):
     def __init__( self, position=1, base=None):
         compound_policy_t.__init__( self, base )
         self._position = position
-        
+
     def _get_position( self ):
         return self._position
     def _set_position( self, new_position):
@@ -132,34 +142,34 @@ class return_internal_reference_t( compound_policy_t ):
 
     def _get_name(self, function_creator):
         return '::boost::python::return_internal_reference'
-    
+
     def _get_args(self, function_creator):
         return [ str( self.position ) ]
 
 def return_internal_reference( arg_pos=1, base=None):
     return return_internal_reference_t( arg_pos, base )
-        
+
 class with_custodian_and_ward_t( compound_policy_t ):
     def __init__( self, custodian, ward, base=None):
         compound_policy_t.__init__( self, base )
         self._custodian = custodian
         self._ward = ward
-        
+
     def _get_custodian( self ):
         return self._custodian
     def _set_custodian( self, new_custodian):
         self._custodian = new_custodian
     custodian = property( _get_custodian, _set_custodian )
-        
+
     def _get_ward( self ):
         return self._ward
     def _set_ward( self, new_ward):
         self._ward = new_ward
     ward = property( _get_ward, _set_ward )
-    
+
     def _get_name(self, function_creator):
         return '::boost::python::with_custodian_and_ward'
-    
+
     def _get_args(self, function_creator):
         return [ str( self.custodian ), str( self.ward ) ]
 
@@ -172,7 +182,7 @@ class with_custodian_and_ward_postcall_t( with_custodian_and_ward_t ):
 
     def _get_name(self, function_creator):
         return '::boost::python::with_custodian_and_ward_postcall'
-    
+
 def with_custodian_and_ward_postcall( custodian, ward, base=None):
     return with_custodian_and_ward_postcall_t( custodian, ward, base )
 
@@ -180,7 +190,7 @@ class return_value_policy_t( compound_policy_t ):
     def __init__( self, result_converter_generator, base=None):
         compound_policy_t.__init__( self, base )
         self._result_converter_generator = result_converter_generator
-        
+
     def _get_result_converter_generator( self ):
         return self._result_converter_generator
     def _set_result_converter_generator( self, new_result_converter_generator):
@@ -190,7 +200,7 @@ class return_value_policy_t( compound_policy_t ):
 
     def _get_name(self, function_creator):
         return '::boost::python::return_value_policy'
-    
+
     def _get_args(self, function_creator):
         if function_creator:
             rcg = algorithm.create_identifier( function_creator, self.result_converter_generator )

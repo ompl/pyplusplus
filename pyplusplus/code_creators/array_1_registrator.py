@@ -21,7 +21,7 @@ class array_1_registrator_t( code_creator.code_creator_t ):
         self._array_type = array_type
         self._call_policies = self._guess_call_policies()
         self.works_on_instance = False
-        
+
     def _get_array_type( self ):
         return self._array_type
     def _set_array_type( self, new_array_type ):
@@ -37,8 +37,8 @@ class array_1_registrator_t( code_creator.code_creator_t ):
     def _create_name( self ):
         item_type = declarations.array_item_type(self.array_type)
         return "__array_1_%(type)s_%(size)d" \
-               % dict( type=algorithm.create_valid_name( item_type.decl_string ) 
-                       , size=declarations.array_size(self.array_type) )  
+               % dict( type=algorithm.create_valid_name( item_type.decl_string )
+                       , size=declarations.array_size(self.array_type) )
 
     def _guess_call_policies(self):
         item_type = declarations.array_item_type( self.array_type )
@@ -55,8 +55,10 @@ class array_1_registrator_t( code_creator.code_creator_t ):
             fn_name = 'register_const_array_1'
         else:
             fn_name = 'register_array_1'
-        fn_def = templates.join( '::'.join( [ns_name, fn_name] )
-                                  , [ declarations.array_item_type(self.array_type).decl_string
-                                      , str( declarations.array_size(self.array_type) )
-                                      , self.call_policies.create(self, call_policies.CREATION_POLICY.AS_TEMPLATE_ARGUMENT )])        
+
+        fn_def_tmpl_args = [ declarations.array_item_type(self.array_type).decl_string
+                             , str( declarations.array_size(self.array_type) )
+                             , self.call_policies.create(self, call_policies.CREATION_POLICY.AS_TEMPLATE_ARGUMENT )]
+
+        fn_def = templates.join( '::'.join( [ns_name, fn_name] ), fn_def_tmpl_args )
         return call_invocation.join( fn_def, [ '"%s"' % self._create_name() ] ) + ';'
