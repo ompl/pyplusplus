@@ -64,7 +64,6 @@ class creator_t( declarations.decl_visitor_t ):
                   , decls
                   , module_name
                   , boost_python_ns_name='bp'
-                  , create_castinig_constructor=False
                   , call_policies_resolver_=None
                   , types_db=None
                   , target_configuration=None
@@ -75,7 +74,6 @@ class creator_t( declarations.decl_visitor_t ):
         @param decls: Declarations that should be exposed in the final module.
         @param module_name: The name of the final module.
         @param boost_python_ns_name: The alias for the boost::python namespace.
-        @param create_castinig_constructor: ...todo...
         @param call_policies_resolver_: Callable that takes one declaration (calldef_t) as input and returns a call policy object which should be used for this declaration.
         @param types_db: ...todo...
         @param target_configuration: A target configuration object can be used to customize the generated source code to a particular compiler or a particular version of Boost.Python.
@@ -83,7 +81,6 @@ class creator_t( declarations.decl_visitor_t ):
         @type decls: list of declaration_t
         @type module_name: str
         @type boost_python_ns_name: str
-        @type create_castinig_constructor: bool
         @type call_policies_resolver_: callable
         @type types_db: L{types_database_t<types_database.types_database_t>}
         @type target_configuration: L{target_configuration_t<code_creators.target_configuration_t>}
@@ -110,7 +107,6 @@ class creator_t( declarations.decl_visitor_t ):
         self.__extmodule = code_creators.module_t()
         self.__extmodule.add_system_header( "boost/python.hpp" )
         self.__extmodule.adopt_creator( code_creators.include_t( header="boost/python.hpp" ) )
-        self.__create_castinig_constructor = create_castinig_constructor
         if boost_python_ns_name:
             bp_ns_alias = code_creators.namespace_alias_t( alias=boost_python_ns_name
                                                            , full_namespace_name='::boost::python' )
@@ -250,10 +246,6 @@ class creator_t( declarations.decl_visitor_t ):
 
     def _does_class_have_smth_to_export(self, exportable_members ):
         return bool( self._filter_decls( exportable_members ) )
-
-    def _is_constructor_of_abstract_class( self, decl ):
-        assert isinstance( decl, declarations.constructor_t )
-        return decl.parent.is_abstract
 
     def _filter_decls( self, decls ):
         # Filter out artificial (compiler created) types unless they are classes
@@ -604,10 +596,7 @@ class creator_t( declarations.decl_visitor_t ):
         if self.curr_decl.is_copy_constructor:
             return
         self.__types_db.update( self.curr_decl )
-        if not self._is_constructor_of_abstract_class( self.curr_decl ) \
-           and 1 == len( self.curr_decl.arguments ) \
-           and self.__create_castinig_constructor \
-           and self.curr_decl.access_type == ACCESS_TYPES.PUBLIC:
+        if self.curr_decl.allow_implicit_conversion:
             maker = code_creators.casting_constructor_t( constructor=self.curr_decl )
             self.__module_body.adopt_creator( maker )
 

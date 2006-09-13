@@ -7,6 +7,8 @@ import os
 import sys
 import time
 
+import warnings
+
 from pygccxml import parser
 from pygccxml import declarations as decls_package
 
@@ -201,7 +203,7 @@ class module_builder_t(object):
     def build_code_creator( self
                        , module_name
                        , boost_python_ns_name='bp'
-                       , create_castinig_constructor=True
+                       , create_castinig_constructor=False
                        , call_policies_resolver_=None
                        , types_db=None
                        , target_configuration=None
@@ -224,10 +226,18 @@ class module_builder_t(object):
             and returns documentation string
         @type doc_extractor: callable or None
         """
+        if create_castinig_constructor:
+            msg = os.linesep.join([
+                  "create_castinig_constructor argument is deprecated and should not be used."
+                , "If you still want Py++ to generate implicitly_convertible code, consider to use allow_implicit_conversion constructor property"
+                , "mb = module_builder_t(...)"
+                , "mb.constructors().allow_implicit_conversion = True"])
+            warnings.warn(msg, DeprecationWarning, stacklevel=2)
+            self.global_ns.constructors().allow_implicit_conversion = True
+
         creator = mcreator_package.creator_t( self.global_ns
                                               , module_name
                                               , boost_python_ns_name
-                                              , create_castinig_constructor
                                               , call_policies_resolver_
                                               , types_db
                                               , target_configuration

@@ -10,13 +10,16 @@ import fundamental_tester_base
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'casting'
-    
+
     def __init__( self, *args ):
-        fundamental_tester_base.fundamental_tester_base_t.__init__( 
+        fundamental_tester_base.fundamental_tester_base_t.__init__(
             self
             , tester_t.EXTENSION_NAME
             , *args )
-    
+
+    def customize( self, mb ):
+        mb.constructors().allow_implicit_conversion = True
+
     def run_tests( self, module):
         x_inst = module.x()
         x_inst.value = 25
@@ -26,7 +29,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( 0 == module.x_value(False) )
 
 def create_suite():
-    suite = unittest.TestSuite()    
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

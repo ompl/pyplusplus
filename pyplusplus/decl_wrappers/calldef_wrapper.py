@@ -216,6 +216,7 @@ class constructor_t( declarations.constructor_t, calldef_t ):
         declarations.constructor_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
         self._body = ''
+        self._allow_implicit_conversion = False
 
     def _get_body(self):
         return self._body
@@ -228,6 +229,33 @@ class constructor_t( declarations.constructor_t, calldef_t ):
         if self.is_artificial:
             return 'Py++ does not exports compiler generated constructors'
         return ''
+
+    def does_define_implicit_conversion( self ):
+        """ returns true if the constructor can take part in implicit conversions.
+
+        For more information see:
+
+            * http://boost.org/libs/python/doc/v2/implicit.html#implicitly_convertible-spec
+
+            * http://msdn2.microsoft.com/en-us/library/h1y7x448.aspx
+        """
+        if self.parent.is_abstract: #user is not able to create an instance of the class
+            return False
+        if self.is_copy_constructor:
+            return False
+        if 1 != len( self.arguments ):
+            return False
+        if self.parent.find_out_member_access_type( self ) != declarations.ACCESS_TYPES.PUBLIC:
+            return False
+        return True
+
+    def _get_allow_implicit_conversion(self):
+        return self._allow_implicit_conversion and self.does_define_implicit_conversion()
+    def _set_allow_implicit_conversion(self, allow_implicit_conversion):
+        self._allow_implicit_conversion = allow_implicit_conversion
+    allow_implicit_conversion = property( _get_allow_implicit_conversion, _set_allow_implicit_conversion
+                     , doc="boolean, indicates whether Py++ should generate implicitly_convertible code or not" \
+                           "Default value is calculated from the constructor type" )
 
 class destructor_t( declarations.destructor_t, calldef_t ):
     """you may ignore this class for he time being.
