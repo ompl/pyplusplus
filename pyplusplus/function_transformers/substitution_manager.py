@@ -11,6 +11,7 @@
 from pygccxml import declarations
 from code_manager import code_manager_t, wrapper_code_manager_t
 from function_transformer import function_transformer_t
+from pyplusplus import decl_wrappers
 
 # substitution_manager_t
 class substitution_manager_t:
@@ -197,7 +198,7 @@ class substitution_manager_t:
         self.virtual_func.class_name = wrapper_class
         self.virtual_func.FUNC_NAME = decl.name
         self.virtual_func.CALL_FUNC_NAME = decl.name
-        self.virtual_func.input_params = map(lambda a: a.name, decl.arguments)
+        self.virtual_func.input_params = map(lambda a: self._function_call_arg(a), decl.arguments)
 
         self.wrapper_func.arg_list = decl.arguments[:]
         self.wrapper_func.class_name = wrapper_class
@@ -542,6 +543,39 @@ class substitution_manager_t:
             decl = parent
         return None
 
+    # _function_call_arg
+    def _function_call_arg(self, arg):
+        """Return the C++ expression that represents arg in the actual function call.
+
+        This helper method returns a string that contains a C++ expression
+        that references the argument arg. This expression is supposed to
+        be used in the function invocation of which this is one input
+        parameter. The return value is one of three variants:
+
+         - <name>
+         - boost::ref(<name>)
+         - boost::python::ptr(<name>)
+        
+        @rtype: str
+        """
+        arg_type = declarations.remove_alias( arg.type )
+        if decl_wrappers.python_traits.is_immutable( arg_type ):
+            return arg.name
+        elif declarations.is_reference( arg_type ):
+            no_ref = declarations.remove_reference( arg_type )
+            if decl_wrappers.python_traits.is_immutable( no_ref ):
+                #pass by value
+                return arg.name
+            else:
+                #pass by ref
+                return 'boost::ref(%s)' % arg.name
+        elif declarations.is_pointer( arg_type ) \
+             and not declarations.is_pointer( arg_type.base ) \
+             and not decl_wrappers.python_traits.is_immutable( arg_type.base ):
+            return 'boost::python::ptr(%s)' % arg.name
+        else:
+            return arg.name
+
 
 # return_virtual_result_t
 class return_virtual_result_t(function_transformer_t):
@@ -575,13 +609,19 @@ class return_virtual_result_t(function_transformer_t):
         # value of the C++ function call. If the value exists it is extracted
         # from the Python result tuple, converted to C++ and returned from
         # the virtual function. If it does not exist, do nothing.
+#        try:
+#            resultidx = sm.wrapper_func.result_exprs.index(sm.wrapper_func.result_var)
+#        except ValueError:
+#            return
+
         try:
-            resultidx = sm.wrapper_func.result_exprs.index(sm.wrapper_func.result_var)
+            resexpr = sm.py_result_expr(self.result_var)
         except ValueError:
             return
         
         res = "// Extract the C++ return value\n"
-        res += "%s = boost::python::extract<%s>(%s[%d]);"%(self.result_var, sm.virtual_func.ret_type, sm.virtual_func.result_var, resultidx)
+        res += "%s = boost::python::extract<%s>(%s);"%(self.result_var, sm.virtual_func.ret_type, resexpr)
+#        res += "%s = boost::python::extract<%s>(%s[%d]);"%(self.result_var, sm.virtual_func.ret_type, sm.virtual_func.result_var, resultidx)
         return res        
 
 
