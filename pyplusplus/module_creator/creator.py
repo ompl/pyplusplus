@@ -4,6 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import types_database
+import creators_wizard
 import class_organizer
 import call_policies_resolver
 from pygccxml import declarations
@@ -566,7 +567,7 @@ class creator_t( declarations.decl_visitor_t ):
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
 
-        maker_cls, fwrapper_cls = code_creators.guess_mem_fun_creator_classes( self.curr_decl )
+        maker_cls, fwrapper_cls = creators_wizard.find_out_mem_fun_creator_classes( self.curr_decl )
 
         maker = None
         fwrapper = None
