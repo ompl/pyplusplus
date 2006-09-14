@@ -45,7 +45,13 @@ INDEXING_SUITE_2_CONTAINERS = {
 
 INDEXING_SUITE_2_MAIN_HEADER = "boost/python/suite/indexing/container_suite.hpp"
 
-DO_NOT_REPORT_MSGS = [ "Py++ does not exports compiler generated constructors" ]
+DO_NOT_REPORT_MSGS = [
+    "Py++ does not exports compiler generated constructors"
+    , 'Py++, by default, does not expose internal compilers declarations. Names of those declarations usually start with "__".'
+    , 'Py++, by default, does not expose internal declarations (those that gccxml say belong to "<internal>" header).'
+    , 'Py++, by default, does not expose compiler generated declarations.'
+    , 'Py++ can not expose private class.'
+]
 
 class creator_t( declarations.decl_visitor_t ):
     """Creating code creators.
@@ -117,7 +123,7 @@ class creator_t( declarations.decl_visitor_t ):
         self.__extmodule.adopt_creator( self.__module_body )
 
         prepared_decls = self._prepare_decls( decls, doc_extractor )
-        self.__decls = self._filter_decls( self._reorder_decls( prepared_decls ) )
+        self.__decls = self._reorder_decls( prepared_decls )
 
         self.curr_code_creator = self.__module_body
         self.curr_decl = None
@@ -162,7 +168,6 @@ class creator_t( declarations.decl_visitor_t ):
 
             for msg in readme:
                 self.decl_logger.warn( "%s;%s" % ( decl, msg ) )
-
 
         #leave only declarations defined under namespace, but remove namespaces
         decls = filter( lambda x: not isinstance( x, declarations.namespace_t ) \
@@ -216,48 +221,6 @@ class creator_t( declarations.decl_visitor_t ):
         new_ordered.extend( others )
         new_ordered.extend( variables )
         return new_ordered #
-
-    def _exportable_class_members( self, class_decl ):
-        assert isinstance( class_decl, declarations.class_t )
-        members = filter( lambda mv: mv.ignore == False and mv.exportable, class_decl.public_members )
-        #protected and private virtual functions that not overridable and not pure
-        #virtual should not be exported
-        for member in class_decl.protected_members:
-            if not isinstance( member, declarations.calldef_t ):
-                continue
-            else:
-                members.append( member )
-
-        vfunction_selector = lambda member: isinstance( member, declarations.member_function_t ) \
-                                            and member.virtuality == VIRTUALITY_TYPES.PURE_VIRTUAL
-        members.extend( filter( vfunction_selector, class_decl.private_members ) )
-        #now lets filter out none public operators: Py++ does not support them right now
-        members = filter( lambda decl: not isinstance( decl, declarations.member_operator_t )
-                                       or decl.access_type == ACCESS_TYPES.PUBLIC
-                          , members )
-        #-#if declarations.has_destructor( class_decl ) \
-        #-#   and not declarations.has_public_destructor( class_decl ):
-            #remove artificial constructors
-        members = filter( lambda decl: not isinstance( decl, declarations.constructor_t )
-                                       or not decl.is_artificial
-                          , members )
-        members = filter( lambda member: member.ignore == False and member.exportable, members )
-        ordered_members = self._reorder_decls( members )
-        return ordered_members
-
-    def _does_class_have_smth_to_export(self, exportable_members ):
-        return bool( self._filter_decls( exportable_members ) )
-
-    def _filter_decls( self, decls ):
-        # Filter out artificial (compiler created) types unless they are classes
-        # See: http://public.kitware.com/pipermail/gccxml/2004-October/000486.html
-        decls = filter( lambda x: not (x.is_artificial and
-                                       not (isinstance(x, ( declarations.class_t, declarations.enumeration_t))))
-                       , decls )
-        # Filter out type defs
-        decls = filter( lambda x: not isinstance( x, declarations.typedef_t ), decls )
-
-        return decls
 
     def __is_same_func( self, f1, f2 ):
         if not f1.__class__ is f2.__class__:
@@ -602,7 +565,7 @@ class creator_t( declarations.decl_visitor_t ):
             self.__module_body.adopt_creator( maker )
 
         cwrapper = None
-        exportable_members = self._exportable_class_members(self.curr_code_creator.declaration)
+        exportable_members = self.curr_code_creator.declaration.get_exportable_members()
         if self._is_wrapper_needed( self.curr_decl.parent, exportable_members ):
             class_wrapper = self.curr_code_creator.wrapper
             cwrapper = code_creators.constructor_wrapper_t( constructor=self.curr_decl )
@@ -710,7 +673,7 @@ class creator_t( declarations.decl_visitor_t ):
         assert isinstance( self.curr_decl, declarations.class_t )
         cls_decl = self.curr_decl
         cls_parent_cc = self.curr_code_creator
-        exportable_members = self._exportable_class_members(self.curr_decl)
+        exportable_members = self.curr_decl.get_exportable_members(self._reorder_decls)
 
         wrapper = None
         cls_cc = code_creators.class_t( class_inst=self.curr_decl )

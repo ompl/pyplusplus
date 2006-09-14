@@ -90,10 +90,10 @@ class class_common_details_t( object ):
         if None is self._equality_comparable:
             self._equality_comparable = declarations.has_public_equal( self )
         return self._equality_comparable
-    
+
     def _set_equality_comparable( self, value ):
         self._equality_comparable = value
-        
+
     equality_comparable = property( _get_equality_comparable, _set_equality_comparable
                                     , doc="indicates existence of public operator=" \
                                          +"Default value is calculated, based on information presented in the declarations tree" )
@@ -137,7 +137,7 @@ class class_t( class_common_details_t
         self._null_constructor_body = ''
         self._copy_constructor_body = ''
         self._exception_translation_code = None
-        
+
     def _get_redefine_operators( self ):
         return self._redefine_operators
     def _set_redefine_operators( self, new_value ):
@@ -211,7 +211,7 @@ class class_t( class_common_details_t
     @property
     def exception_argument_name( self ):
         """exception argument name for translate exception function
-        
+
         If you don't understand what this argument is, please take a look on
         Boost.Python documentation: http://www.boost.org/libs/python/doc/v2/exception_translator.html
         """
@@ -221,7 +221,7 @@ class class_t( class_common_details_t
         return self._exception_translation_code
     def _set_exception_translation_code( self, code ):
         self._exception_translation_code = code
-    exception_translation_code = property( _get_exception_translation_code, _set_exception_translation_code 
+    exception_translation_code = property( _get_exception_translation_code, _set_exception_translation_code
                                            , doc="C++ exception to Python exception translation code" \
                                                 +"\nExample: PyErr_SetString(PyExc_RuntimeError, exc.what()); " \
                                                 +"\nPy++ will generate the rest of the code." \
@@ -229,29 +229,29 @@ class class_t( class_common_details_t
 
     def translate_exception_to_string( self, python_exception_type, to_string ):
         """registers exception translation to string
-        
+
         @param python_exception_type: Python exception type, for example PyExc_RuntimeError
         @type python_exception_type: str
-        
-        @param to_string: C++ expression that extracts information from exception. 
+
+        @param to_string: C++ expression that extracts information from exception.
                           The type of expression should be char*.
         @type to_string: str
         """
-        #NICE TO HAVE: 
+        #NICE TO HAVE:
         #1. exception\assert\warning should be raised if python_exception_type
         #   does not contain valid Python exception
         #2. Py++ can validate, that member function returns char*
         code = "PyErr_SetString( %(exception_type)s, %(to_string)s ); " \
                % { 'exception_type' : python_exception_type, 'to_string' : to_string }
         self.exception_translation_code = code
-    
+
     def add_declaration_code( self, code ):
         """adds the code to the declaration section"""
         self.declaration_code.append( user_text.user_text_t( code ) )
 
     def add_registration_code( self, code, works_on_instance=True ):
         """adds the code to the class registration section
-        
+
         works_on_instance: If true, the custom code can be applied directly to obj inst.
         Example: ObjInst."CustomCode"
         """
@@ -278,3 +278,35 @@ class class_t( class_common_details_t
         if not self in self.parent.public_members:
             return 'Py++ can not expose private class.'
         return ''
+
+    def get_exportable_members( self, sort=None ):
+        """returns list of internal declarations that should\\could be exported"""
+        #TODO: obviously this function should be shorter. Almost all logic of this class
+        #      should be spread between decl_wrapper classes
+        members = filter( lambda mv: mv.ignore == False and mv.exportable, self.public_members )
+        #protected and private virtual functions that not overridable and not pure
+        #virtual should not be exported
+        for member in self.protected_members:
+            if not isinstance( member, declarations.calldef_t ):
+                continue
+            else:
+                members.append( member )
+
+        vfunction_selector = lambda member: isinstance( member, declarations.member_function_t ) \
+                                            and member.virtuality == declarations.VIRTUALITY_TYPES.PURE_VIRTUAL
+        members.extend( filter( vfunction_selector, self.private_members ) )
+        #now lets filter out none public operators: Py++ does not support them right now
+        members = filter( lambda decl: not isinstance( decl, declarations.member_operator_t )
+                                       or decl.access_type == declarations.ACCESS_TYPES.PUBLIC
+                          , members )
+        #-#if declarations.has_destructor( self ) \
+        #-#   and not declarations.has_public_destructor( self ):
+            #remove artificial constructors
+        members = filter( lambda decl: not isinstance( decl, declarations.constructor_t )
+                                       or not decl.is_artificial
+                          , members )
+        members = filter( lambda member: member.ignore == False and member.exportable, members )
+        sorted_members = members
+        if sort:
+            sorted_members = sort( members )
+        return sorted_members

@@ -97,6 +97,9 @@ class decl_wrapper_t(object):
                 self._exportable_reason = 'Py++, by default, does not expose internal compilers declarations. Names of those declarations usually start with "__".'
             elif self.location and self.location.file_name == "<internal>":
                 self._exportable_reason = 'Py++, by default, does not expose internal declarations (those that gccxml say belong to "<internal>" header).'
+            elif self.is_artificial \
+                 and not isinstance( self, ( declarations.class_t, declarations.enumeration_t ) ):
+                self._exportable_reason = 'Py++, by default, does not expose compiler generated declarations.'
             else:
                 self._exportable_reason = self._exportable_impl( )
             self._exportable = not bool( self._exportable_reason )
