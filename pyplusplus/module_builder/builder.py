@@ -234,7 +234,7 @@ class module_builder_t(object):
         warnings.warn(msg, DeprecationWarning, stacklevel=2)
 
         if create_castinig_constructor:
-            self.global_ns.constructors().allow_implicit_conversion = True
+            self.global_ns.constructors(allow_empty=True).allow_implicit_conversion = True
 
         creator = mcreator_package.creator_t( self.global_ns
                                               , module_name
