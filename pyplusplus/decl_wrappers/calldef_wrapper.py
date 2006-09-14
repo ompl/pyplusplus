@@ -216,7 +216,7 @@ class constructor_t( declarations.constructor_t, calldef_t ):
         declarations.constructor_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
         self._body = ''
-        self._allow_implicit_conversion = False
+        self._allow_implicit_conversion = True
 
     def _get_body(self):
         return self._body
@@ -255,7 +255,7 @@ class constructor_t( declarations.constructor_t, calldef_t ):
         self._allow_implicit_conversion = allow_implicit_conversion
     allow_implicit_conversion = property( _get_allow_implicit_conversion, _set_allow_implicit_conversion
                      , doc="boolean, indicates whether Py++ should generate implicitly_convertible code or not" \
-                           "Default value is calculated from the constructor type" )
+                           "Default value is calculated from the constructor type." )
 
 class destructor_t( declarations.destructor_t, calldef_t ):
     """you may ignore this class for he time being.

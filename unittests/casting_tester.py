@@ -17,9 +17,6 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , tester_t.EXTENSION_NAME
             , *args )
 
-    def customize( self, mb ):
-        mb.constructors().allow_implicit_conversion = True
-
     def run_tests( self, module):
         x_inst = module.x()
         x_inst.value = 25
