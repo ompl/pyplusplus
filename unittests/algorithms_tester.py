@@ -121,22 +121,24 @@ class readme_tester_t( unittest.TestCase ):
         minus_minus = xxx.operator( symbol='--' )
         self.failUnless( 1 == len( minus_minus.readme() ), os.linesep.join( minus_minus.readme() ) )
 
-class class_multiple_files_tester_t(unittest.TestCase):
+class multiple_files_tester_t(unittest.TestCase):
     CLASS_DEF = \
     """
     namespace tester{
-    struct X{
+    struct b{
         enum EColor{ red, blue };
         enum EFruit{ apple, orange };
 
-        X(){}
-        X( int ){}
+        b(){}
+        b( int ){}
 
         void do_nothing(){}
 
         int do_somghing(){ return 1; }
 
         int m_dummy;
+
+        struct b_nested{};
     };
     }
     """
@@ -145,11 +147,51 @@ class class_multiple_files_tester_t(unittest.TestCase):
                 [ module_builder.create_text_fc( self.CLASS_DEF ) ]
                 , gccxml_path=autoconfig.gccxml.executable )
         mb.namespace( name='::tester' ).include()
-        X = mb.class_( 'X' )
-        X.add_declaration_code( '//hello world' )
-        mb.build_code_creator('dummy')
+        b = mb.class_( 'b' )
+        b.add_declaration_code( '//hello world' )
+        nested = b.class_( 'b_nested' )
+        nested.add_declaration_code( '//hello nested decl' )
+        nested.add_registration_code( '//hello nested reg', False )
+
+        mb.build_code_creator('b_multi')
+        mb.split_module( autoconfig.build_dir, on_unused_file_found=lambda fpath: fpath )
+
+class class_multiple_files_tester_t(unittest.TestCase):
+    CLASS_DEF = \
+    """
+    namespace tester{
+    struct x{
+        enum EColor{ red, blue };
+        enum EFruit{ apple, orange };
+
+        x(){}
+        x( int ){}
+
+        void do_nothing(){}
+
+        int do_somghing(){ return 1; }
+
+        int m_dummy;
+
+        struct x_nested{};
+    };
+    }
+    """
+    def test(self):
+        mb = module_builder.module_builder_t(
+                [ module_builder.create_text_fc( self.CLASS_DEF ) ]
+                , gccxml_path=autoconfig.gccxml.executable )
+        mb.namespace( name='::tester' ).include()
+        x = mb.class_( 'x' )
+        x.add_registration_code( '//hello world reg' )
+        x.add_declaration_code( '//hello world decl' )
+        nested = x.class_( 'x_nested' )
+        nested.add_declaration_code( '//hello nested decl' )
+        nested.add_registration_code( '//hello nested reg', False )
+
+        mb.build_code_creator('x_class_multi')
         mb.split_module( autoconfig.build_dir
-                        , [ mb.class_( '::tester::X' ) ]
+                        , [ mb.class_( '::tester::x' ) ]
                         , on_unused_file_found=lambda fpath: fpath )
 
 
@@ -169,6 +211,8 @@ class doc_extractor_tester_t( unittest.TestCase ):
 
 def create_suite():
     suite = unittest.TestSuite()
+    multiple_files_tester_t
+    suite.addTest( unittest.makeSuite(multiple_files_tester_t))
     suite.addTest( unittest.makeSuite(doc_extractor_tester_t))
     suite.addTest( unittest.makeSuite(class_organizer_tester_t))
     suite.addTest( unittest.makeSuite(indent_tester_t))

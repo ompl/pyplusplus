@@ -72,7 +72,7 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         header_file = os.path.join( self.directory_path, self.wrapper_header(class_creator) )
         self.write_file( header_file, wrapper_code )
 
-    def split_internal_creators( self, class_creator, creators, pattern ):
+    def split_internal_creators( self, class_creator, creators, pattern, decl_creators=None):
         file_path = os.path.join( self.directory_path
                                   , self.create_base_fname( class_creator, pattern ) )
 
@@ -103,6 +103,12 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
 
         source_code.append( '' )
         source_code.append( self.create_namespaces_code( creators ) )
+
+        if decl_creators:
+            for decl_creator in decl_creators:
+                source_code.append( '' )
+                source_code.append( decl_creator.create() )
+                decl_creator.create = lambda: ''
 
         # Write the register() function...
         source_code.append( '' )
@@ -175,7 +181,14 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
     def split_internal_classes( self, class_creator ):
         class_types = ( code_creators.class_t, code_creators.class_declaration_t )
         creators = filter( lambda x: isinstance(x, class_types ), class_creator.creators )
-        self.split_internal_creators( class_creator, creators, 'classes' )
+
+        decl_creators = []
+        for creator in creators:
+            if not isinstance( creator, code_creators.class_t ):
+                continue
+            decl_creators.extend( creator.recursive_associated_decl_creators() )
+
+        self.split_internal_creators( class_creator, creators, 'classes', decl_creators )
         return 'classes'
 
     def split_internal_member_variables( self, class_creator ):

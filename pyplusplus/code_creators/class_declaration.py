@@ -99,6 +99,18 @@ class class_t( scoped.scoped_t ):
         """ references to class declaration code creators. """
         return self._associated_decl_creators
 
+    def recursive_associated_decl_creators( self ):
+        """ references to all class declaration code creators. """
+        associated_creators = self.associated_decl_creators[:]
+
+        relevant_creators = filter( lambda creator: isinstance( creator, class_t )
+                                    , algorithm.make_flatten( self.creators ) )
+
+        map( lambda creator: associated_creators.extend( creator.associated_decl_creators )
+             , relevant_creators )
+
+        return associated_creators
+
     def _get_held_type(self):
         return self.declaration.held_type
     def _set_held_type(self, held_type):

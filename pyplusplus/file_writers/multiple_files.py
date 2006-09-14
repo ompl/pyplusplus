@@ -199,7 +199,7 @@ class multiple_files_t(writer.writer_t):
         class_wrapper = None
         decl_creators = []
         if isinstance( class_creator, code_creators.class_t ):
-            decl_creators.extend( class_creator.associated_decl_creators )
+            decl_creators.extend( class_creator.recursive_associated_decl_creators() )
             if  class_creator.wrapper:
                 class_wrapper = class_creator.wrapper
                 decl_creators.append( class_creator.wrapper )
