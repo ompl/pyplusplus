@@ -75,12 +75,12 @@ class multiple_files_t(writer.writer_t):
         @rtype: str
         """
         tmpl = os.linesep.join([
-                    "#ifndef __%(file_name)s_hpp__pyplusplus_wrapper__"
-                  , "#define __%(file_name)s_hpp__pyplusplus_wrapper__"
+                    "#ifndef %(file_name)s_hpp__pyplusplus_wrapper"
+                  , "#define %(file_name)s_hpp__pyplusplus_wrapper"
                   , ''
                   , "%(code)s"
                   , ''
-                  , "#endif//__%(file_name)s_hpp__pyplusplus_wrapper__" ])
+                  , "#endif//%(file_name)s_hpp__pyplusplus_wrapper" ])
 
         content = ''
         if self.extmodule.license:
