@@ -11,6 +11,7 @@ The following policies are available:
 
  - L{output_t}
  - L{input_t}
+ - L{inout_t}
  - L{input_array_t}
  - L{output_array_t}
 """
@@ -105,12 +106,71 @@ class input_t:
         reftype = arg.type
         if not (isinstance(reftype, declarations.reference_t) or
             isinstance(reftype, declarations.pointer_t)):
-            raise ValueError, 'Output variable %d ("%s") must be a reference or a pointer (got %s)'%(self.idx, arg.name, arg.type)
+            raise ValueError, 'Input variable %d ("%s") must be a reference or a pointer (got %s)'%(self.idx, arg.name, arg.type)
 
         # Create an equivalent argument that is not a reference type
         noref_arg = declarations.argument_t(name=arg.name, type=arg.type.base, default_value=arg.default_value)
         # Insert the noref argument
         sm.insert_arg(self.idx, noref_arg, arg.name)
+
+# inout_t
+class inout_t:
+    """Handles a single input/output variable.
+
+    void foo(int& v) -> v = foo(v)
+    """
+    
+    def __init__(self, idx):
+        """Constructor.
+
+        The specified argument must be a reference or a pointer.
+
+        @param idx: Index of the argument that is an in/out value (the first arg has index 1).
+        @type idx: int
+        """
+        self.idx = idx
+        self.local_var = "<not initialized>"
+
+    def __str__(self):
+        return "InOut(%d)"%(self.idx)
+
+    def init_funcs(self, sm):
+        # Remove the specified input argument from the wrapper function
+        arg = sm.remove_arg(self.idx)
+        
+        # Do some checks (the arg has to be a reference or a pointer)
+        reftype = arg.type
+        if not (isinstance(reftype, declarations.reference_t) or
+            isinstance(reftype, declarations.pointer_t)):
+            raise ValueError, 'InOut variable %d ("%s") must be a reference or a pointer (got %s)'%(self.idx, arg.name, arg.type)
+
+        # Create an equivalent argument that is not a reference type
+        noref_arg = declarations.argument_t(name=arg.name, type=arg.type.base, default_value=arg.default_value)
+        # Insert the noref argument
+        sm.insert_arg(self.idx, noref_arg, arg.name)
+
+        # Use the input arg to also store the output
+        self.local_var = noref_arg.name
+        # Append the output to the result tuple
+        sm.wrapper_func.result_exprs.append(self.local_var)
+
+        # Replace the expression in the C++ function call
+        if isinstance(reftype, declarations.pointer_t):
+            sm.wrapper_func.input_params[self.idx-1] = "&%s"%self.local_var
+        else:
+            sm.wrapper_func.input_params[self.idx-1] = self.local_var
+
+    
+    def virtual_post_call(self, sm):
+        """Extract the C++ value after the call to the Python function.
+        """
+        arg = sm.virtual_func.arg_list[self.idx-1]
+        res = "// Extract the C++ value for in/out argument '%s' (index: %d)\n"%(arg.name, self.idx)
+        if isinstance(arg.type, declarations.pointer_t):
+            res += "*"
+        res += "%s = boost::python::extract<%s>(%s);"%(arg.name, arg.type.base, sm.py_result_expr(self.local_var))
+        return res
+
 
 
 # input_array_t
@@ -160,7 +220,7 @@ class input_array_t:
         self.pylist = sm.virtual_func.declare_local("py_"+arg.name, "boost::python::list")
 
         # Replace the removed argument with a Python object.
-        newarg = declarations.argument_t(arg.name, "boost::python::object")
+        newarg = declarations.argument_t(arg.name, declarations.dummy_type_t("boost::python::object"))
         sm.insert_arg(self.idx, newarg, self.pylist)
 
         self.argname = arg.name

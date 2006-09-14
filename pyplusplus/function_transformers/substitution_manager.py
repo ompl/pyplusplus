@@ -192,7 +192,19 @@ class substitution_manager_t:
         self._wrapper_includes = []
 
         # Initialize the code managers...
-        
+
+        self.virtual_func.arg_list = decl.arguments[:]
+        self.virtual_func.class_name = wrapper_class
+        self.virtual_func.FUNC_NAME = decl.name
+        self.virtual_func.CALL_FUNC_NAME = decl.name
+        self.virtual_func.input_params = map(lambda a: a.name, decl.arguments)
+
+        self.wrapper_func.arg_list = decl.arguments[:]
+        self.wrapper_func.class_name = wrapper_class
+        self.wrapper_func.FUNC_NAME = "%s_wrapper"%decl.alias
+        self.wrapper_func.CALL_FUNC_NAME = decl.name
+        self.wrapper_func.input_params = map(lambda a: a.name, decl.arguments)
+
         if str(decl.return_type)=="void":
             ret_type = None
         else:
@@ -202,18 +214,8 @@ class substitution_manager_t:
             self.wrapper_func.result_exprs = [self.wrapper_func.result_var]
 
         self.virtual_func.ret_type = ret_type
-        self.virtual_func.arg_list = decl.arguments[:]
-        self.virtual_func.class_name = wrapper_class
-        self.virtual_func.FUNC_NAME = decl.name
-        self.virtual_func.CALL_FUNC_NAME = decl.name
-        self.virtual_func.input_params = map(lambda a: a.name, decl.arguments)
 
         self.wrapper_func.ret_type = ret_type
-        self.wrapper_func.arg_list = decl.arguments[:]
-        self.wrapper_func.class_name = wrapper_class
-        self.wrapper_func.FUNC_NAME = "%s_wrapper"%decl.alias
-        self.wrapper_func.CALL_FUNC_NAME = decl.name
-        self.wrapper_func.input_params = map(lambda a: a.name, decl.arguments)
 
         # The offset that is added to the index in insert_arg()
         # This index is either 0 for free functions or 1 for member functions
@@ -224,7 +226,7 @@ class substitution_manager_t:
         clsdecl = self._class_decl(decl)
         if clsdecl!=None:
             selfname = self.wrapper_func._make_name_unique("self")
-            selfarg = declarations.argument_t(selfname, "%s&"%clsdecl.name)
+            selfarg = declarations.argument_t(selfname, declarations.dummy_type_t("%s&"%clsdecl.name))
             self.wrapper_func.arg_list.insert(0, selfarg)
             self.wrapper_func.CALL_FUNC_NAME = "%s.%s"%(selfname, self.wrapper_func.CALL_FUNC_NAME)
             self._insert_arg_idx_offset = 1
@@ -256,6 +258,8 @@ class substitution_manager_t:
         It is not necessary to call this method manually, it is
         automatically called at the time a substitution is requested.
         """
+#        print "Transforming:",self.decl
+#        print "  using transformers:", ", ".join(map(lambda x: str(x), self.transformers))
 
         # Append the default return_virtual_result_t code modifier
         transformers = self.transformers+[return_virtual_result_t()]
@@ -335,6 +339,7 @@ class substitution_manager_t:
         if idx==0:
             if id(self.wrapper_func.ret_type)==id(self.wrapper_func.ret_type):
                 self.wrapper_func.ret_type = None
+                self.wrapper_func.result_exprs.remove(self.wrapper_func.result_var)
             else:
                 raise ValueError, 'Argument %d not found on the wrapper function'%(idx)
         # Remove argument...
@@ -345,7 +350,9 @@ class substitution_manager_t:
             try:
                 self.wrapper_func.arg_list.remove(arg)
             except ValueError:
-                raise ValueError, 'Argument %d ("%s") not found on the wrapper function'%(idx, arg.name)
+                msg = str(self.decl)+"\n"
+                msg += 'Argument %d ("%s") not found on the wrapper function'%(idx, arg.name)
+                raise ValueError, msg
 
             # Remove the input parameter on the Python call in the
             # virtual function.

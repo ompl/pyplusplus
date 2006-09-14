@@ -74,8 +74,10 @@ from calldef import free_fun_overloads_class_t
 from calldef import copy_constructor_wrapper_t
 from calldef import null_constructor_wrapper_t
 
-from calldef import mem_fun_v_transformed_t
-from calldef import mem_fun_v_transformed_wrapper_t
+from calldef_transformed import mem_fun_transformed_t
+from calldef_transformed import mem_fun_transformed_wrapper_t
+from calldef_transformed import mem_fun_v_transformed_t
+from calldef_transformed import mem_fun_v_transformed_wrapper_t
 
 from global_variable import global_variable_base_t
 from global_variable import global_variable_t

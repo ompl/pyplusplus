@@ -546,6 +546,19 @@ class creator_t( declarations.decl_visitor_t ):
                 maker = maker_cls( function=self.curr_decl )
             self.curr_code_creator.adopt_creator( maker )
 
+        # Are we dealing with transformed non-virtual member functions?
+        if maker_cls==code_creators.mem_fun_transformed_t:
+            # Create the code creator that generates the function source code
+            mftw = code_creators.mem_fun_transformed_wrapper_t(self.curr_decl)
+            # and add it either to the wrapper class or just to the declaration
+            # area of the cpp file
+            if self.curr_code_creator.wrapper is None:
+                self.curr_code_creator.associated_decl_creators.append(mftw)
+            else:
+                self.curr_code_creator.wrapper.adopt_creator(mftw)
+            # Set the wrapper so that the registration code will refer to it
+            maker.wrapper = mftw
+
         if self.curr_decl.has_static:
             #static_method should be created only once.
             found = filter( lambda creator: isinstance( creator, code_creators.static_method_t )

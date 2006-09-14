@@ -22,7 +22,10 @@ def find_out_mem_fun_creator_classes( decl ):
     access_level = decl.parent.find_out_member_access_type( decl )
     if access_level == ACCESS_TYPES.PUBLIC:
         if decl.virtuality == VIRTUALITY_TYPES.NOT_VIRTUAL:
-            maker_cls = code_creators.mem_fun_t
+            if decl.function_transformers:
+                maker_cls = code_creators.mem_fun_transformed_t
+            else:
+                maker_cls = code_creators.mem_fun_t
         elif decl.virtuality == VIRTUALITY_TYPES.PURE_VIRTUAL:
             fwrapper_cls = code_creators.mem_fun_pv_wrapper_t
             maker_cls = code_creators.mem_fun_pv_t

@@ -35,7 +35,7 @@ class code_manager_t(subst_t):
     @ivar ret_type: Return type. The value may be any object where str(obj) is valid C++ code. The value None corresponds to void. This will be the value of the variable RET_TYPE.
     @type ret_type: str
     @ivar arg_list: The argument list. The items are pygccxml argument_t objects. This list will appear in the variables ARG_LIST, ARG_LIST_DEF and ARG_LIST_TYPES.
-    @type arg_list: list of argument_t
+    @type arg_list: list of L{argument_t<pygccxml.declarations.calldef.argument_t>}
     @ivar input_params: A list of strings that contain the input parameter for the function call. This list is used for the INPUT_PARAMS variable.
     @type input_params: list of str
     @ivar result_var: The name of the variable that will receive the result of the function call. If None, the return value is ignored. This attribute will be used for the variable RESULT_VAR_ASSIGNMENT.
@@ -225,8 +225,8 @@ class wrapper_code_manager_t(code_manager_t):
     which is a list of individual expressions. Apart from that this
     class is identical to L{code_manager_t}.
 
-    @ivar result_exprs: Similar to result_expr but this list variable can contain more than just one result. The items can be either strings containing the variable names (or expressions) that should be returned or it can be an argument_t object (usually from the argument list of the virtual function) whose name attribute will be used. This attribute only exists on the code manager for the wrapper function (the virtual function cannot return several values, use result_expr instead).
-    @type result_exprs: list of str or argument_t
+    @ivar result_exprs: Similar to result_expr but this list variable can contain more than just one result. The items can be either strings containing the variable names (or expressions) that should be returned or it can be an L{argument_t<pygccxml.declarations.calldef.argument_t>} object (usually from the argument list of the virtual function) whose name attribute will be used. This attribute only exists on the code manager for the wrapper function (the virtual function cannot return several values, use result_expr instead).
+    @type result_exprs: list of str or L{argument_t<pygccxml.declarations.calldef.argument_t>}
     """
 
     def __init__(self):
