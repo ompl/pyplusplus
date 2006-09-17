@@ -479,17 +479,8 @@ class creator_t( declarations.decl_visitor_t ):
             self.__extmodule.add_system_header( header )
             self.__extmodule.add_include( header )
 
-        #I am going tp find last class registration and to add all container creators
-        #after it.
-        last_cls_index = -1
-        for i in range( len( self.__module_body.creators ) - 1, -1, -1 ):
-            if isinstance( self.__module_body.creators[i], code_creators.class_t ):
-                last_cls_index = i
-                break
-        insert_position = last_cls_index + 1
         creators.reverse()
-        for creator in creators:
-            self.__module_body.adopt_creator( creator, insert_position )
+        self.__module_body.adopt_creators( creators, 0 )
 
     def create(self, decl_headers=None):
         """Create and return the module for the extension.
