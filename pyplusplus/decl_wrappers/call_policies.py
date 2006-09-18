@@ -217,3 +217,9 @@ return_opaque_pointer = '::boost::python::return_opaque_pointer'
 
 def return_value_policy( result_converter_generator, base=None):
     return return_value_policy_t( result_converter_generator, base )
+
+
+def is_return_opaque_pointer_policy( policy ):
+    """returns True is policy represents return_value_policy<return_opaque_pointer>, False otherwise"""
+    return isinstance( policy, return_value_policy_t ) \
+            and policy.result_converter_generator == return_opaque_pointer
