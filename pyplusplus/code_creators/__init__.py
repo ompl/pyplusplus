@@ -120,3 +120,5 @@ from indexing_suites import value_traits_t
 
 from exception_translator import exception_translator_t
 from exception_translator import exception_translator_register_t
+
+from opaque_type_registrator import opaque_type_registrator_t
