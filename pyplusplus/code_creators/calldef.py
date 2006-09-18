@@ -30,6 +30,12 @@ class calldef_t( declaration_based.declaration_based_t):
     def __init__(self, function, wrapper=None ):
         declaration_based.declaration_based_t.__init__( self, declaration=function )
         self._wrapper = wrapper
+        self._associated_decl_creators = []
+        
+    @property
+    def associated_decl_creators( self ):
+        """ references to declaration code creators. """
+        return self._associated_decl_creators
 
     def _get_wrapper( self ):
         return self._wrapper

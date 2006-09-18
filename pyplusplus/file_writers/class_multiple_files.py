@@ -183,10 +183,11 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         creators = filter( lambda x: isinstance(x, class_types ), class_creator.creators )
 
         decl_creators = []
-        for creator in creators:
-            if not isinstance( creator, code_creators.class_t ):
-                continue
-            decl_creators.extend( creator.recursive_associated_decl_creators() )
+        class_creators = filter( lambda creator: isinstance( creator, code_creators.class_t )
+                                 , creators )
+        
+        map( lambda creator: decl_creators.extend( self.associated_decl_creators( creator ) )
+             , class_creators )
 
         self.split_internal_creators( class_creator, creators, 'classes', decl_creators )
         return 'classes'

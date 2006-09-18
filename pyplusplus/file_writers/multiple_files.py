@@ -61,6 +61,21 @@ class multiple_files_t(writer.writer_t):
                                @type: str
                                """ )
 
+    def associated_decl_creators( self, creator ):
+        """ references to all class declaration code creators. """
+        if not isinstance( creator, code_creators.class_t ):
+            return []
+            
+        associated_creators = creator.associated_decl_creators[:]
+
+        relevant_creators = filter( lambda acreator: isinstance( acreator, code_creators.class_t )
+                                    , code_creators.make_flatten( creator.creators ) )
+
+        map( lambda acreator: associated_creators.extend( acreator.associated_decl_creators )
+             , relevant_creators )
+
+        return associated_creators
+
     def create_function_code( self, function_name ):
         return "void %s();" % function_name
 
@@ -199,7 +214,7 @@ class multiple_files_t(writer.writer_t):
         class_wrapper = None
         decl_creators = []
         if isinstance( class_creator, code_creators.class_t ):
-            decl_creators.extend( class_creator.recursive_associated_decl_creators() )
+            decl_creators.extend( self.associated_decl_creators( class_creator ) )
             if  class_creator.wrapper:
                 class_wrapper = class_creator.wrapper
                 decl_creators.append( class_creator.wrapper )
