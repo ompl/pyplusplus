@@ -35,6 +35,23 @@ int identity( int z ){ return z; }
 
 int x_value(const x& d ){ return d.value; }
 
+
+struct vector{
+    vector(){}
+    vector( double ){}
+    vector( const vector& ){}
+};
+
+struct float_vector{
+    float_vector(){}
+    float_vector( const float_vector& ){}
+    float_vector( const vector& ){}
+    float_vector( float ){}
+};
+
+inline void do_nothing(){
+    float_vector( 5.0 );
+}
 }
 
 #endif//__casting_to_be_exported_hpp__

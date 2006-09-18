@@ -1,0 +1,9 @@
+SharedLibrary( target=r'cspc_ext'
+    , source=[ r'cspc.cpp' ]
+    , LIBS=[ r"boost_python" ]
+    , LIBPATH=[ r"/home/roman/boost_cvs/bin",r"" ]
+    , CPPPATH=[ r"/home/roman/boost_cvs",r"/usr/include/python2.4" ]
+    , CCFLAGS=[ '-DBOOST_PYTHON_TRACE_REGISTRY' ]
+    , SHLIBPREFIX=''
+    , SHLIBSUFFIX='.so'
+)

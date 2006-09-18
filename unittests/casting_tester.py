@@ -16,6 +16,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             self
             , tester_t.EXTENSION_NAME
             , *args )
+    def customize( self, mb ):
+        mb.class_("float_vector").add_registration_code("def( bp::init< const casting::float_vector& >() )")
 
     def run_tests( self, module):
         x_inst = module.x()
@@ -24,6 +26,11 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( 25 == module.x_value(25) )
         self.failUnless( 1 == module.x_value(True) )
         self.failUnless( 0 == module.x_value(False) )
+        try:
+            fv = module.float_vector( 5.0 )
+            self.fail( "TypeError exception was not raised" )
+        except TypeError:
+            pass
 
 def create_suite():
     suite = unittest.TestSuite()

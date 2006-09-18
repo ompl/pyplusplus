@@ -100,6 +100,12 @@ ref_get_value( controllers::controller_ptr_i& a ){
     return a->get_value();
 }
 
+//inline int
+//val_get_value( my_smart_ptr_t< controllers::add_x_t > a ){
+//    return a->get_value();
+//}
+
+
 inline int
 val_get_value( controllers::controller_ptr_i a ){
     return a->get_value();
