@@ -80,6 +80,7 @@ from call_policies import reference_existing_object
 from call_policies import return_by_value
 from call_policies import return_opaque_pointer
 from call_policies import return_value_policy
+from call_policies import is_return_opaque_pointer_policy
 
 from decl_wrapper_printer import decl_wrapper_printer_t
 from decl_wrapper_printer import print_declarations
