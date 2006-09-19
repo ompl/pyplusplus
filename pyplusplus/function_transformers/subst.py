@@ -9,6 +9,7 @@
 """
 
 import re
+import string
 
 # subst_t
 class subst_t:
@@ -16,9 +17,9 @@ class subst_t:
 
     This class performs text substitutions on a template string. The
     variables are simply stored as attributes inside the class and may
-    be of any type that can be converted to a string. An empty string
-    is used if a template string references a variable that does not
-    exist.
+    be of any type that can be converted to a string.
+    If a template string references a variable that does not exist,
+    the reference is not substituted.
 
     Example::
 
@@ -76,11 +77,11 @@ class subst_t:
     def substitute(self, template):
         """Substitute the variables in template and return the result.
 
-        All variables of the form "$<varname>" are replaced with the
-        corresponding attribute <varname>. Block variables must appear
-        in one single line. The indendation of the variable determines
-        the indendation of the entire block.
-        Unknown variables will be substituted with an empty string.
+        All variables of the form "$<varname>" or "${varname}" are
+        replaced with the corresponding attribute <varname>. Block
+        variables must appear in one single line. The indendation of
+        the variable determines the indendation of the entire block.
+        References to unknown variables won't get substituted.
 
         @param template: The template string
         @type template: str
@@ -108,17 +109,8 @@ class subst_t:
         code = "\n".join(lines)
 
         # Replace the non-block variables...
-        varexpr = re.compile("\$[a-zA-Z_]+|\$\{[a-zA-Z_]+\}")
-        while 1:
-            m = varexpr.search(code)
-            if m==None:
-                break
-            s = m.start()
-            e = m.end()
-            key = code[s+1:e]
-            if key[0]=="{":
-                key = key[1:-1]
-            code = "%s%s%s"%(code[:s], getattr(self, key, ""), code[e:])
+        tmpl = string.Template(code)
+        code = tmpl.safe_substitute(self.__dict__)
 
         # Replace trailing blanks on each line...
         expr = re.compile("[ ]+$", re.MULTILINE)

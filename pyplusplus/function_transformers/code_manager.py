@@ -184,10 +184,14 @@ class code_manager_t(subst_t):
         # RESULT_VAR_ASSIGNMENT
         if self.result_var!=None:
             self.RESULT_VAR_ASSIGNMENT = "%s = "%self.result_var
+        else:
+            self.RESULT_VAR_ASSIGNMENT = ""
 
         # RESULT_TYPE
         if self.result_type!=None:
             self.RESULT_TYPE = str(self.result_type)
+        else:
+            self.RESULT_TYPE = ""
 
         # INPUT_PARAMS
         self.INPUT_PARAMS = ", ".join(self.input_params)
@@ -195,6 +199,8 @@ class code_manager_t(subst_t):
         # RETURN_STMT
         if self.result_expr!=None:
             self.RETURN_STMT = "return %s;"%self.result_expr
+        else:
+            self.RETURN_STMT = ""
 
     # _make_name_unique
     def _make_name_unique(self, name):
