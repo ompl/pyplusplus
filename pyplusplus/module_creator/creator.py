@@ -564,6 +564,13 @@ class creator_t( declarations.decl_visitor_t ):
             # Set the wrapper so that the registration code will refer to it
             maker.wrapper = mftw
 
+        # Include the gil_state header from the code repository.
+        if not self.__extmodule.is_system_header(code_repository.gil_state.file_name):
+            self.__extmodule.add_system_header( code_repository.gil_state.file_name )
+            self.__extmodule.adopt_creator( code_creators.include_t( code_repository.gil_state.file_name )
+                                            , self.__extmodule.first_include_index() + 1)
+            
+
         if self.curr_decl.has_static:
             #static_method should be created only once.
             found = filter( lambda creator: isinstance( creator, code_creators.static_method_t )
