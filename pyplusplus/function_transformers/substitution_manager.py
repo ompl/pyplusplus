@@ -148,7 +148,11 @@ class substitution_manager_t:
          | [} catch(...) {...}]     |
          +--------------------------+
 
+     - CLEANUP:  The cleanup code blocks of all function transformers.
+
      - RETURN_STMT:  "return <varname>" or "return boost::python::make_tuple(...)"
+
+     - EXCEPTION_HANDLER_EXIT: The C++ code that is executed at the end of the main exception handler (default: "throw;")
     
 
     @ivar wrapper_func: The L{code manager<code_manager_t>} object that manages the wrapper function. This is used by the arg policies to modify the wrapper function.
@@ -297,6 +301,12 @@ class substitution_manager_t:
         postcall = "\n\n".join(src)
         self.wrapper_func.POST_CALL = postcall
 
+        # Create the wrapper function cleanup block...
+        src = map(lambda cb: getattr(cb, "wrapper_cleanup", defmeth)(self), transformers)
+        src = filter(lambda x: x!=None, src)
+        cleanup = "\n\n".join(src)
+        self.wrapper_func.CLEANUP = cleanup
+
         # Create the virtual function pre-call block...
         src = map(lambda cb: getattr(cb, "virtual_pre_call", defmeth)(self), transformers)
         src = filter(lambda x: x!=None, src)
@@ -309,7 +319,13 @@ class substitution_manager_t:
         src.reverse()
         postcall = "\n\n".join(src)
         self.virtual_func.POST_CALL = postcall
-            
+
+        # Create the virtual function cleanup block...
+        src = map(lambda cb: getattr(cb, "virtual_cleanup", defmeth)(self), transformers)
+        src = filter(lambda x: x!=None, src)
+        cleanup = "\n\n".join(src)
+        self.virtual_func.CLEANUP = cleanup
+
 
     # remove_arg
     def remove_arg(self, idx):

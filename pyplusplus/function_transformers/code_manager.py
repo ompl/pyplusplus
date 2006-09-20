@@ -44,6 +44,8 @@ class code_manager_t(subst_t):
     @type result_type: str
     @ivar result_expr: A string containing the expression that will be put after the "return" statement. This expression is used for the variable RETURN_STMT.
     @type result_expr: str
+    @ivar exception_handler_exit: The C++ code that is executed at the end of the main exception handler (default: "throw;").
+    @type exception_handler_exit: str
 
     @author: Matthias Baas
     """
@@ -53,7 +55,8 @@ class code_manager_t(subst_t):
         """
         subst_t.__init__(self, blockvars=["DECLARATIONS",
                                           "PRE_CALL",
-                                          "POST_CALL"])
+                                          "POST_CALL",
+                                          "EXCEPTION_HANDLER_EXIT"])
 
         # The name of the class of which the generated function is a member
         # (pass None or an empty string if the function is a free function)
@@ -80,6 +83,12 @@ class code_manager_t(subst_t):
         # the "return" statement.
         self.result_expr = None
 
+        # The C++ code that is executed at the end of the main
+        # exception handler.
+        self.exception_handler_exit = "throw;"
+
+        # Key:Variable name / Value:1
+        self._allocated_vars = {}
         # Key:Variable name / Value:(type,size,default)
         self._declared_vars = {}
         # A list with variable tuples: (name, type, size, default)
@@ -100,11 +109,30 @@ class code_manager_t(subst_t):
         @return: The assigned variable name (which is guaranteed to be unique)
         @rtype: str
         """
-        name = self._make_name_unique(name)
+        name = self.allocate_local(name)
         self._declared_vars[name] = (type,size,default)
         self._local_var_list.append((name, type, size, default))
         return name
 
+    # allocate_local
+    def allocate_local(self, name):
+        """Allocate a local variable name and return the final name.
+
+        Allocate a variable name that is unique to the entire
+        function.  The variable will not appear in the DECLARATIONS
+        block. Instead, the caller has to generate the declaration
+        code himself at an appropriate place.
+
+        @param name: The desired variable name
+        @type name: str
+        @return: The assigned variable name (which is guaranteed to be unique)
+        @rtype: str
+        """
+        name = self._make_name_unique(name)
+        self._allocated_vars[name] = 1
+        return name    
+
+    # is_defined
     def is_defined(self, name):
         """Check if a variable name is already in use.
 
@@ -113,7 +141,7 @@ class code_manager_t(subst_t):
 
         @rtype: bool
         """
-        if name in self._declared_vars:
+        if name in self._allocated_vars:
             return True
         if filter(lambda a: a.name==name, self.arg_list):
             return True
@@ -127,6 +155,8 @@ class code_manager_t(subst_t):
         @return: Returns the type of the specified local variable.
         @rtype: str
         """
+        if name in self._allocated_vars:
+            raise ValueError, 'The type of local variable "%s" is unknown.'%name
         if name not in self._declared_vars:
             raise ValueError, 'Local variable "%s" not found.'%name
 
@@ -201,6 +231,12 @@ class code_manager_t(subst_t):
             self.RETURN_STMT = "return %s;"%self.result_expr
         else:
             self.RETURN_STMT = ""
+
+        # EXCEPTION_HANDLER_EXIT
+        if self.exception_handler_exit!=None:
+            self.EXCEPTION_HANDLER_EXIT = self.exception_handler_exit
+        else:
+            self.EXCEPTION_HANDLER_EXIT = ""
 
     # _make_name_unique
     def _make_name_unique(self, name):
