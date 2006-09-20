@@ -43,9 +43,11 @@ class tester_t( unittest.TestCase ):
     def test_py_derived( self ):
         self.__test_impl( py_derived_t(), 28 )
 
-    def test_py_double_derived_t( self ):
+    def test_py_double_derived( self ):
         self.__test_impl( py_double_derived_t(), 31 )
 
+    def test_created_derived( self ):
+        self.__test_impl( custom_sptr.create_derived(), 11 )
 
 def create_suite():
     suite = unittest.TestSuite()

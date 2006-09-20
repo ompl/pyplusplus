@@ -22,6 +22,16 @@ namespace boost{ namespace python{
         typedef T type;
     };
 
+
+    inline derived_t * get_pointer(derived_ptr_t const& p){
+        return p.get();
+    }
+
+    template<>
+    struct pointee< derived_ptr_t >{
+        typedef derived_t type;
+    };
+
 } }
 
 
@@ -65,7 +75,6 @@ struct derived_wrapper_t : derived_t, bp::wrapper< derived_t > {
 
 };
 
-
 BOOST_PYTHON_MODULE( custom_sptr ){
     bp::class_< base_wrapper_t, boost::noncopyable, smart_ptr_t< base_wrapper_t > >( "base_i" )
         .def( "get_value", bp::pure_virtual( &base_i::get_value ) );
@@ -77,9 +86,11 @@ BOOST_PYTHON_MODULE( custom_sptr ){
 
     bp::implicitly_convertible< smart_ptr_t< derived_wrapper_t >, smart_ptr_t< derived_t > >();
     bp::implicitly_convertible< smart_ptr_t< derived_t >, smart_ptr_t< base_i > >();
+    bp::implicitly_convertible< derived_ptr_t, smart_ptr_t< derived_t > >();
+    boost::python::register_ptr_to_python< derived_ptr_t >();
 
     bp::def( "const_ref_get_value", &::const_ref_get_value );
     bp::def( "ref_get_value", &::ref_get_value );
     bp::def( "val_get_value", &::val_get_value );
-
+    bp::def( "create_derived", &::create_derived );
 }
