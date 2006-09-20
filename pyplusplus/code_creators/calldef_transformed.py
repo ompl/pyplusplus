@@ -229,6 +229,8 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
         
         # Stores the name of the variable that holds the override
         self._override_var = None
+        # Stores the name of the 'gstate' variable
+        self._gstate_var = None
 
     def default_name(self):
         """Return the name of the 'default' function.
@@ -317,28 +319,31 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
 
     def create_virtual_body(self):
 
-        thread_safe = False
+        thread_safe = getattr(self.declaration, "thread_safe", False)
         
         if thread_safe:
-            # Todo: Properly allocate "gstate"
             body = """
-PyGILState_STATE gstate;
-gstate = PyGILState_Ensure();
+pyplusplus::gil_state_t %(gstate_var)s;
 
-$DECLARATIONS
-
-PyGILState_Release(gstate);
+%(gstate_var)s.ensure();
+boost::python::override %(override_var)s = this->get_override( "%(alias)s" );
+%(gstate_var)s.release();
 
 if( %(override_var)s )
 {
-  gstate = PyGILState_Ensure();
+  // The corresponding release() is done in the destructor of %(gstate_var)s
+  %(gstate_var)s.ensure();
 
-  try {
+  $DECLARATIONS
+
+  try {   
     $PRE_CALL
   
     ${RESULT_VAR_ASSIGNMENT}boost::python::call<$RESULT_TYPE>($INPUT_PARAMS);
   
     $POST_CALL  
+
+    $RETURN_STMT  
   }
   catch(...)
   {
@@ -346,11 +351,11 @@ if( %(override_var)s )
     {
       PyErr_Print();
     }
-    PyGILState_Release(gstate);
-    throw;
+    
+    $CLEANUP
+    
+    $EXCEPTION_HANDLER_EXIT
   }
-  PyGILState_Release(gstate);
-  $RETURN_STMT  
 }
 else
 {
@@ -360,10 +365,12 @@ else
 
         if not thread_safe:
             body = """
-$DECLARATIONS
+boost::python::override %(override_var)s = this->get_override( "%(alias)s" );
 
 if( %(override_var)s )
 {
+  $DECLARATIONS
+  
   $PRE_CALL
 
   ${RESULT_VAR_ASSIGNMENT}boost::python::call<$RESULT_TYPE>($INPUT_PARAMS);
@@ -398,6 +405,7 @@ else
         return body % {
 #            'override' : self.override_identifier()
             'override_var' : self._override_var
+            , 'gstate_var' : self._gstate_var
             , 'alias' : self.declaration.alias
 #            , 'func_var' : "func_"+self.declaration.alias
             , 'inherited' : self.create_base_body()
@@ -476,7 +484,8 @@ $RETURN_STMT
         # Create the substitution manager
         decl = self.declaration
         sm = function_transformers.substitution_manager_t(decl, transformers=decl.function_transformers)
-        self._override_var = sm.virtual_func.declare_local(decl.alias+"_callable", "boost::python::override", default='this->get_override( "%s" )'%decl.alias)
+        self._override_var = sm.virtual_func.allocate_local(decl.alias+"_callable")
+        self._gstate_var = sm.virtual_func.allocate_local("gstate")
         self._subst_manager = sm
     
         answer = [ self.create_function() ]
