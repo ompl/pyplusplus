@@ -7,9 +7,12 @@ import os
 import pygccxml
 import algorithm
 import declaration_based
+import registration_based
 
-class unnamed_enum_t( declaration_based.declaration_based_t ):
+class unnamed_enum_t( registration_based.registration_based_t
+                      , declaration_based.declaration_based_t ):
     def __init__(self, unnamed_enum ):
+        registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=unnamed_enum)
         self.works_on_instance = False
         
@@ -27,3 +30,4 @@ class unnamed_enum_t( declaration_based.declaration_based_t ):
             result.append( tmpl % ( self.value_aliases.get( name, name )
                                     , algorithm.create_identifier( self, full_name + '::' + name ) ) )
         return os.linesep.join( result )
+    

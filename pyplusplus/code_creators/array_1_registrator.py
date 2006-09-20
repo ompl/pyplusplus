@@ -6,18 +6,18 @@
 
 import os
 import algorithm
-import code_creator
+import registration_based
 from pyplusplus import code_repository
 from pyplusplus.decl_wrappers import call_policies
 from pyplusplus.decl_wrappers import python_traits
 from pygccxml import declarations
 
-class array_1_registrator_t( code_creator.code_creator_t ):
+class array_1_registrator_t( registration_based.registration_based_t ):
     """
     This class creates code that register static sized array
     """
     def __init__( self, array_type ):
-        code_creator.code_creator_t.__init__( self )
+        registration_based.registration_based_t.__init__( self )
         self._array_type = array_type
         self._call_policies = self._guess_call_policies()
         self.works_on_instance = False

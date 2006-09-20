@@ -8,10 +8,13 @@ import types
 import algorithm
 import code_creator
 import declaration_based
+import registration_based
 from pygccxml import declarations
 
-class indexing_suite1_t( declaration_based.declaration_based_t ):
+class indexing_suite1_t( registration_based.registration_based_t
+                         , declaration_based.declaration_based_t ):
     def __init__(self, container ):
+        registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=container )
 
     def _get_configuration( self ):
@@ -47,8 +50,10 @@ class indexing_suite1_t( declaration_based.declaration_based_t ):
         return "def( %s() )" %  self._create_suite_declaration()
 
 
-class indexing_suite2_t( declaration_based.declaration_based_t ):
+class indexing_suite2_t( registration_based.registration_based_t
+                         , declaration_based.declaration_based_t ):
     def __init__(self, container ):
+        registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=container )
         self.__method_mask_var_name = "methods_mask"
         self.works_on_instance = not self.does_user_disable_methods()
@@ -104,8 +109,10 @@ class indexing_suite2_t( declaration_based.declaration_based_t ):
             answer.append( ';' )
         return ''.join( answer )
 
-class value_traits_t( declaration_based.declaration_based_t ):
+class value_traits_t( code_creator.code_creator_t
+                      , declaration_based.declaration_based_t ):
     def __init__( self, value_class ):
+        code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=value_class )
 
     def generate_value_traits( self ):

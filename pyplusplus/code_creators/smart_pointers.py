@@ -5,8 +5,10 @@
 
 import os
 import algorithm
-from pygccxml import declarations
 import declaration_based
+import registration_based
+from pygccxml import declarations
+
 templates = declarations.templates
 
 class held_type_t(object):
@@ -32,13 +34,15 @@ class held_type_t(object):
         arg = algorithm.create_identifier( creator, creator.declaration.decl_string )
         return templates.join( smart_ptr, [ arg ] )
     
-class smart_pointer_registrator_t( declaration_based.declaration_based_t ):
+class smart_pointer_registrator_t( registration_based.registration_based_t
+                                   , declaration_based.declaration_based_t ):
     """ Convertor for boost::python::register_ptr_to_python<PTR>.
         Lets boost python know that it can use smart_ptr to hold a an object.
         See: http://www.boost.org/libs/python/doc/v2/register_ptr_to_python.html
     """
     def __init__( self, smart_ptr, class_creator ):
         """ smart_ptr: string of ptr type.  Ex: 'boost::shared_ptr'  """
+        registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, class_creator.declaration )
         self._smart_ptr = smart_ptr
         self._class_creator = class_creator
@@ -67,13 +71,15 @@ class smart_pointer_registrator_t( declaration_based.declaration_based_t ):
         held_type = held_type_t(self.smart_ptr).create( self )
         return templates.join( rptp, [ held_type ] ) + '();'
     
-class smart_pointers_converter_t( declaration_based.declaration_based_t ):
+class smart_pointers_converter_t( registration_based.registration_based_t
+                                  , declaration_based.declaration_based_t ):
     """ creator for boost::python::implicitly_convertible.
         This creates a statemnt that allows the usage of C++ implicit
         conversion from source to target.
         See: http://www.boost.org/libs/python/doc/v2/implicit.html
     """
     def __init__( self, smart_ptr, source, target ):
+        registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, source )
         self._target = target
         self._smart_ptr = smart_ptr

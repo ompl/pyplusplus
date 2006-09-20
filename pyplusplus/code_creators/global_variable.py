@@ -6,17 +6,21 @@
 import os
 import pygccxml
 import algorithm
+import code_creator
 import declaration_based
+import registration_based
 from pygccxml import declarations
 from pyplusplus import code_repository
 
 #TODO: if variable is not const, then export it using boost::python::ptr
-class global_variable_base_t( declaration_based.declaration_based_t ):
+class global_variable_base_t( registration_based.registration_based_t
+                              , declaration_based.declaration_based_t ):
     """
     Base class for all global variables code creators. Mainly exists to
     simplify file writers algorithms.
     """
     def __init__(self, variable, wrapper=None ):
+        registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=variable)
         self._wrapper = wrapper
 
@@ -60,12 +64,14 @@ class array_gv_t( global_variable_base_t ):
         answer.append( '();' )
         return ''.join( answer )
 
-class array_gv_wrapper_t( declaration_based.declaration_based_t ):
+class array_gv_wrapper_t( code_creator.code_creator_t
+                          , declaration_based.declaration_based_t ):
     """
     Creates C++ code that register array class.
     """
 
     def __init__(self, variable ):
+        code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=variable)
 
     def _get_wrapper_type( self ):

@@ -502,4 +502,3 @@ $RETURN_STMT
         self.declaration.arguments = self._subst_manager.wrapper_func.arg_list
 
         return answer
-

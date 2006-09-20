@@ -6,7 +6,7 @@
 import algorithm
 import code_creator
 
-class declaration_based_t(code_creator.code_creator_t):
+class declaration_based_t:
     """Code creator that is based on a declaration.
     """
     def __init__(self, declaration ):
@@ -17,12 +17,8 @@ class declaration_based_t(code_creator.code_creator_t):
         @param parent: Parent code creator.
         @type parent: code_creator_t
         """
-        code_creator.code_creator_t.__init__(self)
         self._decl = declaration
         
-    def _create_impl(self):
-        raise NotImplementedError()
-
     def _generate_valid_name(self, name=None):
         if name == None:
             name = self.declaration.name
@@ -50,3 +46,4 @@ class declaration_based_t(code_creator.code_creator_t):
         if None is self.declaration.documentation:
             return ''
         return self.declaration.documentation
+    

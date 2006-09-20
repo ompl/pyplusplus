@@ -5,19 +5,23 @@
 
 import os
 import algorithm
+import code_creator
 import declaration_based
 from pyplusplus import code_repository
 from pyplusplus.decl_wrappers import call_policies
 from pyplusplus.decl_wrappers import python_traits
+import registration_based
 from pygccxml import declarations
 
-class member_variable_base_t( declaration_based.declaration_based_t ):
+class member_variable_base_t( registration_based.registration_based_t
+                              , declaration_based.declaration_based_t ):
     """
     Base class for all member variables code creators. Mainly exists to
     simplify file writers algorithms.
     """
 
     def __init__(self, variable, wrapper=None ):
+        registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=variable)
         self._wrapper = wrapper
 
@@ -131,13 +135,14 @@ class member_variable_t( member_variable_base_t ):
     def _create_impl(self):
         return self._generate_variable()
 
-class member_variable_wrapper_t( declaration_based.declaration_based_t ):
+class member_variable_wrapper_t( code_creator.code_creator_t
+                                 , declaration_based.declaration_based_t ):
     """
     Creates C++ code that creates accessor for pointer class variables
     """
     #TODO: give user a way to set call policies
     #      treat void* pointer
-    indent = declaration_based.declaration_based_t.indent
+    indent = code_creator.code_creator_t.indent
     MV_GET_TEMPLATE = os.linesep.join([
           'static %(type)s get_%(name)s(%(cls_type)s inst ){'
         , indent( 'return inst.%(name)s;' )
@@ -167,6 +172,7 @@ class member_variable_wrapper_t( declaration_based.declaration_based_t ):
     ])
 
     def __init__(self, variable ):
+        code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=variable)
 
     def _get_getter_full_name(self):
@@ -273,12 +279,13 @@ class bit_field_t( member_variable_base_t ):
                     answer[i] = os.linesep + self.indent( self.indent( self.indent( answer[i] ) ) )
             return ''.join( answer )
 
-class bit_field_wrapper_t( declaration_based.declaration_based_t ):
+class bit_field_wrapper_t( code_creator.code_creator_t
+                           , declaration_based.declaration_based_t ):
     """
     Creates C++ code that creates accessor for bit fields
     """
 
-    indent = declaration_based.declaration_based_t.indent
+    indent = code_creator.code_creator_t.indent
     BF_GET_TEMPLATE = os.linesep.join([
           '%(type)s get_%(name)s() const {'
         , indent( 'return %(name)s;' )
@@ -294,6 +301,7 @@ class bit_field_wrapper_t( declaration_based.declaration_based_t ):
     ])
 
     def __init__(self, variable ):
+        code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=variable)
 
     def _get_getter_full_name(self):
@@ -370,12 +378,14 @@ class array_mv_t( member_variable_base_t ):
 
 #TODO: generated fucntion should be static and take instance of the wrapped class
 #as first argument.
-class array_mv_wrapper_t( declaration_based.declaration_based_t ):
+class array_mv_wrapper_t( code_creator.code_creator_t
+                          , declaration_based.declaration_based_t ):
     """
     Creates C++ code that register array class.
     """
 
     def __init__(self, variable ):
+        code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=variable)
 
     def _get_wrapper_type( self ):
@@ -477,12 +487,13 @@ class mem_var_ref_t( member_variable_base_t ):
             answer.append( "%s.%s;" % (class_var_name, self._create_setter() ) )
         return ''.join( answer )
 
-class mem_var_ref_wrapper_t( declaration_based.declaration_based_t ):
+class mem_var_ref_wrapper_t( code_creator.code_creator_t
+                             , declaration_based.declaration_based_t ):
     """
     Creates C++ code that creates accessor for class member variable, that has type reference.
     """
 
-    indent = declaration_based.declaration_based_t.indent
+    indent = code_creator.code_creator_t.indent
     GET_TEMPLATE = os.linesep.join([
           'static %(type)s get_%(name)s( %(class_type)s& inst ) {'
         , indent( 'return inst.%(name)s;' )
@@ -498,6 +509,7 @@ class mem_var_ref_wrapper_t( declaration_based.declaration_based_t ):
     ])
 
     def __init__(self, variable ):
+        code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=variable)
 
     def _get_getter_full_name(self):

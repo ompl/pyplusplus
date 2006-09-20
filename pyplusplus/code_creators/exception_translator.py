@@ -8,10 +8,13 @@ import types
 import algorithm 
 import code_creator
 import declaration_based
+import registration_based
 from pygccxml import declarations
 
-class exception_translator_t( declaration_based.declaration_based_t ):
+class exception_translator_t( code_creator.code_creator_t
+                              , declaration_based.declaration_based_t ):
     def __init__(self, exception_class ):        
+        code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=exception_class  )
 
     @property
@@ -28,8 +31,10 @@ class exception_translator_t( declaration_based.declaration_based_t ):
                  , 'arg_name' : self.declaration.exception_argument_name }
 
 
-class exception_translator_register_t( declaration_based.declaration_based_t ):
+class exception_translator_register_t( registration_based.registration_based_t
+                                       , declaration_based.declaration_based_t ):
     def __init__(self, exception_class, exception_translator):        
+        registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=exception_class )
         self.works_on_instance = False
         self.translator = exception_translator

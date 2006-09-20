@@ -7,6 +7,7 @@ import os
 import algorithm
 import code_creator
 import declaration_based
+import registration_based
 import class_declaration
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
@@ -26,8 +27,10 @@ use_enum_workaround = False
 #protected member functions - call, override
 #private - override
 
-class calldef_t( declaration_based.declaration_based_t):
+class calldef_t( registration_based.registration_based_t
+                 , declaration_based.declaration_based_t ):
     def __init__(self, function, wrapper=None ):
+        registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=function )
         self._wrapper = wrapper
         self._associated_decl_creators = []
@@ -154,8 +157,10 @@ class calldef_t( declaration_based.declaration_based_t):
         return ''.join( result )
 
 
-class calldef_wrapper_t( declaration_based.declaration_based_t):
+class calldef_wrapper_t( code_creator.code_creator_t
+                         , declaration_based.declaration_based_t):
     def __init__(self, function ):
+        code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=function )
 
     def argument_name( self, index ):
@@ -795,22 +800,6 @@ class mem_fun_private_v_wrapper_t( calldef_wrapper_t ):
 
 mem_fun_private_pv_wrapper_t = mem_fun_private_v_wrapper_t
 
-
-#class protected_helper_t( object ):
-    #def __init__( self ):
-        #object.__init__( self )
-
-    #def wclass_inst_arg_type( self ):
-        #inst_arg_type = declarations.declarated_t( self.declaration.parent )
-        #if self.declaration.has_const:
-            #inst_arg_type = declarations.const_t(inst_arg_type)
-        #inst_arg_type = declarations.reference_t(inst_arg_type)
-        #return inst_arg_type
-
-    #def wclass_inst_arg( self ):
-        #return self.wclass_inst_arg_type().decl_string + ' wcls_inst'
-
-
 class constructor_t( calldef_t ):
     """
     Creates boost.python code needed to expose constructor.
@@ -867,11 +856,13 @@ class constructor_t( calldef_t ):
             code = self.parent.class_var_name + '.' + code + ';'
         return code
 
-class static_method_t( declaration_based.declaration_based_t ):
+class static_method_t( declaration_based.declaration_based_t
+                       , registration_based.registration_based_t ):
     """
     Creates boost.python code that expose member function as static function.
     """
     def __init__(self, function, function_code_creator=None ):
+        registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=function )
 
         self._function_code_creator = function_code_creator
@@ -932,11 +923,13 @@ class constructor_wrapper_t( calldef_wrapper_t ):
 #There are usecases when boost.python requeres
 #constructor for wrapper class from exposed class
 #I should understand this more
-class copy_constructor_wrapper_t( declaration_based.declaration_based_t ):
+class copy_constructor_wrapper_t( code_creator.code_creator_t
+                                  , declaration_based.declaration_based_t ):
     """
     Creates wrapper class constructor from wrapped class instance.
     """
     def __init__( self, class_inst ):
+        code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=class_inst )
 
     def _create_declaration(self):
@@ -968,11 +961,13 @@ class copy_constructor_wrapper_t( declaration_based.declaration_based_t ):
         return os.linesep.join( answer )
 
 
-class null_constructor_wrapper_t( declaration_based.declaration_based_t ):
+class null_constructor_wrapper_t( code_creator.code_creator_t
+                                  , declaration_based.declaration_based_t ):
     """
     Creates wrapper for compiler generated null constructor.
     """
     def __init__( self, class_inst ):
+        code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=class_inst )
 
     def _create_constructor_call( self ):
@@ -992,7 +987,8 @@ class null_constructor_wrapper_t( declaration_based.declaration_based_t ):
 
 #in python all operators are members of class, while in C++
 #you can define operators that are not.
-class operator_t( declaration_based.declaration_based_t ):
+class operator_t( registration_based.registration_based_t
+                  , declaration_based.declaration_based_t ):
     """
     Creates boost.python code needed to expose supported subset of C++ operators.
     """
@@ -1002,9 +998,8 @@ class operator_t( declaration_based.declaration_based_t ):
         BOTH = 'both'
 
     def __init__(self, operator ):
-        declaration_based.declaration_based_t.__init__( self
-                                                        , declaration=operator
-                                                         )
+        registration_based.registration_based_t.__init__( self )
+        declaration_based.declaration_based_t.__init__( self, declaration=operator )
 
     def _call_type_constructor( self, type ):
         x = declarations.remove_reference( type )
@@ -1066,11 +1061,13 @@ class operator_t( declaration_based.declaration_based_t ):
             code = self._create_unary_operator()
         return 'def( %s )' % code
 
-class casting_operator_t( declaration_based.declaration_based_t ):
+class casting_operator_t( registration_based.registration_based_t
+                          , declaration_based.declaration_based_t ):
     """
     Creates boost.python code needed to register type conversions( implicitly_convertible )
     """
     def __init__( self, operator ):
+        registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=operator )
 
     def _create_impl(self):
@@ -1085,13 +1082,15 @@ class casting_operator_t( declaration_based.declaration_based_t ):
                                            , [ from_arg , to_arg ] )  \
                + '();'
 
-class casting_member_operator_t( declaration_based.declaration_based_t ):
+class casting_member_operator_t( registration_based.registration_based_t
+                                 , declaration_based.declaration_based_t ):
     """
     Creates boost.python code needed to register casting operators. For some
     operators Pythonic name is given: __int__, __long__, __float__, __str__
     """
 
     def __init__( self, operator ):
+        registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=operator )
 
     def _create_impl(self):
@@ -1118,13 +1117,15 @@ class casting_member_operator_t( declaration_based.declaration_based_t ):
                             , 'doc' : doc
                }
 
-class casting_constructor_t( declaration_based.declaration_based_t ):
+class casting_constructor_t( registration_based.registration_based_t
+                             , declaration_based.declaration_based_t ):
     """
     Creates boost.python code needed to register type conversions( implicitly_convertible ).
     This case treat situation when class has public non explicit constuctor from
     another type.
     """
     def __init__( self, constructor ):
+        registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=constructor )
 
     def _create_impl(self):
@@ -1221,9 +1222,9 @@ class free_fun_overloads_class_t( calldef_overloads_class_t ):
                    , 'max' : max_
                }
 
-class calldef_overloads_t( code_creator.code_creator_t ):
+class calldef_overloads_t( registration_based.registration_based_t ):
     def __init__( self, overloads_class ):
-        code_creator.code_creator_t.__init__( self )
+        registration_based.registration_based_t.__init__( self )
         self._overloads_class = overloads_class
 
     @property

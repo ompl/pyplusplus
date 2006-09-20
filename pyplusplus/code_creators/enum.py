@@ -6,12 +6,15 @@
 import os
 import algorithm
 import declaration_based
+import registration_based
 
-class enum_t( declaration_based.declaration_based_t ):
+class enum_t( registration_based.registration_based_t
+              , declaration_based.declaration_based_t ):
     """
     Creates boost.python code that expose C++ enum
     """
     def __init__(self, enum ):
+        registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=enum)
         self.works_on_instance = False
 

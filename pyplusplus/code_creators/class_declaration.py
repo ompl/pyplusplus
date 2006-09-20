@@ -10,11 +10,14 @@ import calldef
 import algorithm
 import smart_pointers
 import declaration_based
+import registration_based
 from pygccxml import declarations
 
-class class_declaration_t( scoped.scoped_t ):
+class class_declaration_t( scoped.scoped_t
+                           , registration_based.registration_based_t ):
     def __init__(self, class_inst ):
         scoped.scoped_t.__init__( self, declaration=class_inst )
+        registration_based.registration_based_t.__init__( self )
         self.works_on_instance = False
 
     def _generate_class_definition(self):
@@ -78,12 +81,13 @@ class class_declaration_t( scoped.scoped_t ):
             return self._generate_code_no_scope()
 
 
-class class_t( scoped.scoped_t ):
+class class_t( scoped.scoped_t, registration_based.registration_based_t ):
     """
     Creates boost.python code that needed to export a class
     """
     def __init__(self, class_inst, wrapper=None ):
         scoped.scoped_t.__init__( self, declaration=class_inst )
+        registration_based.registration_based_t.__init__( self )
         self._wrapper = wrapper
         self.works_on_instance = False
         self._associated_decl_creators = []
