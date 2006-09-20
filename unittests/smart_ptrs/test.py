@@ -26,6 +26,9 @@ class tester_t( unittest.TestCase ):
         except Exception, error:
             self.failUnless( error.__class__.__name__ == 'ArgumentError' )
 
+    def __test_ref_fine( self, inst, val ):
+        self.assertEqual( custom_sptr.ref_get_value( inst ), val )
+
     def __test_val( self, inst, val ):
         self.assertEqual( custom_sptr.val_get_value( inst ), val )
 
@@ -48,6 +51,13 @@ class tester_t( unittest.TestCase ):
 
     def test_created_derived( self ):
         self.__test_impl( custom_sptr.create_derived(), 11 )
+
+    def test_created_base( self ):
+        inst = custom_sptr.create_base()
+        val = 11
+        self.__test_ref_fine( inst, val )
+        self.__test_val( inst, val )
+        self.__test_const_ref( inst, val )
 
 def create_suite():
     suite = unittest.TestSuite()

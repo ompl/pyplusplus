@@ -80,6 +80,7 @@ BOOST_PYTHON_MODULE( custom_sptr ){
         .def( "get_value", bp::pure_virtual( &base_i::get_value ) );
 
     bp::implicitly_convertible< smart_ptr_t< base_wrapper_t >, smart_ptr_t< base_i > >();
+    bp::register_ptr_to_python< smart_ptr_t< base_i > >();
 
     bp::class_< derived_wrapper_t, bp::bases< base_i >, smart_ptr_t<derived_wrapper_t> >( "derived_t" )
         .def( "get_value", &derived_t::get_value, &derived_wrapper_t::default_get_value );
@@ -87,10 +88,11 @@ BOOST_PYTHON_MODULE( custom_sptr ){
     bp::implicitly_convertible< smart_ptr_t< derived_wrapper_t >, smart_ptr_t< derived_t > >();
     bp::implicitly_convertible< smart_ptr_t< derived_t >, smart_ptr_t< base_i > >();
     bp::implicitly_convertible< derived_ptr_t, smart_ptr_t< derived_t > >();
-    boost::python::register_ptr_to_python< derived_ptr_t >();
+    bp::register_ptr_to_python< derived_ptr_t >();
 
     bp::def( "const_ref_get_value", &::const_ref_get_value );
     bp::def( "ref_get_value", &::ref_get_value );
     bp::def( "val_get_value", &::val_get_value );
     bp::def( "create_derived", &::create_derived );
+    bp::def( "create_base", &::create_base );
 }

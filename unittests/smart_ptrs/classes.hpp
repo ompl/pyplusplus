@@ -61,6 +61,11 @@ derived_ptr_t create_derived(){
     return derived_ptr_t( new derived_t() );
 }
 
+smart_ptr_t< base_i > create_base(){
+    return smart_ptr_t< base_i >( new derived_t() );
+}
+
+
 //Next function could be exposed, but it could not be solved
 //This is the explanation David Abrahams gave:
 //Naturally; there is no instance of smart_ptr_t<base_i> anywhere in the
