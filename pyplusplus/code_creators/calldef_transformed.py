@@ -329,7 +329,7 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
         
         if thread_safe:
             body = """
-pyplusplus::threading::gil_state_t %(gstate_var)s;
+pyplusplus::threading::gil_guard_t %(gstate_var)s;
 
 %(gstate_var)s.ensure();
 boost::python::override %(override_var)s = this->get_override( "%(alias)s" );
