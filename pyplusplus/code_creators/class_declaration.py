@@ -90,18 +90,12 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
         registration_based.registration_based_t.__init__( self )
         self._wrapper = wrapper
         self.works_on_instance = False
-        self._associated_decl_creators = []
 
     def _get_wrapper( self ):
         return self._wrapper
     def _set_wrapper( self, new_wrapper ):
         self._wrapper = new_wrapper
     wrapper = property( _get_wrapper, _set_wrapper )
-
-    @property
-    def associated_decl_creators( self ):
-        """ references to class declaration code creators. """
-        return self._associated_decl_creators
 
     def _get_held_type(self):
         return self.declaration.held_type

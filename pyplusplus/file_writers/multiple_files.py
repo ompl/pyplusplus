@@ -63,17 +63,23 @@ class multiple_files_t(writer.writer_t):
 
     def associated_decl_creators( self, creator ):
         """ references to all class declaration code creators. """
-        if not isinstance( creator, code_creators.class_t ):
+        if not isinstance( creator, code_creators.registration_based_t ):
             return []
-            
+
         associated_creators = creator.associated_decl_creators[:]
 
-        relevant_creators = filter( lambda acreator: isinstance( acreator, code_creators.class_t )
-                                    , code_creators.make_flatten( creator.creators ) )
+        internal_creators = []
+        if isinstance( creator, code_creators.compound_t ):
+            internal_creators.extend(
+                filter( lambda acreator: isinstance( acreator, code_creators.compound_t )
+                        , code_creators.make_flatten( creator.creators ) ) )
 
-        map( lambda acreator: associated_creators.extend( acreator.associated_decl_creators )
-             , relevant_creators )
-
+        map( lambda internal_creator: associated_creators.extend( internal_creator.associated_decl_creators )
+             , internal_creators )
+        #now associated_creators contains all code creators associated with the creator
+        #We should leave only creators, defined in the global namespace
+        associated_creators = filter( lambda associated_creator: associated_creator.parent is self.extmodule
+                                      , associated_creators )
         return associated_creators
 
     def create_function_code( self, function_name ):
@@ -160,7 +166,7 @@ class multiple_files_t(writer.writer_t):
         else:
             return os.linesep.join( map( lambda creator: creator.create(), ns_creators ) )
 
-    def create_source( self, file_name, function_name, registration_creators, declaration_creators=None ):
+    def create_source( self, file_name, function_name, registration_creators ):
         """Return the content of a cpp file.
 
         @param file_name: The base name of the corresponding include file (without extension)
@@ -172,9 +178,10 @@ class multiple_files_t(writer.writer_t):
         @returns: The content for a cpp file
         @rtype: str
         """
+        declaration_creators = []
+        for rc in registration_creators:
+            declaration_creators.extend( self.associated_decl_creators( rc ) )
 
-        if None is declaration_creators:
-            declaration_creators = []
         creators = registration_creators + declaration_creators
 
         answer = []
@@ -211,19 +218,10 @@ class multiple_files_t(writer.writer_t):
         self.write_file( header_name
                          , self.create_header( class_creator.alias
                                                , self.create_function_code( function_name ) ) )
-        class_wrapper = None
-        decl_creators = []
-        if isinstance( class_creator, code_creators.class_t ):
-            decl_creators.extend( self.associated_decl_creators( class_creator ) )
-            if  class_creator.wrapper:
-                class_wrapper = class_creator.wrapper
-                decl_creators.append( class_creator.wrapper )
 
         # Write the .cpp file...
-        cpp_code = self.create_source( class_creator.alias
-                                       , function_name
-                                       , [class_creator]
-                                       , decl_creators )
+        cpp_code = self.create_source( class_creator.alias, function_name, [class_creator] )
+
         self.write_file( file_path + self.SOURCE_EXT, cpp_code )
 
         # Replace the create() method so that only the register() method is called
@@ -286,9 +284,8 @@ class multiple_files_t(writer.writer_t):
         self.write_file( header_name
                          , self.create_header( file_pattern, self.create_function_code( function_name ) ) )
         self.write_file( file_path + self.SOURCE_EXT
-                         , self.create_source( file_pattern
-                                               , function_name
-                                               , creators ))
+                         , self.create_source( file_pattern, function_name, creators ))
+
         for creator in creators:
             creator.create = lambda: ''
         self.extmodule.body.adopt_creator(

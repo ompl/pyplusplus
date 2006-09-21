@@ -27,6 +27,8 @@ from custom import custom_text_t
 
 from declaration_based import declaration_based_t
 
+from registration_based import registration_based_t
+
 from scoped import scoped_t
 
 from module_body import module_body_t

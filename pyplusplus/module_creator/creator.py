@@ -132,7 +132,7 @@ class creator_t( declarations.decl_visitor_t ):
         self.__free_operators = []
         self.__exposed_free_fun_overloads = set()
         self.__exposed_opaque_decls = set()
-        
+
     def _prepare_decls( self, decls, doc_extractor ):
         global DO_NOT_REPORT_MSGS
 
@@ -534,7 +534,7 @@ class creator_t( declarations.decl_visitor_t ):
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
         self.register_opaque_type( self.curr_decl.return_type, self.curr_decl.call_policies )
-        
+
         maker_cls, fwrapper_cls = creators_wizard.find_out_mem_fun_creator_classes( self.curr_decl )
 
         maker = None
@@ -569,7 +569,7 @@ class creator_t( declarations.decl_visitor_t ):
             self.__extmodule.add_system_header( code_repository.gil_state.file_name )
             self.__extmodule.adopt_creator( code_creators.include_t( code_repository.gil_state.file_name )
                                             , self.__extmodule.first_include_index() + 1)
-            
+
 
         if self.curr_decl.has_static:
             #static_method should be created only once.
@@ -620,7 +620,7 @@ class creator_t( declarations.decl_visitor_t ):
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
         self.register_opaque_type( self.curr_decl.return_type, self.curr_decl.call_policies )
-        
+
         self.__types_db.update( self.curr_decl )
         if not self.curr_decl.parent.is_abstract \
            and not declarations.is_reference( self.curr_decl.return_type ):
@@ -710,6 +710,7 @@ class creator_t( declarations.decl_visitor_t ):
             wrapper = code_creators.class_wrapper_t( declaration=self.curr_decl
                                                      , class_creator=cls_cc )
             cls_cc.wrapper = wrapper
+            cls_cc.associated_decl_creators.append( wrapper )
             #insert wrapper before module body
             if isinstance( self.curr_decl.parent, declarations.class_t ):
                 #we deal with internal class
