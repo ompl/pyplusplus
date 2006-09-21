@@ -7,7 +7,7 @@
 This file contains C++ code to acquire/release the GIL.
 """
 
-file_name = "__gil_state.pypp.hpp"
+file_name = "__gil_guard.pypp.hpp"
 
 code = \
 """// Copyright 2004 Roman Yakovenko.
@@ -15,22 +15,22 @@ code = \
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef __gil_state_pyplusplus_hpp__
-#define __gil_state_pyplusplus_hpp__
+#ifndef __gil_guard_pyplusplus_hpp__
+#define __gil_guard_pyplusplus_hpp__
 
-namespace pyplusplus{ 
+namespace pyplusplus{ namespace threading {
 
-class gil_state_t
+class gil_guard_t
 {
     public:
-    gil_state_t( bool lock=false )
+    gil_guard_t( bool lock=false )
      : m_locked( false )
     {
         if( lock )
             ensure();
     }
 
-    ~gil_state_t() {
+    ~gil_guard_t() {
         release();
     }
 
@@ -55,8 +55,8 @@ class gil_state_t
     PyGILState_STATE m_gstate;
 };
 
-} /* pyplusplus*/ 
+} /* threading */ } /* pyplusplus*/ 
 
 
-#endif//__gil_state_pyplusplus_hpp__
+#endif//__gil_guard_pyplusplus_hpp__
 """
