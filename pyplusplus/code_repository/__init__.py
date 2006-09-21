@@ -14,6 +14,6 @@ C{char data[23];}
 """
 
 import array_1
-import gil_state
+import gil_guard
 
-all = [ array_1, gil_state ]
+all = [ array_1, gil_guard ]
