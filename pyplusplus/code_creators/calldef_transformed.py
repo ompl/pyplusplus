@@ -10,6 +10,7 @@ import os
 from pygccxml import declarations
 from calldef import calldef_t, calldef_wrapper_t
 import pyplusplus.function_transformers as function_transformers
+from pyplusplus import code_repository
 
 ######################################################################
 
@@ -63,6 +64,10 @@ class mem_fun_transformed_wrapper_t( calldef_wrapper_t ):
         @type function: calldef_t
         """
         calldef_wrapper_t.__init__( self, function=function )
+
+        # Create the substitution manager
+        sm = function_transformers.substitution_manager_t(function, transformers=function.function_transformers)
+        self._subst_manager = sm
 
 #    def is_free_function(self):
 #        """Return True if the generated function is a free function.
@@ -151,10 +156,6 @@ $RETURN_STMT
         return os.linesep.join( answer )
 
     def _create_impl(self):
-        # Create the substitution manager
-        decl = self.declaration
-        sm = function_transformers.substitution_manager_t(decl, transformers=decl.function_transformers)
-        self._subst_manager = sm
     
         answer = self.create_function()
 
@@ -226,11 +227,16 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
         @type function: calldef_t
         """
         calldef_wrapper_t.__init__( self, function=function )
-        
+
+        # Create the substitution manager
+        sm = function_transformers.substitution_manager_t(function, transformers=function.function_transformers)
+        self._subst_manager = sm
+
         # Stores the name of the variable that holds the override
-        self._override_var = None
+        self._override_var = sm.virtual_func.allocate_local(function.alias+"_callable")
         # Stores the name of the 'gstate' variable
-        self._gstate_var = None
+        self._gstate_var = sm.virtual_func.allocate_local("gstate")
+
 
     def default_name(self):
         """Return the name of the 'default' function.
@@ -323,7 +329,7 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
         
         if thread_safe:
             body = """
-pyplusplus::gil_state_t %(gstate_var)s;
+pyplusplus::threading::gil_state_t %(gstate_var)s;
 
 %(gstate_var)s.ensure();
 boost::python::override %(override_var)s = this->get_override( "%(alias)s" );
@@ -478,15 +484,15 @@ $RETURN_STMT
         answer.append( self.indent( self.create_default_body() ) )
         answer.append( '}' )
         return os.linesep.join( answer )
-      
+
+    def get_required_headers(self):
+        """Return a list of required header file names."""
+        res = [code_repository.gil_guard.file_name]
+        res += self._subst_manager.virtual_func.get_required_headers()
+        res += self._subst_manager.wrapper_func.get_required_headers()
+        return res
 
     def _create_impl(self):
-        # Create the substitution manager
-        decl = self.declaration
-        sm = function_transformers.substitution_manager_t(decl, transformers=decl.function_transformers)
-        self._override_var = sm.virtual_func.allocate_local(decl.alias+"_callable")
-        self._gstate_var = sm.virtual_func.allocate_local("gstate")
-        self._subst_manager = sm
     
         answer = [ self.create_function() ]
         answer.append( os.linesep )

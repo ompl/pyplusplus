@@ -160,8 +160,8 @@ class substitution_manager_t:
     @ivar virtual_func: The L{code manager<code_manager_t>} object that manages the virtual function. This is used by the arg policies to modify the virtual function.
     @type virtual_func: L{code_manager_t}
     
-    @group Methods called by the user of the class: append_code_block, subst_wrapper, subst_virtual, get_includes
-    @group Methods called by the function transformers: remove_arg, insert_arg, py_result_expr, require_include
+    @group Methods called by the user of the class: append_code_block, subst_wrapper, subst_virtual
+    @group Methods called by the function transformers: remove_arg, insert_arg, py_result_expr
 
     @author: Matthias Baas
     """
@@ -465,66 +465,6 @@ class substitution_manager_t:
             return pyresult
         else:
             return "%s[%d]"%(pyresult, idx)
-
-    # require_include
-    def require_include(self, include, where=None):
-        """Declare an include file that is required for the code to compile.
-
-        This function is supposed to be called by function transformer
-        objects to tell the substitution manager that they create code
-        that requires a particular header file.
-
-        include is the name of the include file which may contain <> or ""
-        characters around the name. 
-
-        @param include: The name of the include file (may contain <> or "")
-        @type include: str
-        @param where: "wrapper", "virtual" or None (for both)
-        @type where: str
-        """
-        if where not in ["wrapper", "virtual", None]:
-            raise ValueError, "Invalid 'where' argument: %s"%where
-
-        if include=="":
-            return
-
-        # Add apostrophes if there aren't any already
-        if include[0] not in '"<':
-            include = '"%s"'%include
-            
-        if where=="wrapper" or where==None:
-            if include not in self._wrapper_includes:
-                self._wrapper_includes.append(include)
-                
-        if where=="virtual" or where==None:
-            if include not in self._virtual_includes:
-                self._virtual_includes.append(include)                
-            
-    # get_includes
-    def get_includes(self, where=None):
-        """Return a list of include files required for the wrapper and/or the virtual function.
-
-        @param where: "wrapper", "virtual" or None (for a combined list)
-        @type where: str
-        @return: A list of include file names (all names contain <> or "")
-        @rtype: list of str
-        """
-        if where not in ["wrapper", "virtual", None]:
-            raise ValueError, "Invalid 'where' argument: %s"%where
-
-        if where=="wrapper":
-            return self._wrapper_includes[:]
-
-        if where=="virtual":
-            return self._virtual_includes[:]
-
-        # Merge both lists (without duplicating names)
-        res = self._virtual_includes[:]
-        for inc in self._wrapper_includes:
-            if inc not in res:
-                res.append(inc)
-
-        return res
 
     # subst_virtual
     def subst_virtual(self, template):

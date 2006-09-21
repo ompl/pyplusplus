@@ -554,21 +554,28 @@ class creator_t( declarations.decl_visitor_t ):
         # Are we dealing with transformed non-virtual member functions?
         if maker_cls==code_creators.mem_fun_transformed_t:
             # Create the code creator that generates the function source code
-            mftw = code_creators.mem_fun_transformed_wrapper_t(self.curr_decl)
+            fwrapper = code_creators.mem_fun_transformed_wrapper_t(self.curr_decl)
             # and add it either to the wrapper class or just to the declaration
             # area of the cpp file
             if self.curr_code_creator.wrapper is None:
-                self.curr_code_creator.associated_decl_creators.append(mftw)
+                self.curr_code_creator.associated_decl_creators.append(fwrapper)
             else:
-                self.curr_code_creator.wrapper.adopt_creator(mftw)
+                self.curr_code_creator.wrapper.adopt_creator(fwrapper)
             # Set the wrapper so that the registration code will refer to it
-            maker.wrapper = mftw
+            maker.wrapper = fwrapper
 
-        # Include the gil_state header from the code repository.
-        if not self.__extmodule.is_system_header(code_repository.gil_state.file_name):
-            self.__extmodule.add_system_header( code_repository.gil_state.file_name )
-            self.__extmodule.adopt_creator( code_creators.include_t( code_repository.gil_state.file_name )
-                                            , self.__extmodule.first_include_index() + 1)
+        # Make sure all required headers are included...
+        required_headers = getattr(fwrapper, "get_required_headers", lambda : [])()
+        for header in required_headers:
+            # Check whether the header is already included
+            included = filter(lambda cc: isinstance(cc, code_creators.include_t) and cc.header==header, self.__extmodule.creators)
+            if not included:
+                self.__extmodule.add_include( header )
+
+            # Check if it is a header from the code repository
+            if header in map(lambda mod: mod.file_name, code_repository.all):
+                # Make Py++ write the header
+                self.__extmodule.add_system_header( header )
 
 
         if self.curr_decl.has_static:

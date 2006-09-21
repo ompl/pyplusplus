@@ -94,6 +94,39 @@ class code_manager_t(subst_t):
         # A list with variable tuples: (name, type, size, default)
         self._local_var_list = []
 
+        # Required header file names
+        self._required_headers = []
+
+    # require_header
+    def require_header(self, include):
+        """Declare an include file that is required for the code to compile.
+
+        include is the name of the include file which may contain <> or ""
+        characters around the name (which are currently ignored).
+        If an include file is declared twice it will only be added once.
+
+        @param include: The name of the include file (may contain <> or "")
+        @type include: str
+        """
+        if include=="":
+            return
+
+        # Add apostrophes if there aren't any already
+        if include[0] in '"<':
+            include = include[1:-1]
+
+        if include not in self._required_headers:
+            self._required_headers.append(include)
+
+    # get_required_headers
+    def get_required_headers(self, where=None):
+        """Return a list of include files required for the function.
+
+        @return: A list of include file names
+        @rtype: list of str
+        """
+        return self._required_headers
+
     # declare_local
     def declare_local(self, name, type, size=None, default=None):
         """Declare a local variable and return its final name.
