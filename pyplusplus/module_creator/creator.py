@@ -315,6 +315,8 @@ class creator_t( declarations.decl_visitor_t ):
                     return True #virtual and pure virtual functions requieres wrappers.
                 if member.access_type in ( ACCESS_TYPES.PROTECTED, ACCESS_TYPES.PRIVATE ):
                     return True #we already decided that those functions should be exposed, so I need wrapper for them
+                if member.function_transformers:
+                    return True #function transformers require wrapper
         return bool( self.redefined_funcs(class_inst) )
 
     def register_opaque_type( self, type_, call_policy ):
@@ -550,19 +552,6 @@ class creator_t( declarations.decl_visitor_t ):
             else:
                 maker = maker_cls( function=self.curr_decl )
             self.curr_code_creator.adopt_creator( maker )
-
-        # Are we dealing with transformed non-virtual member functions?
-        if maker_cls==code_creators.mem_fun_transformed_t:
-            # Create the code creator that generates the function source code
-            fwrapper = code_creators.mem_fun_transformed_wrapper_t(self.curr_decl)
-            # and add it either to the wrapper class or just to the declaration
-            # area of the cpp file
-            if self.curr_code_creator.wrapper is None:
-                self.curr_code_creator.associated_decl_creators.append(fwrapper)
-            else:
-                self.curr_code_creator.wrapper.adopt_creator(fwrapper)
-            # Set the wrapper so that the registration code will refer to it
-            maker.wrapper = fwrapper
 
         # Make sure all required headers are included...
         required_headers = getattr(fwrapper, "get_required_headers", lambda : [])()
