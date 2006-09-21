@@ -70,10 +70,10 @@ class multiple_files_t(writer.writer_t):
 
         internal_creators = []
         if isinstance( creator, code_creators.compound_t ):
-            internal_creators.extend(
-                filter( lambda acreator: isinstance( acreator, code_creators.compound_t )
+            internal_creators.extend( 
+                filter( lambda creator: isinstance( creator, code_creators.registration_based_t )
                         , code_creators.make_flatten( creator.creators ) ) )
-
+        
         map( lambda internal_creator: associated_creators.extend( internal_creator.associated_decl_creators )
              , internal_creators )
         #now associated_creators contains all code creators associated with the creator
@@ -315,8 +315,8 @@ class multiple_files_t(writer.writer_t):
     def split_free_functions( self ):
         """Write all free functions into a separate .h/.cpp file.
         """
-        creators = filter( lambda x: isinstance(x, code_creators.free_function_t )
-                           , self.extmodule.body.creators )
+        free_functions = ( code_creators.free_function_t, code_creators.free_fun_overloads_t )
+        creators = filter( lambda x: isinstance(x, free_functions ), self.extmodule.body.creators )
         self.split_creators( creators, '_free_functions', 'register_free_functions', -1 )
 
     #TODO: move write_main to __init__

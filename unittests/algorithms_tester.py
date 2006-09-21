@@ -125,6 +125,9 @@ class multiple_files_tester_t(unittest.TestCase):
     CLASS_DEF = \
     """
     namespace tester{
+    
+    void check_overload( int i=0, int j=1, int k=2 );
+
     struct b{
         enum EColor{ red, blue };
         enum EFruit{ apple, orange };
@@ -134,8 +137,10 @@ class multiple_files_tester_t(unittest.TestCase):
 
         void do_nothing(){}
 
-        int do_somghing(){ return 1; }
+        int do_something(){ return 1; }
 
+        void check_overload( int i=0, int j=1, int k=2 );
+        
         int m_dummy;
 
         struct b_nested{};
@@ -147,6 +152,7 @@ class multiple_files_tester_t(unittest.TestCase):
                 [ module_builder.create_text_fc( self.CLASS_DEF ) ]
                 , gccxml_path=autoconfig.gccxml.executable )
         mb.namespace( name='::tester' ).include()
+        mb.calldefs( 'check_overload' ).use_overload_macro = True
         b = mb.class_( 'b' )
         b.add_declaration_code( '//hello world' )
         nested = b.class_( 'b_nested' )
@@ -160,6 +166,9 @@ class class_multiple_files_tester_t(unittest.TestCase):
     CLASS_DEF = \
     """
     namespace tester{
+
+    void check_overload( int i=0, int j=1, int k=2 );
+
     struct x{
         enum EColor{ red, blue };
         enum EFruit{ apple, orange };
@@ -169,7 +178,9 @@ class class_multiple_files_tester_t(unittest.TestCase):
 
         void do_nothing(){}
 
-        int do_somghing(){ return 1; }
+        int do_something(){ return 1; }
+ 
+        void check_overload( int i=0, int j=1, int k=2 );
 
         int m_dummy;
 
@@ -188,6 +199,7 @@ class class_multiple_files_tester_t(unittest.TestCase):
         nested = x.class_( 'x_nested' )
         nested.add_declaration_code( '//hello nested decl' )
         nested.add_registration_code( '//hello nested reg', False )
+        mb.calldefs( 'check_overload' ).use_overload_macro = True
 
         mb.build_code_creator('x_class_multi')
         mb.split_module( autoconfig.build_dir

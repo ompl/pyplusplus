@@ -646,11 +646,13 @@ class creator_t( declarations.decl_visitor_t ):
                         if None is f.call_policies:
                             f.call_policies = self.__call_policies_resolver( f )
                             self.register_opaque_type( f.return_type, f.call_policies )
+                            
                     overloads_cls_creator = code_creators.free_fun_overloads_class_t( overloads )
                     self.__extmodule.adopt_declaration_creator( overloads_cls_creator )
 
                     overloads_reg = code_creators.free_fun_overloads_t( overloads_cls_creator )
                     self.curr_code_creator.adopt_creator( overloads_reg )
+                    overloads_reg.associated_decl_creators.append( overloads_cls_creator )
         else:
             self.__types_db.update( self.curr_decl )
             if None is self.curr_decl.call_policies:
@@ -687,10 +689,11 @@ class creator_t( declarations.decl_visitor_t ):
 
                 overloads_cls_creator = code_creators.mem_fun_overloads_class_t( overloads )
                 self.__extmodule.adopt_declaration_creator( overloads_cls_creator )
-                cls_creator.associated_decl_creators.append( overloads_cls_creator )
-
+                
                 overloads_reg = code_creators.mem_fun_overloads_t( overloads_cls_creator )
                 cls_creator.adopt_creator( overloads_reg )
+                
+                overloads_reg.associated_decl_creators.append( overloads_cls_creator )
         return exposed
 
     def visit_class(self ):

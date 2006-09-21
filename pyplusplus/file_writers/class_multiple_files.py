@@ -157,7 +157,7 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
             return patterns
 
     def split_internal_memfuns( self, class_creator ):
-        calldef_types = ( code_creators.mem_fun_t )
+        calldef_types = ( code_creators.mem_fun_t, code_creators.mem_fun_overloads_t )
         return self.split_internal_calldefs( class_creator, calldef_types, 'memfuns' )
 
     def split_internal_v_memfuns( self, class_creator ):
