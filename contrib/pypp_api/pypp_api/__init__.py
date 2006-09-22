@@ -67,6 +67,11 @@ PROTECTED = ACCESS_TYPES.PROTECTED
 PRIVATE = ACCESS_TYPES.PRIVATE
 
 from decltypes import arg, cpp
-from argpolicy import *
+#from argpolicy import *
+from pyplusplus.function_transformers.arg_policies import output_t as Output
+from pyplusplus.function_transformers.arg_policies import input_t as Input
+from pyplusplus.function_transformers.arg_policies import inout_t as InOut
+from pyplusplus.function_transformers.arg_policies import input_array_t as InputArray
+from pyplusplus.function_transformers.arg_policies import output_array_t as OutputArray
 
 from modulebuilder import ModuleBuilder

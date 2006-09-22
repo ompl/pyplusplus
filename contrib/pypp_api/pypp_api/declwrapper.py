@@ -254,7 +254,29 @@ class IDecl:
             if decoration_log!=None:
                 ps = ", ".join(map(lambda x: str(x), policies))
                 self._logDecoration("setArgPolicy(%s)"%ps, decl)
-            self.modulebuilder.mArgPolicyManager.setArgPolicy(decl, policies)
+            decl.function_transformers.extend(list(policies))
+#            self.modulebuilder.mArgPolicyManager.setArgPolicy(decl, policies)
+
+    # setAttr
+    def setAttr(self, attr, value):
+        """Set an arbitrary attribute.
+
+        Sets an arbitrary attribute on the contained decl_wrappers.
+
+        This method can be used as a backdoor to access Py++
+        decl_wrapper properties that are not directly exposed in
+        pypp_api (yet).
+
+        @param attr: Attribute name
+        @type attr: str
+        @param value: The value that should be set
+        """
+        self._checkLock()
+        for decl in self._iterContained():
+            if decoration_log!=None:
+                self._logDecoration('setAttr("%s", %s)'%(attr,value), decl)
+            setattr(decl, attr, value)
+        return self
 
     # addMethod
     def addMethod(self, name, impl):
