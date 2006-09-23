@@ -40,7 +40,7 @@ class multiple_files_t(writer.writer_t):
         self.split_method_names = []  # List of methods from the split files
         self.write_main = write_main
         self.written_files = []
-
+        self.ref_count_creators = ( code_creators.opaque_type_registrator_t, )
 
     def write_file( self, fpath, content ):
         self.written_files.append( fpath )
@@ -198,7 +198,8 @@ class multiple_files_t(writer.writer_t):
         for creator in declaration_creators:
             answer.append( '' )
             answer.append( creator.create() )
-            creator.create = lambda: ''
+            if not isinstance( creator, self.ref_count_creators ):
+                creator.create = lambda: ''
 
         # Write the register() function...
         answer.append( '' )

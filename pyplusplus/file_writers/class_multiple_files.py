@@ -108,7 +108,8 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
             for decl_creator in self.associated_decl_creators( creator ):
                 source_code.append( '' )
                 source_code.append( decl_creator.create() )
-                decl_creator.create = lambda: ''
+                if not isinstance( decl_creator, self.ref_count_creators ):
+                    decl_creator.create = lambda: ''
 
         # Write the register() function...
         source_code.append( '' )
@@ -228,7 +229,8 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         for creator in class_creator.associated_decl_creators:
             source_code.append( '' )
             source_code.append( creator.create() )
-            creator.create = lambda: ''
+            if not isinstance( creator, self.ref_count_creators ):
+                creator.create = lambda: ''
 
         # Write the register() function...
         source_code.append( '' )
