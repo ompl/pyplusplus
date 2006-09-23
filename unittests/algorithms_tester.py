@@ -125,8 +125,13 @@ class multiple_files_tester_t(unittest.TestCase):
     CLASS_DEF = \
     """
     namespace tester{
-    
+
+    struct op_struct{};
+
+    op_struct* get_opaque();
+
     void check_overload( int i=0, int j=1, int k=2 );
+
 
     struct b{
         enum EColor{ red, blue };
@@ -138,6 +143,8 @@ class multiple_files_tester_t(unittest.TestCase):
         void do_nothing(){}
 
         int do_something(){ return 1; }
+
+        op_struct* get_opaque();
 
         void check_overload( int i=0, int j=1, int k=2 );
         
@@ -153,6 +160,9 @@ class multiple_files_tester_t(unittest.TestCase):
                 , gccxml_path=autoconfig.gccxml.executable )
         mb.namespace( name='::tester' ).include()
         mb.calldefs( 'check_overload' ).use_overload_macro = True
+        mb.calldefs( 'get_opaque' ).call_policies \
+          = module_builder.call_policies.return_value_policy( module_builder.call_policies.return_opaque_pointer )
+        mb.class_( 'op_struct' ).exclude()
         b = mb.class_( 'b' )
         b.add_declaration_code( '//hello world' )
         nested = b.class_( 'b_nested' )
@@ -166,6 +176,10 @@ class class_multiple_files_tester_t(unittest.TestCase):
     CLASS_DEF = \
     """
     namespace tester{
+
+    struct op_struct{};
+
+    op_struct* get_opaque();
 
     void check_overload( int i=0, int j=1, int k=2 );
 
@@ -181,6 +195,8 @@ class class_multiple_files_tester_t(unittest.TestCase):
         int do_something(){ return 1; }
  
         void check_overload( int i=0, int j=1, int k=2 );
+
+        op_struct* get_opaque();
 
         int m_dummy;
 
@@ -200,6 +216,9 @@ class class_multiple_files_tester_t(unittest.TestCase):
         nested.add_declaration_code( '//hello nested decl' )
         nested.add_registration_code( '//hello nested reg', False )
         mb.calldefs( 'check_overload' ).use_overload_macro = True
+        mb.calldefs( 'get_opaque' ).call_policies \
+          = module_builder.call_policies.return_value_policy( module_builder.call_policies.return_opaque_pointer )
+        mb.class_( 'op_struct' ).exclude()
 
         mb.build_code_creator('x_class_multi')
         mb.split_module( autoconfig.build_dir
