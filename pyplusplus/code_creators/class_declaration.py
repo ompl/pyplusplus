@@ -176,7 +176,7 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
 
         held_type = self._generated_held_type()
         if self.wrapper:
-            if held_type and not self.target_configuration.boost_python_has_wrapper_held_type:
+            if not self.target_configuration.boost_python_has_wrapper_held_type:
                 args.append( algorithm.create_identifier( self, self.declaration.decl_string ) )
             args.append( self.wrapper.full_name )
         else:

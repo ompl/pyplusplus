@@ -889,7 +889,7 @@ class constructor_wrapper_t( calldef_wrapper_t ):
         result.append( self.parent.wrapper_alias )
         result.append( '(' )
         args = []
-        if self.parent.held_type and not self.target_configuration.boost_python_has_wrapper_held_type:
+        if not self.target_configuration.boost_python_has_wrapper_held_type:
             args.append( 'PyObject*' )
         args_decl = self.args_declaration()
         if args_decl:
@@ -936,7 +936,7 @@ class copy_constructor_wrapper_t( code_creator.code_creator_t
         result = []
         result.append( self.parent.wrapper_alias )
         result.append( '(' )
-        if self.parent.held_type and not self.target_configuration.boost_python_has_wrapper_held_type:
+        if not self.target_configuration.boost_python_has_wrapper_held_type:
             result.append( 'PyObject*, ' )
         declarated = declarations.declarated_t( self.declaration )
         const_decl = declarations.const_t( declarated )
@@ -975,7 +975,7 @@ class null_constructor_wrapper_t( code_creator.code_creator_t
 
     def _create_impl(self):
         answer = [ self.parent.wrapper_alias + '(' ]
-        if self.parent.held_type and not self.target_configuration.boost_python_has_wrapper_held_type:
+        if not self.target_configuration.boost_python_has_wrapper_held_type:
             answer[0] = answer[0] + 'PyObject*'
         answer[0] = answer[0] + ')'
         answer.append( ': ' + self._create_constructor_call() )
