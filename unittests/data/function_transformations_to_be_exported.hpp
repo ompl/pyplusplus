@@ -84,6 +84,15 @@ int image_fixed_output_array( image_t& img) {
   return v[0]+v[1]+v[2];
 }
 
+//////////////////////////////////////////////////////////////////////
+
+// A class without any virtual members
+struct no_virtual_members_t
+{
+  bool member(int& v) { v=17; return true; }
+};
+
+
 }
 
 #endif//__function_transformations_to_be_exported_hpp__

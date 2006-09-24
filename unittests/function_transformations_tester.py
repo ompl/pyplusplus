@@ -29,6 +29,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         image.member_function( "fixed_output_array" ).function_transformers.extend([output_array_t(1,3)])
         mb.free_function("get_cpp_instance").call_policies = return_value_policy(reference_existing_object)
         mb.variable( "cpp_instance" ).exclude()
+        
+        cls = mb.class_("no_virtual_members_t")
+        cls.member_function("member").function_transformers.append(output_t(1))
+            
         mb.decls(lambda decl: decl.name[0]=="_").exclude()
 
     def run_tests(self, module):
@@ -135,7 +139,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         # Check if the C++ class can also be passed back to C++
         self.assertEqual(module.get_image_one_value(cppimg), 12)
 
+        ######### Test no_virtual_members_t ########
 
+        cls = module.no_virtual_members_t()
+        self.assertEqual(cls.member(), (True, 17))
 
 def create_suite():
     suite = unittest.TestSuite()
