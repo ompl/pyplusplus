@@ -24,6 +24,7 @@ def find_out_mem_fun_creator_classes( decl ):
         if decl.virtuality == VIRTUALITY_TYPES.NOT_VIRTUAL:
             if decl.function_transformers:
                 maker_cls = code_creators.mem_fun_transformed_t
+                fwrapper_cls = code_creators.mem_fun_transformed_wrapper_t
             else:
                 maker_cls = code_creators.mem_fun_t
         elif decl.virtuality == VIRTUALITY_TYPES.PURE_VIRTUAL:
