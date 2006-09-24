@@ -7,6 +7,7 @@ import os
 import sys
 import unittest
 import fundamental_tester_base
+from pyplusplus import code_creators
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'operators_bug'
@@ -19,11 +20,17 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                                                                     
     def customize(self, mb ):
         mb.classes().redefine_operators = True
+        mb.add_declaration_code( 'const operators_bug::vector operators_bug::vector::one(1);' )
+        tg = code_creators.target_configuration_t( )
+        tg.boost_python_has_wrapper_held_type = False
+        mb.build_code_creator( self.EXTENSION_NAME, target_configuration=tg )
     
     def run_tests(self, module):     
         i = module.integral()
         i.value = 25
         j = i + i
+        v = module.vector( 2 ) + module.vector.one
+        self.failUnless( v.x == 3 )
     
 def create_suite():
     suite = unittest.TestSuite()    

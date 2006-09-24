@@ -80,7 +80,13 @@ class multiple_files_t(writer.writer_t):
         #We should leave only creators, defined in the global namespace
         associated_creators = filter( lambda associated_creator: associated_creator.parent is self.extmodule
                                       , associated_creators )
-        return associated_creators
+        unique_associated_creators = []
+        unique_associated_creator_ids = set()
+        for acreator in associated_creators:
+            if not id( acreator ) in unique_associated_creator_ids:
+                unique_associated_creator_ids.add( id( acreator ) )
+                unique_associated_creators.append( acreator )
+        return unique_associated_creators
 
     def create_function_code( self, function_name ):
         return "void %s();" % function_name
