@@ -34,7 +34,7 @@ class calldef_t( registration_based.registration_based_t
         declaration_based.declaration_based_t.__init__( self, declaration=function )
         self._wrapper = wrapper
         self._associated_decl_creators = []
-        
+
     @property
     def associated_decl_creators( self ):
         """ references to declaration code creators. """
@@ -1159,12 +1159,13 @@ class calldef_overloads_class_t( code_creator.code_creator_t ):
         min_ = None
         max_ = 0
         for f in self.functions:
-            args_ = len( f.arguments )
+            f_max = len( f.arguments )
+            f_min = f_max - len( filter( lambda arg: arg.default_value, f.arguments ) )
             if None is min_:
-                min_ = args_
+                min_ = f_min
             else:
-                min_ = min( min_, args_ )
-            max_tmp = max( max_, args_ )
+                min_ = min( min_, f_min )
+            max_tmp = max( max_, f_max )
             if max_ < max_tmp:
                 max_ = max_tmp
                 self._max_fun = f
