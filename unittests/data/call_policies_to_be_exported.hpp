@@ -20,7 +20,7 @@ inline void return_second_arg( int, int x, int )
 }
 
 namespace return_self{
-    
+
 inline const dummy& return_self( const dummy& x , int y )
 { return x; }
 
@@ -46,7 +46,15 @@ inline void* my_address(){
 inline bool compare( void* ptr ){
     return ptr == my_address();
 }
- 
+
+}
+
+namespace opaque{
+    struct impl_details_t{};
+
+    inline impl_details_t* get_impl_details(){
+        return (impl_details_t*)( 0x11223344 );
+    }
 }
 
 }
