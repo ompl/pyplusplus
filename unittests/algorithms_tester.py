@@ -121,57 +121,6 @@ class readme_tester_t( unittest.TestCase ):
         minus_minus = xxx.operator( symbol='--' )
         self.failUnless( 1 == len( minus_minus.readme() ), os.linesep.join( minus_minus.readme() ) )
 
-class multiple_files_tester_t(unittest.TestCase):
-    CLASS_DEF = \
-    """
-    namespace tester{
-
-    struct op_struct{};
-
-    op_struct* get_opaque();
-
-    void check_overload( int i=0, int j=1, int k=2 );
-
-
-    struct b{
-        enum EColor{ red, blue };
-        enum EFruit{ apple, orange };
-
-        b(){}
-        b( int ){}
-
-        void do_nothing(){}
-
-        int do_something(){ return 1; }
-
-        op_struct* get_opaque();
-
-        void check_overload( int i=0, int j=1, int k=2 );
-        
-        int m_dummy;
-
-        struct b_nested{};
-    };
-    }
-    """
-    def test(self):
-        mb = module_builder.module_builder_t(
-                [ module_builder.create_text_fc( self.CLASS_DEF ) ]
-                , gccxml_path=autoconfig.gccxml.executable )
-        mb.namespace( name='::tester' ).include()
-        mb.calldefs( 'check_overload' ).use_overload_macro = True
-        mb.calldefs( 'get_opaque' ).call_policies \
-          = module_builder.call_policies.return_value_policy( module_builder.call_policies.return_opaque_pointer )
-        mb.class_( 'op_struct' ).exclude()
-        b = mb.class_( 'b' )
-        b.add_declaration_code( '//hello world' )
-        nested = b.class_( 'b_nested' )
-        nested.add_declaration_code( '//hello nested decl' )
-        nested.add_registration_code( '//hello nested reg', False )
-
-        mb.build_code_creator('b_multi')
-        mb.split_module( autoconfig.build_dir, on_unused_file_found=lambda fpath: fpath )
-
 class class_multiple_files_tester_t(unittest.TestCase):
     CLASS_DEF = \
     """
@@ -193,7 +142,7 @@ class class_multiple_files_tester_t(unittest.TestCase):
         void do_nothing(){}
 
         int do_something(){ return 1; }
- 
+
         void check_overload( int i=0, int j=1, int k=2 );
 
         op_struct* get_opaque();
@@ -242,8 +191,6 @@ class doc_extractor_tester_t( unittest.TestCase ):
 
 def create_suite():
     suite = unittest.TestSuite()
-    multiple_files_tester_t
-    suite.addTest( unittest.makeSuite(multiple_files_tester_t))
     suite.addTest( unittest.makeSuite(doc_extractor_tester_t))
     suite.addTest( unittest.makeSuite(class_organizer_tester_t))
     suite.addTest( unittest.makeSuite(indent_tester_t))

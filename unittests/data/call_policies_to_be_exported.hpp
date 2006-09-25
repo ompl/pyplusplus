@@ -55,6 +55,10 @@ namespace opaque{
     inline impl_details_t* get_impl_details(){
         return (impl_details_t*)( 0x11223344 );
     }
+
+    typedef struct opaque_ *opaque_pointer;
+    opaque_pointer get_opaque(){ return 0; }
+
 }
 
 }

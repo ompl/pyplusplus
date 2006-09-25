@@ -61,6 +61,7 @@ import unnamed_classes_tester
 import cppexceptions_tester
 import no_init_tester
 import overloads_macro_tester
+import split_module_tester
 
 def create_suite(times):
     testers = [
@@ -118,6 +119,7 @@ def create_suite(times):
         , cppexceptions_tester
         , no_init_tester
         , overloads_macro_tester
+        , split_module_tester
     ]
 
     main_suite = unittest.TestSuite()

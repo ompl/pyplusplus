@@ -16,21 +16,21 @@ LICENSE = """// Copyright 2004 Roman Yakovenko.
 
 class fundamental_tester_base_t( unittest.TestCase ):
     SUFFIX_TO_BE_EXPORTED = '_to_be_exported.hpp'
-    
+
     def __init__(self, module_name, *args, **keywd ):
         unittest.TestCase.__init__(self, *args)
         self.__module_name = module_name
         self.__to_be_exported_header \
             = os.path.join( autoconfig.data_directory
                             , self.__module_name + self.SUFFIX_TO_BE_EXPORTED )
-        
+
         self.__generated_source_file_name = os.path.join( autoconfig.build_dir
                                                           , self.__module_name + '.cpp' )
         self.__generated_scons_file_name = os.path.join( autoconfig.build_dir
                                                           , self.__module_name + '.scons' )
-        
+
         self.__indexing_suite_version = keywd.get( 'indexing_suite_version', 1 )
-        
+
     def failIfRaisesAny(self, callableObj, *args, **kwargs):
         try:
             callableObj(*args, **kwargs)
@@ -43,10 +43,21 @@ class fundamental_tester_base_t( unittest.TestCase ):
             callableObj(*args, **kwargs)
         except:
             was_exception = True
-        self.failUnless(was_exception, 'exception has not been raised during execution.')           
+        self.failUnless(was_exception, 'exception has not been raised during execution.')
+
     def customize(self, generator):
         pass
-        
+
+    def get_source_files( self ):
+        sources = [ self.__generated_source_file_name ]
+        to_be_exported_cpp = os.path.splitext( self.__to_be_exported_header )[0] + '.cpp'
+        if os.path.exists( to_be_exported_cpp ):
+            sources.append( to_be_exported_cpp  )
+        return sources
+
+    def generate_source_files( self, mb ):
+        mb.write_module( self.__generated_source_file_name )
+
     def run_tests(self, module):
         raise NotImplementedError()
 
@@ -65,9 +76,9 @@ class fundamental_tester_base_t( unittest.TestCase ):
             mb.build_code_creator( self.__module_name, doc_extractor=doc_extractor )
         mb.code_creator.std_directories.extend( autoconfig.scons_config.cpppath )
         mb.code_creator.user_defined_directories.append( autoconfig.data_directory )
-        mb.code_creator.precompiled_header = "boost/python.hpp" 
+        mb.code_creator.precompiled_header = "boost/python.hpp"
         mb.code_creator.license = LICENSE
-        mb.write_module( self.__generated_source_file_name )
+        self.generate_source_files( mb )
 
     def _create_sconstruct(self, sources ):
         sources_str = []
@@ -80,7 +91,7 @@ class fundamental_tester_base_t( unittest.TestCase ):
         sconstruct_file = file( self.__generated_scons_file_name, 'w+b' )
         sconstruct_file.write( sconstruct_script )
         sconstruct_file.close()
-    
+
     def _create_extension(self):
         cmd = autoconfig.scons.cmd_build % self.__generated_scons_file_name
         output = os.popen( cmd )
@@ -116,12 +127,9 @@ class fundamental_tester_base_t( unittest.TestCase ):
         pypp = None
         try:
             self._create_extension_source_file()
-            sources = [ self.__generated_source_file_name ]            
-            to_be_exported_cpp = os.path.splitext( self.__to_be_exported_header )[0] + '.cpp'
-            if os.path.exists( to_be_exported_cpp ):
-                sources.append( to_be_exported_cpp  )
+            sources = self.get_source_files()
             self._create_sconstruct(sources)
-            self._create_extension()       
+            self._create_extension()
             pypp = __import__( self.__module_name )
             self.run_tests(pypp)
         finally:
