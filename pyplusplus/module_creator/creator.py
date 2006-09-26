@@ -331,14 +331,14 @@ class creator_t( declarations.decl_visitor_t ):
         else:#class declaration:
             decl = declarations.class_declaration_traits.get_declaration( naked_type )
         opaque_type_registrator = None
-        if not id(decl) in self.__exposed_opaque_decls.keys():
+        if id(decl) not in self.__exposed_opaque_decls.keys():
             opaque_type_registrator = code_creators.opaque_type_registrator_t( decl )
             self.__exposed_opaque_decls[ id(decl) ] = opaque_type_registrator
             self.__extmodule.adopt_declaration_creator( opaque_type_registrator )
         else:
             opaque_type_registrator = self.__exposed_opaque_decls[ id(decl) ]
         creator.associated_decl_creators.append(opaque_type_registrator)
-        
+
     def _adopt_free_operator( self, operator ):
         def adopt_operator_impl( operator, found_creators ):
             creator = filter( lambda creator: isinstance( creator, code_creators.class_t )
@@ -561,7 +561,7 @@ class creator_t( declarations.decl_visitor_t ):
             self.curr_code_creator.adopt_creator( maker )
 
         self.register_opaque_type( maker, self.curr_decl.return_type, self.curr_decl.call_policies )
-        
+
         # Make sure all required headers are included...
         required_headers = getattr(fwrapper, "get_required_headers", lambda : [])()
         for header in required_headers:
@@ -654,7 +654,7 @@ class creator_t( declarations.decl_visitor_t ):
                         self.__types_db.update( f )
                         if None is f.call_policies:
                             f.call_policies = self.__call_policies_resolver( f )
-                            
+
                     overloads_cls_creator = code_creators.free_fun_overloads_class_t( overloads )
                     self.__extmodule.adopt_declaration_creator( overloads_cls_creator )
 
@@ -697,11 +697,11 @@ class creator_t( declarations.decl_visitor_t ):
 
                 overloads_cls_creator = code_creators.mem_fun_overloads_class_t( overloads )
                 self.__extmodule.adopt_declaration_creator( overloads_cls_creator )
-                
+
                 overloads_reg = code_creators.mem_fun_overloads_t( overloads_cls_creator )
                 cls_creator.adopt_creator( overloads_reg )
                 overloads_reg.associated_decl_creators.append( overloads_cls_creator )
-                
+
                 self.register_opaque_type( overloads_reg, f.return_type, f.call_policies )
         return exposed
 
@@ -768,6 +768,9 @@ class creator_t( declarations.decl_visitor_t ):
             translator_register \
                 = code_creators.exception_translator_register_t( cls_decl, translator )
             cls_cc.adopt_creator( translator_register )
+
+        for property_def in cls_decl.properties:
+            cls_cc.adopt_creator( code_creators.property_t(property_def) )
 
         self.curr_decl = cls_decl
         self.curr_code_creator = cls_parent_cc

@@ -7,6 +7,7 @@
 
 import os
 import user_text
+import properties
 import decl_wrapper
 import scopedef_wrapper
 from pygccxml import declarations
@@ -137,6 +138,7 @@ class class_t( class_common_details_t
         self._null_constructor_body = ''
         self._copy_constructor_body = ''
         self._exception_translation_code = None
+        self._properties = []
 
     def _get_redefine_operators( self ):
         return self._redefine_operators
@@ -310,3 +312,25 @@ class class_t( class_common_details_t
         if sort:
             sorted_members = sort( members )
         return sorted_members
+
+    @property
+    def properties( self ):
+        """list of properties"""
+        return self._properties
+
+    def add_property( self, name, fget, fset=None, doc='' ):
+        """adds new property to the class
+
+        @param name: name of the property
+        @type name: str
+
+        @param fget: reference to the class member function
+        @param fset: reference to the class member function, could be None
+        @param doc: documentation string
+        """
+        self._properties.append( properties.property_t( name, fget, fset, doc ) )
+
+    def add_static_property( self, name, fget, fset=None, doc='' ):
+        """adds new static property to the class"""
+        self._properties.append( properties.property_t( name, fget, fset, doc, True ) )
+
