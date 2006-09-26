@@ -1,5 +1,5 @@
-SharedLibrary( target=r'ic_ext'
-    , source=[ r'ic.cpp' ]
+SharedLibrary( target=r'operators_ext'
+    , source=[ r'operators_ext.cpp' ]
     , LIBS=[ r"boost_python" ]
     , LIBPATH=[ r"/home/roman/boost_cvs/bin",r"" ]
     , CPPPATH=[ r"/home/roman/boost_cvs",r"/usr/include/python2.4" ]

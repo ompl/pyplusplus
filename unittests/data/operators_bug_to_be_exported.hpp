@@ -34,6 +34,18 @@ struct integral2 : public number< integral, int >{
     //in this case no operator should be redefined
 };
 
+struct vector
+{
+  double x;
+  static const vector one;
+
+  vector(double ax) : x(ax) {}
+  vector operator+(const vector& other) const { return vector(x+other.x); }
+
+  virtual void trigger_wrapper() {}
+};
+
+
 }
     
 

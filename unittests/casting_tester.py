@@ -26,11 +26,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( 25 == module.x_value(25) )
         self.failUnless( 1 == module.x_value(True) )
         self.failUnless( 0 == module.x_value(False) )
-        try:
-            fv = module.float_vector( 5.0 )
-            self.fail( "TypeError exception was not raised" )
-        except TypeError:
-            pass
+        fv = module.float_vector( 5.0 )
 
 def create_suite():
     suite = unittest.TestSuite()

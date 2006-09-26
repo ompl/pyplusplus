@@ -53,7 +53,7 @@ class property_t( registration_based.registration_based_t ):
         pd = self.property_def
         if pd.fget.call_policies and not pd.fget.call_policies.is_default():
             return True
-        elif pd.fset or pd.fset.call_policies or not pd.fset.call_policies.is_default():
+        elif pd.fset or ( pd.fset and ( pd.fset.call_policies or not pd.fset.call_policies.is_default() ) ):
             return True
         elif pd.doc:
             return True

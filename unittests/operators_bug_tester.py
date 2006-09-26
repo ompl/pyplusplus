@@ -22,7 +22,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.classes().redefine_operators = True
         mb.add_declaration_code( 'const operators_bug::vector operators_bug::vector::one(1);' )
         tg = code_creators.target_configuration_t( )
-        tg.boost_python_has_wrapper_held_type = False
+        #tg.boost_python_has_wrapper_held_type = False
         mb.build_code_creator( self.EXTENSION_NAME, target_configuration=tg )
     
     def run_tests(self, module):     

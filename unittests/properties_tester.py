@@ -25,7 +25,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         count.exclude()
         set_count.exclude()
         cls.add_property( "count", count, set_count )
-
+        cls.add_property( "count_ro", count )
+        
         get_nested = cls.member_function( 'get_nested' )
         get_nested.call_policies = call_policies.return_internal_reference()
         set_nested = cls.member_function( 'set_nested' )
