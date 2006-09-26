@@ -32,7 +32,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         
         cls = mb.class_("no_virtual_members_t")
         cls.member_function("member").function_transformers.append(output_t(1))
-            
+
+        #cls = mb.class_("ft_private_destructor_t")
+        #cls.member_function("get_value").function_transformers.append(output_t(1))
+
         mb.decls(lambda decl: decl.name[0]=="_").exclude()
 
     def run_tests(self, module):
