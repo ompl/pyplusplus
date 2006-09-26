@@ -61,6 +61,15 @@ class multiple_files_t(writer.writer_t):
                                @type: str
                                """ )
 
+    def get_unique_creators( self, creators ):
+        unique_creators = []
+        unique_creator_ids = set()
+        for creator in creators:
+            if not id( creator ) in unique_creator_ids:
+                unique_creator_ids.add( id( creator ) )
+                unique_creators.append( creator )
+        return unique_creators
+
     def associated_decl_creators( self, creator ):
         """ references to all class declaration code creators. """
         if not isinstance( creator, code_creators.registration_based_t ):
@@ -70,23 +79,17 @@ class multiple_files_t(writer.writer_t):
 
         internal_creators = []
         if isinstance( creator, code_creators.compound_t ):
-            internal_creators.extend( 
+            internal_creators.extend(
                 filter( lambda creator: isinstance( creator, code_creators.registration_based_t )
                         , code_creators.make_flatten( creator.creators ) ) )
-        
+
         map( lambda internal_creator: associated_creators.extend( internal_creator.associated_decl_creators )
              , internal_creators )
         #now associated_creators contains all code creators associated with the creator
         #We should leave only creators, defined in the global namespace
         associated_creators = filter( lambda associated_creator: associated_creator.parent is self.extmodule
                                       , associated_creators )
-        unique_associated_creators = []
-        unique_associated_creator_ids = set()
-        for acreator in associated_creators:
-            if not id( acreator ) in unique_associated_creator_ids:
-                unique_associated_creator_ids.add( id( acreator ) )
-                unique_associated_creators.append( acreator )
-        return unique_associated_creators
+        return associated_creators
 
     def create_function_code( self, function_name ):
         return "void %s();" % function_name
@@ -187,6 +190,7 @@ class multiple_files_t(writer.writer_t):
         declaration_creators = []
         for rc in registration_creators:
             declaration_creators.extend( self.associated_decl_creators( rc ) )
+        declaration_creators = self.get_unique_creators( declaration_creators )
 
         creators = registration_creators + declaration_creators
 
