@@ -6,7 +6,7 @@
 import os
 #import algorithm
 #import code_creator
-#import class_declaration
+import class_declaration
 from pygccxml import declarations
 from calldef import calldef_t, calldef_wrapper_t
 import pyplusplus.function_transformers as function_transformers
@@ -97,10 +97,10 @@ class mem_fun_transformed_wrapper_t( calldef_wrapper_t ):
 
         @rtype: str
         """
-        if self.parent==None:
-            return '_py_' + self.declaration.alias
-        else:
+        if isinstance(self.parent, class_declaration.class_wrapper_t):
             return self.parent.full_name + '::_py_' + self.declaration.alias
+        else:
+            return '_py_' + self.declaration.alias
 
     def create_sig_id(self):
         """Create an ID string that identifies a signature.
