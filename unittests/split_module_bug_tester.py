@@ -23,8 +23,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.files = []
 
     def customize( self, mb ):
-        mb.calldefs( 'get_opaque' ).call_policies \
-          = call_policies.return_value_policy( call_policies.return_opaque_pointer )
+        opaque_cp = call_policies.return_value_policy( call_policies.return_opaque_pointer )
+        mb.calldefs( 'get_opaque' ).call_policies = opaque_cp
+        mb.calldefs( 'get_opaque2' ).call_policies = opaque_cp
 
     def generate_source_files( self, mb ):
         files = mb.split_module( autoconfig.build_dir, on_unused_file_found=lambda fpath: fpath )
@@ -36,6 +37,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def run_tests(self, module):
         module.get_opaque()
+        module.get_opaque2()
 
 def create_suite():
     suite = unittest.TestSuite()

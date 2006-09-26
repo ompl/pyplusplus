@@ -9,6 +9,7 @@
 typedef struct opaque_ *opaque_pointer;
 
 inline opaque_pointer get_opaque(){ return 0; }
+inline opaque_pointer get_opaque2(){ return 0; }
 
 
 #endif//__split_module_to_be_exported_hpp__
