@@ -230,11 +230,14 @@ class substitution_manager_t:
         # Check if we're dealing with a member function...
         clsdecl = self._class_decl(decl)
         if clsdecl!=None:
-            selfname = self.wrapper_func._make_name_unique("self")
-            selfarg = declarations.argument_t(selfname, declarations.dummy_type_t("%s&"%clsdecl.name))
-            self.wrapper_func.arg_list.insert(0, selfarg)
-            self.wrapper_func.CALL_FUNC_NAME = "%s.%s"%(selfname, self.wrapper_func.CALL_FUNC_NAME)
-            self._insert_arg_idx_offset = 1
+            if decl.has_static:
+                self.wrapper_func.CALL_FUNC_NAME = "%s::%s"%(clsdecl.name, self.wrapper_func.CALL_FUNC_NAME)                
+            else:
+                selfname = self.wrapper_func._make_name_unique("self")
+                selfarg = declarations.argument_t(selfname, declarations.dummy_type_t("%s&"%clsdecl.name))
+                self.wrapper_func.arg_list.insert(0, selfarg)
+                self.wrapper_func.CALL_FUNC_NAME = "%s.%s"%(selfname, self.wrapper_func.CALL_FUNC_NAME)
+                self._insert_arg_idx_offset = 1
 
         # Argument index map
         # Original argument index ---> Input arg index  (indices are 0-based!)
