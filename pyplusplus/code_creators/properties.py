@@ -30,7 +30,7 @@ class property_t( registration_based.registration_based_t ):
         return 'typedef ' + f.function_type().create_typedef( ftype_alias, exported_class_alias ) + ';'
 
     def create_accessor_code( self, f, ftype_alias ):
-        f_ref_code = '%s( %s )' % ( ftype_alias, declarations.full_name( f ) )
+        f_ref_code = '%s( &%s )' % ( ftype_alias, declarations.full_name( f ) )
         if f.call_policies and f.call_policies.is_default():
             return f_ref_code
         result = [ self.make_function_identifier ]
