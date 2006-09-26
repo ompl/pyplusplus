@@ -1,9 +1,0 @@
-SharedLibrary( target=r'operators_ext'
-    , source=[ r'operators_ext.cpp' ]
-    , LIBS=[ r"boost_python" ]
-    , LIBPATH=[ r"/home/roman/boost_cvs/bin",r"" ]
-    , CPPPATH=[ r"/home/roman/boost_cvs",r"/usr/include/python2.4" ]
-    , CCFLAGS=[ '-DBOOST_PYTHON_TRACE_REGISTRY' ]
-    , SHLIBPREFIX=''
-    , SHLIBSUFFIX='.so'
-)
