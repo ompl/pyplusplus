@@ -9,6 +9,11 @@
 namespace properties{
 
 struct properties_tester_t{
+
+    struct nested{
+        int n;
+    };
+
     properties_tester_t()
     : m_count( 0 )
     {}
@@ -19,7 +24,14 @@ struct properties_tester_t{
     void set_count( int x )
     { m_count = x; }
 
+    nested& get_nested()
+    { return m_nested; }
+
+    void set_nested( nested x )
+    { m_nested = x; }
+
     int m_count;
+    nested m_nested;
 };
 
 }

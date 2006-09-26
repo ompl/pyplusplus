@@ -7,6 +7,7 @@ import os
 import sys
 import unittest
 import fundamental_tester_base
+from pyplusplus.module_builder import call_policies
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'properties'
@@ -25,8 +26,19 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         set_count.exclude()
         cls.add_property( "count", count, set_count )
 
+        get_nested = cls.member_function( 'get_nested' )
+        get_nested.call_policies = call_policies.return_internal_reference()
+        set_nested = cls.member_function( 'set_nested' )
+        cls.add_property( "nested_", get_nested, set_nested )
+
+        cls.add_property( "nested_ro", get_nested )
+
     def run_tests(self, module):
-        pass
+        pt = module.properties_tester_t()
+        self.failUnless( pt.count == 0 )
+        pt.count = 21
+        self.failUnless( pt.m_count == 21 )
+
 
 def create_suite():
     suite = unittest.TestSuite()
