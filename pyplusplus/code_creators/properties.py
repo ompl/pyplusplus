@@ -8,7 +8,6 @@ import algorithm
 import registration_based
 from pygccxml import declarations
 
-#I am sure in future I will have to treat template classes
 class property_t( registration_based.registration_based_t ):
     def __init__(self, property_def, wrapper=None ):
         registration_based.registration_based_t.__init__( self )
@@ -60,16 +59,61 @@ class property_t( registration_based.registration_based_t ):
         else:
             return True
 
+    def is_same_parent( self ):
+        pd = self.property_def
+        if not pd.fset:
+            return False
+        return pd.fget.parent is pd.fset.parent
+
+    def create_class_typedef_on_demand( self, f, prefix='' ):
+        if None is f:
+            return ( None, None )
+        if not isinstance( f.parent, declarations.class_t ):
+            return ( None, None )
+        if not declarations.templates.is_instantiation( f.parent.decl_string ):
+            return ( None, None )
+        cls_name = None
+        cls_identifier = algorithm.create_identifier( self, f.parent.decl_string )
+        if prefix:
+            cls_name = prefix + 'class_t'
+        else:
+            cls_name = 'exported_class_t'
+        return ( 'typedef %s %s;' % ( cls_identifier, cls_name ), cls_name )
+
+
     def create_property_code( self ):
         result = []
         param_sep = ', '
         if self.has_long_line():
             param_sep = os.linesep + self.indent( param_sep )
 
-        result.append( self.create_function_type_alias_code( self.property_def.fget, 'fget' ) )
+        fget_class_typedef_code, fget_class_alias = None, None
+        fset_class_typedef_code, fset_class_alias = None, None
+        if self.is_same_parent():
+            fget_class_typedef_code, fget_class_alias \
+                = self.create_class_typedef_on_demand( self.property_def.fget )
+            fset_class_alias = fget_class_alias
+            fset_class_typedef_code = fget_class_typedef_code
+        else:
+            fget_class_typedef_code, fget_class_alias \
+                = self.create_class_typedef_on_demand( self.property_def.fget, 'fget_' )
+            fset_class_typedef_code, fset_class_alias \
+                = self.create_class_typedef_on_demand( self.property_def.fset, 'fset_' )
+
+        if fget_class_typedef_code:
+            result.append( fget_class_typedef_code )
+
+        if fset_class_typedef_code and fset_class_typedef_code != fget_class_typedef_code:
+            result.append( os.linesep )
+            result.append( fset_class_typedef_code )
+
+        if result:
+            result.append( 2 * os.linesep )
+
+        result.append( self.create_function_type_alias_code( self.property_def.fget, 'fget', fget_class_alias ) )
         if self.property_def.fset:
             result.append( os.linesep )
-            result.append( self.create_function_type_alias_code( self.property_def.fset, 'fset' ) )
+            result.append( self.create_function_type_alias_code( self.property_def.fset, 'fset', fset_class_alias ) )
 
         result.append( 2 * os.linesep )
 
