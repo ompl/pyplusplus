@@ -223,69 +223,6 @@ class creator_t( declarations.decl_visitor_t ):
         new_ordered.extend( variables )
         return new_ordered #
 
-    def __is_same_func( self, f1, f2 ):
-        if not f1.__class__ is f2.__class__:
-            return False
-        if isinstance( f1, declarations.member_calldef_t ) and f1.has_const != f2.has_const:
-            return False
-        if f1.name != f2.name:
-            return False
-        if f1.return_type != f2.return_type:
-            return False
-        if len( f1.arguments ) != len(f2.arguments):
-            return False
-        for f1_arg, f2_arg in zip( f1.arguments, f2.arguments ):
-            if f1_arg.type != f2_arg.type:
-                return False
-        return True
-
-    def redefined_funcs( self, cls ):
-        all_included = declarations.custom_matcher_t( lambda decl: decl.ignore == False and decl.exportable )
-        all_protected = declarations.access_type_matcher_t( 'protected' ) & all_included
-        all_pure_virtual = declarations.virtuality_type_matcher_t( VIRTUALITY_TYPES.PURE_VIRTUAL )
-        all_not_pure_virtual = ~all_pure_virtual
-
-        query = all_protected | all_pure_virtual
-
-        funcs = set()
-        defined_funcs = set()
-
-        for base in cls.recursive_bases:
-            if base.access == ACCESS_TYPES.PRIVATE:
-                continue
-            base_cls = base.related_class
-            funcs.update( base_cls.member_functions( query, allow_empty=True ) )
-            funcs.update( base_cls.member_operators( query, allow_empty=True ) )
-
-            defined_funcs.update( base_cls.member_functions( all_not_pure_virtual, allow_empty=True ) )
-            defined_funcs.update( base_cls.member_operators( all_not_pure_virtual, allow_empty=True ) )
-
-        not_reimplemented_funcs = set()
-        for f in funcs:
-            cls_fs = cls.calldefs( name=f.name, recursive=False, allow_empty=True )
-            for cls_f in cls_fs:
-                if self.__is_same_func( f, cls_f ):
-                    break
-            else:
-                #should test whether this function has been added or not
-                for f_impl in not_reimplemented_funcs:
-                    if self.__is_same_func( f, f_impl ):
-                        break
-                else:
-                    #should test whether this function is implemented in base class
-                    if f.virtuality != VIRTUALITY_TYPES.PURE_VIRTUAL:
-                        not_reimplemented_funcs.add( f )
-                    else:
-                        for f_defined in defined_funcs:
-                            if self.__is_same_func( f, f_defined ):
-                                break
-                        else:
-                            not_reimplemented_funcs.add( f )
-        functions = list( not_reimplemented_funcs )
-        functions.sort( cmp=lambda f1, f2: cmp( ( f1.name, f1.location.as_tuple() )
-                                                , ( f2.name, f2.location.as_tuple() ) ) )
-        return functions
-
     def _is_wrapper_needed(self, class_inst, exportable_members):
         if isinstance( self.curr_decl, declarations.class_t ) \
            and self.curr_decl.wrapper_code:
@@ -317,7 +254,7 @@ class creator_t( declarations.decl_visitor_t ):
                     return True #we already decided that those functions should be exposed, so I need wrapper for them
                 if member.function_transformers:
                     return True #function transformers require wrapper
-        return bool( self.redefined_funcs(class_inst) )
+        return bool( class_inst.redefined_funcs() )
 
     def register_opaque_type( self, creator, type_, call_policy ):
         if not decl_wrappers.is_return_opaque_pointer_policy( call_policy ):
@@ -747,7 +684,7 @@ class creator_t( declarations.decl_visitor_t ):
             self.curr_decl = decl
             declarations.apply_visitor( self, decl )
 
-        for redefined_func in self.redefined_funcs( cls_decl ):
+        for redefined_func in cls_decl.redefined_funcs():
             if isinstance( redefined_func, declarations.operator_t ):
                 continue
             self.curr_decl = redefined_func
