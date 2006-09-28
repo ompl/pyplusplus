@@ -75,7 +75,13 @@ class code_generator_t(object):
         boost_ns.namespace( 'gregorian', recursive=False ).include()
         boost_ns.namespace( 'local_time', recursive=False ).include()
         boost_ns.classes( lambda decl: decl.name.startswith( 'constrained_value<' ) ).include()
-                
+        
+        ## Exclude protected and private that are not pure virtual
+        query = ~declarations.access_type_matcher_t( 'public' ) \
+            & ~declarations.virtuality_type_matcher_t( declarations.VIRTUALITY_TYPES.PURE_VIRTUAL )
+        non_public_non_pure_virtual = boost_ns.calldefs( query )
+        non_public_non_pure_virtual.exclude()
+    
         for name in [ 'month_str_to_ushort', 'from_stream_type', 'parse_date' ]:
             boost_ns.calldefs( lambda decl: decl.name.startswith( name ) ).exclude()
 
@@ -116,7 +122,21 @@ class code_generator_t(object):
         tdi = mb.class_( lambda decl: decl.alias == 'time_duration_impl' )
         tdi_init = tdi.constructor( arg_types=[None, None, None, None], recursive=False)
         tdi_init.ignore=True
-        
+        #next declarations are not exported, but Py++ writes warnings about them:
+        boost_ns.operators( '<<' ).exclude()
+        boost_ns.operators( '>>' ).exclude()
+        boost_ns.operators( '=' ).exclude()
+        #next function uses non public class in its definition.
+        microsec_clocks = boost_ns.classes( lambda decl: decl.name.startswith( 'microsec_clock<') )
+        for mc in microsec_clocks:
+            mc.member_functions( 'create_time' ).exclude()        
+
+        #TODO: add FT
+        #next function takes reference to int. This function could not be called
+        #from Python. Function transformation feature solves this problem
+        tz_db_base = boost_ns.class_( lambda decl: decl.name.startswith( 'tz_db_base<' ) )
+        tz_db_base.member_functions( 'split_rule_spec' ).exclude()
+                
     def add_code( self, mb ):
         as_number_template = 'def( "as_number", &%(class_def)s::operator %(class_def)s::value_type, bp::default_call_policies() )'
         

@@ -47,6 +47,7 @@ class code_generator_t(object):
         self.__mb.global_ns.exclude()
         rational = self.__mb.class_('rational<long>')
         rational.include()
+        rational.casting_operator( lambda decl: 'long int[2]' in str(decl) ).exclude()
         
         r_assign = rational.calldef( 'assign', recursive=False )
         r_assign.call_policies = call_policies.return_self()
@@ -64,7 +65,11 @@ class code_generator_t(object):
         self.__mb.free_function( 'rational_cast<long, long>' ).include()
         self.__mb.free_function( 'rational_cast<long, long>' ).alias = 'to_long'
         self.__mb.free_function( 'abs<long>' ).include()
-        
+
+        self.__mb.global_ns.operators( '++' ).exclude()
+        self.__mb.global_ns.operators( '--' ).exclude()
+        self.__mb.global_ns.operators( '=' ).exclude()
+
     def prepare_decls( self ):
         self.__mb.class_('rational<long>').alias = 'rational'
 
