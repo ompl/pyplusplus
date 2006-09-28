@@ -5,7 +5,7 @@
 
 """defines class that configure "callable" declaration exposing"""
 
-import os
+import user_text
 import decl_wrapper
 from pygccxml import declarations
 
@@ -392,6 +392,20 @@ class free_function_t( declarations.free_function_t, calldef_t ):
         declarations.free_function_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
         self._use_overload_macro = False
+        self._declaration_code = []
+    
+    def add_declaration_code( self, code ):
+        """adds the code to the declaration section"""
+        self.declaration_code.append( user_text.user_text_t( code ) )
+
+    @property
+    def declaration_code( self ):
+        """
+        List of strings, that contains valid C++ code, that will be added to
+        the same file in which the registration code for the function will be
+        generated
+        """
+        return self._declaration_code
 
     def get_use_overload_macro(self):
         return self._use_overload_macro

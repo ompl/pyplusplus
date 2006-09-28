@@ -28,6 +28,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         sm.include()
         sm.class_( 'op_struct' ).exclude()
 
+        mb.free_function( 'check_overload' ).add_declaration_code( '//hello check_overload' )
+        mb.free_function( 'get_opaque' ).add_declaration_code( '//hello get_opaque' )
+        
         mb.calldefs( 'check_overload' ).use_overload_macro = True
         mb.calldefs( 'get_opaque' ).call_policies \
           = call_policies.return_value_policy( call_policies.return_opaque_pointer )

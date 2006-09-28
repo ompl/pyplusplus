@@ -572,6 +572,13 @@ class creator_t( declarations.decl_visitor_t ):
                     self.curr_code_creator.adopt_creator( overloads_reg )
                     overloads_reg.associated_decl_creators.append( overloads_cls_creator )
                     self.register_opaque_type( overloads_reg, f.return_type, f.call_policies )
+                    
+                    ctext_t = code_creators.custom_text_t
+                    for f in overloads:
+                        uc_creators = map( lambda uc: ctext_t( uc.text ), f.declaration_code )
+                        insert_pos = self.__extmodule.creators.index( self.__module_body )
+                        self.__extmodule.adopt_creators( uc_creators, insert_pos )
+                        overloads_reg.associated_decl_creators.extend( uc_creators )
         else:
             self.__types_db.update( self.curr_decl )
             if None is self.curr_decl.call_policies:
@@ -580,6 +587,12 @@ class creator_t( declarations.decl_visitor_t ):
             self.curr_code_creator.adopt_creator( maker )
             self.register_opaque_type( maker, self.curr_decl.return_type, self.curr_decl.call_policies )
 
+            ctext_t = code_creators.custom_text_t
+            uc_creators = map( lambda uc: ctext_t( uc.text ), self.curr_decl.declaration_code )
+            insert_pos = self.__extmodule.creators.index( self.__module_body )
+            self.__extmodule.adopt_creators( uc_creators, insert_pos )
+            maker.associated_decl_creators.extend( uc_creators )
+            
     def visit_free_operator( self ):
         self.__types_db.update( self.curr_decl )
         self.__free_operators.append( self.curr_decl )
