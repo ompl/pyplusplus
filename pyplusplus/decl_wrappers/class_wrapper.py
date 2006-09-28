@@ -367,8 +367,7 @@ class class_t( class_common_details_t
         all_not_pure_virtual = ~all_pure_virtual
 
         query = all_protected | all_pure_virtual
-        operators_query = declarations.custom_matcher_t( lambda decl: decl.symbol in ('()', '[]') ) \
-                          & query
+        relevant_opers = declarations.custom_matcher_t( lambda decl: decl.symbol in ('()', '[]') )
         funcs = set()
         defined_funcs = set()
 
@@ -377,10 +376,10 @@ class class_t( class_common_details_t
                 continue
             base_cls = base.related_class
             funcs.update( base_cls.member_functions( query, allow_empty=True ) )
-            funcs.update( base_cls.member_operators( operators_query, allow_empty=True ) )
+            funcs.update( base_cls.member_operators( relevant_opers & query, allow_empty=True ) )
 
             defined_funcs.update( base_cls.member_functions( all_not_pure_virtual, allow_empty=True ) )
-            defined_funcs.update( base_cls.member_operators( all_not_pure_virtual, allow_empty=True ) )
+            defined_funcs.update( base_cls.member_operators( all_not_pure_virtual & relevant_opers, allow_empty=True ) )
 
         not_reimplemented_funcs = set()
         is_same_function = declarations.is_same_function
@@ -415,7 +414,6 @@ class class_t( class_common_details_t
 
         If wrapper is not needed than [] will be returned.
         """
-
         explanation = []
         if self.wrapper_code:
             explanation.append( "Py++ will generate class wrapper - hand written code should be added to the wrapper class" )
