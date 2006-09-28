@@ -157,14 +157,12 @@ class creator_t( declarations.decl_visitor_t ):
             if doc_extractor and decl.exportable:
                 decl.documentation = doc_extractor( decl )
 
-            readme = decl.readme()
+            readme = filter( lambda msg: msg not in DO_NOT_REPORT_MSGS, decl.readme() )
             if not readme:
                 continue
-
+            
             if not decl.exportable:
                 reason = readme[0]
-                if reason in DO_NOT_REPORT_MSGS:
-                    continue
                 readme = readme[1:]
                 self.decl_logger.warn( "%s;%s" % ( decl, reason ) )
 
