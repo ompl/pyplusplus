@@ -409,3 +409,50 @@ class class_t( class_common_details_t
                                                 , ( f2.name, f2.location.as_tuple() ) ) )
         self._redefined_funcs = functions
         return self._redefined_funcs
+
+    def is_wrapper_needed(self):
+        """returns an explanation( list of str ) why wrapper is needed.
+
+        If wrapper is not needed than [] will be returned.
+        """
+
+        explanation = []
+        if self.wrapper_code:
+            explanation.append( "Py++ will generate class wrapper - hand written code should be added to the wrapper class" )
+
+        if self.null_constructor_body:
+            explanation.append( "Py++ will generate class wrapper - hand written code should be added to the wrapper class null constructor body" )
+
+        if self.copy_constructor_body:
+            explanation.append( "Py++ will generate class wrapper - hand written code should be added to the wrapper class copy constructor body" )
+
+        if self.redefined_funcs():
+            explanation.append( "Py++ will generate class wrapper - there are few functions that should be redefined in class wrapper" )
+
+        for member in self.get_exportable_members():
+            if isinstance( member, declarations.destructor_t ):
+                continue
+            if isinstance( member, declarations.variable_t ):
+                if member.bits:
+                    explanation.append( "Py++ will generate class wrapper - class contains bit field member variable" )
+                if declarations.is_pointer( member.type ):
+                    explanation.append( "Py++ will generate class wrapper - class contains T* member variable" )
+                if declarations.is_reference( member.type ):
+                    explanation.append( "Py++ will generate class wrapper - class contains T& member variable" )
+                if declarations.is_array( member.type ):
+                    explanation.append( "Py++ will generate class wrapper - class contains array member variable" )
+            if isinstance( member, declarations.class_t ) and member.is_wrapper_needed():
+                explanation.append( "Py++ will generate class wrapper - class contains definition of nested class that requires wrapper class" )
+            if isinstance( member, declarations.calldef_t ):
+                if isinstance( member, declarations.constructor_t ) and member.body:
+                    explanation.append( "Py++ will generate class wrapper - hand written code should be added to the wrapper class constructor body" )
+                if member.virtuality != VIRTUALITY_TYPES.NOT_VIRTUAL:
+                    explanation.append( "Py++ will generate class wrapper - class contains definition of virtual or pure virtual member function" )
+                if member.access_type in ( ACCESS_TYPES.PROTECTED, ACCESS_TYPES.PRIVATE ):
+                    explanation.append( "Py++ will generate class wrapper - user asked to expose non - public member function" )
+                #if member.function_transformers:
+                #    return True #function transformers require wrapper
+        return explanation
+
+    def _readme_impl( self ):
+        return self.is_wrapper_needed()

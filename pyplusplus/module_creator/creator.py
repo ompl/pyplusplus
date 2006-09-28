@@ -51,6 +51,7 @@ DO_NOT_REPORT_MSGS = [
     , 'Py++, by default, does not expose internal declarations (those that gccxml say belong to "<internal>" header).'
     , 'Py++, by default, does not expose compiler generated declarations.'
     , 'Py++ can not expose private class.'
+    , 'Py++ will generate class wrapper - class contains definition of virtual or pure virtual member function'
 ]
 
 class creator_t( declarations.decl_visitor_t ):
@@ -222,39 +223,6 @@ class creator_t( declarations.decl_visitor_t ):
         new_ordered.extend( others )
         new_ordered.extend( variables )
         return new_ordered #
-
-    def _is_wrapper_needed(self, class_inst, exportable_members):
-        if isinstance( self.curr_decl, declarations.class_t ) \
-           and self.curr_decl.wrapper_code:
-            return True
-        elif isinstance( self.curr_code_creator, declarations.class_t ) \
-           and self.curr_code_creator.wrapper_code:
-            return True
-        else:
-            pass
-
-        for member in exportable_members:
-            if isinstance( member, declarations.destructor_t ):
-                continue
-            if isinstance( member, declarations.variable_t ):
-                if member.bits:
-                    return True
-                if declarations.is_pointer( member.type ):
-                    return True
-                if declarations.is_reference( member.type ):
-                    return True
-                if declarations.is_array( member.type ):
-                    return True
-            if isinstance( member, declarations.class_t ):
-                return True
-            if isinstance( member, declarations.calldef_t ):
-                if member.virtuality != VIRTUALITY_TYPES.NOT_VIRTUAL:
-                    return True #virtual and pure virtual functions requieres wrappers.
-                if member.access_type in ( ACCESS_TYPES.PROTECTED, ACCESS_TYPES.PRIVATE ):
-                    return True #we already decided that those functions should be exposed, so I need wrapper for them
-                if member.function_transformers:
-                    return True #function transformers require wrapper
-        return bool( class_inst.redefined_funcs() )
 
     def register_opaque_type( self, creator, type_, call_policy ):
         if not decl_wrappers.is_return_opaque_pointer_policy( call_policy ):
@@ -487,8 +455,16 @@ class creator_t( declarations.decl_visitor_t ):
         fwrapper = None
         if fwrapper_cls:
             fwrapper = fwrapper_cls( function=self.curr_decl )
-            class_wrapper = self.curr_code_creator.wrapper
-            class_wrapper.adopt_creator( fwrapper )
+            if fwrapper_cls is code_creators.mem_fun_transformed_wrapper_t:
+                if self.curr_code_creator.wrapper:
+                    class_wrapper = self.curr_code_creator.wrapper
+                    class_wrapper.adopt_creator( fwrapper )
+                else:
+                    self.__extmodule.adopt_declaration_creator( fwrapper )
+                    self.curr_code_creator.associated_decl_creators.append(fwrapper)
+            else:
+                class_wrapper = self.curr_code_creator.wrapper
+                class_wrapper.adopt_creator( fwrapper )
 
         if maker_cls:
             if fwrapper:
@@ -531,8 +507,7 @@ class creator_t( declarations.decl_visitor_t ):
             self.__module_body.adopt_creator( maker )
 
         cwrapper = None
-        exportable_members = self.curr_code_creator.declaration.get_exportable_members()
-        if self._is_wrapper_needed( self.curr_decl.parent, exportable_members ):
+        if self.curr_decl.parent.is_wrapper_needed():
             class_wrapper = self.curr_code_creator.wrapper
             cwrapper = code_creators.constructor_wrapper_t( constructor=self.curr_decl )
             class_wrapper.adopt_creator( cwrapper )
@@ -651,7 +626,7 @@ class creator_t( declarations.decl_visitor_t ):
         wrapper = None
         cls_cc = code_creators.class_t( class_inst=self.curr_decl )
 
-        if self._is_wrapper_needed( self.curr_decl, exportable_members ):
+        if self.curr_decl.is_wrapper_needed():
             wrapper = code_creators.class_wrapper_t( declaration=self.curr_decl
                                                      , class_creator=cls_cc )
             cls_cc.wrapper = wrapper

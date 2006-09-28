@@ -92,13 +92,12 @@ struct no_virtual_members_t
   bool member(int& v) { v=17; return true; }
 };
 
-/*
 struct ft_private_destructor_t{
 	static void get_value( int& x ){ x = 21; }
 private:
 	~ft_private_destructor_t(){}
 };
-*/
+
 }
 
 #endif//__function_transformations_to_be_exported_hpp__

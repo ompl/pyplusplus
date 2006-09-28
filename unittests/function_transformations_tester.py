@@ -29,21 +29,21 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         image.member_function( "fixed_output_array" ).function_transformers.extend([output_array_t(1,3)])
         mb.free_function("get_cpp_instance").call_policies = return_value_policy(reference_existing_object)
         mb.variable( "cpp_instance" ).exclude()
-        
+
         cls = mb.class_("no_virtual_members_t")
         cls.member_function("member").function_transformers.append(output_t(1))
 
-        #cls = mb.class_("ft_private_destructor_t")
-        #cls.member_function("get_value").function_transformers.append(output_t(1))
+        cls = mb.class_("ft_private_destructor_t")
+        cls.member_function("get_value").function_transformers.append(output_t(1))
 
         mb.decls(lambda decl: decl.name[0]=="_").exclude()
 
     def run_tests(self, module):
         """Run the actual unit tests.
         """
-        
+
         ####### Do the tests directly on the wrapper C++ class ########
-        
+
         img = module.image_t( 2, 6)
 
         # Check a method that returns two values by reference
@@ -73,8 +73,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         # Check the fixed_output_array method
         self.assertEqual(img.fixed_output_array(), [1,2,3])
 
+        self.assertEqual(module.ft_private_destructor_t.get_value(), 21)
+
         ####### Do the tests on a class derived in Python ########
-        
+
         class py_image1_t(module.image_t):
             def __init__(self, h, w):
                 module.image_t.__init__(self, h, w)
@@ -96,7 +98,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                     return (2,5)
 
         pyimg1 = py_image1_t(3,7)
-        
+
         # Check a method that returns two values by reference
         self.assertEqual(pyimg1.get_size(), (3,7))
 
@@ -120,7 +122,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             # Override a virtual method and invoke the inherited method
             def get_one_value(self):
                 return module.image_t.get_one_value(self)+2
-        
+
         pyimg2 = py_image2_t(4,8)
 
         # Check the derived get_one_value() method
