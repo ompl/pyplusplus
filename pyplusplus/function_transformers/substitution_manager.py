@@ -214,8 +214,10 @@ class substitution_manager_t:
             ret_type = None
         else:
             ret_type = decl.return_type
-            self.wrapper_func.result_type = str(ret_type)
+#            self.wrapper_func.result_type = str(ret_type)
+            self.wrapper_func.result_type = str(declarations.type_traits.remove_reference(ret_type))
             self.wrapper_func.result_var = self.wrapper_func.declare_local("result", self.wrapper_func.result_type)
+#            self.wrapper_func.result_var = self.wrapper_func.allocate_local("result")
             self.wrapper_func.result_exprs = [self.wrapper_func.result_var]
 
         self.virtual_func.ret_type = ret_type
@@ -231,10 +233,10 @@ class substitution_manager_t:
         clsdecl = self._class_decl(decl)
         if clsdecl!=None:
             if decl.has_static:
-                self.wrapper_func.CALL_FUNC_NAME = "%s::%s"%(clsdecl.name, self.wrapper_func.CALL_FUNC_NAME)                
+                self.wrapper_func.CALL_FUNC_NAME = "%s::%s"%(declarations.full_name(clsdecl), self.wrapper_func.CALL_FUNC_NAME)                
             else:
                 selfname = self.wrapper_func._make_name_unique("self")
-                selfarg = declarations.argument_t(selfname, declarations.dummy_type_t("%s&"%clsdecl.name))
+                selfarg = declarations.argument_t(selfname, declarations.dummy_type_t("%s&"%declarations.full_name(clsdecl)))
                 self.wrapper_func.arg_list.insert(0, selfarg)
                 self.wrapper_func.CALL_FUNC_NAME = "%s.%s"%(selfname, self.wrapper_func.CALL_FUNC_NAME)
                 self._insert_arg_idx_offset = 1
@@ -280,6 +282,7 @@ class substitution_manager_t:
         # inside the virtual function.
         if len(self.wrapper_func.result_exprs)>0:
             self.virtual_func.result_type = "boost::python::object"
+#            self.virtual_func.result_var = self.virtual_func.allocate_local("pyresult")
             self.virtual_func.result_var = self.virtual_func.declare_local("pyresult", self.virtual_func.result_type)
 #            self.virtual_func.result_expr = self.virtual_func.result_var
 
