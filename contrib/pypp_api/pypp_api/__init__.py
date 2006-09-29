@@ -50,16 +50,17 @@ Add detailed usage here.
 
 
 # Bring in call policies to use
-from pyplusplus.decl_wrappers import return_self
-from pyplusplus.decl_wrappers import return_internal_reference
-from pyplusplus.decl_wrappers import with_custodian_and_ward
-from pyplusplus.decl_wrappers import copy_const_reference
-from pyplusplus.decl_wrappers import copy_non_const_reference
-from pyplusplus.decl_wrappers import manage_new_object
-from pyplusplus.decl_wrappers import reference_existing_object
-from pyplusplus.decl_wrappers import return_by_value
-from pyplusplus.decl_wrappers import return_opaque_pointer
-from pyplusplus.decl_wrappers import return_value_policy
+from pyplusplus.decl_wrappers.call_policies import *
+#from pyplusplus.decl_wrappers import return_self
+#from pyplusplus.decl_wrappers import return_internal_reference
+#from pyplusplus.decl_wrappers import with_custodian_and_ward
+#from pyplusplus.decl_wrappers import copy_const_reference
+#from pyplusplus.decl_wrappers import copy_non_const_reference
+#from pyplusplus.decl_wrappers import manage_new_object
+#from pyplusplus.decl_wrappers import reference_existing_object
+#from pyplusplus.decl_wrappers import return_by_value
+#from pyplusplus.decl_wrappers import return_opaque_pointer
+#from pyplusplus.decl_wrappers import return_value_policy
 
 from pygccxml.declarations import ACCESS_TYPES
 PUBLIC = ACCESS_TYPES.PUBLIC
@@ -75,3 +76,5 @@ from pyplusplus.function_transformers.arg_policies import input_array_t as Input
 from pyplusplus.function_transformers.arg_policies import output_array_t as OutputArray
 
 from modulebuilder import ModuleBuilder
+
+import extendcreators

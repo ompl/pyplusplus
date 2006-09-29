@@ -191,13 +191,48 @@ class IDecl:
     def finalize(self):
         """Finalize virtual member functions or an entire class.
 
-        Prevents the generation of wrappers for virtual member functions.
+        This method can be called on classes or individual member functions
+        to prevent the generation of wrapper classes. This is done by
+        resetting the virtuality attribute of the members to "non-virtual"
+        and by ignoring protected and private member functions.
+        A ValueError exception is raised if the method is called on pure
+        virtual functions because those cannot be wrapped without a wrapper
+        class.
+
+        Even when finalize() was successfully called it is still possible
+        that Py++ generates a wrapper class nevertheless. The presence
+        of virtual member functions is only one part of the test whether
+        a wrapper class has to be generated (member variables can also
+        trigger a wrapper class which is not prevented by this method).        
         """
         self._checkLock()
+        VIRTUALITY_TYPES = pygccxml.declarations.VIRTUALITY_TYPES
         for decl in self._iterContained():
+            # Mark the declaration as being finalized
+            decl._pypp_api_finalized = True
+            
+            if not isinstance(decl, pygccxml.declarations.member_calldef_t):
+                continue
+
+            if (isinstance(decl, pyplusplus.decl_wrappers.constructor_t) or
+                isinstance(decl, pyplusplus.decl_wrappers.destructor_t)):
+                continue
+            
+            if decl.virtuality==VIRTUALITY_TYPES.PURE_VIRTUAL:
+                raise ValueError, "%s\nMember is pure virtual and cannot be finalized."%decl
+
+            # Pretend that this method is a non-virtual method
+            decl.virtuality = VIRTUALITY_TYPES.NOT_VIRTUAL
+
             if decoration_log!=None:
                 self._logDecoration("finalize", decl)
-            decl.finalize()
+#            decl.finalize()
+
+        # Ignore protected and private methods as these would trigger
+        # the generation of a wrapper class
+        ACCESS_TYPES = pygccxml.declarations.ACCESS_TYPES
+        self.Methods(accesstype=ACCESS_TYPES.PROTECTED, allow_empty=True).ignore()
+        self.Methods(accesstype=ACCESS_TYPES.PRIVATE, allow_empty=True).ignore()
         return self
 
     # setPolicy
@@ -212,6 +247,8 @@ class IDecl:
             if decoration_log!=None:
                 self._logDecoration("setPolicy(...)", decl)
             decl.call_policies = policy
+
+        return self
 
     # setHeldType
     def setHeldType(self, heldtype):
@@ -257,6 +294,8 @@ class IDecl:
             decl.function_transformers.extend(list(policies))
 #            self.modulebuilder.mArgPolicyManager.setArgPolicy(decl, policies)
 
+        return self
+
     # setAttr
     def setAttr(self, attr, value):
         """Set an arbitrary attribute.
@@ -294,7 +333,7 @@ class IDecl:
         @param impl: The name of the C/C++ function that implements the method.
         @type impl: str
         """
-        self.cdef(name, impl)
+        return self.cdef(name, impl)
 
 
     # def
@@ -377,6 +416,7 @@ class IDecl:
              header=None,
              headerdir=None,
              accesstype=None,
+             const=None,
              filter=None,
              recursive=None,
              allow_empty=None,
@@ -429,6 +469,8 @@ class IDecl:
         @param headerdir: Select declarations by the directory in which their header file is located
         @type headerdir: str
         @param accesstype: Access type (PUBLIC or PROTECTED). This implies the type flag MEMBER_FUNCTION.
+        @param const: Select declarations by their constness.
+        @type const: bool
         @param filter: User defined filter function
         @type callable
         @param recursive: Extend the search to grandchildren? If not specified, a global (customizable) default value is used.
@@ -484,6 +526,9 @@ class IDecl:
         if accesstype!=None:
             addFilter(accesstype, AccessTypeFilter)
             itype |= METHOD
+        # const filter
+        if const!=None:
+            addFilter(const, ConstFilter)
         # custom filters
         if filter!=None:
             if _type(filter)==list:
@@ -577,7 +622,7 @@ class IDecl:
 
     # Vars
     def Vars(self, name=None, type=0, **args):
-        return self.Vars(name=name, type=type|VARIABLE, **args)
+        return self.Decls(name=name, type=type|VARIABLE, **args)
 
     # Decl
     def Decl(self, name=None, **args):
