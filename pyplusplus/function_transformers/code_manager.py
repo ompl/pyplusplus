@@ -188,7 +188,7 @@ class code_manager_t(subst_t):
         @return: Returns the type of the specified local variable.
         @rtype: str
         """
-        if name in self._allocated_vars:
+        if name not in self._allocated_vars:
             raise ValueError, 'The type of local variable "%s" is unknown.'%name
         if name not in self._declared_vars:
             raise ValueError, 'Local variable "%s" not found.'%name
@@ -247,6 +247,7 @@ class code_manager_t(subst_t):
         # RESULT_VAR_ASSIGNMENT
         if self.result_var!=None:
             self.RESULT_VAR_ASSIGNMENT = "%s = "%self.result_var
+#            self.RESULT_VAR_ASSIGNMENT = "%s %s = "%(self.result_type, self.result_var)
         else:
             self.RESULT_VAR_ASSIGNMENT = ""
 
@@ -331,19 +332,29 @@ class wrapper_code_manager_t(code_manager_t):
             # argument_t
             else:
                 result_exprs.append(re.name)
-        
-        # No output values?
-        if len(result_exprs)==0:
-            self.ret_type = None
-            self.result_expr = None
-        # Exactly one output value?
-        elif len(result_exprs)==1:
-            self.ret_type = "boost::python::object"
-            self.result_expr = "boost::python::object(%s)"%result_exprs[0]
-        # More than one output value...
-        else:
-            self.ret_type = "boost::python::object"
-            self.result_expr = "boost::python::make_tuple(%s)"%(", ".join(result_exprs))
+
+        if self.result_expr==None:
+            # No output values?
+            if len(result_exprs)==0:
+                self.ret_type = None
+                self.result_expr = None
+            # Exactly one output value?
+            elif len(result_exprs)==1:
+                self.ret_type = "boost::python::object"
+                self.result_expr = "boost::python::object(%s)"%result_exprs[0]
+##                self.result_expr = self.result_exprs[0]
+##                try:
+##                    # Try to determine the type of the result expression
+##                    # (assuming it's just a local variable)
+##                    self.ret_type = self.local_type_str(self.result_expr)
+##                except:
+##                    # if the above fails, return a generic Python object
+##                    self.ret_type = "boost::python::object"
+##                    self.result_expr = "boost::python::object(%s)"%result_exprs[0]
+            # More than one output value...
+            else:
+                self.ret_type = "boost::python::object"
+                self.result_expr = "boost::python::make_tuple(%s)"%(", ".join(result_exprs))
 
         # Invoke the inherited method that sets the actual variables
         code_manager_t.init_variables(self)
