@@ -341,6 +341,8 @@ class TypeFilter(FilterBase):
             t.append("CONSTRUCTOR")
         if f & ENUM:
             t.append("ENUM")
+        if f & VARIABLE:
+            t.append("VARIABLE")
         return "type==%s"%("|".join(t))
 
     def __call__(self, decl):
@@ -364,6 +366,8 @@ class TypeFilter(FilterBase):
             res |= ENUM
         elif isinstance(decl, namespace_t):
             res |= NAMESPACE
+        elif isinstance(decl, variable_t):
+            res |= VARIABLE
 
         if isinstance(decl, constructor_t):
             res |= CONSTRUCTOR
@@ -429,6 +433,27 @@ class AccessTypeFilter(FilterBase):
         if at==None:
             return False
         return at==self.accesstype
+
+# ConstFilter
+class ConstFilter(FilterBase):
+    """Filter by constness.
+    """
+
+    def __init__(self, constness):
+        """Constructor.
+
+        constness is a boolean that specifies whether a declaration
+        has to be declared const or not to match the filter.
+        """
+        FilterBase.__init__(self)
+        self.constness = constness
+
+    def __str__(self):
+        return "const==%s"%self.constness
+
+    def __call__(self, decl):
+        const = bool(getattr(decl, "has_const", False))
+        return const==self.constness
 
 # CustomFilter
 class CustomFilter(FilterBase):
