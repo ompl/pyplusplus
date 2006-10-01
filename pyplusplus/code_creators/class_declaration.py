@@ -153,7 +153,7 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
         assert isinstance( self.declaration, declarations.class_t )
         for base_desc in self.declaration.bases:
             assert isinstance( base_desc, declarations.hierarchy_info_t )
-            if base_desc.access == declarations.ACCESS_TYPES.PRIVATE:
+            if base_desc.access != declarations.ACCESS_TYPES.PUBLIC:
                 continue
             if base_creators.has_key( id(base_desc.related_class) ):
                 bases.append( algorithm.create_identifier( self, base_desc.related_class.decl_string ) )
