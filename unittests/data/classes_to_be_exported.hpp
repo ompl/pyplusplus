@@ -75,7 +75,7 @@ struct constructor1{
 namespace scope_based{
 struct scope_based_exposer{
     enum EColor{ red, green, blue };
-    scope_based_exposer(){}
+    scope_based_exposer(EColor c=blue){}
 };    
 }
 
@@ -88,7 +88,13 @@ protected:
 };
 };
 
+namespace non_public_hierarchy{
+
+struct protected_base{};
+struct protected_derived : protected protected_base{};
+
+}
+
 }//classes 
 
 #endif//__classes_to_be_exported_hpp__
-
