@@ -55,6 +55,18 @@ class calldef_t( registration_based.registration_based_t
     def param_sep(self):
         return os.linesep + self.indent( self.PARAM_SEPARATOR )
 
+    def should_use_enum_wa( self, arg ):
+        global use_enum_workaround
+        if not declarations.is_enum( arg.type ):
+            return False
+        if use_enum_workaround:
+            return True
+        #enum belongs to the class we are working on
+        if self.declaration.parent is declarations.enum_declaration( arg.type ).parent \
+           and isinstance( self.declaration, declarations.constructor_t ):
+            return True
+        return False
+
     def keywords_args(self):
         boost_arg = algorithm.create_identifier( self, '::boost::python::arg' )
         boost_obj = algorithm.create_identifier( self, '::boost::python::object' )
@@ -71,7 +83,7 @@ class calldef_t( registration_based.registration_based_t
                        and declarations.is_integral( arg_type_no_alias ) \
                        and not arg.default_value.startswith( arg_type_no_alias.decl_string ):
                         result.append( '=(%s)(%s)' % ( arg_type_no_alias.decl_string, arg.default_value ) )
-                    elif use_enum_workaround and declarations.is_enum( arg.type ):
+                    elif self.should_use_enum_wa( arg ):
                         #Work around for bug/missing functionality in boost.python.
                         #registration order
                         result.append( '=(long)(%s)' % arg.default_value )
