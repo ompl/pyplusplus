@@ -24,16 +24,31 @@ struct properties_tester_t{
     void set_count( int x )
     { m_count = x; }
 
-    nested& get_nested()
+    const nested& get_nested() const
     { return m_nested; }
 
     void set_nested( nested x )
     { m_nested = x; }
-
+    
     int m_count;
     nested m_nested;
 };
 
+struct properties_finder_tester_t{
+
+    int count() const { return 0; }
+    void set_count( int ){}
+    
+    int get_size() const { return 0; }
+    void set_size( int ){}
+    
+    int getWidth() const { return 0; }
+    void setWidth(int) {}
+    
+    int GetHeight() const { return 0; }
+    void SetHeight(int){}
+    
+};
 }
 
 

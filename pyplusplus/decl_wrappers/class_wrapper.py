@@ -333,6 +333,10 @@ class class_t( class_common_details_t
         """
         self._properties.append( properties.property_t( name, fget, fset, doc ) )
 
+    def add_properties( self, recognizer=None, exclude_accessors=False ):
+        props = properties.find_properties( self, recognizer, exclude_accessors )
+        self.properties.extend( props )
+                        
     def add_static_property( self, name, fget, fset=None, doc='' ):
         """adds new static property to the class"""
         self._properties.append( properties.property_t( name, fget, fset, doc, True ) )

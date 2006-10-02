@@ -33,6 +33,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         cls.add_property( "nested_", get_nested, set_nested )
 
         cls.add_property( "nested_ro", get_nested )
+        
+        cls = mb.class_( 'properties_finder_tester_t' )
+        cls.add_properties( exclude_accessors=True )
+        self.failUnless( 4 == len( cls.properties ) )
 
     def run_tests(self, module):
         pt = module.properties_tester_t()
