@@ -51,7 +51,7 @@ class output_t:
         reftype = arg.type
         if not (isinstance(reftype, declarations.reference_t) or
             isinstance(reftype, declarations.pointer_t)):
-            raise ValueError, 'Output variable %d ("%s") must be a reference or a pointer (got %s)'%(self.idx, arg.name, arg.type)
+            raise ValueError, '%s\nOutput variable %d ("%s") must be a reference or a pointer (got %s)'%(sm.decl, self.idx, arg.name, arg.type)
 
         # Declare a local variable that will receive the output value
         self.local_var = sm.wrapper_func.declare_local(arg.name, str(reftype.base))
@@ -106,7 +106,7 @@ class input_t:
         reftype = arg.type
         if not (isinstance(reftype, declarations.reference_t) or
             isinstance(reftype, declarations.pointer_t)):
-            raise ValueError, 'Input variable %d ("%s") must be a reference or a pointer (got %s)'%(self.idx, arg.name, arg.type)
+            raise ValueError, '%s\nInput variable %d ("%s") must be a reference or a pointer (got %s)'%(sm.decl, self.idx, arg.name, arg.type)
 
         # Create an equivalent argument that is not a reference type
         noref_arg = declarations.argument_t(name=arg.name, type=arg.type.base, default_value=arg.default_value)
@@ -142,7 +142,7 @@ class inout_t:
         reftype = arg.type
         if not (isinstance(reftype, declarations.reference_t) or
             isinstance(reftype, declarations.pointer_t)):
-            raise ValueError, 'InOut variable %d ("%s") must be a reference or a pointer (got %s)'%(self.idx, arg.name, arg.type)
+            raise ValueError, '%s\nInOut variable %d ("%s") must be a reference or a pointer (got %s)'%(sm.decl, self.idx, arg.name, arg.type)
 
         # Create an equivalent argument that is not a reference type
         noref_arg = declarations.argument_t(name=arg.name, type=arg.type.base, default_value=arg.default_value)
@@ -213,7 +213,7 @@ class input_array_t:
         
         if not (isinstance(arg.type, declarations.pointer_t) or
                 isinstance(arg.type, declarations.array_t)):
-            raise ValueError, "Argument %d (%s) must be a pointer."%(self.idx, arg.name)
+            raise ValueError, "%s\nArgument %d (%s) must be a pointer."%(sm.decl, self.idx, arg.name)
 
         # Declare a variable that will hold the Python list
         # (this will be the input of the Python call in the virtual function)
@@ -305,7 +305,7 @@ class output_array_t:
         
         if not (isinstance(arg.type, declarations.pointer_t) or
                 isinstance(arg.type, declarations.array_t)):
-            raise ValueError, "Argument %d (%s) must be a pointer."%(self.idx, arg.name)
+            raise ValueError, "%s\nArgument %d (%s) must be a pointer."%(sm.decl, self.idx, arg.name)
 
         self.argname = arg.name
         self.basetype = str(arg.type.base).replace("const", "").strip()
