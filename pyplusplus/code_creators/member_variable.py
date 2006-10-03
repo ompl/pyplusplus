@@ -347,33 +347,45 @@ class array_mv_t( member_variable_base_t ):
     """
     def __init__(self, variable, wrapper ):
         member_variable_base_t.__init__( self, variable=variable, wrapper=wrapper )
+        self.works_on_instance = False
 
-    def _create_impl( self ):
-        assert isinstance( self.wrapper, array_mv_wrapper_t )
+    def _create_body( self ):
+        answer = []
+        answer.append( 'typedef %s;' % self.wrapper.wrapper_creator_type.create_typedef( 'array_wrapper_creator' ) )
+        answer.append( os.linesep * 2 )
+        
         doc = ''
         if self.declaration.type_qualifiers.has_static:
-            answer = [ 'add_static_property' ]
+            answer.append( self.parent.class_var_name + '.add_static_property' )
         else:
             if self.documentation:
                 doc = self.documentation
-            answer = [ 'add_property' ]
+            answer.append( self.parent.class_var_name + '.add_property' )
         answer.append( '( ' )
         answer.append('"%s"' % self.declaration.name )
         answer.append( os.linesep + self.indent( self.PARAM_SEPARATOR ) )
         temp = [ algorithm.create_identifier( self, "::boost::python::make_function" ) ]
         temp.append( '( ' )
-        temp.append( '(%s)(&%s)'
-                       % ( self.wrapper.wrapper_creator_type
-                           , self.wrapper.wrapper_creator_full_name ) )
+        temp.append( 'array_wrapper_creator(&%s)' % self.wrapper.wrapper_creator_full_name )
         if not self.declaration.type_qualifiers.has_static:
-            temp.append( os.linesep + self.indent( self.PARAM_SEPARATOR, 4 ) )
+            temp.append( os.linesep + self.indent( self.PARAM_SEPARATOR, 6 ) )
             temp.append( call_policies.with_custodian_and_ward_postcall( 0, 1 ).create(self) )
         temp.append( ' )' )
         answer.append( ''.join( temp ) )
         if doc:
+            answer.append( os.linesep )
             answer.append( self.PARAM_SEPARATOR )
             answer.append( doc )
         answer.append( ' );' )
+        return ''.join( answer )
+
+    def _create_impl( self ):
+        answer = []
+        answer.append( '{ //%s, type=%s' % ( self.declaration, self.declaration.type ) )
+        answer.append( os.linesep * 2 )
+        answer.append( self.indent( self._create_body() ) )
+        answer.append( os.linesep )
+        answer.append( '}' )
         return ''.join( answer )
 
 #TODO: generated fucntion should be static and take instance of the wrapped class
@@ -388,49 +400,55 @@ class array_mv_wrapper_t( code_creator.code_creator_t
         code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=variable)
 
-    def _get_wrapper_type( self ):
-        ns_name = code_repository.array_1.namespace
+    @property
+    def wrapper_type( self ):
+        tmpl = "%(namespace)s::%(constness)sarray_1_t< %(item_type)s, %(array_size)d>"
+        
+        constness = ''
         if declarations.is_const( self.declaration.type ):
-            class_name = 'const_array_1_t'
-        else:
-            class_name = 'array_1_t'
+            constness = 'const_'
+        result = tmpl % {
+                'namespace' : code_repository.array_1.namespace
+              , 'constness' : constness
+              , 'item_type' : declarations.array_item_type( self.declaration.type ).decl_string
+              , 'array_size': declarations.array_size( self.declaration.type )
+        }
+        return declarations.dummy_type_t( result )
 
-        decl_string = declarations.templates.join(
-              '::'.join( [ns_name, class_name] )
-            , [ declarations.array_item_type( self.declaration.type ).decl_string
-                , str( declarations.array_size( self.declaration.type ) )
-        ])
-
-        return declarations.dummy_type_t( decl_string )
-    wrapper_type = property( _get_wrapper_type )
-
-    def _get_wrapper_creator_type(self):
-        return declarations.member_function_type_t.create_decl_string(
+    @property
+    def wrapped_class_type( self ):
+        wrapped_cls_type = declarations.declarated_t( self.declaration.parent )
+        if declarations.is_const( self.declaration.type ):
+            wrapped_cls_type = declarations.const_t( wrapped_cls_type )
+        return declarations.reference_t( wrapped_cls_type )
+    
+    @property
+    def wrapper_creator_type(self):
+        return declarations.free_function_type_t(
                 return_type=self.wrapper_type
-                , class_decl_string=self.parent.full_name
-                , arguments_types=[]
-                , has_const=False )
-    wrapper_creator_type = property( _get_wrapper_creator_type )
-
-    def _get_wrapper_creator_name(self):
+                , arguments_types=[self.wrapped_class_type] )
+    
+    @property 
+    def wrapper_creator_name(self):
         return '_'.join( ['pyplusplus', self.declaration.name, 'wrapper'] )
-    wrapper_creator_name = property( _get_wrapper_creator_name )
 
-    def _get_wrapper_creator_full_name(self):
+    @property
+    def wrapper_creator_full_name(self):
         return '::'.join( [self.parent.full_name, self.wrapper_creator_name] )
-    wrapper_creator_full_name = property( _get_wrapper_creator_full_name )
 
     def _create_impl( self ):
-        answer = [self.wrapper_type.decl_string]
-        answer.append( ''.join([ self.wrapper_creator_name, '(){']) )
-        temp = ''.join([ 'return '
-                         , self.wrapper_type.decl_string
-                         , '( '
-                         , self.declaration.name
-                         , ' );'])
-        answer.append( self.indent( temp ) )
-        answer.append('}')
-        return os.linesep.join( answer )
+        tmpl = os.linesep.join([
+            "static %(wrapper_type)s"
+          , "%(wrapper_creator_name)s( %(wrapped_class_type)s inst ){"
+          , self.indent( "return %(wrapper_type)s( inst.%(mem_var_ref)s );" )
+          , "}"
+        ])
+        return tmpl % {
+                'wrapper_type' : self.wrapper_type.decl_string
+              , 'wrapper_creator_name' : self.wrapper_creator_name
+              , 'wrapped_class_type' : self.wrapped_class_type.decl_string
+              , 'mem_var_ref' : self.declaration.name
+            }
 
 
 class mem_var_ref_t( member_variable_base_t ):

@@ -63,6 +63,7 @@ import no_init_tester
 import overloads_macro_tester
 import split_module_tester
 import properties_tester
+import arrays_bug_tester
 
 def create_suite(times):
     testers = [
@@ -122,6 +123,7 @@ def create_suite(times):
         , overloads_macro_tester
         , split_module_tester
         , properties_tester
+        , arrays_bug_tester
     ]
 
     main_suite = unittest.TestSuite()
