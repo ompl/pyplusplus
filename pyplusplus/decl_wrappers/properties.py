@@ -47,17 +47,17 @@ class property_t( object ):
 class property_recognizer_i(object):
     def __init__( self ):
         object.__init__( self )
-        
+
     def create_property( self, fget, fset ):
         raise NotImplementedError()
 
     def create_read_only_property( sefl, fget ):
         raise NotImplementedError()
-    
+
 class name_based_recognizer_t( property_recognizer_i ):
     def __init__( self ):
         property_recognizer_i.__init__( self )
-        self.__prefixes = ( 
+        self.__prefixes = (
             (  'is', 'set' )
           , ( 'get', 'set' )
           , ( 'has', 'set' )
@@ -69,7 +69,7 @@ class name_based_recognizer_t( property_recognizer_i ):
         if not name.startswith( prefix ):
             return False
         return True
-        
+
     def check_name_compatibility( self, gname, sname, gprefix, sprefix ):
         if not self.check_prefix( gname, gprefix ):
             return False
@@ -84,13 +84,13 @@ class name_based_recognizer_t( property_recognizer_i ):
         if gprefix:
             gprefix = convert( gprefix )
         return ( gprefix, convert( sprefix ) )
-    
+
     def make_u_camel_convention( self, gprefix, sprefix ):
         convert = lambda x: x[0].upper() + x[1:]
         if gprefix:
             gprefix = convert( gprefix )
         return ( gprefix, convert( sprefix ) )
-    
+
     def make_l_camel_convention( self, gprefix, sprefix ):
         convert = lambda x: x[0].lower() + x[1:]
         if gprefix:
@@ -98,7 +98,7 @@ class name_based_recognizer_t( property_recognizer_i ):
         return ( gprefix, convert( sprefix ) )
 
     def find_out_prefixes( self, gname, sname ):
-        convention_makers = [ 
+        convention_makers = [
             self.make_std_convention #longest first
           , self.make_u_camel_convention
           , self.make_l_camel_convention ]
@@ -111,17 +111,19 @@ class name_based_recognizer_t( property_recognizer_i ):
         return None
 
     def find_out_ro_prefixes( self, gname ):
-        convention_makers = [ 
+        convention_makers = [
             self.make_std_convention #longest first
           , self.make_u_camel_convention
           , self.make_l_camel_convention ]
 
         for convention_maker in convention_makers:
             for g, unused in self.__prefixes:
+                if not g:
+                    continue
                 gc, unused = convention_maker( g, 'set' )
                 if self.check_prefix( gname, gc ):
                     return gc
-        return None
+        return ''
 
     def check_type_compatibility( self, fget, fset ):
         #algorithms allows "const" differences between types
@@ -140,7 +142,7 @@ class name_based_recognizer_t( property_recognizer_i ):
             return declarations.is_same( t1, t2 )
         else:
             return False
-    
+
     def create_property( self, fget, fset ):
         if not self.check_type_compatibility( fget, fset ):
             return None
@@ -151,10 +153,10 @@ class name_based_recognizer_t( property_recognizer_i ):
 
     def create_read_only_property( self, fget ):
         found = self.find_out_ro_prefixes( fget.name )
-        if found:
-            return property_t( fget.name[len(found[0]):], fget )
-        else:
+        if None is found:
             return None
+        else:
+            return property_t( fget.name[len(found):], fget )
 
 class properties_finder_t:
     def __init__( self, cls, recognizer=None, exclude_accessors=False ):
@@ -177,7 +179,7 @@ class properties_finder_t:
 
         self.inherited_getters, self.inherited_setters \
             = self.__get_accessors( inherted_mem_funs )
-        
+
     def __is_getter( self, mem_fun ):
         if mem_fun.arguments:
             return False
@@ -186,7 +188,7 @@ class properties_finder_t:
         if not mem_fun.has_const:
             return False
         return True
-    
+
     def __is_setter( self, mem_fun ):
         if len( mem_fun.arguments ) != 1:
             return False
@@ -195,7 +197,7 @@ class properties_finder_t:
         if mem_fun.has_const:
             return False
         return True
-    
+
     def __get_accessors( self, mem_funs ):
         getters = []
         setters = []
@@ -231,21 +233,21 @@ class properties_finder_t:
                     properties.append( property_ )
                     break
         return properties
-        
+
     def __call__( self ):
         used_getters = set()
         used_setters = set()
         properties = []
         #this get, this set
-        properties.extend( 
+        properties.extend(
             self.find_properties( self.getters, self.setters, used_getters, used_setters ) )
         #this get, base set
-        properties.extend( 
+        properties.extend(
             self.find_properties( self.getters, self.inherited_setters, used_getters, used_setters ) )
         #base get, this set
-        properties.extend( 
+        properties.extend(
             self.find_properties( self.inherited_getters, self.setters, used_getters, used_setters ) )
-        
+
         for fget in self.getters:
             if fget in used_getters:
                 continue
@@ -253,14 +255,14 @@ class properties_finder_t:
             if property_:
                 used_getters.add( fget )
                 properties.append( property_ )
-                
+
         if self.exclude_accessors:
             map( lambda accessor: accessor.exclude(), used_getters )
             map( lambda accessor: accessor.exclude(), used_setters )
-            
+
         return properties
-    
+
 def find_properties( cls, recognizer=None, exclude_accessors=False ):
     pf = properties_finder_t( cls, recognizer, exclude_accessors )
     properties = pf()
-    return properties 
+    return properties
