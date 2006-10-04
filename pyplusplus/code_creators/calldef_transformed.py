@@ -89,7 +89,21 @@ class mem_fun_transformed_wrapper_t( calldef_wrapper_t ):
                 return_type=rettype
                 , arguments_types=map( lambda arg: arg.type, self.declaration.arguments ) )
 
+    def wrapper_name(self):
+        """Return the name of the wrapper function.
+
+        This is just the local name without any scope information.
         
+        """
+        # A list with the individual components of the name
+        components = ["_py"]
+        # Is the wrapper placed outside a wrapper class?
+        if not isinstance(self.parent, class_declaration.class_wrapper_t):
+            # Incorporate the original class name into the name
+            components.append(self.declaration.parent.name)
+        components.append(self.declaration.alias)
+        return "_".join(components)
+                
     def full_name(self):
         """Return the full name of the wrapper function.
 
@@ -98,9 +112,9 @@ class mem_fun_transformed_wrapper_t( calldef_wrapper_t ):
         @rtype: str
         """
         if isinstance(self.parent, class_declaration.class_wrapper_t):
-            return self.parent.full_name + '::_py_' + self.declaration.alias
+            return self.parent.full_name + '::' + self.wrapper_name()
         else:
-            return '_py_' + self.declaration.alias
+            return self.wrapper_name()
 
     def create_sig_id(self):
         """Create an ID string that identifies a signature.
@@ -119,7 +133,7 @@ class mem_fun_transformed_wrapper_t( calldef_wrapper_t ):
         template = self._subst_manager.subst_wrapper(template)
 
         return template % {
-            'name' : "_py_"+name
+            'name' : self.wrapper_name()
             , 'throw' : self.throw_specifier_code()
         }
 
