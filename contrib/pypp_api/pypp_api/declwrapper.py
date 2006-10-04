@@ -468,7 +468,7 @@ class IDecl:
         @type header: str
         @param headerdir: Select declarations by the directory in which their header file is located
         @type headerdir: str
-        @param accesstype: Access type (PUBLIC or PROTECTED). This implies the type flag MEMBER_FUNCTION.
+        @param accesstype: Access type (PUBLIC or PROTECTED). This implies the type flags CLASS_MEMBER.
         @param const: Select declarations by their constness.
         @type const: bool
         @param filter: User defined filter function
@@ -525,7 +525,7 @@ class IDecl:
         # accesstype filter
         if accesstype!=None:
             addFilter(accesstype, AccessTypeFilter)
-            itype |= METHOD
+            itype |= CLASS_MEMBER
         # const filter
         if const!=None:
             addFilter(const, ConstFilter)

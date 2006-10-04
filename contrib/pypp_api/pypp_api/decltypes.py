@@ -19,6 +19,7 @@ ENUM            = 0x20
 VARIABLE        = 0x40
 
 CALLABLE        = METHOD | FUNCTION | CONSTRUCTOR
+CLASS_MEMBER    = METHOD | CONSTRUCTOR | VARIABLE | ENUM
 
 # cpp
 class cpp:

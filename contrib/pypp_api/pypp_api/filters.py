@@ -429,7 +429,13 @@ class AccessTypeFilter(FilterBase):
         return "accesstype==%s"%self.accesstype
 
     def __call__(self, decl):
-        at = getattr(decl, "access_type", None)
+        try:
+            at = getattr(decl, "access_type", None)
+        except RuntimeError, e:
+            # Accessing access_type on non-member variables
+            # raises an error
+            at = None
+
         if at==None:
             return False
         return at==self.accesstype
