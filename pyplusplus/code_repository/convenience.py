@@ -23,18 +23,16 @@ code = \
 
 #include "boost/python.hpp"
 
-//1 - dimension
 namespace pyplusplus{ namespace convenience{
 
-void raise_error( PyObject *exception, const char *message ){
-
+inline void
+raise_error( PyObject *exception, const char *message ){
    PyErr_SetString(exception, message);
    boost::python::throw_error_already_set();
-
 }
 
-void ensure_sequence( boost::python::object seq, Py_ssize_t expected_length=-1 ){
-
+inline void
+ensure_sequence( boost::python::object seq, Py_ssize_t expected_length=-1 ){
     PyObject* seq_impl = seq.ptr();
 
     if( !PySequence_Check( seq_impl ) ){
@@ -48,27 +46,32 @@ void ensure_sequence( boost::python::object seq, Py_ssize_t expected_length=-1 )
             << "Actual sequence length is " << length << ".";
         raise_error( PyExc_ValueError, err.str().c_str() );
     }
-
 }
 
 template< class ExpectedType >
 void ensure_uniform_sequence( boost::python::object seq, Py_ssize_t expected_length=-1 ){
-
     ensure_sequence( seq, expected_length );
+
     Py_ssize_t length = boost::python::len( seq );
     for( Py_ssize_t index = 0; index < length; ++index ){
         boost::python::object item = seq[index];
+
         boost::python::extract<ExpectedType> type_checker( item );
-        if( type_checker.check() ){
-            const boost::python::type_info expected_type_info( boost::python::type_id<ExpectedType>() );
-            //TODO: How to extract type_info from PyObject?
+        if( !type_checker.check() ){
+            std::string expected_type_name( boost::python::type_id<ExpectedType>().name() );
+
+            std::string item_type_name("different");
+            PyObject* item_impl = item.ptr();
+            if( item_impl && item_impl->ob_type && item_impl->ob_type->tp_name ){
+                item_type_name = std::string( item_impl->ob_type->tp_name );
+            }
+
             std::stringstream err;
-            err << "Sequence should contain only items with type \"" << expected_type_info.name() << "\". "
-                << "Item at position " << index << " has different type.";
+            err << "Sequence should contain only items with type \\"" << expected_type_name << "\\". "
+                << "Item at position " << index << " has \\"" << item_type_name << "\\" type.";
             raise_error( PyExc_ValueError, err.str().c_str() );
         }
     }
-
 }
 
 } /*pyplusplus*/ } /*convenience*/
