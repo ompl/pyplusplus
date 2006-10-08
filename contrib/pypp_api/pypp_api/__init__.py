@@ -67,7 +67,7 @@ PUBLIC = ACCESS_TYPES.PUBLIC
 PROTECTED = ACCESS_TYPES.PROTECTED
 PRIVATE = ACCESS_TYPES.PRIVATE
 
-from decltypes import arg, cpp
+from decltypes import *
 #from argpolicy import *
 from pyplusplus.function_transformers.arg_policies import output_t as Output
 from pyplusplus.function_transformers.arg_policies import input_t as Input

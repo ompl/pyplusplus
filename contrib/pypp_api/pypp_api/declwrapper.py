@@ -417,6 +417,7 @@ class IDecl:
              headerdir=None,
              accesstype=None,
              const=None,
+             virtuality=None,
              filter=None,
              recursive=None,
              allow_empty=None,
@@ -471,6 +472,8 @@ class IDecl:
         @param accesstype: Access type (PUBLIC or PROTECTED). This implies the type flags CLASS_MEMBER.
         @param const: Select declarations by their constness.
         @type const: bool
+        @param virtuality: Select declarations by their virtuality. This implies the type flags CLASS_MEMBER:
+        @type virtuality: Virtuality flags
         @param filter: User defined filter function
         @type callable
         @param recursive: Extend the search to grandchildren? If not specified, a global (customizable) default value is used.
@@ -529,6 +532,10 @@ class IDecl:
         # const filter
         if const!=None:
             addFilter(const, ConstFilter)
+        # virtuality filter
+        if virtuality!=None:
+            addFilter(virtuality, VirtualityFilter)
+            itype |= CLASS_MEMBER
         # custom filters
         if filter!=None:
             if _type(filter)==list:

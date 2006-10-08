@@ -461,6 +461,45 @@ class ConstFilter(FilterBase):
         const = bool(getattr(decl, "has_const", False))
         return const==self.constness
 
+# VirtualityFilter
+class VirtualityFilter(FilterBase):
+    """Filter by virtuality.
+    """
+
+    def __init__(self, virtuality_flags):
+        """Constructor.
+
+        virtuality_flags is a combination of the flags NON_VIRTUAL,
+        NON_PURE_VIRTUAL, PURE_VIRTUAL and VIRTUAL.
+        """
+        FilterBase.__init__(self)
+        self.virtuality_flags = virtuality_flags
+
+    def __str__(self):
+        f = []
+        if self.virtuality_flags & NON_VIRTUAL:
+            f.append("non-virtual")
+        if self.virtuality_flags & NON_PURE_VIRTUAL:
+            f.append("non-pure virtual")        
+        if self.virtuality_flags & PURE_VIRTUAL:
+            f.append("pure virtual")
+
+        v = "|".join(f)
+        return "virtuality==%s"%v
+
+    def __call__(self, decl):
+        v = getattr(decl, "virtuality", None)
+        if v==None:
+            return False
+        vf = self.virtuality_flags
+        if vf&NON_VIRTUAL and v==VIRTUALITY_TYPES.NOT_VIRTUAL:
+            return True
+        elif vf&NON_PURE_VIRTUAL and v==VIRTUALITY_TYPES.VIRTUAL:
+            return True
+        elif vf&PURE_VIRTUAL and v==VIRTUALITY_TYPES.PURE_VIRTUAL:
+            return True
+        return False
+
 # CustomFilter
 class CustomFilter(FilterBase):
     """Filter by user defined function.

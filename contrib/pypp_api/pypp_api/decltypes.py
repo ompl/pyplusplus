@@ -21,6 +21,11 @@ VARIABLE        = 0x40
 CALLABLE        = METHOD | FUNCTION | CONSTRUCTOR
 CLASS_MEMBER    = METHOD | CONSTRUCTOR | VARIABLE | ENUM
 
+NON_VIRTUAL  = 0x01
+NON_PURE_VIRTUAL = 0x02    
+PURE_VIRTUAL = 0x04
+VIRTUAL      = NON_PURE_VIRTUAL | PURE_VIRTUAL
+
 # cpp
 class cpp:
     """This class wraps C++ source code for default values.
