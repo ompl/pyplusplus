@@ -226,15 +226,15 @@ class module_builder_t(object):
             and returns documentation string
         @type doc_extractor: callable or None
         """
-        msg = os.linesep.join([
-                  "create_casting_constructor argument is deprecated and should not be used."
-                , "If you still want Py++ to generate implicitly_convertible code, consider to use allow_implicit_conversion constructor property"
-                , "mb = module_builder_t(...)"
-                , "mb.constructors().allow_implicit_conversion = True"])
-        warnings.warn(msg, DeprecationWarning, stacklevel=2)
+        if not create_casting_constructor:
+            msg = os.linesep.join([
+                      "create_casting_constructor argument is deprecated."
+                    , "If want to disable boost::python::implicitly_convertible code generation, consider to use allow_implicit_conversion constructor property"
+                    , ">>> mb = module_builder_t(...)"
+                    , ">>> mb.constructors().allow_implicit_conversion = False"])
+            warnings.warn(msg, DeprecationWarning, stacklevel=2)
 
-        if create_casting_constructor:
-            self.global_ns.constructors(allow_empty=True).allow_implicit_conversion = True
+            self.global_ns.constructors(allow_empty=True).allow_implicit_conversion = False
 
         creator = mcreator_package.creator_t( self.global_ns
                                               , module_name
