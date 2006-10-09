@@ -236,7 +236,6 @@ class input_array_t:
         # Replace the input parameter with the C array
         sm.wrapper_func.input_params[self.idx-1] = self.carray
 
-
     def wrapper_pre_call(self, sm):
         """Wrapper function code.
         """
@@ -252,7 +251,6 @@ class input_array_t:
                 , 'ivar' : self.wrapper_ivar
                 , 'array_name' : self.carray
                }
-        return res
 
     def virtual_pre_call(self, sm):
         """Virtual function code.
@@ -337,22 +335,35 @@ class output_array_t:
         return res
 
     def virtual_post_call(self, sm):
-        res = ""
-        res += "// Assert that the Python object corresponding to output\n"
-        res += "// argument '%s' is really a sequence.\n"%self.argname
-        res += "%s = %s;\n"%(self.virtual_pyval, sm.py_result_expr(self.argname))
-        res += "if (!PySequence_Check(%s.ptr()))\n"%self.virtual_pyval
-        res += "{\n"
-        res += '  PyErr_SetString(PyExc_ValueError, "%s: sequence expected as return value for output array \'%s\'");\n'%(sm.decl.name, self.argname)
-        res += '  boost::python::throw_error_already_set();\n'
-        res += "}\n"
-        res += "// Assert that the sequence has the correct size\n"
-        res += "if (PySequence_Length(%s.ptr())!=%s)\n"%(self.virtual_pyval, self.size)
-        res += "{\n"
-        res += '  PyErr_SetString(PyExc_ValueError, "%s: sequence with %s values expected as return value for output array \'%s\'");\n'%(sm.decl.name, self.size, self.argname)
-        res += '  boost::python::throw_error_already_set();\n'
-        res += "}\n"
-        res += "// Copy the Python sequence into '%s'\n"%self.argname
-        res += "for(%s=0; %s<%d; %s++)\n"%(self.virtual_ivar, self.virtual_ivar, self.size, self.virtual_ivar)
-        res += "  %s[%s] = boost::python::extract<%s>(%s[%s]);"%(self.argname, self.virtual_ivar, self.basetype, self.virtual_pyval, self.virtual_ivar)
-        return res
+        tmpl = []
+        tmpl.append( 'pyplusplus::convenience::ensure_uniform_sequence< %(type)s >( %(argname)s, %(size)d );' )
+        tmpl.append( 'for(%(ivar)s=0; %(ivar)s<%(size)d; ++%(ivar)s){' )
+        tmpl.append( '   %(array_name)s[ %(ivar)s ] = boost::python::extract< %(type)s >( %(argname)s[%(ivar)s] );' )
+        tmpl.append( '}' )
+        return os.linesep.join( tmpl ) % {
+                  'type' : self.basetype
+                , 'argname' : sm.py_result_expr(self.argname)
+                , 'size' : self.size
+                , 'ivar' : self.virtual_ivar
+                , 'array_name' : self.argname
+               }
+
+        #~ res = ""
+        #~ res += "// Assert that the Python object corresponding to output\n"
+        #~ res += "// argument '%s' is really a sequence.\n"%self.argname
+        #~ res += "%s = %s;\n"%(self.virtual_pyval, sm.py_result_expr(self.argname))
+        #~ res += "if (!PySequence_Check(%s.ptr()))\n"%self.virtual_pyval
+        #~ res += "{\n"
+        #~ res += '  PyErr_SetString(PyExc_ValueError, "%s: sequence expected as return value for output array \'%s\'");\n'%(sm.decl.name, self.argname)
+        #~ res += '  boost::python::throw_error_already_set();\n'
+        #~ res += "}\n"
+        #~ res += "// Assert that the sequence has the correct size\n"
+        #~ res += "if (PySequence_Length(%s.ptr())!=%s)\n"%(self.virtual_pyval, self.size)
+        #~ res += "{\n"
+        #~ res += '  PyErr_SetString(PyExc_ValueError, "%s: sequence with %s values expected as return value for output array \'%s\'");\n'%(sm.decl.name, self.size, self.argname)
+        #~ res += '  boost::python::throw_error_already_set();\n'
+        #~ res += "}\n"
+        #~ res += "// Copy the Python sequence into '%s'\n"%self.argname
+        #~ res += "for(%s=0; %s<%d; %s++)\n"%(self.virtual_ivar, self.virtual_ivar, self.size, self.virtual_ivar)
+        #~ res += "  %s[%s] = boost::python::extract<%s>(%s[%s]);"%(self.argname, self.virtual_ivar, self.basetype, self.virtual_pyval, self.virtual_ivar)
+        #~ return res

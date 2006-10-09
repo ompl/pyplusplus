@@ -65,10 +65,6 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         # Check the fixed_input_array method
         self.assertEqual(img.fixed_input_array([1,2,3]), 6)
         self.assertEqual(img.fixed_input_array((1,2,3)), 6)
-        self.assertRaises(ValueError, lambda : img.fixed_input_array([1,2,3,4]))
-        self.assertRaises(ValueError, lambda : img.fixed_input_array([1,2]))
-        self.assertRaises(TypeError, lambda : img.fixed_input_array(1))
-        self.assertRaises(TypeError, lambda : img.fixed_input_array(None))
 
         # Check the fixed_output_array method
         self.assertEqual(img.fixed_output_array(), [1,2,3])
@@ -111,7 +107,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         # Check if fixed_output_array() is correctly called from C++
         self.assertEqual(module.image_fixed_output_array(pyimg1), 14)
         pyimg1.fixed_output_array_mode = 1
-        self.assertRaises(ValueError, lambda : module.image_fixed_output_array(pyimg1))
+        self.assertRaises(TypeError, lambda : module.image_fixed_output_array(pyimg1))
         pyimg1.fixed_output_array_mode = 2
         self.assertRaises(ValueError, lambda : module.image_fixed_output_array(pyimg1))
 
