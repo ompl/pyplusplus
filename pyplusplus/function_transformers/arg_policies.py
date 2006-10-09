@@ -347,23 +347,3 @@ class output_array_t:
                 , 'ivar' : self.virtual_ivar
                 , 'array_name' : self.argname
                }
-
-        #~ res = ""
-        #~ res += "// Assert that the Python object corresponding to output\n"
-        #~ res += "// argument '%s' is really a sequence.\n"%self.argname
-        #~ res += "%s = %s;\n"%(self.virtual_pyval, sm.py_result_expr(self.argname))
-        #~ res += "if (!PySequence_Check(%s.ptr()))\n"%self.virtual_pyval
-        #~ res += "{\n"
-        #~ res += '  PyErr_SetString(PyExc_ValueError, "%s: sequence expected as return value for output array \'%s\'");\n'%(sm.decl.name, self.argname)
-        #~ res += '  boost::python::throw_error_already_set();\n'
-        #~ res += "}\n"
-        #~ res += "// Assert that the sequence has the correct size\n"
-        #~ res += "if (PySequence_Length(%s.ptr())!=%s)\n"%(self.virtual_pyval, self.size)
-        #~ res += "{\n"
-        #~ res += '  PyErr_SetString(PyExc_ValueError, "%s: sequence with %s values expected as return value for output array \'%s\'");\n'%(sm.decl.name, self.size, self.argname)
-        #~ res += '  boost::python::throw_error_already_set();\n'
-        #~ res += "}\n"
-        #~ res += "// Copy the Python sequence into '%s'\n"%self.argname
-        #~ res += "for(%s=0; %s<%d; %s++)\n"%(self.virtual_ivar, self.virtual_ivar, self.size, self.virtual_ivar)
-        #~ res += "  %s[%s] = boost::python::extract<%s>(%s[%s]);"%(self.argname, self.virtual_ivar, self.basetype, self.virtual_pyval, self.virtual_ivar)
-        #~ return res
