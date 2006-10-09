@@ -5,6 +5,7 @@
 
 "defines property_t helper class"
 
+import algorithm
 from pygccxml import declarations
 
 class property_t( object ):
@@ -143,20 +144,27 @@ class name_based_recognizer_t( property_recognizer_i ):
         else:
             return False
 
+    def find_out_property_name( self, fget, prefix ):
+        if fget.name == prefix:
+            #use class name for property name
+            return algorithm.create_valid_name( fget.parent.name )
+        else:
+            return fget.name[len(prefix):]
+
     def create_property( self, fget, fset ):
         if not self.check_type_compatibility( fget, fset ):
             return None
         found = self.find_out_prefixes( fget.name, fset.name )
         if not found:
             return None
-        return property_t( fget.name[len(found[0]):], fget, fset )
+        return property_t( self.find_out_property_name( fget, found[0] ), fget, fset )
 
     def create_read_only_property( self, fget ):
         found = self.find_out_ro_prefixes( fget.name )
         if None is found:
             return None
         else:
-            return property_t( fget.name[len(found):], fget )
+            return property_t( self.find_out_property_name( fget, found ), fget )
 
 class properties_finder_t:
     def __init__( self, cls, recognizer=None, exclude_accessors=False ):

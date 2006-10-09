@@ -36,8 +36,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
         cls = mb.class_( 'properties_finder_tester_t' )
         cls.add_properties( exclude_accessors=True )
-        print len( cls.properties )
-        self.failUnless( 5 == len( cls.properties ) )
+        self.failUnless( 6 == len( cls.properties ) )
+        self.failUnless( cls.name in map( lambda pr: pr.name, cls.properties ) )
 
     def run_tests(self, module):
         pt = module.properties_tester_t()
