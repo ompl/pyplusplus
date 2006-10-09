@@ -50,8 +50,8 @@ struct properties_finder_tester_t{
 
     int GetType() const { return 0; }
 
-    float get() const;
-    void set(float);
+    float get() const{ return 0.1; }
+    void set(float){}
 
 };
 }

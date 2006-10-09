@@ -65,9 +65,9 @@ class name_based_recognizer_t( property_recognizer_i ):
           , (    '', 'set' ) )
 
     def check_prefix( self, name, prefix ):
-        if len( prefix ) >= len( name ):
-            return False
         if not name.startswith( prefix ):
+            return False
+        if len( name ) < len( prefix ):
             return False
         return True
 
