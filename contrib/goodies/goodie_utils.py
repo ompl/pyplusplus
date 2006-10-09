@@ -16,6 +16,8 @@ import pyplusplus.decl_wrappers as decl_wrappers
 import copy
 import re
 
+# TODO:
+# - extend add_member_function to include method to add
 
 def set_recursive_default(val):
    pd.scopedef_t.RECURSIVE_DEFAULT = val
@@ -23,6 +25,16 @@ def set_recursive_default(val):
 def set_allow_empty_mdecl_default(val):
    pd.scopedef_t.ALLOW_EMPTY_MDECL_WRAPPER = val
 
+
+def decl_from_typedef(decl):
+   """ decl: decl or mdecl with typedef.  Return the "real" decl. """
+   typedef_decl = decl
+   if isinstance(typedef_decl, pd.mdecl_wrapper_t):
+      typedef_decl = decl[0]   
+   assert isinstance(typedef_decl, pd.typedef_t)
+   return typedef_decl.type.declaration
+
+   
 def finalize(cls):
    """ Attempt to finalize a class by not exposing virtual methods.
          Still exposes in the case of pure virtuals otherwise the class
@@ -53,7 +65,6 @@ def add_method(moduleBuilder, methodName, method):
    """  Add a method to the module builder. """
    code_text = 'boost::python::def("%s",%s);'%(methodName, method)
    moduleBuilder.add_registration_code(code_text)   
-
 
 def is_const_ref(type):
    """ Extra trait tester method to check if something is a const reference. """
@@ -139,13 +150,13 @@ class TemplateWrapper:
        to allow access to the template at a later time.
        
        TODO: If used a form that allowed multiple templates to be specified
-             ex: TemplateWrapper("osg::vector", arguments=[["float","3"],["int","4"]]
+             ex: TemplateWrapper("OSG::vector", arguments=[["float","3"],["int","4"]]
              then how would we handle naming?  Automatic or must be specified?
    """
    def __init__(self, templateType, finalName = None):   #, arguments=None):
       """
-      templateType: Either a base type ("osg::vector") or a full template
-                    type ("osg::vector<float>")
+      templateType: Either a base type ("OSG::vector") or a full template
+                    type ("OSG::vector<float>")
       finalName: Name to rename the decl to after finding it.
       """
       self.mTemplateType = templateType
@@ -187,7 +198,7 @@ class TemplateBuilder:
        Usage:
           
           tb = TemplateBuilder()
-          vec3f_t = tb.Template("osg::vector<float,3>")
+          vec3f_t = tb.Template("OSG::vector<float,3>")
           
           # Add autogen code to a header that is included
           mb = moduble_builder_t([myheaders])
