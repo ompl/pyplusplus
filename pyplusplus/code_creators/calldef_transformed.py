@@ -17,7 +17,7 @@ from pyplusplus import code_repository
 class mem_fun_transformed_t( calldef_t ):
     """Creates code for public non-virtual member functions.
     """
-    
+
     def __init__( self, function, wrapper=None ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
 
@@ -34,7 +34,7 @@ class mem_fun_transformed_t( calldef_t ):
             full_name = self.wrapper.full_name()
         else:
             full_name = declarations.full_name( self.declaration )
-            
+
         if use_function_alias:
             return '%s( &%s )' \
                    % ( self.function_type_alias, full_name )
@@ -93,7 +93,7 @@ class mem_fun_transformed_wrapper_t( calldef_wrapper_t ):
         """Return the name of the wrapper function.
 
         This is just the local name without any scope information.
-        
+
         """
         # A list with the individual components of the name
         components = ["_py"]
@@ -103,7 +103,7 @@ class mem_fun_transformed_wrapper_t( calldef_wrapper_t ):
             components.append(self.declaration.parent.name)
         components.append(self.declaration.alias)
         return "_".join(components)
-                
+
     def full_name(self):
         """Return the full name of the wrapper function.
 
@@ -143,11 +143,11 @@ class mem_fun_transformed_wrapper_t( calldef_wrapper_t ):
 $DECLARATIONS
 
 $PRE_CALL
-  
+
 $RESULT_VAR_ASSIGNMENT$CALL_FUNC_NAME($INPUT_PARAMS);
-  
+
 $POST_CALL
-  
+
 $RETURN_STMT
 """
 
@@ -170,7 +170,7 @@ $RETURN_STMT
         return os.linesep.join( answer )
 
     def _create_impl(self):
-    
+
         answer = self.create_function()
 
         # Replace the argument list of the declaration so that in the
@@ -186,7 +186,7 @@ $RETURN_STMT
 class mem_fun_v_transformed_t( calldef_t ):
     """Creates code for (public) virtual member functions.
     """
-    
+
     def __init__( self, function, wrapper=None ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
         self.default_function_type_alias = 'default_' + self.function_type_alias
@@ -340,7 +340,7 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
     def create_virtual_body(self):
 
         thread_safe = getattr(self.declaration, "thread_safe", False)
-        
+
         if thread_safe:
             body = """
 pyplusplus::threading::gil_guard_t %(gstate_var)s;
@@ -356,14 +356,14 @@ if( %(override_var)s )
 
   $DECLARATIONS
 
-  try {   
+  try {
     $PRE_CALL
-  
-    ${RESULT_VAR_ASSIGNMENT}boost::python::call<$RESULT_TYPE>($INPUT_PARAMS);
-  
-    $POST_CALL  
 
-    $RETURN_STMT  
+    ${RESULT_VAR_ASSIGNMENT}boost::python::call<$RESULT_TYPE>($INPUT_PARAMS);
+
+    $POST_CALL
+
+    $RETURN_STMT
   }
   catch(...)
   {
@@ -371,9 +371,9 @@ if( %(override_var)s )
     {
       PyErr_Print();
     }
-    
+
     $CLEANUP
-    
+
     $EXCEPTION_HANDLER_EXIT
   }
 }
@@ -390,7 +390,7 @@ boost::python::override %(override_var)s = this->get_override( "%(alias)s" );
 if( %(override_var)s )
 {
   $DECLARATIONS
-  
+
   $PRE_CALL
 
   ${RESULT_VAR_ASSIGNMENT}boost::python::call<$RESULT_TYPE>($INPUT_PARAMS);
@@ -436,7 +436,7 @@ else
         cls_wrapper = self._subst_manager.wrapper_func.declare_local("cls_wrapper", cls_wrapper_type);
         # The name of the 'self' variable (i.e. first argument)
         selfname = self._subst_manager.wrapper_func.arg_list[0].name
-        
+
         body = """$DECLARATIONS
 
 $PRE_CALL
@@ -468,7 +468,7 @@ $RETURN_STMT
                      "cls_wrapper" : cls_wrapper,
                      "self" : selfname,
                      "base_name" : self.base_name() }
-        
+
 #        function_call = declarations.call_invocation.join( self.declaration.name
 #                                                           , [ self.function_call_args() ] )
 #        body = self.wrapped_class_identifier() + '::' + function_call + ';'
@@ -493,7 +493,7 @@ $RETURN_STMT
 
         header = 'static $RET_TYPE %s( $ARG_LIST_DEF ) {'%self.default_name()
         header = self._subst_manager.subst_wrapper(header)
-        
+
         answer = [ header ]
         answer.append( self.indent( self.create_default_body() ) )
         answer.append( '}' )
@@ -501,13 +501,13 @@ $RETURN_STMT
 
     def get_required_headers(self):
         """Return a list of required header file names."""
-        res = [code_repository.gil_guard.file_name]
+        res = [code_repository.gil_guard.file_name, code_repository.convenience.file_name ]
         res += self._subst_manager.virtual_func.get_required_headers()
         res += self._subst_manager.wrapper_func.get_required_headers()
         return res
 
     def _create_impl(self):
-    
+
         answer = [ self.create_function() ]
         answer.append( os.linesep )
         answer.append( self.create_base_function() )

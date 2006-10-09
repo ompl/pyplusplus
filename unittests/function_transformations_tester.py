@@ -67,8 +67,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.assertEqual(img.fixed_input_array((1,2,3)), 6)
         self.assertRaises(ValueError, lambda : img.fixed_input_array([1,2,3,4]))
         self.assertRaises(ValueError, lambda : img.fixed_input_array([1,2]))
-        self.assertRaises(ValueError, lambda : img.fixed_input_array(1))
-        self.assertRaises(ValueError, lambda : img.fixed_input_array(None))
+        self.assertRaises(TypeError, lambda : img.fixed_input_array(1))
+        self.assertRaises(TypeError, lambda : img.fixed_input_array(None))
 
         # Check the fixed_output_array method
         self.assertEqual(img.fixed_output_array(), [1,2,3])

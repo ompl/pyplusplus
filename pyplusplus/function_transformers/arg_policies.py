@@ -15,7 +15,7 @@ The following policies are available:
  - L{input_array_t}
  - L{output_array_t}
 """
-
+import os
 from pygccxml import declarations
 
 # output_t
@@ -27,7 +27,7 @@ class output_t:
 
     void getValue(int& v) -> v = getValue()
     """
-    
+
     def __init__(self, idx):
         """Constructor.
 
@@ -64,7 +64,7 @@ class output_t:
         else:
             sm.wrapper_func.input_params[self.idx-1] = self.local_var
 
-    
+
     def virtual_post_call(self, sm):
         """Extract the C++ value after the call to the Python function.
         """
@@ -84,7 +84,7 @@ class input_t:
 
     void setValue(int& v) -> setValue(v)
     """
-    
+
     def __init__(self, idx):
         """Constructor.
 
@@ -101,7 +101,7 @@ class input_t:
     def init_funcs(self, sm):
         # Remove the specified input argument from the wrapper function
         arg = sm.remove_arg(self.idx)
-        
+
         # Do some checks (the arg has to be a reference or a pointer)
         reftype = arg.type
         if not (isinstance(reftype, declarations.reference_t) or
@@ -119,7 +119,7 @@ class inout_t:
 
     void foo(int& v) -> v = foo(v)
     """
-    
+
     def __init__(self, idx):
         """Constructor.
 
@@ -137,7 +137,7 @@ class inout_t:
     def init_funcs(self, sm):
         # Remove the specified input argument from the wrapper function
         arg = sm.remove_arg(self.idx)
-        
+
         # Do some checks (the arg has to be a reference or a pointer)
         reftype = arg.type
         if not (isinstance(reftype, declarations.reference_t) or
@@ -160,7 +160,7 @@ class inout_t:
         else:
             sm.wrapper_func.input_params[self.idx-1] = self.local_var
 
-    
+
     def virtual_post_call(self, sm):
         """Extract the C++ value after the call to the Python function.
         """
@@ -182,9 +182,9 @@ class input_array_t:
 
 
     TODO: Error handling (in the wrapper function)!
-    
+
     """
-    
+
     def __init__(self, idx, size):
         """Constructor.
 
@@ -205,12 +205,12 @@ class input_array_t:
 
     def __str__(self):
         return "InputArray(%d,%d)"%(self.idx, self.size)
-    
+
     def init_funcs(self, sm):
 
         # Remove the original argument...
         arg = sm.remove_arg(self.idx)
-        
+
         if not (isinstance(arg.type, declarations.pointer_t) or
                 isinstance(arg.type, declarations.array_t)):
             raise ValueError, "%s\nArgument %d (%s) must be a pointer."%(sm.decl, self.idx, arg.name)
@@ -240,21 +240,18 @@ class input_array_t:
     def wrapper_pre_call(self, sm):
         """Wrapper function code.
         """
-        res = ""
-        res += "// Assert that '%s' is really a sequence...\n"%self.argname
-        res += "if (!PySequence_Check(%s.ptr()))\n"%self.argname
-        res += "{\n"
-        res += '  PyErr_SetString(PyExc_ValueError, "Argument %s: sequence expected");\n'%self.argname
-        res += '  boost::python::throw_error_already_set();\n'
-        res += "}\n"
-        res += "// Copy the sequence '%s' into '%s'...\n"%(self.argname, self.carray)
-        res += 'if (%s.attr("__len__")()!=%d)\n'%(self.argname, self.size)
-        res += '{\n'
-        res += '  PyErr_SetString(PyExc_ValueError, "Invalid sequence size (expected %d)");\n'%self.size
-        res += '  boost::python::throw_error_already_set();\n'
-        res += '}\n'
-        res += "for(%s=0; %s<%d; %s++)\n"%(self.wrapper_ivar, self.wrapper_ivar, self.size, self.wrapper_ivar)
-        res += "  %s[%s] = boost::python::extract< %s >(%s[%s]);"%(self.carray, self.wrapper_ivar, self.basetype, self.argname , self.wrapper_ivar)
+        tmpl = []
+        tmpl.append( 'pyplusplus::convenience::ensure_uniform_sequence< %(type)s >( %(argname)s, %(size)d );' )
+        tmpl.append( 'for(%(ivar)s=0; %(ivar)s<%(size)d; ++%(ivar)s){' )
+        tmpl.append( '   %(array_name)s[ %(ivar)s ] = boost::python::extract< %(type)s >( %(argname)s[%(ivar)s] );' )
+        tmpl.append( '}' )
+        return os.linesep.join( tmpl ) % {
+                  'type' : self.basetype
+                , 'argname' : self.argname
+                , 'size' : self.size
+                , 'ivar' : self.wrapper_ivar
+                , 'array_name' : self.carray
+               }
         return res
 
     def virtual_pre_call(self, sm):
@@ -272,12 +269,12 @@ class output_array_t:
     """Handles an output array of a fixed size.
 
     void getVec3(double* v) -> v = getVec3()
-    # v will be a list with 3 floats    
+    # v will be a list with 3 floats
 
     TODO: Error handling (in the virtual function)!
-    
+
     """
-    
+
     def __init__(self, idx, size):
         """Constructor.
 
@@ -289,7 +286,7 @@ class output_array_t:
 
         self.idx = idx
         self.size = size
-        
+
         self.argname = None
         self.basetype = None
         self.pyval = None
@@ -302,7 +299,7 @@ class output_array_t:
     def init_funcs(self, sm):
         # Remove the original argument...
         arg = sm.remove_arg(self.idx)
-        
+
         if not (isinstance(arg.type, declarations.pointer_t) or
                 isinstance(arg.type, declarations.array_t)):
             raise ValueError, "%s\nArgument %d (%s) must be a pointer."%(sm.decl, self.idx, arg.name)
@@ -328,7 +325,7 @@ class output_array_t:
 
         # Declare a variable that will receive the Python list
         self.virtual_pyval = sm.virtual_func.declare_local("py_"+self.argname, "boost::python::object")
-            
+
         # Declare an int which is used for the loop
         self.virtual_ivar = sm.virtual_func.declare_local("i", "int", default=0)
 
