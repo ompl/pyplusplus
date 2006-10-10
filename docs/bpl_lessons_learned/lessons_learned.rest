@@ -21,7 +21,7 @@ On this page you will find my collection of the solutions to some of the problem
   solution contains source code and comprehensive unit test for the problem.
 
 
-.. _`Custom smart pointer class` : ./smart_ptr/smart_ptr.html
+.. _`Custom smart pointer class` : ./smart_ptrs/smart_ptrs.html
 
 
 .. _`Py++` : ./../pyplusplus.html
