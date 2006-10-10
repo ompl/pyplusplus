@@ -31,7 +31,7 @@ struct derived_ptr_t : public smart_ptr_t< derived_t >{
 
     derived_ptr_t( const smart_ptr_t< base_i >& r)
     : smart_ptr_t<derived_t>()
-	{
+    {
         pRep = static_cast<derived_t*>(r.getPointer());
         pUseCount = r.useCountPointer();
         if (pUseCount)
@@ -41,18 +41,18 @@ struct derived_ptr_t : public smart_ptr_t< derived_t >{
     }
 
     derived_ptr_t& operator=(const smart_ptr_t< base_i >& r)
-	{
-	    if (pRep == static_cast<derived_t*>(r.getPointer()))
-		    return *this;
+    {
+        if (pRep == static_cast<derived_t*>(r.getPointer()))
+            return *this;
         release();
-		pRep = static_cast<derived_t*>(r.getPointer());
-		pUseCount = r.useCountPointer();
-		if (pUseCount)
-		{
-		    ++(*pUseCount);
+        pRep = static_cast<derived_t*>(r.getPointer());
+        pUseCount = r.useCountPointer();
+        if (pUseCount)
+        {
+            ++(*pUseCount);
         }
 
-		return *this;
+        return *this;
     }
 };
 
