@@ -1,0 +1,38 @@
+==============================
+Boost.Python - lessons learned
+==============================
+
+.. contents:: Table of contents
+
+--------
+Preamble
+--------
+
+Software development is an interactrive process. During `Py++`_ development
+I see many interesting problems and even more interesting solutions.
+
+On this page you will find my collection of the solutions to some of the problems.
+
+
+`Custom smart pointer class`_
+
+  There are projects, which use custom smart pointer(s). For majority of the
+  projects, it is not an option to switch to ``boost::shared_ptr``. The
+  solution contains source code and comprehensive unit test for the problem.
+
+
+.. _`Custom smart pointer class` : ./smart_ptr/smart_ptr.html
+
+
+.. _`Py++` : ./../pyplusplus.html
+.. _`pygccxml` : http://www.language-binding.net/pygccxml/pygccxml.html
+.. _`SourceForge`: http://sourceforge.net/index.php
+
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:
+
