@@ -33,7 +33,15 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         #will reporoduce bug
         mb.class_('callable_t').always_expose_using_scope = True
         mb.BOOST_PYTHON_MAX_ARITY = 1
-
+        mb.free_function( 'instantiate_mem_fun_environment' ).exclude()
+        
+        env = mb.class_( 'mem_fun_environment_t' )
+        get_value = env.member_function( 'get_value', return_type='int' )
+        get_value.alias = 'get_value_int' 
+        get_value.name = get_value.demangled_name
+        
+        mb.run_query_optimizer()
+        
     def create_py_immutable_by_ref( self, module ):
         class py_immutable_by_ref( module.immutable_by_ref_t ):
             def __init__( self ):
@@ -120,7 +128,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         x = self.create_py_immutable_by_ref(module)
         self.failUnless( x.identity( '11' ) == '1111' )
         self.failUnless( module.immutable_by_ref_t.call_identity(x, '11') == '1111' )
-
+        
+        env = module.mem_fun_environment_t()
+        env.get_value_int("xxx")
+        
 def create_suite():
     suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))

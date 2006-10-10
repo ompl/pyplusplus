@@ -166,6 +166,16 @@ struct immutable_by_ref_t{
     }
 };
 
+
+struct mem_fun_environment_t{
+    template< class T>
+    T get_value(const std::string& x){ return T(); }
+};
+
+inline void instantiate_mem_fun_environment(){
+    mem_fun_environment_t env;
+    int i = env.get_value<int>("");
+}
 }
 
 #endif//__member_functions_to_be_exported_hpp__

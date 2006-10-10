@@ -7,4 +7,3 @@
 
 namespace member_functions{ 
 }
-
