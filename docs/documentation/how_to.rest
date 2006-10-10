@@ -243,7 +243,92 @@ welcome too!
 
 .. _`wiki page` : https://realityforge.vrsource.org/view/PyppApi/TemplateSupport
 
+---------------------------------------------------
+How to deal with template on return type functions?
+---------------------------------------------------
+::
 
+  struct environment_t{
+      ...
+      template< class T>
+      T get_value(const std::string& name);
+      ...
+  };
+
+  //Somewhere in your code
+  environment_t env;
+  std::string path = env.get_value< std::string >( "PATH" );
+  int version = env.get_value< int >( "VERSION" );
+
+`GCC-XML`_ will see both instantiations, ``get_value<int>`` and ``get_value< std::string >``,
+and will provide information about them. The name of both member functions,
+reported by `GCC-XML`_ is "**get_value**".
+
+In this case, `Py++`_ generates a code, which contains few errors and if your are
+lucky, depends on the compiler you use, the generated code will not compile.
+Otherwise, you will discover the errors while testing the bindings.
+
+Generated code:
+::
+
+  bp::class_< environment_t >( "environment_t" )
+      ...
+      .def( "get_value"
+            , (int ( ::environment_t::* )( ::std::string const & ) )( &::environment_t::get_value ) )
+      .def( "get_value"
+            , (::std::string ( ::environment_t::* )( ::std::string const & ) )( &::environment_t::get_value ) );
+
+The correct code:
+::
+
+  bp::class_< environment_t >( "environment_t" )
+      .def( "get_value"
+            , (int ( ::environment_t::* )( ::std::string const & ) )( &::environment_t::get_value< int > ) )
+            //--------------------------------------------------------------------------^^^^^^^^^^^^^^^^
+      .def( "get_value"
+            , (::std::string ( ::environment_t::* )( ::std::string const & ) )( &::environment_t::get_value< std::string > ) );
+            //------------------------------------------------------------------------------------^^^^^^^^^^^^^^^^^^^^^^^^
+
+The perfect one:
+::
+
+  bp::class_< environment_t >( "environment_t" )
+      ...
+      .def( "get_value", &::environment_t::get_value< int > )
+      .def( "get_value", &::environment_t::get_value< std::string > );
+
+Solution
+--------
+::
+
+  mb = module_builder_t( ..., optimize_queries=False, ... )
+  environment = mb.class_( "environment_t" )
+  for f in environment.member_functions( "get_value" ):
+      f.alias = f.name + "_" + f.return_type.decl_string #create new function alias
+      f.name = f.demangled_name
+  mb.run_query_optimizer()
+
+Before you read the rest of the answer, you should understand what is "name mangling"
+means. If you don't, consider reading about it on `Wikipedia`__.
+
+.. __ : http://en.wikipedia.org/wiki/Name_mangling
+
+
+The solution is pretty simple. `GCC-XML`_ reports mangled and demangled function
+names. The demangled function name contains "real" function name:
+``get_value< used type >``. You only have to instruct `Py++`_ to use it.
+
+`Py++`_ does not use by default demangled function name for mainly one reason.
+Demangled function name is a string that contains a lot of information. `Py++`_
+implements a parser, which extracts the only relevant one. The parser
+implementation is a little bit complex and was not heavily tested. By "heavily" I
+mean that I tested it on a lot of crazy use cases and on a real project, but
+there is always some new use case out there. I am almost sure it will work for
+you. The problem, we deal with, is rare, so by default "demangled_name"
+feature is turned off.
+
+By the way, almost the same problem exists for template classes. But, in the
+classes use case `Py++`_ uses demangled name by default.
 
 .. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
