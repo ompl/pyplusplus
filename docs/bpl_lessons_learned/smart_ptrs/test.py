@@ -13,7 +13,7 @@ class py_double_derived_t( custom_sptr.derived_t ):
         custom_sptr.derived_t.__init__( self )
 
     def get_value( self ):
-        return 31
+        return 0xDD
 
 class tester_t( unittest.TestCase ):
     def __init__( self, *args ):
@@ -41,20 +41,20 @@ class tester_t( unittest.TestCase ):
         self.__test_const_ref( inst, val )
 
     def test_derived( self ):
-        self.__test_impl( custom_sptr.derived_t(), 11 )
+        self.__test_impl( custom_sptr.derived_t(), 0xD )
 
     def test_py_derived( self ):
         self.__test_impl( py_derived_t(), 28 )
 
     def test_py_double_derived( self ):
-        self.__test_impl( py_double_derived_t(), 31 )
+        self.__test_impl( py_double_derived_t(), 0xDD )
 
     def test_created_derived( self ):
-        self.__test_impl( custom_sptr.create_derived(), 11 )
+        self.__test_impl( custom_sptr.create_derived(), 0xD )
 
     def test_created_base( self ):
         inst = custom_sptr.create_base()
-        val = 11
+        val = 0xD
         self.__test_ref_fine( inst, val )
         self.__test_val( inst, val )
         self.__test_const_ref( inst, val )
