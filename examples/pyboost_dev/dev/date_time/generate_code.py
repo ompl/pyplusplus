@@ -55,7 +55,12 @@ class code_generator_t(object):
             f_decl.alias = f_decl.name
             f_decl.name = f_decl.demangled_name
             #f_decl.create_with_signature = True
-            
+
+        local_date_time = mb.class_( lambda decl: decl.name.startswith( 'local_date_time_base<' ) )
+        for c in local_date_time.constructors():
+            if not c.is_copy_constructor:
+                local_date_time.remove_declaration( c )
+
         mb.run_query_optimizer()
 
         for name, alias in customization_data.name2alias.items():
@@ -75,7 +80,6 @@ class code_generator_t(object):
         boost_ns.namespace( 'gregorian', recursive=False ).include()
         boost_ns.namespace( 'local_time', recursive=False ).include()
         boost_ns.classes( lambda decl: decl.name.startswith( 'constrained_value<' ) ).include()
-        
         ## Exclude protected and private that are not pure virtual
         query = ~declarations.access_type_matcher_t( 'public' ) \
             & ~declarations.virtuality_type_matcher_t( declarations.VIRTUALITY_TYPES.PURE_VIRTUAL )
@@ -138,6 +142,8 @@ class code_generator_t(object):
         tz_db_base.member_functions( 'split_rule_spec' ).exclude()
                 
     def add_code( self, mb ):
+        mb.classes().add_properties( exclude_accessors=True )
+        
         as_number_template = 'def( "as_number", &%(class_def)s::operator %(class_def)s::value_type, bp::default_call_policies() )'
         
         classes = mb.classes()

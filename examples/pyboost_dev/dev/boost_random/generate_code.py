@@ -116,6 +116,7 @@ class code_generator_t(object):
                 var_gen_cls.alias = var_gen_typedef.name + '__' + distrib_cls.alias
                 
         self.set_call_policies()
+        boost_ns.classes().add_properties( exclude_accessors=True )
 
     def set_call_policies( self ):
         boost_ns = self.__mb.namespace( 'boost' )

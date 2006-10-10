@@ -215,7 +215,7 @@ class posix_time:
 
 class local_time:
     dst_calc_rule = _date_time_.dst_calc_rule
-    local_date_time = _date_time_.local_date_time
+    #local_date_time = _date_time_.local_date_time
     custom_time_zone = _date_time_.custom_time_zone
     posix_time_zone = _date_time_.posix_time_zone
     time_zone_base = _date_time_.time_zone_base
