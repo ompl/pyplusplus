@@ -25,6 +25,7 @@ public:
     //Every custom smart pointer class should have copy constructor and 
     //assignment operator. Probably you smart pointer class already has this
     //functionality.
+
     smart_ptr_t(const smart_ptr_t& r)
     : m_managed(0), m_use_count(0)
     {
