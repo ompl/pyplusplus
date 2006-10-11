@@ -1,0 +1,32 @@
+===================================
+How to expose custom smart pointer?
+===================================
+
+.. contents:: Table of contents
+
+------------
+Introduction
+------------
+
+.. include:: ./definition.rest
+
+
+--------
+Download
+--------
+
+https://sourceforge.net/project/showfiles.php?group_id=118209
+
+
+.. _`Py++` : ./../pyplusplus.html
+.. _`pygccxml` : http://www.language-binding.net/pygccxml/pygccxml.html
+.. _`SourceForge`: http://sourceforge.net/index.php
+
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:
+
