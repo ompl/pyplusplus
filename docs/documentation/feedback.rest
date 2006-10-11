@@ -24,27 +24,27 @@ declarations it exports, it can scan declarations for potential problems, report
 them and in some cases provide hints about how to resolve the problem. Few examples:
 
 *
-  ::
+  .. code-block:: C++
 
-     struct Y{ ... };    
-     
+     struct Y{ ... };
+
+  .. code-block:: C++
+
      struct X{
          ...
          virtual Y& do_smth();
-         ...
      };
 
   Member function ``do_smth`` can not be overridden in Python because... [FILL IN HERE].
 
 *
-  ::
+  .. code-block:: C++
 
       struct window{
           ...
           void get_size( int& heght, int& widht ) const;
-          ...
       };
-      
+
   Member function ``get_size`` can be exposed to Python, but it will not be callable because [FILL IN HERE].
   
 * In order to expose free/member function that takes more than 10 arguments user
@@ -80,12 +80,12 @@ and want to change it, right?
 
 1. If you simply want to change the logging message level:
 
-   ::
+   .. code-block:: Python
 
      import logging
      from pyplusplus import module_builder
 
-   ::
+   .. code-block:: Python
 
      module_builder.set_logger_level( logging.DEBUG )
 
@@ -101,20 +101,15 @@ and want to change it, right?
    Both packages define a ``loggers`` class. Those classes keep references to 
    different loggers. The ``loggers`` classes look very similar to the next class:
 
-   ::
+   .. code-block:: Python
 
       import logging #standard Python package
-
-   ::
-
+      
       def _create_logger_( name ):
           logger = logging.getLogger(name)
           ...
           return logger
-
-
-   ::
-
+      
       class loggers:
            file_writer = _create_logger_( 'pyplusplus.file_writer' )
            declarations = _create_logger_( 'pyplusplus.declarations' )

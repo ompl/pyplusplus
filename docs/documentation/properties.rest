@@ -18,7 +18,8 @@ version 0.8.2 `Py++`_ provides a convenient API to specify class properties.
 -------------
 Usage example
 -------------
-::
+
+.. code-block:: C++
 
   struct number{
       ...
@@ -29,7 +30,7 @@ Usage example
       float m_value;
   }
 
-::
+.. code-block:: Python
 
   mb = module_builder_t( ... )
   number = mb.class_( 'number' )
@@ -41,7 +42,8 @@ Usage example
 This is rather the hard way to add properties to the class. `Py++`_ comes with
 built-in algorithm, which automaticly recognizes properties and adds them to the
 class:
-::
+
+.. code-block:: Python
 
   mb = module_builder_t( ... )
   number = mb.class_( 'number' )
@@ -61,9 +63,11 @@ Call policies
 
 Consider next use case:
 
-::
+.. code-block:: C++
 
   struct nested{ ... };
+
+.. code-block:: C++
 
   struct data{
       ...
@@ -78,7 +82,7 @@ In order to expose ``get_nested`` member function you have to specify its
 `call policies`_. Same precondition holds for exposing member function as
 property:
 
-::
+.. code-block:: Python
 
   mb = module_builder_t( ... )
   get_nested = mb.member_function( 'get_nested' )

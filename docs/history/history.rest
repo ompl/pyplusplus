@@ -198,16 +198,17 @@ Py++, especially Matthias:
    a default argument.
 
 8. `Py++`_ now generates correct code for hierarchy of abstract classes:
-   ::
+
+   .. code-block:: C++
 
      struct abstract1{
          virtual void do_smth() = 0;
      }
-
+     
      struct abstract2 : public abstract1{
          virtual void do_smth_else() = 0;
      }
-
+     
      struct concrete : public abstract2{
          virtual void do_smth(){};
          virtual void do_smth_else(){};

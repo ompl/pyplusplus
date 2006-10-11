@@ -77,7 +77,8 @@ Indexing suites API
 By default, `Py++`_ works with built-in indexing suite. If you want to use
 next version of indexing suite, you should tell this to the ``module_builder_t.__init__``
 method:
-::
+
+.. code-block:: Python
 
   mb = module_builder_t( ..., indexing_suite_version=2 )
 
@@ -121,7 +122,8 @@ Next version of indexing suite API
 
 In this case there is no single place, where you can configure exported container
 functionality. Please take a look on next C++ code:
-::
+
+.. code-block:: C++
 
   struct item{
       ...  

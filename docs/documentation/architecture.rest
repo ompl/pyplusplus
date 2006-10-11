@@ -85,16 +85,16 @@ of all those services is pretty simple and well polished.
 Before I explain how these services are integrated, take a look on next source 
 code:
 
-::
+.. code-block:: Python
 
   mb = module_builder_t( ... )
 
-::
+.. code-block:: Python
 
   details = mb.namespace( 'details' )
   details.exclude()
 
-::
+.. code-block:: Python
 
   my_class = mb.class_( 'my_class' )
   my_class.rename("MyClass")
@@ -229,7 +229,7 @@ the code it creates. For example:
 
   Here is "cut & paste" of the relevant code from the source file:
 
-  ::
+  .. code-block:: Python
 
     def _create_impl(self):
         result = []

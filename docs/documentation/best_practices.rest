@@ -41,7 +41,7 @@ Tips
   ``module_builder_t.__init__`` methods takes reference to an instance of cache
   class or ``None``:
 
-  ::
+  .. code-block:: Python
 
     from module_builder import *
     mb = module_builder_t( ..., cache=file_cache_t( path to project cache file ), ... )
@@ -60,13 +60,12 @@ Tips
   implemented an initial version of the functionality. After small discussion,
   we agreed on next interface:
 
-  ::
+  .. code-block:: Python
 
     class module_builder_t( ... ):
         ...
         def split_module( self, directory_path, huge_classes=None, precompiled_header=None ):
             ...
-        ...
 
   ``precompiled_header`` argument could be ``None`` or string, that contains
   name of precompiled header file, which will be created in the directory.
@@ -78,7 +77,7 @@ Tips
   `this error`_. `Py++`_ will automatically split generated code for the
   huge classes to few files:
 
-  ::
+  .. code-block:: Python
 
     mb = module_builder_t( ... )
     ...

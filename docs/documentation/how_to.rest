@@ -7,17 +7,17 @@ How to ... ?
 ----------------------------------------
 How to add custom exception translation?
 ----------------------------------------
-::
+
+.. code-block:: C++
 
   struct my_exception{
     ...
     const std::string& error() const;
-    ...
   }
 
 First of all lets define ``translate`` function:
 
-::
+.. code-block:: Python
 
   translate_code = \
   """
@@ -26,14 +26,14 @@ First of all lets define ``translate`` function:
     }
   """
 
-::
+.. code-block:: Python
 
   mb.add_declaration_code( translate_code )
 
 
 Now we should register it:
 
-::
+.. code-block:: Python
 
   registration_code = "boost::python::register_exception_translator<my_exception>(&translate);"
   mb.add_registration_code( registration_code )
@@ -43,7 +43,7 @@ Small usage advice.
 
 `Py++`_ allows you to define a query that will return you all exception classes:
 
-::
+.. code-block:: Python
 
   mb = module_builder_t( ... )
   exception_classes = mb.decls( lambda decl: decl.name.endswith( 'exception' ) )
@@ -56,17 +56,17 @@ That's all.
 -------------------------------------------------------
 How to expose function, which has hand-written wrapper?
 -------------------------------------------------------
-::
+.. code-block:: C++
 
   struct window_t{
       ...
       void get_size( int& height, int& widht ) const;
-      ...
   };
 
 You can not expose ``get_size`` function as is - ``int`` is immutable type in
 Python. So, we need to create a wrapper to the function:
-::
+
+.. code-block:: C++
 
   boost::python::tuple get_size_wrapper( const window_t& win ){
       int height(0), width( 0 );
@@ -74,7 +74,7 @@ Python. So, we need to create a wrapper to the function:
       return boost::python::make_tuple( height, width );
   }
 
-::
+.. code-block:: C++
 
   class_<window_t>( ... )
       .def( "get_size", &get_size_wrapper )
@@ -84,8 +84,7 @@ Python. So, we need to create a wrapper to the function:
 Now, after you know how this problem is solved. I will show how this solution
 could be integrated with `Py++`_.
 
-
-::
+.. code-block:: Python
 
   wrapper_code = \
   """
@@ -96,11 +95,11 @@ could be integrated with `Py++`_.
     }
   """
 
-::
+.. code-block:: Python
 
   registration_code = 'def( "get_size", &%s::get_size )' % window.wrapper_alias
 
-::
+.. code-block:: Python
 
   mb = module_builder_t( ... )
   window = mb.class_( "window_t" )
@@ -132,32 +131,20 @@ How to automatically export template functions\\class?
 ------------------------------------------------------
 
 Lets say you have next C++ function:
-::
 
-  //file point.h
+.. code-block:: C++
 
-::
-
+  // file point.h
   namespace geometry{
-
-::
-
-  template< class T>
-  struct point_t{
-      T x, y;
-  };
-
-::
-
-  template <class T>
-  double distance( const point_t<T>& point ){
-      return sqrt( point.x * point.x + point.y*point.y );
-  }
-
-::
-
+      template< class T>
+      struct point_t{
+          T x, y;
+      };
+      template <class T>
+      double distance( const point_t<T>& point ){
+          return sqrt( point.x * point.x + point.y*point.y );
+      }
   } //namespace geometry
-
 
 You should understand, that you can not export template itself, but only its
 instantiations. The solution is built using next facts:
@@ -174,11 +161,11 @@ Simple and straightforward
 
 Open your favorite editor and create a header file with the content:
 
-::
+.. code-block:: C++
 
   #include "point.h"
 
-::
+.. code-block:: C++
 
   namespace  py_details{
       inline void instantiate(){
@@ -194,7 +181,7 @@ Now, you add this file to the list of files you pass as input to
 ``module_builder_t.__init__`` method and excludes the ``py_details`` namespace
 declarations from being exported:
 
-::
+.. code-block:: Python
 
   mb = module_builder_t( [..., just created file ], ... )
   mb.namespace( 'py_details' ).exclude()
@@ -207,20 +194,20 @@ of the class\\function. Obviously, the previous approach will not work for you.
 The solution is to build your own code generator, which will generate code similar
 to the one, in the previous paragraph.
 
-::
+.. code-block:: Python
 
   from module_builder import module_builder_t, create_text_fc
 
-::
+.. code-block:: Python
 
   def generate_instantiations_string( ... ):
       ...
 
-::
+.. code-block:: Python
 
   code = generate_instantiations_string( ... )
 
-::
+.. code-block:: Python
 
   mb = module_builder_t( [ ..., create_text_fc( code ) ], ... )
   mb.namespace( 'py_details' ).exclude()
@@ -246,7 +233,7 @@ welcome too!
 ---------------------------------------------------
 How to deal with template on return type functions?
 ---------------------------------------------------
-::
+.. code-block:: C++
 
   struct environment_t{
       ...
@@ -269,7 +256,8 @@ lucky, depends on the compiler you use, the generated code will not compile.
 Otherwise, you will discover the errors while testing the bindings.
 
 Generated code:
-::
+
+.. code-block:: C++
 
   bp::class_< environment_t >( "environment_t" )
       ...
@@ -279,7 +267,8 @@ Generated code:
             , (::std::string ( ::environment_t::* )( ::std::string const & ) )( &::environment_t::get_value ) );
 
 The correct code:
-::
+
+.. code-block:: C++
 
   bp::class_< environment_t >( "environment_t" )
       .def( "get_value"
@@ -290,7 +279,8 @@ The correct code:
             //------------------------------------------------------------------------------------^^^^^^^^^^^^^^^^^^^^^^^^
 
 The perfect one:
-::
+
+.. code-block:: C++
 
   bp::class_< environment_t >( "environment_t" )
       ...
@@ -299,7 +289,7 @@ The perfect one:
 
 Solution
 --------
-::
+.. code-block:: Python
 
   mb = module_builder_t( ..., optimize_queries=False, ... )
   environment = mb.class_( "environment_t" )

@@ -12,23 +12,18 @@ Class template instantiation alias
 template, than `Py++`_ will use it as a `Python`_ class name.
 
 For example:
-::
+
+.. code-block:: C++
 
   #include <vector>
-
-::
-
   typedef std::vector< int > numbers;
-
-::
-
   numbers generate_n(){
       ...
   }
 
 `Py++`_ will use "numbers" as Python class name:
 
-::
+.. code-block:: C++
 
   using boost::python;
   class_< std::vector< int > >( "numbers" )

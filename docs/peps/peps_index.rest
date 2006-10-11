@@ -21,7 +21,7 @@ There is no technical reason why unnamed classes/structs/unions are not exported
 
 by `Py++`_:
 
-::
+.. code-block:: C++
 
   class Foo{
       union {
