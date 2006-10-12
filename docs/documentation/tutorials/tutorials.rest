@@ -31,8 +31,8 @@ My advise to you - start with `graphical interface`_, because:
 
   * it is able to generate `Py++`_ code for you
 
-.. _`graphical interface` : ./pyplusplus_demo.png
-.. _`Graphical interface` : ./pyplusplus_demo.png
+.. _`graphical interface` : ./pyplusplus_gui.html
+.. _`Graphical interface` : ./pyplusplus_gui.html
 
 ---------------
 Getting started
