@@ -18,7 +18,7 @@ mb = module_builder.module_builder_t(
 Color = mb.enum( 'color' )
 Color.rename('Color')
 
-#Set call policies to animal::get_name_ptr
+#Set call policies to animal::genealogical_tree_ref
 animal = mb.class_( 'animal' )
 genealogical_tree_ref = animal.member_function( 'genealogical_tree_ref', recursive=False )
 genealogical_tree_ref.call_policies = module_builder.call_policies.return_internal_reference()
