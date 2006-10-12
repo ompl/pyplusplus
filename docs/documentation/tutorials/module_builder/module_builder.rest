@@ -24,8 +24,8 @@ please take a look on two files:
 * `generate_code.py`_ - Python code, that uses `Py++`_ to export
   declarations from the source file
 
-.. _`hello_world.hpp` : ./hello_world.html
-.. _`generate_code.py` : ./generate_code.html
+.. _`hello_world.hpp` : ./hello_world.hpp.html
+.. _`generate_code.py` : ./generate_code.py.html
 
 ----------------
 module_builder_t
@@ -35,8 +35,7 @@ module_builder_t
 should really to be familiar with - ``module_builder``. This package is some kind
 of facade to low level API. It provides simple and intuitive API. The main
 class within this package is ``module_builder_t``. The instance of this class will
-guide you through the whole process. Next few paragraphs will tell you more about
-this class.
+guide you through the whole process. 
 
 -------------------------
 module_builder_t.__init__
@@ -50,27 +49,27 @@ First of all, what is needed in order to create an instance of the class?
    to expose. This is the only required parameter.
 
 2. ``gccxml_path`` - path to `GCC-XML`_ binary. If you don't supply this argument
-   `pygccxml`_ will look for it using your environment variable ``PATH``.
+   `pygccxml`_ will look for it using ``PATH`` environment variable.
 
 There are some other arguments:
 
-* additional include  directories
+* additional include directories
 * [un]defined symbols ( macros )
-* declarations cache
+* intermediate results cache strategy configuration
 * ...
 
 Parsing of source files is done within this method. Post condition of this
-method is - all declarations has been successfully extracted from the sources
-files.
+method is that all declarations has been successfully extracted from the sources
+files and you can start work on them.
 
 --------------------------
 Declarations customization
 --------------------------
-Not all declarations should be exported! Not every declaration could be exported
-without human invocation! As you already saw from example, `Py++`_ provides
-simple and powerful declarations query interface. By default, only declarations
-that belongs to files, you have asked to parse, and to files, that lies in the same
-directories as parsed files, will be exported:
+There are always declarations, which should not be exported or could not be 
+exported without human invocation. As you already saw from example, `Py++`_ provides
+simple and powerful declarations query interface. By default, only the declarations
+that belongs to the files, you have asked to parse, and to the files, that lies 
+in the same directories as parsed files, will be exported:
 ::
 
   project_root/
@@ -97,10 +96,17 @@ you could/should/may change `Py++`_ defaults:
 * to set call policies
 * ...
 
-
 I think it is critical for beginners to see what is going on, right?
 ``module_builder_t`` class has ``print_declarations`` method. You can print whole
-declarations tree or some specific declaration. Very convenient, very useful.
+declarations tree or some specific declaration. You will find a lot of useful
+information there:
+
+* whether the declaration is include\\excluded
+* call policies
+* warnings, `Py++`_ warns you about the declarations that have some "problems"
+* ...
+
+Very convenient, very useful. 
 
 -----------------------------------
 module_builder_t.build_code_creator
@@ -151,7 +157,7 @@ Result
 
 `View generated file`_
 
-.. _`View generated file` : ./result.html
+.. _`View generated file` : ./generated.cpp.html
 
 That's all. I hope you enjoyed.
 

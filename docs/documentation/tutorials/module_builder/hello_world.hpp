@@ -1,13 +1,7 @@
-// Copyright 2004 Roman Yakovenko.
+// Copyright 2004-2006 Roman Yakovenko.
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
-
-/******************************************************************************************
- *                                                                                        *
- *   ANY CHANGE IN THIS FILE MUST BE REFLECTED IN docs/tutorials DIRECTORY                *
- *                                                                                        *
- *****************************************************************************************/
 
 #ifndef __hello_world_hpp__
 #define __hello_world_hpp__
@@ -17,22 +11,24 @@
 //I want to rename color to Color
 enum color{ red, green, blue };
 
+struct genealogical_tree{/*...*/};
+
 struct animal{
-    
-    animal( const std::string& name="" )
+        
+    explicit animal( const std::string& name="" )
     : m_name( name )
     {}
         
     //I need to set call policies to the function
-    const std::string* get_name_ptr() const
-    { return &m_name; }
+    genealogical_tree& genealogical_tree_ref()
+    { return m_genealogical_tree; }
 
-    const std::string& name() const
+    std::string name() const
     { return m_name; }
-        
+   
 private:    
     std::string m_name;
-
+    genealogical_tree m_genealogical_tree;
 };
 
 //I want to exclude next declarations:

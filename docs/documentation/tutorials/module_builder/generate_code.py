@@ -4,15 +4,9 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-#############################################################################
-##                                                                          #
-##   ANY CHANGE IN THIS FILE MUST BE REFLECTED IN docs/tutorials DIRECTORY  #
-##                                                                          #
-#############################################################################
-
 import os
 import sys
-sys.path.append( '../..' )
+sys.path.append( '../../../..' )
 from environment import gccxml
 from pyplusplus import module_builder
 
@@ -26,12 +20,12 @@ Color.rename('Color')
 
 #Set call policies to animal::get_name_ptr
 animal = mb.class_( 'animal' )
-get_name_ptr = animal.member_function( 'get_name_ptr', recursive=False )
-get_name_ptr.call_policies = module_builder.call_policies.return_internal_reference()
+genealogical_tree_ref = animal.member_function( 'genealogical_tree_ref', recursive=False )
+genealogical_tree_ref.call_policies = module_builder.call_policies.return_internal_reference()
 
 #next code has same effect
-get_name_ptr = mb.member_function( 'get_name_ptr' )
-get_name_ptr.call_policies = module_builder.call_policies.return_internal_reference()
+genealogical_tree_ref = mb.member_function( 'genealogical_tree_ref' )
+genealogical_tree_ref.call_policies = module_builder.call_policies.return_internal_reference()
 
 #I want to exclude all classes with name starts with impl
 impl_classes = mb.classes( lambda decl: decl.name.startswith( 'impl' ) )
@@ -57,4 +51,4 @@ mb.code_creator.license = '//Boost Software License( http://boost.org/more/licen
 mb.code_creator.user_defined_directories.append( os.path.abspath('.') )
 
 #And finally we can write code to the disk
-mb.write_module( os.path.join( os.path.abspath('.'), 'hello_world.py.cpp' ) )
+mb.write_module( os.path.join( os.path.abspath('.'), 'generated.cpp' ) )
