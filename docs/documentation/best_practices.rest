@@ -23,7 +23,7 @@ First of all, let me to define "big project". "Big project" is a project with
 few hundred of header files. `Py++`_ was born to create `Python`_ bindings
 for such projects. If you take a look `here`__ you will find few such projects.
 
-.. __ : ./../../pygccxml/quotes.html
+.. __ : ./../../pyplusplus/quotes.html
 
 Tips
 ----

@@ -424,7 +424,7 @@ Oliveira, the `Pyste`_ author, understands the problems, I raised here. He
 thought about them, long before I created `Py++`_. But unfortunately, lack
 of time and motivation prevents him to work on `Pyste`_.
 
-.. _`screenshot` : ./../tutorials/pyplusplus_demo.png
+.. _`screenshot` : ./../documentation/tutorials/pyplusplus_demo.png
 .. _`Py++` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html
 .. _`Pyste`: http://www.boost.org/libs/python/doc/index.html

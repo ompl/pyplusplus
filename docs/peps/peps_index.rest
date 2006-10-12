@@ -49,7 +49,7 @@ Call wrapper policies
 Not all functions could be exposed to Python as is. This `document`__ will
 explain how `Py++`_ will help users to create wrappers around those functions.
 
-.. __ : ./call_wrapper_policies.html
+.. __ : ./function_transformation.html
 
 ------------------------------------------
 Domain Specific Language ( DSL ) challenge

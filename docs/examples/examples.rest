@@ -12,8 +12,8 @@ Graphical interface
 `Py++`_ has nice, small and simple `graphical interface`_. Please, read
 `tutorials`_ for more information.
 
-.. _`graphical interface` : ./../tutorials/pyplusplus_demo.png
-.. _`tutorials` : ./../tutorials/tutorials.html
+.. _`graphical interface` : ./../documentation/tutorials/pyplusplus_gui.html
+.. _`tutorials` : ./../documentation/tutorials/tutorials.html
 
 ---------
 pyeasybmp
