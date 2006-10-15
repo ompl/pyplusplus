@@ -1,0 +1,128 @@
+=================
+Default arguments
+=================
+
+.. contents:: Table of contents
+
+------------
+Introduction
+------------
+
+There is more than one way to export function with default arguments. Before we 
+proceed, please take a look on next class:
+
+.. code-block:: C++
+
+  struct X
+  {
+      bool f(int a=12)
+      {
+          return true;
+      }  
+  };
+
+-------------------
+Do nothing approach
+-------------------
+
+By default `Py++`_ exposes function with its default arguments.
+
+.. code-block:: C++
+
+  namespace bp = boost::python;
+  
+  BOOST_PYTHON_MODULE(pyplusplus){
+    bp::class_< X >( "X" )    
+        .def( 
+            "f"
+            , &::X::f
+            , ( bp::arg("a")=(int)(12) ) );  
+  }
+
+This approach brings another additional value: keyword arguments. Your users
+will be able to call function ``f`` like this:
+
+.. code-block:: Python
+
+  x = X()
+  x.f( a=13 )
+
+----------------------------
+Default values, using macros
+----------------------------
+
+``BOOST_PYTHON_FUNCTION_OVERLOADS`` and ``BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS``
+macros help to deal with default values. You can turn ``use_overload_macro``
+to ``True`` as shown in `overloading`_ document.
+
+.. _`overloading` : ./overloading.html 
+
+--------------------------
+Registration order problem
+--------------------------
+
+There are different trades-off between these approaches. In general you should
+use the first one, untill you have "registration order" problem:
+
+.. code-block:: C++
+
+  struct S1;
+  struct S2;
+  
+  struct S1{
+      void do_smth( S2* s2=0 );
+  };
+  
+  struct S2{
+      void do_smth( S1 s1=S1() );
+  };
+  
+  BOOST_PYTHON_MODULE( ... ){
+      using namespace boost::python;
+      
+      class_< S2 >( "S2" )
+          .def( "do_smth", &S2::do_smth, ( arg("s1")=S1() ) );
+      
+      class_< S1 >( "S1" )
+          .def( "do_smth", &S1::do_smth, ( arg("s2")=object() ) );
+          
+  }
+
+These module could not be loaded, because the expression ``arg("s1")=S1()``
+requieres ``S1`` struct to be registered. `GCC-XML`_ reports default arguments 
+as strings. `Py++`_ doesn't have enough information to generate code with the 
+right class registration order.
+
+
+Unfortunatelly these macros have some limitations:
+
+1. The overloaded functions must have a common sequence of initial arguments.
+
+2. You will not be able to override virtual functions in `Python`_.
+
+3. You will not be able to use "named" arguments.
+
+4. You will not be able to set the functions documentation.
+
+Nevertheless these limitations the macros becomes very useful when you have 
+"registration order" problem with default arguments.
+
+
+
+
+`Py++`_ needs your help to generate right code:
+
+
+
+.. _`Py++` : ./../pyplusplus.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Python`: http://www.python.org
+.. _`GCC-XML`: http://www.gccxml.org
+
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:

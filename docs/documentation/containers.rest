@@ -51,10 +51,12 @@ The long answer is here:
 
 .. _`documentation` : ./indexing_suite_v2.html
 .. _`post` : http://mail.python.org/pipermail/c++-sig/2003-October/005802.html
-
-------------------------
-Py++ and indexing suites
-------------------------
+
+
+------------------------
+Py++ and indexing suites
+------------------------
+
 `Py++`_ implements support for both indexing suites. More over, you can 
 freely mix indexing suites. For example you can expose ``std::vector<int>`` using
 `Boost.Python`_ built-in indexing suite and ``std::map< int, std::string>`` using
