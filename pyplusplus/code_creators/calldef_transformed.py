@@ -67,6 +67,7 @@ class mem_fun_transformed_wrapper_t( calldef_wrapper_t ):
 
         # Create the substitution manager
         sm = function_transformers.substitution_manager_t(function, transformers=function.function_transformers)
+        sm.init_funcs()
         self._subst_manager = sm
 
 #    def is_free_function(self):
@@ -169,6 +170,13 @@ $RETURN_STMT
         answer.append( '}' )
         return os.linesep.join( answer )
 
+    def get_required_headers(self):
+        """Return a list of required header file names."""
+        res = []
+        res += self._subst_manager.virtual_func.get_required_headers()
+        res += self._subst_manager.wrapper_func.get_required_headers()
+        return res
+
     def _create_impl(self):
 
         answer = self.create_function()
@@ -244,6 +252,7 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
 
         # Create the substitution manager
         sm = function_transformers.substitution_manager_t(function, transformers=function.function_transformers)
+        sm.init_funcs()
         self._subst_manager = sm
 
         # Stores the name of the variable that holds the override
@@ -501,7 +510,7 @@ $RETURN_STMT
 
     def get_required_headers(self):
         """Return a list of required header file names."""
-        res = [code_repository.gil_guard.file_name, code_repository.convenience.file_name ]
+        res = [code_repository.gil_guard.file_name]
         res += self._subst_manager.virtual_func.get_required_headers()
         res += self._subst_manager.wrapper_func.get_required_headers()
         return res

@@ -17,6 +17,7 @@ The following policies are available:
 """
 import os
 from pygccxml import declarations
+from pyplusplus import code_repository
 
 # output_t
 class output_t:
@@ -236,6 +237,9 @@ class input_array_t:
         # Replace the input parameter with the C array
         sm.wrapper_func.input_params[self.idx-1] = self.carray
 
+        # Request the convenience header
+        sm.wrapper_func.require_header(code_repository.convenience.file_name)
+
     def wrapper_pre_call(self, sm):
         """Wrapper function code.
         """
@@ -326,6 +330,10 @@ class output_array_t:
 
         # Declare an int which is used for the loop
         self.virtual_ivar = sm.virtual_func.declare_local("i", "int", default=0)
+
+        # Request the convenience header
+        sm.virtual_func.require_header(code_repository.convenience.file_name)
+
 
     def wrapper_post_call(self, sm):
         res = ""
