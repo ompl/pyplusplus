@@ -87,9 +87,8 @@ class compound_policy_t( call_policy_t ):
 
     def _create_impl( self, function_creator ):
         args = self._get_args(function_creator)
-        base_policy_code = self._base.create( function_creator, CREATION_POLICY.AS_TEMPLATE_ARGUMENT )
-        if base_policy_code:
-            args.append( base_policy_code )
+        if not self._base.is_default():
+            args.append( self._base.create( function_creator, CREATION_POLICY.AS_TEMPLATE_ARGUMENT ) )
         name = algorithm.create_identifier( function_creator, self._get_name(function_creator) )
         return declarations.templates.join( name, args )
 
