@@ -25,6 +25,10 @@ code = \
 
 namespace pyplusplus{ namespace convenience{
 
+//TODO: Replace index_type with Boost.Python defined ssize_t type.
+//      This should be done by checking Python and Boost.Python version.
+typedef int index_type;
+
 inline void
 raise_error( PyObject *exception, const char *message ){
    PyErr_SetString(exception, message);
@@ -32,14 +36,14 @@ raise_error( PyObject *exception, const char *message ){
 }
 
 inline void
-ensure_sequence( boost::python::object seq, boost::python::ssize_t expected_length=-1 ){
+ensure_sequence( boost::python::object seq, index_type expected_length=-1 ){
     PyObject* seq_impl = seq.ptr();
 
     if( !PySequence_Check( seq_impl ) ){
         raise_error( PyExc_TypeError, "Sequence expected" );
     }
 
-    boost::python::ssize_t length = PySequence_Length( seq_impl );
+    index_type length = PySequence_Length( seq_impl );
     if( expected_length != -1 && length != expected_length ){
         std::stringstream err;
         err << "Expected sequence length is " << expected_length << ". "
@@ -49,11 +53,11 @@ ensure_sequence( boost::python::object seq, boost::python::ssize_t expected_leng
 }
 
 template< class ExpectedType >
-void ensure_uniform_sequence( boost::python::object seq, boost::python::ssize_t expected_length=-1 ){
+void ensure_uniform_sequence( boost::python::object seq, index_type expected_length=-1 ){
     ensure_sequence( seq, expected_length );
 
-    boost::python::ssize_t length = boost::python::len( seq );
-    for( boost::python::ssize_t index = 0; index < length; ++index ){
+    index_type length = boost::python::len( seq );
+    for( index_type index = 0; index < length; ++index ){
         boost::python::object item = seq[index];
 
         boost::python::extract<ExpectedType> type_checker( item );
