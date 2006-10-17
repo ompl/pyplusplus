@@ -8,11 +8,11 @@ Call policies
 Introduction
 ------------
 
-`Boost.Python`_ has a `nice introduction`__ in the tutorials about call policies.
-Also you can find more formal definition - `CallPolicies Concept`_ . 
+`Boost.Python`_ has a `nice introduction`__ to call policies. `"Call policies concept"`_
+document will provide you with formal definition.
 
 .. __ : http://boost.org/libs/python/doc/tutorial/doc/html/python/functions.html#python.call_policies
-.. _`CallPolicies Concept` : http://boost.org/libs/python/doc/v2/CallPolicies.html#CallPolicies-concept
+.. _`"Call policies concept"` : http://boost.org/libs/python/doc/v2/CallPolicies.html#CallPolicies-concept
 
 ------
 Syntax
@@ -60,51 +60,54 @@ Python code:
     
     mb = module_builder.module_builder_t( ... )
     mb.free_function( 'return_second_arg' ).call_policies = call_policies.return_arg( 2 )
+    #---------------------------------------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     
     mb.member_function( 'do_smth' ).call_policies = call_policies.return_self()
+    #-------------------------------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     
-    mb.calldef( 'get_opaque' ).call_policies \
+    mb.calldef( 'get_opaque' ).call_policies 
         = call_policies.return_value_policy( call_policies.return_opaque_pointer )
 
 --------
 Defaults
 --------
 
-`Py++`_ is able to "guess" few call policies, base on analysis of return type:
+`Py++`_ is able to "guess" few call policies, base on analysis of return type
+and\\or operator name:
 
 * ``default_call_policies``:
 
-  * `Python`_ immutable type by value: C++ fundamental types, ``std::string``, enumerations
+  * `Python`_ immutable type returned by value: C++ fundamental types, ``std::string``, enumerations
   
-  *  user defined type ( class ) by value
+  *  user-defined type ( class ) returned by value
   
-  * ``const char*``
+  * return type is ``const char*``
 
 * ``return_value_policy``
   
   * ``return_opaque_pointer``
   
-    * ``void*`` 
+    * return type is ``void*`` 
   
-    * ``const void*``
+    * return type is ``const void*``
   
   * ``copy_const_reference``
 
-    * ``const T&``
+    * return type is ``const T&``
     
     * for member ``operator[]`` that returns const reference to immutable type
   
   * ``return_by_value``
 
-    * ``const wchar_t*``
+    * return type is ``const wchar_t*``
     
   * ``copy_non_const_reference``
   
-    * ``T&``, for member ``operator[]`` that returns reference to immutable type
+    * return type is ``T&``, for member ``operator[]`` that returns reference to immutable type
   
   * ``return_internal_reference``
   
-    * ``T&``, for member ``operator[]``
+    * return type is ``T&``, for member ``operator[]``
 
 ---------------------
 Missing call policies
@@ -131,16 +134,14 @@ Special case
 ------------
 
 ``return_value_policy( return_opaque_pointer )`` is a special policy for `Boost.Python`_.
-In this case, it requieres from an user to define specializations for the 
+In this case, it requieres from you to define specialization for the 
 ``boost::python::type_id`` function on the type pointed to by returned pointer. 
-`Py++`_ will generate the requiered code.
+`Py++`_ will generate the required code. 
 
 For more information about the call policy please refer to `Boost.Python`_
 `documentation`_.
 
 .. _`documentation` : http://boost.org/libs/python/doc/v2/return_opaque_pointer.html 
-
-
 
 
 .. _`Py++` : ./../pyplusplus.html

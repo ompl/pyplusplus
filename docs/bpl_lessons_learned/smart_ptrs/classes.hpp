@@ -1,7 +1,6 @@
 #ifndef classes_11_11_2006
 #define classes_11_11_2006
 
-
 #include "smart_ptr.h"
 
 struct base_i{
@@ -68,14 +67,16 @@ smart_ptr_t< base_i > create_base(){
 }
 
 
-//Next function could be exposed, but it could not be solved
-//This is the explanation David Abrahams gave:
-//Naturally; there is no instance of smart_ptr_t<base_i> anywhere in the
-//Python object for the reference to bind to. The rules are the same as in C++:
+//Next function could be exposed, but it could not be called from Python, when
+//the argument is instance of derived class.
 //
-//  int f(smart_ptr_t<base>& x) { return 0; }
+//This is the explanation David Abrahams gave:
+//  Naturally; there is no instance of smart_ptr_t<base_i> anywhere in the
+//  Python object for the reference to bind to. The rules are the same as in C++:
+//
+//  int f(smart_ptr_t<base>& x);
 //  smart_ptr_t<derived> y;
-//  int z = f(y);                // fails to compile
+//  int z = f(y);               // fails to compile
 
 inline int
 ref_get_value( smart_ptr_t< base_i >& a ){

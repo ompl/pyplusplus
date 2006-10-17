@@ -1,8 +1,3 @@
-// Copyright 2004 Roman Yakovenko.
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
-
 #include "boost/python.hpp"
 #include "classes.hpp"
 
@@ -11,11 +6,13 @@ namespace bp = boost::python;
 namespace boost{ namespace python{
 
     //We need to tell Boost.Python how to work with your smart pointer.
+    //Short explanation:
+    //  "get_pointer" extracts the pointer to the object it manages.
+    //  "pointee" extracts the type of the object, smart pointer manages.
+    
     //You can read more about this functionality in the reference manual:
     //http://boost.org/libs/python/doc/v2/pointee.html .
-    //In general 
-    //    get_pointer extracts the pointer to the object it manages.
-    //    pointee extracts the type of the object smart pointer manages.
+
     template<class T>
     inline T * get_pointer(smart_ptr_t<T> const& p){
         return p.get();
@@ -86,8 +83,9 @@ BOOST_PYTHON_MODULE( custom_sptr ){
 
     //Register implicit conversion between smart pointers. Boost.Python library
     //can not discover relationship between classes.This will allow Boost.Python
-    //to treat right functions, which expect to get as argument smart_ptr_t< base_i >
-    //class instance.
+    //to treat right the functions, which expect to get as argument 
+    //smart_ptr_t< base_i > class instance, when smart_ptr_t< derived from base_i > 
+    //class instance is passed.
     //For more information about implicitly_convertible see the documentation:
     //http://boost.org/libs/python/doc/v2/implicit.html .
     bp::implicitly_convertible< smart_ptr_t< base_wrapper_t >, smart_ptr_t< base_i > >();
@@ -103,7 +101,7 @@ BOOST_PYTHON_MODULE( custom_sptr ){
     //in Python, which derive from the derived_t class.
         .def( "get_value", &derived_t::get_value, &derived_wrapper_t::default_get_value );
 
-    //Nothing special, just registering all existing conversion.
+    //Now register all existing conversion:
     bp::implicitly_convertible< smart_ptr_t< derived_wrapper_t >, smart_ptr_t< derived_t > >();
     bp::implicitly_convertible< smart_ptr_t< derived_t >, smart_ptr_t< base_i > >();
     bp::implicitly_convertible< derived_ptr_t, smart_ptr_t< derived_t > >();

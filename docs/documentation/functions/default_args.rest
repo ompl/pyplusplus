@@ -39,8 +39,8 @@ By default `Py++`_ exposes function with its default arguments.
             , ( bp::arg("a")=(int)(12) ) );  
   }
 
-This approach brings another additional value: keyword arguments. Your users
-will be able to call function ``f`` like this:
+The additional value of the approach is keyword arguments. You will be able to 
+call function ``f`` like this:
 
 .. code-block:: Python
 
@@ -52,17 +52,24 @@ Default values, using macros
 ----------------------------
 
 ``BOOST_PYTHON_FUNCTION_OVERLOADS`` and ``BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS``
-macros help to deal with default values. You can turn ``use_overload_macro``
-to ``True`` as shown in `overloading`_ document.
+macros can help to deal with default values too. You can turn ``use_overload_macro``
+to ``True``:
 
-.. _`overloading` : ./overloading.html 
+.. code-block:: Python
+
+  import module_builder
+  
+  mb = module_builder.module_builder_t( ... )
+  x = mb.class_( "X" )
+  x.member_function( "f" ).use_overload_macro = True
+  #------------------------^^^^^^^^^^^^^^^^^^^^^^^^^
 
 --------------------------
 Registration order problem
 --------------------------
 
-There are different trades-off between these approaches. In general you should
-use the first one, untill you have "registration order" problem:
+There is different trades-off between these approaches. In general you should
+use the first one, until you have "registration order" problem:
 
 .. code-block:: C++
 
@@ -88,30 +95,51 @@ use the first one, untill you have "registration order" problem:
           
   }
 
-These module could not be loaded, because the expression ``arg("s1")=S1()``
-requieres ``S1`` struct to be registered. `GCC-XML`_ reports default arguments 
-as strings. `Py++`_ doesn't have enough information to generate code with the 
-right class registration order.
+The good news is that it is very easy to identify the problem: the module could 
+not be loaded. The main reason is that expression ``arg("s1")=S1()`` requires 
+``S1`` struct to be registered. `GCC-XML`_ reports default arguments as strings. 
+`Py++`_ doesn't have enough information to generate code with the right class 
+registration order. In this case you have to instruct `Py++`_ to use macros:
+
+.. code-block:: Python
+
+  import module_builde
+  
+  mb = module_builder.module_builder_t( ... )
+  s2 = mb.class_( "S2" )
+  s2.member_function( "do_smth" ).use_overload_macro = True
+
+When you switch to macros, than:
+
+* You will not be able to override virtual functions in `Python`_.
+
+* You will not be able to use "named" arguments.
+
+* You will not be able to set the functions documentation.
+
+Special case
+------------
+
+Class constructors are special case:
+
+.. code-block:: C++
+
+  struct S1;
+  struct S2;
+  
+  struct S1{
+      S1( S2* s2=0 );
+  };
+  
+  struct S2{
+      S2( S1 s1=S1() );
+  };
 
 
-Unfortunatelly these macros have some limitations:
-
-1. The overloaded functions must have a common sequence of initial arguments.
-
-2. You will not be able to override virtual functions in `Python`_.
-
-3. You will not be able to use "named" arguments.
-
-4. You will not be able to set the functions documentation.
-
-Nevertheless these limitations the macros becomes very useful when you have 
-"registration order" problem with default arguments.
-
-
-
-
-`Py++`_ needs your help to generate right code:
-
+You cannot use same work around and `Py++`_ ( version 0.8.2 ) could not help you.
+The use case presented here is a little bit esoteric. If you have such use case
+and you cannot change the source code, consider contacting `Py++`_ developers.
+I am sure we will be able to help you.
 
 
 .. _`Py++` : ./../pyplusplus.html
