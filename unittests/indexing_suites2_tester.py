@@ -27,6 +27,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         fvector.indexing_suite.disable_method( 'extend' )
         fvector.indexing_suite.disable_methods_group( 'reorder' )
         #fvector.indexing_suite.call_policies = module_builder.call_policies.default_call_policies()
+        items_ptr = generator.global_ns.typedef( 'items_ptr_t' )
+        items_ptr = declarations.remove_declarated( items_ptr.type )
+        items_ptr.indexing_suite.call_policies = module_builder.call_policies.return_internal_reference()
+        
        
     def run_tests( self, module):
         fv = module.fvector()
@@ -43,7 +47,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         name2value = module.name2value_t()
         name2value[ "x" ] = "y"
         self.failUnless( "x" == module.get_first_name( name2value ) )
-        
+        items_ptr = module.items_ptr_t()
+        items_ptr.append( item )
+        self.failUnless( items_ptr[0].value == 1977 )
+        print 'xx'
 def create_suite():
     suite = unittest.TestSuite()    
     suite.addTest( unittest.makeSuite(tester_t))

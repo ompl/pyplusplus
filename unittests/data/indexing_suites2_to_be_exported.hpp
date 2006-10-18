@@ -33,6 +33,11 @@ struct item_t{
 
 typedef std::vector<item_t> items_t;
 
+typedef std::vector<item_t*> items_ptr_t;
+inline items_ptr_t create_items_ptr(){
+    return items_ptr_t();
+}
+
 inline item_t get_value( const std::vector<item_t>& vec, unsigned int index ){
     return vec.at(index);
 }
