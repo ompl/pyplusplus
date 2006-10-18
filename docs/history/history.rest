@@ -33,7 +33,7 @@ There were few reasons to this:
 
 
 -------------
-Version 0.8.*
+Version 0.8.2
 -------------
 
 1. Interface changes:
