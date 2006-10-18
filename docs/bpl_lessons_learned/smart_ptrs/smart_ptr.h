@@ -3,6 +3,7 @@
 
 #include <assert.h>
 
+
 //The smart_ptr_t class has been created based on Ogre::SharedPtr class
 //http://www.ogre3d.org/docs/api/html/OgreSharedPtr_8h-source.html
 
@@ -23,7 +24,7 @@ public:
     {}
 
     //Every custom smart pointer class should have copy constructor and 
-    //assignment operator. Probably you smart pointer class already has this
+    //assignment operator. Probably your smart pointer class already has this
     //functionality.
 
     smart_ptr_t(const smart_ptr_t& r)
@@ -58,7 +59,7 @@ public:
     //    smart_ptr_t< base > b( smart_ptr_t<derived>() );
     //
     //This functionality is very important for C++ Python bindings. It will allow
-    //us to register smart pointer conversion:
+    //you to register smart pointer conversion:
     //    boost::python::implicitly_convertible< smart_ptr_t< derived >, smart_ptr_t< base > >();
     template<class Y>
     smart_ptr_t(const smart_ptr_t<Y>& r)

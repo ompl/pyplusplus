@@ -68,7 +68,7 @@ smart_ptr_t< base_i > create_base(){
 
 
 //Next function could be exposed, but it could not be called from Python, when
-//the argument is instance of derived class.
+//the argument is the instance of a derived class.
 //
 //This is the explanation David Abrahams gave:
 //  Naturally; there is no instance of smart_ptr_t<base_i> anywhere in the

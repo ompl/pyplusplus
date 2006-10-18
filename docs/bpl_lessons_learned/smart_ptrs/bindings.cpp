@@ -82,10 +82,11 @@ BOOST_PYTHON_MODULE( custom_sptr ){
         .def( "get_value", bp::pure_virtual( &base_i::get_value ) );
 
     //Register implicit conversion between smart pointers. Boost.Python library
-    //can not discover relationship between classes.This will allow Boost.Python
-    //to treat right the functions, which expect to get as argument 
-    //smart_ptr_t< base_i > class instance, when smart_ptr_t< derived from base_i > 
-    //class instance is passed.
+    //can not discover relationship between classes. You have to tell about the 
+    //relationship to it. This will allow Boost.Python to treat right, the 
+    //functions, which expect to get as argument smart_ptr_t< base_i > class 
+    //instance, when smart_ptr_t< derived from base_i > class instance is passed.
+    //
     //For more information about implicitly_convertible see the documentation:
     //http://boost.org/libs/python/doc/v2/implicit.html .
     bp::implicitly_convertible< smart_ptr_t< base_wrapper_t >, smart_ptr_t< base_i > >();
