@@ -42,29 +42,29 @@ Version 0.8.2
      argument ``create_castinig_constructor`` was removed and deprecation warning
      was introduced.
 
-2. Performance improvments. In some cases you can get x10 performance boost.
-   Many thanks to Allen Bierbaum! This was achieved by saving and reusing results
-   of different `pygccxml`_ algorithms and type traits functions.
+2. Performance improvements. In some cases you can get x10 performance boost.
+   Many thanks to Allen Bierbaum! Saving and reusing results of different 
+   `pygccxml`_ algorithms and type traits functions achieved this.
 
-3. Convinience API for registering exception translator was introduced.
+3. Convenience API for registering exception translator was introduced.
 
 4. `Py++`_ can generate code that uses ``BOOST_PYTHON_FUNCTION_OVERLOADS`` and
    ``BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS`` macros.
 
 5. Treatment to previously generated and no more in-use files was added. By
    default `Py++`_ will delete these files, but of course you can redefine this
-   behaviour.
+   behavior.
 
 6. Generated code changes:
 
    * ``default_call_policies`` should not be generated any more.
 
    * For functions that have ``return_value_policy< return_opaque_pointer >``
-     call policy, `Py++`_ will automaticly generate ``BOOST_PYTHON_OPAQUE_SPECIALIZED_TYPE_ID``
+     call policy, `Py++`_ will automatically generate ``BOOST_PYTHON_OPAQUE_SPECIALIZED_TYPE_ID``
      macro. Thank you very much for Gottfried Ganssauge for this idea.
 
 7. Support for Boost.Python properties was introduced. `Py++`_ implements small
-   algorithm, that will automaticly discover properties, base on naming conventions.
+   algorithm, that will automatically discover properties, base on naming conventions.
 
 8. ``decl_wrappers.class_t`` has new function: ``is_wrapper_needed``. This
    function explains why `Py++`_ creates class wrapper for exposed class.
