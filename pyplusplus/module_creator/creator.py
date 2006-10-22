@@ -416,7 +416,7 @@ class creator_t( declarations.decl_visitor_t ):
         @returns: Returns the root of the code creators tree
         @rtype: L{module_t<code_creators.module_t>}
         """
-        if not decl_headers:
+        if decl_headers is None:
             self._create_includes()
         else:
             for h in decl_headers:
