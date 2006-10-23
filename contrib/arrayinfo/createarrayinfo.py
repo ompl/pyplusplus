@@ -122,7 +122,7 @@ def parseHeader(filename, cpp="cpp", cppargs="", output=sys.stdout):
     # Run the file through the preprocessor...
     filename = os.path.abspath(filename)
     print >>sys.stderr, "Parsing",filename
-    cmd = "%s %s %s >_tmp.h"%(cpp, cppargs, filename)
+    cmd = '%s %s "%s" >_tmp.h'%(cpp, cppargs, filename.replace(" ", "\\ "))
     print >>sys.stderr, cmd
     os.system(cmd)
 

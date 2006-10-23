@@ -4,6 +4,8 @@
 # Author: Matthias Baas (baas@ira.uka.de)
 ######################################################################
 
+import os.path
+
 # ArrayInfo
 class ArrayInfo:
     """Reads the information that was created by createarrayinfo.py.
@@ -58,7 +60,7 @@ class ArrayInfo:
         array size is not known, otherwise the size of the array is
         returned.
         """
-        filename = decl.location.file_name
+        filename = os.path.normpath(decl.location.file_name)
         line = decl.location.line
         funcname = decl.name
         args = self.funcargs.get((filename, line, funcname))

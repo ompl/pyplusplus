@@ -10,7 +10,7 @@ equivalent Python function with the only difference that it scans
 C/C++ source code.
 """
 
-import re
+import re, os.path
 
 WHITESPACE = 0
 NAME       = 1
@@ -21,7 +21,7 @@ OPERATOR   = 5
 CHARACTER  = 6
 
 # tokenize
-def tokenize(readline, tokeater):
+def tokenize(readline, tokeater, preprocessed=True):
     """Reads a C/C++ input stream and creates tokens.
 
     The first parameter, readline, must be a callable object which
@@ -40,7 +40,8 @@ def tokenize(readline, tokeater):
     be the actual filename if you provide a preprocessed file stream
     as input (so you should first run cpp on any source code). The
     tokenizer actually expects preprocessed data as it doesn't handle
-    comments.
+    comments. If preprocessed is False, any preprocessor directive is
+    also considered to be a token.
     """
     
     regs =  ( (WHITESPACE, re.compile(r"[ \t]+")),
@@ -50,6 +51,8 @@ def tokenize(readline, tokeater):
               (OPERATOR,   re.compile(r"->|::|\+\+|--|->\*|\.\*|<<|>>|<=|>=|==|!=|&&|\|\||\+=|-=|\*=|/=|%=|&=|\^=|\|=|<<=|>>=|\(|\)|\[|\]|\.|\+|-|!|~|\*|/|&|\^|%|<|>|\?|:|=")),
               (NEWLINE,    re.compile(r"\n"))
             )
+
+    refilename = re.compile(r'\"[^\"]*\"')
 
     linenr   = 0
     filename = ""
@@ -65,11 +68,16 @@ def tokenize(readline, tokeater):
         scolbase = 0
 
         # Process preprocessor lines...
-        if line[0]=="#":
+        if preprocessed and line[0]=="#":
             try:
-                f = line.strip().split(" ")
+                line0 = line.strip()
+                f = line0.split(" ")
                 linenr = int(f[1])-1
-                filename = f[2][1:-1]
+                m = refilename.search(line0)
+                if m==None:
+                    filename = os.path.normpath(f[2][1:-1])
+                else:
+                    filename = line0[m.start()+1:m.end()-1]
             except:
                 pass
             continue
