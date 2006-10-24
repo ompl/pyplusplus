@@ -7,9 +7,8 @@ import os
 import sys
 import unittest
 import fundamental_tester_base
-from pyplusplus.function_transformers.transformers import *
-from pyplusplus.decl_wrappers import *
-
+from pyplusplus import function_transformers as ft
+from pyplusplus.module_builder import call_policies
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'function_transformations'
 
@@ -21,20 +20,21 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def customize( self, mb ):
         image = mb.class_( "image_t" )
-        image.member_function( "get_size" ).function_transformers.extend([output_t(1), output_t(2)])
-        image.member_function( "get_one_value" ).function_transformers.extend([output_t(1)])
-        image.member_function( "get_size2" ).function_transformers.extend([output_t(1), output_t(2)])
-        image.member_function( "input_arg" ).function_transformers.extend([input_t(1)])
-        image.member_function( "fixed_input_array" ).function_transformers.extend([input_array_t(1,3)])
-        image.member_function( "fixed_output_array" ).function_transformers.extend([output_array_t(1,3)])
-        mb.free_function("get_cpp_instance").call_policies = return_value_policy(reference_existing_object)
+        image.member_function( "get_size" ).add_transformation( ft.output(1), ft.output(2) )
+        image.member_function( "get_one_value" ).add_transformation( ft.output(1) )
+        image.member_function( "get_size2" ).add_transformation( ft.output(1), ft.output(2) )
+        image.member_function( "input_arg" ).add_transformation( ft.input(1) )
+        image.member_function( "fixed_input_array" ).add_transformation( ft.input_array(1,3) )
+        image.member_function( "fixed_output_array" ).add_transformation( ft.output_array(1,3) )
+        mb.free_function("get_cpp_instance").call_policies \
+            = call_policies.return_value_policy(call_policies.reference_existing_object)
         mb.variable( "cpp_instance" ).exclude()
 
         cls = mb.class_("no_virtual_members_t")
-        cls.member_function("member").function_transformers.append(output_t(1))
+        cls.member_function("member").add_transformation( ft.output(1) )
 
         cls = mb.class_("ft_private_destructor_t")
-        cls.member_function("get_value").function_transformers.append(output_t(1))
+        cls.member_function("get_value").add_transformation( ft.output(1) )
 
         mb.decls(lambda decl: decl.name[0]=="_").exclude()
 
