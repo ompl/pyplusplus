@@ -16,11 +16,12 @@ The following policies are available:
  - L{output_array_t}
 """
 import os
+import transformer
 from pygccxml import declarations
 from pyplusplus import code_repository
 
 # output_t
-class output_t:
+class output_t( transformer.transformer_t ):
     """Handles a single output variable.
 
     The specified variable is removed from the argument list and is turned
@@ -30,6 +31,7 @@ class output_t:
     """
 
     def __init__(self, idx):
+        transformer.transformer_t.__init__( self )
         """Constructor.
 
         The specified argument must be a reference or a pointer.
@@ -78,7 +80,7 @@ class output_t:
 
 
 # input_t
-class input_t:
+class input_t(transformer.transformer_t):
     """Handles a single input variable.
 
     The reference on the specified variable is removed.
@@ -94,6 +96,7 @@ class input_t:
         @param idx: Index of the argument that is an output value (the first arg has index 1).
         @type idx: int
         """
+        transformer.transformer_t.__init__( self )
         self.idx = idx
 
     def __str__(self):
@@ -115,7 +118,7 @@ class input_t:
         sm.insert_arg(self.idx, noref_arg, arg.name)
 
 # inout_t
-class inout_t:
+class inout_t(transformer.transformer_t):
     """Handles a single input/output variable.
 
     void foo(int& v) -> v = foo(v)
@@ -129,6 +132,7 @@ class inout_t:
         @param idx: Index of the argument that is an in/out value (the first arg has index 1).
         @type idx: int
         """
+        transformer.transformer_t.__init__( self )
         self.idx = idx
         self.local_var = "<not initialized>"
 
@@ -175,7 +179,7 @@ class inout_t:
 
 
 # input_array_t
-class input_array_t:
+class input_array_t(transformer.transformer_t):
     """Handles an input array with fixed size.
 
     void setVec3(double* v) ->  setVec3(object v)
@@ -194,6 +198,7 @@ class input_array_t:
         @param size: The fixed size of the input array
         @type size: int
         """
+        transformer.transformer_t.__init__( self )
         self.idx = idx
         self.size = size
 
@@ -267,7 +272,7 @@ class input_array_t:
 
 
 # output_array_t
-class output_array_t:
+class output_array_t(transformer.transformer_t):
     """Handles an output array of a fixed size.
 
     void getVec3(double* v) -> v = getVec3()
@@ -285,7 +290,7 @@ class output_array_t:
         @param size: The fixed size of the output array
         @type size: int
         """
-
+        transformer.transformer_t.__init__( self )
         self.idx = idx
         self.size = size
 
@@ -355,3 +360,4 @@ class output_array_t:
                 , 'ivar' : self.virtual_ivar
                 , 'array_name' : self.argname
                }
+    
