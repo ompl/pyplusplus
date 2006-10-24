@@ -20,9 +20,11 @@ def find_out_mem_fun_creator_classes( decl ):
     maker_cls = None
     fwrapper_cls = None
     access_level = decl.parent.find_out_member_access_type( decl )
+    if len( decl.transformations ) not in ( 0, 1 ):
+        raise RuntimeError( "Right now Py++ does not support multiple transformation applied on a single function." )
     if access_level == ACCESS_TYPES.PUBLIC:
         if decl.virtuality == VIRTUALITY_TYPES.NOT_VIRTUAL:
-            if decl.function_transformers:
+            if decl.transformations:
                 maker_cls = code_creators.mem_fun_transformed_t
                 fwrapper_cls = code_creators.mem_fun_transformed_wrapper_t
             else:
@@ -31,7 +33,7 @@ def find_out_mem_fun_creator_classes( decl ):
             fwrapper_cls = code_creators.mem_fun_pv_wrapper_t
             maker_cls = code_creators.mem_fun_pv_t
         else:
-            if decl.function_transformers:
+            if decl.transformations:
                 fwrapper_cls = code_creators.mem_fun_v_transformed_wrapper_t
                 maker_cls = code_creators.mem_fun_v_transformed_t
             else:

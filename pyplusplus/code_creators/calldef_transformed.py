@@ -66,7 +66,8 @@ class mem_fun_transformed_wrapper_t( calldef_wrapper_t ):
         calldef_wrapper_t.__init__( self, function=function )
 
         # Create the substitution manager
-        sm = function_transformers.substitution_manager_t(function, transformers=function.function_transformers)
+        sm = function_transformers.substitution_manager_t( function
+                                                           , transformers=function.transformations[0].transformers)
         sm.init_funcs()
         self._subst_manager = sm
 
@@ -251,7 +252,9 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
         calldef_wrapper_t.__init__( self, function=function )
 
         # Create the substitution manager
-        sm = function_transformers.substitution_manager_t(function, transformers=function.function_transformers)
+        sm = function_transformers.substitution_manager_t(function
+                                                          , transformers=function.transformations[0].transformers )
+        
         sm.init_funcs()
         self._subst_manager = sm
 

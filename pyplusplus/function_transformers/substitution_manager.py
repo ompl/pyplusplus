@@ -11,7 +11,6 @@
 from pygccxml import declarations
 from code_manager import code_manager_t, wrapper_code_manager_t
 from transformer import transformer_t
-from pyplusplus import decl_wrappers
 
 # substitution_manager_t
 class substitution_manager_t:
@@ -521,6 +520,8 @@ class substitution_manager_t:
         @rtype: str
         """
         arg_type = declarations.remove_alias( arg.type )
+        #prevent recursive import
+        from pyplusplus import decl_wrappers
         if decl_wrappers.python_traits.is_immutable( arg_type ):
             return arg.name
         elif declarations.is_reference( arg_type ):

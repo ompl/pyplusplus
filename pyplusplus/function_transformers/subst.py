@@ -140,4 +140,3 @@ class subst_t:
             return ""
         return "\n".join(map(lambda s: ((n*" ")+s).rstrip(), code.split("\n")))
 
-

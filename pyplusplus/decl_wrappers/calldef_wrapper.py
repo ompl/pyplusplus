@@ -8,6 +8,7 @@
 import user_text
 import decl_wrapper
 from pygccxml import declarations
+from pyplusplus import function_transformers as ft
 
 class calldef_t(decl_wrapper.decl_wrapper_t):
     """base class for all decl_wrappers callable objects classes."""
@@ -28,7 +29,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         self._use_default_arguments = True
         self._create_with_signature = False
         self._overridable = None
-        self._function_transformers = None
+        self._transformations = None
 
     def get_call_policies(self):
         return self._call_policies
@@ -78,16 +79,6 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         else:
             return False
 
-    #def _finalize_impl( self, error_behavior ):
-        #if not isinstance( self, declarations.member_calldef_t ):
-            #pass
-        #elif self.virtuality == declarations.VIRTUALITY_TYPES.PURE_VIRTUAL:
-            #raise RuntimeError( "In order to expose pure virtual function, you should allow to Py++ to create wrapper." )
-        #elif self.access_type == declarations.ACCESS_TYPES.PROTECTED:
-            #self.ignore = True
-        #else:
-            #pass
-
     def get_overridable( self ):
         """Check if the method can be overridden."""
         if None is self._overridable:
@@ -115,27 +106,24 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
     overridable = property( get_overridable, set_overridable
                             , doc = get_overridable.__doc__ )
 
-
-    def _get_function_transformers(self):
+    @property
+    def transformations(self):
         """Get method for property 'function_transformers'.
 
         Returns a reference to the internal list (which may be modified).
         """
-        if None is self._function_transformers:
+        if None is self._transformations:
             #TODO: for trivial cases get_size( int&, int& ) Py++ should guess
             #function transformers
-            self._function_transformers = []
-        return self._function_transformers
+            self._transformations = []
+        return self._transformations
 
-    def _set_function_transformers(self, function_transformers):
-        """Set method for property 'function_transformers'."""
-        self._function_transformers = function_transformers
+    def add_transformation(self, *args):
+        """Set method for property 'function_transformers'.
 
-    function_transformers = property( _get_function_transformers, _set_function_transformers,
-           doc = """A list of function transformer objects that should be applied to the generated C++ code (default: []).
-           The returned list is the internal list (not a copy) which may be modified.
-           @type: list""")
-
+        args is a list of transformers
+        """
+        self.transformations.append( ft.function_transformation_t( args ) )
 
     def _exportable_impl_derived( self ):
         return ''
