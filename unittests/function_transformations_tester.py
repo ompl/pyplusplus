@@ -7,7 +7,7 @@ import os
 import sys
 import unittest
 import fundamental_tester_base
-from pyplusplus.function_transformers.arg_policies import *
+from pyplusplus.function_transformers.transformers import *
 from pyplusplus.decl_wrappers import *
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):

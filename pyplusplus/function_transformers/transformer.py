@@ -5,15 +5,14 @@
 #
 # Initial author: Matthias Baas
 
-"""This module contains the class L{function_transformer_t}.
+"""This module contains the class L{transformer_t}.
 """
 
 import sys, os.path, copy, re, types
 from pygccxml import declarations, parser
 
 
-# function_transformer_t
-class function_transformer_t:
+class transformer_t:
     """Base class for a function transformer.
 
     This class specifies the interface that a user written transformer
@@ -106,4 +105,3 @@ class function_transformer_t:
 
     def virtual_cleanup(self, sm):
         pass
-

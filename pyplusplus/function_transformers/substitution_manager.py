@@ -10,7 +10,7 @@
 
 from pygccxml import declarations
 from code_manager import code_manager_t, wrapper_code_manager_t
-from function_transformer import function_transformer_t
+from transformer import transformer_t
 from pyplusplus import decl_wrappers
 
 # substitution_manager_t
@@ -174,7 +174,7 @@ class substitution_manager_t:
         @param wrapper_class: The name of the class the generated function should belong to (or None if the generated function should be a free function)
         @type wrapper_class: str
         @param transformers: Function transformer objects
-        @type transformers: list of function_transformer_t        
+        @type transformers: list of transformer_t
         """
 
         # Code manager for the virtual function
@@ -540,7 +540,7 @@ class substitution_manager_t:
 
 
 # return_virtual_result_t
-class return_virtual_result_t(function_transformer_t):
+class return_virtual_result_t(transformer_t):
     """Extract and return the result value of the virtual function.
 
     This is an internal code block object that is automatically appended
@@ -548,7 +548,7 @@ class return_virtual_result_t(function_transformer_t):
     """
 
     def __init__(self):
-        function_transformer_t.__init__(self)
+        transformer_t.__init__(self)
         self.result_var = "<not initialized>"
 
     def __str__(self):
@@ -591,7 +591,7 @@ class return_virtual_result_t(function_transformer_t):
 if __name__=="__main__":
     import pyplusplus
     from pygccxml import parser
-    from arg_policies import Output
+    from transformers import Output
     cpp = """
     class Spam
     {

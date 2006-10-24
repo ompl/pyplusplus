@@ -69,11 +69,11 @@ PRIVATE = ACCESS_TYPES.PRIVATE
 
 from decltypes import *
 #from argpolicy import *
-from pyplusplus.function_transformers.arg_policies import output_t as Output
-from pyplusplus.function_transformers.arg_policies import input_t as Input
-from pyplusplus.function_transformers.arg_policies import inout_t as InOut
-from pyplusplus.function_transformers.arg_policies import input_array_t as InputArray
-from pyplusplus.function_transformers.arg_policies import output_array_t as OutputArray
+from pyplusplus.function_transformers.transformers import output_t as Output
+from pyplusplus.function_transformers.transformers import input_t as Input
+from pyplusplus.function_transformers.transformers import inout_t as InOut
+from pyplusplus.function_transformers.transformers import input_array_t as InputArray
+from pyplusplus.function_transformers.transformers import output_array_t as OutputArray
 
 from modulebuilder import ModuleBuilder
 
