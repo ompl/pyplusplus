@@ -8,6 +8,7 @@
 """This module contains the L{substitution_manager_t} class.
 """
 
+import os
 from pygccxml import declarations
 from code_manager import code_manager_t, wrapper_code_manager_t
 from transformer import transformer_t
@@ -290,47 +291,30 @@ class substitution_manager_t:
 
         self._funcs_initialized = True
 
-        # The default method which is used when a particular method from
-        # the code_base_t interface is not implemented
-        defmeth = lambda x: None
+        block_sep = os.linesep * 2
         # Create the wrapper function pre-call block...
-        src = map(lambda cb: getattr(cb, "wrapper_pre_call", defmeth)(self), transformers)
-        src = filter(lambda x: x!=None, src)
-        precall = "\n\n".join(src)
-        self.wrapper_func.PRE_CALL = precall
+        tmp = filter(None, map(lambda cb: cb.wrapper_pre_call(self), transformers) )        
+        self.wrapper_func.PRE_CALL = block_sep.join( tmp )
 
         # Create the wrapper function post-call block...
-        src = map(lambda cb: getattr(cb, "wrapper_post_call", defmeth)(self), transformers)
-        src = filter(lambda x: x!=None, src)
-        src.reverse()
-        postcall = "\n\n".join(src)
-        self.wrapper_func.POST_CALL = postcall
+        tmp = filter(None, map(lambda cb: cb.wrapper_post_call(self), transformers) )        
+        self.wrapper_func.POST_CALL = block_sep.join( tmp )
 
         # Create the wrapper function cleanup block...
-        src = map(lambda cb: getattr(cb, "wrapper_cleanup", defmeth)(self), transformers)
-        src = filter(lambda x: x!=None, src)
-        cleanup = "\n\n".join(src)
-        self.wrapper_func.CLEANUP = cleanup
+        tmp = filter(None, map(lambda cb: cb.wrapper_cleanup(self), transformers) )        
+        self.wrapper_func.CLEANUP = block_sep.join( tmp )
 
         # Create the virtual function pre-call block...
-        src = map(lambda cb: getattr(cb, "virtual_pre_call", defmeth)(self), transformers)
-        src = filter(lambda x: x!=None, src)
-        precall = "\n\n".join(src)
-        self.virtual_func.PRE_CALL = precall
+        tmp = filter(None, map(lambda cb: cb.virtual_pre_call(self), transformers) )        
+        self.virtual_func.PRE_CALL = block_sep.join( tmp )
 
         # Create the virtual function post-call block...
-        src = map(lambda cb: getattr(cb, "virtual_post_call", defmeth)(self), transformers)
-        src = filter(lambda x: x!=None, src)
-        src.reverse()
-        postcall = "\n\n".join(src)
-        self.virtual_func.POST_CALL = postcall
-
+        tmp = filter(None, map(lambda cb: cb.virtual_post_call(self), transformers) )        
+        self.virtual_func.POST_CALL = block_sep.join( tmp )
+        
         # Create the virtual function cleanup block...
-        src = map(lambda cb: getattr(cb, "virtual_cleanup", defmeth)(self), transformers)
-        src = filter(lambda x: x!=None, src)
-        cleanup = "\n\n".join(src)
-        self.virtual_func.CLEANUP = cleanup
-
+        tmp = filter(None, map(lambda cb: cb.virtual_cleanup(self), transformers) )        
+        self.virtual_func.CLEANUP = block_sep.join( tmp )
 
     # remove_arg
     def remove_arg(self, idx):
