@@ -37,6 +37,7 @@ INDEXING_SUITE_2_CONTAINERS = {
     , 'deque<' : "boost/python/suite/indexing/deque.hpp"
     , 'list<' : "boost/python/suite/indexing/list.hpp"
     , 'map<' : "boost/python/suite/indexing/map.hpp"
+    , 'multimap<' : "boost/python/suite/indexing/multimap.hpp"
     , 'hash_map<' : "boost/python/suite/indexing/map.hpp"
     , 'set<' : "boost/python/suite/indexing/set.hpp"
     , 'hash_set<' : "boost/python/suite/indexing/set.hpp"
@@ -52,6 +53,10 @@ DO_NOT_REPORT_MSGS = [
     , 'Py++, by default, does not expose compiler generated declarations.'
     , 'Py++ can not expose private class.'
     , 'Py++ will generate class wrapper - class contains definition of virtual or pure virtual member function'
+    , "Py++ doesn't expose private or protected member variables."
+    , "Py++ doesn't export private not virtual functions."
+    , "Py++ doesn't export private constructor."
+    , "Py++ doesn't export private operators."
 ]
 
 class creator_t( declarations.decl_visitor_t ):

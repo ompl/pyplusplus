@@ -197,7 +197,11 @@ class member_function_t( declarations.member_function_t, calldef_t ):
                              , doc="boolean, if True, will use BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS macro to expose declarations" \
                                   +"Default value is False.")
 
-
+    def _exportable_impl_derived(self):
+        if self.access_type == declarations.ACCESS_TYPES.PRIVATE \
+           and self.virtuality == declarations.VIRTUALITY_TYPES.NOT_VIRTUAL:
+            return "Py++ doesn't export private not virtual functions."
+        return ''
 class constructor_t( declarations.constructor_t, calldef_t ):
     """defines a set of properties, that will instruct Py++ how to expose the constructor"""
     def __init__(self, *arguments, **keywords):
@@ -216,6 +220,8 @@ class constructor_t( declarations.constructor_t, calldef_t ):
     def _exportable_impl_derived( self ):
         if self.is_artificial:
             return 'Py++ does not exports compiler generated constructors'
+        if self.access_type == declarations.ACCESS_TYPES.PRIVATE:
+            return "Py++ doesn't export private constructor."        
         return ''
 
     def does_define_implicit_conversion( self ):
@@ -304,6 +310,9 @@ class member_operator_t( declarations.member_operator_t, calldef_t ):
                       , doc="Gives right alias for operator()( __call__ ) and operator[]( __getitem__ )" )
 
     def _exportable_impl_derived( self ):
+        if self.access_type == declarations.ACCESS_TYPES.PRIVATE \
+           and self.virtuality == declarations.VIRTUALITY_TYPES.NOT_VIRTUAL:
+            return "Py++ doesn't export private operators."        
         return operators_helper.exportable( self )
 
 

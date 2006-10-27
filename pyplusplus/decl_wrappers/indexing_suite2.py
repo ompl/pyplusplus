@@ -62,7 +62,14 @@ class indexing_suite2_t( object ):
         self._disabled_methods = set()
         self._disabled_groups = set()
         self._default_applied = False
+        self._use_container_suite = False
 
+    def get_use_container_suite( self ):
+        return self._use_container_suite
+    def set_use_container_suite( self, value ):
+        self._use_container_suite = value
+    use_container_suite = property( get_use_container_suite, set_use_container_suite )
+    
     def _get_container_class( self ):
         return self.__container_class
     container_class = property( _get_container_class

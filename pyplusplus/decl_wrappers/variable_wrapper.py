@@ -65,4 +65,7 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
             cls = declarations.class_traits.get_declaration( type_ )
             if not cls.name:
                 return "Py++ can not expose variables of with unnamed type."
+        if isinstance( self.parent, declarations.class_t ):
+            if self.access_type != declarations.ACCESS_TYPES.PUBLIC:
+                return "Py++ doesn't expose private or protected member variables."
         return ''

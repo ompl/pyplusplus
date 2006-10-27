@@ -91,7 +91,11 @@ class indexing_suite2_t( registration_based.registration_based_t
             answer.append( '%s.def( ' % self.parent.class_var_name)
         else:
             answer.append( 'def( ' )
-        answer.append( algorithm.create_identifier(self, "::boost::python::indexing::container_suite" ) )
+        bpi = algorithm.create_identifier(self, "::boost::python::indexing" )
+        if self.declaration.indexing_suite.use_container_suite:
+            answer.append( bpi + '::container_suite' )
+        else:
+            answer.append( bpi + '::' + self.declaration.name.split( '<' )[0] + '_suite' )
         answer.append( '< ' )
         answer.append( self.decl_identifier )
         if self.does_user_disable_methods():
