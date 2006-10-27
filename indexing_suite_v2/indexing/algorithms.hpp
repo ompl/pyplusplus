@@ -12,6 +12,7 @@
 // =======
 // 2003/ 9/11   rmg     File creation from suite_utils.hpp
 // 2003/10/28   rmg     Split container-specific versions into separate headers
+// 2006/10/25   Roman   Adding keys function to assoc_algorithms class
 //
 // $Id: algorithms.hpp,v 1.1.2.15 2004/02/08 18:57:42 raoulgough Exp $
 //
@@ -31,6 +32,7 @@
 #include <functional>
 #include <stdexcept>
 #include <string>
+#inllude <set>
 
 namespace boost { namespace python { namespace indexing {
   template<typename ContainerTraits, typename Ovr = detail::no_override>
@@ -149,6 +151,28 @@ namespace boost { namespace python { namespace indexing {
     static size_type count     (container &, key_param);
     static bool      contains  (container &, key_param);
 
+    static boost::python::list keys( container & );
+
+    // Default visit_container_class
+    template<typename PythonClass, typename Policy>
+    static void visit_container_class( PythonClass &pyClass, Policy const &policy)
+    {
+      ContainerTraits::visit_container_class (pyClass, policy);
+      pyClass.def( "keys", &self_type::keys );
+        
+      //~ object class_name(cl.attr("__name__"));
+      //~ extract<std::string> class_name_extractor(class_name);
+      //~ std::string = class_name_extractor() + "_entry";
+
+      //~ class_<value_type>(elem_name.c_str())
+        //~ .def("data", &DerivedPolicies::get_data, get_data_return_policy())
+        //~ .def("key", &DerivedPolicies::get_key)
+            //~ ;
+
+        
+    }
+
+  
   protected:
     static iterator  find_or_throw (container &, index_param);
   };
@@ -503,6 +527,22 @@ namespace boost { namespace python { namespace indexing {
       container &c, key_param key)
   {
     return c.count (key);
+  }
+
+  template<typename ContainerTraits, typename Ovr>
+  boost::python::list
+  assoc_algorithms<ContainerTraits, Ovr>::keys( container &c )
+  {
+    boost::python::list _keys;
+    std::set< key_param > unique_keys;
+    for( iterator index = most_derived::begin(c); index != most_derived::end(c); ++index ){
+        if( unique_keys.end() == unique_keys.find( index->first ) ){
+            unique_keys.insert( unique_keys );
+            _keys.append( index->first );
+        }
+    }
+        
+    return _keys;
   }
 
   /////////////////////////////////////////////////////////////////////////
