@@ -22,6 +22,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , *args)
 
     def customize(self, generator):
+        items = generator.global_ns.typedef( 'items_t' )
+        items = declarations.remove_declarated( items.type )
+        items.alias = "items_t"
         fvector = generator.global_ns.typedef( 'fvector' )
         fvector = declarations.remove_declarated( fvector.type )
         fvector.indexing_suite.disable_method( 'extend' )

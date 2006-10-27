@@ -60,6 +60,12 @@ inline std::string get_first_name( name2value_t const * names ){
     }
 }
 
+
+typedef std::multimap< int, int > multimap_ints_t;
+inline multimap_ints_t create_multimap_ints(){
+    return multimap_ints_t();
+}
+
 }
 
 #endif//__indexing_suites2_to_be_exported_hpp__
