@@ -32,7 +32,7 @@
 #include <functional>
 #include <stdexcept>
 #include <string>
-#inllude <set>
+#include <set>
 
 namespace boost { namespace python { namespace indexing {
   template<typename ContainerTraits, typename Ovr = detail::no_override>
@@ -534,12 +534,15 @@ namespace boost { namespace python { namespace indexing {
   assoc_algorithms<ContainerTraits, Ovr>::keys( container &c )
   {
     boost::python::list _keys;
-    std::set< key_param > unique_keys;
+    //For some reason code with set could not be compiled
+    //std::set< key_param > unique_keys;
     for( iterator index = most_derived::begin(c); index != most_derived::end(c); ++index ){
-        if( unique_keys.end() == unique_keys.find( index->first ) ){
-            unique_keys.insert( unique_keys );
+        //if( unique_keys.end() == unique_keys.find( index->first ) ){
+        //    unique_keys.insert( index->first );
+        if( !_keys.count( index->first ) ){
             _keys.append( index->first );
         }
+        //}
     }
         
     return _keys;
