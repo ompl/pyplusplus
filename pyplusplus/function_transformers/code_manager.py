@@ -358,4 +358,3 @@ class wrapper_code_manager_t(code_manager_t):
 
         # Invoke the inherited method that sets the actual variables
         code_manager_t.init_variables(self)
-

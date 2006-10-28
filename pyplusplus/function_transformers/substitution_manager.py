@@ -176,7 +176,8 @@ class substitution_manager_t:
         @param transformers: Function transformer objects
         @type transformers: list of transformer_t
         """
-
+        #prevent recursive import
+        from pyplusplus import decl_wrappers
         # Code manager for the virtual function
         self.virtual_func = code_manager_t()
         # Code manager for the wrapper function
@@ -202,7 +203,9 @@ class substitution_manager_t:
         self.virtual_func.class_name = wrapper_class
         self.virtual_func.FUNC_NAME = decl.name
         self.virtual_func.CALL_FUNC_NAME = decl.name
-        self.virtual_func.input_params = map(lambda a: self._function_call_arg(a), decl.arguments)
+        self.virtual_func.input_params \
+            = map( lambda arg: decl_wrappers.python_traits.call_traits( arg.type ) % arg.name
+                   , decl.arguments )
 
         self.wrapper_func.arg_list = decl.arguments[:]
         self.wrapper_func.class_name = wrapper_class
@@ -487,41 +490,6 @@ class substitution_manager_t:
                 return parent
             decl = parent
         return None
-
-    # _function_call_arg
-    def _function_call_arg(self, arg):
-        """Return the C++ expression that represents arg in the actual function call.
-
-        This helper method returns a string that contains a C++ expression
-        that references the argument arg. This expression is supposed to
-        be used in the function invocation of which this is one input
-        parameter. The return value is one of three variants:
-
-         - <name>
-         - boost::ref(<name>)
-         - boost::python::ptr(<name>)
-        
-        @rtype: str
-        """
-        arg_type = declarations.remove_alias( arg.type )
-        #prevent recursive import
-        from pyplusplus import decl_wrappers
-        if decl_wrappers.python_traits.is_immutable( arg_type ):
-            return arg.name
-        elif declarations.is_reference( arg_type ):
-            no_ref = declarations.remove_reference( arg_type )
-            if decl_wrappers.python_traits.is_immutable( no_ref ):
-                #pass by value
-                return arg.name
-            else:
-                #pass by ref
-                return 'boost::ref(%s)' % arg.name
-        elif declarations.is_pointer( arg_type ) \
-             and not declarations.is_pointer( arg_type.base ) \
-             and not decl_wrappers.python_traits.is_immutable( arg_type.base ):
-            return 'boost::python::ptr(%s)' % arg.name
-        else:
-            return arg.name
 
 
 # return_virtual_result_t

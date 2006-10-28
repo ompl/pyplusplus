@@ -198,24 +198,8 @@ class calldef_wrapper_t( code_creator.code_creator_t
 
     def function_call_args( self ):
         params = []
-        for index in range( len( self.declaration.arguments ) ):
-            arg_type = declarations.remove_alias( self.declaration.arguments[index].type )
-            if  decl_wrappers.python_traits.is_immutable( arg_type ):
-                params.append( self.argument_name( index ) )
-            elif declarations.is_reference( arg_type ):
-                no_ref = declarations.remove_reference( arg_type )
-                if decl_wrappers.python_traits.is_immutable( no_ref ):
-                    #pass by value
-                    params.append( self.argument_name( index ) )
-                else:
-                    #pass by ref
-                    params.append( 'boost::ref(%s)' % self.argument_name( index ) )
-            elif declarations.is_pointer( arg_type ) \
-                 and not declarations.is_pointer( arg_type.base ) \
-                 and not decl_wrappers.python_traits.is_immutable( arg_type.base ):
-                params.append( 'boost::python::ptr(%s)' % self.argument_name( index ) )
-            else:
-                params.append( self.argument_name( index ) )
+        for index, arg in enumerate( self.declaration.arguments ):
+            params.append( decl_wrappers.python_traits.call_traits( arg.type )  %  self.argument_name( index ) )
         return ', '.join( params )
 
     def wrapped_class_identifier( self ):
