@@ -9,6 +9,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <set>
 
 namespace indexing_suites2 {
 
@@ -64,6 +65,11 @@ inline std::string get_first_name( name2value_t const * names ){
 typedef std::multimap< int, int > multimap_ints_t;
 inline multimap_ints_t create_multimap_ints(){
     return multimap_ints_t();
+}
+
+typedef std::set< std::string > set_strings_t;
+inline set_strings_t create_set_strings(){
+    return set_strings_t();
 }
 
 }

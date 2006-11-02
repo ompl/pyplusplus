@@ -93,8 +93,18 @@ namespace boost { namespace python { namespace indexing {
     static boost::python::list get (container &, index_param);
     // Version to return only the mapped type
 
+    static boost::python::list keys( container & );
+  
     static void      assign     (container &, index_param, value_param);
     static void      insert     (container &, index_param, value_param);
+  
+    template<typename PythonClass, typename Policy>
+    static void visit_container_class( PythonClass &pyClass, Policy const &policy)
+    {
+      ContainerTraits::visit_container_class (pyClass, policy);
+      pyClass.def( "keys", &self_type::keys );        
+    }  
+
   };
 
   template<
@@ -124,6 +134,26 @@ namespace boost { namespace python { namespace indexing {
     return l;
   }
 
+  template<typename ContainerTraits, typename Ovr>
+  boost::python::list
+  multimap_algorithms<ContainerTraits, Ovr>::keys( container &c )
+  {
+    boost::python::list _keys;
+    //For some reason code with set could not be compiled
+    //std::set< key_param > unique_keys;
+    for( iterator index = most_derived::begin(c); index != most_derived::end(c); ++index ){
+        //if( unique_keys.end() == unique_keys.find( index->first ) ){
+        //    unique_keys.insert( index->first );
+        if( !_keys.count( index->first ) ){
+            _keys.append( index->first );
+        }
+        //}
+    }
+        
+    return _keys;
+  }
+  
+  
   /////////////////////////////////////////////////////////////////////////
   // Assign a value at a particular index (map version)
   /////////////////////////////////////////////////////////////////////////

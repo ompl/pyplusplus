@@ -151,25 +151,11 @@ namespace boost { namespace python { namespace indexing {
     static size_type count     (container &, key_param);
     static bool      contains  (container &, key_param);
 
-    static boost::python::list keys( container & );
-
     // Default visit_container_class
     template<typename PythonClass, typename Policy>
     static void visit_container_class( PythonClass &pyClass, Policy const &policy)
     {
       ContainerTraits::visit_container_class (pyClass, policy);
-      pyClass.def( "keys", &self_type::keys );
-        
-      //~ object class_name(cl.attr("__name__"));
-      //~ extract<std::string> class_name_extractor(class_name);
-      //~ std::string = class_name_extractor() + "_entry";
-
-      //~ class_<value_type>(elem_name.c_str())
-        //~ .def("data", &DerivedPolicies::get_data, get_data_return_policy())
-        //~ .def("key", &DerivedPolicies::get_key)
-            //~ ;
-
-        
     }
 
   
@@ -527,25 +513,6 @@ namespace boost { namespace python { namespace indexing {
       container &c, key_param key)
   {
     return c.count (key);
-  }
-
-  template<typename ContainerTraits, typename Ovr>
-  boost::python::list
-  assoc_algorithms<ContainerTraits, Ovr>::keys( container &c )
-  {
-    boost::python::list _keys;
-    //For some reason code with set could not be compiled
-    //std::set< key_param > unique_keys;
-    for( iterator index = most_derived::begin(c); index != most_derived::end(c); ++index ){
-        //if( unique_keys.end() == unique_keys.find( index->first ) ){
-        //    unique_keys.insert( index->first );
-        if( !_keys.count( index->first ) ){
-            _keys.append( index->first );
-        }
-        //}
-    }
-        
-    return _keys;
   }
 
   /////////////////////////////////////////////////////////////////////////

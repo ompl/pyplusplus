@@ -53,7 +53,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         items_ptr = module.items_ptr_t()
         items_ptr.append( item )
         self.failUnless( items_ptr[0].value == 1977 )
-        print 'xx'
+        
+        set_of_strings = module.create_set_strings()
+        set_of_strings.add("s")
+        set_of_strings.add("s1")
+        set_of_strings.add("s")
+        
 def create_suite():
     suite = unittest.TestSuite()    
     suite.addTest( unittest.makeSuite(tester_t))

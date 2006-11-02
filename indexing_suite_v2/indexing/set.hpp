@@ -85,6 +85,14 @@ namespace boost { namespace python { namespace indexing {
     typedef typename Parent::index_param index_param;
 
     static void      insert     (container &, index_param);
+  
+    template<typename PythonClass, typename Policy>
+    static void visit_container_class( PythonClass &pyClass, Policy const &policy)
+    {
+      ContainerTraits::visit_container_class (pyClass, policy);
+      pyClass.def( "add", &self_type::insert );        
+    }  
+
   };
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
@@ -144,13 +152,15 @@ namespace boost { namespace python { namespace indexing {
   set_algorithms<ContainerTraits, Ovr>::insert(
       container &c, index_param ix)
   {
-    if (!c.insert (ix).second)
-      {
-        PyErr_SetString(
-            PyExc_ValueError, "Set already holds value for insertion");
+    c.insert (ix);
+    //~ Python set does not raise exception in this situation
+    //~ if (!c.insert (ix).second)
+      //~ {
+        //~ PyErr_SetString(
+            //~ PyExc_ValueError, "Set already holds value for insertion");
 
-        boost::python::throw_error_already_set ();
-      }
+        //~ boost::python::throw_error_already_set ();
+      //~ }
   }
 } } }
 
