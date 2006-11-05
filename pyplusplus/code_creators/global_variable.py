@@ -12,6 +12,9 @@ import registration_based
 from pygccxml import declarations
 from pyplusplus import code_repository
 
+#TODO: mutable global variable
+#scope.attr( "x" ) = object( ptr( &x ) )
+
 #TODO: if variable is not const, then export it using boost::python::ptr
 class global_variable_base_t( registration_based.registration_based_t
                               , declaration_based.declaration_based_t ):
