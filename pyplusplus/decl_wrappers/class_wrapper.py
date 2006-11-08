@@ -53,6 +53,7 @@ class class_common_details_t( object ):
         self._equality_comparable = None
         self._less_than_comparable = None
         self._isuite_version = 1
+        self._opaque = False
 
     def _get_indexing_suite_version( self ):
         return self._isuite_version
@@ -112,6 +113,17 @@ class class_common_details_t( object ):
     less_than_comparable = property( _get_less_than_comparable, _set_less_than_comparable
                                      , doc="indicates existence of public operator<. " \
                                           +"Default value is calculated, based on information presented in the declarations tree" )
+        
+    def _get_opaque( self ):
+        return self._opaque
+
+    def _set_opaque( self, value ):
+        self._opaque = value
+
+    opaque = property( _get_opaque, _set_opaque
+                      , doc="If True, Py++ will treat return types and arguments T* as opaque types." \
+                            +"Thus it will be able to generate code, that uses " \
+                            +" BOOST_PYTHON_OPAQUE_SPECIALIZED_TYPE_ID macro in a right places." )
 
 #this will only be exported if indexing suite is not None and only when needed
 class class_declaration_t( class_common_details_t

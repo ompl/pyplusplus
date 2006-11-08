@@ -6,6 +6,7 @@
 import types_database
 import creators_wizard
 import class_organizer
+import opaque_types_manager
 import call_policies_resolver
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
@@ -137,7 +138,7 @@ class creator_t( declarations.decl_visitor_t ):
         self.__array_1_registered = set() #(type.decl_string,size)
         self.__free_operators = []
         self.__exposed_free_fun_overloads = set()
-        self.__exposed_opaque_decls = {} #decl : creator
+        self.__opaque_types_manager = opaque_types_manager.manager_t( self.__extmodule )
 
     def _prepare_decls( self, decls, doc_extractor ):
         global DO_NOT_REPORT_MSGS
@@ -227,25 +228,6 @@ class creator_t( declarations.decl_visitor_t ):
         new_ordered.extend( variables )
         return new_ordered #
 
-    def register_opaque_type( self, creator, type_, call_policy ):
-        if not decl_wrappers.is_return_opaque_pointer_policy( call_policy ):
-            return #not our case
-        naked_type = declarations.remove_cv( declarations.remove_pointer( type_ ) )
-        if decl_wrappers.python_traits.is_immutable( naked_type ):
-            return #don't register opaque converter for immutable types.
-        decl = None
-        if declarations.is_class( naked_type ):
-            decl = declarations.class_traits.get_declaration( naked_type )
-        else:#class declaration:
-            decl = declarations.class_declaration_traits.get_declaration( naked_type )
-        opaque_type_registrator = None
-        if id(decl) not in self.__exposed_opaque_decls.keys():
-            opaque_type_registrator = code_creators.opaque_type_registrator_t( decl )
-            self.__exposed_opaque_decls[ id(decl) ] = opaque_type_registrator
-            self.__extmodule.adopt_declaration_creator( opaque_type_registrator )
-        else:
-            opaque_type_registrator = self.__exposed_opaque_decls[ id(decl) ]
-        creator.associated_decl_creators.append(opaque_type_registrator)
 
     def _adopt_free_operator( self, operator ):
         def adopt_operator_impl( operator, found_creators ):
@@ -475,8 +457,7 @@ class creator_t( declarations.decl_visitor_t ):
             else:
                 maker = maker_cls( function=self.curr_decl )
             self.curr_code_creator.adopt_creator( maker )
-
-        self.register_opaque_type( maker, self.curr_decl.return_type, self.curr_decl.call_policies )
+            self.__opaque_types_manager.register_opaque( maker, self.curr_decl )
 
         # Make sure all required headers are included...
         required_headers = getattr(fwrapper, "get_required_headers", lambda : [])()
@@ -544,12 +525,12 @@ class creator_t( declarations.decl_visitor_t ):
            and not declarations.is_reference( self.curr_decl.return_type ):
             maker = code_creators.casting_operator_t( operator=self.curr_decl )
             self.__module_body.adopt_creator( maker )
-            self.register_opaque_type( maker, self.curr_decl.return_type, self.curr_decl.call_policies )
+            self.__opaque_types_manager.register_opaque( maker, self.curr_decl )
         #what to do if class is abstract
         if self.curr_decl.access_type == ACCESS_TYPES.PUBLIC:
             maker = code_creators.casting_member_operator_t( operator=self.curr_decl )
             self.curr_code_creator.adopt_creator( maker )
-            self.register_opaque_type( maker, self.curr_decl.return_type, self.curr_decl.call_policies )
+            self.__opaque_types_manager.register_opaque( maker, self.curr_decl )
 
     def visit_free_function( self ):
         if self.curr_decl in self.__exposed_free_fun_overloads:
@@ -576,7 +557,7 @@ class creator_t( declarations.decl_visitor_t ):
                     overloads_reg = code_creators.free_fun_overloads_t( overloads_cls_creator )
                     self.curr_code_creator.adopt_creator( overloads_reg )
                     overloads_reg.associated_decl_creators.append( overloads_cls_creator )
-                    self.register_opaque_type( overloads_reg, f.return_type, f.call_policies )
+                    self.__opaque_types_manager.register_opaque( overloads_reg, overloads )
                     
                     ctext_t = code_creators.custom_text_t
                     for f in overloads:
@@ -590,7 +571,7 @@ class creator_t( declarations.decl_visitor_t ):
                 self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
             maker = code_creators.free_function_t( function=self.curr_decl )
             self.curr_code_creator.adopt_creator( maker )
-            self.register_opaque_type( maker, self.curr_decl.return_type, self.curr_decl.call_policies )
+            self.__opaque_types_manager.register_opaque( maker, self.curr_decl )
 
             ctext_t = code_creators.custom_text_t
             uc_creators = map( lambda uc: ctext_t( uc.text ), self.curr_decl.declaration_code )
@@ -630,7 +611,7 @@ class creator_t( declarations.decl_visitor_t ):
                 cls_creator.adopt_creator( overloads_reg )
                 overloads_reg.associated_decl_creators.append( overloads_cls_creator )
 
-                self.register_opaque_type( overloads_reg, f.return_type, f.call_policies )
+                self.__opaque_types_manager.register_opaque( overloads_reg, overloads )
         return exposed
 
     def visit_class(self ):
@@ -769,7 +750,7 @@ class creator_t( declarations.decl_visitor_t ):
                     self.curr_decl.setter_call_policies = self.__call_policies_resolver( self.curr_decl, 'set' )
                 wrapper = code_creators.mem_var_ref_wrapper_t( variable=self.curr_decl )
                 maker = code_creators.mem_var_ref_t( variable=self.curr_decl, wrapper=wrapper )
-                self.register_opaque_type( maker, self.curr_decl.type, self.curr_decl.getter_call_policies )
+                self.__opaque_types_manager.register_opaque( maker, self.curr_decl )
             else:
                 maker = code_creators.member_variable_t( variable=self.curr_decl )
             if wrapper:

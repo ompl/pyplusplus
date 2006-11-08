@@ -3,10 +3,13 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import opaque_types_manager
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
 from pyplusplus.decl_wrappers import python_traits
+
+#TODO: add opaque to documentation
 
 class resolver_t( object ):
     def __init__( self ):
@@ -82,6 +85,9 @@ class return_value_policy_resolver_t(resolver_t):
         if declarations.is_same( return_type, self.__const_wchar_pointer ):
             return decl_wrappers.return_value_policy( decl_wrappers.return_by_value )
         
+        if opaque_types_manager.find_out_opaque_decl( return_type, ensure_opaque_decl=True ):
+            return decl_wrappers.return_value_policy( decl_wrappers.return_opaque_pointer )
+            
         return None
         
 class return_internal_reference_resolver_t( resolver_t ):
