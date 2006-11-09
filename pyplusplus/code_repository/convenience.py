@@ -78,6 +78,63 @@ void ensure_uniform_sequence( boost::python::object seq, index_type expected_len
     }
 }
 
+template< class Iterator, class Inserter >
+void copy_container( Iterator begin, Iterator end, Inserter inserter ){
+    for( Iterator index = begin; index != end; ++index )
+        inserter( *index );
+}
+
+template< class Inserter >
+void copy_sequence( boost::python::object const& seq, Inserter inserter ){
+    index_type length = boost::python::len( seq );
+    for( index_type index = 0; index < length; ++index ){
+        inserter( seq[index] );
+    }
+}
+
+struct list_inserter{
+    list_inserter( boost::python::list& py_list )
+    : m_py_list( py_list )
+    {}
+    
+    template< class T >
+    void operator()( T const & value ){
+        m_py_list.append( value );
+    }
+private:
+    boost::python::list& m_py_list;
+};
+
+template < class T >
+struct array_inserter_t{
+    array_inserter_t( T* array, index_type size )
+    : m_array( array )
+      , m_curr_pos( 0 )
+      , m_size( size )
+    {}
+    
+    void operator()( boost::python::object const & item ){
+        if( m_size <= m_curr_pos ){
+            std::stringstream err;
+            err << "Index out of range. Array size is" << m_size << ", "
+                << "current position is" << m_curr_pos << ".";
+            raise_error( PyExc_ValueError, err.str().c_str() );
+        }
+        m_array[ m_curr_pos ] = boost::python::extract< T >( item );
+        m_curr_pos += 1;
+    }
+    
+private:
+    T* m_array;
+    index_type m_curr_pos;
+    const index_type m_size;
+};
+
+template< class T>
+array_inserter_t<T> array_inserter( T* array, index_type size ){
+    return array_inserter_t<T>( array, size );
+}
+
 } /*pyplusplus*/ } /*convenience*/
 
 
