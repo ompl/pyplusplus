@@ -271,8 +271,6 @@ class substitution_manager_t:
         It is not necessary to call this method manually, it is
         automatically called at the time a substitution is requested.
         """
-#        print "Transforming:",self.decl
-#        print "  using transformers:", ", ".join(map(lambda x: str(x), self.transformers))
 
         # Append the default return_virtual_result_t code modifier
         transformers = self.transformers+[return_virtual_result_t()]
@@ -285,9 +283,7 @@ class substitution_manager_t:
         # inside the virtual function.
         if len(self.wrapper_func.result_exprs)>0:
             self.virtual_func.result_type = "boost::python::object"
-#            self.virtual_func.result_var = self.virtual_func.allocate_local("pyresult")
             self.virtual_func.result_var = self.virtual_func.declare_local("pyresult", self.virtual_func.result_type)
-#            self.virtual_func.result_expr = self.virtual_func.result_var
 
         self.wrapper_func.init_variables()
         self.virtual_func.init_variables()
@@ -296,7 +292,7 @@ class substitution_manager_t:
 
         block_sep = os.linesep * 2
         # Create the wrapper function pre-call block...
-        tmp = filter(None, map(lambda cb: cb.wrapper_pre_call(self), transformers) )        
+        tmp = filter(None, map(lambda cb: cb.wrapper_pre_call(self), transformers) )  
         self.wrapper_func.PRE_CALL = block_sep.join( tmp )
 
         # Create the wrapper function post-call block...
@@ -524,11 +520,6 @@ class return_virtual_result_t(transformer_t):
         # value of the C++ function call. If the value exists it is extracted
         # from the Python result tuple, converted to C++ and returned from
         # the virtual function. If it does not exist, do nothing.
-#        try:
-#            resultidx = sm.wrapper_func.result_exprs.index(sm.wrapper_func.result_var)
-#        except ValueError:
-#            return
-
         try:
             resexpr = sm.py_result_expr(self.result_var)
         except ValueError:
@@ -536,45 +527,6 @@ class return_virtual_result_t(transformer_t):
         
         res = "// Extract the C++ return value\n"
         res += "%s = boost::python::extract<%s>(%s);"%(self.result_var, sm.virtual_func.ret_type, resexpr)
-#        res += "%s = boost::python::extract<%s>(%s[%d]);"%(self.result_var, sm.virtual_func.ret_type, sm.virtual_func.result_var, resultidx)
         return res        
 
 
-######################################################################
-if __name__=="__main__":
-    import pyplusplus
-    from pygccxml import parser
-    from transformers import Output
-    cpp = """
-    class Spam
-    {
-      public:
-      int foo(int& w, int* h, int mode=0);
-    };
-    """
-    parser = parser.project_reader_t(parser.config.config_t(),
-                                     decl_factory=pyplusplus.decl_wrappers.dwfactory_t())
-    root = parser.read_string(cpp) 
-    spam = root[0].class_("Spam")
-    foo = spam.member_function("foo")
-
-    wm = substitution_manager_t(foo, transformers=[Output(1), Output(2)], wrapper_class="Spam_wrapper")
-
-    template = '''$RET_TYPE $CLASS_SPEC$FUNC_NAME($ARG_LIST)
-{
-  $DECLARATIONS
-
-  $PRE_CALL
-
-  $RESULT_VAR_ASSIGNMENT$CALL_FUNC_NAME($INPUT_PARAMS);
-
-  $POST_CALL
-
-  $RETURN_STMT
-}
-'''
-    print wm.subst_virtual(template)
-    print wm.subst_wrapper(template)
-    print wm.get_includes()
-    print wm.get_includes("virtual")
-    print wm.get_includes("wrapper")

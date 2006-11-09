@@ -9,10 +9,10 @@
 """
 
 import types
-from subst import subst_t
+import string
 
 # code_manager_t
-class code_manager_t(subst_t):
+class code_manager_t:
     """This class manages pieces of source code for a C++ function.
 
     The class mainly provides the interface for the code blocks to
@@ -51,13 +51,7 @@ class code_manager_t(subst_t):
     """
 
     def __init__(self):
-        """Constructor.
-        """
-        subst_t.__init__(self, blockvars=["DECLARATIONS",
-                                          "PRE_CALL",
-                                          "POST_CALL",
-                                          "EXCEPTION_HANDLER_EXIT"])
-
+        """Constructor."""      
         # The name of the class of which the generated function is a member
         # (pass None or an empty string if the function is a free function)
         self.class_name = None
@@ -97,6 +91,10 @@ class code_manager_t(subst_t):
         # Required header file names
         self._required_headers = []
 
+    def substitute( self, template_code ):
+        tmpl = string.Template(template_code)
+        return tmpl.safe_substitute(self.__dict__)
+        
     # require_header
     def require_header(self, include):
         """Declare an include file that is required for the code to compile.
@@ -342,15 +340,6 @@ class wrapper_code_manager_t(code_manager_t):
             elif len(result_exprs)==1:
                 self.ret_type = "boost::python::object"
                 self.result_expr = "boost::python::object(%s)"%result_exprs[0]
-##                self.result_expr = self.result_exprs[0]
-##                try:
-##                    # Try to determine the type of the result expression
-##                    # (assuming it's just a local variable)
-##                    self.ret_type = self.local_type_str(self.result_expr)
-##                except:
-##                    # if the above fails, return a generic Python object
-##                    self.ret_type = "boost::python::object"
-##                    self.result_expr = "boost::python::object(%s)"%result_exprs[0]
             # More than one output value...
             else:
                 self.ret_type = "boost::python::object"
@@ -358,3 +347,5 @@ class wrapper_code_manager_t(code_manager_t):
 
         # Invoke the inherited method that sets the actual variables
         code_manager_t.init_variables(self)
+
+        

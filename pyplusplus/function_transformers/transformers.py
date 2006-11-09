@@ -205,8 +205,6 @@ class input_array_t(transformer.transformer_t):
         self.argname = None
         self.basetype = None
         self.carray = None
-        self.wrapper_ivar = None
-        self.virtual_ivar = None
         self.pylist = None
 
     def __str__(self):
@@ -234,10 +232,6 @@ class input_array_t(transformer.transformer_t):
 
         # Declare a variable that will hold the C array...
         self.carray = sm.wrapper_func.declare_local("c_"+arg.name, self.basetype, size=self.size)
-        # and an int which is used for the loop
-        self.wrapper_ivar = sm.wrapper_func.declare_local("i", "int", default=0)
-        # and another one in the virtual function
-        self.virtual_ivar = sm.virtual_func.declare_local("i", "int", default=0)
 
         # Replace the input parameter with the C array
         sm.wrapper_func.input_params[self.idx-1] = self.carray
@@ -249,26 +243,25 @@ class input_array_t(transformer.transformer_t):
         """Wrapper function code.
         """
         tmpl = []
-        tmpl.append( 'pyplusplus::convenience::ensure_uniform_sequence< %(type)s >( %(argname)s, %(size)d );' )
-        tmpl.append( 'for(%(ivar)s=0; %(ivar)s<%(size)d; ++%(ivar)s){' )
-        tmpl.append( '   %(array_name)s[ %(ivar)s ] = boost::python::extract< %(type)s >( %(argname)s[%(ivar)s] );' )
-        tmpl.append( '}' )
+        tmpl.append( '%(pypp_con)s::ensure_uniform_sequence< %(type)s >( %(argname)s, %(size)d );' )
+        tmpl.append( '%(pypp_con)s::copy_sequence( %(argname)s, %(pypp_con)s::array_inserter( %(array_name)s, %(size)d ) );' )
         return os.linesep.join( tmpl ) % {
                   'type' : self.basetype
+                , 'pypp_con' : 'pyplusplus::convenience'
                 , 'argname' : self.argname
                 , 'size' : self.size
-                , 'ivar' : self.wrapper_ivar
                 , 'array_name' : self.carray
                }
 
     def virtual_pre_call(self, sm):
-        """Virtual function code.
-        """
-        res = ""
-        res += "// Copy the array '%s' into list '%s'...\n"%(self.argname, self.pylist)
-        res += "for(%s=0; %s<%d; %s++)\n"%(self.virtual_ivar, self.virtual_ivar, self.size, self.virtual_ivar)
-        res += "  %s.append(%s[%s]);"%(self.pylist, self.argname, self.virtual_ivar)
-        return res
+        """Virtual function code."""
+        tmpl = '%(pypp_con)s::copy_container( %(array)s, %(array)s + %(size)d, %(pypp_con)s::list_inserter( %(pylist)s ) );'
+        return tmpl % { 
+              'pypp_con' : 'pyplusplus::convenience'
+            , 'array' : self.argname
+            , 'size' : self.size
+            , 'pylist' : self.pylist
+            }
 
 
 # output_array_t
@@ -323,9 +316,6 @@ class output_array_t(transformer.transformer_t):
         # ...and add it to the result
         sm.wrapper_func.result_exprs.append(arg.name)
 
-        # Declare an int which is used for the loop
-        self.wrapper_ivar = sm.wrapper_func.declare_local("i", "int", default=0)
-
         sm.wrapper_func.input_params[self.idx-1] = self.wrapper_cval
 
         # Virtual:
@@ -333,31 +323,28 @@ class output_array_t(transformer.transformer_t):
         # Declare a variable that will receive the Python list
         self.virtual_pyval = sm.virtual_func.declare_local("py_"+self.argname, "boost::python::object")
 
-        # Declare an int which is used for the loop
-        self.virtual_ivar = sm.virtual_func.declare_local("i", "int", default=0)
-
         # Request the convenience header
         sm.virtual_func.require_header(code_repository.convenience.file_name)
 
 
     def wrapper_post_call(self, sm):
-        res = ""
-        res += "// Copy the sequence '%s' into '%s'...\n"%(self.wrapper_cval, self.wrapper_pyval)
-        res += "for(%s=0; %s<%d; %s++)\n"%(self.wrapper_ivar, self.wrapper_ivar, self.size, self.wrapper_ivar)
-        res += "  %s.append(%s[%s]);"%(self.wrapper_pyval, self.wrapper_cval , self.wrapper_ivar)
-        return res
+        tmpl = '%(pypp_con)s::copy_container( %(array)s, %(array)s + %(size)d, %(pypp_con)s::list_inserter( %(pylist)s ) );'
+        return tmpl % { 
+              'pypp_con' : 'pyplusplus::convenience'
+            , 'array' : self.wrapper_cval
+            , 'size' : self.size
+            , 'pylist' : self.wrapper_pyval
+        }
 
     def virtual_post_call(self, sm):
         tmpl = []
-        tmpl.append( 'pyplusplus::convenience::ensure_uniform_sequence< %(type)s >( %(argname)s, %(size)d );' )
-        tmpl.append( 'for(%(ivar)s=0; %(ivar)s<%(size)d; ++%(ivar)s){' )
-        tmpl.append( '   %(array_name)s[ %(ivar)s ] = boost::python::extract< %(type)s >( %(argname)s[%(ivar)s] );' )
-        tmpl.append( '}' )
+        tmpl.append( '%(pypp_con)s::ensure_uniform_sequence< %(type)s >( %(argname)s, %(size)d );' )
+        tmpl.append( '%(pypp_con)s::copy_sequence( %(argname)s, %(pypp_con)s::array_inserter( %(array_name)s, %(size)d ) );' )
         return os.linesep.join( tmpl ) % {
                   'type' : self.basetype
+                , 'pypp_con' : 'pyplusplus::convenience'
                 , 'argname' : sm.py_result_expr(self.argname)
                 , 'size' : self.size
-                , 'ivar' : self.virtual_ivar
                 , 'array_name' : self.argname
                }
     
