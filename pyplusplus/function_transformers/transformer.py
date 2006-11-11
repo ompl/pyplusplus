@@ -32,6 +32,10 @@ class transformer_t:
         """Returns list of header files that transformer generated code depends on."""
         return []
 
+    def validate( self, function ):
+        """returns error message or None"""
+        raise NotImplementedError()
+
     def init_funcs(self, sm):
         """Wrapper initialization.
 
