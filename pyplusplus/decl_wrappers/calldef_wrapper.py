@@ -118,12 +118,12 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
             self._transformations = []
         return self._transformations
 
-    def add_transformation(self, *args):
+    def add_transformation(self, *args, **keywd):
         """Set method for property 'function_transformers'.
 
         args is a list of transformers
         """
-        self.transformations.append( ft.function_transformation_t( args ) )
+        self.transformations.append( ft.function_transformation_t( args, **keywd ) )
 
     def _exportable_impl_derived( self ):
         return ''

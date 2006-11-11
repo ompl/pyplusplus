@@ -9,11 +9,12 @@
 
 
 class function_transformation_t:   
-    def __init__(self, transformers):
+    def __init__(self, transformers, **keywd):
         """Constructor.
         """
         self.__transformers = list(transformers)
-
+        self.__thread_safe = keywd.get( 'thread_safe', False )
+        
     @property
     def transformers( self ):
         return self.__transformers
@@ -23,3 +24,7 @@ class function_transformation_t:
         map( lambda transformer: headers.extend( transformer.required_headers() )
              , self.transformers )
         return headers
+
+    @property
+    def thread_safe( self ):
+        return self.__thread_safe

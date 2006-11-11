@@ -19,7 +19,7 @@ class code_manager_t:
     manipulate a function and stores the actual substitution variables.
     Each function has its own code manager instance.
 
-    A code block can declare a local variable using L{declare_local()}
+    A code block can declare a local variable using L{declare_variable()}
     and it can manipulate one of the attributes that are used to
     initialize the final variables (see the documentation of the
     instance variables below). The final variables (such as RET_TYPE,
@@ -81,22 +81,15 @@ class code_manager_t:
         # exception handler.
         self.exception_handler_exit = "throw;"
 
-        # Key:Variable name / Value:1
-        self._allocated_vars = {}
         # Key:Variable name / Value:(type,size,default)
         self._declared_vars = {}
-        # A list with variable tuples: (name, type, size, default)
-        self._local_var_list = []
-
-        # Required header file names
-        self._required_headers = []
 
     def substitute( self, template_code ):
         tmpl = string.Template(template_code)
         return tmpl.safe_substitute(self.__dict__)
 
-    # declare_local
-    def declare_local(self, name, type, size=None, default=None):
+    # declare_variable
+    def declare_variable(self, name, type, size=None, default=None):
         """Declare a local variable and return its final name.
 
         @param name: The desired variable name
@@ -110,63 +103,9 @@ class code_manager_t:
         @return: The assigned variable name (which is guaranteed to be unique)
         @rtype: str
         """
-        name = self.allocate_local(name)
-        self._declared_vars[name] = (type,size,default)
-        self._local_var_list.append((name, type, size, default))
-        return name
-
-    # allocate_local
-    def allocate_local(self, name):
-        """Allocate a local variable name and return the final name.
-
-        Allocate a variable name that is unique to the entire
-        function.  The variable will not appear in the DECLARATIONS
-        block. Instead, the caller has to generate the declaration
-        code himself at an appropriate place.
-
-        @param name: The desired variable name
-        @type name: str
-        @return: The assigned variable name (which is guaranteed to be unique)
-        @rtype: str
-        """
         name = self._make_name_unique(name)
-        self._allocated_vars[name] = 1
-        return name    
-
-    # is_defined
-    def is_defined(self, name):
-        """Check if a variable name is already in use.
-
-        The method returns True if name is the name of an argument or of
-        a local variable.
-
-        @rtype: bool
-        """
-        if name in self._allocated_vars:
-            return True
-        if filter(lambda a: a.name==name, self.arg_list):
-            return True
-        return False
-
-    def local_type_str(self, name):
-        """Return the type of a local variable.
-
-        An exception is raised if a variable called name does not exist.
-
-        @return: Returns the type of the specified local variable.
-        @rtype: str
-        """
-        if name not in self._allocated_vars:
-            raise ValueError, 'The type of local variable "%s" is unknown.'%name
-        if name not in self._declared_vars:
-            raise ValueError, 'Local variable "%s" not found.'%name
-
-        type,size,default = self._declared_vars[name]
-        
-        if size==None:
-            return type
-        else:
-            return "*%s"%type
+        self._declared_vars[name] = (type,size,default)
+        return name
 
     def init_variables(self):
         """Initialize the substitution variables.
@@ -202,7 +141,8 @@ class code_manager_t:
 
         # Create the declaration block -> DECLARATIONS
         vardecls = []
-        for varname,type,size,default in self._local_var_list:
+        for varname in self._declared_vars.keys():
+            type,size,default = self._declared_vars[ varname ]
             if default==None:
                 vd = "%s %s"%(type, varname)
             else:
@@ -249,16 +189,13 @@ class code_manager_t:
         @return: A unique name based on the input name
         @rtype: str
         """
-        if not self.is_defined(name):
-            return name
-
         n = 2
+        newname = name
         while 1:
-            newname = "%s_%d"%(name, n)
-            if not self.is_defined(newname):
+            if not self._declared_vars.has_key( newname ):
                 return newname
+            newname = "%s_%d"%(name, n)
             n += 1
-
 
 # wrapper_code_manager_t
 class wrapper_code_manager_t(code_manager_t):

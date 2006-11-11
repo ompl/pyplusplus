@@ -57,7 +57,7 @@ class output_t( transformer.transformer_t ):
             raise ValueError, '%s\nOutput variable %d ("%s") must be a reference or a pointer (got %s)'%(sm.decl, self.idx, arg.name, arg.type)
 
         # Declare a local variable that will receive the output value
-        self.local_var = sm.wrapper_func.declare_local(arg.name, str(reftype.base))
+        self.local_var = sm.wrapper_func.declare_variable(arg.name, str(reftype.base))
         # Append the output to the result tuple
         sm.wrapper_func.result_exprs.append(self.local_var)
 
@@ -220,7 +220,7 @@ class input_array_t(transformer.transformer_t):
 
         # Declare a variable that will hold the Python list
         # (this will be the input of the Python call in the virtual function)
-        self.pylist = sm.virtual_func.declare_local("py_"+arg.name, "boost::python::list")
+        self.pylist = sm.virtual_func.declare_variable("py_"+arg.name, "boost::python::list")
 
         # Replace the removed argument with a Python object.
         newarg = declarations.argument_t(arg.name, declarations.dummy_type_t("boost::python::object"))
@@ -230,7 +230,7 @@ class input_array_t(transformer.transformer_t):
         self.basetype = str(arg.type.base).replace("const", "").strip()
 
         # Declare a variable that will hold the C array...
-        self.carray = sm.wrapper_func.declare_local("c_"+arg.name, self.basetype, size=self.size)
+        self.carray = sm.wrapper_func.declare_variable("c_"+arg.name, self.basetype, size=self.size)
 
         # Replace the input parameter with the C array
         sm.wrapper_func.input_params[self.idx-1] = self.carray
@@ -307,9 +307,9 @@ class output_array_t(transformer.transformer_t):
         # Wrapper:
 
         # Declare a variable that will hold the C array...
-        self.wrapper_cval = sm.wrapper_func.declare_local("c_"+self.argname, self.basetype, size=self.size)
+        self.wrapper_cval = sm.wrapper_func.declare_variable("c_"+self.argname, self.basetype, size=self.size)
         # Declare a Python list which will receive the output...
-        self.wrapper_pyval = sm.wrapper_func.declare_local(self.argname, "boost::python::list")
+        self.wrapper_pyval = sm.wrapper_func.declare_variable(self.argname, "boost::python::list")
         # ...and add it to the result
         sm.wrapper_func.result_exprs.append(arg.name)
 
@@ -318,7 +318,7 @@ class output_array_t(transformer.transformer_t):
         # Virtual:
 
         # Declare a variable that will receive the Python list
-        self.virtual_pyval = sm.virtual_func.declare_local("py_"+self.argname, "boost::python::object")
+        self.virtual_pyval = sm.virtual_func.declare_variable("py_"+self.argname, "boost::python::object")
 
     def wrapper_post_call(self, sm):
         tmpl = '%(pypp_con)s::copy_container( %(array)s, %(array)s + %(size)d, %(pypp_con)s::list_inserter( %(pylist)s ) );'

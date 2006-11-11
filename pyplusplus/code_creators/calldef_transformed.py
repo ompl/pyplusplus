@@ -247,10 +247,11 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
         self._subst_manager = sm
 
         # Stores the name of the variable that holds the override
-        self._override_var = sm.virtual_func.allocate_local(function.alias+"_callable")
+        self._override_var \
+            = sm.virtual_func.declare_variable(function.alias + "_callable", 'boost::python::override')
         # Stores the name of the 'gstate' variable
-        self._gstate_var = sm.virtual_func.allocate_local("gstate")
-
+        self._gstate_var \
+            = sm.virtual_func.declare_variable("gstate", 'pyplusplus::threading ::gil_guard_t' )
 
     def default_name(self):
         """Return the name of the 'default' function.
@@ -339,7 +340,7 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
 
     def create_virtual_body(self):
 
-        thread_safe = getattr(self.declaration, "thread_safe", False)
+        thread_safe = self.declaration.transformations[0].thread_safe
 
         if thread_safe:
             body = """
@@ -415,25 +416,16 @@ else
         # Replace the $-variables
         body = self._subst_manager.subst_virtual(body)
 
-#        template = []
-#        template.append( 'if( %(override)s func_%(alias)s = this->get_override( "%(alias)s" ) )' )
-#        template.append( self.indent('%(return_)sfunc_%(alias)s( %(args)s );') )
-#        template.append( 'else' )
-#        template.append( self.indent('%(return_)s%(wrapped_class)s::%(name)s( %(args)s );') )
-#        template = os.linesep.join( template )
-
         return body % {
-#            'override' : self.override_identifier()
             'override_var' : self._override_var
             , 'gstate_var' : self._gstate_var
             , 'alias' : self.declaration.alias
-#            , 'func_var' : "func_"+self.declaration.alias
             , 'inherited' : self.create_base_body()
         }
 
     def create_default_body(self):
         cls_wrapper_type = self.parent.full_name
-        cls_wrapper = self._subst_manager.wrapper_func.declare_local("cls_wrapper", cls_wrapper_type);
+        cls_wrapper = self._subst_manager.wrapper_func.declare_variable("cls_wrapper", cls_wrapper_type);
         # The name of the 'self' variable (i.e. first argument)
         selfname = self._subst_manager.wrapper_func.arg_list[0].name
 

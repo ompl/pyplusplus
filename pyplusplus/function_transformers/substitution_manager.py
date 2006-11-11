@@ -217,10 +217,8 @@ class substitution_manager_t:
             ret_type = None
         else:
             ret_type = decl.return_type
-#            self.wrapper_func.result_type = str(ret_type)
             self.wrapper_func.result_type = str(declarations.type_traits.remove_reference(ret_type))
-            self.wrapper_func.result_var = self.wrapper_func.declare_local("result", self.wrapper_func.result_type)
-#            self.wrapper_func.result_var = self.wrapper_func.allocate_local("result")
+            self.wrapper_func.result_var = self.wrapper_func.declare_variable("result", self.wrapper_func.result_type)
             self.wrapper_func.result_exprs = [self.wrapper_func.result_var]
 
         self.virtual_func.ret_type = ret_type
@@ -283,7 +281,7 @@ class substitution_manager_t:
         # inside the virtual function.
         if len(self.wrapper_func.result_exprs)>0:
             self.virtual_func.result_type = "boost::python::object"
-            self.virtual_func.result_var = self.virtual_func.declare_local("pyresult", self.virtual_func.result_type)
+            self.virtual_func.result_var = self.virtual_func.declare_variable("pyresult", self.virtual_func.result_type)
 
         self.wrapper_func.init_variables()
         self.virtual_func.init_variables()
@@ -509,7 +507,7 @@ class return_virtual_result_t(transformer_t):
         
         # Declare the local variable that will hold the return value
         # for the virtual function
-        self.result_var = sm.virtual_func.declare_local("result", sm.virtual_func.ret_type)
+        self.result_var = sm.virtual_func.declare_variable("result", sm.virtual_func.ret_type)
         # Replace the result expression if there is still the default
         # result expression (which will not work anyway)
         if sm.virtual_func.result_expr==sm.virtual_func.result_var:
@@ -528,4 +526,3 @@ class return_virtual_result_t(transformer_t):
         res = "// Extract the C++ return value\n"
         res += "%s = boost::python::extract<%s>(%s);"%(self.result_var, sm.virtual_func.ret_type, resexpr)
         return res        
-
