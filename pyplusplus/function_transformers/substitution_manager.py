@@ -193,10 +193,6 @@ class substitution_manager_t:
         
         self.wrapper_class = wrapper_class
 
-        # A list of required include files
-        self._virtual_includes = []
-        self._wrapper_includes = []
-
         # Initialize the code managers...
 
         self.virtual_func.arg_list = decl.arguments[:]
@@ -231,13 +227,13 @@ class substitution_manager_t:
         self._insert_arg_idx_offset = 0
 
         # Check if we're dealing with a member function...
-        clsdecl = self._class_decl(decl)
-        if clsdecl!=None:
+        if isinstance( decl.parent, declarations.class_t ):
             if decl.has_static:
-                self.wrapper_func.CALL_FUNC_NAME = "%s::%s"%(declarations.full_name(clsdecl), self.wrapper_func.CALL_FUNC_NAME)                
+                self.wrapper_func.CALL_FUNC_NAME \
+                    = "%s::%s" % (declarations.full_name(decl.parent), self.wrapper_func.CALL_FUNC_NAME)                
             else:
                 selfname = self.wrapper_func._make_name_unique("self")
-                selfarg = declarations.argument_t(selfname, declarations.dummy_type_t("%s&"%declarations.full_name(clsdecl)))
+                selfarg = declarations.argument_t(selfname, declarations.dummy_type_t("%s&"%declarations.full_name(decl.parent)))
                 self.wrapper_func.arg_list.insert(0, selfarg)
                 self.wrapper_func.CALL_FUNC_NAME = "%s.%s"%(selfname, self.wrapper_func.CALL_FUNC_NAME)
                 self._insert_arg_idx_offset = 1
@@ -253,11 +249,6 @@ class substitution_manager_t:
 
         # Flag that is set after the functions were initialized
         self._funcs_initialized = False
-
-
-    def append_transformer(self, transformer):
-        """not yet implemented"""
-        pass
     
     # init_funcs
     def init_funcs(self):
@@ -474,16 +465,6 @@ class substitution_manager_t:
             self.init_funcs()
         return self.wrapper_func.substitute(template)
 
-    # _class_decl
-    def _class_decl(self, decl):
-        """Return the class declaration that belongs to a member declaration.
-        """
-        while decl.parent!=None:
-            parent = decl.parent
-            if isinstance(parent, declarations.class_t):
-                return parent
-            decl = parent
-        return None
 
 
 # return_virtual_result_t
