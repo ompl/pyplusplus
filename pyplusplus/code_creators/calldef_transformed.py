@@ -71,13 +71,6 @@ class mem_fun_transformed_wrapper_t( calldef_wrapper_t ):
         sm.init_funcs()
         self._subst_manager = sm
 
-#    def is_free_function(self):
-#        """Return True if the generated function is a free function.
-#
-#        @rtype: bool
-#        """
-#        return self.parent==None
-
     def function_type(self):
         """Return the type of the wrapper function.
 
@@ -95,7 +88,6 @@ class mem_fun_transformed_wrapper_t( calldef_wrapper_t ):
         """Return the name of the wrapper function.
 
         This is just the local name without any scope information.
-
         """
         # A list with the individual components of the name
         components = ["_py"]
@@ -117,14 +109,6 @@ class mem_fun_transformed_wrapper_t( calldef_wrapper_t ):
             return self.parent.full_name + '::' + self.wrapper_name()
         else:
             return self.wrapper_name()
-
-    def create_sig_id(self):
-        """Create an ID string that identifies a signature.
-
-        @rtype: str
-        """
-        template = '%s($ARG_LIST_TYPES)'%self.declaration.alias
-        return self._subst_manager.subst_wrapper(template)
 
     def create_declaration(self, name):
         """Create the function header.
@@ -154,9 +138,6 @@ class mem_fun_transformed_wrapper_t( calldef_wrapper_t ):
         return body
 
     def create_function(self):
-#        sig_id = self.create_sig_id()
-        # ...check sig here...
-
         answer = [70*"/"]
         answer.append("// Transformed wrapper function for:")
         answer.append("// %s"%self.declaration)
@@ -460,12 +441,6 @@ $RETURN_STMT
                      "cls_wrapper" : cls_wrapper,
                      "self" : selfname,
                      "base_name" : self.base_name() }
-
-#        function_call = declarations.call_invocation.join( self.declaration.name
-#                                                           , [ self.function_call_args() ] )
-#        body = self.wrapped_class_identifier() + '::' + function_call + ';'
-#        if not declarations.is_void( self.declaration.return_type ):
-#            body = 'return ' + body
         return body
 
     def create_function(self):
@@ -507,3 +482,4 @@ $RETURN_STMT
         self.declaration.arguments = self._subst_manager.wrapper_func.arg_list
 
         return answer
+    
