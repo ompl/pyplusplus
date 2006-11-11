@@ -529,4 +529,3 @@ class return_virtual_result_t(transformer_t):
         res += "%s = boost::python::extract<%s>(%s);"%(self.result_var, sm.virtual_func.ret_type, resexpr)
         return res        
 
-

@@ -202,6 +202,7 @@ class member_function_t( declarations.member_function_t, calldef_t ):
            and self.virtuality == declarations.VIRTUALITY_TYPES.NOT_VIRTUAL:
             return "Py++ doesn't export private not virtual functions."
         return ''
+    
 class constructor_t( declarations.constructor_t, calldef_t ):
     """defines a set of properties, that will instruct Py++ how to expose the constructor"""
     def __init__(self, *arguments, **keywords):

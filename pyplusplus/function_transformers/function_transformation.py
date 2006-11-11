@@ -17,3 +17,9 @@ class function_transformation_t:
     @property
     def transformers( self ):
         return self.__transformers
+
+    def required_headers( self ):
+        headers = []
+        map( lambda transformer: headers.extend( transformer.required_headers() )
+             , self.transformers )
+        return headers

@@ -140,18 +140,13 @@ class mem_fun_transformed_wrapper_t( calldef_wrapper_t ):
         }
 
     def create_body(self):
-
-        body = """
-$DECLARATIONS
-
-$PRE_CALL
-
-$RESULT_VAR_ASSIGNMENT$CALL_FUNC_NAME($INPUT_PARAMS);
-
-$POST_CALL
-
-$RETURN_STMT
-"""
+        body = os.linesep.join([
+            '$DECLARATIONS'
+            , '$PRE_CALL'
+            , '$RESULT_VAR_ASSIGNMENT$CALL_FUNC_NAME($INPUT_PARAMS);'
+            , '$POST_CALL'
+            , '$RETURN_STMT'
+        ])
 
         # Replace the $-variables
         body = self._subst_manager.subst_wrapper(body)
@@ -170,13 +165,6 @@ $RETURN_STMT
         answer.append( self.indent( self.create_body() ) )
         answer.append( '}' )
         return os.linesep.join( answer )
-
-    def get_required_headers(self):
-        """Return a list of required header file names."""
-        res = []
-        res += self._subst_manager.virtual_func.get_required_headers()
-        res += self._subst_manager.wrapper_func.get_required_headers()
-        return res
 
     def _create_impl(self):
 
@@ -510,13 +498,6 @@ $RETURN_STMT
         answer.append( self.indent( self.create_default_body() ) )
         answer.append( '}' )
         return os.linesep.join( answer )
-
-    def get_required_headers(self):
-        """Return a list of required header file names."""
-        res = [code_repository.gil_guard.file_name]
-        res += self._subst_manager.virtual_func.get_required_headers()
-        res += self._subst_manager.wrapper_func.get_required_headers()
-        return res
 
     def _create_impl(self):
 

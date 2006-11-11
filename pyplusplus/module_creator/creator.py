@@ -458,20 +458,20 @@ class creator_t( declarations.decl_visitor_t ):
                 maker = maker_cls( function=self.curr_decl )
             self.curr_code_creator.adopt_creator( maker )
             self.__opaque_types_manager.register_opaque( maker, self.curr_decl )
-
-        # Make sure all required headers are included...
-        required_headers = getattr(fwrapper, "get_required_headers", lambda : [])()
-        for header in required_headers:
-            # Check whether the header is already included
-            included = filter(lambda cc: isinstance(cc, code_creators.include_t) and cc.header==header, self.__extmodule.creators)
-            if not included:
-                self.__extmodule.add_include( header )
-
-            # Check if it is a header from the code repository
-            if header in map(lambda mod: mod.file_name, code_repository.all):
-                # Make Py++ write the header
-                self.__extmodule.add_system_header( header )
-
+        
+        if self.curr_decl.transformations:
+            required_headers = self.curr_decl.transformations[0].required_headers()
+            for header in required_headers:
+                # Check whether the header is already included
+                included = filter( lambda cc: isinstance(cc, code_creators.include_t) and cc.header==header
+                                   , self.__extmodule.creators)
+                if not included:
+                    self.__extmodule.add_include( header )
+    
+                # Check if it is a header from the code repository
+                if header in code_repository.headers:
+                    self.__extmodule.add_system_header( header )
+    
         if self.curr_decl.has_static:
             #static_method should be created only once.
             found = filter( lambda creator: isinstance( creator, code_creators.static_method_t )

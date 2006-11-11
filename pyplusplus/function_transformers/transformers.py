@@ -43,7 +43,7 @@ class output_t( transformer.transformer_t ):
         self.local_var = "<not initialized>"
 
     def __str__(self):
-        return "Output(%d)"%(self.idx)
+        return "output(%d)"%(self.idx)
 
     def init_funcs(self, sm):
         # Remove the specified output argument from the wrapper function
@@ -78,7 +78,6 @@ class output_t( transformer.transformer_t ):
         res += "%s = boost::python::extract<%s>(%s);"%(arg.name, arg.type.base, sm.py_result_expr(self.local_var))
         return res
 
-
 # input_t
 class input_t(transformer.transformer_t):
     """Handles a single input variable.
@@ -100,7 +99,7 @@ class input_t(transformer.transformer_t):
         self.idx = idx
 
     def __str__(self):
-        return "Input(%d)"%(self.idx)
+        return "input(%d)"%(self.idx)
 
     def init_funcs(self, sm):
         # Remove the specified input argument from the wrapper function
@@ -137,7 +136,7 @@ class inout_t(transformer.transformer_t):
         self.local_var = "<not initialized>"
 
     def __str__(self):
-        return "InOut(%d)"%(self.idx)
+        return "inout(%d)"%(self.idx)
 
     def init_funcs(self, sm):
         # Remove the specified input argument from the wrapper function
@@ -184,10 +183,6 @@ class input_array_t(transformer.transformer_t):
 
     void setVec3(double* v) ->  setVec3(object v)
     # v must be a sequence of 3 floats
-
-
-    TODO: Error handling (in the wrapper function)!
-
     """
 
     def __init__(self, idx, size):
@@ -209,6 +204,10 @@ class input_array_t(transformer.transformer_t):
 
     def __str__(self):
         return "InputArray(%d,%d)"%(self.idx, self.size)
+
+    def required_headers( self ):
+        """Returns list of header files that transformer generated code depends on."""
+        return [ code_repository.convenience.file_name ]
 
     def init_funcs(self, sm):
 
@@ -235,9 +234,6 @@ class input_array_t(transformer.transformer_t):
 
         # Replace the input parameter with the C array
         sm.wrapper_func.input_params[self.idx-1] = self.carray
-
-        # Request the convenience header
-        sm.wrapper_func.require_header(code_repository.convenience.file_name)
 
     def wrapper_pre_call(self, sm):
         """Wrapper function code.
@@ -270,9 +266,6 @@ class output_array_t(transformer.transformer_t):
 
     void getVec3(double* v) -> v = getVec3()
     # v will be a list with 3 floats
-
-    TODO: Error handling (in the virtual function)!
-
     """
 
     def __init__(self, idx, size):
@@ -295,6 +288,10 @@ class output_array_t(transformer.transformer_t):
 
     def __str__(self):
         return "OutputArray(%d,%d)"%(self.idx, self.size)
+
+    def required_headers( self ):
+        """Returns list of header files that transformer generated code depends on."""
+        return [ code_repository.convenience.file_name ]
 
     def init_funcs(self, sm):
         # Remove the original argument...
@@ -322,10 +319,6 @@ class output_array_t(transformer.transformer_t):
 
         # Declare a variable that will receive the Python list
         self.virtual_pyval = sm.virtual_func.declare_local("py_"+self.argname, "boost::python::object")
-
-        # Request the convenience header
-        sm.virtual_func.require_header(code_repository.convenience.file_name)
-
 
     def wrapper_post_call(self, sm):
         tmpl = '%(pypp_con)s::copy_container( %(array)s, %(array)s + %(size)d, %(pypp_con)s::list_inserter( %(pylist)s ) );'

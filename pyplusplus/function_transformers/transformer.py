@@ -28,6 +28,10 @@ class transformer_t:
         """
         pass
 
+    def required_headers( self ):
+        """Returns list of header files that transformer generated code depends on."""
+        return []
+
     def init_funcs(self, sm):
         """Wrapper initialization.
 
