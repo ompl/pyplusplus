@@ -52,8 +52,7 @@ class output_t( transformer.transformer_t ):
         # Do some sanity checking (whether the argument can actually be
         # an output argument, i.e. it has to be a reference or a pointer)
         reftype = arg.type
-        if not (isinstance(reftype, declarations.reference_t) or
-            isinstance(reftype, declarations.pointer_t)):
+        if not declarations.is_pointer( reftype ) and not declarations.is_reference( reftype ):
             raise ValueError, '%s\nOutput variable %d ("%s") must be a reference or a pointer (got %s)'%(sm.decl, self.idx, arg.name, arg.type)
 
         # Declare a local variable that will receive the output value
@@ -107,8 +106,7 @@ class input_t(transformer.transformer_t):
 
         # Do some checks (the arg has to be a reference or a pointer)
         reftype = arg.type
-        if not (isinstance(reftype, declarations.reference_t) or
-            isinstance(reftype, declarations.pointer_t)):
+        if not declarations.is_pointer( reftype ) and not declarations.is_reference( reftype ):
             raise ValueError, '%s\nInput variable %d ("%s") must be a reference or a pointer (got %s)'%(sm.decl, self.idx, arg.name, arg.type)
 
         # Create an equivalent argument that is not a reference type
@@ -144,8 +142,7 @@ class inout_t(transformer.transformer_t):
 
         # Do some checks (the arg has to be a reference or a pointer)
         reftype = arg.type
-        if not (isinstance(reftype, declarations.reference_t) or
-            isinstance(reftype, declarations.pointer_t)):
+        if not declarations.is_pointer( reftype ) and not declarations.is_reference( reftype ):
             raise ValueError, '%s\nInOut variable %d ("%s") must be a reference or a pointer (got %s)'%(sm.decl, self.idx, arg.name, arg.type)
 
         # Create an equivalent argument that is not a reference type
@@ -214,8 +211,7 @@ class input_array_t(transformer.transformer_t):
         # Remove the original argument...
         arg = sm.remove_arg(self.idx)
 
-        if not (isinstance(arg.type, declarations.pointer_t) or
-                isinstance(arg.type, declarations.array_t)):
+        if not declarations.is_pointer( arg.type ) and not declarations.is_array( arg.type ):
             raise ValueError, "%s\nArgument %d (%s) must be a pointer."%(sm.decl, self.idx, arg.name)
 
         # Declare a variable that will hold the Python list
@@ -297,8 +293,7 @@ class output_array_t(transformer.transformer_t):
         # Remove the original argument...
         arg = sm.remove_arg(self.idx)
 
-        if not (isinstance(arg.type, declarations.pointer_t) or
-                isinstance(arg.type, declarations.array_t)):
+        if not declarations.is_pointer( arg.type ) and not declarations.is_array( arg.type ):            
             raise ValueError, "%s\nArgument %d (%s) must be a pointer."%(sm.decl, self.idx, arg.name)
 
         self.argname = arg.name
