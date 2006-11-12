@@ -242,7 +242,7 @@ class input_array_t(transformer.transformer_t):
         self.native_array = sm.wrapper_func.declare_variable( 
               "native_" + self.arg.name
             , declarations.array_item_type( self.arg.type )
-            , size=self.array_size)
+            , '[%d]' % self.array_size)
 
         # Replace the input parameter with the C array
         sm.wrapper_func.input_params[self.arg_index] = self.native_array
@@ -315,7 +315,7 @@ class output_array_t(transformer.transformer_t):
         self.native_array = sm.wrapper_func.declare_variable(
               "native_" + self.arg.name
             , declarations.array_item_type( self.arg.type )
-            , size=self.array_size)
+            , '[%d]' % self.array_size)
 
         # Declare a Python list which will receive the output...
         self.pylist = sm.wrapper_func.declare_variable( 

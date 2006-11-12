@@ -8,6 +8,7 @@
 """This module contains the L{code_manager_t} and L{wrapper_code_manager_t} classes.
 """
 
+import os
 import types
 import string
 
@@ -89,7 +90,7 @@ class code_manager_t:
         return tmpl.safe_substitute(self.__dict__)
 
     # declare_variable
-    def declare_variable(self, name, type, size=None, default=None):
+    def declare_variable(self, name, type, initialize_expr=''):
         """Declare a local variable and return its final name.
 
         @param name: The desired variable name
@@ -104,7 +105,7 @@ class code_manager_t:
         @rtype: str
         """
         name = self._make_name_unique(name)
-        self._declared_vars[name] = (type,size,default)
+        self._declared_vars[name] = (type, initialize_expr)
         return name
 
     def init_variables(self):
@@ -141,21 +142,16 @@ class code_manager_t:
 
         # Create the declaration block -> DECLARATIONS
         vardecls = []
-        for varname in self._declared_vars.keys():
-            type,size,default = self._declared_vars[ varname ]
-            if default==None:
-                vd = "%s %s"%(type, varname)
-            else:
-                vd = "%s %s = %s"%(type, varname, default)
-            if size!=None:
-                vd += "[%d]"%size
-            vardecls.append(vd+";")
-        self.DECLARATIONS = "\n".join(vardecls)
+        for name, (type, initialize_expr) in self._declared_vars.iteritems():
+            tmpl = "%(type)s %(name)s%(initialize_expr)s;"
+            vardecls.append( tmpl % { 'type' : type
+                                      , 'name' : name
+                                      , 'initialize_expr' : initialize_expr } )
+        self.DECLARATIONS = os.linesep.join(vardecls)
 
         # RESULT_VAR_ASSIGNMENT
         if self.result_var!=None:
             self.RESULT_VAR_ASSIGNMENT = "%s = "%self.result_var
-#            self.RESULT_VAR_ASSIGNMENT = "%s %s = "%(self.result_type, self.result_var)
         else:
             self.RESULT_VAR_ASSIGNMENT = ""
 
