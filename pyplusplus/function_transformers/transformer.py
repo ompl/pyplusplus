@@ -11,8 +11,11 @@
 import sys, os.path, copy, re, types
 from pygccxml import declarations, parser
 
+return_ = -1
 
 class transformer_t:
+    USE_1_BASED_INDEXING = False
+    
     """Base class for a function transformer.
 
     This class specifies the interface that a user written transformer
@@ -23,18 +26,38 @@ class transformer_t:
     @author: Matthias Baas
     """
     
-    def __init__(self):
+    def __init__(self, function):
         """Constructor.
         """
-        pass
+        self.__function = function
+
+    @property 
+    def function( self ):
+        """reference to the function, for which a wrapper will be generated"""
+        return self.__function
 
     def required_headers( self ):
         """Returns list of header files that transformer generated code depends on."""
         return []
 
-    def validate( self, function ):
-        """returns error message or None"""
-        raise NotImplementedError()
+    def get_argument( self, reference ):
+        if isinstance( reference, str ):
+            found = filter( lambda arg: arg.name == reference, self.function.arguments )
+            if len( found ) == 1:
+                return found[0]
+            raise RuntimeError( "Argument with %s was not found" % reference )
+        else:
+           assert isinstance( reference, int )
+           if transformer_t.USE_1_BASED_INDEXING:
+               reference += 1
+           return self.function.arguments[ reference ]
+
+    def get_type( self, reference ):
+        global return_
+        if isinstance( reference, int ) and reference == return_:
+            return self.function.return_type
+        else:
+            return self.get_argument( reference ).type
 
     def init_funcs(self, sm):
         """Wrapper initialization.

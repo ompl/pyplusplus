@@ -30,53 +30,52 @@ class output_t( transformer.transformer_t ):
     void getValue(int& v) -> v = getValue()
     """
 
-    def __init__(self, idx):
-        transformer.transformer_t.__init__( self )
+    def __init__(self, function, arg_ref):
+        transformer.transformer_t.__init__( self, function )
         """Constructor.
 
         The specified argument must be a reference or a pointer.
 
-        @param idx: Index of the argument that is an output value (the first arg has index 1).
-        @type idx: int
+        @param arg_ref: Index of the argument that is an output value (the first arg has index 1).
+        @type arg_ref: int
         """
-        self.idx = idx
+        self.arg = self.get_argument( arg_ref )
+        self.arg_index = self.function.arguments.index( self.arg )
         self.local_var = "<not initialized>"
 
+        if not declarations.is_pointer( self.arg.type ) and not declarations.is_reference( self.arg.type ):
+            raise ValueError( '%s\nin order to use "output" transformation, argument %s type must be a reference or a pointer (got %s).' ) \
+                  % ( function, self.arg_ref.name, arg.type)
+
     def __str__(self):
-        return "output(%d)"%(self.idx)
+        return "output(%d)"%(self.arg_index)
 
     def init_funcs(self, sm):
         # Remove the specified output argument from the wrapper function
-        arg = sm.remove_arg(self.idx)
-
-        # Do some sanity checking (whether the argument can actually be
-        # an output argument, i.e. it has to be a reference or a pointer)
-        reftype = arg.type
-        if not declarations.is_pointer( reftype ) and not declarations.is_reference( reftype ):
-            raise ValueError, '%s\nOutput variable %d ("%s") must be a reference or a pointer (got %s)'%(sm.decl, self.idx, arg.name, arg.type)
+        sm.remove_arg(self.arg_index+1)
 
         # Declare a local variable that will receive the output value
-        self.local_var = sm.wrapper_func.declare_variable(arg.name, str(reftype.base))
+        self.local_var = sm.wrapper_func.declare_variable( self.arg.name, str(self.arg.type.base) )
         # Append the output to the result tuple
         sm.wrapper_func.result_exprs.append(self.local_var)
 
         # Replace the expression in the C++ function call
-        if isinstance(reftype, declarations.pointer_t):
-            sm.wrapper_func.input_params[self.idx-1] = "&%s"%self.local_var
-        else:
-            sm.wrapper_func.input_params[self.idx-1] = self.local_var
+        input_param = self.local_var
+        if declarations.is_pointer( self.arg.type ):
+            input_param = "&%s" % self.local_var
+            
+        sm.wrapper_func.input_params[self.arg_index] = input_param
 
 
     def virtual_post_call(self, sm):
-        """Extract the C++ value after the call to the Python function.
-        """
-        arg = sm.virtual_func.arg_list[self.idx-1]
-        res = "// Extract the C++ value for output argument '%s' (index: %d)\n"%(arg.name, self.idx)
-        if isinstance(arg.type, declarations.pointer_t):
-            res += "*"
-        res += "%s = boost::python::extract<%s>(%s);"%(arg.name, arg.type.base, sm.py_result_expr(self.local_var))
-        return res
-
+        """Extract the C++ value after the call to the Python function."""
+        res = []
+        if declarations.is_pointer( self.arg.type ):
+            res.append( "*" )
+        res.append( "%s = boost::python::extract<%s>(%s);" \
+                    % ( self.arg.name, self.arg.type.base, sm.py_result_expr(self.local_var) ) )
+        return ''.join( res )
+        
 # input_t
 class input_t(transformer.transformer_t):
     """Handles a single input variable.
@@ -86,7 +85,7 @@ class input_t(transformer.transformer_t):
     void setValue(int& v) -> setValue(v)
     """
 
-    def __init__(self, idx):
+    def __init__(self, function, idx):
         """Constructor.
 
         The specified argument must be a reference or a pointer.
@@ -94,8 +93,8 @@ class input_t(transformer.transformer_t):
         @param idx: Index of the argument that is an output value (the first arg has index 1).
         @type idx: int
         """
-        transformer.transformer_t.__init__( self )
-        self.idx = idx
+        transformer.transformer_t.__init__( self, function )
+        self.idx = idx + 1
 
     def __str__(self):
         return "input(%d)"%(self.idx)
@@ -121,7 +120,7 @@ class inout_t(transformer.transformer_t):
     void foo(int& v) -> v = foo(v)
     """
 
-    def __init__(self, idx):
+    def __init__(self, function, idx):
         """Constructor.
 
         The specified argument must be a reference or a pointer.
@@ -129,8 +128,8 @@ class inout_t(transformer.transformer_t):
         @param idx: Index of the argument that is an in/out value (the first arg has index 1).
         @type idx: int
         """
-        transformer.transformer_t.__init__( self )
-        self.idx = idx
+        transformer.transformer_t.__init__( self, function )
+        self.idx = idx + 1
         self.local_var = "<not initialized>"
 
     def __str__(self):
@@ -182,7 +181,7 @@ class input_array_t(transformer.transformer_t):
     # v must be a sequence of 3 floats
     """
 
-    def __init__(self, idx, size):
+    def __init__(self, function, idx, size):
         """Constructor.
 
         @param idx: Index of the argument that is an input array (the first arg has index 1).
@@ -190,8 +189,8 @@ class input_array_t(transformer.transformer_t):
         @param size: The fixed size of the input array
         @type size: int
         """
-        transformer.transformer_t.__init__( self )
-        self.idx = idx
+        transformer.transformer_t.__init__( self, function )
+        self.idx = idx + 1
         self.size = size
 
         self.argname = None
@@ -264,7 +263,7 @@ class output_array_t(transformer.transformer_t):
     # v will be a list with 3 floats
     """
 
-    def __init__(self, idx, size):
+    def __init__(self, function, idx, size):
         """Constructor.
 
         @param idx: Index of the argument that is an output array (the first arg has index 1).
@@ -272,8 +271,8 @@ class output_array_t(transformer.transformer_t):
         @param size: The fixed size of the output array
         @type size: int
         """
-        transformer.transformer_t.__init__( self )
-        self.idx = idx
+        transformer.transformer_t.__init__( self, function )
+        self.idx = idx + 1
         self.size = size
 
         self.argname = None

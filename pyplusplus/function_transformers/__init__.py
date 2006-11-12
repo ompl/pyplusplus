@@ -22,16 +22,26 @@ import transformers
 from function_transformation import function_transformation_t
 
 def output( *args, **keywd ):
-    return transformers.output_t( *args, **keywd )
+    def creator( function ):
+        return transformers.output_t( function, *args, **keywd )
+    return creator
 
 def input( *args, **keywd ):
-    return transformers.input_t( *args, **keywd )
+    def creator( function ):
+        return transformers.input_t( function, *args, **keywd )
+    return creator
 
 def inout( *args, **keywd ):
-    return transformers.inout_t( *args, **keywd )
+    def creator( function ):
+        return transformers.inout_t( function, *args, **keywd )
+    return creator
 
 def input_array( *args, **keywd ):
-    return transformers.input_array_t( *args, **keywd )
+    def creator( function ):
+        return transformers.input_array_t( function, *args, **keywd )
+    return creator
 
 def output_array( *args, **keywd ):
-    return transformers.output_array_t( *args, **keywd )
+    def creator( function ):
+        return transformers.output_array_t( function, *args, **keywd )
+    return creator

@@ -9,10 +9,10 @@
 
 
 class function_transformation_t:   
-    def __init__(self, transformers, **keywd):
-        """Constructor.
-        """
-        self.__transformers = list(transformers)
+    def __init__(self, function, transformer_creator, **keywd):
+        """Constructor. """
+        self.__function = function
+        self.__transformers = map( lambda tr_creator: tr_creator( function ), transformer_creator )
         self.__thread_safe = keywd.get( 'thread_safe', False )
         
     @property

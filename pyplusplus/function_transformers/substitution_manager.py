@@ -12,6 +12,7 @@ import os
 from pygccxml import declarations
 from code_manager import code_manager_t, wrapper_code_manager_t
 from transformer import transformer_t
+from transformer import return_
 
 # substitution_manager_t
 class substitution_manager_t:
@@ -262,7 +263,7 @@ class substitution_manager_t:
         """
 
         # Append the default return_virtual_result_t code modifier
-        transformers = self.transformers+[return_virtual_result_t()]
+        transformers = self.transformers+[return_virtual_result_t(self.decl)]
 
         for cb in transformers:
             if hasattr(cb, "init_funcs"):
@@ -360,6 +361,7 @@ class substitution_manager_t:
                     self.argidxmap[i] -= 1
             
             return arg
+
 
     # insert_arg
     def insert_arg(self, idx, arg, inputexpr):
@@ -475,8 +477,8 @@ class return_virtual_result_t(transformer_t):
     to the list of code blocks inside the substitution_manager_t class.
     """
 
-    def __init__(self):
-        transformer_t.__init__(self)
+    def __init__(self, function):
+        transformer_t.__init__(self, function)
         self.result_var = "<not initialized>"
 
     def __str__(self):

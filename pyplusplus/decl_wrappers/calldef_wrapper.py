@@ -123,7 +123,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
 
         args is a list of transformers
         """
-        self.transformations.append( ft.function_transformation_t( args, **keywd ) )
+        self.transformations.append( ft.function_transformation_t( self, args, **keywd ) )
 
     def _exportable_impl_derived( self ):
         return ''
