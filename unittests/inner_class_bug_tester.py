@@ -20,7 +20,11 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     
     def run_tests( self, module):
         main = module.main_t()
+        main.main_method()
+        main.main_method2()
         inner = module.main_t.inner_t( 12 )
+        inner.inner_method()
+        inner.inner_method2()
 
 def create_suite():
     suite = unittest.TestSuite()    
