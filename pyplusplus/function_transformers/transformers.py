@@ -20,6 +20,23 @@ import transformer
 from pygccxml import declarations
 from pyplusplus import code_repository
 
+#TODO: pointers should be checked for NULL
+
+def is_ref_or_ptr( type_ ):
+    return declarations.is_pointer( type_ ) or declarations.is_reference( type_ )
+
+def is_ptr_or_array( type_ ):
+    return declarations.is_pointer( type_ ) or declarations.is_array( type_ )
+
+def remove_ref_or_ptr( type_ ):
+    if declarations.is_pointer( type_ ):
+        return declarations.remove_pointer( type_ )
+    elif declarations.is_reference( type_ ):
+        return declarations.remove_reference( type_ )
+    else:
+        raise TypeError( 'Type should be reference or pointer, got %s.' % type_ )
+    
+
 # output_t
 class output_t( transformer.transformer_t ):
     """Handles a single output variable.
@@ -43,7 +60,7 @@ class output_t( transformer.transformer_t ):
         self.arg_index = self.function.arguments.index( self.arg )
         self.local_var = "<not initialized>"
 
-        if not declarations.is_pointer( self.arg.type ) and not declarations.is_reference( self.arg.type ):
+        if not is_ref_or_ptr( self.arg.type ):
             raise ValueError( '%s\nin order to use "output" transformation, argument %s type must be a reference or a pointer (got %s).' ) \
                   % ( function, self.arg_ref.name, arg.type)
 
@@ -55,7 +72,7 @@ class output_t( transformer.transformer_t ):
         sm.remove_arg(self.arg_index+1)
 
         # Declare a local variable that will receive the output value
-        self.local_var = sm.wrapper_func.declare_variable( self.arg.name, str(self.arg.type.base) )
+        self.local_var = sm.wrapper_func.declare_variable( self.arg.name, str( remove_ref_or_ptr( self.arg.type ) ) )
         # Append the output to the result tuple
         sm.wrapper_func.result_exprs.append(self.local_var)
 
@@ -73,7 +90,9 @@ class output_t( transformer.transformer_t ):
         if declarations.is_pointer( self.arg.type ):
             res.append( "*" )
         res.append( "%s = boost::python::extract<%s>(%s);" \
-                    % ( self.arg.name, self.arg.type.base, sm.py_result_expr(self.local_var) ) )
+                    % ( self.arg.name
+                        , remove_ref_or_ptr( self.arg.type )
+                        , sm.py_result_expr(self.local_var) ) )
         return ''.join( res )
         
 # input_t
@@ -85,7 +104,7 @@ class input_t(transformer.transformer_t):
     void setValue(int& v) -> setValue(v)
     """
 
-    def __init__(self, function, idx):
+    def __init__(self, function, arg_ref):
         """Constructor.
 
         The specified argument must be a reference or a pointer.
@@ -94,24 +113,24 @@ class input_t(transformer.transformer_t):
         @type idx: int
         """
         transformer.transformer_t.__init__( self, function )
-        self.idx = idx + 1
+        self.arg = self.get_argument( arg_ref )
+        self.arg_index = self.function.arguments.index( self.arg )
+
+        if not is_ref_or_ptr( self.arg.type ):
+            raise ValueError( '%s\nin order to use "input" transformation, argument %s type must be a reference or a pointer (got %s).' ) \
+                  % ( function, self.arg_ref.name, arg.type)
 
     def __str__(self):
         return "input(%d)"%(self.idx)
 
     def init_funcs(self, sm):
         # Remove the specified input argument from the wrapper function
-        arg = sm.remove_arg(self.idx)
-
-        # Do some checks (the arg has to be a reference or a pointer)
-        reftype = arg.type
-        if not declarations.is_pointer( reftype ) and not declarations.is_reference( reftype ):
-            raise ValueError, '%s\nInput variable %d ("%s") must be a reference or a pointer (got %s)'%(sm.decl, self.idx, arg.name, arg.type)
+        sm.remove_arg(self.arg_index + 1)
 
         # Create an equivalent argument that is not a reference type
-        noref_arg = declarations.argument_t(name=arg.name, type=arg.type.base, default_value=arg.default_value)
+        noref_arg = self.arg.clone( type=remove_ref_or_ptr( self.arg.type ) )
         # Insert the noref argument
-        sm.insert_arg(self.idx, noref_arg, arg.name)
+        sm.insert_arg(self.arg_index + 1, noref_arg, self.arg.name)
 
 # inout_t
 class inout_t(transformer.transformer_t):
@@ -120,7 +139,7 @@ class inout_t(transformer.transformer_t):
     void foo(int& v) -> v = foo(v)
     """
 
-    def __init__(self, function, idx):
+    def __init__(self, function, arg_ref):
         """Constructor.
 
         The specified argument must be a reference or a pointer.
@@ -129,25 +148,26 @@ class inout_t(transformer.transformer_t):
         @type idx: int
         """
         transformer.transformer_t.__init__( self, function )
-        self.idx = idx + 1
+        self.arg = self.get_argument( arg_ref )
+        self.arg_index = self.function.arguments.index( self.arg )
         self.local_var = "<not initialized>"
+        
+        if not is_ref_or_ptr( self.arg.type ):
+            raise ValueError( '%s\nin order to use "inout" transformation, argument %s type must be a reference or a pointer (got %s).' ) \
+                  % ( function, self.arg_ref.name, arg.type)
 
     def __str__(self):
-        return "inout(%d)"%(self.idx)
+        return "inout(%d)"%(self.arg_index)
 
     def init_funcs(self, sm):
         # Remove the specified input argument from the wrapper function
-        arg = sm.remove_arg(self.idx)
-
-        # Do some checks (the arg has to be a reference or a pointer)
-        reftype = arg.type
-        if not declarations.is_pointer( reftype ) and not declarations.is_reference( reftype ):
-            raise ValueError, '%s\nInOut variable %d ("%s") must be a reference or a pointer (got %s)'%(sm.decl, self.idx, arg.name, arg.type)
+        sm.remove_arg(self.arg_index + 1)
 
         # Create an equivalent argument that is not a reference type
-        noref_arg = declarations.argument_t(name=arg.name, type=arg.type.base, default_value=arg.default_value)
+        noref_arg = self.arg.clone( type=remove_ref_or_ptr( self.arg.type ) )
+
         # Insert the noref argument
-        sm.insert_arg(self.idx, noref_arg, arg.name)
+        sm.insert_arg(self.idx+1, noref_arg, arg.name)
 
         # Use the input arg to also store the output
         self.local_var = noref_arg.name
@@ -155,23 +175,22 @@ class inout_t(transformer.transformer_t):
         sm.wrapper_func.result_exprs.append(self.local_var)
 
         # Replace the expression in the C++ function call
-        if isinstance(reftype, declarations.pointer_t):
-            sm.wrapper_func.input_params[self.idx-1] = "&%s"%self.local_var
-        else:
-            sm.wrapper_func.input_params[self.idx-1] = self.local_var
-
+        input_param = self.local_var
+        if declarations.is_pointer( self.arg.type ):
+            input_param = "&%s" % self.local_var
+            
+        sm.wrapper_func.input_params[self.arg_index] = input_param
 
     def virtual_post_call(self, sm):
-        """Extract the C++ value after the call to the Python function.
-        """
-        arg = sm.virtual_func.arg_list[self.idx-1]
-        res = "// Extract the C++ value for in/out argument '%s' (index: %d)\n"%(arg.name, self.idx)
+        """Extract the C++ value after the call to the Python function."""
+        res = []
         if isinstance(arg.type, declarations.pointer_t):
-            res += "*"
-        res += "%s = boost::python::extract<%s>(%s);"%(arg.name, arg.type.base, sm.py_result_expr(self.local_var))
-        return res
-
-
+            res.append( "*" )
+        res.append( "%s = boost::python::extract<%s>(%s);" 
+                    % ( self.arg.name
+                        , remove_ref_or_ptr( self.arg.type )
+                        , sm.py_result_expr( self.local_var ) ) )
+        return ''.join( res )
 
 # input_array_t
 class input_array_t(transformer.transformer_t):
@@ -181,78 +200,76 @@ class input_array_t(transformer.transformer_t):
     # v must be a sequence of 3 floats
     """
 
-    def __init__(self, function, idx, size):
+    def __init__(self, function, arg_ref, array_size):
         """Constructor.
 
-        @param idx: Index of the argument that is an input array (the first arg has index 1).
-        @type idx: int
         @param size: The fixed size of the input array
         @type size: int
         """
         transformer.transformer_t.__init__( self, function )
-        self.idx = idx + 1
-        self.size = size
+        
+        self.arg = self.get_argument( arg_ref )
+        self.arg_index = self.function.arguments.index( self.arg )
 
-        self.argname = None
-        self.basetype = None
-        self.carray = None
+        if not is_ptr_or_array( self.arg.type ):
+            raise ValueError( '%s\nin order to use "input_array" transformation, argument %s type must be a array or a pointer (got %s).' ) \
+                  % ( function, self.arg_ref.name, arg.type)
+
+        self.array_size = array_size
+        self.native_array = None
         self.pylist = None
 
     def __str__(self):
-        return "InputArray(%d,%d)"%(self.idx, self.size)
+        return "input_array(%s,%d)"%( self.arg.name, self.array_size)
 
     def required_headers( self ):
         """Returns list of header files that transformer generated code depends on."""
         return [ code_repository.convenience.file_name ]
 
     def init_funcs(self, sm):
-
         # Remove the original argument...
-        arg = sm.remove_arg(self.idx)
-
-        if not declarations.is_pointer( arg.type ) and not declarations.is_array( arg.type ):
-            raise ValueError, "%s\nArgument %d (%s) must be a pointer."%(sm.decl, self.idx, arg.name)
+        sm.remove_arg(self.arg_index + 1)
 
         # Declare a variable that will hold the Python list
         # (this will be the input of the Python call in the virtual function)
-        self.pylist = sm.virtual_func.declare_variable("py_"+arg.name, "boost::python::list")
+        self.pylist = sm.virtual_func.declare_variable("py_" + self.arg.name, "boost::python::list")
 
         # Replace the removed argument with a Python object.
-        newarg = declarations.argument_t(arg.name, declarations.dummy_type_t("boost::python::object"))
-        sm.insert_arg(self.idx, newarg, self.pylist)
-
-        self.argname = arg.name
-        self.basetype = str(arg.type.base).replace("const", "").strip()
+        newarg = self.arg.clone( type=declarations.dummy_type_t("boost::python::object") )
+        sm.insert_arg(self.arg_index+1, newarg, self.pylist)
 
         # Declare a variable that will hold the C array...
-        self.carray = sm.wrapper_func.declare_variable("c_"+arg.name, self.basetype, size=self.size)
+        self.native_array = sm.wrapper_func.declare_variable( 
+              "native_" + self.arg.name
+            , declarations.array_item_type( self.arg.type )
+            , size=self.array_size)
 
         # Replace the input parameter with the C array
-        sm.wrapper_func.input_params[self.idx-1] = self.carray
+        sm.wrapper_func.input_params[self.arg_index] = self.native_array
 
     def wrapper_pre_call(self, sm):
         """Wrapper function code.
         """
         tmpl = []
-        tmpl.append( '%(pypp_con)s::ensure_uniform_sequence< %(type)s >( %(argname)s, %(size)d );' )
-        tmpl.append( '%(pypp_con)s::copy_sequence( %(argname)s, %(pypp_con)s::array_inserter( %(array_name)s, %(size)d ) );' )
+        tmpl.append( '%(pypp_con)s::ensure_uniform_sequence< %(type)s >( %(pylist)s, %(array_size)d );' )
+        tmpl.append( '%(pypp_con)s::copy_sequence( %(pylist)s, %(pypp_con)s::array_inserter( %(native_array)s, %(array_size)d ) );' )
         return os.linesep.join( tmpl ) % {
-                  'type' : self.basetype
+                  'type' : declarations.array_item_type( self.arg.type )
                 , 'pypp_con' : 'pyplusplus::convenience'
-                , 'argname' : self.argname
-                , 'size' : self.size
-                , 'array_name' : self.carray
-               }
+                , 'pylist' : self.arg.name
+                , 'array_size' : self.array_size
+                , 'native_array' : self.native_array
+        }
 
     def virtual_pre_call(self, sm):
         """Virtual function code."""
-        tmpl = '%(pypp_con)s::copy_container( %(array)s, %(array)s + %(size)d, %(pypp_con)s::list_inserter( %(pylist)s ) );'
+        tmpl = '%(pypp_con)s::copy_container( %(native_array)s, %(native_array)s + %(array_size)d, %(pypp_con)s::list_inserter( %(pylist)s ) );'
         return tmpl % { 
               'pypp_con' : 'pyplusplus::convenience'
-            , 'array' : self.argname
-            , 'size' : self.size
+            , 'native_array' : self.arg.name
+            , 'array_size' : self.array_size
             , 'pylist' : self.pylist
-            }
+        }
 
 
 # output_array_t
@@ -263,7 +280,7 @@ class output_array_t(transformer.transformer_t):
     # v will be a list with 3 floats
     """
 
-    def __init__(self, function, idx, size):
+    def __init__(self, function, arg_ref, size):
         """Constructor.
 
         @param idx: Index of the argument that is an output array (the first arg has index 1).
@@ -272,17 +289,19 @@ class output_array_t(transformer.transformer_t):
         @type size: int
         """
         transformer.transformer_t.__init__( self, function )
-        self.idx = idx + 1
-        self.size = size
+        self.arg = self.get_argument( arg_ref )
+        self.arg_index = self.function.arguments.index( self.arg )
 
-        self.argname = None
-        self.basetype = None
-        self.pyval = None
-        self.cval = None
-        self.ivar = None
+        if not is_ptr_or_array( self.arg.type ):
+            raise ValueError( '%s\nin order to use "input_array" transformation, argument %s type must be a array or a pointer (got %s).' ) \
+                  % ( function, self.arg_ref.name, arg.type)
+
+        self.array_size = size
+        self.native_array = None
+        self.pylist = None
 
     def __str__(self):
-        return "OutputArray(%d,%d)"%(self.idx, self.size)
+        return "output_array(%s,%d)"%( self.arg.name, self.array_size)
 
     def required_headers( self ):
         """Returns list of header files that transformer generated code depends on."""
@@ -290,48 +309,44 @@ class output_array_t(transformer.transformer_t):
 
     def init_funcs(self, sm):
         # Remove the original argument...
-        arg = sm.remove_arg(self.idx)
-
-        if not declarations.is_pointer( arg.type ) and not declarations.is_array( arg.type ):            
-            raise ValueError, "%s\nArgument %d (%s) must be a pointer."%(sm.decl, self.idx, arg.name)
-
-        self.argname = arg.name
-        self.basetype = str(arg.type.base).replace("const", "").strip()
-
-        # Wrapper:
+        sm.remove_arg(self.arg_index + 1)
 
         # Declare a variable that will hold the C array...
-        self.wrapper_cval = sm.wrapper_func.declare_variable("c_"+self.argname, self.basetype, size=self.size)
+        self.native_array = sm.wrapper_func.declare_variable(
+              "native_" + self.arg.name
+            , declarations.array_item_type( self.arg.type )
+            , size=self.array_size)
+
         # Declare a Python list which will receive the output...
-        self.wrapper_pyval = sm.wrapper_func.declare_variable(self.argname, "boost::python::list")
+        self.pylist = sm.wrapper_func.declare_variable( 
+              'py_' + self.arg.name
+            , "boost::python::list" )
+        
         # ...and add it to the result
-        sm.wrapper_func.result_exprs.append(arg.name)
+        sm.wrapper_func.result_exprs.append(self.pylist)
 
-        sm.wrapper_func.input_params[self.idx-1] = self.wrapper_cval
+        sm.wrapper_func.input_params[ self.arg_index ] = self.native_array
 
-        # Virtual:
-
-        # Declare a variable that will receive the Python list
-        self.virtual_pyval = sm.virtual_func.declare_variable("py_"+self.argname, "boost::python::object")
-
+        self.virtual_pylist = sm.virtual_func.declare_variable("py_"+self.arg.name, "boost::python::object")
+        
     def wrapper_post_call(self, sm):
-        tmpl = '%(pypp_con)s::copy_container( %(array)s, %(array)s + %(size)d, %(pypp_con)s::list_inserter( %(pylist)s ) );'
+        tmpl = '%(pypp_con)s::copy_container( %(native_array)s, %(native_array)s + %(array_size)d, %(pypp_con)s::list_inserter( %(pylist)s ) );'
         return tmpl % { 
               'pypp_con' : 'pyplusplus::convenience'
-            , 'array' : self.wrapper_cval
-            , 'size' : self.size
-            , 'pylist' : self.wrapper_pyval
+            , 'native_array' : self.native_array
+            , 'array_size' : self.array_size
+            , 'pylist' : self.pylist
         }
 
     def virtual_post_call(self, sm):
         tmpl = []
-        tmpl.append( '%(pypp_con)s::ensure_uniform_sequence< %(type)s >( %(argname)s, %(size)d );' )
-        tmpl.append( '%(pypp_con)s::copy_sequence( %(argname)s, %(pypp_con)s::array_inserter( %(array_name)s, %(size)d ) );' )
+        tmpl.append( '%(pypp_con)s::ensure_uniform_sequence< %(type)s >( %(pylist)s, %(array_size)d );' )
+        tmpl.append( '%(pypp_con)s::copy_sequence( %(pylist)s, %(pypp_con)s::array_inserter( %(native_array)s, %(array_size)d ) );' )
         return os.linesep.join( tmpl ) % {
-                  'type' : self.basetype
+                  'type' : declarations.array_item_type( self.arg.type )
                 , 'pypp_con' : 'pyplusplus::convenience'
-                , 'argname' : sm.py_result_expr(self.argname)
-                , 'size' : self.size
-                , 'array_name' : self.argname
-               }
+                , 'pylist' : sm.py_result_expr(self.pylist)
+                , 'array_size' : self.array_size
+                , 'native_array' : self.arg.name
+        }
     

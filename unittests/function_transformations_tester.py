@@ -20,21 +20,21 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def customize( self, mb ):
         image = mb.class_( "image_t" )
-        image.member_function( "get_size" ).add_transformation( ft.output(1), ft.output(2) )
-        image.member_function( "get_one_value" ).add_transformation( ft.output(1) )
-        image.member_function( "get_size2" ).add_transformation( ft.output(1), ft.output(2) )
-        image.member_function( "input_arg" ).add_transformation( ft.input(1) )
-        image.member_function( "fixed_input_array" ).add_transformation( ft.input_array(1,3) )
-        image.member_function( "fixed_output_array" ).add_transformation( ft.output_array(1,3) )
+        image.member_function( "get_size" ).add_transformation( ft.output(0), ft.output(1) )
+        image.member_function( "get_one_value" ).add_transformation( ft.output(0) )
+        image.member_function( "get_size2" ).add_transformation( ft.output(0), ft.output(1) )
+        image.member_function( "input_arg" ).add_transformation( ft.input(0) )
+        image.member_function( "fixed_input_array" ).add_transformation( ft.input_array(0,3) )
+        image.member_function( "fixed_output_array" ).add_transformation( ft.output_array(0,3) )
         mb.free_function("get_cpp_instance").call_policies \
             = call_policies.return_value_policy(call_policies.reference_existing_object)
         mb.variable( "cpp_instance" ).exclude()
 
         cls = mb.class_("no_virtual_members_t")
-        cls.member_function("member").add_transformation( ft.output(1) )
+        cls.member_function("member").add_transformation( ft.output(0) )
 
         cls = mb.class_("ft_private_destructor_t")
-        cls.member_function("get_value").add_transformation( ft.output(1) )
+        cls.member_function("get_value").add_transformation( ft.output(0) )
 
         mb.decls(lambda decl: decl.name[0]=="_").exclude()
 
