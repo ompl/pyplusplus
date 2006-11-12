@@ -65,6 +65,7 @@ import split_module_tester
 import properties_tester
 import arrays_bug_tester
 import convenience_tester
+import inner_class_bug_tester
 
 def create_suite(times):
     testers = [
@@ -126,6 +127,7 @@ def create_suite(times):
         , properties_tester
         , arrays_bug_tester
         , convenience_tester
+        , inner_class_bug_tester
     ]
 
     main_suite = unittest.TestSuite()
