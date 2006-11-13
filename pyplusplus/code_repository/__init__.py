@@ -16,8 +16,9 @@ C{char data[23];}
 import array_1
 import gil_guard
 import convenience
+import call_policies
 
-all = [ array_1, gil_guard, convenience ]
+all = [ array_1, gil_guard, convenience, call_policies ]
 
 headers = map( lambda f: f.file_name, all )
 

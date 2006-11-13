@@ -139,6 +139,7 @@ class creator_t( declarations.decl_visitor_t ):
         self.__free_operators = []
         self.__exposed_free_fun_overloads = set()
         self.__opaque_types_manager = opaque_types_manager.manager_t( self.__extmodule )
+        self.__return_pointee_value_exists = False
 
     def _prepare_decls( self, decls, doc_extractor ):
         global DO_NOT_REPORT_MSGS
@@ -350,6 +351,14 @@ class creator_t( declarations.decl_visitor_t ):
         creators.reverse()
         self.__module_body.adopt_creators( creators, 0 )
 
+    def __on_demand_include_call_policies( self, call_policy ):
+        if not self.__return_pointee_value_exists \
+           and decl_wrappers.is_return_pointee_value_policy( call_policy ):
+            self.__return_pointee_value_exists = True
+            self.__extmodule.add_include( code_repository.call_policies.file_name )            
+            self.__extmodule.add_system_header( code_repository.call_policies.file_name )
+            
+
     def create(self, decl_headers=None):
         """Create and return the module for the extension.
 
@@ -388,7 +397,8 @@ class creator_t( declarations.decl_visitor_t ):
         self.__types_db.update( self.curr_decl )
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
-
+        self.__on_demand_include_call_policies( self.curr_decl.call_policies )
+        
         maker_cls, fwrapper_cls = creators_wizard.find_out_mem_fun_creator_classes( self.curr_decl )
 
         maker = None
@@ -453,6 +463,7 @@ class creator_t( declarations.decl_visitor_t ):
         maker = code_creators.constructor_t( constructor=self.curr_decl, wrapper=cwrapper )
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
+        self.__on_demand_include_call_policies( self.curr_decl.call_policies )
         self.curr_code_creator.adopt_creator( maker )
 
     def visit_destructor( self ):
@@ -469,7 +480,8 @@ class creator_t( declarations.decl_visitor_t ):
     def visit_casting_operator( self ):
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
-
+        self.__on_demand_include_call_policies( self.curr_decl.call_policies )
+        
         self.__types_db.update( self.curr_decl )
         if not self.curr_decl.parent.is_abstract and not declarations.is_reference( self.curr_decl.return_type ):
             maker = code_creators.casting_operator_t( operator=self.curr_decl )
@@ -499,6 +511,7 @@ class creator_t( declarations.decl_visitor_t ):
                         self.__types_db.update( f )
                         if None is f.call_policies:
                             f.call_policies = self.__call_policies_resolver( f )
+                        self.__on_demand_include_call_policies( f.call_policies )
 
                     overloads_cls_creator = code_creators.free_fun_overloads_class_t( overloads )
                     self.__extmodule.adopt_declaration_creator( overloads_cls_creator )
@@ -518,6 +531,8 @@ class creator_t( declarations.decl_visitor_t ):
             self.__types_db.update( self.curr_decl )
             if None is self.curr_decl.call_policies:
                 self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
+            self.__on_demand_include_call_policies( self.curr_decl.call_policies )
+            
             maker = code_creators.free_function_t( function=self.curr_decl )
             self.curr_code_creator.adopt_creator( maker )
             self.__opaque_types_manager.register_opaque( maker, self.curr_decl )
@@ -552,6 +567,7 @@ class creator_t( declarations.decl_visitor_t ):
                     self.__types_db.update( f )
                     if None is f.call_policies:
                         f.call_policies = self.__call_policies_resolver( f )
+                    self.__on_demand_include_call_policies( f.call_policies )
 
                 overloads_cls_creator = code_creators.mem_fun_overloads_class_t( overloads )
                 self.__extmodule.adopt_declaration_creator( overloads_cls_creator )
@@ -695,8 +711,10 @@ class creator_t( declarations.decl_visitor_t ):
             elif declarations.is_reference( self.curr_decl.type ):
                 if None is self.curr_decl.getter_call_policies:
                     self.curr_decl.getter_call_policies = self.__call_policies_resolver( self.curr_decl, 'get' )
+                self.__on_demand_include_call_policies( self.curr_decl.getter_call_policies )
                 if None is self.curr_decl.setter_call_policies:
                     self.curr_decl.setter_call_policies = self.__call_policies_resolver( self.curr_decl, 'set' )
+                self.__on_demand_include_call_policies( self.curr_decl.setter_call_policies )
                 wrapper = code_creators.mem_var_ref_wrapper_t( variable=self.curr_decl )
                 maker = code_creators.mem_var_ref_t( variable=self.curr_decl, wrapper=wrapper )
                 self.__opaque_types_manager.register_opaque( maker, self.curr_decl )

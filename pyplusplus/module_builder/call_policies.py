@@ -17,3 +17,4 @@ from pyplusplus.decl_wrappers import reference_existing_object
 from pyplusplus.decl_wrappers import return_by_value
 from pyplusplus.decl_wrappers import return_opaque_pointer
 from pyplusplus.decl_wrappers import return_value_policy
+from pyplusplus.decl_wrappers import return_pointee_value
