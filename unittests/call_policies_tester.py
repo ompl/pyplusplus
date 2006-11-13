@@ -29,6 +29,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.calldef( 'get_opaque' ).call_policies \
             = call_policies.return_value_policy( call_policies.return_opaque_pointer )
 
+        mb.calldef( 'get_fundamental_ptr_value' ).call_policies \
+            = call_policies.return_value_policy( call_policies.return_pointee_value )
+
+        mb.calldef( 'get_fundamental_ptr_value_null' ).call_policies \
+            = call_policies.return_value_policy( call_policies.return_pointee_value )
+
     def run_tests(self, module):
         self.failUnless( module.compare( module.my_address() ) )
 
@@ -45,6 +51,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         cont = module.container()
         self.failUnless( 1977 == cont[1977] )
 
+        self.failUnless( 0.5 == module.get_fundamental_ptr_value() )
+        
+        self.failUnless( None is module.get_fundamental_ptr_value_null() )
+        
         module.get_impl_details()
 
         module.get_opaque()

@@ -61,6 +61,20 @@ namespace opaque{
 
 }
 
+namespace fundamental_ptr{
+
+inline float* get_fundamental_ptr_value(){
+    static float x = 0.5;
+    return &x;
+}
+
+inline float* get_fundamental_ptr_value_null(){
+    return (float*)(0);
+}
+
+
+}
+
 }
 
 #endif//__call_policies_to_be_exported_hpp__
