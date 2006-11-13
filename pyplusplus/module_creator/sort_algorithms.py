@@ -196,7 +196,11 @@ def sort_classes( classes ):
 def sort_calldefs( decls ):
     return calldef_organizer_t().sort( decls )
 
-def sort( decls, use_calldef_organizer=False ):
+USE_CALLDEF_ORGANIZER = False 
+#If you understand what problem calldef_organizer_t solves, than may be you should 
+#use this.
+
+def sort( decls ):
     classes = filter( lambda x: isinstance( x, declarations.class_t ), decls )
     ordered = sort_classes( classes )
 
@@ -228,7 +232,7 @@ def sort( decls, use_calldef_organizer=False ):
 
     enums.sort( cmp=cmp_by_name )
     variables.sort( cmp=cmp_by_name )
-    if use_calldef_organizer:
+    if USE_CALLDEF_ORGANIZER:
         others = sort_calldefs(others)
         constructors = sort_calldefs(constructors)
     else:

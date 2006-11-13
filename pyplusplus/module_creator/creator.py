@@ -5,7 +5,7 @@
 
 import types_database
 import creators_wizard
-import decls_organizer
+import sort_algorithms
 import opaque_types_manager
 import call_policies_resolver
 from pygccxml import declarations
@@ -129,10 +129,8 @@ class creator_t( declarations.decl_visitor_t ):
         self.__module_body = code_creators.module_body_t( name=module_name )
         self.__extmodule.adopt_creator( self.__module_body )
 
-        self._sort_decls = lambda decls: decls_organizer.sort( decls )
-
         prepared_decls = self._prepare_decls( decls, doc_extractor )
-        self.__decls = self._sort_decls( prepared_decls )
+        self.__decls = sort_algorithms.sort( prepared_decls )
 
         self.curr_code_creator = self.__module_body
         self.curr_decl = None
@@ -575,7 +573,7 @@ class creator_t( declarations.decl_visitor_t ):
         assert isinstance( self.curr_decl, declarations.class_t )
         cls_decl = self.curr_decl
         cls_parent_cc = self.curr_code_creator
-        exportable_members = self.curr_decl.get_exportable_members(self._sort_decls)
+        exportable_members = self.curr_decl.get_exportable_members(sort_algorithms.sort)
 
         wrapper = None
         cls_cc = code_creators.class_t( class_inst=self.curr_decl )
