@@ -10,7 +10,6 @@ class COLOR:
     GRAY = 1
     BLACK = 2
 
-
 class class_organizer_t(object):
     def __init__( self, decls ):
         object.__init__( self )
@@ -116,7 +115,130 @@ class class_organizer_t(object):
         for fname in self.__desired_order:
             answer.append( fname2inst[fname] )
         return answer
+        
+class calldef_organizer_t( object ):  
+    #Take a look on this post:
+    #  http://mail.python.org/pipermail/c++-sig/2006-October/011463.html
 
-def findout_desired_order( decls ):
-    organizer = class_organizer_t( decls )
+    #calldef_organizer_t will take into account only requiered arguments.
+    #Next rules are implemented:
+    #1. calldef( bool ) will be the last registered function
+    #2. T* will come after T ( const T& )
+    def __init__( self ):
+        object.__init__( self )
+        #preserve order in which functions where defined        
+        self.__cmp_unrelated = lambda d1, d2: cmp( d1.location.line, d2.location.line )
+        
+    def __build_groups( self, decls ):
+        groups = { None: [] }
+        for d in decls:
+            if not isinstance( d, declarations.calldef_t ) or 1 != len( d.required_args ):
+                groups[ None ].append( d )
+            else:
+                if not groups.has_key( d.name ):
+                    groups[ d.name ] = []
+                groups[ d.name ].append( d )
+        return groups
+
+    def __cmp_types( self, t1, t2 ):
+        if declarations.is_pointer( t1 ) and declarations.is_pointer( t2 ):
+            return self.__cmp_types( declarations.remove_pointer( t1 )
+                                     , declarations.remove_pointer( t2 ) )
+        elif declarations.is_pointer( t1 ) and not declarations.is_pointer( t2 ):
+            t1 = declarations.remove_cv( declarations.remove_pointer( t1 ) )
+            t2 = declarations.remove_cv( t2 )
+            if declarations.is_same( t1, t2 ):
+                return 1
+        elif not declarations.is_pointer( t1 ) and declarations.is_pointer( t2 ):
+            t1 = declarations.remove_cv( t1 )
+            t2 = declarations.remove_cv( declarations.remove_pointer( t2 ) )
+            if declarations.is_same( t1, t2 ):
+                return -1
+        else: #not is_pointer( t1 ) and not is_pointer( t2 ):     
+            if declarations.is_integral( t1 ) and not declarations.is_bool( t1 ) and declarations.is_bool( t2 ):
+                return -1
+            elif declarations.is_bool( t1 ) and declarations.is_integral( t2 ) and not declarations.is_bool( t2 ):
+                return 1
+            else:
+                pass
+        return None
+
+    def __cmp( self, f1, f2 ):
+        result = self.__cmp_types( f1.arguments[0].type, f2.arguments[0].type )    
+        if None is result:
+            result = self.__cmp_unrelated( f1, f2 )
+        return result
+
+    def __sort_groups( self, groups ):
+        for group in groups.keys():
+            if None is group:
+                continue
+            groups[ group ].sort( self.__cmp )
+    
+    def __join_groups( self, groups ):
+        decls = []
+        sorted_keys = groups.keys()
+        sorted_keys.sort()
+        for group in sorted_keys:
+            decls.extend( groups[group] )
+        return decls
+
+    def sort( self, decls ):
+        groups = self.__build_groups( decls )
+        self.__sort_groups(groups)
+        result = self.__join_groups(groups)
+        return result    
+
+def sort_classes( classes ):
+    organizer = class_organizer_t( classes )
     return organizer.desired_order()
+
+def sort_calldefs( decls ):
+    return calldef_organizer_t().sort( decls )
+
+def sort( decls, use_calldef_organizer=False ):
+    classes = filter( lambda x: isinstance( x, declarations.class_t ), decls )
+    ordered = sort_classes( classes )
+
+    ids = set( [ id( inst ) for inst in ordered ] )
+    for decl in decls:
+        if id( decl ) not in ids:
+            ids.add( id(decl) )
+            ordered.append( decl )
+    #type should be exported before it can be used.
+    variables = []
+    enums = []
+    others = []
+    classes = []
+    constructors = []
+    for inst in ordered:
+        if isinstance( inst, declarations.variable_t ):
+            variables.append( inst )
+        elif isinstance( inst, declarations.enumeration_t ):
+            enums.append( inst )
+        elif isinstance( inst, ( declarations.class_t, declarations.class_declaration_t ) ):
+            classes.append( inst )
+        elif isinstance( inst, declarations.constructor_t ):
+            constructors.append( inst )
+        else:
+            others.append( inst )
+    #this will prevent from py++ to change the order of generated code
+    cmp_by_name = lambda d1, d2: cmp( d1.name, d2.name )
+    cmp_by_line = lambda d1, d2: cmp( d1.location.line, d2.location.line )
+
+    enums.sort( cmp=cmp_by_name )
+    variables.sort( cmp=cmp_by_name )
+    if use_calldef_organizer:
+        others = sort_calldefs(others)
+        constructors = sort_calldefs(constructors)
+    else:
+        others.sort( cmp=cmp_by_name )
+        constructors.sort( cmp=cmp_by_line )
+    
+    new_ordered = []
+    new_ordered.extend( enums )
+    new_ordered.extend( classes )
+    new_ordered.extend( constructors )
+    new_ordered.extend( others )
+    new_ordered.extend( variables )
+    return new_ordered #

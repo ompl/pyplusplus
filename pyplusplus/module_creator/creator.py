@@ -5,7 +5,7 @@
 
 import types_database
 import creators_wizard
-import class_organizer
+import decls_organizer
 import opaque_types_manager
 import call_policies_resolver
 from pygccxml import declarations
@@ -129,8 +129,10 @@ class creator_t( declarations.decl_visitor_t ):
         self.__module_body = code_creators.module_body_t( name=module_name )
         self.__extmodule.adopt_creator( self.__module_body )
 
+        self._sort_decls = lambda decls: decls_organizer.sort( decls )
+
         prepared_decls = self._prepare_decls( decls, doc_extractor )
-        self.__decls = self._reorder_decls( prepared_decls )
+        self.__decls = self._sort_decls( prepared_decls )
 
         self.curr_code_creator = self.__module_body
         self.curr_decl = None
@@ -183,51 +185,6 @@ class creator_t( declarations.decl_visitor_t ):
         decls = filter( lambda x: x.ignore == False and x.exportable == True, decls )
 
         return decls
-
-    def _reorder_decls(self, decls ):
-        classes = filter( lambda x: isinstance( x, declarations.class_t )
-                          , decls )
-
-        ordered = class_organizer.findout_desired_order( classes )
-        ids = set( [ id( inst ) for inst in ordered ] )
-        for decl in decls:
-            if id( decl ) not in ids:
-                ids.add( id(decl) )
-                ordered.append( decl )
-        #type should be exported before it can be used.
-        variables = []
-        enums = []
-        others = []
-        classes = []
-        constructors = []
-        for inst in ordered:
-            if isinstance( inst, declarations.variable_t ):
-                variables.append( inst )
-            elif isinstance( inst, declarations.enumeration_t ):
-                enums.append( inst )
-            elif isinstance( inst, ( declarations.class_t, declarations.class_declaration_t ) ):
-                classes.append( inst )
-            elif isinstance( inst, declarations.constructor_t ):
-                constructors.append( inst )
-            else:
-                others.append( inst )
-        #this will prevent from py++ to change the order of generated code
-        cmp_by_name = lambda d1, d2: cmp( d1.name, d2.name )
-        cmp_by_line = lambda d1, d2: cmp( d1.location.line, d2.location.line )
-
-        enums.sort( cmp=cmp_by_name )
-        others.sort( cmp=cmp_by_name )
-        variables.sort( cmp=cmp_by_name )
-        constructors.sort( cmp=cmp_by_line )
-
-        new_ordered = []
-        new_ordered.extend( enums )
-        new_ordered.extend( classes )
-        new_ordered.extend( constructors )
-        new_ordered.extend( others )
-        new_ordered.extend( variables )
-        return new_ordered #
-
 
     def _adopt_free_operator( self, operator ):
         def adopt_operator_impl( operator, found_creators ):
@@ -618,7 +575,7 @@ class creator_t( declarations.decl_visitor_t ):
         assert isinstance( self.curr_decl, declarations.class_t )
         cls_decl = self.curr_decl
         cls_parent_cc = self.curr_code_creator
-        exportable_members = self.curr_decl.get_exportable_members(self._reorder_decls)
+        exportable_members = self.curr_decl.get_exportable_members(self._sort_decls)
 
         wrapper = None
         cls_cc = code_creators.class_t( class_inst=self.curr_decl )
