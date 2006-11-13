@@ -384,6 +384,14 @@ class casting_operator_t( declarations.casting_operator_t, calldef_t ):
                       , doc="Gives right alias for casting operators: __int__, __long__, __str__." \
                            +"If there is no built-in type, creates as_xxx alias" )
 
+    def _exportable_impl_derived( self ):
+        if not declarations.is_fundamental( self.return_type ) and not self.has_const:
+            return 'Py++ does not exports non-const casting operators with user defined type as return value. This could be change in future.'
+        if self.access_type != declarations.ACCESS_TYPES.PUBLIC:
+            return "Py++ doesn't export non-public casting operators."                    
+        return ''
+
+
 class free_function_t( declarations.free_function_t, calldef_t ):
     """defines a set of properties, that will instruct Py++ how to expose the free function"""
     def __init__(self, *arguments, **keywords):

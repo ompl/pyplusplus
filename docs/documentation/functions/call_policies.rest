@@ -143,6 +143,44 @@ For more information about the call policy please refer to `Boost.Python`_
 
 .. _`documentation` : http://boost.org/libs/python/doc/v2/return_opaque_pointer.html 
 
+--------------------------
+Py++ defined call policies
+--------------------------
+
+return_pointee_value
+--------------------
+
+Class ``return_pointee_value`` is a model of `ResultConverterGenerator`_  which 
+can be used to wrap C++ functions returning any pointer, such that the pointee of
+return value is copied into a new Python object.
+
+Example
+~~~~~~~
+
+.. code-block:: C++
+
+  float* get_value(){
+      static float value = 0.5;
+      return &value;
+  }
+  
+  float* get_null_value(){
+    return (float*)( 0 );
+  }
+  
+  namespace bpl = boost::python;
+  BOOST_PYTHON_MODULE(my_module){
+    def( "get_value"
+         , bpl::return_value_policy< pyplusplus::call_policies::return_pointee_value<> >() );
+
+    def( "get_null_value"
+         , bpl::return_value_policy< pyplusplus::call_policies::return_pointee_value<> >() );
+  }
+
+`Py++`_ code is pretty simple and similar to what you already know:
+
+
+.. _`ResultConverterGenerator` : http://boost.org/libs/python/doc/v2/ResultConverter.html#ResultConverterGenerator-concept
 
 .. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html

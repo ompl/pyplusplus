@@ -467,25 +467,19 @@ class creator_t( declarations.decl_visitor_t ):
             self.curr_code_creator.adopt_creator( maker )
 
     def visit_casting_operator( self ):
-        if not declarations.is_fundamental( self.curr_decl.return_type ) \
-           and not self.curr_decl.has_const:
-            #TODO: move this code to decl_wrappers
-            return #only const casting operators can generate implicitly_convertible
-
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
 
         self.__types_db.update( self.curr_decl )
-        if not self.curr_decl.parent.is_abstract \
-           and not declarations.is_reference( self.curr_decl.return_type ):
+        if not self.curr_decl.parent.is_abstract and not declarations.is_reference( self.curr_decl.return_type ):
             maker = code_creators.casting_operator_t( operator=self.curr_decl )
             self.__module_body.adopt_creator( maker )
             self.__opaque_types_manager.register_opaque( maker, self.curr_decl )
+            
         #what to do if class is abstract
-        if self.curr_decl.access_type == ACCESS_TYPES.PUBLIC:
-            maker = code_creators.casting_member_operator_t( operator=self.curr_decl )
-            self.curr_code_creator.adopt_creator( maker )
-            self.__opaque_types_manager.register_opaque( maker, self.curr_decl )
+        maker = code_creators.casting_member_operator_t( operator=self.curr_decl )
+        self.curr_code_creator.adopt_creator( maker )
+        self.__opaque_types_manager.register_opaque( maker, self.curr_decl )
 
     def visit_free_function( self ):
         if self.curr_decl in self.__exposed_free_fun_overloads:
