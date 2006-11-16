@@ -3,4 +3,5 @@ name = 'functions & operators'
 
 names = { 'call_policies' : 'call policies'
           , 'default_args' : 'default arguments'
+          , 'registration_order' : 'registration order'
 }
