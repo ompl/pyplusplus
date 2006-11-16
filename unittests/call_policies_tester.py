@@ -22,9 +22,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.calldef( 'return_second_arg' ).call_policies = call_policies.return_arg( 2 )
         mb.calldef( 'return_self' ).call_policies = call_policies.return_self()
 
-        mb.class_( 'impl_details_t' ).exclude()
-        mb.calldef( 'get_impl_details' ).call_policies \
-            = call_policies.return_value_policy( call_policies.return_opaque_pointer )
+        mb.class_( 'impl_details_t' ).opaque = True
 
         mb.calldef( 'get_opaque' ).call_policies \
             = call_policies.return_value_policy( call_policies.return_opaque_pointer )

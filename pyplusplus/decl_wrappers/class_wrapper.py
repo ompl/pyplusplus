@@ -118,7 +118,8 @@ class class_common_details_t( object ):
         return self._opaque
 
     def _set_opaque( self, value ):
-        self._opaque = value
+        self._opaque = value        
+        self.ignore = value #don't expose opaque type
 
     opaque = property( _get_opaque, _set_opaque
                       , doc="If True, Py++ will treat return types and arguments T* as opaque types." \

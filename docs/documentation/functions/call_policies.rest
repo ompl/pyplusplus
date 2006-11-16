@@ -90,6 +90,12 @@ and\\or operator name:
     * return type is ``void*`` 
   
     * return type is ``const void*``
+    
+    * return type is ``T*`` and ``T`` is a user defined opaque type
+      
+      ``class_t`` and ``class_declaration_t`` classes have ``opaque`` property. 
+      You have to set it to ``True``, if you want `Py++`_ to create this call 
+      policy automaticly for all functions, that use ``T*`` as return type.
   
   * ``copy_const_reference``
 
@@ -133,15 +139,43 @@ happen:
 Special case
 ------------
 
+Before you read this paragraph consider to read `Boost.Python`_ `return_opaque_pointer documentation`_.
+
 ``return_value_policy( return_opaque_pointer )`` is a special policy for `Boost.Python`_.
 In this case, it requieres from you to define specialization for the 
 ``boost::python::type_id`` function on the type pointed to by returned pointer. 
 `Py++`_ will generate the required code. 
 
-For more information about the call policy please refer to `Boost.Python`_
-`documentation`_.
 
-.. _`documentation` : http://boost.org/libs/python/doc/v2/return_opaque_pointer.html 
+Actually you should define ``boost::python::type_id`` specialization also in case
+a function takes the opaque type as an argument. `Py++`_ can do it for you, all 
+you need is to say to mark a declaration as opaque.
+
+Example:
+
+.. code-block:: C++
+
+  struct identity_impl_t{};
+  typedef identity_impl_t* identity;
+  
+  struct world_t{
+      
+      world_t( identity id );
+      
+      identity get_id() const;
+      
+      ...
+  };
+
+`Py++`_ code:
+
+.. code-block:: Python
+
+  mb = module_builder_t(...)
+  mb.class_( 'identity_impl_t' ).opaque = True
+
+
+.. _`return_opaque_pointer documentation` : http://boost.org/libs/python/doc/v2/return_opaque_pointer.html 
 
 --------------------------
 Py++ defined call policies
@@ -177,8 +211,25 @@ Example
          , bpl::return_value_policy< pyplusplus::call_policies::return_pointee_value<> >() );
   }
 
-`Py++`_ code is pretty simple and similar to what you already know:
+The `Py++`_ code is not that different from what you already know:
 
+.. code-block:: Python
+
+  from pyplusplus import module_builder
+  from pyplusplus.module_builder import call_policies
+  
+  mb = module_builder.module_builder_t( ... )
+  mb.free_function( return_type='float *' ).call_policies \
+      = call_policies.return_value_policy( call_policies.return_pointee_value )
+
+Python code:
+
+.. code-block:: Python
+
+  import my_module
+  
+  assert 0.5 == my_module.get_value()
+  assert None is my_module.get_null_value()
 
 .. _`ResultConverterGenerator` : http://boost.org/libs/python/doc/v2/ResultConverter.html#ResultConverterGenerator-concept
 
