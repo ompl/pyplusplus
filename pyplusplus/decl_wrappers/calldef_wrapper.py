@@ -162,6 +162,8 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         msgs = []
         #TODO: functions that takes as argument pointer to pointer to smth, could not be exported
         #see http://www.boost.org/libs/python/doc/v2/faq.html#funcptr
+        
+        #TODO: add warning to the case described in registration_order.rest document.
         if len( self.arguments ) > calldef_t.BOOST_PYTHON_MAX_ARITY:
             tmp = [ "The function has more than %d arguments ( %d ). " ]
             tmp.append( "You should adjust BOOST_PYTHON_MAX_ARITY macro." )
@@ -171,6 +173,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
 
         if suspicious_type( self.return_type ) and None is self.call_policies:
             msgs.append( 'The function "%s" returns non-const reference to C++ fundamental type - value can not be modified from Python.' % str( self ) )
+
         for index, arg in enumerate( self.arguments ):
             if suspicious_type( arg.type ):
                 tmpl = [ 'The function takes as argument (name=%s, pos=%d ) ' ]
