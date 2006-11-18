@@ -113,10 +113,12 @@ a correct functionality:
      from pyplusplus.module_creator import sort_algorithms
      
      sort_algorithms.USE_CALLDEF_ORGANIZER = True
-
+     # The functionality is available from version 0.8.3
+   
 4. The last and the perfect solution. `Py++`_ will let you know, when your code
-   has such problem. After this you can change the aliases of the functions.
-   The third step is to create small "dispatch" function in Python:
+   has such problem. The functionality is available from version 0.8.3. After 
+   this you can change the aliases of the functions. The third step is to create 
+   small "dispatch" function in Python:
    
    .. code-block:: Python
    
