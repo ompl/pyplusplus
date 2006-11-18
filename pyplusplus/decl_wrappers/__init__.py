@@ -33,6 +33,8 @@ You may encounter the following objects in a declaration tree:
 
 """
 
+import algorithm
+
 from decl_wrapper import decl_wrapper_t
 
 from calldef_wrapper import calldef_t

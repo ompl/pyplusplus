@@ -4,6 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 from pygccxml import declarations
+from pyplusplus import decl_wrappers
 
 class COLOR:
     WHITE = 0
@@ -141,27 +142,7 @@ class calldef_organizer_t( object ):
         return groups
 
     def __cmp_types( self, t1, t2 ):
-        if declarations.is_pointer( t1 ) and declarations.is_pointer( t2 ):
-            return self.__cmp_types( declarations.remove_pointer( t1 )
-                                     , declarations.remove_pointer( t2 ) )
-        elif declarations.is_pointer( t1 ) and not declarations.is_pointer( t2 ):
-            t1 = declarations.remove_cv( declarations.remove_pointer( t1 ) )
-            t2 = declarations.remove_cv( t2 )
-            if declarations.is_same( t1, t2 ):
-                return 1
-        elif not declarations.is_pointer( t1 ) and declarations.is_pointer( t2 ):
-            t1 = declarations.remove_cv( t1 )
-            t2 = declarations.remove_cv( declarations.remove_pointer( t2 ) )
-            if declarations.is_same( t1, t2 ):
-                return -1
-        else: #not is_pointer( t1 ) and not is_pointer( t2 ):     
-            if declarations.is_integral( t1 ) and not declarations.is_bool( t1 ) and declarations.is_bool( t2 ):
-                return -1
-            elif declarations.is_bool( t1 ) and declarations.is_integral( t2 ) and not declarations.is_bool( t2 ):
-                return 1
-            else:
-                pass
-        return None
+        return decl_wrappers.algorithm.registration_order.is_related( t1, t2 )
 
     def __cmp( self, f1, f2 ):
         result = self.__cmp_types( f1.arguments[0].type, f2.arguments[0].type )    

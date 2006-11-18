@@ -5,7 +5,9 @@
 
 """defines class that configure "callable" declaration exposing"""
 
+import os
 import user_text
+import algorithm
 import decl_wrapper
 from pygccxml import declarations
 from pyplusplus import function_transformers as ft
@@ -163,7 +165,6 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         #TODO: functions that takes as argument pointer to pointer to smth, could not be exported
         #see http://www.boost.org/libs/python/doc/v2/faq.html#funcptr
         
-        #TODO: add warning to the case described in registration_order.rest document.
         if len( self.arguments ) > calldef_t.BOOST_PYTHON_MAX_ARITY:
             tmp = [ "The function has more than %d arguments ( %d ). " ]
             tmp.append( "You should adjust BOOST_PYTHON_MAX_ARITY macro." )
@@ -183,6 +184,16 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
 
         if False == self.overridable:
             msgs.append( self._non_overridable_reason)
+            
+        problematics = algorithm.registration_order.select_problematics( self )
+        if problematics:
+            tmp = [ "The function introduces registration order problem. " ]
+            tmp.append( "For more information read next document: "
+                        + "http://language-binding.net/pyplusplus/documentation/functions/registration_order.html" )
+            tmp.append( "Problematic functions: " )
+            for f in problematics:
+                tmp.append( os.linesep + '\t' + str(f) )
+            msgs.append( os.linesep.join( tmp ) )
         return msgs
 
 class member_function_t( declarations.member_function_t, calldef_t ):

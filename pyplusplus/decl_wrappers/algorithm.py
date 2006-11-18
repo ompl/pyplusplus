@@ -9,6 +9,7 @@ tree.
 """
 
 import re
+from pygccxml import declarations
 
 def creators_affect_on_me( me ):
     """This algorithm finds all code creators that can influence on code generated
@@ -93,3 +94,44 @@ def create_identifier(creator, full_name ):
             return new_name
     else:
         return full_name
+    
+class registration_order:
+    @staticmethod
+    def is_related( t1, t2 ):
+        if declarations.is_pointer( t1 ) and declarations.is_pointer( t2 ):
+            return registration_order.is_related( declarations.remove_pointer( t1 )
+                                                  , declarations.remove_pointer( t2 ) )
+        elif declarations.is_pointer( t1 ) and not declarations.is_pointer( t2 ):
+            t1 = declarations.remove_cv( declarations.remove_pointer( t1 ) )
+            t2 = declarations.remove_cv( t2 )
+            if declarations.is_same( t1, t2 ):
+                return 1
+        elif not declarations.is_pointer( t1 ) and declarations.is_pointer( t2 ):
+            t1 = declarations.remove_cv( t1 )
+            t2 = declarations.remove_cv( declarations.remove_pointer( t2 ) )
+            if declarations.is_same( t1, t2 ):
+                return -1
+        else: #not is_pointer( t1 ) and not is_pointer( t2 ):     
+            if declarations.is_integral( t1 ) and not declarations.is_bool( t1 ) \
+               and declarations.is_bool( t2 ):
+                return -1
+            elif declarations.is_bool( t1 ) \
+                 and declarations.is_integral( t2 ) and not declarations.is_bool( t2 ):
+                return 1
+            else:
+                pass
+        return None
+    
+    @staticmethod
+    def select_problematics( calldef ):
+        if 1 != len( calldef.required_args ):
+            return []
+        problematics = []
+        for f in calldef.overloads:
+            if 1 != len( f.required_args ):
+                continue
+            if None != registration_order.is_related( calldef.arguments[0].type, f.arguments[0].type ):
+                problematics.append( f )
+        return problematics
+
+    
