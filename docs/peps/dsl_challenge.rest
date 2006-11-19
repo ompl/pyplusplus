@@ -105,42 +105,42 @@ Special syntax should be introduce to support
   BUI does not work for template instantiated classes and functions. If we change
   class ``Point`` to be template, the special syntax should be introduced:
 
- .. code-block:: C++
+    .. code-block:: C++
 
-   template < class Numeric >
-   struct Point{
-       ...
-   };
+     template < class Numeric >
+     struct Point{
+         ...
+     };
 
-.. code-block:: Python
+    .. code-block:: Python
 
-   PointTmpl = mb.module.template('Point')
-   Point = PointTmpl( 'int' )
+       PointTmpl = mb.module.template('Point')
+       Point = PointTmpl( 'int' )
 
- This is a trivial example, that is why it looks grate. Consider next class:
+  This is a trivial example, that is why it looks grate. Consider next class:
 
-. code-block:: C++
+    .. code-block:: C++
 
-   template< class String, class Allocator >
-   class regex{ ... }
+       template< class String, class Allocator >
+       class regex{ ... }
 
- The code the user will need to write is:
+  The code the user will need to write is:
 
- .. code-block:: Python
+    .. code-block:: Python
 
-    regex_tmpl = mb.module.geometry.template( 'regex' )
-    #white spaces and scope resolution( :: ) are important
-    regex_std_string = regex_tmpl(
-          '::std::basic_string<char,std::char_traits<char>,std::allocator<char> >'
-        , '::std::allocator<char>' )
+       regex_tmpl = mb.module.geometry.template( 'regex' )
+       #white spaces and scope resolution( :: ) are important
+       regex_std_string = regex_tmpl(
+             '::std::basic_string<char,std::char_traits<char>,std::allocator<char> >'
+           , '::std::allocator<char>' )
 
- Using current `Py++`_ interface the user can get reference to the class
- instantiation in one line of code:
+  Using current `Py++`_ interface the user can get reference to the class
+  instantiation in one line of code:
 
-.. code-block:: Python
+    .. code-block:: Python
 
-   regex_std_string = mb.class_(
-      lambda decl: decl.name.startswith( 'regex' ) and 'wchar_t' not in decl.name )
+       regex_std_string = mb.class_(
+          lambda decl: decl.name.startswith( 'regex' ) and 'wchar_t' not in decl.name )
 
 * overloaded functions resolution
 
@@ -165,9 +165,9 @@ Full name
 Using BUI the user is forced to write full declaration name, otherwise he faces
 next problem:
 
-.. code-block:: Python
+  .. code-block:: Python
 
-  Point = mb.module.Point
+     Point = mb.module.Point
 
 Lets analyze what the ``Point`` value:
 
@@ -182,7 +182,7 @@ Lets analyze what the ``Point`` value:
 
    .. code-block:: Python
 
-     Point.add_registration_code( ... )
+      Point.add_registration_code( ... )
 
    Constructor declaration does not define ``add_registration_code`` method.
    According to Python rules: "Errors should never pass silently", exception

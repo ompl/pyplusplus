@@ -45,7 +45,40 @@ Who is using Py++?
   .. __ : http://www.highend3d.com/maya
 
 * Lakin Wecker, the author of `Python-OGRE`_ project, is using `Py++`_ to
-  create Python bindings for `OGRE`_.
+  create Python bindings for `OGRE`_. 
+  
+  `OGRE`_ - is a scene-oriented, flexible 3D engine written in C++ designed to 
+  make it easier and more intuitive for developers to produce applications 
+  utilising hardware-accelerated 3D graphics. 
+
+* Andy Miller, another developer of `Python-OGRE`_ project, is using `Py++`_ to
+  create Python bindings for:
+  
+  * `CEGUI`_ - a free library providing windowing and widgets for graphics 
+    APIs / engines where such functionality is not natively available, or 
+    severely lacking. 
+
+    .. _`CEGUI` : http://www.cegui.org.uk/wiki/index.php/Main_Page
+
+  * `Newton`_ - Newton Game Dynamics, a closed source (but free) physics and 
+    collisions library.
+
+    .. _`Newton` : http://www.newtondynamics.com/apache2-default/
+
+  * `ODE`_ - an open source, high performance library for simulating rigid body 
+    dynamics. 
+
+    .. _`ODE` : http://www.ode.org/
+
+  * `OIS`_ - an object oriented input system.
+  
+    .. _`OIS` : http://www.wreckedgames.com/wiki/index.php/WreckedLibs:OIS
+
+* Nicolas Tessore is using `Py++`_ to create Python bindings for `NifTools`_
+  project. You can read in his `blog`_ what he thinks about `Py++`_.
+
+  .. _`NifTools` : http://www.niftools.org/wiki/index.php/NIF_File_Format_Library_and_Tools
+  .. _`blog` : http://ni-te.de/blog/?p=10
 
 * I am :-). I created Python bindings for next libraries:
 
