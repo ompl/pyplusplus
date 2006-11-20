@@ -8,13 +8,14 @@ class tester_t( unittest.TestCase ):
 
     def test( self ):
         ptr = shared_ptr.create_ptr()
-        self.failUnless( ptr.name == "ptr" )
+        self.failUnless( ptr.text == "ptr" )
         self.failUnless( shared_ptr.read_ptr( ptr ) == "ptr" )
         
         const_ptr = shared_ptr.create_const_ptr()
-        self.failUnless( const_ptr.name == "const ptr" )
+        self.failUnless( const_ptr.text == "const ptr" )
         self.failUnless( shared_ptr.read_const_ptr( const_ptr ) == "const ptr" )
         
+        #testing conversion functionality
         self.failUnless( shared_ptr.read_const_ptr( ptr ) == "ptr" )
 
 def create_suite():
