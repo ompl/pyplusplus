@@ -42,8 +42,11 @@ Boost.Python installation
 -------------------------
 
 Users of Microsoft Windows can enjoy from simple `installer for Boost Libraries`_.
-You can find it `here`_.
+You can find it `here`_. Take a look on new `getting started guide`_ for Boost
+libraries.
 
+
+.. _`getting started guide` : http://boost.cvs.sourceforge.net/*checkout*/boost/boost/more/getting_started.html
 .. _`here` : http://www.boost-consulting.com/download.html
 .. _`installer for Boost Libraries` : http://www.boost-consulting.com/download.html
 
