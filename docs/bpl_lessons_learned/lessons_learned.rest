@@ -14,13 +14,18 @@ I see many interesting problems and even more interesting solutions.
 On this page you will find my collection of the solutions to some of the problems.
 
 
-`Custom smart pointer class`_
+`custom smart pointer class`_
 
   .. include:: ./smart_ptrs/definition.rest
 
-.. _`Custom smart pointer class` : ./smart_ptrs/smart_ptrs.html
+.. _`custom smart pointer class` : ./smart_ptrs/smart_ptrs.html
 
+`boost::shared_ptr< const T>`_
 
+  .. include:: ./shared_ptr/definition.rest
+
+.. _`boost::shared_ptr< const T>` : ./shared_ptr/shared_ptr.html
+  
 .. _`Py++` : ./../pyplusplus.html
 .. _`pygccxml` : http://www.language-binding.net/pygccxml/pygccxml.html
 .. _`SourceForge`: http://sourceforge.net/index.php
