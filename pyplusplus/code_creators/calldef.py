@@ -6,26 +6,21 @@
 import os
 import algorithm
 import code_creator
+import calldef_utils
 import declaration_based
 import registration_based
 import class_declaration
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 
-#virtual functions that returns const reference to something
-#could not be overriden by Python. The reason is simple:
-#in boost::python::override::operator(...) result of marshaling
-#(Python 2 C++) is saved on stack, after functions returns the result
-#will be reference to no where - access violetion.
-#For example see temporal variable tester
-
-use_enum_workaround = False
-
 #TODO:
 #Add to docs:
 #public memebr functions - call, override, call base implementation
 #protected member functions - call, override
 #private - override
+
+def make_id_creator( code_creator ):
+    return lambda decl_string: algorithm.create_identifier( code_creator, decl_string )        
 
 class calldef_t( registration_based.registration_based_t
                  , declaration_based.declaration_based_t ):
@@ -55,44 +50,9 @@ class calldef_t( registration_based.registration_based_t
     def param_sep(self):
         return os.linesep + self.indent( self.PARAM_SEPARATOR )
 
-    def should_use_enum_wa( self, arg ):
-        global use_enum_workaround
-        if not declarations.is_enum( arg.type ):
-            return False
-        if use_enum_workaround:
-            return True
-        #enum belongs to the class we are working on
-        if self.declaration.parent is declarations.enum_declaration( arg.type ).parent \
-           and isinstance( self.declaration, declarations.constructor_t ):
-            return True
-        return False
-
     def keywords_args(self):
-        boost_arg = algorithm.create_identifier( self, '::boost::python::arg' )
-        boost_obj = algorithm.create_identifier( self, '::boost::python::object' )
-        result = ['( ']
-        for arg in self.declaration.arguments:
-            if 1 < len( result ):
-                result.append( self.PARAM_SEPARATOR )
-            result.append( boost_arg )
-            result.append( '("%s")' % arg.name )
-            if self.declaration.use_default_arguments and arg.default_value:
-                if not declarations.is_pointer( arg.type ) or arg.default_value != '0':
-                    arg_type_no_alias = declarations.remove_alias( arg.type )
-                    if declarations.is_fundamental( arg_type_no_alias ) \
-                       and declarations.is_integral( arg_type_no_alias ) \
-                       and not arg.default_value.startswith( arg_type_no_alias.decl_string ):
-                        result.append( '=(%s)(%s)' % ( arg_type_no_alias.decl_string, arg.default_value ) )
-                    elif self.should_use_enum_wa( arg ):
-                        #Work around for bug/missing functionality in boost.python.
-                        #registration order
-                        result.append( '=(long)(%s)' % arg.default_value )
-                    else:
-                        result.append( '=%s' % arg.default_value )
-                else:
-                    result.append( '=%s()' % boost_obj )
-        result.append( ' )' )
-        return ''.join( result )
+        arg_utils = calldef_utils.argument_utils_t( self.declaration, make_id_creator( self ) )
+        return arg_utils.keywords_args()
 
     def create_def_code( self ):
         if not self.works_on_instance:
@@ -175,32 +135,16 @@ class calldef_wrapper_t( code_creator.code_creator_t
         code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=function )
 
-    def argument_name( self, index ):
-        arg = self.declaration.arguments[ index ]
-        if arg.name:
-            return arg.name
-        else:
-            return 'p%d' % index
-
-    def args_declaration( self ):
-        args = []
-        for index, arg in enumerate( self.declaration.arguments ):
-            result = arg.type.decl_string + ' ' + self.argument_name(index)
-            if arg.default_value:
-                result += '=%s' % arg.default_value
-            args.append( result )
-        if len( args ) == 1:
-            return args[ 0 ]
-        return ', '.join( args )
-
     def override_identifier(self):
         return algorithm.create_identifier( self, '::boost::python::override' )
 
     def function_call_args( self ):
-        params = []
-        for index, arg in enumerate( self.declaration.arguments ):
-            params.append( decl_wrappers.python_traits.call_traits( arg.type )  %  self.argument_name( index ) )
-        return ', '.join( params )
+        arg_utils = calldef_utils.argument_utils_t( self.declaration, make_id_creator( self ) )
+        return arg_utils.call_args()
+
+    def args_declaration( self ):
+        arg_utils = calldef_utils.argument_utils_t( self.declaration, make_id_creator( self ) )
+        return arg_utils.args_declaration()
 
     def wrapped_class_identifier( self ):
         return algorithm.create_identifier( self, declarations.full_name( self.declaration.parent ) )
@@ -897,10 +841,9 @@ class constructor_wrapper_t( calldef_wrapper_t ):
     def _create_constructor_call( self ):
         answer = [ algorithm.create_identifier( self, self.parent.declaration.decl_string ) ]
         answer.append( '( ' )
-        params = []
-        for index in range( len( self.declaration.arguments ) ):
-            params.append( self.argument_name( index ) )
-        answer.append( ', '.join( params ) )
+        arg_utils = calldef_utils.argument_utils_t( self.declaration, make_id_creator( self ) )
+        params = arg_utils.call_args()
+        answer.append( params )
         if params:
             answer.append(' ')
         answer.append( ')' )
