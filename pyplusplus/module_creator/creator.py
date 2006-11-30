@@ -6,6 +6,7 @@
 import types_database
 import creators_wizard
 import sort_algorithms
+import dependencies_manager
 import opaque_types_manager
 import call_policies_resolver
 from pygccxml import declarations
@@ -127,7 +128,9 @@ class creator_t( declarations.decl_visitor_t ):
         self.__exposed_free_fun_overloads = set()
         self.__opaque_types_manager = opaque_types_manager.manager_t( self.__extmodule )
         self.__return_pointee_value_exists = False
-
+        
+        self.__dependencies_manager = dependencies_manager.manager_t(self.decl_logger)
+        
     def _prepare_decls( self, decls, doc_extractor ):
         decls = declarations.make_flatten( decls )
 
@@ -181,6 +184,7 @@ class creator_t( declarations.decl_visitor_t ):
                                              and operator is creator.declaration
                              , creator.creators ):
                     #expose operator only once
+                    self.__dependencies_manager.add_exported( operator )
                     creator.adopt_creator( code_creators.operator_t( operator=operator ) )
             elif not creator:
                 pass
@@ -302,6 +306,7 @@ class creator_t( declarations.decl_visitor_t ):
             used_headers.add( isuite[ container_name ] )
 
             cls_creator = create_cls_cc( cls )
+            self.__dependencies_manager.add_exported( cls )
             creators.append( cls_creator )
             try:
                 element_type = cls.indexing_suite.element_type
@@ -370,6 +375,7 @@ class creator_t( declarations.decl_visitor_t ):
             creator.target_configuration = self.__target_configuration
         #last action.
         self._append_user_code()
+        self.__dependencies_manager.inform_user()
         return self.__extmodule
 
     def _create_includes(self):
@@ -380,6 +386,7 @@ class creator_t( declarations.decl_visitor_t ):
     def visit_member_function( self ):
         fwrapper = None
         self.__types_db.update( self.curr_decl )
+        self.__dependencies_manager.add_exported( self.curr_decl )
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
         self.__on_demand_include_call_policies( self.curr_decl.call_policies )
@@ -436,6 +443,7 @@ class creator_t( declarations.decl_visitor_t ):
         if self.curr_decl.is_copy_constructor:
             return
         self.__types_db.update( self.curr_decl )
+        self.__dependencies_manager.add_exported( self.curr_decl )
         if self.curr_decl.allow_implicit_conversion:
             maker = code_creators.casting_constructor_t( constructor=self.curr_decl )
             self.__module_body.adopt_creator( maker )
@@ -461,8 +469,10 @@ class creator_t( declarations.decl_visitor_t ):
             self.__types_db.update( self.curr_decl )
             maker = code_creators.operator_t( operator=self.curr_decl )
             self.curr_code_creator.adopt_creator( maker )
+            self.__dependencies_manager.add_exported( self.curr_decl )
 
     def visit_casting_operator( self ):
+        self.__dependencies_manager.add_exported( self.curr_decl )
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
         self.__on_demand_include_call_policies( self.curr_decl.call_policies )
@@ -494,6 +504,7 @@ class creator_t( declarations.decl_visitor_t ):
                     self.__exposed_free_fun_overloads.update( overloads )
                     for f in overloads:
                         self.__types_db.update( f )
+                        self.__dependencies_manager.add_exported( f )
                         if None is f.call_policies:
                             f.call_policies = self.__call_policies_resolver( f )
                         self.__on_demand_include_call_policies( f.call_policies )
@@ -514,6 +525,7 @@ class creator_t( declarations.decl_visitor_t ):
                         overloads_reg.associated_decl_creators.extend( uc_creators )
         else:
             self.__types_db.update( self.curr_decl )
+            self.__dependencies_manager.add_exported( self.curr_decl )
             if None is self.curr_decl.call_policies:
                 self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
             self.__on_demand_include_call_policies( self.curr_decl.call_policies )
@@ -557,6 +569,7 @@ class creator_t( declarations.decl_visitor_t ):
 
                 for f in overloads:
                     self.__types_db.update( f )
+                    self.__dependencies_manager.add_exported( f )
                     if None is f.call_policies:
                         f.call_policies = self.__call_policies_resolver( f )
                     self.__on_demand_include_call_policies( f.call_policies )
@@ -572,7 +585,7 @@ class creator_t( declarations.decl_visitor_t ):
         return exposed
 
     def visit_class(self ):
-        assert isinstance( self.curr_decl, declarations.class_t )
+        self.__dependencies_manager.add_exported( self.curr_decl )
         cls_decl = self.curr_decl
         cls_parent_cc = self.curr_code_creator
         exportable_members = self.curr_decl.get_exportable_members(sort_algorithms.sort)
@@ -643,7 +656,7 @@ class creator_t( declarations.decl_visitor_t ):
 
 
     def visit_enumeration(self):
-        assert isinstance( self.curr_decl, declarations.enumeration_t )
+        self.__dependencies_manager.add_exported( self.curr_decl )
         maker = None
         if self.curr_decl.name:
             maker = code_creators.enum_t( enum=self.curr_decl )
@@ -667,7 +680,8 @@ class creator_t( declarations.decl_visitor_t ):
 
     def visit_variable(self):
         self.__types_db.update( self.curr_decl )
-
+        self.__dependencies_manager.add_exported( self.curr_decl )
+        
         if declarations.is_array( self.curr_decl.type ):
             if not self.__cr_array_1_included:
                 self.__extmodule.add_system_header( code_repository.array_1.file_name )
