@@ -253,19 +253,16 @@ class mem_fun_v_transformed_t( calldef_t ):
     def controller( self ):
         return self.ft.controller
     
+    @property
+    def function_type_alias( self ):
+        return 'default_' + self.alias + '_function_type'
+
     def _get_alias_impl( self ):
         return self.wrapper.ft.alias
     
     def create_function_type_alias_code( self, exported_class_alias=None ):
-        result = []
-
-        ftype = self.declaration.function_type()
-        result.append( 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias )  )
-        if self.wrapper:
-            result.append( os.linesep )
-            ftype = self.wrapper.function_type()
-            result.append( 'typedef %s;' % ftype.create_typedef( self.default_function_type_alias ) )
-        return ''.join( result )
+        ftype = self.wrapper.default_function_type()
+        return 'typedef %s;' % ftype.create_typedef( self.function_type_alias )
 
     def create_keywords_args(self):
         cntrl = self.controller.default_controller

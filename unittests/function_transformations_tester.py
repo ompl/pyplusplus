@@ -48,6 +48,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         point3d.mem_fun( 'distance' ).add_transformation( ft.output(1) )
         
         image = mb.class_( "image_t" )
+        image.always_expose_using_scope = True
         image.member_function( "get_size" )
         image.member_function( "get_size" ).add_transformation( ft.output(0), ft.output(1) )
         image.member_function( "get_one_value" ).add_transformation( ft.output(0) )
