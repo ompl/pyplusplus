@@ -8,72 +8,50 @@
 import os
 from string import Template
 
-# function_name - C++ function name
-# function_alias - function name that Python user will see
+#TODO: pre_call, post_call terminology should be changed. Use prefix and suffix
+#instead: http://boost.org/libs/smart_ptr/sp_techniques.html#wrapper
 
-class mem_fun: 
+class sealed_fun: 
     body = Template( os.linesep.join([
-          '$declare_variables'
-        , '$pre_call'
-        , '$save_return_value_stmt$function_name($input_params);'
-        , '$post_call'
-        , '$return_stmt'
-    ]))
-
-class mem_fun_v:    
-    
-    original_function_call = Template( "$return_$wrapped_class::%function_name( $args );" )
-
-    override_body = Template( os.linesep.join([
-        '$declare_variables'
-        , '$declare_override_function = this->get_override( "$function_alias" );'
-        , 'if( $override_function_var_name ){'
-        , '    $declare_override_variables'
-        , '    $override_pre_call'
-        , '    ${save_override_return_value}boost::python::call<$override_return_type>( $override_function_var_name$override_input_params;'
-        , '    $override_post_call'
-        , '    $override_return_stmt'
-        , '}'
-        , 'else{'
-        , '    ' + original_function_call.template
+          'static $return_type $unique_function_name( $arg_declarations ){'
+        , '    $declare_variables'
+        , '    $pre_call'
+        , '    $save_result$function_name($arg_expressions);'
+        , '    $post_call'
+        , '    $return'
         , '}'
     ]))
 
-    override_body_safe = Template( os.linesep.join([
-        '$declare_gil_guard'
-        , '$declare_variables'
-        , '$lock_gil_guard'
-        , '$declare_override_function = this->get_override( "$function_alias" );'
-        , '$unlock_gil_guard'
-        , 'if( $override_function_var_name ){'
-        , '    $lock_gil_guard //release() will be called from destructor'
-        , '    $declare_override_variables'
-        , '    $override_pre_call'
-        , '    ${save_override_return_value}boost::python::call<$override_return_type>( $override_function_var_name$override_input_params;'
-        , '    $override_post_call'
-        , '    $override_return_stmt'
-        , '}'
-        , 'else{'
-        , '    ' + original_function_call.template
+class virtual_mem_fun:    
+    override = Template( os.linesep.join([
+          'virtual $return_type $function_name( $arg_declarations )$constness $throw{'
+        , '    namespace bpl = boost::python;'
+        , '    if( bpl::override $py_function_var = this->get_override( "$function_alias" ) ){'
+        , '        $declare_py_variables'
+        , '        $py_pre_call'
+        , '        ${save_py_result}bpl::call<bpl::object>( $py_function_var.ptr()$py_arg_expressions );'
+        , '        $py_post_call'
+        , '        $py_return'
+        , '    }'
+        , '    else{'
+        , '        $cpp_return$wrapped_class::$function_name( $cpp_arg_expressions );'
+        , '    }'
         , '}'
     ]))
     
-    default_body = Template( os.linesep.join([
-          '$declare_variables'
-        , '$pre_call'
-        , '$declare_wrapped_class_inst'
-        , 'if( dynamic_cast< $wrapped_class* >( boost::addressof( $wrapped_class_inst_var_name ) ) ){'
-        # The following call is done on an instance created in Python i.e. a 
-        # wrapper instance. this call might invoke python code.
-        , '    $save_return_value_stmt$wrapped_class_inst_var_name->$wrapped_class::$function_name($input_params);'
+    default = Template( os.linesep.join([
+          'static $return_type $unique_function_name( $arg_declarations ){'
+        , '    $declare_variables'
+        , '    $pre_call'
+        , '    if( dynamic_cast< $wrapper_class* >( boost::addressof( $wrapped_inst ) ) ){'
+        , '        $save_result$wrapped_inst.$wrapped_class::$function_name($arg_expressions);'
+        , '    }'
+        , '    else{'
+        , '        $save_result$wrapped_inst.$function_name($arg_expressions);'
+        , '    }'
+        , '    $post_call'
+        , '    $return'
         , '}'
-        , 'else{'
-        # The following call is done on an instance created in C++, so it won't 
-        # invoke python code.
-        , '    $save_return_value_stmt$function_name($input_params);'
-        , '}'
-        , '$post_call'
-        , '$return_stmt'
     ]))
 
 

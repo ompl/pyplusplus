@@ -4,482 +4,415 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-#import algorithm
-#import code_creator
+import algorithm
+import code_creator
+import calldef_utils
 import class_declaration
 from pygccxml import declarations
 from calldef import calldef_t, calldef_wrapper_t
 import pyplusplus.function_transformers as function_transformers
 from pyplusplus import code_repository
 
-######################################################################
+#TODO: constructors also can have transformation defined. We should use make _init
+# function for this purpose
 
-class mem_fun_transformed_t( calldef_t ):
-    """Creates code for public non-virtual member functions.
-    """
-
+def remove_duplicate_linesep( code ):
+    lines = code.split( os.linesep )
+    lines = filter( lambda line: line.strip(), lines )
+    return os.linesep.join( lines )
+    
+class sealed_fun_transformed_t( calldef_t ):
     def __init__( self, function, wrapper=None ):
         calldef_t.__init__( self, function=function, wrapper=wrapper )
 
+    @property
+    def ft( self ): #function transformation
+        return self.declaration.transformations[0]
+
+    @property 
+    def controller( self ):
+        return self.ft.controller
+    
+    def _get_alias_impl( self ):
+        return self.wrapper.ft.alias
+    
     def create_function_type_alias_code( self, exported_class_alias=None  ):
-        if self.wrapper==None:
-            ftype = self.declaration.function_type()
-        else:
-            ftype = self.wrapper.function_type()
-        res = 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias )
-        return res
+        ftype = self.wrapper.function_type()
+        return 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias )
 
     def create_function_ref_code(self, use_function_alias=False):
-        if self.wrapper:
-            full_name = self.wrapper.full_name()
-        else:
-            full_name = declarations.full_name( self.declaration )
+        full_name = self.wrapper.full_name()
 
         if use_function_alias:
             return '%s( &%s )' \
                    % ( self.function_type_alias, full_name )
         elif self.declaration.create_with_signature:
-            if self.wrapper:
-                func_type = self.wrapper.function_type()
-            else:
-                func_type = self.declaration.function_type().decl_string
-            return '(%s)( &%s )' \
-                   % ( func_type, full_name )
+            func_type = self.wrapper.function_type()
+            return '(%s)( &%s )' % ( func_type, full_name )
         else:
             return '&%s' % full_name
 
+    def create_call_policies( self ):
+        return ''
 
-class mem_fun_transformed_wrapper_t( calldef_wrapper_t ):
-    """Creates wrapper code for (public) non-virtual member functions.
-
-    The generated function is either used as a static member inside the
-    wrapper class (when self.parent is not None) or as a free function
-    (when self.parent is None).
-    """
-
+class sealed_fun_transformed_wrapper_t( calldef_wrapper_t ):
     def __init__( self, function ):
-        """Constructor.
-
-        @param function: Function declaration
-        @type function: calldef_t
-        """
         calldef_wrapper_t.__init__( self, function=function )
 
-        # Create the substitution manager
-        sm = function_transformers.substitution_manager_t( function
-                                                           , transformers=function.transformations[0].transformers)
-        sm.init_funcs()
-        self._subst_manager = sm
+    @property
+    def ft( self ): #function transformation
+        return self.declaration.transformations[0]
 
-    def function_type(self):
-        """Return the type of the wrapper function.
+    @property 
+    def controller( self ):
+        return self.ft.controller
 
-        @rtype: type_t
-        """
-        template = '$RET_TYPE'
-        rettype = self._subst_manager.subst_wrapper(template)
-        rettype = declarations.dummy_type_t(rettype)
+    def resolve_function_ref( self ):
+        raise NotImplementedError()
 
-        return declarations.free_function_type_t(
-                return_type=rettype
-                , arguments_types=map( lambda arg: arg.type, self.declaration.arguments ) )
+    def create_fun_definition(self):
+        cntrl = self.controller
 
-    def wrapper_name(self):
-        """Return the name of the wrapper function.
+        make_object = algorithm.create_identifier( self, 'pyplusplus::call_policies::make_object' )
+        make_tuple = algorithm.create_identifier( self, 'boost::python::make_tuple' )
+        
+        tmpl_values = dict()
 
-        This is just the local name without any scope information.
-        """
-        # A list with the individual components of the name
-        components = ["_py"]
-        # Is the wrapper placed outside a wrapper class?
-        if not isinstance(self.parent, class_declaration.class_wrapper_t):
-            # Incorporate the original class name into the name
-            components.append(self.declaration.parent.name)
-        components.append(self.declaration.alias)
-        return "_".join(components)
+        tmpl_values['unique_function_name'] = self.wrapper_name()
+        tmpl_values['return_type'] = self.controller.wrapper_return_type.decl_string
+        tmpl_values['arg_declarations'] = self.args_declaration()
+        
+        tmpl_values['declare_variables'] \
+            = os.linesep + os.linesep.join( map( lambda var: self.indent( var.declare_var_string() )
+                                                 , cntrl.variables ) )
+                
+        tmpl_values['pre_call'] = os.linesep + self.indent( os.linesep.join( cntrl.pre_call ) )
 
-    def full_name(self):
-        """Return the full name of the wrapper function.
+        tmpl_values['save_result'] = ''
+        if not declarations.is_void( self.declaration.return_type ):
+            tmpl_values['save_result'] \
+                = '%(type)s %(name)s = ' \
+                  % { 'type': cntrl.result_variable.type.decl_string
+                      , 'name' : cntrl.result_variable.name }
 
-        The returned name also includes the class name (if there is any).
+        tmpl_values['function_name'] = self.resolve_function_ref()
+        tmpl_values['arg_expressions'] = self.PARAM_SEPARATOR.join( cntrl.arg_expressions )
+        return_stmt_creator = calldef_utils.return_stmt_creator_t( self
+                                    , self.controller
+                                    , self.controller.result_variable
+                                    , self.controller.return_variables )
 
-        @rtype: str
-        """
-        if isinstance(self.parent, class_declaration.class_wrapper_t):
-            return self.parent.full_name + '::' + self.wrapper_name()
-        else:
-            return self.wrapper_name()
-
-    def create_declaration(self, name):
-        """Create the function header.
-        """
-        template = 'static $RET_TYPE %(name)s( $ARG_LIST_DEF ) %(throw)s'
-
-        # Substitute the $-variables
-        template = self._subst_manager.subst_wrapper(template)
-
-        return template % {
-            'name' : self.wrapper_name()
-            , 'throw' : self.throw_specifier_code()
-        }
-
-    def create_body(self):
-        body = os.linesep.join([
-            '$DECLARATIONS'
-            , '$PRE_CALL'
-            , '$RESULT_VAR_ASSIGNMENT$CALL_FUNC_NAME($INPUT_PARAMS);'
-            , '$POST_CALL'
-            , '$RETURN_STMT'
-        ])
-
-        # Replace the $-variables
-        body = self._subst_manager.subst_wrapper(body)
-
-        return body
-
-    def create_function(self):
-        answer = [70*"/"]
-        answer.append("// Transformed wrapper function for:")
-        answer.append("// %s"%self.declaration)
-        answer.append(70*"/")
-        answer.append( self.create_declaration(self.declaration.alias) + '{')
-        answer.append( self.indent( self.create_body() ) )
-        answer.append( '}' )
-        return os.linesep.join( answer )
-
+        tmpl_values['post_call'] = os.linesep + self.indent( os.linesep.join( cntrl.post_call ) )
+        if return_stmt_creator.pre_return_code:
+            tmpl_values['post_call'] \
+                = os.linesep.join([ tmpl_values['post_call']
+                                    , self.indent( return_stmt_creator.pre_return_code )])
+        tmpl_values['return'] = os.linesep + self.indent( return_stmt_creator.statement )
+            
+        f_def = self.controller.template.substitute(tmpl_values)
+        return remove_duplicate_linesep( f_def )
+        
     def _create_impl(self):
-
-        answer = self.create_function()
-
-        # Replace the argument list of the declaration so that in the
-        # case that keywords are created, the correct arguments will be
-        # picked up (i.e. the modified argument list and not the original
-        # argument list)
-        self.declaration.arguments = self._subst_manager.wrapper_func.arg_list
-
-        return answer
-
-######################################################################
-
-class mem_fun_v_transformed_t( calldef_t ):
-    """Creates code for (public) virtual member functions.
+        return self.create_fun_definition()
+        
+class free_fun_transformed_t( sealed_fun_transformed_t ):
+    """Creates code for public non-virtual member functions.
     """
 
     def __init__( self, function, wrapper=None ):
-        calldef_t.__init__( self, function=function, wrapper=wrapper )
-        self.default_function_type_alias = 'default_' + self.function_type_alias
+        sealed_fun_transformed_t.__init__( self, function=function, wrapper=wrapper )
+        self.works_on_instance = False
 
-    def create_function_type_alias_code( self, exported_class_alias=None ):
-        if self.wrapper==None:
-            ftype = self.declaration.function_type()
-        else:
-            ftype = self.wrapper.function_type()
+    def create_def_code( self ):
+        return self.def_identifier()
 
-        result = []
-        result.append( 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias )  )
-        return ''.join( result )
-
-    def create_doc(self):
-        return None
-
-    def create_function_ref_code(self, use_function_alias=False):
-        if self.wrapper:
-            full_name = self.wrapper.default_full_name()
-        else:
-            full_name = declarations.full_name( self.declaration )
-
-        result = []
-        if use_function_alias:
-            result.append( '%s(&%s)'
-                           % ( self.function_type_alias, full_name ) )
-        elif self.declaration.create_with_signature:
-            if self.wrapper:
-                func_type = self.wrapper.function_type()
-            else:
-                func_type = self.declaration.function_type().decl_string
-            result.append( '(%s)(&%s)'
-                           % ( func_type, full_name ) )
-        else:
-            result.append( '&%s' % full_name )
-
-        return ''.join( result )
+    def create_keywords_args(self):
+        arg_utils = calldef_utils.argument_utils_t( self.declaration
+                                                   , algorithm.make_id_creator( self )
+                                                   , self.controller.wrapper_args )
+        return arg_utils.keywords_args()
 
 
-class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
-    """Creates wrapper code for (public) virtual member functions.
-
-    The generated code consists of two functions: the virtual function
-    and the 'default' function.
-    """
-
+class free_fun_transformed_wrapper_t( sealed_fun_transformed_wrapper_t ):
     def __init__( self, function ):
         """Constructor.
 
         @param function: Function declaration
         @type function: calldef_t
         """
-        calldef_wrapper_t.__init__( self, function=function )
-
-        # Create the substitution manager
-        sm = function_transformers.substitution_manager_t(function
-                                                          , transformers=function.transformations[0].transformers )
+        sealed_fun_transformed_wrapper_t .__init__( self, function=function )
         
-        sm.init_funcs()
-        self._subst_manager = sm
-
-        # Stores the name of the variable that holds the override
-        self._override_var \
-            = sm.virtual_func.declare_variable(function.alias + "_callable", 'boost::python::override')
-        # Stores the name of the 'gstate' variable
-        self._gstate_var \
-            = sm.virtual_func.declare_variable("gstate", 'pyplusplus::threading ::gil_guard_t' )
-
-    def default_name(self):
-        """Return the name of the 'default' function.
-
-        @rtype: str
-        """
-        return "default_" + self.declaration.alias
-
-    def default_full_name(self):
-        """Return the full name of the 'default' function.
-
-        The returned name also includes the class name.
-
-        @rtype: str
-        """
-        return self.parent.full_name + '::default_' + self.declaration.alias
-
-    def virtual_name(self):
-        """Return the name of the 'virtual' function.
-
-        @rtype: str
-        """
-        return self.declaration.name
-
-    def base_name(self):
-        """Return the name of the 'base' function.
-
-        @rtype: str
-        """
-        return "base_" + self.declaration.name
-
     def function_type(self):
-        template = '$RET_TYPE'
-        rettype = self._subst_manager.subst_wrapper(template)
-        rettype = declarations.dummy_type_t(rettype)
-
         return declarations.free_function_type_t(
-                return_type=rettype
-                , arguments_types=map( lambda arg: arg.type, self.declaration.arguments ) )
+                  return_type=self.controller.wrapper_return_type
+                , arguments_types=self.controller.wrapper_args )
 
-        return declarations.member_function_type_t(
-                return_type=self.declaration.return_type
-                , class_inst=declarations.dummy_type_t( self.parent.full_name )
-                , arguments_types=map( lambda arg: arg.type, self.declaration.arguments )
-                , has_const=self.declaration.has_const )
+    def wrapper_name( self ):
+        return self.ft.unique_name
 
-    def create_declaration(self, name, virtual=True):
-        """Create the function header.
+    def full_name(self):
+        return self.ft.unique_name
 
-        This method is used for the virtual function (and the base_ function),
-        but not for the default function.
-        """
-        template = '%(virtual)s$RET_TYPE %(name)s( $ARG_LIST_DEF )%(constness)s %(throw)s'
+    def args_declaration( self ):
+        arg_utils = calldef_utils.argument_utils_t( 
+                          self.declaration
+                        , algorithm.make_id_creator( self )
+                        , self.controller.wrapper_args )
+        return arg_utils.args_declaration()
 
-        # Substitute the $-variables
-        template = self._subst_manager.subst_virtual(template)
-
-        virtualspec = ''
-        if virtual:
-            virtualspec = 'virtual '
-
-        constness = ''
-        if self.declaration.has_const:
-            constness = ' const '
+    def create_declaration(self, name):
+        template = 'static %(return_type)s %(name)s( %(args)s )'
 
         return template % {
-            'virtual' : virtualspec
-            , 'name' : name
-            , 'constness' : constness
-            , 'throw' : self.throw_specifier_code()
+            'return_type' : self.controller.wrapper_return_type.decl_string
+            , 'name' : self.wrapper_name()
+            , 'args' : self.args_declaration()
         }
 
-    def create_base_body(self):
-        body = "%(return_)s%(wrapped_class)s::%(name)s( %(args)s );"
+    def resolve_function_ref( self ):
+        return declarations.full_name( self.declaration )
 
-        return_ = ''
-        if not declarations.is_void( self.declaration.return_type ):
-            return_ = 'return '
 
-        return body % {
-              'name' : self.declaration.name
-            , 'args' : self.function_call_args()
-            , 'return_' : return_
-            , 'wrapped_class' : self.wrapped_class_identifier()
-        }
+class mem_fun_transformed_t( sealed_fun_transformed_t ):
+    """Creates code for public non-virtual member functions.
+    """
+    def __init__( self, function, wrapper=None ):
+        sealed_fun_transformed_t.__init__( self, function=function, wrapper=wrapper )
 
-    def create_virtual_body(self):
+    def create_keywords_args(self):
+        args = self.controller.wrapper_args[:]
+        if self.controller.inst_arg:
+            args.insert( 0, self.controller.inst_arg )
 
-        thread_safe = self.declaration.transformations[0].thread_safe
+        arg_utils = calldef_utils.argument_utils_t( self.declaration
+                                                   , algorithm.make_id_creator( self )
+                                                   , args )
+        return arg_utils.keywords_args()
 
-        if thread_safe:
-            body = """
-pyplusplus::threading::gil_guard_t %(gstate_var)s;
+class mem_fun_transformed_wrapper_t( sealed_fun_transformed_wrapper_t ):
+    def __init__( self, function ):
+        """Constructor.
 
-%(gstate_var)s.ensure();
-boost::python::override %(override_var)s = this->get_override( "%(alias)s" );
-%(gstate_var)s.release();
+        @param function: Function declaration
+        @type function: calldef_t
+        """
+        sealed_fun_transformed_wrapper_t.__init__( self, function=function )
 
-if( %(override_var)s )
-{
-  // The corresponding release() is done in the destructor of %(gstate_var)s
-  %(gstate_var)s.ensure();
+    def __is_global( self ):
+        return not isinstance( self.parent, class_declaration.class_wrapper_t )
 
-  $DECLARATIONS
+    def function_type(self):
+        args = map( lambda arg: arg.type, self.controller.wrapper_args ) 
+        if self.controller.inst_arg:
+            args.insert( 0, self.controller.inst_arg.type )
+        return declarations.free_function_type_t(
+                  return_type=self.controller.wrapper_return_type
+                , arguments_types=args )
 
-  try {
-    $PRE_CALL
-
-    ${RESULT_VAR_ASSIGNMENT}boost::python::call<$RESULT_TYPE>($INPUT_PARAMS);
-
-    $POST_CALL
-
-    $RETURN_STMT
-  }
-  catch(...)
-  {
-    if (PyErr_Occurred())
-    {
-      PyErr_Print();
-    }
-
-    $CLEANUP
-
-    $EXCEPTION_HANDLER_EXIT
-  }
-}
-else
-{
-  %(inherited)s
-}
-"""
-
-        if not thread_safe:
-            body = """
-boost::python::override %(override_var)s = this->get_override( "%(alias)s" );
-
-if( %(override_var)s )
-{
-  $DECLARATIONS
-
-  $PRE_CALL
-
-  ${RESULT_VAR_ASSIGNMENT}boost::python::call<$RESULT_TYPE>($INPUT_PARAMS);
-
-  $POST_CALL
-
-  $RETURN_STMT
-}
-else
-{
-  %(inherited)s
-}
-"""
-
-        vf = self._subst_manager.virtual_func
-        arg0 = "%s.ptr()"%self._override_var
-        if vf.INPUT_PARAMS=="":
-            vf.INPUT_PARAMS = arg0
+    def wrapper_name( self ):
+        if self.__is_global():
+            return self.ft.unique_name
         else:
-            vf.INPUT_PARAMS = arg0+", "+vf.INPUT_PARAMS
+            if self.declaration.overloads: 
+                #it is possible that other functions will have same signature
+                return self.ft.unique_name
+            else:
+                return self.declaration.name            
 
-        # Replace the $-variables
-        body = self._subst_manager.subst_virtual(body)
+    def full_name(self):
+        if self.__is_global():
+            return self.ft.unique_name
+        else:
+            return self.parent.full_name + '::' + self.wrapper_name()
 
-        return body % {
-            'override_var' : self._override_var
-            , 'gstate_var' : self._gstate_var
-            , 'alias' : self.declaration.alias
-            , 'inherited' : self.create_base_body()
-        }
+    def args_declaration( self ):
+        args = self.controller.wrapper_args[:]
+        if self.controller.inst_arg:
+            args.insert( 0, self.controller.inst_arg )
+        arg_utils = calldef_utils.argument_utils_t( 
+                          self.declaration
+                        , algorithm.make_id_creator( self )
+                        , args )
+        return arg_utils.args_declaration()
 
-    def create_default_body(self):
-        cls_wrapper_type = self.parent.full_name
-        cls_wrapper = self._subst_manager.wrapper_func.declare_variable("cls_wrapper", cls_wrapper_type);
-        # The name of the 'self' variable (i.e. first argument)
-        selfname = self._subst_manager.wrapper_func.arg_list[0].name
+    def resolve_function_ref( self ):
+        if self.controller.inst_arg:
+            return self.controller.inst_arg.name + '.' + self.declaration.name
+        else:
+            return declarations.full_name( self.declaration )
 
-        body = """$DECLARATIONS
+class mem_fun_v_transformed_t( calldef_t ):
+    def __init__( self, function, wrapper=None ):
+        calldef_t.__init__( self, function=function, wrapper=wrapper )
 
-$PRE_CALL
+    @property
+    def ft( self ): #function transformation
+        return self.declaration.transformations[0]
 
-%(cls_wrapper_type)s* %(cls_wrapper)s = dynamic_cast<%(cls_wrapper_type)s*>(boost::addressof(%(self)s));
-if (%(cls_wrapper)s==0)
-{
-  // The following call is done on an instance created in C++,
-  // so it won't invoke Python code.
-  $RESULT_VAR_ASSIGNMENT$CALL_FUNC_NAME($INPUT_PARAMS);
-}
-else
-{
-  // The following call is done on an instance created in Python,
-  // i.e. a wrapper instance. This call might invoke Python code.
-  $RESULT_VAR_ASSIGNMENT%(cls_wrapper)s->%(base_name)s($INPUT_PARAMS);
-}
-
-$POST_CALL
-
-$RETURN_STMT
-"""
-
-        # Replace the $-variables
-        body = self._subst_manager.subst_wrapper(body)
-
-        # Replace the remaining parameters
-        body = body%{"cls_wrapper_type" : cls_wrapper_type,
-                     "cls_wrapper" : cls_wrapper,
-                     "self" : selfname,
-                     "base_name" : self.base_name() }
-        return body
-
-    def create_function(self):
-        answer = [ self.create_declaration(self.declaration.name) + '{' ]
-        answer.append( self.indent( self.create_virtual_body() ) )
-        answer.append( '}' )
-        return os.linesep.join( answer )
-
-    def create_base_function( self ):
-        answer = [ self.create_declaration("base_"+self.declaration.name, False) + '{' ]
-        body = "%(return_)s%(wrapped_class)s::%(name)s( %(args)s );"
-        answer.append( self.indent( self.create_base_body() ) )
-        answer.append( '}' )
-        return os.linesep.join( answer )
-
-    def create_default_function( self ):
-
-        header = 'static $RET_TYPE %s( $ARG_LIST_DEF ) {'%self.default_name()
-        header = self._subst_manager.subst_wrapper(header)
-
-        answer = [ header ]
-        answer.append( self.indent( self.create_default_body() ) )
-        answer.append( '}' )
-        return os.linesep.join( answer )
-
-    def _create_impl(self):
-
-        answer = [ self.create_function() ]
-        answer.append( os.linesep )
-        answer.append( self.create_base_function() )
-        answer.append( os.linesep )
-        answer.append( self.create_default_function() )
-        answer = os.linesep.join( answer )
-
-        # Replace the argument list of the declaration so that in the
-        # case that keywords are created, the correct arguments will be
-        # picked up (i.e. the modified argument list and not the original
-        # argument list)
-        self.declaration.arguments = self._subst_manager.wrapper_func.arg_list
-
-        return answer
+    @property 
+    def controller( self ):
+        return self.ft.controller
     
+    def _get_alias_impl( self ):
+        return self.wrapper.ft.alias
+    
+    def create_function_type_alias_code( self, exported_class_alias=None ):
+        result = []
+
+        ftype = self.declaration.function_type()
+        result.append( 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias )  )
+        if self.wrapper:
+            result.append( os.linesep )
+            ftype = self.wrapper.function_type()
+            result.append( 'typedef %s;' % ftype.create_typedef( self.default_function_type_alias ) )
+        return ''.join( result )
+
+    def create_keywords_args(self):
+        cntrl = self.controller.default_controller
+        arg_utils = calldef_utils.argument_utils_t( self.declaration
+                                                   , algorithm.make_id_creator( self )
+                                                   , [cntrl.inst_arg] + cntrl.wrapper_args )
+        return arg_utils.keywords_args()
+
+    def create_function_ref_code(self, use_function_alias=False):
+        full_name = self.wrapper.default_full_name()
+        if use_function_alias:
+            return '%s( &%s )' % ( self.function_type_alias, full_name )
+        elif self.declaration.create_with_signature:
+            func_type = self.wrapper.default_function_type()
+            return '(%s)( &%s )' % ( func_type, full_name )
+        else:
+            return '&%s' % full_name
+
+class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
+    def __init__( self, function ):
+        calldef_wrapper_t.__init__( self, function=function )
+
+    @property
+    def ft( self ): #function transformation
+        return self.declaration.transformations[0]
+
+    @property 
+    def controller( self ):
+        return self.ft.controller
+
+    def default_name(self):
+        if self.declaration.overloads: 
+            #it is possible that other functions will have same signature
+            return 'default_' + self.ft.unique_name
+        else:
+            return 'default_' + self.declaration.alias 
+
+    def default_full_name(self):
+        return self.parent.full_name + '::' + self.default_name()
+
+    def args_override_declaration( self ):
+        return self.args_declaration()
+
+    def args_default_declaration( self ):
+        cntrl = self.controller.default_controller
+        arg_utils = calldef_utils.argument_utils_t( self.declaration
+                                                    , algorithm.make_id_creator( self )
+                                                    , [cntrl.inst_arg] + cntrl.wrapper_args )
+        return arg_utils.args_declaration()
+
+    def default_function_type(self):
+        cntrl = self.controller.default_controller
+        args = [cntrl.inst_arg.type] + map( lambda arg: arg.type, cntrl.wrapper_args ) 
+        return declarations.free_function_type_t( return_type=cntrl.wrapper_return_type
+                                                  , arguments_types=args )
+
+    def create_default(self):
+        cntrl = self.controller.default_controller
+
+        make_object = algorithm.create_identifier( self, 'pyplusplus::call_policies::make_object' )
+        make_tuple = algorithm.create_identifier( self, 'boost::python::make_tuple' )
+        
+        tmpl_values = dict()
+
+        tmpl_values['unique_function_name'] = self.default_name()
+        tmpl_values['return_type'] = cntrl.wrapper_return_type.decl_string
+        tmpl_values['arg_declarations'] = self.args_default_declaration()        
+        tmpl_values['wrapper_class'] = self.parent.wrapper_alias
+        tmpl_values['wrapped_class'] = declarations.full_name( self.declaration.parent )
+        tmpl_values['wrapped_inst'] = cntrl.inst_arg.name
+        
+        decl_vars = cntrl.variables[:]
+        if not declarations.is_void( self.declaration.return_type ):
+            decl_vars.append( cntrl.result_variable )
+        tmpl_values['declare_variables'] \
+            = os.linesep + os.linesep.join( map( lambda var: self.indent( var.declare_var_string() )
+                                                 , decl_vars ) )
+                
+        tmpl_values['pre_call'] = os.linesep + self.indent( os.linesep.join( cntrl.pre_call ) )
+
+        tmpl_values['save_result'] = ''
+        if not declarations.is_void( self.declaration.return_type ):
+            tmpl_values['save_result'] = '%s = ' % cntrl.result_variable.name
+
+        tmpl_values['function_name'] = self.declaration.name
+        tmpl_values['arg_expressions'] = self.PARAM_SEPARATOR.join( cntrl.arg_expressions )
+        return_stmt_creator = calldef_utils.return_stmt_creator_t( self
+                                    , cntrl
+                                    , cntrl.result_variable
+                                    , cntrl.return_variables )
+
+        tmpl_values['post_call'] = os.linesep + self.indent( os.linesep.join( cntrl.post_call ) )
+        if return_stmt_creator.pre_return_code:
+            tmpl_values['post_call'] \
+                = os.linesep.join([ tmpl_values['post_call']
+                                    , self.indent( return_stmt_creator.pre_return_code )])
+        tmpl_values['return'] = os.linesep + self.indent( return_stmt_creator.statement )
+            
+        f_def = cntrl.template.substitute(tmpl_values)
+        return remove_duplicate_linesep( f_def )
+
+    def wrapped_class_identifier( self ):
+        return algorithm.create_identifier( self, declarations.full_name( self.declaration.parent ) )
+
+    def create_override(self):
+        cntrl = self.controller.override_controller       
+        
+        tmpl_values = dict()
+        tmpl_values['return_type' ] = self.declaration.return_type.decl_string 
+        tmpl_values['function_name'] = self.declaration.name
+        tmpl_values['arg_declarations'] = self.args_override_declaration()
+        tmpl_values['constness'] = ''
+        if self.declaration.has_const:
+            tmpl_values['constness'] = ' const '
+        tmpl_values['throw'] = self.throw_specifier_code()        
+        tmpl_values['py_function_var'] = cntrl.py_function_var
+        tmpl_values['function_alias'] = self.declaration.alias
+        tmpl_values['declare_py_variables'] \
+            = os.linesep + os.linesep.join( map( lambda var: self.indent( var.declare_var_string(), 2 )
+                                                 , cntrl.py_variables ) )
+
+        tmpl_values['py_pre_call'] = os.linesep + self.indent( os.linesep.join( cntrl.py_pre_call ), 2 )
+        tmpl_values['py_post_call'] = os.linesep + self.indent( os.linesep.join( cntrl.py_post_call ), 2 )
+        tmpl_values['py_arg_expressions'] = ''
+        if cntrl.py_arg_expressions:
+            tmpl_values['py_arg_expressions'] \
+                = ', ' + declarations.call_invocation.join( '', cntrl.py_arg_expressions )
+            
+        tmpl_values['save_py_result'] = "bpl::object %s = " % cntrl.py_result_variable.name
+        tmpl_values['py_return'] = ''
+        tmpl_values['cpp_return'] = ''
+        if not declarations.is_void( self.declaration.return_type ):
+            tmpl_values['py_return'] \
+                = 'return bpl::extract< %(type)s >( pyplus_conv::get_out_argument( %(py_result)s, 0 ) );' \
+                  % { 'type' : self.declaration.return_type.decl_string
+                    , 'py_result' : cntrl.py_result_variable.name }
+            tmpl_values['cpp_return'] = 'return '
+
+        tmpl_values['wrapped_class'] = self.wrapped_class_identifier()
+
+        arg_utils = calldef_utils.argument_utils_t( self.declaration
+                                                   , algorithm.make_id_creator( self )
+                                                   , self.declaration.arguments )
+        tmpl_values['cpp_arg_expressions'] = arg_utils.call_args()
+
+        f_def_code = cntrl.template.substitute(tmpl_values)
+        return remove_duplicate_linesep( f_def_code )
+        
+    def _create_impl(self):
+        return os.linesep.join([ self.create_override(), '', self.create_default() ])

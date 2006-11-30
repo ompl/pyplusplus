@@ -19,9 +19,6 @@ from pyplusplus import decl_wrappers
 #protected member functions - call, override
 #private - override
 
-def make_id_creator( code_creator ):
-    return lambda decl_string: algorithm.create_identifier( code_creator, decl_string )        
-
 class calldef_t( registration_based.registration_based_t
                  , declaration_based.declaration_based_t ):
     def __init__(self, function, wrapper=None ):
@@ -50,10 +47,15 @@ class calldef_t( registration_based.registration_based_t
     def param_sep(self):
         return os.linesep + self.indent( self.PARAM_SEPARATOR )
 
-    def keywords_args(self):
-        arg_utils = calldef_utils.argument_utils_t( self.declaration, make_id_creator( self ) )
+    def create_keywords_args(self):
+        arg_utils = calldef_utils.argument_utils_t( self.declaration, algorithm.make_id_creator( self ) )
         return arg_utils.keywords_args()
 
+    def create_call_policies( self ):
+        if self.declaration.call_policies.is_default():
+            return ''
+        return self.declaration.call_policies.create( self )
+                
     def create_def_code( self ):
         if not self.works_on_instance:
             return '%s.def' % self.parent.class_var_name
@@ -96,15 +98,16 @@ class calldef_t( registration_based.registration_based_t
         result.append( self.create_function_ref_code( not self.works_on_instance ) )
 
         if self.declaration.use_keywords:
-            result.append( self.param_sep() )
-            result.append( self.keywords_args() )
+            keywd_args = self.create_keywords_args()
+            if keywd_args:
+                result.append( self.param_sep() )
+                result.append( keywd_args )
 
         if self.declaration.call_policies:
-            if not self.declaration.call_policies.is_default():
+            c_p_code = self.create_call_policies()
+            if c_p_code:
                 result.append( self.param_sep() )
-                result.append( self.declaration.call_policies.create( self ) )
-            else:
-                pass#don't generate default_call_policies
+                result.append( c_p_code )
         else:
             result.append( os.linesep + self.indent( '/* undefined call policies */', 2 ) )
 
@@ -139,11 +142,11 @@ class calldef_wrapper_t( code_creator.code_creator_t
         return algorithm.create_identifier( self, '::boost::python::override' )
 
     def function_call_args( self ):
-        arg_utils = calldef_utils.argument_utils_t( self.declaration, make_id_creator( self ) )
+        arg_utils = calldef_utils.argument_utils_t( self.declaration, algorithm.make_id_creator( self ) )
         return arg_utils.call_args()
 
     def args_declaration( self ):
-        arg_utils = calldef_utils.argument_utils_t( self.declaration, make_id_creator( self ) )
+        arg_utils = calldef_utils.argument_utils_t( self.declaration, algorithm.make_id_creator( self ) )
         return arg_utils.args_declaration()
 
     def wrapped_class_identifier( self ):
@@ -779,7 +782,7 @@ class constructor_t( calldef_t ):
         answer.append( '(' )
         keywords_args = None
         if self.declaration.use_keywords:
-            keywords_args = self.keywords_args()
+            keywords_args = self.create_keywords_args()
             answer.append( '%s' % keywords_args )
         if self.documentation:
             if keywords_args:
@@ -841,7 +844,7 @@ class constructor_wrapper_t( calldef_wrapper_t ):
     def _create_constructor_call( self ):
         answer = [ algorithm.create_identifier( self, self.parent.declaration.decl_string ) ]
         answer.append( '( ' )
-        arg_utils = calldef_utils.argument_utils_t( self.declaration, make_id_creator( self ) )
+        arg_utils = calldef_utils.argument_utils_t( self.declaration, algorithm.make_id_creator( self ) )
         params = arg_utils.call_args()
         answer.append( params )
         if params:
@@ -1177,7 +1180,7 @@ class calldef_overloads_t( registration_based.registration_based_t ):
     def create_end_def_code( self ):
         raise NotImplementedError()
 
-    def keywords_args(self):
+    def create_keywords_args(self):
         result = [ algorithm.create_identifier( self, '::boost::python::args' ) ]
         result.append( '( ' )
         args = []
@@ -1199,7 +1202,7 @@ class calldef_overloads_t( registration_based.registration_based_t ):
     def create_overloads_cls( self ):
         result = [ self.overloads_class.name ]
         result.append( '( ' )
-        result.append( os.linesep + self.indent( self.keywords_args(), 3 ) )
+        result.append( os.linesep + self.indent( self.create_keywords_args(), 3 ) )
         if self.overloads_class.max_function.documentation:
             result.append( os.linesep + self.indent( self.PARAM_SEPARATOR, 3 ) )
             result.append( self.overloads_class.max_function.documentation )

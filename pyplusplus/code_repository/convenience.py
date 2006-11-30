@@ -135,8 +135,29 @@ array_inserter_t<T> array_inserter( T* array, index_type size ){
     return array_inserter_t<T>( array, size );
 }
 
+inline boost::python::object 
+get_out_argument( boost::python::object result, const char* arg_name ){
+    if( PySequence_Check( result.ptr() ) ){
+        return boost::python::getattr( result, arg_name );
+    }    
+    else{
+        return result;
+    }
+}
+
+inline boost::python::object 
+get_out_argument( boost::python::object result, index_type index ){
+    if( PySequence_Check( result.ptr() ) ){
+        return result[ index ];
+    }    
+    else{
+        return result;
+    }
+}
+
 } /*pyplusplus*/ } /*convenience*/
 
+namespace pyplus_conv = pyplusplus::convenience;
 
 #endif//__convenience_pyplusplus_hpp__
 

@@ -168,10 +168,14 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         if len( self.arguments ) > calldef_t.BOOST_PYTHON_MAX_ARITY:
             tmp = [ "The function has more than %d arguments ( %d ). " ]
             tmp.append( "You should adjust BOOST_PYTHON_MAX_ARITY macro." )
-            tmp.append( "For more information see: http://mail.python.org/pipermail/c++-sig/2002-June/001554.html" )
+            tmp.append( "For more information see: http://www.boost.org/libs/python/doc/v2/configuration.html" )
             tmp = ' '.join( tmp )
             msgs.append( tmp % ( calldef_t.BOOST_PYTHON_MAX_ARITY, len( self.arguments ) ) )
-
+        
+        if self.transformations:
+            #if user defined transformation, than I think it took care of the problems
+            return msgs
+            
         if suspicious_type( self.return_type ) and None is self.call_policies:
             msgs.append( 'The function "%s" returns non-const reference to C++ fundamental type - value can not be modified from Python.' % str( self ) )
 

@@ -58,11 +58,12 @@ class property_recognizer_i(object):
 class name_based_recognizer_t( property_recognizer_i ):
     def __init__( self ):
         property_recognizer_i.__init__( self )
-        self.__prefixes = (
-            (  'is', 'set' )
-          , ( 'get', 'set' )
-          , ( 'has', 'set' )
-          , (    '', 'set' ) )
+        
+    def prefixes( self ):
+        return [  (  'is', 'set' )
+                , ( 'get', 'set' )
+                , ( 'has', 'set' )
+                , (    '', 'set' ) ]
 
     def check_prefix( self, name, prefix ):
         if not name.startswith( prefix ):
@@ -105,7 +106,7 @@ class name_based_recognizer_t( property_recognizer_i ):
           , self.make_l_camel_convention ]
 
         for convention_maker in convention_makers:
-            for g, s in self.__prefixes:
+            for g, s in self.prefixes():
                 gc, sc = convention_maker( g, s )
                 if self.check_name_compatibility( gname, sname, gc, sc ):
                     return ( gc, sc )
@@ -118,7 +119,7 @@ class name_based_recognizer_t( property_recognizer_i ):
           , self.make_l_camel_convention ]
 
         for convention_maker in convention_makers:
-            for g, unused in self.__prefixes:
+            for g, unused in self.prefixes():
                 if not g:
                     continue
                 gc, unused = convention_maker( g, 'set' )

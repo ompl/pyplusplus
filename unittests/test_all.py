@@ -67,6 +67,7 @@ import arrays_bug_tester
 import convenience_tester
 import inner_class_bug_tester
 import declarations_order_bug_tester
+import function_transformations_tester
 
 def create_suite(times):
     testers = [
@@ -130,6 +131,7 @@ def create_suite(times):
         , convenience_tester
         , inner_class_bug_tester
         , declarations_order_bug_tester
+        , function_transformations_tester
     ]
 
     main_suite = unittest.TestSuite()

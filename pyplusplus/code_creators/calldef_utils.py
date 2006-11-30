@@ -3,6 +3,8 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import os
+import algorithm
 import code_creator
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
@@ -39,6 +41,8 @@ class argument_utils_t:
         return False
 
     def keywords_args(self):
+        if not self.__args:
+            return ''
         boost_arg = self.__id_creator( '::boost::python::arg' )
         boost_obj = self.__id_creator( '::boost::python::object' )
         result = ['( ']
@@ -86,8 +90,66 @@ class argument_utils_t:
     def call_args( self ):
         params = []
         for index, arg in enumerate( self.__args ):
-            params.append( decl_wrappers.python_traits.call_traits( arg.type )  %  self.argument_name( index ) )
+            params.append( decl_wrappers.python_traits.call_traits( arg.type )
+                           % self.argument_name( index ) )
         return ', '.join( params )
 
+class return_stmt_creator_t( object ):
+    def __init__( self, creator, controller, result_var, return_vars ):
+        object.__init__( self )
+        self.__creator = creator
+        self.__controller = controller
+        self.__function = controller.function
+        self.__return_vars = return_vars[:]
+        self.__pre_return_code = None
+        self.__return_stmt = None
+        self.__result_var = result_var
+        self.__call_policy_alias = controller.register_variable_name( 'call_policies_t' )
+        
+    @property
+    def pre_return_code( self ):
+        if None is self.__pre_return_code:
+            if not self.__controller.return_variables \
+               or self.__function.call_policies.is_default() \
+               or declarations.is_void( self.__function.return_type ):
+                self.__pre_return_code = ''
+            else:
+                c_p_typedef = 'typedef %s %s;' \
+                              % ( self.__function.call_policies.create_template_arg( self.__creator )
+                                  , self.__call_policy_alias )
+                self.__pre_return_code = c_p_typedef
+        return self.__pre_return_code
 
+    @property
+    def statement( self ):      
+        if None is self.__return_stmt:
+            stmt = ''
+            bpl_object = algorithm.create_identifier( self.__creator, 'boost::python::object' )            
+            make_tuple = algorithm.create_identifier( self.__creator, 'boost::python::make_tuple' )            
+            make_object = algorithm.create_identifier( self.__creator, 'pyplusplus::call_policies::make_object' )
 
+            if not declarations.is_void( self.__function.return_type ):
+                if self.__function.call_policies.is_default():
+                    self.__return_vars.insert( 0, self.__result_var.name )
+                else:
+                    self.__return_vars.insert( 0
+                            , declarations.call_invocation.join( 
+                                declarations.templates.join( make_object, [self.__call_policy_alias] )
+                                , [self.__result_var.name] ) )
+            
+            if 0 == len( self.__return_vars ):
+                pass
+            elif 1 == len( self.__return_vars ):
+                stmt = bpl_object + '( %s )' % self.__return_vars[ 0 ]
+            else: # 1 < 
+                stmt = declarations.call_invocation.join( make_tuple, self.__return_vars )
+                if self.__creator.LINE_LENGTH < len( stmt ):
+                    stmt = declarations.call_invocation.join( 
+                                  make_tuple
+                                , self.__return_vars
+                                , os.linesep + self.__creator.indent( self.__creator.PARAM_SEPARATOR, 6 ) )
+                    
+            if stmt:
+                stmt = 'return ' + stmt + ';'
+            self.__return_stmt = stmt
+        return self.__return_stmt

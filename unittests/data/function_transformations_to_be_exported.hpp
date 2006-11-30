@@ -6,6 +6,91 @@
 #ifndef __function_transformations_to_be_exported_hpp__
 #define __function_transformations_to_be_exported_hpp__
 
+#include <cmath>
+#include <string>
+
+namespace ft2{
+    
+void hello_world( std::string& hw ){
+    hw = "hello world!";
+}
+    
+//used to check output transformer
+struct calculator_t{
+    calculator_t(){
+    }
+
+    virtual ~calculator_t(){
+    }
+    
+    int assign_0_1_2( int& one, int& two ){
+        one = 1;
+        two = 2;
+        return 0;
+    }
+    
+    void assign_1_2( int& one, int& two ){
+        assign_0_1_2( one, two );
+    }
+    
+    calculator_t* clone_and_assign_5( int& five ){
+        five = 5;
+        return new calculator_t();
+    }
+};
+
+//used to check input\inout transformers
+struct window_t{
+    window_t()
+    : height( 0 )
+      , width( 0 )
+    {}
+    
+    void resize( int& h, int& w ){
+        height = h;
+        width = w;
+    }
+    
+    int resize_in_out( int& h, int& w){
+        height *= h; 
+        h = height;
+        width *= w;
+        w = width;
+        return h*w;
+    }
+    
+    int height;
+    int width;
+};
+
+struct point3d_t{
+    
+    point3d_t()
+    : x( 0 ), y(0), z(0)
+    {}
+        
+    int initialize( int v[3] ){
+        x = v[0];
+        y = v[1];
+        z = v[2];
+        return x*y*z;
+    }
+    
+    void position( int v[3] ){
+        v[0] = x;
+        v[1] = y;
+        v[2] = z;        
+    }        
+    
+    static void distance( const point3d_t& pt, double& dist ){
+        dist = sqrt( double( pt.x*pt.x + pt.y*pt.y + pt.z*pt.z ) );
+    }
+    
+    int x, y, z;
+};
+    
+}
+
 namespace ft{
 
 struct image_t{

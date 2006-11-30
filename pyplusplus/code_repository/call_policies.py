@@ -70,6 +70,14 @@ struct return_pointee_value{
 
 };
 
+template< typename CallPolicies, class T >
+bpl::object make_object( T const & x ){
+    //constructs object using CallPolicies result_converter
+    typedef BOOST_DEDUCED_TYPENAME CallPolicies::result_converter:: template apply< T >::type result_converter_t;
+    result_converter_t rc;
+    return bpl::object( bpl::handle<>( rc( x ) ) );
+}
+
 } /*pyplusplus*/ } /*call_policies*/
 
 

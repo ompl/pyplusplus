@@ -15,10 +15,11 @@ C{char data[23];}
 
 import array_1
 import gil_guard
+import named_tuple
 import convenience
 import call_policies
 
-all = [ array_1, gil_guard, convenience, call_policies ]
+all = [ array_1, gil_guard, convenience, call_policies, named_tuple ]
 
 headers = map( lambda f: f.file_name, all )
 

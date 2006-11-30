@@ -99,3 +99,6 @@ class creator_finder:
         if recursive:
             search_area = make_flatten_generator( where )
         return filter( lambda inst: isinstance( inst, what ), search_area )
+
+def make_id_creator( code_creator ):
+    return lambda decl_string: create_identifier( code_creator, decl_string )        

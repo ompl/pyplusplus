@@ -3,7 +3,7 @@ import templates
 from pygccxml import declarations
 
 class variable_t( object ):
-    def __init__( self, name, type, initialize_expr='' ):
+    def __init__( self, type, name, initialize_expr='' ):
         self.__name = name
         self.__type = type
         self.__initialize_expr = initialize_expr
@@ -25,19 +25,23 @@ class variable_t( object ):
                                      , name=self.name
                                      , type=self.type
                                      , initialize_expr=self.initialize_expr )
-    
-class controller_base_t( object ):
-    def __init__( self, function ):
+
+class variables_manager_t( object ):
+    def __init__( self ):
         object.__init__( self )
-        self.__function = function
-        self.__variables = {} #name : variable
-        self.__names_in_use = set( map( lambda arg: arg.name, self.function.arguments ) )
+        self.__variables = [] #variables
+        self.__names_in_use = set()
+    
+    @property
+    def variables( self ):
+        return self.__variables
         
     def declare_variable( self, type, name, initialize_expr='' ):
         unique_name = self.__create_unique_var_name( name )
-        self.__variables[ unique_name ] = variable_t( type, unique_name, initialize_expr )
+        self.__variables.append( variable_t( type, unique_name, initialize_expr ) )
+        return unique_name
     
-    def register_variable_name( self, name ):
+    def register_name( self, name ):
         return self.__create_unique_var_name( name )
         
     def __create_unique_var_name( self, name ):
@@ -45,39 +49,100 @@ class controller_base_t( object ):
         unique_name = name
         while 1:
             if unique_name in self.__names_in_use:
-                unique_name = "%s_%d" % ( name, n )
+                unique_name = "%s%d" % ( name, n )
                 n += 1
             else:
                 self.__names_in_use.add( unique_name )
                 return unique_name
 
-class mem_fun_controller_t( controller_base_t ):
+def create_variables_manager( function ):
+    vm = variables_manager_t()
+    map( lambda arg: vm.register_name( arg.name ) , function.arguments )
+    return vm
+
+class controller_base_t( object ):
+    def __init__( self, function ):
+        self.__function = function
+
+    @property
+    def function( self ):
+        return self.__function
+
+    def apply( self, transformations ):
+        raise NotImplementedError()
+
+class sealed_fun_controller_t( controller_base_t ): 
+    #base class for free and member function controllers
     def __init__( self, function ):
         controller_base_t.__init__( self, function )
-        self.__transformed_args = function.arguments[:]
-        self.__transformed_return_type = function.return_type
-        
+        self.__vars_manager = create_variables_manager( function )
+        self.__wrapper_args = [ arg.clone() for arg in function.arguments ]
+        self.__result_var = variable_t( self.function.return_type
+                                        , self.register_variable_name( 'result' ) )
         self.__return_variables = []
         self.__pre_call = []
         self.__post_call = []
-        self.__save_return_value_stmt = None
-        self.__input_params = [ arg.name for arg in function.arguments ]        
-        self.__return_stmt = None
+        self.__arg_expressions = [ arg.name for arg in function.arguments ]
+
+    @property
+    def variables( self ):
+        return self.__vars_manager.variables
+        
+    def declare_variable( self, type, name, initialize_expr='' ):
+        return self.__vars_manager.declare_variable( type, name, initialize_expr)
+    
+    def register_variable_name( self, name ):
+        return self.__vars_manager.register_name( name )
+        
+    @property 
+    def result_variable( self ):
+        return self.__result_var
+    
+    @property
+    def template( self ):
+        return templates.sealed_fun.body
         
     @property
-    def transformed_args( self ):
-        return self.__transformed_args
+    def wrapper_args( self ):
+        return self.__wrapper_args
+
+    def find_wrapper_arg( self, name ):
+        for arg in self.wrapper_args:
+            if arg.name == name:
+                return arg
+        return None
+
+    def remove_wrapper_arg( self, name ):
+        arg = self.find_wrapper_arg( name )
+        if not arg:
+            raise LookupError( "Unable to remove '%s' argument - not found!" % name ) 
+        del self.wrapper_args[ self.wrapper_args.index(arg) ]
+
+    @property
+    def arg_expressions( self ):
+        return self.__arg_expressions
+
+    def modify_arg_expression( self, index, expression ):
+        self.arg_expressions[ index ] = expression
     
-    def __get_transformed_return_type( self ):
-        return self.__transformed_return_type        
-    def __set_transformed_return_type( self, type_ ):
-        if isinstane( type, types.StringTypes ):
-            type_ = declarations.dummy_type_t( type_ )
-        self.__transformed_return_type = type_
-    transformed_return_type = property( __get_transformed_return_type, __set_transformed_return_type )
+    @property
+    def wrapper_return_type( self ):
+        return_vars_count = len( self.return_variables )
+        if not declarations.is_void( self.function.return_type ):
+            return_vars_count += 1
+        if 0 == return_vars_count:
+            return self.function.return_type #return type is void
+        elif 1 == return_vars_count:
+            return declarations.dummy_type_t( 'boost::python::object' )
+        else:
+            return declarations.dummy_type_t( 'boost::python::tuple' )
+        
+    @property
+    def return_variables( self ):
+        return self.__return_variables
     
-    def add_return_variable( self, variable_name ):
-        self.__return_variables.append( name )
+    def return_variable( self, variable_name ):
+        self.__return_variables.append( variable_name )
     
     @property
     def pre_call( self ):
@@ -87,22 +152,133 @@ class mem_fun_controller_t( controller_base_t ):
         self.__pre_call.append( code )
         
     @property
-    def pos_call( self ):
+    def post_call( self ):
         return self.__post_call
     
     def add_post_call_code( self, code ):
         self.__post_call.append( code )
-       
-    def __get_save_return_value_stmt( self ):
-        return self.__save_return_value_stmt
-    def __set_save_return_value_stmt( self, expr ):
-        self.__save_return_value_stmt = expr
-    save_return_value_stmt = property( __get_save_return_value_stmt, __set_save_return_value_stmt )
     
-    def set_input_param( self, index, var_name_or_expr ):
-        self.__input_params[ index ] = var_name_or_expr
+class mem_fun_controller_t( sealed_fun_controller_t ):
+    def __init__( self, function ):
+        sealed_fun_controller_t.__init__( self, function )
         
+        inst_arg_type = declarations.declarated_t( self.function.parent )
+        if self.function.has_const:
+            inst_arg_type = declarations.const_t( inst_arg_type )
+        inst_arg_type = declarations.reference_t( inst_arg_type )
+        
+        self.__inst_arg = None
+        if not self.function.has_static:
+            self.__inst_arg = declarations.argument_t( name=self.register_variable_name( 'inst' )
+                                                       , type=inst_arg_type )
+
+    def apply( self, transformations ):
+        map( lambda t: t.configure_mem_fun( self ), transformations )
+
+    @property 
+    def inst_arg( self ):
+        return self.__inst_arg
+
+class free_fun_controller_t( sealed_fun_controller_t ):
+    def __init__( self, function ):
+        sealed_fun_controller_t.__init__( self, function )
+
+    def apply( self, transformations ):
+        map( lambda t: t.configure_free_fun( self ), transformations )
+
+
+class virtual_mem_fun_controller_t( controller_base_t ):
+    class override_fun_controller_t( controller_base_t ):
+        def __init__( self, function ):
+            controller_base_t.__init__( self, function )
+            self.__py_vars_manager = create_variables_manager( function )
+            self.__py_function_var \
+                = self.__py_vars_manager.register_name( 'func_' + function.alias )
+            self.__py_pre_call = []
+            self.__py_post_call = []
+            self.__py_result_var = variable_t( declarations.dummy_type_t( 'boost::python::object' )
+                                               , self.register_py_variable_name( 'py_result' ) )
+    
+            self.__py_arg_expressions = [ arg.name for arg in function.arguments ]
+
+        @property
+        def template( self ):
+            return templates.virtual_mem_fun.override
+
+        @property
+        def py_variables( self ):
+            return self.__py_vars_manager.variables
+            
+        def declare_py_variable( self, type, name, initialize_expr='' ):
+            return self.__py_vars_manager.declare_variable( type, name, initialize_expr)
+        
+        def register_py_variable_name( self, name ):
+            return self.__py_vars_manager.register_name( name )
+            
+        @property
+        def py_function_var( self ):
+            return self.__py_function_var
+        
+        @property
+        def py_pre_call( self ):
+            return self.__py_pre_call
+            
+        def add_py_pre_call_code( self, code ):
+            self.__py_pre_call.append( code )
+            
+        @property
+        def py_post_call( self ):
+            return self.__py_post_call
+        
+        def add_py_post_call_code( self, code ):
+            self.__py_post_call.append( code )
+    
+        @property
+        def py_result_variable( self ):
+            return self.__py_result_var
+        
+        @property
+        def py_arg_expressions( self ):
+            return filter( None, self.__py_arg_expressions )
+    
+        def remove_py_arg( self, index ):
+            self.__py_arg_expressions[ index ] = None
+            
+        def modify_py_arg_expression( self, index, expression ):
+            self.arg_expressions[ index ] = expression
+    
+    class default_fun_controller_t( sealed_fun_controller_t ):
+        def __init__( self, function ):
+            sealed_fun_controller_t.__init__( self, function )
+            
+            inst_arg_type = declarations.declarated_t( self.function.parent )
+            if self.function.has_const:
+                inst_arg_type = declarations.const_t( inst_arg_type )
+            inst_arg_type = declarations.reference_t( inst_arg_type )
+            
+            self.__inst_arg = declarations.argument_t( name=self.register_variable_name( 'inst' )
+                                                       , type=inst_arg_type )
+
+        @property 
+        def inst_arg( self ):
+            return self.__inst_arg
+        
+        @property
+        def template( self ):
+            return templates.virtual_mem_fun.default
+
+    def __init__( self, function ):
+        controller_base_t.__init__( self, function )
+        self.__override_cntrl = self.override_fun_controller_t( function )
+        self.__default_cntrl = self.default_fun_controller_t( function )
+
+    def apply( self, transformations ):
+        map( lambda t: t.configure_virtual_mem_fun( self ), transformations )
+
     @property
-    def return_stmt
-    
-        
+    def override_controller( self ):
+        return self.__override_cntrl
+
+    @property
+    def default_controller( self ):
+        return self.__default_cntrl

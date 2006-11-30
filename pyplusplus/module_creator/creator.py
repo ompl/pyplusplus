@@ -47,19 +47,6 @@ INDEXING_SUITE_2_CONTAINERS = {
 
 INDEXING_SUITE_2_MAIN_HEADER = "boost/python/suite/indexing/container_suite.hpp"
 
-DO_NOT_REPORT_MSGS = [
-    "Py++ does not exports compiler generated constructors"
-    , 'Py++, by default, does not expose internal compilers declarations. Names of those declarations usually start with "__".'
-    , 'Py++, by default, does not expose internal declarations (those that gccxml say belong to "<internal>" header).'
-    , 'Py++, by default, does not expose compiler generated declarations.'
-    , 'Py++ can not expose private class.'
-    , 'Py++ will generate class wrapper - class contains definition of virtual or pure virtual member function'
-    , "Py++ doesn't expose private or protected member variables."
-    , "Py++ doesn't export private not virtual functions."
-    , "Py++ doesn't export private constructor."
-    , "Py++ doesn't export private operators."
-]
-
 class creator_t( declarations.decl_visitor_t ):
     """Creating code creators.
 
@@ -142,8 +129,6 @@ class creator_t( declarations.decl_visitor_t ):
         self.__return_pointee_value_exists = False
 
     def _prepare_decls( self, decls, doc_extractor ):
-        global DO_NOT_REPORT_MSGS
-
         decls = declarations.make_flatten( decls )
 
         for decl in decls:
@@ -164,7 +149,7 @@ class creator_t( declarations.decl_visitor_t ):
             if doc_extractor and decl.exportable:
                 decl.documentation = doc_extractor( decl )
 
-            readme = filter( lambda msg: msg not in DO_NOT_REPORT_MSGS, decl.readme() )
+            readme = filter( lambda msg: msg not in decl_wrappers.skip_messages, decl.readme() )
             if not readme:
                 continue
             
@@ -533,7 +518,14 @@ class creator_t( declarations.decl_visitor_t ):
                 self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
             self.__on_demand_include_call_policies( self.curr_decl.call_policies )
             
-            maker = code_creators.free_function_t( function=self.curr_decl )
+            maker = None
+            if self.curr_decl.transformations:
+                wrapper = code_creators.free_fun_transformed_wrapper_t( self.curr_decl )
+                self.__extmodule.adopt_declaration_creator( wrapper )
+                maker = code_creators.free_fun_transformed_t( self.curr_decl, wrapper )
+                maker.associated_decl_creators.append( wrapper )
+            else:
+                maker = code_creators.free_function_t( function=self.curr_decl )
             self.curr_code_creator.adopt_creator( maker )
             self.__opaque_types_manager.register_opaque( maker, self.curr_decl )
 

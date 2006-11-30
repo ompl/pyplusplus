@@ -38,6 +38,9 @@ class call_policy_t(object):
             code = code + '()'
         return code
 
+    def create_template_arg( self, function_creator ):
+        return self.create( function_creator, CREATION_POLICY.AS_TEMPLATE_ARGUMENT )
+
     def is_default( self ):
         """Returns True is self is instance of L{default_call_policies_t} class"""
         #Small hack that allows to write nicer code

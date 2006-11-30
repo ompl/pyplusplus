@@ -59,82 +59,10 @@ class transformer_t:
         else:
             return self.get_argument( reference ).type
 
-    def init_funcs(self, sm):
-        """Wrapper initialization.
-
-        This method is called before the actual wrapper source code is
-        generated. This is the place where you can modify the signature
-        of the C++ wrapper function or allocate local variables.
-
-        @param sm: Substitution manager instance
-        @type sm: L{substitution_manager_t}
-        """
+    def configure_mem_fun( self, controller ):
         pass
-
-    def wrapper_pre_call(self, sm):
-        """Generate the C++ code that should be executed before the actual function call.
-
-        The code from this method will be put into the wrapper function.
-
-        @param sm: Substitution manager instance
-        @type sm: L{substitution_manager_t}
-        @return: C++ code or None
-        @rtype: str
-        """
-        pass
-
-    def wrapper_post_call(self, sm):
-        """Generate the C++ code that should be executed after the actual function call.
-
-        The code from this method will be put into the wrapper function.
-
-        @param sm: Substitution manager instance
-        @type sm: L{substitution_manager_t}
-        @return: C++ code or None
-        @rtype: str
-        """
-        pass
-
-    def wrapper_cleanup(self, sm):
-        """Generate code that should be executed in the case of an error.
-
-        This method has to assume that the preCall code was executed but
-        the postCall code won't be executed because something went wrong.
-        
-        <not used yet>
-        
-        @param sm: Substitution manager instance
-        @type sm: L{substitution_manager_t}
-        @return: C++ code or None
-        @rtype: str
-        """
-        pass
-
-    def virtual_pre_call(self, sm):
-        """Generate the C++ code that should be executed before the actual function call.
-
-        The code from this method will be put into the virtual function.
-        
-        @param sm: Substitution manager instance
-        @type sm: L{substitution_manager_t}
-        @return: C++ code or None
-        @rtype: str
-        """
-        pass
-
-    def virtual_post_call(self, sm):
-        """Generate the C++ code that should be executed after the actual function call.
-
-        The code from this method will be put into the virtual function.
-
-        @param sm: Substitution manager instance
-        @type sm: L{substitution_manager_t}
-        @return: C++ code or None
-        @rtype: str
-        """
-        pass
-
-    def virtual_cleanup(self, sm):
+    
+    def configure_free_fun( self, controller ):
         pass
     
     

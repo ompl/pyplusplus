@@ -30,9 +30,13 @@ class declaration_based_t:
                             doc="""The declaration this code creator is based on.
                             @type: L{decl_wrapper_t<decl_wrappers.decl_wrapper_t>}
                             """)
+
+    def _get_alias_impl( self ):
+        return self.declaration.alias
     
     def _get_alias(self):
-        return self.declaration.alias
+        return self._get_alias_impl()
+    
     def _set_alias(self, alias):
         self.declaration.alias = alias
     alias = property( _get_alias, _set_alias )

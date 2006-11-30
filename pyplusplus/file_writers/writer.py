@@ -50,7 +50,12 @@ class writer_t(object):
         for cr in code_repository.all:
             if self.__extmodule.is_system_header( cr.file_name ):
                 self.write_file( os.path.join( dir, cr.file_name ), cr.code )
-    
+        #temporal patch: always write named_tuple.py file
+
+        f = file( os.path.join( dir, code_repository.named_tuple.file_name ), 'w+b' )
+        f.write( code_repository.named_tuple.code )
+        f.close()
+
     @staticmethod
     def write_file( fpath, content ):
         """Write a source file.

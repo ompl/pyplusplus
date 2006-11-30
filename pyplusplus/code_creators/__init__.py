@@ -78,6 +78,8 @@ from calldef import null_constructor_wrapper_t
 
 from calldef_transformed import mem_fun_transformed_t
 from calldef_transformed import mem_fun_transformed_wrapper_t
+from calldef_transformed import free_fun_transformed_t
+from calldef_transformed import free_fun_transformed_wrapper_t
 from calldef_transformed import mem_fun_v_transformed_t
 from calldef_transformed import mem_fun_v_transformed_wrapper_t
 

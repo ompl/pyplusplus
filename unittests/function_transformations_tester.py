@@ -5,10 +5,14 @@
 
 import os
 import sys
+import math
 import unittest
 import fundamental_tester_base
+from named_tuple import named_tuple
 from pyplusplus import function_transformers as ft
 from pyplusplus.module_builder import call_policies
+
+
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'function_transformations'
 
@@ -19,7 +23,32 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , *args )
 
     def customize( self, mb ):
+        
+        mb.global_ns.calldefs().create_with_signature = True
+        
+        hello_world = mb.free_fun( 'hello_world' )
+        hello_world.add_transformation( ft.output(0) )
+        
+        calc = mb.class_('calculator_t' )
+        assign_funs = calc.mem_funs( lambda decl: decl.name.startswith( 'assign' ) )
+        assign_funs.add_transformation( ft.output(0), ft.output(1) )
+        
+        clone_and_assign_5 = calc.mem_fun( 'clone_and_assign_5' )
+        clone_and_assign_5.add_transformation( ft.output(0) )
+        clone_and_assign_5.call_policies = call_policies.return_value_policy( call_policies.manage_new_object )
+            
+        window = mb.class_( 'window_t' )
+        window.mem_fun( 'resize' ).add_transformation( ft.input(0), ft.input(1) )
+        window.mem_fun( 'resize_in_out' ).add_transformation( ft.inout(0), ft.inout(1) )
+        
+        point3d = mb.class_( 'point3d_t' )
+        point3d.add_wrapper_code( '' )
+        point3d.mem_fun( 'initialize' ).add_transformation( ft.input_array(0, size=3) )
+        point3d.mem_fun( 'position' ).add_transformation( ft.output_array(0, size=3) )
+        point3d.mem_fun( 'distance' ).add_transformation( ft.output(1) )
+        
         image = mb.class_( "image_t" )
+        image.member_function( "get_size" )
         image.member_function( "get_size" ).add_transformation( ft.output(0), ft.output(1) )
         image.member_function( "get_one_value" ).add_transformation( ft.output(0) )
         image.member_function( "get_size2" ).add_transformation( ft.output(0), ft.output(1) )
@@ -36,14 +65,38 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         cls = mb.class_("ft_private_destructor_t")
         cls.member_function("get_value").add_transformation( ft.output(0) )
 
-        mb.decls(lambda decl: decl.name[0]=="_").exclude()
+        mb.decls(lambda decl: decl.name.startswith("_")).exclude()
 
     def run_tests(self, module):
         """Run the actual unit tests.
         """
 
         ####### Do the tests directly on the wrapper C++ class ########
+        calc = module.calculator_t()
+        self.failUnless( ( 0, 1, 2 ) == calc.assign_0_1_2() )
+        self.failUnless( ( 1, 2 ) == calc.assign_1_2() )
+        calc2, five = calc.clone_and_assign_5()
+        self.failUnless( five == 5 )
+        self.failUnless( calc2 )
+        #test make_object function
+        self.failUnless( sys.getrefcount( calc ) == sys.getrefcount( calc2 ) )
 
+        window = module.window_t()
+        window.height = 0
+        window.width = 0
+        window.resize( 1, 2 )
+        self.failUnless( window.height==1 and window.width==2 )
+        square, h, w = window.resize_in_out( 3, 7 )
+        self.failUnless( square == 1*3*2*7 and h==3 and w==2*7 )
+        self.failUnless( window.height==3 and window.width==2*7 )
+        
+        point3d = module.point3d_t()
+        result = point3d.initialize( [ 1,2,3 ] )
+        self.failUnless( result== 1*2*3 and point3d.x == 1 and point3d.y==2 and point3d.z==3 )
+        self.failUnless( [1,2,3] == point3d.position() )
+        self.failUnless( module.point3d_t.distance( point3d ) == math.sqrt( 1*1 + 2*2 + 3*3 ) )
+        
+        self.failUnless( module.hello_world() == "hello world!" )
         img = module.image_t( 2, 6)
 
         # Check a method that returns two values by reference
@@ -85,13 +138,13 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             def fixed_output_array(self):
                 # Produce a correct return value
                 if self.fixed_output_array_mode==0:
-                    return (2,5,7)
+                    return named_tuple( v=(2,5,7) )
                 # Produce the wrong type
                 elif self.fixed_output_array_mode==1:
                     return 5
                 # Produce a sequence with the wrong number of items
                 elif self.fixed_output_array_mode==2:
-                    return (2,5)
+                    return named_tuple( v=(2,5) )
 
         pyimg1 = py_image1_t(3,7)
 
