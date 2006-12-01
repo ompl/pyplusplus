@@ -47,8 +47,13 @@ class manager_t( object ):
     def __build_dependencies( self, decl ):
         if self.__is_std_decl( decl ):
             return [] #std declarations should be exported by Py++!
-        return decl.i_depend_on_them()
         
+        dependencies = decl.i_depend_on_them(recursive=False)
+        if isinstance( decl, declarations.class_t ):
+            dependencies = filter( lambda d: d.access_type != declarations.ACCESS_TYPES.PRIVATE
+                                   , dependencies )
+        return dependencies
+    
     def __find_out_used_but_not_exported( self ):
         used_not_exported = []
         exported_ids = set( map( lambda d: id( d ), self.__exported_decls ) )
