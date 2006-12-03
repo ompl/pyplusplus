@@ -3,6 +3,9 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+"""defines class, which informs user about used, but unexposed declarations"""
+
+import os
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 
@@ -70,12 +73,24 @@ class manager_t( object ):
                     used_not_exported.append( dependency )                    
         return used_not_exported
 
-    def __create_msg( self, dependency ):
-        reason = 'The declaration depends on unexposed declaration "%s".' \
-              % dependency.find_out_depend_on_declaration()
-        return "%s;%s" % ( dependency.declaration, reason )
+    def __group_by_unexposed( self, dependencies ):
+        groups = {}
+        for dependency in dependencies:
+            depend_on_decl = dependency.find_out_depend_on_declaration()
+            if not groups.has_key( id( depend_on_decl ) ):
+                groups[ id( depend_on_decl ) ] = []
+            groups[ id( depend_on_decl ) ].append( dependency )
+        return groups
+
+    def __create_msg( self, dependencies ):
+        depend_on_decl = dependencies[0].find_out_depend_on_declaration()
+        reason = [ 'There are declarations, which depend on the unexposed one:' ]
+        for dependency in dependencies:
+            reason.append( ' ' + str( dependency.declaration ) )
+        return "%s;%s" % ( depend_on_decl, os.linesep.join( reason ) )
         
     def inform_user( self ):
         used_not_exported_decls = self.__find_out_used_but_not_exported()
-        for used_not_exported in used_not_exported_decls:
-            self.__logger.warn( self.__create_msg( used_not_exported ) )
+        groups = self.__group_by_unexposed( used_not_exported_decls )
+        for group in groups.itervalues():
+            self.__logger.warn( self.__create_msg( group ) )
