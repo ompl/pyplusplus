@@ -7,14 +7,15 @@ Py++ introduction
 -------------
 What is Py++?
 -------------
+Definition:
+  .. include:: ./definition.rest
 
-.. include:: ./definition.rest
-`Py++`_ is a powerful code generator that uses few different programming paradigms
-to help you to expose C++ declarations to Python. This code generator will not 
-stand on your way. It will guide you through the whole process. It will raise 
-warnings in the case you are doing something wrong with a link to the explanation.
-And the most important it will save your time - you will not have to update
-code generator script every time you change source code.
+`Py++`_ uses few different programming paradigms to help you to expose C++ 
+declarations to Python. This code generator will not stand on your way. It will 
+guide you through the whole process. It will raise warnings in the case you are 
+doing something wrong with a link to the explanation. And the most important it 
+will save your time - you will not have to update code generator script every 
+time source code is changed.
 
 -----------------------
 Code generation process
