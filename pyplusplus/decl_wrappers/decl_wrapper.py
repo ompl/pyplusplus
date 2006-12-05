@@ -9,6 +9,7 @@ instructions."""
 import algorithm
 from pyplusplus import _logging_
 from pygccxml import declarations
+from pyplusplus import messages
 
 class decl_wrapper_t(object):
     """Declaration interface.
@@ -38,7 +39,7 @@ class decl_wrapper_t(object):
     def _set_documentation( self, value ):
         self._documentation = value
     documentation = property( _get_documentation, _set_documentation
-                             , doc="Using this property you can set documentatio of exported declaration." )
+                             , doc="Using this property you can set documentation of the declaration." )
 
     def _generate_valid_name(self, name=None):
         if name == None:
@@ -94,12 +95,12 @@ class decl_wrapper_t(object):
     def get_exportable( self ):
         if self._exportable is None:
             if self.name.startswith( '__' ):
-                self._exportable_reason = 'Py++, by default, does not expose internal compilers declarations. Names of those declarations usually start with "__".'
+                self._exportable_reason = messages.W1000
             elif self.location and self.location.file_name == "<internal>":
-                self._exportable_reason = 'Py++, by default, does not expose internal declarations (those that gccxml say belong to "<internal>" header).'
+                self._exportable_reason = messages.W1001
             elif self.is_artificial \
                  and not isinstance( self, ( declarations.class_t, declarations.enumeration_t ) ):
-                self._exportable_reason = 'Py++, by default, does not expose compiler generated declarations.'
+                self._exportable_reason = messages.W1002
             else:
                 self._exportable_reason = self._exportable_impl( )
             self._exportable = not bool( self._exportable_reason )

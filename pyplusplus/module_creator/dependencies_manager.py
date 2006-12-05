@@ -6,6 +6,7 @@
 """defines class, which informs user about used, but unexposed declarations"""
 
 import os
+from pyplusplus import messages
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 
@@ -84,10 +85,10 @@ class manager_t( object ):
 
     def __create_msg( self, dependencies ):
         depend_on_decl = dependencies[0].find_out_depend_on_declaration()
-        reason = [ 'There are declarations, which depend on the unexposed one:' ]
+        decls = []
         for dependency in dependencies:
-            reason.append( ' ' + str( dependency.declaration ) )
-        return "%s;%s" % ( depend_on_decl, os.linesep.join( reason ) )
+            decls.append( os.linesep + ' ' + str( dependency.declaration ) )
+        return "%s;%s" % ( depend_on_decl, messages.W1040 % ''.join( decls ) )
         
     def inform_user( self ):
         used_not_exported_decls = self.__find_out_used_but_not_exported()

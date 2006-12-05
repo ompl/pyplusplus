@@ -9,6 +9,8 @@ import os
 import user_text
 import algorithm
 import decl_wrapper
+import python_traits
+from pyplusplus import messages
 from pygccxml import declarations
 from pyplusplus import function_transformers as ft
 
@@ -88,15 +90,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
                and self.virtuality != declarations.VIRTUALITY_TYPES.NOT_VIRTUAL \
                and declarations.is_reference( self.return_type ):
                 self._overridable = False
-                self._non_overridable_reason = "Virtual functions that return "\
-                           "const reference can not be overriden from Python. "\
-                           "Ther is current no way for them to return a reference "\
-                           "to C++ code that calls them because in "\
-                           "boost::python::override::operator(...) the result of "\
-                           "marshaling (Python to C++) is saved on stack, after function "\
-                           "exit, thus the resulting reference would be a reference to "\
-                           "a temporary variable and would cause an access violation. "\
-                           "For an example of this see the temporary_variable_tester."
+                self._non_overridable_reason = messages.W1003
             else:
                 self._overridable = True
                 self._non_overridable_reason = ""
@@ -138,20 +132,19 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
             ptr2functions = filter( lambda unit: isinstance( unit, declarations.calldef_type_t )
                                     , units )
             if ptr2functions:
-                return "boost.python can not expose function, which takes as argument/returns pointer to function." \
-                       + " See http://www.boost.org/libs/python/doc/v2/faq.html#funcptr for more information."
+                return messages.W1004
             #Function that take as agrument some instance of non public class
             #will not be exported. Same to the return variable
             if isinstance( units[-1], declarations.declarated_t ):
                 dtype = units[-1]
                 if isinstance( dtype.declaration.parent, declarations.class_t ):
                     if dtype.declaration not in dtype.declaration.parent.public_members:
-                        return "Py++ can not expose function that takes as argument/returns instance of non public class. Generated code will not compile."
+                        return messages.W1005
             no_ref = declarations.remove_reference( some_type )
             no_ptr = declarations.remove_pointer( no_ref )
             no_const = declarations.remove_const( no_ptr )
             if declarations.is_array( no_const ):
-                return "Py++ can not expose function that takes as argument/returns C++ arrays. This will be changed in near future."
+                return messages.W1006
         return self._exportable_impl_derived()
 
     def _readme_impl( self ):
@@ -160,44 +153,34 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
                 return False
             type_no_ref = declarations.remove_reference( type_ )
             return not declarations.is_const( type_no_ref ) \
-                   and declarations.is_fundamental( type_no_ref )
+                   and python_traits.is_immutable( type_no_ref )
         msgs = []
         #TODO: functions that takes as argument pointer to pointer to smth, could not be exported
         #see http://www.boost.org/libs/python/doc/v2/faq.html#funcptr
         
         if len( self.arguments ) > calldef_t.BOOST_PYTHON_MAX_ARITY:
-            tmp = [ "The function has more than %d arguments ( %d ). " ]
-            tmp.append( "You should adjust BOOST_PYTHON_MAX_ARITY macro." )
-            tmp.append( "For more information see: http://www.boost.org/libs/python/doc/v2/configuration.html" )
-            tmp = ' '.join( tmp )
-            msgs.append( tmp % ( calldef_t.BOOST_PYTHON_MAX_ARITY, len( self.arguments ) ) )
+            msgs.append( messages.W1007 % ( calldef_t.BOOST_PYTHON_MAX_ARITY, len( self.arguments ) ) )
         
         if self.transformations:
             #if user defined transformation, than I think it took care of the problems
             return msgs
             
         if suspicious_type( self.return_type ) and None is self.call_policies:
-            msgs.append( 'The function "%s" returns non-const reference to C++ fundamental type - value can not be modified from Python.' % str( self ) )
+            msgs.append( messages.W1008 )
 
         for index, arg in enumerate( self.arguments ):
             if suspicious_type( arg.type ):
-                tmpl = [ 'The function takes as argument (name=%s, pos=%d ) ' ]
-                tmpl.append( 'non-const reference to C++ fundamental type - ' )
-                tmpl.append( 'function could not be called from Python.' )
-                msgs.append( ''.join( tmpl ) % ( arg.name, index ) )
+                msgs.append( messages.W1009 % ( arg.name, index ) )
 
         if False == self.overridable:
             msgs.append( self._non_overridable_reason)
             
         problematics = algorithm.registration_order.select_problematics( self )
         if problematics:
-            tmp = [ "The function introduces registration order problem. " ]
-            tmp.append( "For more information read next document: "
-                        + "http://language-binding.net/pyplusplus/documentation/functions/registration_order.html" )
-            tmp.append( "Problematic functions: " )
+            tmp = []
             for f in problematics:
                 tmp.append( os.linesep + '\t' + str(f) )
-            msgs.append( os.linesep.join( tmp ) )
+            msgs.append( messages.W1010 % os.linesep.join( tmp ) )
         return msgs
 
 class member_function_t( declarations.member_function_t, calldef_t ):
@@ -218,7 +201,7 @@ class member_function_t( declarations.member_function_t, calldef_t ):
     def _exportable_impl_derived(self):
         if self.access_type == declarations.ACCESS_TYPES.PRIVATE \
            and self.virtuality == declarations.VIRTUALITY_TYPES.NOT_VIRTUAL:
-            return "Py++ doesn't export private not virtual functions."
+            return messages.W1011
         return ''
     
 class constructor_t( declarations.constructor_t, calldef_t ):
@@ -238,9 +221,9 @@ class constructor_t( declarations.constructor_t, calldef_t ):
 
     def _exportable_impl_derived( self ):
         if self.is_artificial:
-            return 'Py++ does not exports compiler generated constructors'
+            return messages.W1012
         if self.access_type == declarations.ACCESS_TYPES.PRIVATE:
-            return "Py++ doesn't export private constructor."        
+            return messages.W1013
         return ''
 
     def does_define_implicit_conversion( self ):
@@ -304,9 +287,7 @@ class operators_helper:
         if isinstance( oper, declarations.member_operator_t ) and oper.symbol in ( '()', '[]' ):
             return ''
         if not operators_helper.is_supported( oper ):
-            msg = [ '"%s" is not supported. ' % oper.name ]
-            msg.append( 'See Boost.Python documentation: http://www.boost.org/libs/python/doc/v2/operators.html#introduction.' )
-            return ' '.join( msg )
+            return messages.W1014 % oper.name
         return ''
 
 class member_operator_t( declarations.member_operator_t, calldef_t ):
@@ -331,7 +312,7 @@ class member_operator_t( declarations.member_operator_t, calldef_t ):
     def _exportable_impl_derived( self ):
         if self.access_type == declarations.ACCESS_TYPES.PRIVATE \
            and self.virtuality == declarations.VIRTUALITY_TYPES.NOT_VIRTUAL:
-            return "Py++ doesn't export private operators."        
+            return messages.W1015
         return operators_helper.exportable( self )
 
 
@@ -404,9 +385,9 @@ class casting_operator_t( declarations.casting_operator_t, calldef_t ):
 
     def _exportable_impl_derived( self ):
         if not declarations.is_fundamental( self.return_type ) and not self.has_const:
-            return 'Py++ does not exports non-const casting operators with user defined type as return value. This could be change in future.'
+            return messages.W1016
         if self.access_type != declarations.ACCESS_TYPES.PUBLIC:
-            return "Py++ doesn't export non-public casting operators."                    
+            return messages.W1017
         return ''
 
 

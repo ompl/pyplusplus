@@ -10,6 +10,7 @@ import user_text
 import properties
 import decl_wrapper
 import scopedef_wrapper
+from pyplusplus import messages
 from pygccxml import declarations
 import indexing_suite1 as isuite1
 import indexing_suite2 as isuite2
@@ -289,12 +290,12 @@ class class_t( class_common_details_t
 
     def _exportable_impl( self ):
         if not self.name:
-            return 'Py++ can not expose unnamed classes.'
+            return messages.W1018
             #it is possible to do so, but not for unnamed classes defined under namespace.
         if isinstance( self.parent, declarations.namespace_t ):
             return ''
         if not self in self.parent.public_members:
-            return 'Py++ can not expose private class.'
+            return messages.W1019
         return ''
 
     def get_exportable_members( self, sort=None ):
@@ -433,40 +434,38 @@ class class_t( class_common_details_t
         """
         explanation = []
         if self.wrapper_code:
-            explanation.append( "Py++ will generate class wrapper - hand written code should be added to the wrapper class" )
+            explanation.append( messages.W1020 )
 
         if self.null_constructor_body:
-            explanation.append( "Py++ will generate class wrapper - hand written code should be added to the wrapper class null constructor body" )
+            explanation.append( messages.W1021 )
 
         if self.copy_constructor_body:
-            explanation.append( "Py++ will generate class wrapper - hand written code should be added to the wrapper class copy constructor body" )
+            explanation.append( messages.W1022 )
 
         if self.redefined_funcs():
-            explanation.append( "Py++ will generate class wrapper - there are few functions that should be redefined in class wrapper" )
+            explanation.append( messages.W1023 )
 
         for member in self.get_exportable_members():
             if isinstance( member, declarations.destructor_t ):
                 continue
             if isinstance( member, declarations.variable_t ):
                 if member.bits:
-                    explanation.append( "Py++ will generate class wrapper - class contains bit field member variable" )
+                    explanation.append( messages.W1024 )
                 if declarations.is_pointer( member.type ):
-                    explanation.append( "Py++ will generate class wrapper - class contains T* member variable" )
+                    explanation.append( messages.W1025 )
                 if declarations.is_reference( member.type ):
-                    explanation.append( "Py++ will generate class wrapper - class contains T& member variable" )
+                    explanation.append( messages.W1026 )
                 if declarations.is_array( member.type ):
-                    explanation.append( "Py++ will generate class wrapper - class contains array member variable" )
+                    explanation.append( messages.W1027 )
             if isinstance( member, declarations.class_t ) and member.is_wrapper_needed():
-                explanation.append( "Py++ will generate class wrapper - class contains definition of nested class that requires wrapper class" )
+                explanation.append( messages.W1028 )
             if isinstance( member, declarations.calldef_t ):
                 if isinstance( member, declarations.constructor_t ) and member.body:
-                    explanation.append( "Py++ will generate class wrapper - hand written code should be added to the wrapper class constructor body" )
+                    explanation.append( messages.W1029 )
                 if member.virtuality != VIRTUALITY_TYPES.NOT_VIRTUAL:
-                    explanation.append( "Py++ will generate class wrapper - class contains definition of virtual or pure virtual member function" )
+                    explanation.append( messages.W1030 )
                 if member.access_type in ( ACCESS_TYPES.PROTECTED, ACCESS_TYPES.PRIVATE ):
-                    explanation.append( "Py++ will generate class wrapper - user asked to expose non - public member function" )
-                #if member.function_transformers:
-                #    return True #function transformers require wrapper
+                    explanation.append( messages.W1031 )
         return explanation
 
     def _readme_impl( self ):

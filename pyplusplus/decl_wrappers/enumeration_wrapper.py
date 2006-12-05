@@ -5,8 +5,9 @@
 
 """defines class that configure enumeration declaration exposing"""
 
-from pygccxml import declarations
 import decl_wrapper
+from pyplusplus import messages
+from pygccxml import declarations
 
 class enumeration_t(decl_wrapper.decl_wrapper_t, declarations.enumeration_t):
     """defines a set of properties, that will instruct Py++ how to expose the enumeration
@@ -72,7 +73,5 @@ class enumeration_t(decl_wrapper.decl_wrapper_t, declarations.enumeration_t):
         if self.name:
             name2value = self.get_name2value_dict()
             if len( set( name2value.keys() ) ) != len( set( name2value.values() ) ):
-                msgs.append( "Boost.Python does not support enums with duplicate values. "
-                             "You can read more about this here: http://boost.org/libs/python/todo.html#support-for-enums-with-duplicate-values . "
-                             "The quick work around is to add new class variable to the exported enum, from Python. " )
+                msgs.append( messages.W1032 )
         return msgs

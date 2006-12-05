@@ -6,6 +6,7 @@
 """defines class that configure global and member variable exposing"""
 
 import decl_wrapper
+from pyplusplus import messages
 from pygccxml import declarations
 from pyplusplus.decl_wrappers import python_traits
 
@@ -43,29 +44,28 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
 
     def _exportable_impl( self ):
         if not self.name:
-            return "Py++ can not expose unnamed variables"
+            return messages.W1033
         if self.bits == 0 and self.name == "":
-            return "Py++ can not expose alignement bit."
+            return messages.W1034
         type_ = declarations.remove_alias( self.type )
         type_ = declarations.remove_const( type_ )
         if declarations.is_pointer( type_ ):
             if self.type_qualifiers.has_static:
-                return "Py++ can not expose static pointer member variables. This could be changed in future."
+                return messages.W1035
             if python_traits.is_immutable( type_.base ):
-                return "Py++ can not expose pointer to Python immutable member variables. This could be changed in future."
+                return messages.W1036
 
             units = declarations.decompose_type( type_ )
             ptr2functions = filter( lambda unit: isinstance( unit, declarations.calldef_type_t )
                                     , units )
             if ptr2functions:
-                return "boost.python can not expose variables, which are pointer to function." \
-                       + " See http://www.boost.org/libs/python/doc/v2/faq.html#funcptr for more information."
+                return messages.W1037
         type_ = declarations.remove_pointer( type_ )
         if declarations.class_traits.is_my_case( type_ ):
             cls = declarations.class_traits.get_declaration( type_ )
             if not cls.name:
-                return "Py++ can not expose variables of with unnamed type."
+                return messages.W1038
         if isinstance( self.parent, declarations.class_t ):
             if self.access_type != declarations.ACCESS_TYPES.PUBLIC:
-                return "Py++ doesn't expose private or protected member variables."
+                return messages.W1039
         return ''
