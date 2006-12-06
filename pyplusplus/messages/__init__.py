@@ -23,6 +23,8 @@ DISABLE_MESSAGES = [
 ]
 #Messages kept by DISABLE_MESSAGES list will not be reported
 
+def disable( *args ):
+    DISABLE_MESSAGES.extend( args )
 
 def filter_disabled_msgs( msgs, disable_messages=None ):
     report = []

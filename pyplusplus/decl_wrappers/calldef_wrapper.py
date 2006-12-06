@@ -153,7 +153,8 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
                 return False
             type_no_ref = declarations.remove_reference( type_ )
             return not declarations.is_const( type_no_ref ) \
-                   and python_traits.is_immutable( type_no_ref )
+                   and ( declarations.is_fundamental( type_no_ref ) 
+                         or declarations.is_enum( type_no_ref ) )
         msgs = []
         #TODO: functions that takes as argument pointer to pointer to smth, could not be exported
         #see http://www.boost.org/libs/python/doc/v2/faq.html#funcptr
