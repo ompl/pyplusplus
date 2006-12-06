@@ -8,6 +8,7 @@ import sys
 import unittest
 import fundamental_tester_base
 from pyplusplus import code_creators
+from pyplusplus import messages
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'smart_pointers'
@@ -20,7 +21,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
    
     def customize( self, mb ):
         base = mb.class_( 'base' )
-        #base.held_type = ''
+        shared_ptrs = mb.decls( lambda decl: decl.name.startswith( 'shared_ptr<' ) )
+        shared_ptrs.disable_warnings( messages.W1040 )
    
     def create_py_derived( self, module ):
         class py_derived_t( module.base ):

@@ -30,6 +30,7 @@ import code_repository
 import utils
 import decl_wrappers
 import module_builder
+import messages
 
 from _logging_ import multi_line_formatter_t
 

@@ -28,6 +28,7 @@ class decl_wrapper_t(object):
         self._exportable = None
         self._exportable_reason = None
         self._documentation = None
+        self.__msgs_to_ignore = set()
 
     @property
     def logger( self ):
@@ -114,14 +115,34 @@ class decl_wrapper_t(object):
     def _readme_impl( self ):
         return []
 
-    def readme( self ):
+
+    def readme( self, skip_ignored=True ):
         """This function will returns some hints/tips/description of problems
         that applied to the declarations. For example function that has argument
         reference to some fundamental type could be exported, but could not be called
         from Python
+        
+        @param skip_ignored: if True, messages that user asked to not reported
+                             will not be returned
         """
-        text = []
+        msgs = []
         if not self.exportable:
-            text.append( self.why_not_exportable() )
-        text.extend( self._readme_impl() )
-        return text
+            msgs.append( self.why_not_exportable() )
+        msgs.extend( self._readme_impl() )
+        return messages.filter_disabled_msgs( msgs, self.__msgs_to_ignore )
+
+    @property
+    def disabled_messaged( self ):
+        return self.__msgs_to_ignore
+
+    def disable_messages( self, *args ):
+        """Using this method you can tell to Py++ to not report some specifiec warnings.
+        
+        Usage example: decl.ignore_warnings( messages.W1001, messages.W1040 )
+        """
+        for msg in args:
+            msg_id = messages.find_out_message_id( msg )
+            if not msg_id:
+                raise RuntimeError( "Unable to find out message id. The message is: " + msg )
+            self.__msgs_to_ignore.add( msg )
+    disable_warnings = disable_messages

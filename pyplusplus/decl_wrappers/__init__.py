@@ -148,18 +148,3 @@ class dwfactory_t( declarations.decl_factory_t ):
 
     def create_variable( self, *arguments, **keywords ):
         return variable_t(*arguments, **keywords)
-
-
-skip_messages = [
-    "Py++ does not exports compiler generated constructors"
-    , 'Py++, by default, does not expose internal compilers declarations. Names of those declarations usually start with "__".'
-    , 'Py++, by default, does not expose internal declarations (those that gccxml say belong to "<internal>" header).'
-    , 'Py++, by default, does not expose compiler generated declarations.'
-    , 'Py++ can not expose private class.'
-    , 'Py++ will generate class wrapper - class contains definition of virtual or pure virtual member function'
-    , "Py++ doesn't expose private or protected member variables."
-    , "Py++ doesn't export private not virtual functions."
-    , "Py++ doesn't export private constructor."
-    , "Py++ doesn't export private operators."
-]
-#Messages kept by skip_messages list will not be reported

@@ -152,7 +152,7 @@ class creator_t( declarations.decl_visitor_t ):
             if doc_extractor and decl.exportable:
                 decl.documentation = doc_extractor( decl )
 
-            readme = filter( lambda msg: msg not in decl_wrappers.skip_messages, decl.readme() )
+            readme = decl.readme()
             if not readme:
                 continue
             

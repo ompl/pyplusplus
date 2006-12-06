@@ -71,7 +71,9 @@ class manager_t( object ):
                 if isinstance( depend_on_decl, declarations.class_types ) and depend_on_decl.opaque:
                     continue
                 if id( depend_on_decl ) not in exported_ids:
-                    used_not_exported.append( dependency )                    
+                    report = messages.filter_disabled_msgs([messages.W1040], depend_on_decl.disabled_messaged )
+                    if report:
+                        used_not_exported.append( dependency )                    
         return used_not_exported
 
     def __group_by_unexposed( self, dependencies ):
