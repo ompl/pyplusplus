@@ -1,0 +1,104 @@
+======================
+``output`` transformer
+======================
+
+.. contents:: Table of contents
+
+----------
+Definition
+----------
+
+``output`` transformer removes an argument from the function definition and adds
+the "returned", by the original function, value to the return statement of the 
+function-wrapper.
+
+``output`` transformer takes as argument name or index of the original function
+argument. The argument should have "reference" type. Support for "pointer" type
+will be added pretty soon.
+
+-------
+Example
+-------
+
+.. code-block:: C++
+
+  #include <string>
+  
+  inline void hello_world( std::string& hw ){
+      hw = "hello world!";
+  }
+
+Lets say that you need to expose ``hello_world`` function. As you know
+``std::string`` is mapped to `Python`_ string, which is immutable type, so you 
+have to create small wrapper for the function. Next `Py++`_ code does it for you:
+
+  .. code-block:: Python
+
+     from pyplusplus import module_builder
+     from pyplusplus import function_transformers as FT
+     
+     mb = module_builder.module_builder_t( ... )
+     hw = mb.mem_fun( 'hello_world' )
+     hw.add_transformation( FT.output(0) )
+
+What you see below is the relevant pieces of generated code:
+
+  .. code-block:: C++
+
+     namespace bp = boost::python;
+     
+     static boost::python::object hello_world_a3478182294a057b61508c30b1361318(  ){
+         std::string hw2;
+         ::hello_world(hw2);
+         return bp::object( hw2 );
+     }
+     
+     BOOST_PYTHON_MODULE(...){
+         ...
+         bp::def( "hello_world", &hello_world_a3478182294a057b61508c30b1361318 );
+      }
+
+Explanation
+-----------
+
+I feel like I need to explain why the function wrapper for ``hello_world`` function
+has such strange name - ``hello_world_a3478182294a057b61508c30b1361318``. The
+short answer is function overloading. Consider next code that you need to export:
+
+  .. code-block:: C++
+
+     void get_distance( long& );
+     void get_distance( double& );
+
+In order to expose ``get_distance`` functions you have to create 2 function
+wrappers and give them distinguish names. You also have to register them under 
+different aliases, otherwise your users will not be able to call the functions.
+`Py++`_ does it for you. The generated wrapper names are unique in the whole 
+project. They will not be changed between different runs of the code generator.
+The aliases `Py++`_ gives to the functions are ugly. You have to provide your 
+own aliases:
+
+    .. code-block:: Python
+
+     from pyplusplus import module_builder
+     from pyplusplus import function_transformers as FT
+     
+     mb = module_builder.module_builder_t( ... )
+     get_distance_int = mb.mem_fun( 'get_distance', arg_types=[ 'int &'] )
+     get_distance_int.add_transformation( FT.output(0), alias="get_distance_as_int" )
+
+The main reason for the behaviour is that even if you forget to give an alias
+to a function, your users will still be able to call the function.
+
+.. _`Py++` : ./../pyplusplus.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Python`: http://www.python.org
+.. _`GCC-XML`: http://www.gccxml.org
+
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:
