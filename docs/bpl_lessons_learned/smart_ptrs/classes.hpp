@@ -13,9 +13,10 @@ struct derived_t : base_i{
     derived_t(){}    
     virtual int get_value() const{ return 0xD; }
 };
-
-//Small convenience class. Actually it is defined here, because this is a pattern
-//Ogre project uses.
+    
+// Some smart pointer classes does not have reach interface as boost ones.
+// In order to provide same level of convenience, users are forced to create
+// classes, which derive from smart pointer class.
 struct derived_ptr_t : public smart_ptr_t< derived_t >{
 
     derived_ptr_t()
@@ -56,8 +57,8 @@ struct derived_ptr_t : public smart_ptr_t< derived_t >{
     }
 };
 
-//Few functions that will be used to test custom smart pointer functionality
-//from Python.
+// Few functions that will be used to test custom smart pointer functionality
+// from Python.
 derived_ptr_t create_derived(){
     return derived_ptr_t( new derived_t() );
 }
@@ -67,16 +68,16 @@ smart_ptr_t< base_i > create_base(){
 }
 
 
-//Next function could be exposed, but it could not be called from Python, when
-//the argument is the instance of a derived class.
+// Next function could be exposed, but it could not be called from Python, when
+// the argument is the instance of a derived class.
 //
-//This is the explanation David Abrahams gave:
-//  Naturally; there is no instance of smart_ptr_t<base_i> anywhere in the
-//  Python object for the reference to bind to. The rules are the same as in C++:
+// This is the explanation David Abrahams gave:
+//   Naturally; there is no instance of smart_ptr_t<base_i> anywhere in the
+//   Python object for the reference to bind to. The rules are the same as in C++:
 //
-//  int f(smart_ptr_t<base>& x);
-//  smart_ptr_t<derived> y;
-//  int z = f(y);               // fails to compile
+//   int f(smart_ptr_t<base>& x);
+//   smart_ptr_t<derived> y;
+//   int z = f(y);               // fails to compile
 
 inline int
 ref_get_value( smart_ptr_t< base_i >& a ){
@@ -91,6 +92,31 @@ val_get_value( smart_ptr_t< base_i > a ){
 inline int
 const_ref_get_value( const smart_ptr_t< base_i >& a ){
     return a->get_value();
+}
+
+namespace shared_data{
+
+// Boost.Python has small problem with user defined smart pointers and public
+// member variables, exposed using def_readonly, def_readwrite functionality
+// Read carefully "make_getter" documentation.
+// http://boost.org/libs/python/doc/v2/data_members.html#make_getter-spec
+// bindings.cpp contains solution to the problem.
+    
+struct buffer_t{ 
+    buffer_t() : size(0) {}
+    int size; 
+};
+
+struct buffer_holder_t{
+    buffer_holder_t()
+    : data( new buffer_t() )
+    {}
+        
+    smart_ptr_t< buffer_t > get_data(){ return data; }
+    
+    smart_ptr_t< buffer_t > data;
+};
+
 }
 
 #endif//classes_11_11_2006

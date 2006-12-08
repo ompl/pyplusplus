@@ -59,6 +59,16 @@ class tester_t( unittest.TestCase ):
         self.__test_val( inst, val )
         self.__test_const_ref( inst, val )
 
+    def test_mem_var_access( self ):
+        holder = custom_sptr.buffer_holder_t()
+        self.failUnless( holder.get_data().size == 0 )
+        self.failUnless( holder.data.size == 0 )
+        try:
+            self.failUnless( holder.data_naive.size == 0 )
+            self.fail("TypeError exception was not raised.")
+        except TypeError:
+            pass
+        
 def create_suite():
     suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
