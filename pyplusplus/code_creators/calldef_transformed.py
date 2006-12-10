@@ -145,7 +145,7 @@ class free_fun_transformed_wrapper_t( sealed_fun_transformed_wrapper_t ):
     def function_type(self):
         return declarations.free_function_type_t(
                   return_type=self.controller.wrapper_return_type
-                , arguments_types=self.controller.wrapper_args )
+                , arguments_types=[ arg.type for arg in self.controller.wrapper_args ] )
 
     def wrapper_name( self ):
         return self.ft.unique_name
