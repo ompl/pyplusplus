@@ -34,7 +34,7 @@ if 'roman' in getpass.getuser():
         gccxml.executable = r'd:/dev/gccxml_cvs/gccxml-bin/bin/release/gccxml.exe'
     else:
         scons.suffix = '.so'
-        boost.libs = [ '/home/roman/boost_cvs/bin' ]
+        boost.libs = [ '/home/roman/boost_cvs/libs/python/build/bin-stage' ]
         boost.include = '/home/roman/boost_cvs'
         python.include = '/usr/include/python2.4'
         gccxml.executable = '/home/roman/gccxml-build/bin/gccxml'
