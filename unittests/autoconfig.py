@@ -20,7 +20,7 @@ from environment import scons, boost, python, gccxml
 
 class scons_config:
     libs = ['boost_python']
-    libpath = [ boost.libs, python.libs ]
+    libpath = [ python.libs ] + boost.libs
     cpppath = [ boost.include, python.include ]
     include_dirs = cpppath + [data_directory]
 

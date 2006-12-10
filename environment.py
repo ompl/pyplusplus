@@ -27,14 +27,14 @@ if 'roman' in getpass.getuser():
     if sys.platform == 'win32':
         scons.suffix = '.pyd'
         scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope' ]
-        boost.libs = 'd:/dev/boost_cvs/bin'
+        boost.libs = [ 'd:/dev/boost_cvs/libs/python/build/bin-stage' ]
         boost.include = 'd:/dev/boost_cvs'
         python.libs = 'e:/python25/libs'
         python.include = 'e:/python25/include'
         gccxml.executable = r'd:/dev/gccxml_cvs/gccxml-bin/bin/release/gccxml.exe'
     else:
         scons.suffix = '.so'
-        boost.libs = '/home/roman/boost_cvs/bin'
+        boost.libs = [ '/home/roman/boost_cvs/bin' ]
         boost.include = '/home/roman/boost_cvs'
         python.include = '/usr/include/python2.4'
         gccxml.executable = '/home/roman/gccxml-build/bin/gccxml'
