@@ -95,7 +95,7 @@ class member_variable_t( member_variable_base_t ):
             tmpl = '%(access)s( "%(alias)s", &%(name)s%(doc)s )'
 
         access = 'def_readwrite'
-        if self.is_read_only():
+        if self.declaration.is_read_only:
             access = 'def_readonly'
         doc = ''
         if self.documentation:
@@ -103,37 +103,55 @@ class member_variable_t( member_variable_base_t ):
         result = tmpl % {
                     'access' : access
                     , 'alias' : self.alias
-                    , 'name' : algorithm.create_identifier( self, self.declaration.decl_string )
+                    , 'name' : self.decl_identifier
                     , 'doc' : doc }
 
         return result
 
-    def is_read_only( self ):
-        type_ = declarations.remove_alias( self.declaration.type )
-        if declarations.is_pointer( type_ ):
-            type_ = declarations.remove_pointer( type_ )
-            return isinstance( type_, declarations.const_t )
+    def _generate_for_smart_ptr( self ):
+        doc = ''
+        add_property = ''
+        make_getter = algorithm.create_identifier( self, '::boost::python::make_getter')
+        make_setter = algorithm.create_identifier( self, '::boost::python::make_setter')
+        if self.declaration.type_qualifiers.has_static:
+            add_property = 'add_static_property'
+        else:
+            if self.documentation:
+                doc = self.documentation
+            add_property = 'add_property'
+        add_property_args = [ '"%s"' % self.alias ]
+        getter_code = declarations.call_invocation.join( 
+                          make_getter
+                        , [ '&' + self.decl_identifier
+                            , self.declaration.getter_call_policies.create( self ) ]
+                        , os.linesep + self.indent( self.PARAM_SEPARATOR, 6) )
+        
+        add_property_args.append( getter_code )
+        if not self.declaration.is_read_only:
+            setter_code = ''
+            setter_args = [ '&' + self.decl_identifier ]
+            if self.declaration.setter_call_policies \
+               and not self.declaration.setter_call_policies.is_default():
+                   setter_args.append( self.declaration.setter_call_policies.create( self ) )
+            setter_code = declarations.call_invocation.join( 
+                              make_setter
+                            , setter_args
+                            , os.linesep + self.indent( self.PARAM_SEPARATOR, 6) )
+            add_property_args.append( setter_code)
+        if doc:
+            add_property_args.append( doc )
+        return declarations.call_invocation.join( 
+                    add_property
+                    , add_property_args
+                    , os.linesep + self.indent( self.PARAM_SEPARATOR, 4 ) )
 
-        if declarations.is_reference( type_ ):
-            type_ = declarations.remove_reference( type_ )
-
-        if isinstance( type_, declarations.const_t ):
-            return True
-
-        if isinstance( type_, declarations.declarated_t ) \
-           and isinstance( type_.declaration, declarations.class_t ) \
-           and not declarations.has_public_assign( type_.declaration ):
-            return True
-        return False
-
-    def _generate_variable( self ):
+    def _create_impl( self ):
         if declarations.is_pointer( self.declaration.type ):
             return self._generate_for_pointer()
+        elif self.declaration.apply_smart_ptr_wa:
+            return self._generate_for_smart_ptr()
         else:
             return self._generate_for_none_pointer()
-
-    def _create_impl(self):
-        return self._generate_variable()
 
 class member_variable_wrapper_t( code_creator.code_creator_t
                                  , declaration_based.declaration_based_t ):

@@ -23,6 +23,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         base = mb.class_( 'base' )
         shared_ptrs = mb.decls( lambda decl: decl.name.startswith( 'shared_ptr<' ) )
         shared_ptrs.disable_warnings( messages.W1040 )
+        mb.variable( 'buffer' ).apply_smart_ptr_wa = True
+        mb.variable( 'const_buffer' ).apply_smart_ptr_wa = True
    
     def create_py_derived( self, module ):
         class py_derived_t( module.base ):
@@ -82,6 +84,16 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( 23 == module.const_ref_auto_some_value(da) )
         self.failUnless( 28 == module.const_ref_shared_some_value(py_derived) )
 
+        holder1 = module.shared_data_buffer_holder_t()
+        self.failUnless( holder1.buffer.size == 0 )
+        
+        holder2 = module.shared_data_buffer_holder_t()
+        holder2.buffer.size = 2
+        
+        holder1.buffer = holder2.buffer
+        self.failUnless( holder1.buffer.size == 2 )
+        holder1.buffer.size = 3
+        self.failUnless( holder2.buffer.size == 3 )
 
 def create_suite():
     suite = unittest.TestSuite()    

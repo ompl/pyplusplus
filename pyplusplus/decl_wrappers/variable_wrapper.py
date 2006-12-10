@@ -6,9 +6,10 @@
 """defines class that configure global and member variable exposing"""
 
 import decl_wrapper
+import python_traits
+import call_policies
 from pyplusplus import messages
 from pygccxml import declarations
-from pyplusplus.decl_wrappers import python_traits
 
 class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
     """defines a set of properties, that will instruct Py++ how to expose the variable"""
@@ -17,6 +18,8 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
         decl_wrapper.decl_wrapper_t.__init__( self )
         self._getter_call_policies = None
         self._setter_call_policies = None
+        self._apply_smart_ptr_wa = False
+        self._is_read_only = None
 
     __call_policies_doc__ = \
     """There are usecase, when exporting member variable forces Py++ to
@@ -29,6 +32,14 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
     """
 
     def get_getter_call_policies( self ):
+        if None is self._getter_call_policies:
+            if self.apply_smart_ptr_wa:
+                value_policy = ''
+                if self.is_read_only:
+                   value_policy = call_policies.copy_const_reference
+                else:
+                    value_policy = call_policies.copy_non_const_reference
+                self._getter_call_policies = call_policies.return_value_policy( value_policy )
         return self._getter_call_policies
     def set_getter_call_policies( self, call_policies ):
         self._getter_call_policies = call_policies
@@ -36,11 +47,54 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
                                      , doc=__call_policies_doc__ )
 
     def get_setter_call_policies( self ):
+        if None is self._getter_call_policies:
+            if self.apply_smart_ptr_wa:
+                self._setter_call_policies = call_policies.default_call_policies()       
         return self._setter_call_policies
     def set_setter_call_policies( self, call_policies ):
         self._setter_call_policies = call_policies
     setter_call_policies = property( get_setter_call_policies, set_setter_call_policies
                                      , doc=__call_policies_doc__ )
+
+    def get_apply_smart_ptr_wa( self ):
+        return self._apply_smart_ptr_wa
+    def set_apply_smart_ptr_wa( self, value):
+        self._apply_smart_ptr_wa = value
+    apply_smart_ptr_wa = property( get_apply_smart_ptr_wa, set_apply_smart_ptr_wa
+                                     , doc="" )
+
+
+    def __find_out_is_read_only(self):
+        type_ = declarations.remove_alias( self.type )
+        
+        if isinstance( type_, declarations.const_t ):
+            return True
+        
+        if declarations.is_pointer( type_ ):
+            type_ = declarations.remove_pointer( type_ )
+
+        if declarations.is_reference( type_ ):
+            type_ = declarations.remove_reference( type_ )
+
+        if isinstance( type_, declarations.const_t ):
+            return True
+        
+        if self.apply_smart_ptr_wa:
+            return False #all smart pointers has assign operator
+            
+        if isinstance( type_, declarations.declarated_t ) \
+           and isinstance( type_.declaration, declarations.class_t ) \
+           and not declarations.has_public_assign( type_.declaration ):
+            return True
+        return False
+        
+    def get_is_read_only( self ):
+        if None is self._is_read_only:
+            self._is_read_only = self.__find_out_is_read_only()
+        return self._is_read_only
+    def set_is_read_only( self, v ):
+        self._is_read_only = v
+    is_read_only = property( get_is_read_only, set_is_read_only )
 
     def _exportable_impl( self ):
         if not self.name:

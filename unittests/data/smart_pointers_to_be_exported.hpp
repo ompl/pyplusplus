@@ -60,6 +60,23 @@ int val_shared_some_value( base_s_ptr a );
 int const_ref_auto_some_value( const base_a_ptr& a );
 int const_ref_shared_some_value( const base_s_ptr& a );
 
+struct shared_data_buffer_t{
+    shared_data_buffer_t() 
+    : size( 0 )
+    {}
+    int size;
+};
+
+struct shared_data_buffer_holder_t{
+    typedef boost::shared_ptr<shared_data_buffer_t> holder_impl_t;
+    shared_data_buffer_holder_t()
+    : buffer( new shared_data_buffer_t() )
+      , const_buffer( new shared_data_buffer_t() )
+    {}
+        
+    holder_impl_t buffer;
+    const holder_impl_t const_buffer;
+};
 
 }    
 
