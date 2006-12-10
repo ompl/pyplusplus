@@ -1,5 +1,5 @@
 ======================
-``output`` transformer
+``input`` transformer
 ======================
 
 .. contents:: Table of contents
@@ -8,11 +8,9 @@
 Definition
 ----------
 
-"output" transformer removes an argument from the function definition and adds
-the "returned", by the original function, value to the return statement of the 
-function-wrapper.
+"input" transformer removes a "reference" type from the function argument.
 
-"output" transformer takes as argument name or index of the original function
+"input" transformer takes as argument name or index of the original function
 argument. The argument should have "reference" type. Support for "pointer" type
 will be added pretty soon.
 
@@ -39,7 +37,7 @@ have to create small wrapper for the function. Next `Py++`_ code does it for you
      
      mb = module_builder.module_builder_t( ... )
      hw = mb.mem_fun( 'hello_world' )
-     hw.add_transformation( FT.output(0) )
+     hw.add_transformation( FT.input(0) )
 
 What you see below is the relevant pieces of generated code:
 
@@ -47,17 +45,14 @@ What you see below is the relevant pieces of generated code:
 
      namespace bp = boost::python;
      
-     static boost::python::object hello_world_a3478182294a057b61508c30b1361318(  ){
-         std::string hw2;
-         ::hello_world(hw2);
-         return bp::object( hw2 );
+     static void hello_world_a3478182294a057b61508c30b1361318( ::std::string hw ){
+         ::hello_world(hw);
      }
-     
+
      BOOST_PYTHON_MODULE(...){
          ...
          bp::def( "hello_world", &hello_world_a3478182294a057b61508c30b1361318 );
-      }
-
+     }
 
 .. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html

@@ -13,7 +13,7 @@ Terminology
   rules. Especially: a change of return type and\\or arguments and their mapping
   to the original ones.
   
-* Function wrapper
+* Function wrapper ( or just wrapper )
 
   C++ function, which calls some other function. 
 
@@ -25,6 +25,10 @@ Terminology
 
   An object that applies predefined set of rules on a function, during 
   function-wrapper construction process.
+
+* Function alias ( or just alias )
+
+  Name under which `Python`_ users see the exposed function
 
 
 .. _`Py++` : ./../pyplusplus.html

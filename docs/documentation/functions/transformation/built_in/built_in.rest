@@ -20,12 +20,19 @@ Introduction
 
 * ``output_array``
 
-This set doesn't cover all common use cases, but it will grow with every new 
+The set doesn't cover all common use cases, but it will grow with every new 
 version of `Py++`_. If you created your own transformer consider to contribute 
 it to the project.
 
 I suggest you to start reading ``output`` transformer. It is pretty simple and 
 well explained.
+
+All built-in transformers could be applied on any function, except constructors.
+The support for constructors will be added in future releases.
+
+You don't have to warry about call policies. You can set the call policy and 
+`Py++`_ will generate correct code.
+
 
 .. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
