@@ -43,8 +43,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         
         point3d = mb.class_( 'point3d_t' )
         point3d.add_wrapper_code( '' )
-        point3d.mem_fun( 'initialize' ).add_transformation( ft.input_array(0, size=3) )
-        point3d.mem_fun( 'position' ).add_transformation( ft.output_array(0, size=3) )
+        point3d.mem_fun( 'initialize' ).add_transformation( ft.input_static_array(0, size=3) )
+        point3d.mem_fun( 'position' ).add_transformation( ft.output_static_array(0, size=3) )
         point3d.mem_fun( 'distance' ).add_transformation( ft.output(1) )
         
         image = mb.class_( "image_t" )
@@ -54,8 +54,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         image.member_function( "get_one_value" ).add_transformation( ft.output(0) )
         image.member_function( "get_size2" ).add_transformation( ft.output(0), ft.output(1) )
         image.member_function( "input_arg" ).add_transformation( ft.input(0) )
-        image.member_function( "fixed_input_array" ).add_transformation( ft.input_array(0,3) )
-        image.member_function( "fixed_output_array" ).add_transformation( ft.output_array(0,3) )
+        image.member_function( "fixed_input_array" ).add_transformation( ft.input_static_array(0,3) )
+        image.member_function( "fixed_output_array" ).add_transformation( ft.output_static_array(0,3) )
         mb.free_function("get_cpp_instance").call_policies \
             = call_policies.return_value_policy(call_policies.reference_existing_object)
         mb.variable( "cpp_instance" ).exclude()

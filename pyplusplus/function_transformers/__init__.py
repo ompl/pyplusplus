@@ -35,12 +35,12 @@ def inout( *args, **keywd ):
         return transformers.inout_t( function, *args, **keywd )
     return creator
 
-def input_array( *args, **keywd ):
+def input_static_array( *args, **keywd ):
     def creator( function ):
-        return transformers.input_array_t( function, *args, **keywd )
+        return transformers.input_static_array_t( function, *args, **keywd )
     return creator
 
-def output_array( *args, **keywd ):
+def output_static_array( *args, **keywd ):
     def creator( function ):
-        return transformers.output_array_t( function, *args, **keywd )
+        return transformers.output_static_array_t( function, *args, **keywd )
     return creator

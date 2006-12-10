@@ -210,7 +210,7 @@ _seq2arr = string.Template( os.linesep.join([
 _arr2seq = string.Template( 
             'pyplus_conv::copy_container( $native_array, $native_array + $array_size, pyplus_conv::list_inserter( $pylist ) );' )
 
-class input_array_t(transformer.transformer_t):
+class input_static_array_t(transformer.transformer_t):
     """Handles an input array with fixed size.
 
     void setVec3(double* v) ->  setVec3(object v)
@@ -286,8 +286,8 @@ class input_array_t(transformer.transformer_t):
         self.__configure_v_mem_fun_default( controller.default_controller )
         
 
-# output_array_t
-class output_array_t(transformer.transformer_t):
+# s - static
+class output_static_array_t(transformer.transformer_t):
     """Handles an output array of a fixed size.
 
     void getVec3(double* v) -> v = getVec3()
