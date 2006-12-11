@@ -29,8 +29,8 @@ well explained.
 
 .. _`output` : ./output.html
 
-All built-in transformers could be applied on any function, except constructors.
-The support for constructors will be added in future releases.
+All built-in transformers could be applied on any function, except constructors
+and pure virtual functions. The support for them be added in future releases.
 
 You don't have to warry about call policies. You can set the call policy and 
 `Py++`_ will generate the correct code.
