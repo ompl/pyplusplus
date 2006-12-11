@@ -59,7 +59,9 @@ unique in the whole project. However, they are pretty ugly:
   function
 
 The good news - they will not be changed between different runs of the code 
-generator. If you are exposing an overloaded function, than `Py++`_ uses the ugly 
+generator. 
+
+If you are exposing an overloaded function, in that case `Py++`_ uses the ugly 
 function-wrapper name as an alias. It is up to you to change the alias:
 
   .. code-block:: Python

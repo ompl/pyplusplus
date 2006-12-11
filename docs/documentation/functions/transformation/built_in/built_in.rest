@@ -16,22 +16,27 @@ Introduction
 
 * ``inout``
 
-* ``input_array``
+* ``input_static_array``
 
-* ``output_array``
+* ``output_static_array``
 
 The set doesn't cover all common use cases, but it will grow with every new 
 version of `Py++`_. If you created your own transformer consider to contribute 
 it to the project.
 
-I suggest you to start reading ``output`` transformer. It is pretty simple and 
+I suggest you to start reading `output`_ transformer. It is pretty simple and 
 well explained.
+
+.. _`output` : ./output.html
 
 All built-in transformers could be applied on any function, except constructors.
 The support for constructors will be added in future releases.
 
 You don't have to warry about call policies. You can set the call policy and 
-`Py++`_ will generate correct code.
+`Py++`_ will generate the correct code.
+
+You don't have to warry about the number of arguments, transformers or return 
+value. `Py++`_ handles pretty well such use cases.
 
 
 .. _`Py++` : ./../pyplusplus.html

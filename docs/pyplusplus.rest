@@ -127,9 +127,11 @@ Features list
 -------------
 
 * `Py++`_ support almost all features found in `Boost.Python`_ library
+   
 
 * `Py++`_ generates code, which will help you to understand compiler generated
   error messages
+   
 
 * `Py++`_ has few modes of writing code into files:
   
@@ -148,13 +150,13 @@ Features list
 * Your license is written at the top of every file
 
 * `Py++`_ will check the "completeness" of the bindings. It will check for you
-  that exposed declarations don't have references to unexposed ones.
+  that the exposed declarations don't have references to unexposed ones.
 
 * `Py++`_ provides enough functionality to extract source code documentation
   and write it as Python documentation string
 
-* `Py++`_ provides simple and powerful framework to create wraper for functions, 
-   which could not be exposed as is to `Python`_.
+* `Py++`_ provides simple and powerful framework to create a wrapper for 
+  functions, which could not be exposed as is to `Python`_.
 
 * ...
 

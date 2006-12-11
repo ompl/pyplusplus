@@ -42,15 +42,6 @@ for declarations in unnamed classes, should be created under named class.
 
 The coding itself should take something like 4 - 5 hours, including unit test.
 
----------------------
-Call wrapper policies
----------------------
-
-Not all functions could be exposed to Python as is. This `document`__ will
-explain how `Py++`_ will help users to create wrappers around those functions.
-
-.. __ : ./function_transformation.html
-
 ------------------------------------------
 Domain Specific Language ( DSL ) challenge
 ------------------------------------------
