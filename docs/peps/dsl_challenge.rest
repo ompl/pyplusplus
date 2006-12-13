@@ -67,9 +67,9 @@ are:
 2. verbosity - in order to complete the task, the user have to write "a lot" of
    code
 
----------------------------
-Better user interface (BUI)
----------------------------
+------------------
+Better API (B-API)
+------------------
 
 .. code-block:: Python
 
@@ -92,8 +92,8 @@ problems it has.
 Rule based approach
 -------------------
 
-BUI does not allow to use "rule based" approach! BUI does not allow you to work
-on the whole declarations tree!
+B-API does not allow to use "rule based" approach and to work on the whole
+declarations tree!
 
 Special syntax
 --------------
@@ -102,7 +102,7 @@ Special syntax should be introduce to support
 
 * template instantiations
 
-  BUI does not work for template instantiated classes and functions. If we change
+  B-API does not work for template instantiated classes and functions. If we change
   class ``Point`` to be template, the special syntax should be introduced:
 
     .. code-block:: C++
@@ -145,7 +145,7 @@ Special syntax should be introduce to support
 * overloaded functions resolution
 
   There are use cases, when overloaded functions should be treated differently.
-  It is not possible to distinguish between different functions, using BUI syntax.
+  It is not possible to distinguish between different functions, using B-API syntax.
 
 * C++ operators
 
@@ -162,7 +162,7 @@ and its type.
 Full name
 ---------
 
-Using BUI the user is forced to write full declaration name, otherwise he faces
+Using B-API the user is forced to write full declaration name, otherwise he faces
 next problem:
 
   .. code-block:: Python
@@ -195,12 +195,12 @@ Action item
 -----------
 
 I think, it should be obvious to you, that we cannot drop current `Py++`_ user
-interface. The only solution I see, is to build BUI on top of it. The reason
-the project does not have BUI is simple. I don't feel comfortable to introduce
+interface. The only solution I see, is to build B-API on top of it. The reason
+the project does not have B-API is simple. I don't feel comfortable to introduce
 it, while I am aware to all these problems.
 
 The title of this section should be **Your action item** :-). I will be glad
-to implement BUI, if we can solve all the problems. Consider to contribute your
+to implement B-API, if we can solve all the problems. Consider to contribute your
 experience and knowledge to fix the situation. I am sure together we will build
 very powerful and easy to use code generator.
 

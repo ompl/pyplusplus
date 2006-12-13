@@ -115,7 +115,7 @@ Tips
   for those declarations that are actually used within your library).
 
   In the ``pygccxml`` package you can set the value for the ``-fxml-start``
-  option using the ``start_with_declarations`` attribute of the 
+  option using the ``start_with_declarations`` attribute of the
   ``pygccxml.parser.config_t`` object that you are passing to the parser.
 
 

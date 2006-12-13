@@ -25,7 +25,7 @@ On this page you will find my collection of the solutions to some of the problem
   .. include:: ./shared_ptr/definition.rest
 
 .. _`boost::shared_ptr< const T>` : ./shared_ptr/shared_ptr.html
-  
+
 .. _`Py++` : ./../pyplusplus.html
 .. _`pygccxml` : http://www.language-binding.net/pygccxml/pygccxml.html
 .. _`SourceForge`: http://sourceforge.net/index.php

@@ -40,10 +40,10 @@ consist few files and directories:
 
     4. generated - directory that contains all generated code and only it
 
-    5. unittests - directory that contains gray scale example from tutorials.
+    5. unittests - directory that contains grey scale example from tutorials.
        C++
 
-I run gray scale example on
+I run grey scale example on
 
 |source.bmp|
 
@@ -70,7 +70,7 @@ http://sourceforge.net/project/showfiles.php?group_id=118209.
 .. _`Py++` : ./../../pyplusplus.html
 .. _`environment.py`: http://cvs.sourceforge.net/viewcvs.py/pygccxml/source/pyplusplus/examples/py_easybmp/environment.py?view=markup
 .. _`sconstruct`: http://cvs.sourceforge.net/viewcvs.py/pygccxml/source/pyplusplus/examples/py_easybmp/sconstruct?view=markup
-.. _`grayscale.py`: http://cvs.sourceforge.net/viewcvs.py/pygccxml/source/pyplusplus/examples/py_easybmp/grayscale.py?view=markup
+.. _`greyscale.py`: http://cvs.sourceforge.net/viewcvs.py/pygccxml/source/pyplusplus/examples/py_easybmp/grayscale.py?view=markup
 .. _`create_easybmp.py`: http://cvs.sourceforge.net/viewcvs.py/pygccxml/source/pyplusplus/examples/py_easybmp/create_easybmp.py?view=markup
 .. _`py_easybmp.cpp`: http://cvs.sourceforge.net/viewcvs.py/pygccxml/source/pyplusplus/examples/py_easybmp/py_easybmp.cpp?view=markup
 .. _`Python`: http://www.python.org

@@ -21,12 +21,12 @@ on next class:
       {
           return true;
       }
-  
+
       bool f(int a, double b)
       {
           return true;
       }
-  
+
       bool f(int a, double b, char c)
       {
           return true;
@@ -49,18 +49,18 @@ export an overloaded function and will generate the right code:
 .. code-block:: C++
 
   namespace bp = boost::python;
-  
+
   BOOST_PYTHON_MODULE(pyplusplus){
-    bp::class_< X >( "X" )    
-        .def( 
+    bp::class_< X >( "X" )
+        .def(
             "f"
             , (bool ( ::X::* )( int ) )( &::X::f )
-            , ( bp::arg("a") ) )    
-        .def( 
+            , ( bp::arg("a") ) )
+        .def(
             "f"
             , (bool ( ::X::* )( int,double ) )( &::X::f )
-            , ( bp::arg("a"), bp::arg("b") ) )    
-        .def( 
+            , ( bp::arg("a"), bp::arg("b") ) )
+        .def(
             "f"
             , (bool ( ::X::* )( int,double,char ) )( &::X::f )
             , ( bp::arg("a"), bp::arg("b"), bp::arg("c") ) );
@@ -85,45 +85,45 @@ It is very important to understand it. Lets take a look on next source code:
 .. code-block:: C++
 
   struct Y{
-  
+
       void do_smth( int );
-      
+
       template< class T>
       void do_smth( T t );
-  
+
   };
 
 If you didn't instantiate( use ) ``do_smth`` member function, than `GCC-XML`_
-will not report it. As a result, `Py++`_ will not be aware of the fact that 
+will not report it. As a result, `Py++`_ will not be aware of the fact that
 ``do_smth`` is an overloaded function. To make the long story short, the generated
-code will not compile. You have to instruct `Py++`_ to generate code, which 
+code will not compile. You have to instruct `Py++`_ to generate code, which
 contains function type:
 
 .. code-block:: Python
 
   from pyplusplus import module_builder
-  
+
   mb = module_builder.module_builder_t( ... )
   y = mb.class_( 'Y' )
   y.member_function( 'do_smth' ).create_with_signature = True
   #------------------------------^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Every `Py++`_ class, which describes C++ function\\operator has ``create_with_signature``
-property. You have to set it to ``True``. Default value of the property is 
+property. You have to set it to ``True``. Default value of the property is
 computed. If the exported function is overloaded, then its value is ``True``
 otherwise it will be ``False``.
 
 Do nothing approach weakness
 ----------------------------
 
-Code modification - the weakness of the "do nothing" approach. We live in the 
-dynamic world. You can create bindings for a project, but a month letter, the 
-project developers will add a new function to the exported class. Lets assume 
-that the new function will introduce overloading. If ``create_with_signature`` 
-has ``False`` as a value, than the previously generated code will not compile 
-and you will have to run code generator one more time. 
+Code modification - the weakness of the "do nothing" approach. We live in the
+dynamic world. You can create bindings for a project, but a month letter, the
+project developers will add a new function to the exported class. Lets assume
+that the new function will introduce overloading. If ``create_with_signature``
+has ``False`` as a value, than the previously generated code will not compile
+and you will have to run code generator one more time.
 
-Consider to explicitly set ``create_with_signature`` to ``True``. It will save 
+Consider to explicitly set ``create_with_signature`` to ``True``. It will save
 your and your users time in future.
 
 .. code-block:: Python
@@ -136,7 +136,7 @@ your and your users time in future.
 Overloading using macros
 ------------------------
 
-`Boost.Python`_ provides two macros, which help you to deal with overloaded 
+`Boost.Python`_ provides two macros, which help you to deal with overloaded
 functions:
 
 * ``BOOST_PYTHON_FUNCTION_OVERLOADS``
@@ -152,12 +152,12 @@ You can instruct `Py++`_ to generate code, which will use the macros:
 .. code-block:: Python
 
   import module_builder
-  
+
   mb = module_builder.module_builder_t( ... )
   x = mb.class_( "X" )
   x.member_functions( "f" ).use_overload_macro = True
   #-------------------------^^^^^^^^^^^^^^^^^^^^^^^^^
-  
+
 Member and free functions declaration classes have ``use_overload_macro`` property.
 The default value of the property is ``False``.
 

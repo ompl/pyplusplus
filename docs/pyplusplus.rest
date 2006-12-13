@@ -10,11 +10,11 @@ What is Py++?
 Definition:
   .. include:: ./definition.rest
 
-`Py++`_ uses few different programming paradigms to help you to expose C++ 
-declarations to Python. This code generator will not stand on your way. It will 
-guide you through the whole process. It will raise warnings in the case you are 
-doing something wrong with a link to the explanation. And the most important it 
-will save your time - you will not have to update code generator script every 
+`Py++`_ uses few different programming paradigms to help you to expose C++
+declarations to Python. This code generator will not stand on your way. It will
+guide you through the whole process. It will raise warnings in the case you are
+doing something wrong with a link to the explanation. And the most important it
+will save your time - you will not have to update code generator script every
 time source code is changed.
 
 -----------------------
@@ -22,7 +22,7 @@ Code generation process
 -----------------------
 
 `Boost.Python`_ library allows you to expose C++ code to `Python`_ in quick and
-elegant way. Code generation process, using Py++ consists from few steps. 
+elegant way. Code generation process, using Py++ consists from few steps.
 Next paragraphs will tell you more about every step.
 
 
@@ -127,24 +127,24 @@ Features list
 -------------
 
 * `Py++`_ support almost all features found in `Boost.Python`_ library
-   
+
 
 * `Py++`_ generates code, which will help you to understand compiler generated
   error messages
-   
+
 
 * `Py++`_ has few modes of writing code into files:
-  
+
   * single file
 
   * multiple files
 
-  * multiple files, where single class code is splitted to few files
+  * multiple files, where single class code is split to few files
 
-* `Py++`_ will save your compilation time - it will rewrite a file, only in case 
+* `Py++`_ will save your compilation time - it will rewrite a file, only in case
   of change
 
-* You have full control over generated code. Your code could be inserted almost 
+* You have full control over generated code. Your code could be inserted almost
   anywhere.
 
 * Your license is written at the top of every file
@@ -155,7 +155,7 @@ Features list
 * `Py++`_ provides enough functionality to extract source code documentation
   and write it as Python documentation string
 
-* `Py++`_ provides simple and powerful framework to create a wrapper for 
+* `Py++`_ provides simple and powerful framework to create a wrapper for
   functions, which could not be exposed as is to `Python`_.
 
 * ...

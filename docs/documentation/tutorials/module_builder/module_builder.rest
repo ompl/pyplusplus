@@ -35,7 +35,7 @@ module_builder_t
 should really to be familiar with - ``module_builder``. This package is some kind
 of facade to low level API. It provides simple and intuitive API. The main
 class within this package is ``module_builder_t``. The instance of this class will
-guide you through the whole process. 
+guide you through the whole process.
 
 -------------------------
 module_builder_t.__init__
@@ -65,10 +65,10 @@ files and you can start work on them.
 --------------------------
 Declarations customization
 --------------------------
-There are always declarations, which should not be exported or could not be 
+There are always declarations, which should not be exported or could not be
 exported without human invocation. As you already saw from example, `Py++`_ provides
 simple and powerful declarations query interface. By default, only the declarations
-that belongs to the files, you have asked to parse, and to the files, that lies 
+that belongs to the files, you have asked to parse, and to the files, that lies
 in the same directories as parsed files, will be exported:
 ::
 
@@ -106,7 +106,7 @@ information there:
 * warnings, `Py++`_ warns you about the declarations that have some "problems"
 * ...
 
-Very convenient, very useful. 
+Very convenient, very useful.
 
 -----------------------------------
 module_builder_t.build_code_creator

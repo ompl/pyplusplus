@@ -1,4 +1,4 @@
-﻿============
+============
 How to ... ?
 ============
 
@@ -91,7 +91,7 @@ could be integrated with `Py++`_.
   """
      static boost::python::tuple get_size( const window_t& win ){
         int height(0), width( 0 );
-        win.get_size( height, widht );
+        win.get_size( height, width );
         return boost::python::make_tuple( height, width );
     }
   """
@@ -123,7 +123,7 @@ to ``module_builder_t.split_module``.
 
 If you are using ``split_module``, but still the generated code for some class
 could not be compiled, because of the error, you can ask `Py++`_ to split the
-code generated for class to be splitted to few cpp files.
+code generated for class to be split to few cpp files.
 
 For more information, please read the documentation.
 
@@ -160,7 +160,7 @@ instantiations for ``int`` and ``custom_type`` types. There are few ways to do i
 Simple and straightforward
 --------------------------
 
-Open your favorite editor and create a header file with the content:
+Open your favourite editor and create a header file with the content:
 
 .. code-block:: C++
 
@@ -172,9 +172,9 @@ Open your favorite editor and create a header file with the content:
       inline void instantiate(){
           using namespace geometry;
           sizeof( point_t<int> );
-          sizeof( point_t<cutom_type> );
+          sizeof( point_t<custom_type> );
           distance( point_t<int>(0,0) );
-          distance( point_t<cutom_type>(0,0) );
+          distance( point_t<custom_type>(0,0) );
       }
   }
 
@@ -329,7 +329,7 @@ There are use cases, when `Py++`_ generated file name is too long. In some cases
 the code generation process even fails because of this. What can you do in order
 to eliminate the problem?
 
-First of all the problem arises when you expose template instantiated classes 
+First of all the problem arises when you expose template instantiated classes
 and you did not set the class alias.
 
 Let me explain:
@@ -338,22 +338,22 @@ Let me explain:
 
   template < class T>
   struct holder{ ... };
-  
+
 
 Lets say that you want to export ``holder< int >`` class. Class name in `Python`_
 has few `constraints`_. `Py++`_ is aware of the `constraints`_ and if you didn't
-set an alias to the class, `Py++`_ will do it for you. In this case, 
-"holder_less_int_grate\_" is the generated alias. Obviously it is much longer 
-and not readable. 
+set an alias to the class, `Py++`_ will do it for you. In this case,
+"holder_less_int_grate\_" is the generated alias. Obviously it is much longer
+and not readable.
 
 .. _`constraints` : http://www.python.org/doc/current/ref/identifiers.html
 
-There are few pretty good reasons for this behavior:
+There are few pretty good reasons for this behaviour:
 
 * when you just start to work on `Python`_ bindings concentrate your attention
   on really important things
 
-* if you forgot to set the class alias your users still can use the class 
+* if you forgot to set the class alias your users still can use the class
   functionality, however the class name will be a little bit ugly.
 
 
@@ -366,7 +366,7 @@ generate files with short name, you have to set class alias:
 .. code-block:: Python
 
   from pyplusplus import module_builder
-  
+
   mb = module_builder_t( ... )
   holder = mb.class_( 'holder< int >' )
   holder.alias = 'IntHolder'

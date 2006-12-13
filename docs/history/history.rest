@@ -39,11 +39,11 @@ Version 0.8.2
 1. Interface changes:
 
    * ``module_builder.module_builder_t.build_code_creator`` method:
-     argument ``create_castinig_constructor`` was removed and deprecation warning
+     argument ``create_casting_constructor`` was removed and deprecation warning
      was introduced.
 
 2. Performance improvements. In some cases you can get x10 performance boost.
-   Many thanks to Allen Bierbaum! Saving and reusing results of different 
+   Many thanks to Allen Bierbaum! Saving and reusing results of different
    `pygccxml`_ algorithms and type traits functions achieved this.
 
 3. Convenience API for registering exception translator was introduced.
@@ -53,7 +53,7 @@ Version 0.8.2
 
 5. Treatment to previously generated and no more in-use files was added. By
    default `Py++`_ will delete these files, but of course you can redefine this
-   behavior.
+   behaviour.
 
 6. Generated code changes:
 
@@ -204,11 +204,11 @@ Py++, especially Matthias:
      struct abstract1{
          virtual void do_smth() = 0;
      }
-     
+
      struct abstract2 : public abstract1{
          virtual void do_smth_else() = 0;
      }
-     
+
      struct concrete : public abstract2{
          virtual void do_smth(){};
          virtual void do_smth_else(){};
@@ -246,7 +246,7 @@ Version 0.6.0
 
 5. Bit fields can be accessed from Python
 
-6. Creating custom code creater example has been added.
+6. Creating custom code creator example has been added.
 
 7. Comparison to Pyste has been wrote.
 

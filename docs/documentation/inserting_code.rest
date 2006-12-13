@@ -8,9 +8,9 @@ Inserting code
 Introduction
 ------------
 
-`Py++`_ is not a magician! Sometimes there is a need to add code to 
-generated file(s). This document will describe how you can insert your code to 
-almost any place. 
+`Py++`_ is not a magician! Sometimes there is a need to add code to
+generated file(s). This document will describe how you can insert your code to
+almost any place.
 
 ---------------------
 Insert code to module
@@ -27,16 +27,16 @@ Almost every ``Boost.Python`` module has next structure:
     //registrations code
     ...
   }
-  
-Using ``module_builder_t`` you can add code to declaration and registration 
-sections. More over you can add the code to head or tail of the section. 
+
+Using ``module_builder_t`` you can add code to declaration and registration
+sections. More over you can add the code to head or tail of the section.
 ``module_builder_t`` class provides API, which will help you to complete the task:
 
 * ``add_declaration_code( self, code, tail=True )``
 
   This function will add a code to the declaration section. If you want to add
   the code to the head of the section, pass ``tail=False`` to the method.
-  
+
 * ``add_registration_code( self, code, tail=True )``
 
   This function will add a code to the registration section. If you want to add
@@ -51,7 +51,7 @@ Example
   mb.build_code_creator( ... )
   mb.add_declaration_code( '//just a comment' )
   mb.add_registration_code( '//another comment', False ) #adding code to the head
-  
+
 
 --------------------
 Insert code to class
@@ -68,10 +68,10 @@ Lets take a look on next use case:
       ...
   };
 
-``int`` is immutable type in Python. So you cannot expose ``get_size`` member 
+``int`` is immutable type in Python. So you cannot expose ``get_size`` member
 function as is. You need to create a wrapper and expose it.
 
-In the near future `Py++`_ will eliminate the need of creating hand 
+In the near future `Py++`_ will eliminate the need of creating hand
 written wrapper for this use case.
 
 .. code-block:: C++
@@ -92,26 +92,26 @@ Now you have to register it:
       ...
   ;
 
-How it could be achieved with `Py++`_? Class declaration, has also two 
+How it could be achieved with `Py++`_? Class declaration, has also two
 functions:
 
 * ``add_declaration_code( self, code )``
 
   This method will add the code to the declaration section within the module.
-  
-  If you split your module to few files, `Py++`_ will add this code to the 
+
+  If you split your module to few files, `Py++`_ will add this code to the
   cpp file, class registration code will be written in.
-  
+
   Attention: there is no defined order between wrapper code and declaration section
   code. If you have dependencies between code from declaration section and class
-  wrapper, consider to move declaration code to class wrapper. 
+  wrapper, consider to move declaration code to class wrapper.
 
 * ``add_registration_code( self, code, works_on_instance=True )``
 
-  This method will add the code to the registration section of the class. 
-  
-  What is ``works_on_instance`` argument for? In our case, we added new method 
-  to the class. The first argument of the call will be ``self``. 
+  This method will add the code to the registration section of the class.
+
+  What is ``works_on_instance`` argument for? In our case, we added new method
+  to the class. The first argument of the call will be ``self``.
 
   .. code-block:: Python
 
@@ -152,7 +152,7 @@ Example
 Insert code to class wrapper
 ----------------------------
 
-There are use cases, when you have to add code to `class wrapper`_. Please take a 
+There are use cases, when you have to add code to `class wrapper`_. Please take a
 look on next thread: http://mail.python.org/pipermail/c++-sig/2006-June/010791.html .
 
 
@@ -166,10 +166,10 @@ destroys children classes. It is not an option to switch to ``boost::shared_ptr`
 The solution Niall Douglas found was to implement small lifetime manager. For
 this solution he needed:
 
-* to add to every constructor of class wrapper some code that registers the 
+* to add to every constructor of class wrapper some code that registers the
   instance of the class within the manager
-  
-* to add to destructor of class wrapper some code, that will destroy the instance 
+
+* to add to destructor of class wrapper some code, that will destroy the instance
   if needed.
 
 * to add to class wrapper new variable
@@ -184,14 +184,14 @@ Solution
       constructors.body = class instance registration code
       cls.null_constructor_body = class instance registration code
       cls.copy_constructor_body = class instance registration code
-      
+
       cls.add_wrapper_code( destructor declaration and definition code )
       cls.add_wrapper_code( the new class variable definition code )
 
 .. code-block:: Python
 
   mb = module_builder_t( ... )
-  for cls in mb.classes( relevant classes only ):  
+  for cls in mb.classes( relevant classes only ):
     inject_code( cls )
 
 

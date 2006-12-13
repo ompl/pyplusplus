@@ -8,19 +8,19 @@ User defined transformers
 KISS
 ----
 
-KISS - Keep It Simple Stupid! 
+KISS - Keep It Simple Stupid!
 
-The main goal of the feature: to provide relatively simple way to implement 
-custom transformers. More over, all `built-in transformers`_ implemented as is 
-they were custom transformers. 
+The main goal of the feature: to provide relatively simple way to implement
+custom transformers. More over, all `built-in transformers`_ implemented as is
+they were custom transformers.
 
 -----------
 How to ...?
 -----------
 
-Unfortunatelly I don't have enough time to write a complete documentation :-(.
+Unfortunately I don't have enough time to write a complete documentation :-(.
 Meanwhile fill free to `contact me`_. You also can take a look on `built-in transformers`_
-implementation. 
+implementation.
 
 .. _`contact me` : ../../../../links.html#id5
 .. _`built-in transformers` : ../built_in/built_in.html

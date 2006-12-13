@@ -46,7 +46,7 @@ You can find it `here`_. Take a look on new `getting started guide`_ for Boost
 libraries.
 
 Another very valuable link related to Boost is http://engineering.meta-comm.com/boost.aspx .
-You will find hourly snapshots of the source code and the documentation for all 
+You will find hourly snapshots of the source code and the documentation for all
 Boost libraries.
 
 .. _`getting started guide` : http://boost.cvs.sourceforge.net/*checkout*/boost/boost/more/getting_started.html

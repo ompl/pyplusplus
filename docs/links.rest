@@ -25,13 +25,13 @@ Reading
 
   .. _`A rationale for semantically enhanced library languages` : http://www.research.att.com/~bs/SELLrationale.pdf
 
-  ".. A Semantically Enhanced Library Language (a SEL language or a SELL) is a 
+  ".. A Semantically Enhanced Library Language (a SEL language or a SELL) is a
   dialect created by supersetting a language using a library and then subsetting
-  the result using a tool that `understands` the syntax and semantics of both 
+  the result using a tool that `understands` the syntax and semantics of both
   the underlying language and the library. ..."
-  
+
   `Py++`_ + Boost.Python is a SELL!
-  
+
 
 * `Aspect oriented programming`_
 
@@ -45,19 +45,19 @@ Help resources
 
 * http://www.google.com :-)
 
-* http://boost.org/libs/python/doc/index.html - tutorials, FAQs, reference 
+* http://boost.org/libs/python/doc/index.html - tutorials, FAQs, reference
   manuals
-  
+
 * `Boost.Python wiki`_
 
   .. _`Boost.Python wiki` : http://wiki.python.org/moin/boost%2epython?action=show&redirect=boost+2epython
 
-* http://boost.cvs.sourceforge.net/boost/boost/libs/python/test/ - `Boost.Python`_ 
+* http://boost.cvs.sourceforge.net/boost/boost/libs/python/test/ - `Boost.Python`_
   unit tests. They could be very, very helpful.
 
-* http://svn.sourceforge.net/viewvc/pygccxml/pyplusplus_dev/unittests/ - `Py++`_ 
+* http://svn.sourceforge.net/viewvc/pygccxml/pyplusplus_dev/unittests/ - `Py++`_
   unit tests. They could be even more helpful!
-  
+
 -------------
 Mailing lists
 -------------

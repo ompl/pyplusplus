@@ -40,7 +40,7 @@ Usage example
                        , number.member_function( 'set_value' ) )
 
 This is rather the hard way to add properties to the class. `Py++`_ comes with
-built-in algorithm, which automaticly recognizes properties and adds them to the
+built-in algorithm, which automatically recognizes properties and adds them to the
 class:
 
 .. code-block:: Python
@@ -105,12 +105,13 @@ conventions. It is aware of few widely used get\\set prefixes. It scans the clas
 and its base classes for accessors and after this it tries to match between
 "get" and "set" accessors. If there is "set" accessors, but there is no "get"
 accessor, property will not be constructed. At least one accessor should belong
-to the class.
+to the class. In new property will override an existing exposed declarations
+property will not be created and warning will be written.
 
 Find accessors
 --------------
 
-This part of the algorithm is responcible for finding all functions, which meet
+This part of the algorithm is responsible for finding all functions, which meet
 get\\set accessors criteria.
 
 "get" accessor criteria
@@ -119,6 +120,7 @@ get\\set accessors criteria.
 1. It does not have arguments.
 2. It has return other than ``void``.
 3. It does not modify the instance - has ``const`` attribute.
+4. It does not have an overload.
 
 "set" accessor criteria
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -138,13 +140,13 @@ There are also few rules that applies on both accessor types:
 Recognize property
 ------------------
 
-This part of the algorithm is responcible to recognize the pair of "get" and "set"
-accessors, which constructs the property. `Py++`_ does it by analizing name and
+This part of the algorithm is responsible to recognize the pair of "get" and "set"
+accessors, which constructs the property. `Py++`_ does it by analyzing name and
 type of the accessors.
 
 `Py++`_ understands next coding conventions:
 
-* lowercase_with_underscors
+* lowercase_with_underscores
 * UpperCamel
 * lowCamel
 

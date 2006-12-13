@@ -8,7 +8,7 @@ Default arguments
 Introduction
 ------------
 
-There is more than one way to export function with default arguments. Before we 
+There is more than one way to export function with default arguments. Before we
 proceed, please take a look on next class:
 
 .. code-block:: C++
@@ -18,7 +18,7 @@ proceed, please take a look on next class:
       bool f(int a=12)
       {
           return true;
-      }  
+      }
   };
 
 -------------------
@@ -30,16 +30,16 @@ By default `Py++`_ exposes function with its default arguments.
 .. code-block:: C++
 
   namespace bp = boost::python;
-  
+
   BOOST_PYTHON_MODULE(pyplusplus){
-    bp::class_< X >( "X" )    
-        .def( 
+    bp::class_< X >( "X" )
+        .def(
             "f"
             , &::X::f
-            , ( bp::arg("a")=(int)(12) ) );  
+            , ( bp::arg("a")=(int)(12) ) );
   }
 
-The additional value of the approach is keyword arguments. You will be able to 
+The additional value of the approach is keyword arguments. You will be able to
 call function ``f`` like this:
 
 .. code-block:: Python
@@ -58,7 +58,7 @@ to ``True``:
 .. code-block:: Python
 
   import module_builder
-  
+
   mb = module_builder.module_builder_t( ... )
   x = mb.class_( "X" )
   x.member_function( "f" ).use_overload_macro = True
@@ -75,36 +75,36 @@ use the first one, until you have "registration order" problem:
 
   struct S1;
   struct S2;
-  
+
   struct S1{
       void do_smth( S2* s2=0 );
   };
-  
+
   struct S2{
       void do_smth( S1 s1=S1() );
   };
-  
+
   BOOST_PYTHON_MODULE( ... ){
       using namespace boost::python;
-      
+
       class_< S2 >( "S2" )
           .def( "do_smth", &S2::do_smth, ( arg("s1")=S1() ) );
-      
+
       class_< S1 >( "S1" )
           .def( "do_smth", &S1::do_smth, ( arg("s2")=object() ) );
-          
+
   }
 
-The good news is that it is very easy to identify the problem: the module could 
-not be loaded. The main reason is that expression ``arg("s1")=S1()`` requires 
-``S1`` struct to be registered. `GCC-XML`_ reports default arguments as strings. 
-`Py++`_ doesn't have enough information to generate code with the right class 
+The good news is that it is very easy to identify the problem: the module could
+not be loaded. The main reason is that expression ``arg("s1")=S1()`` requires
+``S1`` struct to be registered. `GCC-XML`_ reports default arguments as strings.
+`Py++`_ doesn't have enough information to generate code with the right class
 registration order. In this case you have to instruct `Py++`_ to use macros:
 
 .. code-block:: Python
 
-  import module_builde
-  
+  import module_builder
+
   mb = module_builder.module_builder_t( ... )
   s2 = mb.class_( "S2" )
   s2.member_function( "do_smth" ).use_overload_macro = True
@@ -126,11 +126,11 @@ Class constructors are special case:
 
   struct S1;
   struct S2;
-  
+
   struct S1{
       S1( S2* s2=0 );
   };
-  
+
   struct S2{
       S2( S1 s1=S1() );
   };
