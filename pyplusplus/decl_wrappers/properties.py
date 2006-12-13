@@ -9,6 +9,10 @@ import algorithm
 from pygccxml import declarations
 
 class property_t( object ):
+    """This class describes a "property". 
+    
+    It keeps
+    """
     def __init__( self, name, fget, fset=None, doc='', is_static=False ):
         self._name = name
         self._fget = fget
@@ -42,7 +46,7 @@ class property_t( object ):
         if self.fset:
             desc.append( ', ' )
             desc.append( 'fset=%s' % declarations.full_name( self.fset ) )
-        return "property [%s]"% ''.join( desc )
+        return 'property "%s"[%s]' % ( self.name, ''.join( desc ) )
 
 
 class property_recognizer_i(object):
@@ -54,6 +58,73 @@ class property_recognizer_i(object):
 
     def create_read_only_property( sefl, fget ):
         raise NotImplementedError()
+
+    def is_accessor( self, mem_fun ):
+        if mem_fun.ignore:
+            return False
+        if mem_fun.access_type != 'public':
+            return False
+        if mem_fun.has_static:
+            return False #TODO: should be supported
+        if mem_fun.virtuality == declarations.VIRTUALITY_TYPES.PURE_VIRTUAL:
+            return False
+        return True
+
+    def is_getter( self, mem_fun ):
+        if mem_fun.arguments:
+            return False 
+        if declarations.is_void( mem_fun.return_type ):
+            return False
+        if not mem_fun.has_const:
+            return False
+        if mem_fun.overloads:
+            return False
+        return True
+
+    def is_setter( self, mem_fun ):
+        if len( mem_fun.arguments ) != 1:
+            return False
+        if not declarations.is_void( mem_fun.return_type ):
+            return False
+        if mem_fun.has_const:
+            return False
+        if mem_fun.overloads:
+            return False            
+        return True
+
+    def __get_accessors( self, mem_funs ):
+        getters = []
+        setters = []
+        for mem_fun in mem_funs:
+            if not self.is_accessor( mem_fun ):
+                continue 
+            elif self.is_getter( mem_fun ):
+                getters.append( mem_fun )
+            elif self.is_setter( mem_fun ):
+                setters.append( mem_fun )
+            else:
+                continue
+        return ( getters, setters )
+
+    def class_accessors( self, cls ):
+        return self.__get_accessors( cls.mem_funs( recursive=False, allow_empty=True ) ) 
+    
+    def base_classes( self, cls ):
+        base_clss = []
+        for hierarchy_info in cls.recursive_bases:
+            if hierarchy_info.related_class.ignore: #don't scan excluded classes
+                continue
+            if 'public' != hierarchy_info.access_type: #don't scan non public hierarchy
+                continue
+            base_clss.append( hierarchy_info.related_class )
+        return base_clss
+    
+    def inherited_accessors( self, cls ):
+        mem_funs = []
+        map( lambda base_cls: mem_funs.extend( base_cls.mem_funs( recursive=False, allow_empty=True ) )
+             , self.base_classes( cls ) )
+        return self.__get_accessors( mem_funs )
+
 
 class name_based_recognizer_t( property_recognizer_i ):
     def __init__( self ):
@@ -174,58 +245,32 @@ class properties_finder_t:
             recognizer = name_based_recognizer_t()
         self.recognizer = recognizer
         self.exclude_accessors = exclude_accessors
-        self.getters, self.setters \
-            = self.__get_accessors( cls.member_functions( recursive=False, allow_empty=True ) )
+        self.getters, self.setters = recognizer.class_accessors( cls )
+        self.inherited_getters, self.inherited_setters = recognizer.inherited_accessors( cls )
 
-        inherted_mem_funs = []
-        for hierarchy_info in cls.recursive_bases:
-            if hierarchy_info.related_class.ignore: #don't scan excluded classes
-                continue
-            if 'public' != hierarchy_info.access_type: #don't scan non public hierarchy
-                continue
-            base_cls = hierarchy_info.related_class
-            inherted_mem_funs.extend( base_cls.member_functions( recursive=False, allow_empty=True ) )
+    def __is_legal_property( self, property_ ):
+        """property is legal if it does not hide other declarations"""
+        def is_relevant( decl ):
+            irrelevant_classes = ( declarations.constructor_t
+                                   , declarations.destructor_t
+                                   , declarations.typedef_t )
+                                    
+            if isinstance( decl, irrelevant_classes ):
+                return False
+            if decl.ignore:
+                return False
+            if decl.alias != property_.name:
+                return False
+            if self.exclude_accessors \
+               and ( decl is property_.fget or decl is property_.fset ):
+                return False
+            return True
 
-        self.inherited_getters, self.inherited_setters \
-            = self.__get_accessors( inherted_mem_funs )
-
-    def __is_getter( self, mem_fun ):
-        if mem_fun.arguments:
-            return False
-        if declarations.is_void( mem_fun.return_type ):
-            return False
-        if not mem_fun.has_const:
-            return False
-        return True
-
-    def __is_setter( self, mem_fun ):
-        if len( mem_fun.arguments ) != 1:
-            return False
-        if not declarations.is_void( mem_fun.return_type ):
-            return False
-        if mem_fun.has_const:
-            return False
-        return True
-
-    def __get_accessors( self, mem_funs ):
-        getters = []
-        setters = []
-        for mem_fun in mem_funs:
-            if mem_fun.ignore:
-                continue
-            elif mem_fun.access_type != 'public':
-                continue
-            elif mem_fun.has_static:
-                continue #TODO: should be supported
-            elif mem_fun.virtuality == declarations.VIRTUALITY_TYPES.PURE_VIRTUAL:
-                continue
-            elif self.__is_getter( mem_fun ):
-                getters.append( mem_fun )
-            elif self.__is_setter( mem_fun ):
-                setters.append( mem_fun )
-            else:
-                continue
-        return ( getters, setters )
+        relevant_decls = []
+        relevant_classes = [self.cls] + self.recognizer.base_classes( self.cls )
+        for cls in relevant_classes:           
+            relevant_decls.extend( cls.decls( is_relevant, recursive=False, allow_empty=True ) )
+        return not bool( relevant_decls )
 
     def find_properties( self, getters, setters, used_getters, used_setters ):
         properties = []
@@ -236,13 +281,13 @@ class properties_finder_t:
                 if fset in used_setters:
                     continue
                 property_ = self.recognizer.create_property( fget, fset )
-                if property_:
+                if property_ and self.__is_legal_property( property_ ):
                     used_getters.add( fget )
                     used_setters.add( fset )
                     properties.append( property_ )
                     break
         return properties
-
+        
     def __call__( self ):
         used_getters = set()
         used_setters = set()
@@ -261,7 +306,7 @@ class properties_finder_t:
             if fget in used_getters:
                 continue
             property_ = self.recognizer.create_read_only_property( fget )
-            if property_:
+            if property_ and self.__is_legal_property( property_ ):
                 used_getters.add( fget )
                 properties.append( property_ )
 
