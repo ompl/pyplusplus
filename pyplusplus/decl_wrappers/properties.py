@@ -6,6 +6,8 @@
 "defines property_t helper class"
 
 import algorithm
+from pyplusplus import messages
+from pyplusplus import _logging_
 from pygccxml import declarations
 
 class property_t( object ):
@@ -248,6 +250,12 @@ class properties_finder_t:
         self.getters, self.setters = recognizer.class_accessors( cls )
         self.inherited_getters, self.inherited_setters = recognizer.inherited_accessors( cls )
 
+    def __report_illegal_property( self, property_ ):
+        logger = _logging_.loggers.declarations
+        if not messages.filter_disabled_msgs([messages.W1041], property_.fget.parent.disabled_messaged ):
+            return #user disabled property warning        
+        logger.warn( "%s;%s" % ( property_.fget.parent, messages.W1041 % property_ ) )
+        
     def __is_legal_property( self, property_ ):
         """property is legal if it does not hide other declarations"""
         def is_relevant( decl ):
@@ -281,11 +289,14 @@ class properties_finder_t:
                 if fset in used_setters:
                     continue
                 property_ = self.recognizer.create_property( fget, fset )
-                if property_ and self.__is_legal_property( property_ ):
-                    used_getters.add( fget )
-                    used_setters.add( fset )
-                    properties.append( property_ )
-                    break
+                if property_:
+                    if self.__is_legal_property( property_ ):
+                        used_getters.add( fget )
+                        used_setters.add( fset )
+                        properties.append( property_ )
+                        break
+                    else:
+                        self.__report_illegal_property( property_ )
         return properties
         
     def __call__( self ):
@@ -306,10 +317,13 @@ class properties_finder_t:
             if fget in used_getters:
                 continue
             property_ = self.recognizer.create_read_only_property( fget )
-            if property_ and self.__is_legal_property( property_ ):
-                used_getters.add( fget )
-                properties.append( property_ )
-
+            if property_:
+                if self.__is_legal_property( property_ ):
+                    used_getters.add( fget )
+                    properties.append( property_ )
+                else:
+                    self.__report_illegal_property( property_ )
+                    
         if self.exclude_accessors:
             map( lambda accessor: accessor.exclude(), used_getters )
             map( lambda accessor: accessor.exclude(), used_setters )

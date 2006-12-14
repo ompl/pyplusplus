@@ -128,7 +128,13 @@ class decl_wrapper_t(object):
         msgs = []
         if not self.exportable:
             msgs.append( self.why_not_exportable() )
-        msgs.extend( self._readme_impl() )
+            
+        if declarations.templates.is_instantiation( self.name ) \
+           and self.alias == self._generate_valid_name():
+            msgs.append( messages.W1043 % self.alias )
+            
+        msgs.extend( self._readme_impl() )        
+        
         return messages.filter_disabled_msgs( msgs, self.__msgs_to_ignore )
 
     @property

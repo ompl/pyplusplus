@@ -7,6 +7,8 @@
 
 import os
 import writer
+from pyplusplus import messages
+from pyplusplus import _logging_
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
@@ -133,13 +135,10 @@ class multiple_files_t(writer.writer_t):
             value_class = class_traits.get_declaration( element_type )
             return self.create_value_traits_header_name( value_class )
         except RuntimeError, error:
-            msg = "%s;%s" \
-                  % ( str(code_creator.declaration)
-                      , "Py++ can not find out container value_type( mapped_type )."
-                        "The container class is template instantiation declaration and not definition."
-                        "This container class will be exported, but there is a posiblity, that generated code will not compile."
-                        "The solution to the problem is to create a variable of the class." )
-            self.logger.warn( msg )
+            decls_logger = _logging_.loggers.declarations
+            if not messages.filter_disabled_msgs([messages.W1042], code_creator.declaration.disabled_messaged ):
+                return #user disabled property warning        
+            decls_logger.warn( "%s;%s" % ( code_creator.declaration, messages.W1042 ) )
 
     def create_include_code( self, creators, head_headers=None, tail_headers=None ):
         answer = []

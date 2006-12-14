@@ -20,29 +20,13 @@ class manager_t( object ):
         self.__exported_decls.append( decl )  
 
     def __is_std_decl( self, decl ):
-        if not decl.parent:
+        #Every class under std should be exported by Boost.Python and\\or Py++
+        #Also this is not the case right now, I prefer to hide the warnings
+        dpath = declarations.declaration_path( decl )
+        if len( dpath ) < 3:
             return False
-
-        if not isinstance( decl.parent, declarations.namespace_t ):
+        if dpath[1] != 'std':
             return False
-
-        if 'std' != decl.parent.name:
-            return False
-
-        ns_std = decl.parent
-        if not ns_std.parent:
-            return False
-
-        if not isinstance( ns_std.parent, declarations.namespace_t ):
-            return False
-
-        if '::' != ns_std.parent.name:
-            return False
-
-        global_ns = ns_std.parent
-        if global_ns.parent:
-            return False 
-        
         if decl.name.startswith( 'pair<' ):
             #special case
             return False

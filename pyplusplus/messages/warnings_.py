@@ -3,11 +3,11 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""This package defines all user messages( warnings + errors ), which will be 
+"""This package defines all user messages (warnings + errors), which will be 
 reported to user.
 """
 
-W1000 = 'Py++, by default, does not expose internal compilers declarations.'\
+W1000 = 'Py++, by default, does not expose internal compilers declarations. '\
         'Names of those declarations usually start with "__".'
 
 W1001 = 'Py++, by default, does not expose internal declarations. ' \
@@ -15,7 +15,7 @@ W1001 = 'Py++, by default, does not expose internal declarations. ' \
 
 W1002 = 'Py++, by default, does not expose compiler generated declarations.'
 
-W1003 = 'Virtual functions that returns const reference can not be overriden from Python. ' \
+W1003 = 'Virtual functions that returns const reference cannot be overridden from Python. ' \
         'Reason: boost::python::override::operator()(...) saves the result of the marshaling ' \
         '(from Python to C++) on the stack. Thus operator() returns reference ' \
         'to a temporary variable. Consider to use "Function Transformation" functionality ' \
@@ -25,7 +25,7 @@ W1004 = 'Boost.Python library can not expose function, which takes as argument/r
         'pointer to function. ' \
         ' See http://www.boost.org/libs/python/doc/v2/faq.html#funcptr for more information.'
 
-W1005 = 'Py++ can not expose function that takes as argument/returns instance of non public class. ' \
+W1005 = 'Py++ cannot expose function that takes as argument/returns instance of non-public class. ' \
         'Generated code will not compile.'
 
 W1006 = 'Py++ need your help to expose function that takes as argument/returns C++ arrays. ' \
@@ -36,9 +36,9 @@ W1007 = 'The function has more than %d arguments ( %d ). ' \
         'For more information see: http://www.boost.org/libs/python/doc/v2/configuration.html'
 
 W1008 = 'The function returns non-const reference to "Python immutable" type. ' \
-        'The value can not be modified from Python. '
+        'The value cannot be modified from Python. '
 
-W1009 = 'The function takes as argument (name=%s, pos=%d ) non-const reference ' \
+W1009 = 'The function takes as argument (name=%s, pos=%d) non-const reference ' \
         'to Python immutable type - function could not be called from Python. ' \
          'Take a look on "Function Transformation" functionality and define the transformation.'
 
@@ -98,7 +98,7 @@ W1032 = "Boost.Python library does not support enums with duplicate values. " \
 
 W1033 = "Py++ can not expose unnamed variables"
 
-W1034 = "Py++ can not expose alignement bit."
+W1034 = "Py++ can not expose alignment bit."
 
 W1035 = "Py++ can not expose static pointer member variables. This could be changed in future."
 
@@ -111,10 +111,20 @@ W1038 = "Py++ can not expose variables of with unnamed type."
 
 W1039 = "Py++ doesn't expose private or protected member variables."
 
-W1040 = 'The declaration is unexposed, but there are other declarations, which refer to it.' \
-        'This could cause "no to_python converter found" run time error.' \
+W1040 = 'The declaration is unexposed, but there are other declarations, which refer to it. ' \
+        'This could cause "no to_python converter found" run time error. ' \
         'Declarations: %s'
 
+W1041 = 'Property "%s" could not be created. There is another exposed declaration with the same name( alias )." ' \
+        'The property will make it inaccessible.'
+
+W1042 = 'Py++ can not find out container value_type( mapped_type ). ' \
+        'The container class is template instantiation declaration and not definition. ' \
+        'This container class will be exported, but there is a possibility, that ' \
+        'generated code will not compile or will lack some functionality. ' \
+        'The solution to the problem is to create a variable of the class.' 
+
+W1043 = 'Py++ created an ugly alias ("%s") for template instantiated class.'
 
 warnings = globals()
 
