@@ -19,6 +19,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                                                                     
     def customize(self, mb ):
         mb.calldef( 'one' ).alias = 'ONE'
+        mb.calldef('plus' ).create_with_signature = True
 
     def run_tests(self, module):        
         self.failUnless( module.ONE() == 1 )

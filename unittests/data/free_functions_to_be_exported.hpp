@@ -12,7 +12,7 @@ inline int one(){
     return 1; 
 }
 
-inline int plus(int a, int b=21){ 
+inline int plus(int a, const int b=21){ 
     return a+b; 
 }
 

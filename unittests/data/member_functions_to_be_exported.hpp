@@ -176,6 +176,11 @@ inline void instantiate_mem_fun_environment(){
     mem_fun_environment_t env;
     int i = env.get_value<int>("");
 }
+
+struct mem_fun_constness_t{
+    static int do_smth( int, const int ){ return 0; }
+    void do_smth_mem( int, const int ){}
+};
 }
 
 #endif//__member_functions_to_be_exported_hpp__
