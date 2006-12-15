@@ -10,13 +10,13 @@ Contributors
 
 Thanks to all the people that have contributed patches, bug reports and suggestions:
 
-  * My wife - Yulia
-  * John Pallister
-  * Matthias Baas
-  * Allen Bierbaum
-  * Lakin Wecker
-  * Georgiy Dernovoy
-  * Gottfried Ganssauge
+* My wife - Yulia
+* John Pallister
+* Matthias Baas
+* Allen Bierbaum
+* Lakin Wecker
+* Georgiy Dernovoy
+* Gottfried Ganssauge
 
 ------------
 Project name
@@ -30,6 +30,44 @@ There were few reasons to this:
 2. "Py++" was the original name of the project: http://mail.python.org/pipermail/c++-sig/2005-July/009280.html
 
 3. Users always changed the name of the projects. I saw at least 6 different names.
+
+-------------
+Version 0.8.5
+-------------
+
+1. `Function transformation`_ feature goes live.
+
+.. _`Function transformation` : ../documentation/functions/transformation/transformation.html
+
+2. "Py++" introduces new functionality, which allows you to control messages and
+   warnings: `how to disable warnings?`_ .
+
+.. _`how to disable warnings?` : ../documentation/feedback.html#how-to-disable-warning-s
+
+3. Adding new algorithm, which controls the registration order of the functions.
+   See `registration order document`_
+
+.. _`registration order document` : ../documentation/functions/registration_order.html
+
+4. New "Py++" defined `return_pointee_value`_ call policy was introduced.
+
+.. _`return_pointee_value` : ../documentation/functions/call_policies.html#py-defined-call-policies
+
+5. Support for opaque types was added. Read more about this feature `here`__.
+
+.. __ : ../documentation/functions/call_policies.html#special-case
+
+6. It is possible to configure "Py++" to generate faster ( compilation time )
+   code for indexing suite version 2. See API documentation.
+
+7. The algorithm, which finds all class properties was improved. It provides
+   user with a better way to control properties creation. A property that would
+   hide another exposed declaration will not be registered\\created.
+
+8. Work around for "custom smart pointer as member variable" Boost.Python bug
+   was introduced.
+
+9. Bugs fixes and documentation improvement.
 
 
 -------------
