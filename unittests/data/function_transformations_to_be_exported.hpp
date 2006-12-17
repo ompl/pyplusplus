@@ -183,6 +183,23 @@ private:
 	~ft_private_destructor_t(){}
 };
 
+struct bug_render_target_t{
+	virtual void get_statistics( float& x, float& y ){
+		x = 1.1;;
+		y = 1.2;
+	}
+	
+	struct frame_stats_t{
+		float x, y;
+	};
+	
+	virtual frame_stats_t get_statistics(){
+		frame_stats_t fs;
+		fs.x = 1.1;
+		fs.y = 1.2;
+	}
+};
+
 }
 
 #endif//__function_transformations_to_be_exported_hpp__

@@ -35,6 +35,13 @@ to the PyOgre bindings (when I last used them). "
 
   Lakin Wecker, the author of `Python-OGRE`_ project
 
+"... Py++ allows the wrappers to be "automagically" created, which means it's much
+easier to keep things up to date (the maintainence on the Py++ based wrapper is
+tiny compared to any other system I've used). It also allows us to wrap other
+libraries fairly easily. "
+
+  Andy Miller, a developer of `Python-OGRE`_ project
+
 ------------------
 Who is using Py++?
 ------------------

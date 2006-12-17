@@ -68,6 +68,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
         mb.decls(lambda decl: decl.name.startswith("_")).exclude()
 
+        cls = mb.class_("bug_render_target_t")
+        cls.mem_fun("get_statistics", arg_types=['float &']*2).add_transformation( ft.output(0), ft.output(1) )
+
     def run_tests(self, module):
         """Run the actual unit tests.
         """

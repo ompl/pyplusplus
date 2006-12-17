@@ -17,6 +17,7 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Lakin Wecker
 * Georgiy Dernovoy
 * Gottfried Ganssauge
+* Andy Miller
 
 ------------
 Project name
