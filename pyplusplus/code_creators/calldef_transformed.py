@@ -333,7 +333,10 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
         tmpl_values['wrapper_class'] = self.parent.wrapper_alias
         tmpl_values['wrapped_class'] = declarations.full_name( self.declaration.parent )
         tmpl_values['wrapped_inst'] = cntrl.inst_arg.name
-        
+        tmpl_values['wrapped_inst_constness'] = ''
+        if declarations.is_const( declarations.remove_reference( cntrl.inst_arg.type ) ):
+            tmpl_values['wrapped_inst_constness'] = 'const'
+            
         decl_vars = cntrl.variables[:]
         if not declarations.is_void( self.declaration.return_type ):
             decl_vars.append( cntrl.result_variable )

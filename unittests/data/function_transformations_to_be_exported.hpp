@@ -184,7 +184,7 @@ private:
 };
 
 struct bug_render_target_t{
-	virtual void get_statistics( float& x, float& y ){
+	virtual void get_statistics( float& x, float& y ) const{
 		x = 1.1;;
 		y = 1.2;
 	}
@@ -197,6 +197,7 @@ struct bug_render_target_t{
 		frame_stats_t fs;
 		fs.x = 1.1;
 		fs.y = 1.2;
+        return fs;
 	}
 };
 

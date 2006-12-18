@@ -43,7 +43,7 @@ class virtual_mem_fun:
           'static $return_type $unique_function_name( $arg_declarations ){'
         , '    $declare_variables'
         , '    $pre_call'
-        , '    if( dynamic_cast< $wrapper_class* >( boost::addressof( $wrapped_inst ) ) ){'
+        , '    if( dynamic_cast< $wrapper_class $wrapped_inst_constness* >( boost::addressof( $wrapped_inst ) ) ){'
         , '        $save_result$wrapped_inst.$wrapped_class::$function_name($arg_expressions);'
         , '    }'
         , '    else{'
