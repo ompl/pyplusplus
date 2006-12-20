@@ -36,7 +36,7 @@ There were few reasons to this:
 Version 0.8.5
 -------------
 
-1. `Function transformation`_ feature goes live.
+1. Added `Function Transformation`_ feature.
 
 .. _`Function transformation` : ../documentation/functions/transformation/transformation.html
 
@@ -45,7 +45,7 @@ Version 0.8.5
 
 .. _`how to disable warnings?` : ../documentation/feedback.html#how-to-disable-warning-s
 
-3. Adding new algorithm, which controls the registration order of the functions.
+3. Added new algorithm, which controls the registration order of the functions.
    See `registration order document`_
 
 .. _`registration order document` : ../documentation/functions/registration_order.html
@@ -171,7 +171,7 @@ Version 0.8.0
 
 5. Member variables, that are pointers exported correctly.
 
-6. Adding experimental support for ``vector_indexing_suite``.
+6. Added experimental support for ``vector_indexing_suite``.
 
 7. Bug fixes.
 
