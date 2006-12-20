@@ -184,6 +184,13 @@ private:
 };
 
 struct bug_render_target_t{
+    
+    static float get_static_statistics( bug_render_target_t& inst ){
+        float x,y;
+        inst.get_statistics( x, y );
+        return x+y;
+    }
+    
 	virtual void get_statistics( float& x, float& y ) const{
 		x = 1.1;;
 		y = 1.2;

@@ -428,7 +428,10 @@ class creator_t( declarations.decl_visitor_t ):
                 # Check if it is a header from the code repository
                 if header in code_repository.headers:
                     self.__extmodule.add_system_header( header )
-    
+                    
+                if not self.__extmodule.is_system_header( code_repository.named_tuple.file_name ):
+                    self.__extmodule.add_system_header( code_repository.named_tuple.file_name )
+                    
         if self.curr_decl.has_static:
             #static_method should be created only once.
             found = filter( lambda creator: isinstance( creator, code_creators.static_method_t )

@@ -2,8 +2,6 @@
 # Distributed under the Boost Software License, Version 1.0. (See
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
-#
-# Initial author: Matthias Baas
 
 """This module contains the class L{transformer_t}.
 """
@@ -12,23 +10,15 @@ import sys, os.path, copy, re, types
 from pygccxml import declarations, parser
 
 return_ = -1
+#return_ is a spacial const, which represent an index of return type
 
 class transformer_t:
+    """Base class for a function transformer."""
+    
     USE_1_BASED_INDEXING = False
-    
-    """Base class for a function transformer.
-
-    This class specifies the interface that a user written transformer
-    has to implement. It doesn't contain any actual functionality so
-    a user doesn't have to derive from this class. Methods that are not
-    implemented are treated as if they would do nothing and return None.
-
-    @author: Matthias Baas
-    """
-    
+        
     def __init__(self, function):
-        """Constructor.
-        """
+        """@param function: reference to function declaration"""
         self.__function = function
 
     @property 
@@ -41,6 +31,10 @@ class transformer_t:
         return []
 
     def get_argument( self, reference ):
+        """returns reference to the desired argument
+        
+        @param reference: name( str ) or index( int ) of the argument
+        """
         if isinstance( reference, str ):
             found = filter( lambda arg: arg.name == reference, self.function.arguments )
             if len( found ) == 1:
@@ -53,6 +47,10 @@ class transformer_t:
            return self.function.arguments[ reference ]
 
     def get_type( self, reference ):
+        """returns type of the desired argument or return type of the function
+        
+        @param reference: name( str ) or index( int ) of the argument
+        """       
         global return_
         if isinstance( reference, int ) and reference == return_:
             return self.function.return_type
@@ -60,9 +58,26 @@ class transformer_t:
             return self.get_argument( reference ).type
 
     def configure_mem_fun( self, controller ):
+        """Transformers should overridde the method, in order to define custom 
+        transformation for non-virtual member function.
+        
+        @param controller: instance of L{mem_fun_controller_t} class
+        """
         pass
     
     def configure_free_fun( self, controller ):
+        """Transformers should overridde the method, in order to define custom 
+        transformation for free function.
+        
+        @param controller: instance of L{free_fun_controller_t} class
+        """        
         pass
     
-    
+    def configure_virtual_mem_fun( self, controller ):
+        """Transformers should overridde the method, in order to define custom 
+        transformation for virtual member function.
+        
+        @param controller: instance of L{virtual_mem_fun_controller_t} class
+        """        
+        pass
+        

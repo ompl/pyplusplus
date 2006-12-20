@@ -12,31 +12,18 @@ code = \
 # http://www.boost.org/LICENSE_1_0.txt)
 
 class named_tuple(tuple):
-    \"\"\"Creates tuple, which allows access to stored values by name and by index.
+    \"\"\"Creates tuple, which allows access to stored values by name and\\or by index.
     
-    named_tuple could be constructed exactly in the same way as Python dict.
+    Construction example: named_tuple( ('a',0), ('b',1) )
+        'a' and 'b' are names, while 0 and 1 are values
     \"\"\"
 
-    def __new__(cls, seq=None, **keywd):
-        if seq:
-            if isinstance( seq, dict ):
-                return tuple.__new__( cls, seq.values() )
-            else:
-                return tuple.__new__( cls, [ val for name, val in seq] )
-        else:
-            return tuple.__new__( cls, keywd.values() )
+    def __new__(cls, *args):
+        return tuple.__new__( cls, [ val for name, val in args] )
 
-    def __init__(self, seq=None, **keywd):
-        "named_tuple could be constructed exactly in the same way as Python dict."
+    def __init__(self, *args):
         tuple.__init__( self )
-        if seq:
-            if isinstance( seq, dict ):
-                name2value = dict( seq.iteritems() )
-            else:
-                name2value = dict( seq )
-        else:
-            name2value = dict( keywd )        
-        self.__dict__[ '__name2value' ] = name2value
+        self.__dict__[ '__name2value' ] = dict( args )
 
     def __getattr__(self, name):
         try:
@@ -56,7 +43,7 @@ class named_tuple(tuple):
             return super( named_tuple, self ).__getitem__( key )
 
 if __name__ == '__main__':
-    nt = named_tuple( a=0, b=1)
+    nt = named_tuple( ('a',0), ('b',1) )
     assert nt.a == 0 and nt.b == 1
     a,b = nt
     assert a == 0 and b == 1

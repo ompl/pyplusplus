@@ -1,23 +1,48 @@
+# Copyright 2006 Roman Yakovenko.
+# Distributed under the Boost Software License, Version 1.0. (See
+# accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+
+"""defines controller classes which help to define the function transformation
+
+The idea behind implementation of "Function Transformation" functionality is simple:
+Py++ defines few templates. Transformers are just editors for the templates.
+In most cases, transformers don't directly edit the template, but use controller
+classes for this purpose. Controller classes provide an abstraction of the templates.
+"""
+
 import string
 import templates
 from pygccxml import declarations
 
 class variable_t( object ):
+    """defines C++ variable"""
     def __init__( self, type, name, initialize_expr='' ):
+        """
+        @param type: type of the variable
+        @type type: instance of L{pygccxml.declarations.type_t}
+        
+        @param name: name( str ) of the variable
+        
+        @param initialize_expr: an expression that initialize the variable
+        """
         self.__name = name
         self.__type = type
         self.__initialize_expr = initialize_expr
         
     @property
     def name( self ):
+        "variable name"
         return self.__name
         
     @property 
     def type( self ):
+        "variable type"
         return self.__type
         
     @property 
     def initialize_expr( self ):
+        "inirialize expression"
         return self.__initialize_expr
         
     def declare_var_string( self ):
@@ -27,6 +52,14 @@ class variable_t( object ):
                                      , initialize_expr=self.initialize_expr )
 
 class variables_manager_t( object ):
+    """function wrapper variables manager
+    
+    Almost every time we define new transformer, we need to define variables.
+    It is important to keep the variable names unique. This class will ensure this.
+    Every time you declare new variable, it will return the unique variable name.
+    The name will be built from the original variable name and some index, which
+    will make the variable to be unique.
+    """
     def __init__( self ):
         object.__init__( self )
         self.__variables = [] #variables
@@ -34,14 +67,32 @@ class variables_manager_t( object ):
     
     @property
     def variables( self ):
+        "list of all declared variables"
         return self.__variables
         
     def declare_variable( self, type, name, initialize_expr='' ):
+        """declare variable
+        
+        @param type: type of the variable
+        @type type: instance of L{pygccxml.declarations.type_t}
+        
+        @param name: name( str ) of the variable
+        
+        @param initialize_expr: an expression that initialize the variable
+        
+        @return: the unique variable name
+        """
         unique_name = self.__create_unique_var_name( name )
         self.__variables.append( variable_t( type, unique_name, initialize_expr ) )
         return unique_name
     
     def register_name( self, name ):
+        """register predefined variable name
+        
+        There are use cases, where it is convenience to define variables within
+        a template. In such cases, the only thing that should be done is registering
+        a unique name of the variable.
+        """
         return self.__create_unique_var_name( name )
         
     def __create_unique_var_name( self, name ):
@@ -61,6 +112,8 @@ def create_variables_manager( function ):
     return vm
 
 class controller_base_t( object ):
+    """base class for all controller classes"""
+    
     def __init__( self, function ):
         self.__function = function
 
@@ -69,10 +122,11 @@ class controller_base_t( object ):
         return self.__function
 
     def apply( self, transformations ):
+        """asks all transformations to configure the controller"""
         raise NotImplementedError()
 
 class sealed_fun_controller_t( controller_base_t ): 
-    #base class for free and member function controllers
+    """base class for free and member function controllers"""
     def __init__( self, function ):
         controller_base_t.__init__( self, function )
         self.__vars_manager = create_variables_manager( function )
@@ -104,7 +158,7 @@ class sealed_fun_controller_t( controller_base_t ):
         
     @property
     def wrapper_args( self ):
-        return self.__wrapper_args
+        return filter( None, self.__wrapper_args )
 
     def find_wrapper_arg( self, name ):
         for arg in self.wrapper_args:
@@ -116,7 +170,7 @@ class sealed_fun_controller_t( controller_base_t ):
         arg = self.find_wrapper_arg( name )
         if not arg:
             raise LookupError( "Unable to remove '%s' argument - not found!" % name ) 
-        del self.wrapper_args[ self.wrapper_args.index(arg) ]
+        self.__wrapper_args[ self.__wrapper_args.index(arg) ] = None
 
     @property
     def arg_expressions( self ):

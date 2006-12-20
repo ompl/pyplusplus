@@ -5,11 +5,12 @@
 
 # Matthias Baas is an initial author of the templates.
 
+"""defines few templates, which will be used to create a function-wrapper
+definition."""
+
 import os
 from string import Template
 
-#TODO: pre_call, post_call terminology should be changed. Use prefix and suffix
-#instead: http://boost.org/libs/smart_ptr/sp_techniques.html#wrapper
 
 class sealed_fun: 
     body = Template( os.linesep.join([

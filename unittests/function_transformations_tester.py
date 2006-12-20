@@ -8,7 +8,6 @@ import sys
 import math
 import unittest
 import fundamental_tester_base
-from named_tuple import named_tuple
 from pyplusplus import function_transformers as ft
 from pyplusplus.module_builder import call_policies
 
@@ -140,15 +139,16 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                 return self.m_height+1
 
             def fixed_output_array(self):
+                from named_tuple import named_tuple
                 # Produce a correct return value
                 if self.fixed_output_array_mode==0:
-                    return named_tuple( v=(2,5,7) )
+                    return named_tuple( ('v', (2,5,7)) )
                 # Produce the wrong type
                 elif self.fixed_output_array_mode==1:
                     return 5
                 # Produce a sequence with the wrong number of items
                 elif self.fixed_output_array_mode==2:
-                    return named_tuple( v=(2,5) )
+                    return named_tuple( ('v', (2,5)) )
 
         pyimg1 = py_image1_t(3,7)
 
@@ -202,6 +202,18 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         cls = module.no_virtual_members_t()
         self.assertEqual(cls.member(), (True, 17))
 
+        class py_bug_render_target_t( module.bug_render_target_t ):
+            def __init__( self ):
+                module.bug_render_target_t.__init__( self )
+                
+            def get_statistics( self ):
+                from named_tuple import named_tuple
+                return named_tuple( ( 'x', 2.0 ), ( 'y', 3.0 ) )
+        tmp = py_bug_render_target_t()
+        
+        tmp.get_statistics()
+        self.failUnless( 2.0 + 3.0 == module.bug_render_target_t.get_static_statistics( tmp ) )
+        
 def create_suite():
     suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))

@@ -137,19 +137,32 @@ array_inserter_t<T> array_inserter( T* array, index_type size ){
 
 inline boost::python::object 
 get_out_argument( boost::python::object result, const char* arg_name ){
-    if( PySequence_Check( result.ptr() ) ){
-        return boost::python::getattr( result, arg_name );
+    if( !PySequence_Check( result.ptr() ) ){
+        return result;
     }    
+    boost::python::object cls = boost::python::getattr( result, "__class__" );
+    boost::python::object cls_name = boost::python::getattr( cls, "__name__" );
+    std::string name = boost::python::extract< std::string >( cls_name );
+    if( "named_tuple" == name ){
+        return boost::python::getattr( result, arg_name );    
+    }
     else{
         return result;
     }
+    
 }
 
 inline boost::python::object 
 get_out_argument( boost::python::object result, index_type index ){
-    if( PySequence_Check( result.ptr() ) ){
-        return result[ index ];
+    if( !PySequence_Check( result.ptr() ) ){
+        return result;
     }    
+    boost::python::object cls = boost::python::getattr( result, "__class__" );
+    boost::python::object cls_name = boost::python::getattr( cls, "__name__" );
+    std::string name = boost::python::extract< std::string >( cls_name );
+    if( "named_tuple" == name ){
+        return result[ index ];    
+    }
     else{
         return result;
     }
