@@ -59,7 +59,7 @@ It is also possible to solve the problem, without changing Boost.Python library:
      }
 
 The second approach is a little bit "evil" because it redefines ``get_pointer``
-function for all shared pointer classes. So you should be careful.
+function for all shared pointer class instantiations. So you should be careful.
 
 Files
 -----
