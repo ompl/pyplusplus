@@ -30,7 +30,7 @@ Features
 * Adding new algorithm, which controls the registration order of the functions.
   http://language-binding.net/pyplusplus/documentation/functions/registration_order.html
   
-* Added new "Py++" defined `return_pointee_value`_ call policy:
+* Added new "Py++" defined "return_pointee_value" call policy:
   http://language-binding.net/pyplusplus/documentation/functions/call_policies.html#py-defined-call-policies
   
 * Opaque types are fully supported:
