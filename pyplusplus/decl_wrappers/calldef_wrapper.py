@@ -164,6 +164,9 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         
         if self.transformations:
             #if user defined transformation, than I think it took care of the problems
+            ft = self.transformations[0]
+            if ft.alias == ft.unique_name:
+                msgs.append( messages.W1044 % ft.alias )
             return msgs
             
         if suspicious_type( self.return_type ) and None is self.call_policies:

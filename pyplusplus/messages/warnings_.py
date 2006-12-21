@@ -126,9 +126,20 @@ W1042 = 'Py++ can not find out container value_type( mapped_type ). ' \
 
 W1043 = 'Py++ created an ugly alias ("%s") for template instantiated class.'
 
+W1044 = 'Py++ created an ugly alias ("%s") for function wrapper.'
+
 warnings = globals()
 
 for identifier, explanation in warnings.items():
+    if len( identifier ) != 5:
+        continue
+    if identifier[0] != 'W':
+        continue
+    try:
+        int( identifier[1:] )
+    except:
+        continue
+    
     globals()[ identifier ] = 'warning %s: %s' % ( identifier, explanation )
 
 del warnings
