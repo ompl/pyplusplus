@@ -368,7 +368,7 @@ class casting_operator_t( declarations.casting_operator_t, calldef_t ):
         calldef_t.__init__( self )
 
     def _get_alias( self):
-        if not self._alias or self.name == super( member_operator_t, self )._get_alias():
+        if not self._alias or self.name == super( casting_operator_t, self )._get_alias():
             return_type = declarations.remove_alias( self.return_type )
             decl_string = return_type.decl_string
             for type_, alias in self.SPECIAL_CASES.items():
