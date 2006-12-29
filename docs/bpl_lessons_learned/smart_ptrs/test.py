@@ -68,6 +68,14 @@ class tester_t( unittest.TestCase ):
             self.fail("TypeError exception was not raised.")
         except TypeError:
             pass
+    
+    def test_numeric( self ):
+        numeric = custom_sptr.create_numeric(21)
+        self.failUnless( 21 == numeric.value ) 
+        self.failUnless( 21 == custom_sptr.get_numeric_value(numeric) )
+        numeric = custom_sptr.numeric_t()
+        self.failUnless( 0 == numeric.value ) 
+        self.failUnless( 0 == custom_sptr.get_numeric_value(numeric) )
         
 def create_suite():
     suite = unittest.TestSuite()

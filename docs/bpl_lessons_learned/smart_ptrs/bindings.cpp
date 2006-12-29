@@ -3,20 +3,26 @@
 
 namespace bp = boost::python;
 
-// "get_pointer" function returns pointer to the object managed by smart pointer
-// class instance
+//namespace boost{
+    // "get_pointer" function returns pointer to the object managed by smart pointer
+    // class instance
 
-template<class T>
-inline T * get_pointer(smart_ptr_t<T> const& p){
-    return p.get();
-}
+    template<class T>
+    inline T * get_pointer(smart_ptr_t<T> const& p){
+        return p.get();
+    }
 
-inline derived_t * get_pointer(derived_ptr_t const& p){
-    return p.get();
-}
-    
+    inline derived_t * get_pointer(derived_ptr_t const& p){
+        return p.get();
+    }
+//}
+
+//using boost::get_pointer;
+
 namespace boost{ namespace python{
 
+    using boost::get_pointer;
+    
     // "pointee" class tells Boost.Python the type of the object managed by smart 
     // pointer class.
     // You can read more about "pointee" class here:
@@ -33,6 +39,7 @@ namespace boost{ namespace python{
     };
 
 } }
+
 
 // "get_pointer" and "pointee" are needed, in order to allow Boost.Python to 
 // work with user defined smart pointer
@@ -116,7 +123,14 @@ BOOST_PYTHON_MODULE( custom_sptr ){
     bp::def( "val_get_value", &::val_get_value );
     bp::def( "create_derived", &::create_derived );
     bp::def( "create_base", &::create_base );
-    
+
+
+    bp::class_< numeric_t, smart_ptr_t< numeric_t > >( "numeric_t" )
+        .def_readwrite( "value", &numeric_t::value );
+
+    bp::def( "create_numeric", &::create_numeric );
+    bp::def( "get_numeric_value", &::get_numeric_value );
+
     // Work around for the public member variable, where type of the variable
     // is smart pointer problem
     bp::class_< shared_data::buffer_t >( "buffer_t" )

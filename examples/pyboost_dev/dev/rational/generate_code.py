@@ -58,8 +58,8 @@ class code_generator_t(object):
         bad_rational = self.__mb.class_('bad_rational' )
         bad_rational.include()
         
-        self.__mb.free_function( 'lcm<long>' ).include()
-        self.__mb.free_function( 'gcd<long>' ).include()
+        self.__mb.namespace( 'boost' ).free_function( 'lcm<long>', recursive=False ).include()
+        self.__mb.namespace( 'boost' ).free_function( 'gcd<long>', recursive=False ).include()
         self.__mb.free_function( 'rational_cast<double, long>' ).include()
         self.__mb.free_function( 'rational_cast<double, long>' ).alias = 'to_double'
         self.__mb.free_function( 'rational_cast<long, long>' ).include()

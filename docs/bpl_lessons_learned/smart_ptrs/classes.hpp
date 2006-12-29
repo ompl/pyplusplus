@@ -13,7 +13,7 @@ struct derived_t : base_i{
     derived_t(){}    
     virtual int get_value() const{ return 0xD; }
 };
-    
+
 // Some smart pointer classes does not have reach interface as boost ones.
 // In order to provide same level of convenience, users are forced to create
 // classes, which derive from smart pointer class.
@@ -93,6 +93,32 @@ inline int
 const_ref_get_value( const smart_ptr_t< base_i >& a ){
     return a->get_value();
 }
+
+
+struct numeric_t{
+    numeric_t()
+    : value(0)
+    {}
+        
+    int value;
+};
+
+smart_ptr_t< numeric_t > create_numeric( int value ){
+    smart_ptr_t< numeric_t > num( new numeric_t() );
+    num->value = value;
+    return num;
+}
+
+int get_numeric_value( smart_ptr_t< numeric_t > n ){
+    if( n.get() ){
+        return n->value;
+    }
+    else{
+        return 0;
+    }
+}
+
+
 
 namespace shared_data{
 
