@@ -8,6 +8,7 @@ import sys
 import math
 import unittest
 import fundamental_tester_base
+from pygccxml import declarations
 from pyplusplus import function_transformers as ft
 from pyplusplus.module_builder import call_policies
 
@@ -69,6 +70,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
         cls = mb.class_("bug_render_target_t")
         cls.mem_fun("get_statistics", arg_types=['float &']*2).add_transformation( ft.output(0), ft.output(1) )
+        
+        cls = mb.class_( 'modify_type_tester_t' )
+        do_nothing = cls.mem_fun( 'do_nothing' )
+        do_nothing.add_transformation( ft.modify_type(0, declarations.remove_reference ) )
 
     def run_tests(self, module):
         """Run the actual unit tests.
@@ -213,6 +218,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         
         tmp.get_statistics()
         self.failUnless( 2.0 + 3.0 == module.bug_render_target_t.get_static_statistics( tmp ) )
+        
+        tmp = module.modify_type_tester_t()
+        self.failUnless( 123 == tmp.do_nothing(123) )
         
 def create_suite():
     suite = unittest.TestSuite()

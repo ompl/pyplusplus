@@ -208,6 +208,12 @@ struct bug_render_target_t{
 	}
 };
 
+struct modify_type_tester_t{
+    int do_nothing( int& v ){
+        return v;
+    }
+};
+
 }
 
 #endif//__function_transformations_to_be_exported_hpp__

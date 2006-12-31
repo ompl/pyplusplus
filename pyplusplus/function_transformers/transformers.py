@@ -66,7 +66,7 @@ class output_t( transformer.transformer_t ):
                   % ( function, self.arg_ref.name, arg.type)
 
     def __str__(self):
-        return "output(%d)"%(self.arg_index)
+        return "output(%d)"%(self.arg.name)
 
     def required_headers( self ):
         """Returns list of header files that transformer generated code depends on."""
@@ -103,10 +103,47 @@ class output_t( transformer.transformer_t ):
     def configure_virtual_mem_fun( self, controller ):
         self.__configure_v_mem_fun_default( controller.default_controller )
         self.__configure_v_mem_fun_override( controller.override_controller )
-       
+
+# input_t
+class type_modifier_t(transformer.transformer_t):
+    """Change/modify type of the argument.
+    
+    Right now compiler should be able to use implicit conversion
+    """
+
+    def __init__(self, function, arg_ref, modifier):
+        """Constructor.
+
+        modifier is callable, which take the type of the argument and should return 
+        new type
+        """
+        transformer.transformer_t.__init__( self, function )
+        self.arg = self.get_argument( arg_ref )
+        self.arg_index = self.function.arguments.index( self.arg )
+        self.modifier = modifier
+
+    def __str__(self):
+        return "type_modifier(%s)" % self.arg.name
+
+    def __configure_sealed( self, controller ):
+        w_arg = controller.find_wrapper_arg( self.arg.name )
+        w_arg.type = self.modifier( self.arg.type )
+
+    def __configure_v_mem_fun_default( self, controller ):
+        self.__configure_sealed( controller )
+
+    def configure_mem_fun( self, controller ):
+        self.__configure_sealed( controller )
+        
+    def configure_free_fun(self, controller ):
+        self.__configure_sealed( controller )
+
+    def configure_virtual_mem_fun( self, controller ):
+        self.__configure_v_mem_fun_default( controller.default_controller ) 
+
         
 # input_t
-class input_t(transformer.transformer_t):
+class input_t(type_modifier_t):
     """Handles a single input variable.
 
     The reference on the specified variable is removed.
@@ -122,32 +159,14 @@ class input_t(transformer.transformer_t):
         @param idx: Index of the argument that is an output value (the first arg has index 1).
         @type idx: int
         """
-        transformer.transformer_t.__init__( self, function )
-        self.arg = self.get_argument( arg_ref )
-        self.arg_index = self.function.arguments.index( self.arg )
+        type_modifier_t.__init__( self, function, arg_ref, remove_ref_or_ptr )
 
         if not is_ref_or_ptr( self.arg.type ):
             raise ValueError( '%s\nin order to use "input" transformation, argument %s type must be a reference or a pointer (got %s).' ) \
                   % ( function, self.arg_ref.name, arg.type)
 
     def __str__(self):
-        return "input(%d)"%(self.idx)
-
-    def __configure_sealed( self, controller ):
-        w_arg = controller.find_wrapper_arg( self.arg.name )
-        w_arg.type = remove_ref_or_ptr( self.arg.type )
-
-    def __configure_v_mem_fun_default( self, controller ):
-        self.__configure_sealed( controller )
-
-    def configure_mem_fun( self, controller ):
-        self.__configure_sealed( controller )
-        
-    def configure_free_fun(self, controller ):
-        self.__configure_sealed( controller )
-
-    def configure_virtual_mem_fun( self, controller ):
-        self.__configure_v_mem_fun_default( controller.default_controller )        
+        return "input(%s)"%(self.arg.name)
 
 # inout_t
 class inout_t(transformer.transformer_t):
@@ -173,7 +192,7 @@ class inout_t(transformer.transformer_t):
                   % ( function, self.arg_ref.name, arg.type)
 
     def __str__(self):
-        return "inout(%d)"%(self.arg_index)
+        return "inout(%s)"%(self.arg.name)
 
     def __configure_sealed(self, controller):
         w_arg = controller.find_wrapper_arg( self.arg.name )
@@ -230,7 +249,7 @@ class input_static_array_t(transformer.transformer_t):
         
         if not is_ptr_or_array( self.arg.type ):
             raise ValueError( '%s\nin order to use "input_array" transformation, argument %s type must be a array or a pointer (got %s).' ) \
-                  % ( function, self.arg_ref.name, arg.type)
+                  % ( function, self.arg.name, self.arg.type)
 
         self.array_size = size
         self.array_item_type = declarations.array_item_type( self.arg.type )
@@ -308,7 +327,7 @@ class output_static_array_t(transformer.transformer_t):
 
         if not is_ptr_or_array( self.arg.type ):
             raise ValueError( '%s\nin order to use "input_array" transformation, argument %s type must be a array or a pointer (got %s).' ) \
-                  % ( function, self.arg_ref.name, arg.type)
+                  % ( function, self.arg.name, self.arg.type)
 
         self.array_size = size
         self.array_item_type = declarations.array_item_type( self.arg.type )

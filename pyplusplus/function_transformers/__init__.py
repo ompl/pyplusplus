@@ -44,3 +44,8 @@ def output_static_array( *args, **keywd ):
     def creator( function ):
         return transformers.output_static_array_t( function, *args, **keywd )
     return creator
+
+def modify_type( *args, **keywd ):
+    def creator( function ):
+        return transformers.type_modifier_t( function, *args, **keywd )
+    return creator
