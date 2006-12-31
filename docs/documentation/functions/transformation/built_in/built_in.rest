@@ -16,6 +16,8 @@ Introduction
 
 * ``inout``
 
+* ``modify_type``
+
 * ``input_static_array``
 
 * ``output_static_array``

@@ -14,6 +14,7 @@ The following policies are available:
  - L{inout_t}
  - L{input_array_t}
  - L{output_array_t}
+ - L{type_modifier_t}
 """
 import os
 import string
