@@ -75,6 +75,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         do_nothing = cls.mem_fun( 'do_nothing' )
         do_nothing.add_transformation( ft.modify_type(0, declarations.remove_reference ) )
 
+        clone = cls.mem_fun( 'clone' )
+        clone.call_policies = call_policies.return_value_policy( call_policies.manage_new_object )
+        clone.add_transformation( ft.modify_type(0, declarations.remove_reference ) )
+        
     def run_tests(self, module):
         """Run the actual unit tests.
         """
@@ -221,6 +225,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         
         tmp = module.modify_type_tester_t()
         self.failUnless( 123 == tmp.do_nothing(123) )
+        self.failUnless( tmp != tmp.clone(123) )
         
 def create_suite():
     suite = unittest.TestSuite()

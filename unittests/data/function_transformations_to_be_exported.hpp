@@ -212,6 +212,11 @@ struct modify_type_tester_t{
     int do_nothing( int& v ){
         return v;
     }
+    
+    modify_type_tester_t* clone(int& c){
+        return new modify_type_tester_t();
+    }
+    
 };
 
 }

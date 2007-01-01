@@ -109,9 +109,9 @@ class return_stmt_creator_t( object ):
     @property
     def pre_return_code( self ):
         if None is self.__pre_return_code:
-            if not self.__controller.return_variables \
-               or self.__function.call_policies.is_default() \
-               or declarations.is_void( self.__function.return_type ):
+            if declarations.is_void( self.__function.return_type ) \
+               and ( self.__function.call_policies.is_default() \
+                     or False == bool( self.__controller.return_variables ) ):
                 self.__pre_return_code = ''
             else:
                 c_p_typedef = 'typedef %s %s;' \
