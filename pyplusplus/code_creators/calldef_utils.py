@@ -134,7 +134,8 @@ class return_stmt_creator_t( object ):
                 else:
                     self.__return_vars.insert( 0
                             , declarations.call_invocation.join( 
-                                declarations.templates.join( make_object, [self.__call_policy_alias] )
+                                declarations.templates.join( make_object
+                                                            , [self.__call_policy_alias, self.__result_var.type.decl_string] )
                                 , [self.__result_var.name] ) )
             
             if 0 == len( self.__return_vars ):

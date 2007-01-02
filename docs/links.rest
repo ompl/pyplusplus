@@ -45,6 +45,9 @@ Help resources
 
 * http://www.google.com :-)
 
+  This site uses Google custom search engine, turned to provide better results
+  when you search for materials related to `Boost.Python`_ library.
+
 * http://boost.org/libs/python/doc/index.html - tutorials, FAQs, reference
   manuals
 
@@ -72,6 +75,26 @@ Mailing lists
 
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Py++` : ./pyplusplus.html
+
+
+----------------------------------
+Libraries inspired by Boost.Python 
+----------------------------------
+
+* `Luabind`_ - interfacing C++ and `Lua`_
+  
+.. _`Luabind` : http://www.rasterbar.com/products/luabind/docs.html
+.. _`Lua` : http://www.lua.org/
+
+* `Pyd`_ - interfacing C++ and `D programming language`_
+
+.. _`Pyd` : http://pyd.dsource.org/index.html
+.. _`D programming language` : http://www.digitalmars.com/d/
+
+* `Sq Plus`_ - interfacing C++ and `Squirrel`_
+
+.. _`Sq Plus` : http://wiki.squirrel-lang.org/default.aspx/SquirrelWiki/SqPlus.html
+.. _`Squirrel` : http://wiki.squirrel-lang.org/
 
 ..
    Local Variables:
