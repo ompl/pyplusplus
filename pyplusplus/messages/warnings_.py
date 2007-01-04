@@ -128,6 +128,10 @@ W1043 = 'Py++ created an ugly alias ("%s") for template instantiated class.'
 
 W1044 = 'Py++ created an ugly alias ("%s") for function wrapper.'
 
+W1045 = 'Py++ does not expose static arrays with unknown size. ' \
+        'You can fix this by setting array size to the actual one.' \
+        'For more information see "array_t" class documentation.'
+
 warnings = globals()
 
 for identifier, explanation in warnings.items():
