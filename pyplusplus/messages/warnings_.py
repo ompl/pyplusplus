@@ -137,6 +137,11 @@ W1046 = 'The virtual function was declared with empty throw. ' \
         'The function wrapper can throw any exception. ' \
         'In case of exception in run-time, the behaviour of the program is undefined! '
 
+W1047 = 'There are two or more classes that use same alias("%s"). ' \
+        'Duplicated aliases causes few problems, but the main one is that some ' \
+        'of the classes will not be exposed to Python.' \
+        'Other classes : %s'
+
 warnings = globals()
 
 for identifier, explanation in warnings.items():
