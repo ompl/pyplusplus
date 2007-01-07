@@ -18,7 +18,7 @@ inline void raise_always(int) throw( my_exception ){};
 
 struct mem_fun_throw_exception_t{
     void raise_nothing() throw() {};
-    void raise_nothing(int) throw() {};
+    virtual void raise_nothing(int) throw() {};
     virtual void raise_always() throw( my_exception ){};
     virtual void raise_always(int) throw( my_exception ){};
 };
