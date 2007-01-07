@@ -132,6 +132,11 @@ W1045 = 'Py++ does not expose static arrays with unknown size. ' \
         'You can fix this by setting array size to the actual one.' \
         'For more information see "array_t" class documentation.'
 
+W1046 = 'The virtual function was declared with empty throw. ' \
+        'Adding the ability to override the function from Python breaks the exception specification. ' \
+        'The function wrapper can throw any exception. ' \
+        'In case of exception in run-time, the behaviour of the program is undefined! '
+
 warnings = globals()
 
 for identifier, explanation in warnings.items():
