@@ -53,7 +53,15 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         items_ptr = module.items_ptr_t()
         items_ptr.append( item )
         self.failUnless( items_ptr[0].value == 1977 )
-        
+        for i in items_ptr:
+            self.failUnless( i.value == 1977 )
+            
+        items_ptr2 = module.create_items_ptr()
+        prev_value = -1
+        for i in items_ptr2:
+            self.failUnless( prev_value + 1 == i.value )
+            prev_value = i.value
+            
         set_of_strings = module.create_set_strings()
         set_of_strings.add("s")
         set_of_strings.add("s1")
