@@ -145,7 +145,10 @@ W1047 = 'There are two or more classes that use same alias("%s"). ' \
 W1048 = 'There are two or more aliases within "pyplusplus::aliases" namespace for ' \
         'the class. In order to enjoy from automatic aliasing, the class alias ' \
         'should be unique. Other aliases: %s'
-        
+
+W1049 = 'This method could not be overriden in Python - method returns reference ' \
+        'to local variable!'
+
 warnings = globals()
 
 for identifier, explanation in warnings.items():
