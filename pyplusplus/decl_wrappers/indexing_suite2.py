@@ -76,7 +76,7 @@ class indexing_suite2_t( object ):
                                 , doc="Reference to STD container class" )
 
     def _get_container_traits( self ):
-        return self._get_container_traits()
+        return self.__container_traits
     container_traits = property( _get_container_traits
                                  , doc="Reference to container traits. See "
                                        "pygccxml documentation for STD container traits.")
@@ -89,7 +89,9 @@ class indexing_suite2_t( object ):
     def _get_call_policies( self ):      
         if self.__call_policies:
             return self.__call_policies
-        
+        if self.container_traits not in declarations.sequential_container_traits:
+            #TODO: find out why map's don't like the policy
+            return self.__call_policies 
         element_type = None
         try:
             element_type = self.element_type
