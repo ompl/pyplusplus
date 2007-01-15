@@ -7,14 +7,14 @@ class auto_conversion_tester_t( unittest.TestCase ):
         unittest.TestCase.__init__( self, *args )
 
     def test_auto( self ):
-        self.failUnless( (0,0,0) == auto_conv.point_ret_val_000() )
-        self.failUnless( (1,0,1) == auto_conv.point_ret_val_101() )
-        self.failUnless( (0,1,0) == auto_conv.point_ret_ref_010() )
-        self.failUnlessRaises( TypeError, auto_conv.point_ret_ptr_110 )
-        self.failUnless( auto_conv.test_point_val_000( (0,0,0) ) )
-        self.failUnless( auto_conv.test_point_cref_010( (0,1,0) ) )
-        self.failUnlessRaises( TypeError, auto_conv.test_point_ref_110, (1,1,0) )
-        self.failUnlessRaises( TypeError, auto_conv.test_point_ptr_101, (1,0,1) )
+        self.failUnless( (0,0,0) == auto_conv.record_ret_val_000() )
+        self.failUnless( (1,0,1) == auto_conv.record_ret_val_101() )
+        self.failUnless( (0,1,0) == auto_conv.record_ret_ref_010() )
+        self.failUnlessRaises( TypeError, auto_conv.record_ret_ptr_110 )
+        self.failUnless( auto_conv.test_record_val_000( (0,0,0) ) )
+        self.failUnless( auto_conv.test_record_cref_010( (0,1,0) ) )
+        self.failUnlessRaises( TypeError, auto_conv.test_record_ref_110, (1,1,0) )
+        self.failUnlessRaises( TypeError, auto_conv.test_record_ptr_101, (1,0,1) )
     
     def test_from_sequence( self ):
         self.failUnless( from_conv.test_val_010( (0,1,0) ) )
