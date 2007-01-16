@@ -7,10 +7,28 @@
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/next.hpp>
 
+/*******************************************************************************
+ 
+This file contains conversion from boost::tuples::tuple class instantiation to
+Python tuple and vice versa. The conversion uses Boost.Python custom r-value 
+converters. Custom r-value converters allows Boost.Python library to handle
+[from|to] [C++|Python] variables conversion "on-the-fly". For example:
+
+typedef boost::tupls::tuple< int, std::string > record_t;
+
+record_t read_record();
+bool validate_record(record_t const & r);
+
+If you don't use custom r-value converters than you need to create small wrappers
+around the function or expose record_t class. 
+
+**/
+
 namespace boost{ namespace python{ 
 
 namespace details{
-//Small helper for incrementing index 
+    
+//Small helper function, introduced to allow short syntax for index incrementing
 template< int index>    
 typename mpl::next< mpl::int_< index > >::type increment_index(){
     typedef typename mpl::next< mpl::int_< index > >::type next_index_type;
@@ -19,8 +37,12 @@ typename mpl::next< mpl::int_< index > >::type increment_index(){
 
 }
     
-//Conversion from C++ type to Python type is pretty simple. Basically, using
-//Python C API create an object and than initialize it.
+/*******************************************************************************
+
+Conversion from C++ type to Python type is pretty simple. Basically, using 
+Python C API you create an object and than initialize it.
+
+**/
 template< class TTuple >    
 struct to_py_tuple{
     
@@ -43,19 +65,24 @@ private:
         convert_impl( c_tuple, values, details::increment_index<index>(), length_type() );
     }
 
-    template< int index >
+    template< int length >
     static void 
-    convert_impl( const TTuple&, list& values, mpl::int_< index >, mpl::int_< index >)
+    convert_impl( const TTuple&, list& values, mpl::int_< length >, mpl::int_< length >)
     {}
 
 };
 
 
-//Conversion from Python type to C++ type is a little bit complex. Boost.Python
-//library implements solution, which manages the memory of the allocated object.
-//In order to implement "from Python" conversion you should supply 2 functions.
-//The first one checks whether the conversion is possible. The second function 
-//should construct an instance of the desired class. 
+/*******************************************************************************
+
+Conversion from Python type to C++ type is a little bit complex. Boost.Python
+library implements solution, which manages the memory of the allocated object.
+This was done in order to allow 
+In order to implement "from Python" conversion you should supply 2 functions.
+The first one checks whether the conversion is possible. The second function 
+should construct an instance of the desired class. 
+
+**/
 
 template< class TTuple>
 struct from_py_tuple{
@@ -120,9 +147,9 @@ private:
         }            
     }
 
-    template< int index >
+    template< int length >
     static bool
-    convertible_impl( const python::tuple& py_tuple, mpl::int_< index >, mpl::int_< index > ){
+    convertible_impl( const python::tuple& py_tuple, mpl::int_< length >, mpl::int_< length > ){
         return true;
     }
     
@@ -138,9 +165,9 @@ private:
         construct_impl( py_tuple, c_tuple, details::increment_index<index>(), length_type() );
     }
 
-    template< int index >
+    template< int length >
     static void
-    construct_impl( const python::tuple& py_tuple, TTuple& c_tuple, mpl::int_< index >, mpl::int_< index > )
+    construct_impl( const python::tuple& py_tuple, TTuple& c_tuple, mpl::int_< length >, mpl::int_< length > )
     {}
 
 };
