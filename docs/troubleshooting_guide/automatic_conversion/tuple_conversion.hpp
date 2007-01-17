@@ -7,22 +7,77 @@
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/next.hpp>
 
-/*******************************************************************************
- 
-This file contains conversion from boost::tuples::tuple class instantiation to
-Python tuple and vice versa. The conversion uses Boost.Python custom r-value 
-converters. Custom r-value converters allows Boost.Python library to handle
-[from|to] [C++|Python] variables conversion "on-the-fly". For example:
-
-typedef boost::tupls::tuple< int, std::string > record_t;
-
-record_t read_record();
-bool validate_record(record_t const & r);
-
-If you don't use custom r-value converters than you need to create small wrappers
-around the function or expose record_t class. 
-
-**/
+/**
+ * Converts boost::tuples::tuple<...> to\from Python tuple
+ *
+ * The conversion is done "on-the-fly", you should only register the conversion 
+ * with your tuple classes. 
+ * For example:
+ *
+ *  typedef boost::tuples::tuple< int, double, std::string > triplet;
+ *  boost::python::register_tuple< triplet >();
+ *
+ * That's all. After this point conversion to\from next types will be handled
+ * by Boost.Python library:
+ *
+ *   triplet
+ *   const triplet
+ *   const triplet&
+ * 
+ * Implementation description.
+ *  The conversion uses Boost.Python custom r-value converters. r-value converters
+ * is very powerful and undocumented feature of the library. The only documentation
+ * we have is http://boost.org/libs/python/doc/v2/faq.html#custom_string .
+ * 
+ *  The conversion consists from two parts: "to" and "from". 
+ *  
+ *  "To" conversion
+ * The "to" part is pretty easy and well documented ( http://docs.python.org/api/api.html ). 
+ * You should use Python C API to create an instance of a class and than you 
+ * initialize the relevant members of the instance.
+ *     
+ *  "From" conversion
+ * Lets start from analizing one of the use case Boost.Python library have to 
+ * deal with:
+ * 
+ *   void do_smth( const triplet& arg ){...}
+ *
+ * In order to allow to call this function from Python, the library should keep
+ * parameter "arg" alive untill the function returns. In other words, the library
+ * should provide instances life-time managment. The provided interface is not
+ * ideal and could be improved. You have to implement two functions:
+ *
+ *  void* convertible( PyObject* obj )
+ *    Checks whether the "obj" could be converted to an instance of the desired 
+ *    class. If true, the function should return "obj", otherwise NULL
+ *
+ *  void construct( PyObject* obj, converter::rvalue_from_python_stage1_data* data)
+ *    Constructs the instance of the desired class. This function will be called
+ *    if and only if "convertible" function returned true. The first argument
+ *    is Python object, which was passed as parameter to "convertible" function.
+ *    The second object is some kind of memory allocator for one object. Basically 
+ *    it keeps a memory chunk. You will use the memory for object allocation.
+ *    
+ *    For some unclear for me reason, the  library implements "C style Inheritance"
+ *    ( http://www.embedded.com/97/fe29712.htm ). So, in order to create new 
+ *    object in the storage you have to cast to the "right" class:
+ * 
+ *      typedef converter::rvalue_from_python_storage<your_type_t> storage_t;
+ *      storage_t* the_storage = reinterpret_cast<storage_t*>( data );
+ *      void* memory_chunk = the_storage->storage.bytes;
+ *
+ *    "memory_chunk" points to the memory, where the instance will be allocated. 
+ *
+ *    In order to create object at specific location, you should use placement new
+ *    operator:
+ *
+ *      your_type_t* instance = new (memory_chunk) your_type_t();
+ *  
+ *    Now, you can continue to initialize the instance. If "your_type_t" constructor
+ *    requires some arguments, well just "parse" the Python object before you call
+ *    the constructor.
+ * 
+ **/
 
 namespace boost{ namespace python{ 
 
@@ -37,12 +92,6 @@ typename mpl::next< mpl::int_< index > >::type increment_index(){
 
 }
     
-/*******************************************************************************
-
-Conversion from C++ type to Python type is pretty simple. Basically, using 
-Python C API you create an object and than initialize it.
-
-**/
 template< class TTuple >    
 struct to_py_tuple{
     
@@ -73,17 +122,6 @@ private:
 };
 
 
-/*******************************************************************************
-
-Conversion from Python type to C++ type is a little bit complex. Boost.Python
-library implements solution, which manages the memory of the allocated object.
-This was done in order to allow 
-In order to implement "from Python" conversion you should supply 2 functions.
-The first one checks whether the conversion is possible. The second function 
-should construct an instance of the desired class. 
-
-**/
-
 template< class TTuple>
 struct from_py_tuple{
         
@@ -111,18 +149,10 @@ struct from_py_tuple{
 
     static void
     construct( PyObject* py_obj, converter::rvalue_from_python_stage1_data* data){
-        //At this point you are exposed to low level implementation details
-        //of Boost.Python library. You use the reinterpret_cast, in order to get
-        //access to the number of bytes, needed to store C++ object        
         typedef converter::rvalue_from_python_storage<TTuple> storage_t;
         storage_t* the_storage = reinterpret_cast<storage_t*>( data );
-        //Now we need to get access to the memory, which will held the object.
         void* memory_chunk = the_storage->storage.bytes;
-        //You should use placement new in order to create object in specific
-        //location
         TTuple* c_tuple = new (memory_chunk) TTuple();
-        //We allocated the memory, now we should tell Boost.Python to manage( free )
-        //it later
         data->convertible = memory_chunk;
 
         python::tuple py_tuple( handle<>( borrowed( py_obj ) ) );
