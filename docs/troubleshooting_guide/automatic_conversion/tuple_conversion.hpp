@@ -37,14 +37,14 @@
  * initialize the relevant members of the instance.
  *     
  *  "From" conversion
- * Lets start from analizing one of the use case Boost.Python library have to 
+ * Lets start from analyzing one of the use case Boost.Python library have to 
  * deal with:
  * 
  *   void do_smth( const triplet& arg ){...}
  *
- * In order to allow to call this function from Python, the library should keep
- * parameter "arg" alive untill the function returns. In other words, the library
- * should provide instances life-time managment. The provided interface is not
+ * In order to allow calling this function from Python, the library should keep
+ * parameter "arg" alive until the function returns. In other words, the library
+ * should provide instances life-time management. The provided interface is not
  * ideal and could be improved. You have to implement two functions:
  *
  *  void* convertible( PyObject* obj )
@@ -58,7 +58,7 @@
  *    The second object is some kind of memory allocator for one object. Basically 
  *    it keeps a memory chunk. You will use the memory for object allocation.
  *    
- *    For some unclear for me reason, the  library implements "C style Inheritance"
+ *    For some unclear for me reason, the library implements "C style Inheritance"
  *    ( http://www.embedded.com/97/fe29712.htm ). So, in order to create new 
  *    object in the storage you have to cast to the "right" class:
  * 
@@ -73,9 +73,19 @@
  *
  *      your_type_t* instance = new (memory_chunk) your_type_t();
  *  
- *    Now, you can continue to initialize the instance. If "your_type_t" constructor
- *    requires some arguments, well just "parse" the Python object before you call
- *    the constructor.
+ *    Now, you can continue to initialize the instance. 
+ * 
+ *      instance->set_xyz = read xyz from obj
+ * 
+ *    If "your_type_t" constructor requires some arguments, "read" the Python 
+ *    object before you call the constructor:
+ *
+ *      xyz_type xyz = read xyz from obj
+ *      your_type_t* instance = new (memory_chunk) your_type_t(xyz);
+ *
+ *  Hint:
+ * In most case you don't really need\have to work with C Python API. Let 
+ * Boost.Python library to do some work for you!
  * 
  **/
 
