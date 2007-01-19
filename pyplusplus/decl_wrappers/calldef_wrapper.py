@@ -157,6 +157,13 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         return self._exportable_impl_derived()
 
     def _readme_impl( self ):
+        def is_double_ptr( type_ ):
+            #check for X**
+            if not declarations.is_pointer( type_ ):
+                return False
+            base = declarations.remove_pointer( type_ )
+            return declarations.is_pointer( base )
+        
         def suspicious_type( type_ ):
             if not declarations.is_reference( type_ ):
                 return False
@@ -180,10 +187,15 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
             
         if suspicious_type( self.return_type ) and None is self.call_policies:
             msgs.append( messages.W1008 )
+        
+        if is_double_ptr( self.return_type ) and None is self.call_policies:
+            msgs.append( messages.W1050 % str(self.return_type) )
 
         for index, arg in enumerate( self.arguments ):
             if suspicious_type( arg.type ):
                 msgs.append( messages.W1009 % ( arg.name, index ) )
+            if is_double_ptr( arg.type ):
+                msgs.append( messages.W1051 % ( arg.name, index, str(arg.type) ) )
 
         if False == self.overridable:
             msgs.append( self._non_overridable_reason)
