@@ -31,12 +31,12 @@ namespace memory_managers{
 
     struct none{
         template< typename T>
-        static void deallocate(T*){}
+        static void deallocate_array(T*){}
     };
     
     struct delete_{
         template< typename T>
-        static void deallocate(T* arr){
+        static void deallocate_array(T* arr){
             delete[] arr;
         }
     };    
@@ -111,7 +111,7 @@ struct as_tuple_impl{
         for( unsigned int i = 0; i < size; ++i ){
             list_.append( make_object< CallPolicies>( arr[i] ) );
         }
-        MemoryManager::deallocate( arr );
+        MemoryManager::deallocate_array( arr );
         return bpl::incref( bpl::tuple( list_ ).ptr() );
     }
 };
