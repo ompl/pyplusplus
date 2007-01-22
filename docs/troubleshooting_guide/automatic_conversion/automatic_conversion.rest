@@ -10,38 +10,52 @@ Introduction
 
 .. include:: ./definition.rest
 
----------------
-Example content
----------------
+-------
+Content
+-------
 
+This example actually consist from 2 small, well documented examples. 
 
+The first one shows how to handle conversion between tuples: `boost::tuples::tuple`_
+and Python tuple.
+
+.. _`boost::tuples::tuple` : http://boost.org/libs/tuple/doc/tuple_users_guide.html
+
+The second one shows how to add an automatic conversion from Python tuple to 
+some registered class. The class registration allows you to use its functionality 
+and enjoy from automatic conversion.
 
 Files
 -----
 
-* `solution.cpp`_ file contains definition of a class and few functions, which
-  have ``shared_ptr< T >`` and ``shared_ptr< const T>`` as return type or as an
-  argument. The file also contains source code that exposes the defined
-  functionality to Python.
+* `tuples.hpp`_ file contains Boost.Tuple to\\from Python tuple conversion 
+  implementation
+  
+* `tuples_tester.cpp`_ file contains few functions, which test the tuples 
+  conversion functionality
+
+* `custom_rvalue.cpp`_ file contains example of registration custom r-value 
+  converter
 
 * `sconstruct`_ file contains build instructions for scons build tool.
 
-* `test.py`_ file contains complete unit tests for the exposed classes
-
-* `pointer_holder.hpp.patch`_ file contains patch for the library
+* `test.py`_ file contains complete unit tests for both example
 
 All files contain comments, which describe what and why was done.
 
-.. _`solution.cpp` : ./solution.cpp.html
+.. _`tuples.hpp` : ./tuples.hpp.html
+.. _`tuples_tester.cpp` : ./tuples_tester.cpp.html
+.. _`custom_rvalue.cpp` : ./custom_rvalue.cpp.html
 .. _`sconstruct` : ./sconstruct.html
 .. _`test.py` : ./test.py.html
-.. _`pointer_holder.hpp.patch` : ./pointer_holder.hpp.patch.html
 
 --------
 Download
 --------
 
-https://sourceforge.net/project/showfiles.php?group_id=118209
+`automatic_conversion.zip`_
+
+.. _`automatic_conversion.zip` : ./automatic_conversion.zip
 
 
 .. _`Py++` : ./../pyplusplus.html
