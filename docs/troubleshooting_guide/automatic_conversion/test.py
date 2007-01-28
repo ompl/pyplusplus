@@ -13,12 +13,16 @@ class tuplesersion_tester_t( unittest.TestCase ):
         self.failUnlessRaises( TypeError, tuples.triplet_ret_ptr_110 )
         self.failUnless( tuples.test_triplet_val_000( (0,0,0) ) )
         self.failUnless( tuples.test_triplet_cref_010( (0,1,0) ) )
+        self.failUnless( tuples.test_triplet_val_000( [0,0,0] ) )
+        self.failUnless( tuples.test_triplet_cref_010( [0,1,0] ) )
         self.failUnlessRaises( TypeError, tuples.test_triplet_ref_110, (1,1,0) )
         self.failUnlessRaises( TypeError, tuples.test_triplet_ptr_101, (1,0,1) )
 
     def test_from_sequence( self ):
         self.failUnless( custom_rvalue.test_val_010( (0,1,0) ) )
         self.failUnless( custom_rvalue.test_cref_000( (0,0,0) ) )
+        self.failUnless( custom_rvalue.test_val_010( [0,1,0] ) )
+        self.failUnless( custom_rvalue.test_cref_000( [0,0,0] ) )
         self.failUnlessRaises( Exception, custom_rvalue.test_ref_111, (1,1,1) )
         self.failUnlessRaises( Exception, custom_rvalue.test_ptr_101, (1,0,1) )
         self.failUnlessRaises( Exception, custom_rvalue.test_cptr_110, (1,1,0) )

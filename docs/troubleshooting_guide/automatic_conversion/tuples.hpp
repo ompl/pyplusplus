@@ -139,7 +139,7 @@ private:
 
 
 template< class TTuple>
-struct from_py_tuple{
+struct from_py_sequence{
 
     typedef TTuple tuple_type;
 
@@ -148,16 +148,16 @@ struct from_py_tuple{
     static void*
     convertible(PyObject* py_obj){
 
-        if( !PyTuple_Check( py_obj ) ){
+        if( !PySequence_Check( py_obj ) ){
             return 0;
         }
 
-        python::tuple py_tuple( handle<>( borrowed( py_obj ) ) );
-        if( tuples::length< TTuple >::value != len( py_tuple ) ){
+        python::object py_sequence( handle<>( borrowed( py_obj ) ) );
+        if( tuples::length< TTuple >::value != len( py_sequence ) ){
             return 0;
         }
 
-        if( convertible_impl( py_tuple, mpl::int_< 0 >(), length_type() ) ){
+        if( convertible_impl( py_sequence, mpl::int_< 0 >(), length_type() ) ){
             return py_obj;
         }
         else{
@@ -173,17 +173,17 @@ struct from_py_tuple{
         TTuple* c_tuple = new (memory_chunk) TTuple();
         data->convertible = memory_chunk;
 
-        python::tuple py_tuple( handle<>( borrowed( py_obj ) ) );
-        construct_impl( py_tuple, *c_tuple, mpl::int_< 0 >(), length_type() );
+        python::object py_sequence( handle<>( borrowed( py_obj ) ) );
+        construct_impl( py_sequence, *c_tuple, mpl::int_< 0 >(), length_type() );
     }
 
-    static TTuple construct_c_tuple( PyObject* py_obj ){
+    static TTuple to_c_tuple( PyObject* py_obj ){
         if( !convertible( py_obj ) ){
             throw std::runtime_error( "Unable to construct boost::tuples::tuple from Python object!" );
         }
         TTuple c_tuple;
-        python::tuple py_tuple( handle<>( borrowed( py_obj ) ) );
-        construct_impl( py_tuple, c_tuple, mpl::int_< 0 >(), length_type() );
+        python::object py_sequence( handle<>( borrowed( py_obj ) ) );
+        construct_impl( py_sequence, c_tuple, mpl::int_< 0 >(), length_type() );
         return c_tuple;
     }
 
@@ -191,41 +191,41 @@ private:
 
     template< int index, int length >
     static bool
-    convertible_impl( const python::tuple& py_tuple, mpl::int_< index >, mpl::int_< length > ){
+    convertible_impl( const python::object& py_sequence, mpl::int_< index >, mpl::int_< length > ){
 
         typedef typename tuples::element< index, TTuple>::type element_type;
 
-        object element = py_tuple[index];
+        object element = py_sequence[index];
         extract<element_type> type_checker( element );
         if( !type_checker.check() ){
             return false;
         }
         else{
-            return convertible_impl( py_tuple, details::increment_index<index>(), length_type() );
+            return convertible_impl( py_sequence, details::increment_index<index>(), length_type() );
         }
     }
 
     template< int length >
     static bool
-    convertible_impl( const python::tuple& py_tuple, mpl::int_< length >, mpl::int_< length > ){
+    convertible_impl( const python::object& py_sequence, mpl::int_< length >, mpl::int_< length > ){
         return true;
     }
 
     template< int index, int length >
     static void
-    construct_impl( const python::tuple& py_tuple, TTuple& c_tuple, mpl::int_< index >, mpl::int_< length > ){
+    construct_impl( const python::object& py_sequence, TTuple& c_tuple, mpl::int_< index >, mpl::int_< length > ){
 
         typedef typename tuples::element< index, TTuple>::type element_type;
 
-        object element = py_tuple[index];
+        object element = py_sequence[index];
         c_tuple.template get< index >() = extract<element_type>( element );
 
-        construct_impl( py_tuple, c_tuple, details::increment_index<index>(), length_type() );
+        construct_impl( py_sequence, c_tuple, details::increment_index<index>(), length_type() );
     }
 
     template< int length >
     static void
-    construct_impl( const python::tuple& py_tuple, TTuple& c_tuple, mpl::int_< length >, mpl::int_< length > )
+    construct_impl( const python::object& py_sequence, TTuple& c_tuple, mpl::int_< length >, mpl::int_< length > )
     {}
 
 };
@@ -235,8 +235,8 @@ void register_tuple(){
 
     to_python_converter< TTuple, to_py_tuple<TTuple> >();
 
-    converter::registry::push_back( &from_py_tuple<TTuple>::convertible
-                                    , &from_py_tuple<TTuple>::construct
+    converter::registry::push_back( &from_py_sequence<TTuple>::convertible
+                                    , &from_py_sequence<TTuple>::construct
                                     , type_id<TTuple>() );
 };
 

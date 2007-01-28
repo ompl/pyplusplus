@@ -61,7 +61,7 @@ struct pytuple2colour{
 
     typedef boost::tuples::tuple< float, float, float> colour_tuple_type;
 
-    typedef bpl::from_py_tuple< colour_tuple_type > converter_type;
+    typedef bpl::from_py_sequence< colour_tuple_type > converter_type;
 
     static void* convertible(PyObject* obj){
         return converter_type::convertible( obj );
@@ -74,7 +74,7 @@ struct pytuple2colour{
         void* memory_chunk = the_storage->storage.bytes;
 
         float red(0.0), green(0.0), blue(0.0);
-        boost::tuples::tie(red, green, blue) = converter_type::construct_c_tuple( obj );
+        boost::tuples::tie(red, green, blue) = converter_type::to_c_tuple( obj );
 
         colour_t* colour = new (memory_chunk) colour_t(red, green, blue);
         data->convertible = memory_chunk;
