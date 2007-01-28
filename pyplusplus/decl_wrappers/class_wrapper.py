@@ -127,6 +127,20 @@ class class_common_details_t( object ):
                             +"Thus it will be able to generate code, that uses " \
                             +" BOOST_PYTHON_OPAQUE_SPECIALIZED_TYPE_ID macro in a right places." )
 
+    def _get_already_exposed_impl( self ):
+        if not self.indexing_suite:
+            return self._already_exposed 
+        try:
+            et = self.indexing_suite.element_type
+            et = declarations.remove_const( et )
+            et = declarations.remove_pointer( et )
+            et = declarations.remove_declarated( et )
+            if isinstance(et, declarations.declaration_t):
+                return et._already_exposed
+            return False
+        except:
+            return False
+
 #this will only be exported if indexing suite is not None and only when needed
 class class_declaration_t( class_common_details_t
                            , decl_wrapper.decl_wrapper_t

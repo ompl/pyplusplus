@@ -137,7 +137,10 @@ class creator_t( declarations.decl_visitor_t ):
         for decl in decls:
             if decl.ignore:
                 continue
-
+            
+            if decl.already_exposed:
+                continue
+            
             #Right now this functionality introduce a bug: declarations that should
             #not be exported for some reason are not marked as such. I will need to
             #find out.
