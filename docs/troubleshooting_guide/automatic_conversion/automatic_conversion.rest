@@ -1,6 +1,6 @@
-===================================================
-How to register ``shared_ptr<const T>`` conversion?
-===================================================
+=================================================
+Automatic conversion between C++ and Python types
+=================================================
 
 .. contents:: Table of contents
 
@@ -14,27 +14,27 @@ Introduction
 Content
 -------
 
-This example actually consist from 2 small, well documented examples. 
+This example actually consist from 2 small, well documented examples.
 
 The first one shows how to handle conversion between tuples: `boost::tuples::tuple`_
 and Python tuple.
 
 .. _`boost::tuples::tuple` : http://boost.org/libs/tuple/doc/tuple_users_guide.html
 
-The second one shows how to add an automatic conversion from Python tuple to 
-some registered class. The class registration allows you to use its functionality 
+The second one shows how to add an automatic conversion from Python tuple to
+some registered class. The class registration allows you to use its functionality
 and enjoy from automatic conversion.
 
 Files
 -----
 
-* `tuples.hpp`_ file contains Boost.Tuple to\\from Python tuple conversion 
+* `tuples.hpp`_ file contains Boost.Tuple to\\from Python tuple conversion
   implementation
-  
-* `tuples_tester.cpp`_ file contains few functions, which test the tuples 
+
+* `tuples_tester.cpp`_ file contains few functions, which test the tuples
   conversion functionality
 
-* `custom_rvalue.cpp`_ file contains example of registration custom r-value 
+* `custom_rvalue.cpp`_ file contains example of registration custom r-value
   converter
 
 * `sconstruct`_ file contains build instructions for scons build tool.
