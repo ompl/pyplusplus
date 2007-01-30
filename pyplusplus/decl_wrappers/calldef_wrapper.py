@@ -316,7 +316,7 @@ class operators_helper:
     @staticmethod
     def exportable( oper ):
         """returns True if Boost.Python or Py++ know how to export the operator"""
-        if isinstance( oper, declarations.member_operator_t ) and oper.symbol in ( '()', '[]' ):
+        if isinstance( oper, declarations.member_operator_t ) and oper.symbol in ( '()', '[]', '=' ):
             return ''
         if not operators_helper.is_supported( oper ):
             return messages.W1014 % oper.name
@@ -335,6 +335,8 @@ class member_operator_t( declarations.member_operator_t, calldef_t ):
                 alias = '__call__'
             elif self.symbol == '[]':
                 alias = '__getitem__'
+            elif self.symbol == '=':
+                alias = 'assign'
             else:
                 pass
         return alias

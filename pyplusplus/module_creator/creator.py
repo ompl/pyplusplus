@@ -472,7 +472,7 @@ class creator_t( declarations.decl_visitor_t ):
         pass
 
     def visit_member_operator( self ):
-        if self.curr_decl.symbol in ( '()', '[]' ):
+        if self.curr_decl.symbol in ( '()', '[]', '=' ):
             self.visit_member_function()
         else:
             self.__types_db.update( self.curr_decl )
