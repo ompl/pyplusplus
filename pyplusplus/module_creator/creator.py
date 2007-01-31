@@ -429,7 +429,7 @@ class creator_t( declarations.decl_visitor_t ):
                 included = filter( lambda cc: isinstance(cc, code_creators.include_t) and cc.header==header
                                    , self.__extmodule.creators)
                 if not included:
-                    self.__extmodule.add_include( header )
+                    self.__extmodule.add_include( header, user_defined=True )
     
                 # Check if it is a header from the code repository
                 if header in code_repository.headers:
