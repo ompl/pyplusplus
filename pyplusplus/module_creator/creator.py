@@ -449,8 +449,6 @@ class creator_t( declarations.decl_visitor_t ):
                 self.curr_code_creator.adopt_creator( static_method )
 
     def visit_constructor( self ):
-        if self.curr_decl.is_copy_constructor:
-            return
         self.__types_db.update( self.curr_decl )
         self.__dependencies_manager.add_exported( self.curr_decl )
         if self.curr_decl.allow_implicit_conversion:
