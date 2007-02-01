@@ -455,7 +455,9 @@ class input_c_buffer_t(transformer.transformer_t):
         buffer_var = controller.declare_variable( 
                           declarations.dummy_type_t( "std::vector< %s >" % self.buffer_item_type.decl_string )
                         , "native_" + self.buffer_arg.name )
-            
+
+        controller.add_pre_call_code( '%s.reserve( %s );' % ( buffer_var, size_var ) )
+        
         copy_pylist2arr = _seq2vector.substitute( type=self.buffer_item_type
                                                   , pylist=w_buffer_arg.name
                                                   , native_array=buffer_var )
