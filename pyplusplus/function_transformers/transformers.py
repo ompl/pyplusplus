@@ -454,8 +454,7 @@ class input_c_buffer_t(transformer.transformer_t):
         # Declare a variable that will hold the C array...
         buffer_var = controller.declare_variable( 
                           declarations.dummy_type_t( "std::vector< %s >" % self.buffer_item_type.decl_string )
-                        , "native_" + self.buffer_arg.name
-                        , '(%s)' % size_var )
+                        , "native_" + self.buffer_arg.name )
             
         copy_pylist2arr = _seq2vector.substitute( type=self.buffer_item_type
                                                   , pylist=w_buffer_arg.name

@@ -236,7 +236,6 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         tmp = module.input_c_buffer_tester_t()
         hw = 'hello world'
         dummy = 11
-        print 'xxxxxxxxxxx> ', tmp.write( list( hw ), dummy ) 
         self.failUnless( 'hello world' == tmp.write( list( hw ), dummy ) )
         self.failUnless( 'hello world' == tmp.write_s( dummy, tuple( list( hw ) ) ) )
         

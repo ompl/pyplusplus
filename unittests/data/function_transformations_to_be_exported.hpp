@@ -222,7 +222,6 @@ struct modify_type_tester_t{
 
 struct input_c_buffer_tester_t{
 	std::string write( char* buffer, int dummy, int size ) const {
-		std::cout << "wwwwwwwwwww> " << std::string( buffer, size );
 		return std::string( buffer, size );
 	}
 	

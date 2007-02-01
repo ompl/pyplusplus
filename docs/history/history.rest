@@ -43,6 +43,15 @@ Version 0.8.*
    * Declaration of virtual functions that have an exception specification with 
      an empty throw was fixed. Now the exception specification is generated properly.
      Many thanks to Martin Preisler for reporting the bug.
+     
+2. Added exposing of copy constructors and "operator=". "operator=" is exposed 
+   under "assign" name. 
+   
+3. Added new call policy - `as_tuple`_
+
+.. _`as_tuple` : ../documentation/functions/call_policies.html
+
+4. Added initial support for multi-module development.
 
 -------------
 Version 0.8.5
