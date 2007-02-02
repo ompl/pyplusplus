@@ -133,7 +133,7 @@ class module_t(compound.compound_t):
             if creator.header in self.__system_headers: 
                 if not leave_system_headers:
                     self.remove_creator( creator )
-            if creator.is_user_defined:
+            elif creator.is_user_defined:
                 pass
             else:
                 self.remove_creator( creator )
@@ -171,8 +171,8 @@ class module_t(compound.compound_t):
         code = self.unindent(code)        
         return os.linesep.join( includes ) + 2 * os.linesep + code + os.linesep
     
-    def add_include( self, header, user_defined ):
-        self.adopt_include( include.include_t( header=header, user_defined=user_defined ) )
+    def add_include( self, header ):
+        self.adopt_include( include.include_t( header=header, user_defined=True ) )
     
     def add_namespace_usage( self, namespace_name ):
         self.adopt_creator( namespace.namespace_using_t( namespace_name )
