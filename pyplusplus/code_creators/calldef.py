@@ -363,7 +363,7 @@ class mem_fun_v_wrapper_t( calldef_wrapper_t ):
         template.append( 'if( %(override)s func_%(alias)s = this->get_override( "%(alias)s" ) )' )
         template.append( self.indent('%(return_)sfunc_%(alias)s( %(args)s );') )
         template.append( 'else' )
-        template.append( self.indent('%(return_)s%(wrapped_class)s::%(name)s( %(args)s );') )
+        template.append( self.indent('%(return_)sthis->%(wrapped_class)s::%(name)s( %(args)s );') )
         template = os.linesep.join( template )
 
         return_ = ''
@@ -593,7 +593,7 @@ class mem_fun_protected_v_wrapper_t( calldef_wrapper_t ):
         template.append( 'if( %(override)s func_%(alias)s = this->get_override( "%(alias)s" ) )' )
         template.append( self.indent('%(return_)sfunc_%(alias)s( %(args)s );') )
         template.append( 'else' )
-        template.append( self.indent('%(return_)s%(wrapped_class)s::%(name)s( %(args)s );') )
+        template.append( self.indent('%(return_)sthis->%(wrapped_class)s::%(name)s( %(args)s );') )
         template = os.linesep.join( template )
 
         return_ = ''
