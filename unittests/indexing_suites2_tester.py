@@ -30,7 +30,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         fvector.indexing_suite.disable_method( 'extend' )
         fvector.indexing_suite.disable_methods_group( 'reorder' )
         #fvector.indexing_suite.call_policies = module_builder.call_policies.default_call_policies()
-        items_ptr = generator.global_ns.typedef( 'items_ptr_t' )
+        items_ptr = generator.global_ns.typedefs( 'items_ptr_t' )[0]
         items_ptr = declarations.remove_declarated( items_ptr.type )
         self.failUnless( items_ptr.indexing_suite.call_policies.__class__
                          is module_builder.call_policies.return_internal_reference().__class__ )

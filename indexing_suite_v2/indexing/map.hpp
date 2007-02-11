@@ -111,7 +111,7 @@ namespace boost { namespace python { namespace indexing {
       typedef BOOST_DEDUCED_TYPENAME most_derived::container::value_type value_type;
       mapping::register_value_type< PythonClass, value_type, Policy >( pyClass );
       //now we can expose iterators functionality
-      pyClass.def( "__iter__", python::iterator< most_derived::container >() );
+      pyClass.def( "__iter__", python::iterator< BOOST_DEDUCED_TYPENAME most_derived::container >() );
     }  
   
   };
