@@ -24,6 +24,9 @@ class call_policy_t(object):
     def __init__(self):
         object.__init__(self)
 
+    def create_type(self):
+        return self.create( None, CREATION_POLICY.AS_TEMPLATE_ARGUMENT )
+
     def create(self, function_creator, creation_policy=CREATION_POLICY.AS_INSTANCE):
         """Creates code from the call policies class instance.
         @param function_creator: parent code creator
