@@ -25,7 +25,6 @@ def set_recursive_default(val):
 def set_allow_empty_mdecl_default(val):
    pd.scopedef_t.ALLOW_EMPTY_MDECL_WRAPPER = val
 
-
 def decl_from_typedef(decl):
    """ decl: decl or mdecl with typedef.  Return the "real" decl. """
    typedef_decl = decl
@@ -35,7 +34,7 @@ def decl_from_typedef(decl):
    return typedef_decl.type.declaration
 
    
-def finalize(cls):
+def finalize(cls, finalize_pure_virtuals=False):
    """ Attempt to finalize a class by not exposing virtual methods.
          Still exposes in the case of pure virtuals otherwise the class
          could not be instantiated.
@@ -44,10 +43,22 @@ def finalize(cls):
       for x in cls:
          finalize(x)
    else:
-      members = cls.decls( pd.virtuality_type_matcher( pd.VIRTUALITY_TYPES.VIRTUAL )
-                        , decl_type=pd.member_calldef_t
-                        , allow_empty=True)
+      matcher = pd.virtuality_type_matcher( pd.VIRTUALITY_TYPES.VIRTUAL )
+      if finalize_pure_virtuals:
+         matcher = matcher | pd.virtuality_type_matcher( pd.VIRTUALITY_TYPES.PURE_VIRTUAL)
+      members = cls.decls( matcher,
+                           decl_type=pd.member_calldef_t,
+                           allow_empty=True)
       members.set_virtuality( pd.VIRTUALITY_TYPES.NOT_VIRTUAL ) 
+      
+      cls.decls(pd.access_type_matcher_t(pd.ACCESS_TYPES.PROTECTED),allow_empty=True).exclude()
+      cls.decls(pd.access_type_matcher_t(pd.ACCESS_TYPES.PRIVATE),allow_empty=True).exclude()
+      
+      wrapper_needs = cls.is_wrapper_needed()
+      if len(wrapper_needs):
+         print "Finalize failed for: ", cls.name
+         for x in wrapper_needs:
+            print "   ", x
 
 
 def add_member_function(cls, methodName, newMethod):
