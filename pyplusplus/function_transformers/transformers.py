@@ -129,7 +129,10 @@ class type_modifier_t(transformer.transformer_t):
     def __configure_sealed( self, controller ):
         w_arg = controller.find_wrapper_arg( self.arg.name )
         w_arg.type = self.modifier( self.arg.type )
-
+        if not declarations.is_convertible( w_arg.type, self.arg.type ):
+            casting_code = 'reinterpret_cast< %s >( %s )' % ( self.arg.type, w_arg.name )
+            controller.modify_arg_expression(self.arg_index, casting_code)
+            
     def __configure_v_mem_fun_default( self, controller ):
         self.__configure_sealed( controller )
 

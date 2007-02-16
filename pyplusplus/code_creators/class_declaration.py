@@ -36,9 +36,9 @@ class class_declaration_t( scoped.scoped_t
         result.append( ';' )
         return ''.join( result )
 
-    def _get_class_var_name(self):
-        return self.alias + '_exposer'
-    class_var_name = property( _get_class_var_name )
+    @property
+    def class_var_name(self):
+        return self.declaration.class_var_name
 
     def is_exposed_using_scope(self):
         if self.declaration.always_expose_using_scope:
@@ -246,10 +246,10 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
         result.append( ';' )
         return ''.join( result )
 
-    def _get_class_var_name(self):
-        return self.alias + '_exposer'
-    class_var_name = property( _get_class_var_name )
-
+    @property
+    def class_var_name(self):
+        return self.declaration.class_var_name
+    
     @property
     def typedef_name( self ):
         return self.class_var_name + '_t'

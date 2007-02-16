@@ -160,6 +160,10 @@ class class_common_details_t( object ):
             return False
         except:
             return False
+    
+    @property
+    def class_var_name(self):
+        return self.alias + '_exposer'
 
 #this will only be exported if indexing suite is not None and only when needed
 class class_declaration_t( class_common_details_t
