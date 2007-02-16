@@ -22,6 +22,10 @@ code = \
 #define call_policies_pyplusplus_hpp__
 
 #include "boost/python.hpp"
+#include "boost/mpl/int.hpp"
+#include "boost/function.hpp"
+#include "boost/python/suite/indexing/iterator_range.hpp"
+#include "boost/python/object/class_detail.hpp"
 
 namespace pyplusplus{ namespace call_policies{
 
@@ -132,6 +136,88 @@ public:
 
 } /*arrays*/
 
+namespace detail{  
+
+struct return_raw_data_ref{
+    
+    template <class T> 
+    struct apply{
+
+        BOOST_STATIC_ASSERT( boost::is_pointer<T>::value );
+        
+        struct type{
+            static bool convertible()
+            { return true; }
+
+            PyObject* 
+            operator()( T return_value) const{ 
+                if( !return_value ){
+                    return bpl::detail::none();
+                }
+                else{
+                    typedef typename boost::remove_pointer< T >::type value_type;
+                    typedef typename boost::remove_const< value_type >::type non_const_value_type;
+                    non_const_value_type* data = const_cast<non_const_value_type*>( return_value );
+                    return PyCObject_FromVoidPtr( data, NULL ); 
+                }
+            }
+        };
+
+    };
+
+};
+
+} //detail
+    
+template < typename ValueType, typename SizeGetter, typename GetItemCallPolicies=bpl::default_call_policies > 
+struct return_range : bpl::default_call_policies
+{
+    typedef return_range< ValueType, SizeGetter, GetItemCallPolicies > this_type;
+public:
+    //result converter generator should return PyCObject instance
+    //postcall will destruct it
+    typedef typename detail::return_raw_data_ref result_converter;
+    typedef GetItemCallPolicies get_item_call_policies;
+    typedef ValueType value_type;
+    typedef bpl::indexing::iterator_range<value_type*> range_type;
+
+    static void register_range_class_on_demand(){
+        
+        // Check the registry. If one is already registered, return it.
+        bpl::handle<> class_obj(
+            bpl::objects::registered_class_object(bpl::type_id<range_type>()));
+        
+        if (class_obj.get() == 0){
+            bpl::class_<range_type>( "_range_iterator_",  bpl::init<value_type*, value_type*>() ) 
+                .def(bpl::indexing::container_suite<range_type>() );
+        }
+    }
+
+    template <class ArgumentPackage>
+    static PyObject* postcall(ArgumentPackage const& args, PyObject* result)
+    {
+        if( result == bpl::detail::none() ){
+            return result;
+        }
+        if( !PyCObject_Check( result ) ){
+            throw std::runtime_error( "Internal error: expected to get PyCObject" );
+        }
+        value_type* raw_data = reinterpret_cast<value_type*>( PyCObject_AsVoidPtr( result ) );
+        Py_DECREF(result);//we don't need result anymore
+        
+        PyObject* self_impl = bpl::detail::get(boost::mpl::int_<0>(),args);
+        bpl::object self( bpl::handle<>( bpl::borrowed( self_impl ) ) );
+
+        register_range_class_on_demand();
+        
+        SizeGetter get_size;
+        ssize_t size = get_size( self );
+        range_type the_range( raw_data, raw_data+size );
+        bpl::object range_obj( the_range );
+        
+        return bpl::incref( range_obj.ptr() );
+    }
+};
 
 } /*pyplusplus*/ } /*call_policies*/
 
