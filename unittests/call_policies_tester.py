@@ -9,6 +9,27 @@ import unittest
 import fundamental_tester_base
 from pyplusplus.module_builder import call_policies
 
+get_size_code = """
+struct raw_data_size_t{
+    ssize_t
+    operator()( boost::python::object self ){
+        boost::python::object raw_data = self.attr( "raw_data" );
+        return boost::python::len( raw_data );
+    }
+};
+"""
+
+get_size_code = """
+struct raw_data_size_t{
+    ssize_t
+    operator()( boost::python::object self ){
+        call_policies::return_range_image_t& image 
+            = boost::python::extract<call_policies::return_range_image_t&>( self );
+        return image.raw_data.size();
+    }
+};
+"""
+
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'call_policies'
 
@@ -35,6 +56,17 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
         mb.calldef( 'create_arr_3' ).call_policies \
             = call_policies.convert_array_to_tuple( 3, call_policies.memory_managers.delete_ )
+
+        image = mb.class_('return_range_image_t')
+        #image.exclude()
+        image.add_declaration_code( get_size_code )
+        get_raw_data = image.mem_fun( 'get_raw_data' )
+        get_raw_data.call_policies \
+            = call_policies.return_range( get_raw_data, 'raw_data_size_t' )
+        get_raw_data_const = image.mem_fun( 'get_raw_data_const' )
+        get_raw_data_const.call_policies \
+            = call_policies.return_range( get_raw_data_const, 'raw_data_size_t' )
+
 
     def run_tests(self, module):
         self.failUnless( module.compare( module.my_address() ) )
@@ -64,6 +96,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         for i in range( 4 ):
             arr3 = x.create_arr_3()
             self.failUnless( arr3 == (0,1,2) )
+            
+        image = module.return_range_image_t()
+        raw_data = image.get_raw_data()
+        self.failUnless( ['1', '\0', '2']==list( raw_data ) )
+        raw_data[1] = 'x'            
+        self.failUnless( raw_data[1] == image.raw_data[1] )
 
 def create_suite():
     suite = unittest.TestSuite()

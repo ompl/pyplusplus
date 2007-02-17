@@ -26,7 +26,7 @@ code = \
 #include "boost/function.hpp"
 #include "boost/python/suite/indexing/iterator_range.hpp"
 #include "boost/python/object/class_detail.hpp"
-
+#include "boost/type_traits/is_same.hpp"
 namespace pyplusplus{ namespace call_policies{
 
 namespace bpl = boost::python;
@@ -169,33 +169,41 @@ struct return_raw_data_ref{
 
 } //detail
     
-template < typename ValueType, typename SizeGetter, typename GetItemCallPolicies=bpl::default_call_policies > 
-struct return_range : bpl::default_call_policies
-{
-    typedef return_range< ValueType, SizeGetter, GetItemCallPolicies > this_type;
+template < typename TGetSize, typename TValueType, typename TValuePolicies=bpl::default_call_policies > 
+struct return_range : bpl::default_call_policies{
+
+    typedef return_range< TGetSize, TValueType, TValuePolicies > this_type;
+
 public:
-    //result converter generator should return PyCObject instance
-    //postcall will destruct it
+
     typedef typename detail::return_raw_data_ref result_converter;
-    typedef GetItemCallPolicies get_item_call_policies;
-    typedef ValueType value_type;
+    
+    typedef TValueType value_type;
+    typedef TGetSize get_size_type;
+    typedef TValuePolicies value_policies_type;
+    
     typedef bpl::indexing::iterator_range<value_type*> range_type;
 
     static void register_range_class_on_demand(){
-        
-        // Check the registry. If one is already registered, return it.
+        //Check the registry. If the class doesn't exist, register it.
         bpl::handle<> class_obj(
             bpl::objects::registered_class_object(bpl::type_id<range_type>()));
         
         if (class_obj.get() == 0){
-            bpl::class_<range_type>( "_range_iterator_",  bpl::init<value_type*, value_type*>() ) 
-                .def(bpl::indexing::container_suite<range_type>() );
+            bpl::class_<range_type> registrator( "_impl_details_range_iterator_",  bpl::init<value_type*, value_type*>() );
+            if( boost::is_same< bpl::default_call_policies, value_policies_type>::value ){
+                registrator.def(bpl::indexing::container_suite<range_type>() );
+            }
+            else{
+                //I need to find out why this code does not compiles
+                //typedef bpl::indexing::iterator_range_suite< range_type > suite_type;
+                //registrator.def(suite_type::with_policies( value_policies_type() ) );
+            }
         }
     }
 
     template <class ArgumentPackage>
-    static PyObject* postcall(ArgumentPackage const& args, PyObject* result)
-    {
+    static PyObject* postcall(ArgumentPackage const& args, PyObject* result){
         if( result == bpl::detail::none() ){
             return result;
         }
@@ -210,9 +218,9 @@ public:
 
         register_range_class_on_demand();
         
-        SizeGetter get_size;
-        ssize_t size = get_size( self );
-        range_type the_range( raw_data, raw_data+size );
+        get_size_type get_size;
+        range_type the_range( raw_data, raw_data + get_size( self ) );
+        
         bpl::object range_obj( the_range );
         
         return bpl::incref( range_obj.ptr() );

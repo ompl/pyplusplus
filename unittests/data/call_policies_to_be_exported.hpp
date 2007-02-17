@@ -6,6 +6,8 @@
 #ifndef __call_policies_to_be_exported_hpp__
 #define __call_policies_to_be_exported_hpp__
 
+#include <string>
+
 namespace call_policies{
 
 struct dummy{
@@ -82,6 +84,27 @@ struct arrays{
         }
         return arr3;
     }
+};
+
+struct return_range_image_t{
+    return_range_image_t() 
+    : raw_data( "" )
+    {
+        raw_data += '1';
+        raw_data += '\0';
+        raw_data += '2';
+    }
+    
+    std::string raw_data;
+    
+    const char* get_raw_data_const() const{
+        return raw_data.c_str();
+    }
+    
+    char* get_raw_data(){
+        return &raw_data.at(0);
+    }
+
 };
 
 }

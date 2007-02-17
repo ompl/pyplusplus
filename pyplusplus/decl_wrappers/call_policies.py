@@ -11,8 +11,9 @@ For every class that implements code creation of call policies, there is a
 convinience function.
 """
 
-from pygccxml import declarations
 import algorithm
+import python_traits
+from pygccxml import declarations
 
 class CREATION_POLICY:
     """Implementation details"""
@@ -23,9 +24,6 @@ class call_policy_t(object):
     """Base class for all call polices classes"""
     def __init__(self):
         object.__init__(self)
-
-    def create_type(self):
-        return self.create( None, CREATION_POLICY.AS_TEMPLATE_ARGUMENT )
 
     def create(self, function_creator, creation_policy=CREATION_POLICY.AS_INSTANCE):
         """Creates code from the call policies class instance.
@@ -40,6 +38,9 @@ class call_policy_t(object):
         if code and creation_policy == CREATION_POLICY.AS_INSTANCE:
             code = code + '()'
         return code
+
+    def create_type(self):
+        return self.create( None, CREATION_POLICY.AS_TEMPLATE_ARGUMENT )
 
     def create_template_arg( self, function_creator ):
         return self.create( function_creator, CREATION_POLICY.AS_TEMPLATE_ARGUMENT )
@@ -306,3 +307,50 @@ class convert_array_to_tuple_t( compound_policy_t ):
     
 def convert_array_to_tuple( array_size, memory_manager, make_object_call_policies=None, base=None ):
     return convert_array_to_tuple_t( array_size, memory_manager, make_object_call_policies, base )
+
+class return_range_t( call_policy_t ):
+    def __init__( self, get_size_class, value_type, value_policies):
+        call_policy_t.__init__( self )
+        self._value_type = value_type
+        self._get_size_class = get_size_class
+        self._value_policies = value_policies
+
+    def _get_get_size_class( self ):
+        return self._get_size_class
+    def _set_get_size_class( self, new_get_size_class):
+        self._get_size_class = new_get_size_class
+    get_size_class = property( _get_get_size_class, _set_get_size_class )
+
+    def _get_value_type( self ):
+        return self._value_type
+    def _set_value_type( self, new_value_type):
+        self._value_type = new_value_type
+    value_type = property( _get_value_type, _set_value_type )
+
+    def _get_value_policies( self ):
+        return self._value_policies
+    def _set_value_policies( self, new_value_policies):
+        self._value_policies = new_value_policies
+    value_policies = property( _get_value_policies, _set_value_policies )
+
+    def _create_impl(self, function_creator ):
+        name = algorithm.create_identifier( function_creator, '::pyplusplus::call_policies::return_range' )
+        args = [ self.get_size_class, self.value_type.decl_string ]
+        if not self.value_policies.is_default():
+            args.append( self.value_policies.create_type() )
+        return declarations.templates.join( name, args )
+    
+def return_range( function, get_size_class, value_policies=None ):
+    r_type = function.return_type
+    if not declarations.is_pointer( r_type ):
+        raise TypeError( 'Function "%s" return type should be pointer, got "%s"'
+                         % r_type.decl_string )
+                         
+    value_type = declarations.remove_pointer( r_type )
+    if None is value_policies:
+        if python_traits.is_immutable( value_type ):
+            value_policies = default_call_policies()
+        else:
+            raise RuntimeError( "return_range call policies requieres specification of value_policies" )
+    return return_range_t( get_size_class, value_type, value_policies )
+    

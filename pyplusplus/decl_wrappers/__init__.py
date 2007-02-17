@@ -90,6 +90,8 @@ from call_policies import custom_call_policies
 from call_policies import convert_array_to_tuple_t
 from call_policies import convert_array_to_tuple
 from call_policies import memory_managers
+from call_policies import return_range
+from call_policies import return_range_t
 
 from decl_wrapper_printer import decl_wrapper_printer_t
 from decl_wrapper_printer import print_declarations
