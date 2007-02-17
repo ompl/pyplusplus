@@ -184,24 +184,6 @@ public:
     
     typedef bpl::indexing::iterator_range<value_type*> range_type;
 
-    static void register_range_class_on_demand(){
-        //Check the registry. If the class doesn't exist, register it.
-        bpl::handle<> class_obj(
-            bpl::objects::registered_class_object(bpl::type_id<range_type>()));
-        
-        if (class_obj.get() == 0){
-            bpl::class_<range_type> registrator( "_impl_details_range_iterator_",  bpl::init<value_type*, value_type*>() );
-            if( boost::is_same< bpl::default_call_policies, value_policies_type>::value ){
-                registrator.def(bpl::indexing::container_suite<range_type>() );
-            }
-            else{
-                //I need to find out why this code does not compiles
-                //typedef bpl::indexing::iterator_range_suite< range_type > suite_type;
-                //registrator.def(suite_type::with_policies( value_policies_type() ) );
-            }
-        }
-    }
-
     template <class ArgumentPackage>
     static PyObject* postcall(ArgumentPackage const& args, PyObject* result){
         if( result == bpl::detail::none() ){
@@ -225,6 +207,35 @@ public:
         
         return bpl::incref( range_obj.ptr() );
     }
+private:
+
+    static void register_range_class( boost::mpl::true_ ){
+        //register range class with default call policies
+        bpl::class_<range_type>( "_impl_details_range_iterator_",  bpl::init<value_type*, value_type*>() )
+            .def(bpl::indexing::container_suite<range_type>() );
+    }
+    
+    static void register_range_class( boost::mpl::false_ ){
+        //register range class with non default call policies
+        unsigned long const methods_mask 
+            = bpl::indexing::all_methods 
+              & ~( bpl::indexing::reorder_methods |  bpl::indexing::search_methods ) ;
+
+        typedef bpl::indexing::iterator_range_suite< range_type, methods_mask > suite_type;
+        bpl::class_<range_type>( "_impl_details_range_iterator_",  bpl::init<value_type*, value_type*>() )
+            .def( suite_type::with_policies( value_policies_type() ) );
+    }
+
+    static void register_range_class_on_demand(){
+        //Check the registry. If the class doesn't exist, register it.
+        bpl::handle<> class_obj(
+            bpl::objects::registered_class_object(bpl::type_id<range_type>()));
+        
+        if( class_obj.get() == 0 ){
+            register_range_class( boost::is_same< bpl::default_call_policies, value_policies_type>() );
+        }
+    }
+
 };
 
 } /*pyplusplus*/ } /*call_policies*/
