@@ -495,3 +495,38 @@ class input_c_buffer_t(transformer.transformer_t):
         self.__configure_v_mem_fun_override( controller.override_controller )
         self.__configure_v_mem_fun_default( controller.default_controller )
         
+
+class transfer_ownership_t(type_modifier_t):
+    """see http://boost.org/libs/python/doc/v2/faq.html#ownership
+    """
+    def __init__(self, function, arg_ref):
+        """Constructor."""
+        transformer.transformer_t.__init__( self, function )
+        self.arg = self.get_argument( arg_ref )
+        self.arg_index = self.function.arguments.index( self.arg )
+        if not declarations.is_pointer( self.arg.type ):
+            raise ValueError( '%s\nin order to use "transfer ownership" transformation, argument %s type must be a pointer (got %s).' ) \
+                  % ( function, self.arg_ref.name, arg.type)
+
+    def __str__(self):
+        return "transfer_ownership(%s)" % self.arg.name
+
+    def __configure_sealed( self, controller ):
+        w_arg = controller.find_wrapper_arg( self.arg.name )
+        naked_type = declarations.remove_pointer( self.arg.type )
+        naked_type = declarations.remove_declarated( naked_type )
+        w_arg.type = declarations.dummy_type_t( 'std::auto_ptr< %s >' % naked_type.decl_string )
+        controller.modify_arg_expression(self.arg_index, w_arg.name + '.release()' )
+            
+    def __configure_v_mem_fun_default( self, controller ):
+        self.__configure_sealed( controller )
+
+    def configure_mem_fun( self, controller ):
+        self.__configure_sealed( controller )
+        
+    def configure_free_fun(self, controller ):
+        self.__configure_sealed( controller )
+
+    def configure_virtual_mem_fun( self, controller ):
+        raise NotImplementedError()
+
