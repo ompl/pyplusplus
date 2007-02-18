@@ -94,6 +94,8 @@ struct return_range_image_t{
         raw_data += '\0';
         raw_data += '2';
     }
+
+    ~return_range_image_t(){}
     
     std::string raw_data;
     
@@ -104,9 +106,22 @@ struct return_range_image_t{
     char* get_raw_data(){
         return &raw_data.at(0);
     }
-
+    
+    return_range_image_t* create_images(){
+        return_range_image_t* images = new return_range_image_t[3];
+        return_range_image_t x;
+        x.raw_data = "0";
+        images[0] = x;
+        return_range_image_t y;
+        y.raw_data = "1";
+        images[1] = y;
+        return_range_image_t  z;
+        z.raw_data = "2";
+        images[2] = z;
+        return images;
+    }
 };
 
-}
+} 
 
 #endif//__call_policies_to_be_exported_hpp__

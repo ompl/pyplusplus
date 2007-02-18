@@ -30,6 +30,15 @@ struct raw_data_size_t{
 };
 """
 
+get_create_images_size = """
+struct get_create_images_size_t{
+    ssize_t
+    operator()( boost::python::object self ){
+        return 3;
+    }
+};
+"""
+
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'call_policies'
 
@@ -58,15 +67,19 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             = call_policies.convert_array_to_tuple( 3, call_policies.memory_managers.delete_ )
 
         image = mb.class_('return_range_image_t')
-        #image.exclude()
         image.add_declaration_code( get_size_code )
+        image.add_declaration_code( get_create_images_size )
         get_raw_data = image.mem_fun( 'get_raw_data' )
         get_raw_data.call_policies \
             = call_policies.return_range( get_raw_data, 'raw_data_size_t' )
         get_raw_data_const = image.mem_fun( 'get_raw_data_const' )
         get_raw_data_const.call_policies \
             = call_policies.return_range( get_raw_data_const, 'raw_data_size_t' )
-
+        create_images = image.mem_fun( 'create_images' )
+        create_images.call_policies \
+            = call_policies.return_range( create_images
+                                          , 'get_create_images_size_t'
+                                          , call_policies.return_value_policy(call_policies.reference_existing_object) )
 
     def run_tests(self, module):
         self.failUnless( module.compare( module.my_address() ) )
@@ -102,6 +115,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( ['1', '\0', '2']==list( raw_data ) )
         raw_data[1] = 'x'            
         self.failUnless( raw_data[1] == image.raw_data[1] )
+        for index, img in enumerate( image.create_images() ):
+            print index, img
 
 def create_suite():
     suite = unittest.TestSuite()
