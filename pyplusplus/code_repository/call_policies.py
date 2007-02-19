@@ -195,13 +195,12 @@ public:
         value_type* raw_data = reinterpret_cast<value_type*>( PyCObject_AsVoidPtr( result ) );
         Py_DECREF(result);//we don't need result anymore
         
-        PyObject* self_impl = bpl::detail::get(boost::mpl::int_<0>(),args);
-        bpl::object self( bpl::handle<>( bpl::borrowed( self_impl ) ) );
+        bpl::tuple args_w( bpl::handle<>( bpl::borrowed( args ) ) );
 
         register_range_class_on_demand();
         
         get_size_type get_size;
-        range_type the_range( raw_data, raw_data + get_size( self ) );
+        range_type the_range( raw_data, raw_data + get_size( args_w ) );
         
         bpl::object range_obj( the_range );
         

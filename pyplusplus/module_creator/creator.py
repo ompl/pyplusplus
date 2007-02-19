@@ -153,7 +153,10 @@ class creator_t( declarations.decl_visitor_t ):
                 #self.__types_db.update( decl )
 
             if doc_extractor and decl.exportable:
-                decl.documentation = doc_extractor( decl )
+                if decl.documentation:
+                    decl.documentation = decl.documentation + doc_extractor( decl )
+                else:
+                    decl.documentation = doc_extractor( decl )
 
             readme = decl.readme()
             if not readme:
