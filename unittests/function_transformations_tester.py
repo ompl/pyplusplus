@@ -85,10 +85,11 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         write_s = cls.mem_fun( 'write_s' )
         write_s.add_transformation( ft.input_c_buffer( 'buffer', 'size' ) )
         
-        resource = mb.class_( 'resource_t' )
+        resource = mb.class_( 'resources_t' )
         resource.held_type = 'std::auto_ptr< %s >' % resource.decl_string
-        do_smth = mb.free_fun( 'do_smth' )
-        do_smth.add_transformation( ft.transfer_ownership( 0 ) )
+        transfer_ownership_tester = mb.class_( 'transfer_ownership_tester_t' )
+        tester = transfer_ownership_tester.mem_fun( 'tester' )
+        tester.add_transformation( ft.transfer_ownership( 0 ) )
         
     def run_tests(self, module):
         """Run the actual unit tests.
