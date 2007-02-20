@@ -73,23 +73,24 @@ W1021 = "Py++ will generate class wrapper - hand written code should be added to
 
 W1022 = "Py++ will generate class wrapper - hand written code should be added to the wrapper class copy constructor body"
 
-W1023 = "Py++ will generate class wrapper - there are few functions that should be redefined in class wrapper"
+W1023 = "Py++ will generate class wrapper - there are few functions that should be redefined in class wrapper. " \
+        "The functions are: %s."
 
-W1024 = "Py++ will generate class wrapper - class contains bit field member variable"
+W1024 = 'Py++ will generate class wrapper - class contains "%s" - bit field member variable'
 
-W1025 = "Py++ will generate class wrapper - class contains T* member variable"
+W1025 = 'Py++ will generate class wrapper - class contains "%s" - T* member variable'
 
-W1026 = "Py++ will generate class wrapper - class contains T& member variable"
+W1026 = 'Py++ will generate class wrapper - class contains "%s" - T& member variable'
 
-W1027 = "Py++ will generate class wrapper - class contains array member variable"
+W1027 = 'Py++ will generate class wrapper - class contains "%s" - array member variable'
 
-W1028 = "Py++ will generate class wrapper - class contains definition of nested class that requires wrapper class"
+W1028 = 'Py++ will generate class wrapper - class contains definition of nested class "%s", which requires wrapper class'
 
 W1029 = "Py++ will generate class wrapper - hand written code should be added to the wrapper class constructor body"
 
-W1030 = "Py++ will generate class wrapper - class contains definition of virtual or pure virtual member function"
+W1030 = 'Py++ will generate class wrapper - class contains "%s" - [pure] virtual member function'
 
-W1031 = "Py++ will generate class wrapper - user asked to expose non - public member function"
+W1031 = 'Py++ will generate class wrapper - user asked to expose non - public member function "%s"'
 
 W1032 = "Boost.Python library does not support enums with duplicate values. " \
         "You can read more about this here: " \
@@ -148,7 +149,9 @@ W1048 = 'There are two or more aliases within "pyplusplus::aliases" namespace fo
 W1049 = 'This method could not be overriden in Python - method returns reference ' \
         'to local variable!'
 
-W1050 = 'The function returns "%s" type. You have to specify a call policies.' 
+W1050 = 'The function returns "%s" type. You have to specify a call policies.' \
+        'Be sure to take a look on Py++ defined call policies: ' \
+        'http://language-binding.net/pyplusplus/documentation/functions/call_policies.html#py-defined-call-policies'
 
 
 W1051 = 'The function takes as argument (name=%s, pos=%d) "%s" type. ' \

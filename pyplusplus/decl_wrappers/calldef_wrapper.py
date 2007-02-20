@@ -184,11 +184,12 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
             if ft.alias == ft.unique_name:
                 msgs.append( messages.W1044 % ft.alias )
             return msgs
-            
+        
         if suspicious_type( self.return_type ) and None is self.call_policies:
             msgs.append( messages.W1008 )
         
-        if is_double_ptr( self.return_type ) and None is self.call_policies:
+        if ( declarations.is_pointer( self.return_type ) or is_double_ptr( self.return_type ) ) \
+           and None is self.call_policies:
             msgs.append( messages.W1050 % str(self.return_type) )
 
         for index, arg in enumerate( self.arguments ):

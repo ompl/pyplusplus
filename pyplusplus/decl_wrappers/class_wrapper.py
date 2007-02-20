@@ -484,30 +484,32 @@ class class_t( class_common_details_t
         if self.copy_constructor_body:
             explanation.append( messages.W1022 )
 
-        if self.redefined_funcs():
-            explanation.append( messages.W1023 )
+        redefined_funcs = self.redefined_funcs()
+        if redefined_funcs:
+            funcs = map( lambda f: f.name, redefined_funcs )
+            explanation.append( messages.W1023 % ', '.join(funcs) )
 
         for member in self.get_exportable_members():
             if isinstance( member, declarations.destructor_t ):
                 continue
             if isinstance( member, declarations.variable_t ):
                 if member.bits:
-                    explanation.append( messages.W1024 )
+                    explanation.append( messages.W1024 % member.name )
                 if declarations.is_pointer( member.type ):
-                    explanation.append( messages.W1025 )
+                    explanation.append( messages.W1025 % member.name )
                 if declarations.is_reference( member.type ):
-                    explanation.append( messages.W1026 )
+                    explanation.append( messages.W1026 % member.name )
                 if declarations.is_array( member.type ):
-                    explanation.append( messages.W1027 )
+                    explanation.append( messages.W1027 % member.name)
             if isinstance( member, declarations.class_t ) and member.is_wrapper_needed():
-                explanation.append( messages.W1028 )
+                explanation.append( messages.W1028 % member.name)
             if isinstance( member, declarations.calldef_t ):
                 if isinstance( member, declarations.constructor_t ) and member.body:
                     explanation.append( messages.W1029 )
                 if member.virtuality != VIRTUALITY_TYPES.NOT_VIRTUAL:
-                    explanation.append( messages.W1030 )
+                    explanation.append( messages.W1030 % member.name )
                 if member.access_type in ( ACCESS_TYPES.PROTECTED, ACCESS_TYPES.PRIVATE ):
-                    explanation.append( messages.W1031 )
+                    explanation.append( messages.W1031 % member.name)
         return explanation
 
     def _readme_impl( self ):
