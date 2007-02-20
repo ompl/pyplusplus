@@ -231,20 +231,21 @@ struct input_c_buffer_tester_t{
 
 };
 
-struct transfer_ownership_tester_t{
-    struct resources_t{
-        resources_t(){
-            std::cout << "created";
-        }
-        ~resources_t(){
-            std::cout << "destroyed";
-        }
-    };
-    void tester(resources_t* r){
-        delete r;
+
+}
+
+struct resource_t{
+    resource_t(){
+        std::cout << "created";
+    }
+    ~resource_t(){
+        std::cout << "destroyed";
     }
 };
 
+void do_smth(resource_t* r){
+    
 }
+
 
 #endif//__function_transformations_to_be_exported_hpp__

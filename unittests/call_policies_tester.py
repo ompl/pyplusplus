@@ -22,7 +22,8 @@ struct raw_data_size_t{
 get_size_code = """
 struct raw_data_size_t{
     ssize_t
-    operator()( boost::python::object self ){
+    operator()( boost::python::tuple args ){
+        boost::python::object self = args[0];
         call_policies::return_range_image_t& image 
             = boost::python::extract<call_policies::return_range_image_t&>( self );
         return image.raw_data.size();
