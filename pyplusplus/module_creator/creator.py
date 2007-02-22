@@ -154,7 +154,9 @@ class creator_t( declarations.decl_visitor_t ):
 
             if doc_extractor and decl.exportable:
                 if decl.documentation:
-                    decl.documentation = decl.documentation + doc_extractor( decl )
+                    extracted_doc = doc_extractor( decl )
+                    if extracted_doc != decl.documentation:
+                      decl.documentation = decl.documentation + extracted_doc
                 else:
                     decl.documentation = doc_extractor( decl )
 

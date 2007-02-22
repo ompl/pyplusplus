@@ -215,7 +215,23 @@ class member_function_t( declarations.member_function_t, calldef_t ):
         declarations.member_function_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
         self._use_overload_macro = False
+        self._override_precall_code = []
+        self._default_precall_code =  []
 
+    def add_override_precall_code(self, code):
+        self._override_precall_code.append( code )
+    
+    @property
+    def override_precall_code(self):
+        return self._override_precall_code
+    
+    def add_default_precall_code(self, code):
+        self._default_precall_code.append( code )
+    
+    @property
+    def default_precall_code(self):
+        return self._default_precall_code
+    
     def get_use_overload_macro(self):
         return self._use_overload_macro
     def set_use_overload_macro(self, use_macro):

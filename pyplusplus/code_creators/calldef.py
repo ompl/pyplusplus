@@ -260,6 +260,9 @@ class mem_fun_pv_wrapper_t( calldef_wrapper_t ):
         if not self.declaration.overridable:
             return self.unoverriden_function_body()
         template = []
+        precall_code = self.declaration.override_precall_code
+        if precall_code:
+            template.append( os.linesep.join( precall_code ) )
         template.append( '%(override)s func_%(alias)s = this->get_override( "%(alias)s" );' )
         template.append( '%(return_)sfunc_%(alias)s( %(args)s );')
         template = os.linesep.join( template )
@@ -360,6 +363,9 @@ class mem_fun_v_wrapper_t( calldef_wrapper_t ):
 
     def create_virtual_body(self):
         template = []
+        precall_code = self.declaration.override_precall_code
+        if precall_code:
+            template.append( os.linesep.join( precall_code ) )
         template.append( 'if( %(override)s func_%(alias)s = this->get_override( "%(alias)s" ) )' )
         template.append( self.indent('%(return_)sfunc_%(alias)s( %(args)s );') )
         template.append( 'else' )
@@ -385,7 +391,11 @@ class mem_fun_v_wrapper_t( calldef_wrapper_t ):
         body = self.wrapped_class_identifier() + '::' + function_call + ';'
         if not declarations.is_void( self.declaration.return_type ):
             body = 'return ' + body
+        precall_code = self.declaration.default_precall_code
+        if precall_code:
+            body = os.linesep.join( precall_code ) + os.linesep + body
         return body
+
 
     def create_function(self):
         answer = [ self.create_declaration(self.declaration.name) + '{' ]
