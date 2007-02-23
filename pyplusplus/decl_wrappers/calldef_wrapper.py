@@ -344,7 +344,23 @@ class member_operator_t( declarations.member_operator_t, calldef_t ):
     def __init__(self, *arguments, **keywords):
         declarations.member_operator_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
+        self._override_precall_code = []
+        self._default_precall_code =  []
 
+    def add_override_precall_code(self, code):
+        self._override_precall_code.append( code )
+    
+    @property
+    def override_precall_code(self):
+        return self._override_precall_code
+    
+    def add_default_precall_code(self, code):
+        self._default_precall_code.append( code )
+    
+    @property
+    def default_precall_code(self):
+        return self._default_precall_code
+        
     def _get_alias( self):
         alias = super( member_operator_t, self )._get_alias()
         if alias == self.name:
