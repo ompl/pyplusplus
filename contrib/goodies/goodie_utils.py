@@ -86,7 +86,7 @@ def is_const_ref(type):
 
 def exclude_protected(cls):
    """ Exclude all protected declarations. """
-   cls.decls(pd.access_type_matcher_t('protected'),allow_empty=True).exclude()
+   cls.decls(pd.access_type_matcher_t(pd.ACCESS_TYPES.PROTECTED),allow_empty=True).exclude()
 
 def wrap_const_ref_params(cls):
    """ Find all member functions of cls and if they take a const& to a class
@@ -160,6 +160,8 @@ class TemplateWrapper:
    """ Proxy for a template instance.  Returned from the TemplateBuilder
        to allow access to the template at a later time.
        
+       NOTE: DO NOT USE DIRECTLY.  ONLY USE AS RETURNED FROM TEMPLATE BUILDER.
+       
        TODO: If used a form that allowed multiple templates to be specified
              ex: TemplateWrapper("OSG::vector", arguments=[["float","3"],["int","4"]]
              then how would we handle naming?  Automatic or must be specified?
@@ -211,7 +213,9 @@ class TemplateBuilder:
           tb = TemplateBuilder()
           vec3f_t = tb.Template("OSG::vector<float,3>")
           
-          # Add autogen code to a header that is included
+          header_contents = tb.buildAutogenContents()
+          # Add contents to some file that is included by module builder
+          
           mb = moduble_builder_t([myheaders])
           tb.process(mb)
           
@@ -229,6 +233,7 @@ class TemplateBuilder:
    
    def Template(self, *args, **kw):
       """Create and add a template wrapper.
+         Returns a template wrapper that can be used to get the decl later.
       """
       temp_wrapper = TemplateWrapper(*args, **kw)
       self.mTemplates.append(temp_wrapper)
