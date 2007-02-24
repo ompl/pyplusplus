@@ -3,11 +3,16 @@
 
 struct event_t
 {
-    virtual void notify() = 0;
     virtual ~event_t(){}
+    void invoke(){
+        notify();
+    }
+protected:
+    virtual void notify() = 0;
 };
 
 struct do_nothing_t : event_t{
+protected:
     virtual void notify(){};
 };
 
@@ -18,7 +23,7 @@ struct simulator_t{
     };
 
     void run() {
-        m_event->notify();
+        m_event->invoke();
         delete m_event;
         m_event = 0;
     };

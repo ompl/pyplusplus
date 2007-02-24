@@ -77,8 +77,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                 self.container = container
                 
             def notify( self ):
-                print 1
-                #self.container.append( 1 )
+                self.container.append( 1 )
                 
         print '1'
         notify_data = []
