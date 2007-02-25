@@ -260,7 +260,7 @@ class input_static_array_t(transformer.transformer_t):
                   % ( function, self.arg.name, self.arg.type)
 
         self.array_size = size
-        self.array_item_type = declarations.array_item_type( self.arg.type )
+        self.array_item_type = declarations.remove_const( declarations.array_item_type( self.arg.type ) )
 
     def __str__(self):
         return "input_array(%s,%d)"%( self.arg.name, self.array_size)
@@ -432,7 +432,7 @@ class input_c_buffer_t(transformer.transformer_t):
             raise ValueError( '%s\nin order to use "input_c_buffer" transformation, "size" argument %s type must be an integral type (got %s).' ) \
                   % ( function, self.size_arg.name, self.size_arg.type)
 
-        self.buffer_item_type = declarations.array_item_type( self.buffer_arg.type )
+        self.buffer_item_type = declarations.remove_const( declarations.array_item_type( self.buffer_arg.type ) )
 
     def __str__(self):
         return "input_c_buffer(buffer arg=%s, size arg=%s)" \
