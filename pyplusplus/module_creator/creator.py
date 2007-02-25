@@ -127,7 +127,7 @@ class creator_t( declarations.decl_visitor_t ):
         self.__free_operators = []
         self.__exposed_free_fun_overloads = set()
         self.__opaque_types_manager = opaque_types_manager.manager_t( self.__extmodule )
-        self.__return_pointee_value_exists = False
+        self.__custom_call_policies_included = False
         
         self.__dependencies_manager = dependencies_manager.manager_t(self.decl_logger)
         
@@ -347,12 +347,15 @@ class creator_t( declarations.decl_visitor_t ):
         self.__module_body.adopt_creators( creators, 0 )
 
     def __on_demand_include_call_policies( self, call_policy ):
-        if not self.__return_pointee_value_exists \
-           and decl_wrappers.is_return_pointee_value_policy( call_policy ):
-            self.__return_pointee_value_exists = True
-            self.__extmodule.add_include( code_repository.call_policies.file_name )            
-            self.__extmodule.add_system_header( code_repository.call_policies.file_name )
+        if self.__custom_call_policies_included:
+            return
             
+        if call_policy.is_predefined():
+            return 
+
+        self.__custom_call_policies_included = True
+        self.__extmodule.add_include( code_repository.call_policies.file_name )            
+        self.__extmodule.add_system_header( code_repository.call_policies.file_name )
 
     def create(self, decl_headers=None):
         """Create and return the module for the extension.

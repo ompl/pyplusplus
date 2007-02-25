@@ -50,6 +50,10 @@ class call_policy_t(object):
         #Small hack that allows to write nicer code
         return False
 
+    def is_predefined( self ):
+        """Returns True if call policy is defined in Boost.Python library, False otherwise"""
+        return True
+
     def _create_impl( self, function_creator ):
         raise NotImplementedError()
 
@@ -214,6 +218,16 @@ class return_value_policy_t( compound_policy_t ):
         else:
             return [self.result_converter_generator]
 
+    def is_predefined( self ):
+        """Returns True if call policy is defined in Boost.Python library, False otherwise"""
+        global return_pointee_value
+        if self.result_converter_generator == return_pointee_value:
+            return False
+        else:
+            return True
+            
+
+
 copy_const_reference = '::boost::python::copy_const_reference'
 copy_non_const_reference = '::boost::python::copy_non_const_reference'
 manage_new_object = '::boost::python::manage_new_object'
@@ -229,12 +243,6 @@ def is_return_opaque_pointer_policy( policy ):
     """returns True is policy represents return_value_policy<return_opaque_pointer>, False otherwise"""
     return isinstance( policy, return_value_policy_t ) \
             and policy.result_converter_generator == return_opaque_pointer
-
-def is_return_pointee_value_policy( policy ):
-    """returns True is policy represents return_value_policy<return_pointee_value>, False otherwise"""
-    return isinstance( policy, return_value_policy_t ) \
-            and policy.result_converter_generator == return_pointee_value
-    
 
 class custom_call_policies_t(call_policy_t):
     """implementation for user defined call policies"""
@@ -270,6 +278,10 @@ class convert_array_to_tuple_t( compound_policy_t ):
         self._array_size = array_size
         self._memory_manager = memory_manager
         self._make_objec_call_policies = make_object_call_policies
+    
+    def is_predefined( self ):
+        """Returns True if call policy is defined in Boost.Python library, False otherwise"""
+        return False
     
     def _get_array_size( self ):
         return self._array_size
@@ -314,6 +326,10 @@ class return_range_t( call_policy_t ):
         self._value_type = value_type
         self._get_size_class = get_size_class
         self._value_policies = value_policies
+
+    def is_predefined( self ):
+        """Returns True if call policy is defined in Boost.Python library, False otherwise"""
+        return False
 
     def _get_get_size_class( self ):
         return self._get_size_class
