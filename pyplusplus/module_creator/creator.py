@@ -349,7 +349,10 @@ class creator_t( declarations.decl_visitor_t ):
     def __on_demand_include_call_policies( self, call_policy ):
         if self.__custom_call_policies_included:
             return
-            
+        
+        if not call_policy:
+            return
+        
         if call_policy.is_predefined():
             return 
 
