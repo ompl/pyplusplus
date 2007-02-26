@@ -317,7 +317,7 @@ class operators_helper:
     """helps Py++ to deal with C++ operators"""
     inplace = [ '+=', '-=', '*=', '/=',  '%=', '>>=', '<<=', '&=', '^=', '|=' ]
     comparison = [ '==', '!=', '<', '>', '<=', '>=' ]
-    non_member = [ '+', '-', '*', '/', '%', '&', '^', '|' ] #'>>', '<<', not implemented
+    non_member = [ '+', '-', '*', '/', '%', '&', '^', '|', ] 
     unary = [ '!', '~', '+', '-' ]
 
     all = inplace + comparison + non_member + unary
@@ -328,7 +328,24 @@ class operators_helper:
         if oper.symbol == '*' and len( oper.arguments ) == 0:
             #dereference does not make sense
             return False
-        return oper.symbol in operators_helper.all
+        if oper.symbol != '<<':
+            return oper.symbol in operators_helper.all
+        
+        args_len = len( oper.arguments )
+        if isinstance( oper, declarations.member_operator_t ):# and args_len != 1:
+            return False #Boost.Python does not support member operator<< :-(
+        if isinstance( oper, declarations.free_operator_t ) and args_len != 2:
+            return False
+        if not declarations.is_same( oper.return_type, oper.arguments[0].type ):
+            return False
+        type_ = oper.return_type
+        if not declarations.is_reference( type_ ):
+            return False
+        type_ = declarations.remove_reference( type_ )
+        if declarations.is_const( type_ ):
+            return False
+        return declarations.is_std_ostream( type_ ) \
+               or declarations.is_std_wostream( type_ )
 
     @staticmethod
     def exportable( oper ):

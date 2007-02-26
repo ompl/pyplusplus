@@ -201,6 +201,10 @@ class creator_t( declarations.decl_visitor_t ):
             arg_type = declarations.base_type( operator.arguments[0].type )
             if isinstance( arg_type, declarations.fundamental_t ):
                 arg_type = declarations.base_type( operator.arguments[1].type )
+            elif isinstance( arg_type, declarations.declarated_t ) and arg_type.declaration.ignore:
+                arg_type = declarations.base_type( operator.arguments[1].type )
+            else:
+                pass
             assert isinstance( arg_type, declarations.declarated_t )
             found = find( lambda decl: arg_type.declaration is decl
                           , self.__extmodule.body.creators )

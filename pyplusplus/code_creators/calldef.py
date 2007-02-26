@@ -1003,8 +1003,13 @@ class operator_t( registration_based.registration_based_t
             assert not "Unable to find out boost::python::self position. " + str( self.declaration )
 
     def _create_binary_operator(self):
-        answer = [ None, self.declaration.symbol, None ]
         self_identifier = algorithm.create_identifier( self, '::boost::python::self' )
+
+        if self.declaration.symbol == '<<':
+            str_identifier = algorithm.create_identifier( self, '::boost::python::self_ns::str' )
+            return '%s( %s )' % ( str_identifier, self_identifier )
+        
+        answer = [ None, self.declaration.symbol, None ]
         self_position = self._findout_self_position()
         if self_position == self.SELF_POSITION.FIRST:
             answer[0] = self_identifier
