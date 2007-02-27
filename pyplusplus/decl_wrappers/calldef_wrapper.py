@@ -344,8 +344,15 @@ class operators_helper:
         type_ = declarations.remove_reference( type_ )
         if declarations.is_const( type_ ):
             return False
-        return declarations.is_std_ostream( type_ ) \
-               or declarations.is_std_wostream( type_ )
+        if args_len == 2:
+            #second argument should has "T const &" type, otherwise the code will not compile
+            tmp = oper.arguments[1].type
+            if not declarations.is_reference( tmp ):
+                return False
+            tmp = declarations.remove_reference( tmp )
+            if not declarations.is_const( tmp ):
+                return False
+        return declarations.is_std_ostream( type_ ) or declarations.is_std_wostream( type_ )
 
     @staticmethod
     def exportable( oper ):
