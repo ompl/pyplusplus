@@ -1,0 +1,92 @@
+========================
+Multi-module development
+========================
+
+.. contents:: Table of contents
+
+------------
+Introduction
+------------
+
+It is a common practices to construct final program or just a library\\package 
+from few different dependent\\independent packages\\libraries. Many time these
+libraries reuse classes\\functions defined in another one. I think this is a must 
+requirement from a code generator to be able to expose these libraries to `Python`_ , 
+without "re-exposing" the class\\functions definition twise.
+
+
+Please take a look on `Creating Packages`_ example, in `Boost.Python`_ tutorials.
+The example introduces slightly different use case, but it is good enough for us. 
+
+Lets assume ``sounds::core`` namespace defines interface (base class) for all 
+filter classes. ``sounds::filters`` namespace defines few "filter" classes. 
+
+The question now is how to expose the classes to Python, while preserving their
+logical location using `Py++`_?
+
+.. _`Creating Packages` : http://boost.org/libs/python/doc/tutorial/doc/html/python/techniques.html#python.creating_packages
+
+-------------------
+``already_exposed``
+-------------------
+
+`Py++`_ declaration
+
+.. code-block:: C++
+
+  //file sounds/core/filter_interface.h
+
+  namespace sounds{ namespace core{
+  
+      struct filter_i{
+          ...
+          virtual void apply() = 0;
+      };
+  } } //sounds::core
+
+
+.. code-block:: C++
+
+  //file sounds/filters/ogg.h
+  
+  #include "sounds/core/filter_interface.h"
+  
+  namespace sounds{ namespace ogg{
+  
+      struct noise_cleaner_t : public core::filter_i{
+          ...
+      };
+  
+  } } //sound::ogg
+
+.. code-block:: Python
+
+  #generate_code.py script
+
+  mb_core = module_builder_t( ... )
+  mb_core.class_( 'filter_i' ).include()
+  
+  mb_filters = module_builder_t( ... )
+  mb_filters.class_( '::sounds::core::filter_i' ).already_exposed = True
+  
+  #----------------------------------------------^^^^^^^^^^^^^^^^^^^^^^^
+  #This will tell to Py++ that "filter_i" class is already exposed
+  
+`Py++`_ will generate right code for both modules:
+
+
+
+
+.. _`Py++` : ./../pyplusplus.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Python`: http://www.python.org
+.. _`GCC-XML`: http://www.gccxml.org
+
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:
+

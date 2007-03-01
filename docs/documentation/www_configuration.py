@@ -6,4 +6,5 @@ names = { 'containers' : 'STL containers'
           , 'doc_string' : 'documentation string'
           , 'inserting_code' : 'inserting code'
           , 'best_practices' : 'best practices' 
+          , 'multi_module_development' :  'multi-module development'
 }
