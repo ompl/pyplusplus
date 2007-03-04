@@ -5,7 +5,7 @@ import getpass
 class boost:
     libs = ''
     include = ''
-    
+
 class python:
     libs = ''
     include = ''
@@ -18,9 +18,9 @@ class scons:
     cmd_build = ''
     cmd_clean = ''
     ccflags = []
-    
+
 if 'roman' in getpass.getuser():
-    
+
     scons.cmd_build = 'scons --file=%s'
     scons.cmd_clean = 'scons --clean --file=%s'
 
@@ -34,7 +34,7 @@ if 'roman' in getpass.getuser():
         gccxml.executable = r'd:/dev/gccxml_cvs/gccxml-bin/bin/release/gccxml.exe'
     else:
         scons.suffix = '.so'
-        boost.libs = [ '/home/roman/boost_cvs/libs/python/build/bin-stage' ]
+        boost.libs = ['/home/roman/boost_cvs/libs/python/build/bin-stage' ]
         boost.include = '/home/roman/boost_cvs'
         python.include = '/usr/include/python2.4'
         gccxml.executable = '/home/roman/gccxml/bin/gccxml'

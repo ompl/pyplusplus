@@ -8,11 +8,11 @@ Multi-module development
 Introduction
 ------------
 
-It is a common practices to construct final program or a package from few
+It is a common practises to construct final program or a package from few
 different dependent or independent C++ libraries. Many time these libraries
 reuse classes\\functions defined in some other library. I think this is a must
 requirement from a code generator to be able to expose these libraries to `Python`_ ,
-without "re-exposing" the class\\functions definition twise.
+without "re-exposing" the class\\functions definition twice.
 
 This functionality is new in version "0.8.6".
 
