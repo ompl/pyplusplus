@@ -130,7 +130,7 @@ class decl_wrapper_t(object):
 
     def get_exportable( self ):
         if self._exportable is None:
-            if self.name.startswith( '__' ):
+            if self.name.startswith( '__' ) or '.' in self.name:
                 self._exportable_reason = messages.W1000
             elif self.location and self.location.file_name == "<internal>":
                 self._exportable_reason = messages.W1001
