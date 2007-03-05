@@ -11,11 +11,8 @@ import declaration_based
 import registration_based
 from pygccxml import declarations
 from pyplusplus import code_repository
+from pyplusplus import decl_wrappers
 
-#TODO: mutable global variable
-#scope.attr( "x" ) = object( ptr( &x ) )
-
-#TODO: if variable is not const, then export it using boost::python::ptr
 class global_variable_base_t( registration_based.registration_based_t
                               , declaration_based.declaration_based_t ):
     """
@@ -48,8 +45,15 @@ class global_variable_t( global_variable_base_t ):
         result = []
         result.append( algorithm.create_identifier( self, '::boost::python::scope' ) )
         result.append( '().attr("%s")' % self.alias )
-        full_name = pygccxml.declarations.full_name( self.declaration )
-        result.append( ' = %s;' % algorithm.create_identifier( self, full_name ) )
+        dtype = self.declaration.type
+        if decl_wrappers.python_traits.is_immutable( dtype ) \
+           or pygccxml.declarations.is_const( dtype ) \
+           or pygccxml.declarations.smart_pointer_traits.is_smart_pointer( dtype ):
+            result.append( ' = %s;' % self.decl_identifier )
+        else:
+            obj_identifier = algorithm.create_identifier( self, '::boost::python::object' )
+            ref_identifier = algorithm.create_identifier( self, '::boost::ref' )
+            result.append( ' = %s( %s( %s ) );' % ( obj_identifier, ref_identifier, self.decl_identifier ) )       
         return ''.join( result )
 
 class array_gv_t( global_variable_base_t ):
