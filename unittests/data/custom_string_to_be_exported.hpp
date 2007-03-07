@@ -15,13 +15,29 @@ public:
     utf16_t() {}
     explicit utf16_t(std::string const& value) : m_value_a(value) {}
     explicit utf16_t(std::wstring const& value) : m_value_w(value) {}   
-        
+    
+    utf16_t( const utf16_t& other )
+    : m_value_a( other.m_value_a ), m_value_w( other.m_value_w )
+    {}
+      
+    utf16_t& operator=( const utf16_t& other ){
+        m_value_a = other.m_value_a;
+        m_value_w = other.m_value_w;
+    }
+    
     std::string const& value_a() const { return m_value_a; }
     std::wstring const& value_w() const { return m_value_w; }
 
 private:    
     std::wstring m_value_w;
     std::string m_value_a;
+};
+
+struct name_t{
+    name_t() : m_123( "123" ){}
+    
+    utf16_t m_name;
+    const utf16_t m_123;
 };
 
 inline std::string utf16_to_string( const utf16_t& x ){

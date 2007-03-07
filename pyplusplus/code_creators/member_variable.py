@@ -108,7 +108,7 @@ class member_variable_t( member_variable_base_t ):
 
         return result
 
-    def _generate_for_smart_ptr( self ):
+    def _generate_using_functions( self ):
         doc = ''
         add_property = ''
         make_getter = algorithm.create_identifier( self, '::boost::python::make_getter')
@@ -148,8 +148,8 @@ class member_variable_t( member_variable_base_t ):
     def _create_impl( self ):
         if declarations.is_pointer( self.declaration.type ):
             return self._generate_for_pointer()
-        elif self.declaration.apply_smart_ptr_wa:
-            return self._generate_for_smart_ptr()
+        elif self.declaration.apply_smart_ptr_wa or self.declaration.use_make_functions:
+            return self._generate_using_functions()
         else:
             return self._generate_for_none_pointer()
 
