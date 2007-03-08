@@ -68,6 +68,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.constructors().allow_implicit_conversion = False
         mb.variable( 'm_name' ).use_make_functions = True
         mb.variable( 'm_123' ).use_make_functions = True
+        mb.class_( 'name_t' ).add_properties();
         
     def run_tests( self, module):
         self.failUnless( "1" == module.utf16_to_string( "1" ) )
@@ -76,6 +77,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         n.m_name = '456'
         self.failUnless( '456' == module.utf16_to_string( n.m_name ) )
         self.failUnless( '123' == module.utf16_to_string( n.m_123 ) )
+        
+        n.name = '11'
+        self.failUnless( '11' == module.utf16_to_string( n.m_name ) )
         
 def create_suite():
     suite = unittest.TestSuite()
