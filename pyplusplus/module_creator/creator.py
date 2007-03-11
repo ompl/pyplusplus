@@ -622,9 +622,10 @@ class creator_t( declarations.decl_visitor_t ):
             else:
                 self.__extmodule.adopt_declaration_creator( wrapper )
             if declarations.has_trivial_copy( self.curr_decl ):
-                #I don't know but sometimes boost.python requieres
-                #to construct wrapper from wrapped classe
-                if not self.curr_decl.noncopyable:
+                #~ #I don't know but sometimes boost.python requieres
+                #~ #to construct wrapper from wrapped classe
+                copy_constr = self.curr_decl.constructor( lambda c: c.is_copy_constructor, recursive=False )
+                if not self.curr_decl.noncopyable and copy_constr.is_artificial:
                     copy_constr = code_creators.copy_constructor_wrapper_t( class_inst=self.curr_decl )
                     wrapper.adopt_creator( copy_constr )
                 null_constr = declarations.find_trivial_constructor(self.curr_decl)
