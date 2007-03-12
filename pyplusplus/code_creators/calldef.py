@@ -885,8 +885,13 @@ class constructor_wrapper_t( calldef_wrapper_t ):
     def _create_impl(self):
         answer = [ self._create_declaration() ]
         answer.append( ': ' + self._create_constructor_call() )
-        answer.append( '  , ' +  self.parent.boost_wrapper_identifier + '()' )
-        answer.append( '{   // Normal constructor' )
+        answer.append( '  , ' +  self.parent.boost_wrapper_identifier + '(){' )
+        if( self.declaration.is_copy_constructor ):
+            answer.append( self.indent( '// copy constructor' ) )
+        elif not self.declaration.arguments:
+            answer.append( self.indent( '// null constructor' ) )
+        else:
+            answer.append( self.indent( '// constructor' ) )
         answer.append( self.declaration.body )
         answer.append( '}' )
         return os.linesep.join( answer )
