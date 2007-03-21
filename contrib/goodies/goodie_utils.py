@@ -189,7 +189,12 @@ class TemplateWrapper:
       """
       # Look up the decl from the alias db
       # XXX: I don't know if this is the best way to look up the decl, but it seems to work
-      self.mDecl = templateBuilder.mAliasDB[self.mTypedefName].declaration.type.declaration 
+      try:
+         self.mDecl = templateBuilder.mAliasDB[self.mTypedefName].declaration.type.declaration
+      except:
+         # If that didn't work, just try to get it from the first declaration
+         self.mDecl = templateBuilder.mAliasDB[self.mTypedefName].declaration
+         
       # Another method
       # decl_name = templateBuilder.mAliasDB[self.mTypedefName].declaration.name
       # decl = ns.decl(decl_name)
