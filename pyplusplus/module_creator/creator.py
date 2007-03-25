@@ -626,12 +626,12 @@ class creator_t( declarations.decl_visitor_t ):
                 #~ #to construct wrapper from wrapped classe
                 copy_constr = self.curr_decl.constructor( lambda c: c.is_copy_constructor, recursive=False )
                 if not self.curr_decl.noncopyable and copy_constr.is_artificial:
-                    copy_constr = code_creators.copy_constructor_wrapper_t( class_inst=self.curr_decl )
-                    wrapper.adopt_creator( copy_constr )
+                    cccc = code_creators.copy_constructor_wrapper_t( constructor=copy_constr )
+                    wrapper.adopt_creator( cccc )
                 null_constr = declarations.find_trivial_constructor(self.curr_decl)
                 if null_constr and null_constr.is_artificial:
                     #this constructor is not going to be exposed
-                    tcons = code_creators.null_constructor_wrapper_t( class_inst=self.curr_decl )
+                    tcons = code_creators.null_constructor_wrapper_t( constructor=null_constr )
                     wrapper.adopt_creator( tcons )
 
         exposed = self.expose_overloaded_mem_fun_using_macro( cls_decl, cls_cc )

@@ -178,11 +178,17 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
 
         held_type = self._generated_held_type()
         if self.wrapper:
-            if not self.target_configuration.boost_python_has_wrapper_held_type:
+            if not self.target_configuration.boost_python_has_wrapper_held_type \
+               or self.declaration.require_self_reference:
                 args.append( algorithm.create_identifier( self, self.declaration.decl_string ) )
-            args.append( self.wrapper.full_name )
+            if self.declaration.require_self_reference:
+                if not held_type:
+                    args.append( self.wrapper.full_name )
+            else:
+                args.append( self.wrapper.full_name )
         else:
             args.append( algorithm.create_identifier( self, self.declaration.decl_string ) )
+            
         bases = self._generate_bases(base_creators)
         if bases:
             args.append( bases )

@@ -8,7 +8,7 @@ struct event_t
         notify();
     }
 protected:
-    virtual void notify() = 0;
+    virtual void notify(){};
 };
 
 struct do_nothing_t : event_t{
@@ -22,6 +22,10 @@ struct simulator_t{
         m_event = event;
     };
 
+    const event_t* get_event(){
+        return m_event;
+    }
+    
     void run() {
         m_event->invoke();
         delete m_event;

@@ -194,7 +194,8 @@ class class_t( class_common_details_t
         self._exception_translation_code = None
         self._properties = []
         self._redefined_funcs = None
-
+        self._require_self_reference  = False
+        
     def _get_redefine_operators( self ):
         return self._redefine_operators
     def _set_redefine_operators( self, new_value ):
@@ -528,3 +529,10 @@ class class_t( class_common_details_t
         if self.member_operators( is_assign, allow_empty=True, recursive=False ):
             return impl_details.GAEUS_VALUES.ALWAYS_TRUE
         return super(class_t, self).guess_always_expose_using_scope_value()    
+
+    def _get_require_self_reference(self):
+        return self._require_self_reference
+    def _set_require_self_reference(self, require_self_reference):
+        self._require_self_reference = require_self_reference
+    require_self_reference = property( _get_require_self_reference, _set_require_self_reference
+                     , doc="boolean, if True the first argument to the constructor will be reference to self object" )
