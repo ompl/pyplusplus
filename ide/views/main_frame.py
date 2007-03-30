@@ -1,4 +1,5 @@
 #Boa:Frame:MainFrame
+from Dialog import Dialog
 
 # Copyright 2004 Roman Yakovenko.
 # 2007 Alexander Eisenhuth
@@ -50,7 +51,7 @@ class MainFrame(wx.Frame):
               flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT)
         parent.AddWindow(self.textGccXml, 1, border=10,
               flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM)
-        parent.AddWindow(self.butGccXml, 0, border=5,
+        parent.AddWindow(self.butGccXml, 0, border=10,
               flag=wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER_VERTICAL)
 
     def _init_coll_bsMURCompile_Items(self, parent):
@@ -70,7 +71,7 @@ class MainFrame(wx.Frame):
         parent.AddWindow(self.staticText3, 0, border=5,
               flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT)
         parent.AddWindow(self.listIncludes, 1, border=10,
-              flag=wx.BOTTOM | wx.TOP | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
+              flag=wx.RIGHT | wx.BOTTOM | wx.TOP | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
 
     def _init_coll_bsHeader_Items(self, parent):
         # generated method, don't edit
@@ -79,7 +80,7 @@ class MainFrame(wx.Frame):
               flag=wx.LEFT | wx.ALIGN_CENTER_VERTICAL)
         parent.AddWindow(self.textHeader, 1, border=10,
               flag=wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.TOP)
-        parent.AddWindow(self.butHeaders, 0, border=5,
+        parent.AddWindow(self.butHeaders, 0, border=10,
               flag=wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER_VERTICAL)
 
     def _init_coll_bsUpLeft_Items(self, parent):
@@ -131,7 +132,7 @@ class MainFrame(wx.Frame):
         parent.AddWindow(self.staticText4, 0, border=5,
               flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT)
         parent.AddWindow(self.listDefines, 1, border=10,
-              flag=wx.BOTTOM | wx.TOP | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
+              flag=wx.RIGHT | wx.BOTTOM | wx.TOP | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
 
     def _init_coll_menuBar1_Menus(self, parent):
         # generated method, don't edit
@@ -291,61 +292,60 @@ class MainFrame(wx.Frame):
 
         self.panelSHUp = wx.Panel(id=wxID_MAINFRAMEPANELSHUP, name=u'panelSHUp',
               parent=self.splitterHorizontal, pos=wx.Point(0, 0),
-              size=wx.Size(833, 372), style=wx.TAB_TRAVERSAL)
+              size=wx.Size(833, 10), style=wx.TAB_TRAVERSAL)
 
         self.panelSHLow = wx.Panel(id=wxID_MAINFRAMEPANELSHLOW,
               name=u'panelSHLow', parent=self.splitterHorizontal,
-              pos=wx.Point(0, 376), size=wx.Size(833, 157),
+              pos=wx.Point(0, 14), size=wx.Size(833, 519),
               style=wx.TAB_TRAVERSAL)
         self.splitterHorizontal.SplitHorizontally(self.panelSHUp,
               self.panelSHLow, 300)
 
         self.notebook1 = wx.Notebook(id=wxID_MAINFRAMENOTEBOOK1,
               name='notebook1', parent=self.panelSHLow, pos=wx.Point(0, 0),
-              size=wx.Size(833, 157), style=0)
+              size=wx.Size(833, 519), style=0)
         self.notebook1.SetLabel(u'Label')
 
         self.textOutput = wx.TextCtrl(id=wxID_MAINFRAMETEXTOUTPUT,
               name=u'textOutput', parent=self.notebook1, pos=wx.Point(0, 0),
-              size=wx.Size(825, 131), style=wx.TE_READONLY | wx.TE_MULTILINE,
+              size=wx.Size(825, 493), style=wx.TE_READONLY | wx.TE_MULTILINE,
               value=u'')
 
         self.splitterVertical = wx.SplitterWindow(id=wxID_MAINFRAMESPLITTERVERTICAL,
               name=u'splitterVertical', parent=self.panelSHUp, pos=wx.Point(0,
-              0), size=wx.Size(833, 367), style=wx.SP_3D)
+              0), size=wx.Size(833, 5), style=wx.SP_3D)
         self.splitterVertical.SetNeedUpdating(True)
         self.splitterVertical.SetMinimumPaneSize(0)
 
         self.panelSettings = wx.Panel(id=wxID_MAINFRAMEPANELSETTINGS,
               name=u'panelSettings', parent=self.splitterVertical,
-              pos=wx.Point(0, 0), size=wx.Size(235, 367),
-              style=wx.TAB_TRAVERSAL)
+              pos=wx.Point(0, 0), size=wx.Size(10, 5), style=wx.TAB_TRAVERSAL)
 
         self.panelCode = wx.Panel(id=wxID_MAINFRAMEPANELCODE, name=u'panelCode',
-              parent=self.splitterVertical, pos=wx.Point(239, 0),
-              size=wx.Size(594, 367), style=wx.TAB_TRAVERSAL)
+              parent=self.splitterVertical, pos=wx.Point(14, 0),
+              size=wx.Size(819, 5), style=wx.TAB_TRAVERSAL)
         self.splitterVertical.SplitVertically(self.panelSettings,
               self.panelCode, 300)
 
         self.nbSettings = wx.Notebook(id=wxID_MAINFRAMENBSETTINGS,
               name=u'nbSettings', parent=self.panelSettings, pos=wx.Point(0, 0),
-              size=wx.Size(235, 367), style=0)
+              size=wx.Size(10, 5), style=0)
         self.nbSettings.SetLabel(u'Label')
         self.nbSettings.SetHelpText(u'')
 
         self.panelNbSettings = wx.Panel(id=wxID_MAINFRAMEPANELNBSETTINGS,
               name=u'panelNbSettings', parent=self.nbSettings, pos=wx.Point(0,
-              0), size=wx.Size(227, 341), style=wx.TAB_TRAVERSAL)
+              0), size=wx.Size(2, 0), style=wx.TAB_TRAVERSAL)
         self.panelNbSettings.Show(True)
         self.panelNbSettings.SetMinSize(wx.Size(100, 100))
 
         self.textCtrl2 = wx.TextCtrl(id=wxID_MAINFRAMETEXTCTRL2,
               name='textCtrl2', parent=self.panelCode, pos=wx.Point(0, 17),
-              size=wx.Size(594, 317), style=wx.TE_MULTILINE, value=u'')
+              size=wx.Size(819, 0), style=wx.TE_MULTILINE, value=u'')
 
         self.panelButtons = wx.Panel(id=wxID_MAINFRAMEPANELBUTTONS,
-              name=u'panelButtons', parent=self.panelCode, pos=wx.Point(54,
-              344), size=wx.Size(486, 23), style=wx.TAB_TRAVERSAL)
+              name=u'panelButtons', parent=self.panelCode, pos=wx.Point(166,
+              -18), size=wx.Size(486, 23), style=wx.TAB_TRAVERSAL)
 
         self.butGenXml = wx.Button(id=wxID_MAINFRAMEBUTGENXML,
               label=u'Generate XML code', name=u'butGenXml',
@@ -370,10 +370,10 @@ class MainFrame(wx.Frame):
 
         self.textHeader = wx.TextCtrl(id=wxID_MAINFRAMETEXTHEADER,
               name=u'textHeader', parent=self.panelNbSettings, pos=wx.Point(56,
-              20), size=wx.Size(128, 21), style=0, value=u'')
+              20), size=wx.Size(0, 21), style=0, value=u'')
 
         self.butHeaders = wx.Button(id=wxID_MAINFRAMEBUTHEADERS, label=u'...',
-              name=u'butHeaders', parent=self.panelNbSettings, pos=wx.Point(189,
+              name=u'butHeaders', parent=self.panelNbSettings, pos=wx.Point(-38,
               19), size=wx.Size(28, 23), style=0)
         self.butHeaders.Bind(wx.EVT_BUTTON, self.OnButHeadersButton,
               id=wxID_MAINFRAMEBUTHEADERS)
@@ -389,10 +389,10 @@ class MainFrame(wx.Frame):
 
         self.textGccXml = wx.TextCtrl(id=wxID_MAINFRAMETEXTGCCXML,
               name=u'textGccXml', parent=self.panelNbSettings, pos=wx.Point(56,
-              61), size=wx.Size(128, 21), style=0, value=u'')
+              61), size=wx.Size(0, 21), style=0, value=u'')
 
         self.butGccXml = wx.Button(id=wxID_MAINFRAMEBUTGCCXML, label=u'...',
-              name=u'butGccXml', parent=self.panelNbSettings, pos=wx.Point(189,
+              name=u'butGccXml', parent=self.panelNbSettings, pos=wx.Point(-38,
               60), size=wx.Size(28, 23), style=0)
         self.butGccXml.Bind(wx.EVT_BUTTON, self.OnButGccXmlButton,
               id=wxID_MAINFRAMEBUTGCCXML)
@@ -404,7 +404,7 @@ class MainFrame(wx.Frame):
 
         self.listIncludes = wx.ListCtrl(id=wxID_MAINFRAMELISTINCLUDES,
               name=u'listIncludes', parent=self.panelNbSettings,
-              pos=wx.Point(56, 102), size=wx.Size(166, 66), style=wx.LC_ICON)
+              pos=wx.Point(56, 102), size=wx.Size(0, 66), style=wx.LC_ICON)
         self.listIncludes.Bind(wx.EVT_RIGHT_DOWN, self.OnListIncludesRightDown)
 
         self.staticText4 = wx.StaticText(id=wxID_MAINFRAMESTATICTEXT4,
@@ -414,7 +414,7 @@ class MainFrame(wx.Frame):
 
         self.listDefines = wx.ListCtrl(id=wxID_MAINFRAMELISTDEFINES,
               name=u'listDefines', parent=self.panelNbSettings, pos=wx.Point(56,
-              188), size=wx.Size(166, 68), style=wx.LC_ICON)
+              188), size=wx.Size(0, 68), style=wx.LC_ICON)
         self.listDefines.Bind(wx.EVT_RIGHT_DOWN, self.OnListDefinesRightDown)
 
         self.staticText5 = wx.StaticText(id=wxID_MAINFRAMESTATICTEXT5,
@@ -451,9 +451,6 @@ class MainFrame(wx.Frame):
     def OnListIncludesRightDown(self, event):
         self.PopupMenu(self.menuIncludes)
 
-    def OnButHeaderButton(self, event):
-        event.Skip()
-
     def OnListDefinesRightDown(self, event):
         self.PopupMenu(self.menuDefines)
 
@@ -467,9 +464,13 @@ class MainFrame(wx.Frame):
         self._controller.GenPyPPCode()
 
     def OnButHeadersButton(self, event):
+        """Callback for button event"""
+        self._controller.OpenHeaderDlg()
         event.Skip()
 
     def OnButGccXmlButton(self, event):
+        """Callback for button event"""
+        self._controller.OpenGccXmlDlg()
         event.Skip()
         
     def set_controller(self, controller):

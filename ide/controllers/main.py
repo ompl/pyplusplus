@@ -5,6 +5,8 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import wx
+
 """ Contoller class. Part of MVC
 Responsibility: Glue view and model code:
 - Handle all events from view (p.e. button) """
@@ -25,8 +27,30 @@ class MainController:
         
     def GenPyPPCode(self):
         """ Generate Py++ code"""
-        self._appendOutText("Generation of Py++ code started")        
+        self._appendOutText("Generation of Py++ code started")
         
+    def OpenHeaderDlg(self):
+        """ """
+        dialog = wx.FileDialog(self._view, "Choose a Header file", ".", "", 
+                               "Header (*.h)|*.h|All Files(*)|*", wx.OPEN)
+        try:
+            if dialog.ShowModal() == wx.ID_OK:
+                self._view.textHeader.Clear()
+                self._view.textHeader.AppendText(dialog.GetPath())
+        finally:
+            dialog.Destroy()
+            
+    def OpenGccXmlDlg(self):
+        """ """
+        dialog = wx.FileDialog(self._view, "Choose GccXml executable", 
+                               ".", "", "All Files(*)|*", wx.OPEN)
+        try:
+            if dialog.ShowModal() == wx.ID_OK:
+                self._view.textGccXml.Clear()
+                self._view.textGccXml.AppendText(dialog.GetPath())
+        finally:
+            dialog.Destroy()
+            
     def _appendOutText(self, text):
         self._view.textOutput.AppendText(text + "\n")
         
