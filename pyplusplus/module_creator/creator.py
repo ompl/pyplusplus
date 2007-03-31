@@ -128,6 +128,7 @@ class creator_t( declarations.decl_visitor_t ):
         self.__exposed_free_fun_overloads = set()
         self.__opaque_types_manager = opaque_types_manager.manager_t( self.__extmodule )
         self.__custom_call_policies_included = False
+        self.__return_range_call_policies_included = False
         
         self.__dependencies_manager = dependencies_manager.manager_t(self.decl_logger)
         
@@ -351,7 +352,7 @@ class creator_t( declarations.decl_visitor_t ):
         self.__module_body.adopt_creators( creators, 0 )
 
     def __on_demand_include_call_policies( self, call_policy ):
-        if self.__custom_call_policies_included:
+        if self.__custom_call_policies_included and self.__return_range_call_policies_included:
             return
         
         if not call_policy:
@@ -360,9 +361,14 @@ class creator_t( declarations.decl_visitor_t ):
         if call_policy.is_predefined():
             return 
 
-        self.__custom_call_policies_included = True
-        self.__extmodule.add_include( code_repository.call_policies.file_name )            
-        self.__extmodule.add_system_header( code_repository.call_policies.file_name )
+        if isinstance( call_policy, decl_wrappers.call_policies.return_range_t ):
+            self.__return_range_call_policies_included = True
+            self.__extmodule.add_include( code_repository.return_range.file_name )            
+            self.__extmodule.add_system_header( code_repository.return_range.file_name )
+        else:
+            self.__custom_call_policies_included = True
+            self.__extmodule.add_include( code_repository.call_policies.file_name )            
+            self.__extmodule.add_system_header( code_repository.call_policies.file_name )
 
     def create(self, decl_headers=None):
         """Create and return the module for the extension.
