@@ -5,7 +5,7 @@ class application_error(Exception):
     def __init__( self, app_error ):
         Exception.__init__( self )
         self._pimpl = app_error
-        
+    
     def __str__( self ):
         return self._pimpl.message()
     
@@ -29,6 +29,12 @@ class tester_t( unittest.TestCase ):
             my_exceptions.check_preconditions( True )
         except Exception, err:
             self.failUnless( str( err ) == "xyz" )
+
+    def test_redirection( self ):
+        try:
+            my_exceptions.check_preconditions( True )
+        except Exception, err:
+            self.failUnless( err.application_name() == "xyz" )
 
     def test_converter( self ):
         try:
