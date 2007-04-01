@@ -8,7 +8,14 @@ class application_error(Exception):
     
     def __str__( self ):
         return self._pimpl.message()
-    
+
+    def __getattribute__(self, attr):
+        my_pimpl = super(application_error, self).__getattribute__("_pimpl")
+        try:
+            return getattr(my_pimpl, attr)
+        except AttributeError:
+            return super(application_error,self).__getattribute__(attr)
+
 my_exceptions.application_error = application_error
 
 class tester_t( unittest.TestCase ):
@@ -34,7 +41,7 @@ class tester_t( unittest.TestCase ):
         try:
             my_exceptions.check_preconditions( True )
         except Exception, err:
-            self.failUnless( err.application_name() == "xyz" )
+            self.failUnless( err.application_name() == "my_exceptions module" )
 
     def test_converter( self ):
         try:

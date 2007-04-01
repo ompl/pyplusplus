@@ -108,6 +108,7 @@ BOOST_PYTHON_MODULE( my_exceptions ){
     bpl::class_< application_error >( "_application_error_" )
         .def( bpl::init<const std::string&>() )
         .def( bpl::init<const application_error&>() )
+        .def( "application_name", &application_error::application_name)
         .def( "message", &application_error::message, return_copy_const_ref() )
         .def( "__str__", &application_error::message, return_copy_const_ref() );
     
