@@ -7,9 +7,11 @@
 This file contains C++ code - "return_range" call policies
 """
 
+from pyplusplus.decl_wrappers import call_policies
+
 namespace = "pyplusplus::call_policies"
 
-file_name = "__return_range.pypp.hpp"
+file_name = call_policies.return_range_t.HEADER_FILE
 
 code = \
 """// Copyright 2004 Roman Yakovenko.

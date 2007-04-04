@@ -15,6 +15,8 @@ import algorithm
 import python_traits
 from pygccxml import declarations
 
+PYPP_CALL_POLICIES_HEADER_FILE = "__call_policies.pypp.hpp"
+
 class CREATION_POLICY:
     """Implementation details"""
     AS_INSTANCE = 'as instance'
@@ -56,6 +58,11 @@ class call_policy_t(object):
 
     def _create_impl( self, function_creator ):
         raise NotImplementedError()
+
+    @property
+    def header_file(self):
+        """Return name of the header file to be included"""
+        return "boost/python.hpp"
 
 class default_call_policies_t(call_policy_t):
     """implementation for ::boost::python::default_call_policies"""
@@ -226,6 +233,13 @@ class return_value_policy_t( compound_policy_t ):
         else:
             return True
             
+    @property
+    def header_file(self):
+        """Return name of the header file to be included"""
+        if self.is_predefined():
+            return super( return_value_policy_t, self ).header_file
+        else:
+            return PYPP_CALL_POLICIES_HEADER_FILE
 
 
 copy_const_reference = '::boost::python::copy_const_reference'
@@ -246,9 +260,10 @@ def is_return_opaque_pointer_policy( policy ):
 
 class custom_call_policies_t(call_policy_t):
     """implementation for user defined call policies"""
-    def __init__( self, call_policies ):
+    def __init__( self, call_policies, header_file=None ):
         call_policy_t.__init__( self )
         self.__call_policies = call_policies
+        self.__header_file = header_file
 
     def _create_impl(self, function_creator ):
         return str( self.__call_policies )
@@ -256,9 +271,16 @@ class custom_call_policies_t(call_policy_t):
     def __str__(self):
         return 'custom call policies'
 
-def custom_call_policies(call_policies):
+    def get_header_file( self ):
+        return self.__header_file
+    def set_header_file( self, header_file_name ):
+        self.__header_file = header_file_name
+    header_file = property( get_header_file, set_header_file
+                            , doc="""Return name of the header file to be included""" )
+
+def custom_call_policies(call_policies, header_file=None):
     """create custom\\user defined call policies"""
-    return custom_call_policies_t(call_policies)
+    return custom_call_policies_t(call_policies, header_file)
 
 class memory_managers:
     none = 'none'
@@ -282,7 +304,12 @@ class convert_array_to_tuple_t( compound_policy_t ):
     def is_predefined( self ):
         """Returns True if call policy is defined in Boost.Python library, False otherwise"""
         return False
-    
+
+    @property
+    def header_file(self):
+        """Return name of the header file to be included"""
+        return PYPP_CALL_POLICIES_HEADER_FILE
+
     def _get_array_size( self ):
         return self._array_size
     def _set_array_size( self, new_array_size):
@@ -321,6 +348,7 @@ def convert_array_to_tuple( array_size, memory_manager, make_object_call_policie
     return convert_array_to_tuple_t( array_size, memory_manager, make_object_call_policies, base )
 
 class return_range_t( call_policy_t ):
+    HEADER_FILE = "__return_range.pypp.hpp"
     def __init__( self, get_size_class, value_type, value_policies):
         call_policy_t.__init__( self )
         self._value_type = value_type
@@ -330,6 +358,11 @@ class return_range_t( call_policy_t ):
     def is_predefined( self ):
         """Returns True if call policy is defined in Boost.Python library, False otherwise"""
         return False
+
+    @property
+    def header_file(self):
+        """Return name of the header file to be included"""
+        return self.HEADER_FILE
 
     def _get_get_size_class( self ):
         return self._get_size_class

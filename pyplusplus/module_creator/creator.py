@@ -8,7 +8,9 @@ import creators_wizard
 import sort_algorithms
 import dependencies_manager
 import opaque_types_manager
+import header_files_manager
 import call_policies_resolver
+
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
@@ -107,8 +109,7 @@ class creator_t( declarations.decl_visitor_t ):
             self.__types_db = types_database.types_database_t()
 
         self.__extmodule = code_creators.module_t()
-        self.__extmodule.add_system_header( "boost/python.hpp" )
-        self.__extmodule.adopt_creator( code_creators.include_t( header="boost/python.hpp" ) )
+        self.__header_files_manager = header_files_manager.manager_t( self.__extmodule )
         if boost_python_ns_name:
             bp_ns_alias = code_creators.namespace_alias_t( alias=boost_python_ns_name
                                                            , full_namespace_name='::boost::python' )
@@ -122,14 +123,10 @@ class creator_t( declarations.decl_visitor_t ):
 
         self.curr_code_creator = self.__module_body
         self.curr_decl = None
-        self.__cr_array_1_included = False
         self.__array_1_registered = set() #(type.decl_string,size)
         self.__free_operators = []
         self.__exposed_free_fun_overloads = set()
         self.__opaque_types_manager = opaque_types_manager.manager_t( self.__extmodule )
-        self.__custom_call_policies_included = False
-        self.__return_range_call_policies_included = False
-        
         self.__dependencies_manager = dependencies_manager.manager_t(self.decl_logger)
         
     def _prepare_decls( self, decls, doc_extractor ):
@@ -351,25 +348,6 @@ class creator_t( declarations.decl_visitor_t ):
         creators.reverse()
         self.__module_body.adopt_creators( creators, 0 )
 
-    def __on_demand_include_call_policies( self, call_policy ):
-        if self.__custom_call_policies_included and self.__return_range_call_policies_included:
-            return
-        
-        if not call_policy:
-            return
-        
-        if call_policy.is_predefined():
-            return 
-
-        if isinstance( call_policy, decl_wrappers.call_policies.return_range_t ):
-            self.__return_range_call_policies_included = True
-            self.__extmodule.add_include( code_repository.return_range.file_name )            
-            self.__extmodule.add_system_header( code_repository.return_range.file_name )
-        else:
-            self.__custom_call_policies_included = True
-            self.__extmodule.add_include( code_repository.call_policies.file_name )            
-            self.__extmodule.add_system_header( code_repository.call_policies.file_name )
-
     def create(self, decl_headers=None):
         """Create and return the module for the extension.
 
@@ -379,10 +357,11 @@ class creator_t( declarations.decl_visitor_t ):
         @rtype: L{module_t<code_creators.module_t>}
         """
         if decl_headers is None:
-            self._create_includes()
-        else:
-            for h in decl_headers:
-                self.__extmodule.adopt_include(code_creators.include_t(header=h))
+            decl_headers = declarations.declaration_files( self.__decls )
+        
+        map( lambda header: self.__header_files_manager.include( header )
+             , decl_headers )
+        
         # Invoke the appropriate visit_*() method on all decls
         for decl in self.__decls:
             self.curr_decl = decl
@@ -399,18 +378,13 @@ class creator_t( declarations.decl_visitor_t ):
         self.__dependencies_manager.inform_user()
         return self.__extmodule
 
-    def _create_includes(self):
-        for fn in declarations.declaration_files( self.__decls ):
-            include = code_creators.include_t( header=fn )
-            self.__extmodule.adopt_include(include)
-
     def visit_member_function( self ):
         fwrapper = None
         self.__types_db.update( self.curr_decl )
         self.__dependencies_manager.add_exported( self.curr_decl )
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
-        self.__on_demand_include_call_policies( self.curr_decl.call_policies )
+        self.__header_files_manager.include_call_policy( self.curr_decl.call_policies )
         
         maker_cls, fwrapper_cls = creators_wizard.find_out_mem_fun_creator_classes( self.curr_decl )
 
@@ -437,22 +411,9 @@ class creator_t( declarations.decl_visitor_t ):
             self.curr_code_creator.adopt_creator( maker )
             self.__opaque_types_manager.register_opaque( maker, self.curr_decl )
         
-        if self.curr_decl.transformations:
+        if self.curr_decl.transformations:            
             required_headers = self.curr_decl.transformations[0].required_headers()
-            for header in required_headers:
-                # Check whether the header is already included
-                included = filter( lambda cc: isinstance(cc, code_creators.include_t) and cc.header==header
-                                   , self.__extmodule.creators)
-                if not included:
-                    self.__extmodule.adopt_include( 
-                        code_creators.include_t( header=header, user_defined=True ) )
-    
-                # Check if it is a header from the code repository
-                if header in code_repository.headers:
-                    self.__extmodule.add_system_header( header )
-                    
-                if not self.__extmodule.is_system_header( code_repository.named_tuple.file_name ):
-                    self.__extmodule.add_system_header( code_repository.named_tuple.file_name )
+            self.__header_files_manager.include_ft( required_headers )
                     
         if self.curr_decl.has_static:
             #static_method should be created only once.
@@ -479,7 +440,7 @@ class creator_t( declarations.decl_visitor_t ):
         maker = code_creators.constructor_t( constructor=self.curr_decl, wrapper=cwrapper )
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
-        self.__on_demand_include_call_policies( self.curr_decl.call_policies )
+        self.__header_files_manager.include_call_policy( self.curr_decl.call_policies )
         self.curr_code_creator.adopt_creator( maker )
 
     def visit_destructor( self ):
@@ -498,7 +459,7 @@ class creator_t( declarations.decl_visitor_t ):
         self.__dependencies_manager.add_exported( self.curr_decl )
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
-        self.__on_demand_include_call_policies( self.curr_decl.call_policies )
+        self.__header_files_manager.include_call_policy( self.curr_decl.call_policies )
         
         self.__types_db.update( self.curr_decl )
         if not self.curr_decl.parent.is_abstract and not declarations.is_reference( self.curr_decl.return_type ):
@@ -530,7 +491,7 @@ class creator_t( declarations.decl_visitor_t ):
                         self.__dependencies_manager.add_exported( f )
                         if None is f.call_policies:
                             f.call_policies = self.__call_policies_resolver( f )
-                        self.__on_demand_include_call_policies( f.call_policies )
+                        self.__header_files_manager.include_call_policy( f.call_policies )
 
                     overloads_cls_creator = code_creators.free_fun_overloads_class_t( overloads )
                     self.__extmodule.adopt_declaration_creator( overloads_cls_creator )
@@ -551,10 +512,13 @@ class creator_t( declarations.decl_visitor_t ):
             self.__dependencies_manager.add_exported( self.curr_decl )
             if None is self.curr_decl.call_policies:
                 self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
-            self.__on_demand_include_call_policies( self.curr_decl.call_policies )
+            self.__header_files_manager.include_call_policy( self.curr_decl.call_policies )
             
             maker = None
             if self.curr_decl.transformations:
+                required_headers = self.curr_decl.transformations[0].required_headers()
+                self.__header_files_manager.include_ft( required_headers )
+
                 wrapper = code_creators.free_fun_transformed_wrapper_t( self.curr_decl )
                 self.__extmodule.adopt_declaration_creator( wrapper )
                 maker = code_creators.free_fun_transformed_t( self.curr_decl, wrapper )
@@ -595,7 +559,7 @@ class creator_t( declarations.decl_visitor_t ):
                     self.__dependencies_manager.add_exported( f )
                     if None is f.call_policies:
                         f.call_policies = self.__call_policies_resolver( f )
-                    self.__on_demand_include_call_policies( f.call_policies )
+                    self.__header_files_manager.include_call_policy( f.call_policies )
 
                 overloads_cls_creator = code_creators.mem_fun_overloads_class_t( overloads )
                 self.__extmodule.adopt_declaration_creator( overloads_cls_creator )
@@ -707,11 +671,7 @@ class creator_t( declarations.decl_visitor_t ):
         self.__dependencies_manager.add_exported( self.curr_decl )
         
         if declarations.is_array( self.curr_decl.type ):
-            if not self.__cr_array_1_included:
-                self.__extmodule.add_system_header( code_repository.array_1.file_name )
-                self.__extmodule.adopt_creator( code_creators.include_t( code_repository.array_1.file_name )
-                                                , self.__extmodule.first_include_index() + 1)
-                self.__cr_array_1_included = True
+            self.__header_files_manager.include(code_repository.array_1.file_name, system=True )
             if self._register_array_1( self.curr_decl.type ):
                 array_1_registrator = code_creators.array_1_registrator_t( array_type=self.curr_decl.type )
                 self.curr_code_creator.adopt_creator( array_1_registrator )
@@ -741,10 +701,10 @@ class creator_t( declarations.decl_visitor_t ):
             elif declarations.is_reference( self.curr_decl.type ):
                 if None is self.curr_decl.getter_call_policies:
                     self.curr_decl.getter_call_policies = self.__call_policies_resolver( self.curr_decl, 'get' )
-                self.__on_demand_include_call_policies( self.curr_decl.getter_call_policies )
+                self.__header_files_manager.include_call_policy( self.curr_decl.getter_call_policies )
                 if None is self.curr_decl.setter_call_policies:
                     self.curr_decl.setter_call_policies = self.__call_policies_resolver( self.curr_decl, 'set' )
-                self.__on_demand_include_call_policies( self.curr_decl.setter_call_policies )
+                self.__header_files_manager.include_call_policy( self.curr_decl.setter_call_policies )
                 wrapper = code_creators.mem_var_ref_wrapper_t( variable=self.curr_decl )
                 maker = code_creators.mem_var_ref_t( variable=self.curr_decl, wrapper=wrapper )
                 self.__opaque_types_manager.register_opaque( maker, self.curr_decl )
