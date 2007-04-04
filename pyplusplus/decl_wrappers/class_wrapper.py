@@ -177,6 +177,12 @@ class class_declaration_t( class_common_details_t
 class class_t( class_common_details_t
                , scopedef_wrapper.scopedef_t
                , declarations.class_t):
+    
+    class CLASS_TYPE:
+        DEFAULT = 'default'
+        WRAPPER = 'wrapper'
+        ALL = ( DEFAULT, WRAPPER )
+        
     def __init__(self, *arguments, **keywords):
         class_common_details_t.__init__( self )
         declarations.class_t.__init__(self, *arguments, **keywords )
@@ -195,6 +201,7 @@ class class_t( class_common_details_t
         self._properties = []
         self._redefined_funcs = None
         self._require_self_reference  = False
+        self._class_type = self.CLASS_TYPE.DEFAULT
         
     def _get_redefine_operators( self ):
         return self._redefine_operators
@@ -202,6 +209,14 @@ class class_t( class_common_details_t
         self._redefine_operators = new_value
     redefine_operators = property( _get_redefine_operators, _set_redefine_operators
                                    , doc="tells Py++ to redefine operators from base class in this class, False by default")
+
+    def _get_class_type(self):
+        return self._class_type
+    def _set_class_type(self, class_type):
+        self._class_type = class_type
+    class_type = property( _get_class_type, _set_class_type
+                          , doc="set this value to CLASS_TYPE.WRAPPER, if you need to transfer ownership of" \
+                                "polymorphic class" )
 
     def _get_held_type(self):
         return self._held_type

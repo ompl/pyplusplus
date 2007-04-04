@@ -8,7 +8,7 @@ struct event_t
         notify();
     }
 protected:
-    virtual void notify(){};
+    virtual void notify() = 0;
 };
 
 struct do_nothing_t : event_t{
