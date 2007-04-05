@@ -10,10 +10,11 @@
 
 import wx
 
-from views.main_frame import create as createMainFrame
-from controllers.main import MainController
+from views.frame_main import create as createMainFrame
+from controllers.controller_main import MainController
 
-modules ={u'main controller': [0, '', u'controllers/main.py'],
+modules ={u'dialog_macro': [0, '', u'views/dialog_macro.py'],
+ u'main controller': [0, '', u'controllers/main_controller.py'],
  u'main view': [1, 'Main frame of ide', u'views/main_frame.py']}
 
 class BoaApp(wx.App):

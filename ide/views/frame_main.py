@@ -1,5 +1,4 @@
 #Boa:Frame:MainFrame
-from Dialog import Dialog
 
 # Copyright 2004 Roman Yakovenko.
 # 2007 Alexander Eisenhuth
@@ -134,7 +133,7 @@ class MainFrame(wx.Frame):
         parent.AddWindow(self.listDefines, 1, border=10,
               flag=wx.RIGHT | wx.BOTTOM | wx.TOP | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
 
-    def _init_coll_menuBar1_Menus(self, parent):
+    def _init_coll_menuBar_Menus(self, parent):
         # generated method, don't edit
 
         parent.Append(menu=self.menueFile, title=u'&File')
@@ -142,10 +141,16 @@ class MainFrame(wx.Frame):
     def _init_coll_menuIncludes_Items(self, parent):
         # generated method, don't edit
 
-        parent.Append(help='', id=wxID_MAINFRAMEMENUINCLUDESADDINC,
-              kind=wx.ITEM_NORMAL, text=u'Add ...')
-        parent.Append(help='', id=wxID_MAINFRAMEMENUINCLUDESITEMS1,
-              kind=wx.ITEM_NORMAL, text=u'Remove')
+        parent.Append(help=u'Add new include directory for gcc',
+              id=wxID_MAINFRAMEMENUINCLUDESADDINC, kind=wx.ITEM_NORMAL,
+              text=u'Add ...')
+        parent.Append(help=u'Remove selected include directory',
+              id=wxID_MAINFRAMEMENUINCLUDESITEMS1, kind=wx.ITEM_NORMAL,
+              text=u'Remove')
+        self.Bind(wx.EVT_MENU, self.OnMenueIncludesAdd,
+              id=wxID_MAINFRAMEMENUINCLUDESADDINC)
+        self.Bind(wx.EVT_MENU, self.OnMenueIncludesRemove,
+              id=wxID_MAINFRAMEMENUINCLUDESITEMS1)
 
     def _init_coll_menueFile_Items(self, parent):
         # generated method, don't edit
@@ -177,10 +182,16 @@ class MainFrame(wx.Frame):
     def _init_coll_menuDefines_Items(self, parent):
         # generated method, don't edit
 
-        parent.Append(help='', id=wxID_MAINFRAMEMENUDEFINESADDDEF,
-              kind=wx.ITEM_NORMAL, text=u'Add ...')
-        parent.Append(help='', id=wxID_MAINFRAMEMENUDEFINESREMOVEDEF,
-              kind=wx.ITEM_NORMAL, text=u'Remove')
+        parent.Append(help=u'Add new define for gcc',
+              id=wxID_MAINFRAMEMENUDEFINESADDDEF, kind=wx.ITEM_NORMAL,
+              text=u'Add ...')
+        parent.Append(help=u'Remove selected define',
+              id=wxID_MAINFRAMEMENUDEFINESREMOVEDEF, kind=wx.ITEM_NORMAL,
+              text=u'Remove')
+        self.Bind(wx.EVT_MENU, self.OnMenueDefinesAddDefine,
+              id=wxID_MAINFRAMEMENUDEFINESADDDEF)
+        self.Bind(wx.EVT_MENU, self.OnMenueDefinesRemoveDefine,
+              id=wxID_MAINFRAMEMENUDEFINESREMOVEDEF)
 
     def _init_coll_nbSettings_Pages(self, parent):
         # generated method, don't edit
@@ -255,14 +266,14 @@ class MainFrame(wx.Frame):
         # generated method, don't edit
         self.menueFile = wx.Menu(title='')
 
-        self.menuBar1 = wx.MenuBar()
+        self.menuBar = wx.MenuBar()
 
         self.menuIncludes = wx.Menu(title='')
 
         self.menuDefines = wx.Menu(title='')
 
         self._init_coll_menueFile_Items(self.menueFile)
-        self._init_coll_menuBar1_Menus(self.menuBar1)
+        self._init_coll_menuBar_Menus(self.menuBar)
         self._init_coll_menuIncludes_Items(self.menuIncludes)
         self._init_coll_menuDefines_Items(self.menuDefines)
 
@@ -273,7 +284,7 @@ class MainFrame(wx.Frame):
               style=wx.DEFAULT_FRAME_STYLE, title=u'Py++ Code generator')
         self._init_utils()
         self.SetClientSize(wx.Size(843, 586))
-        self.SetMenuBar(self.menuBar1)
+        self.SetMenuBar(self.menuBar)
 
         self.statusBar = wx.StatusBar(id=wxID_MAINFRAMESTATUSBAR,
               name=u'statusBar', parent=self, style=0)
@@ -308,8 +319,8 @@ class MainFrame(wx.Frame):
 
         self.textOutput = wx.TextCtrl(id=wxID_MAINFRAMETEXTOUTPUT,
               name=u'textOutput', parent=self.notebook1, pos=wx.Point(0, 0),
-              size=wx.Size(825, 493), style=wx.TE_READONLY | wx.TE_MULTILINE,
-              value=u'')
+              size=wx.Size(825, 493),
+              style=wx.TE_RICH | wx.TE_READONLY | wx.TE_MULTILINE, value=u'')
 
         self.splitterVertical = wx.SplitterWindow(id=wxID_MAINFRAMESPLITTERVERTICAL,
               name=u'splitterVertical', parent=self.panelSHUp, pos=wx.Point(0,
@@ -404,8 +415,10 @@ class MainFrame(wx.Frame):
 
         self.listIncludes = wx.ListCtrl(id=wxID_MAINFRAMELISTINCLUDES,
               name=u'listIncludes', parent=self.panelNbSettings,
-              pos=wx.Point(56, 102), size=wx.Size(0, 66), style=wx.LC_ICON)
+              pos=wx.Point(56, 102), size=wx.Size(0, 66),
+              style=wx.LC_HRULES | wx.LC_NO_HEADER | wx.LC_REPORT)
         self.listIncludes.Bind(wx.EVT_RIGHT_DOWN, self.OnListIncludesRightDown)
+        self.listIncludes.Bind(wx.EVT_SIZE, self.OnListIncludesSize)
 
         self.staticText4 = wx.StaticText(id=wxID_MAINFRAMESTATICTEXT4,
               label=u'Defines', name='staticText4', parent=self.panelNbSettings,
@@ -414,8 +427,10 @@ class MainFrame(wx.Frame):
 
         self.listDefines = wx.ListCtrl(id=wxID_MAINFRAMELISTDEFINES,
               name=u'listDefines', parent=self.panelNbSettings, pos=wx.Point(56,
-              188), size=wx.Size(0, 68), style=wx.LC_ICON)
+              188), size=wx.Size(0, 68),
+              style=wx.LC_HRULES | wx.LC_NO_HEADER | wx.LC_REPORT)
         self.listDefines.Bind(wx.EVT_RIGHT_DOWN, self.OnListDefinesRightDown)
+        self.listDefines.Bind(wx.EVT_SIZE, self.OnListDefinesSize)
 
         self.staticText5 = wx.StaticText(id=wxID_MAINFRAMESTATICTEXT5,
               label=u'Code', name='staticText5', parent=self.panelCode,
@@ -428,6 +443,7 @@ class MainFrame(wx.Frame):
 
     def __init__(self, parent):
         self._init_ctrls(parent)
+        self._setup_ide_ctrls()
         self.SetSize((self.GetSize()[0]+1,self.GetSize()[1]+1))
         
     def OnMenueFileNewMenu(self, event):
@@ -465,14 +481,54 @@ class MainFrame(wx.Frame):
 
     def OnButHeadersButton(self, event):
         """Callback for button event"""
-        self._controller.OpenHeaderDlg()
+        self._controller.OpenDlgHeader()
         event.Skip()
 
     def OnButGccXmlButton(self, event):
         """Callback for button event"""
-        self._controller.OpenGccXmlDlg()
+        self._controller.OpenDlgGccXml()
         event.Skip()
         
     def set_controller(self, controller):
         """Set controller of MVC"""
         self._controller = controller
+        
+    def _setup_ide_ctrls(self):
+        """Do ide related settings in ctrls"""
+        list_inc = self.listIncludes
+        list_def = self.listDefines
+        
+        # Init list controls
+        for list_ctrl in (list_inc, list_def):
+            list_ctrl.InsertColumn(0, "Path")
+
+    def OnListIncludesSize(self, event):
+        """Handle resize of listIncludes"""
+        list_ctrl = self.listIncludes
+        list_ctrl.SetColumnWidth(0, list_ctrl.GetSize().GetWidth() - 30 )
+        event.Skip()
+
+    def OnListDefinesSize(self, event):
+        """Handle resize of listDefines"""
+        list_ctrl = self.listDefines
+        list_ctrl.SetColumnWidth(0, list_ctrl.GetSize().GetWidth() - 30 )
+        event.Skip()
+
+    def OnMenueIncludesAdd(self, event):
+        self._controller.OpenDlgAddInclude()
+        event.Skip()
+
+    def OnMenueIncludesRemove(self, event):
+        event.Skip()
+
+    def OnMenueDefinesAddDefine(self, event):
+        self._controller.OpenDlgAddMacro()
+        event.Skip()
+        
+    def OnMenueDefinesRemoveDefine(self, event):
+        event.Skip()
+
+        
+        
+        
+    
