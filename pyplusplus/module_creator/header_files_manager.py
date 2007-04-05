@@ -17,16 +17,15 @@ class manager_t( object ):
         self.__extmodule.add_system_header( "boost/python.hpp" )
         self.__extmodule.adopt_creator( code_creators.include_t( header="boost/python.hpp" ) )
 
-    def include( self, header, system=False, once=True, user_defined=False ):
-        if once:
-            normalized_header = self.normalize( header )
-            if normalized_header in self.__already_included:
-                return
-        self.__extmodule.add_system_header( header )
+    def include( self, header, system=False, user_defined=False ):
+        normalized_header = self.normalize( header )
+        if normalized_header in self.__already_included:
+            return
+        else:
+            self.__already_included.add( normalized_header )
         self.__extmodule.adopt_include( code_creators.include_t( header, user_defined=user_defined ) )
         if system:
             self.__extmodule.add_system_header( header )
-        
 
     def include_call_policy( self, call_policy ):
         if not call_policy:
