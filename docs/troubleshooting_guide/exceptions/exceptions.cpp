@@ -4,10 +4,14 @@
 
 /**
  * Content:
- *  * example, which explain how to create custom exception class, which derives
- *    from Python built-in exceptions
+ *  * example, which explain how to create custom exception class, which gives
+ *    expected behaviour to exceptions exposed using Boost.Python library.
+ * 
+ *  The example also allows you to map your exception classes to the Python 
+ *  built-in ones.
  *
  **/
+
 class application_error : public std::exception{
 public:
 
@@ -35,27 +39,32 @@ private:
     const std::string m_msg;
 };
 
+//small dummy function that will conditionaly throws exception
 void check_preconditions( bool raise_error ){
     if( raise_error ){
         throw application_error( "xyz" );
     }
 }
 
+//test function for custom r-value converter
 std::string get_application_name( const application_error& err ){
     return err.application_name();
 }
 
 namespace bpl = boost::python;
 
-struct exception_translator{
+struct exception_translator{    
     
     exception_translator(){
+
+        bpl::register_exception_translator<application_error>(&exception_translator::translate);
+
+        //Register custom r-value converter
+        //There are situations, where we have to pass the exception back to 
+        //C++ library. This will do the trick
         bpl::converter::registry::push_back( &exception_translator::convertible
                                             , &exception_translator::construct
                                             , bpl::type_id<application_error>() );
-        
-        bpl::register_exception_translator<application_error>(&exception_translator::translate);
-
     }
     
     static void 

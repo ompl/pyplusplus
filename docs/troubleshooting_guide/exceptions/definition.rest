@@ -1,4 +1,4 @@
-Boost.Python has a limitation: it does not allow to create classes, which derives
-from the classes defined in Python. It is impossible to solve the general use case,
-without changing the library, but it is pretty simple to create solution for 
-"exception" classes.
+Boost.Python has a limitation: it does not allow to create class, which derives
+from the class defined in Python. In most use cases this should not bother you,
+except one - exceptions. The example will provide you with one of the possible
+solutions.
