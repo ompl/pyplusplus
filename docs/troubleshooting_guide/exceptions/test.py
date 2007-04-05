@@ -17,6 +17,7 @@ class application_error(Exception):
             return super(application_error,self).__getattribute__(attr)
 
 my_exceptions.application_error = application_error
+my_exceptions._application_error_.py_err_class = application_error
 
 class tester_t( unittest.TestCase ):
     def __init__( self, *args ):

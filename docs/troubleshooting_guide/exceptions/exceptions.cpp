@@ -1,5 +1,6 @@
 #include "boost/python.hpp"
 #include <stdexcept>
+#include <iostream>
 
 /**
  * Content:
@@ -59,10 +60,10 @@ struct exception_translator{
     
     static void 
     translate( const application_error& err ){
-        bpl::object this_module( bpl::handle<>( bpl::borrowed(PyImport_AddModule("my_exceptions"))));
-        bpl::object app_exc_class = this_module.attr("application_error");
-        bpl::object pyerr = app_exc_class( err );
-        PyErr_SetObject( app_exc_class.ptr(), bpl::incref( pyerr.ptr() ) );
+        bpl::object pimpl_err( err );
+        bpl::object pyerr_class = pimpl_err.attr( "py_err_class" );
+        bpl::object pyerr = pyerr_class( pimpl_err );
+        PyErr_SetObject( pyerr_class.ptr(), bpl::incref( pyerr.ptr() ) );
     }
 
     //Sometimes, exceptions should be passed back to the library.
