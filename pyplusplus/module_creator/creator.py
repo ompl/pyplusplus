@@ -31,25 +31,6 @@ VIRTUALITY_TYPES = declarations.VIRTUALITY_TYPES
 #       };
 # };
 
-INDEXING_SUITE_1_CONTAINERS = {
-    'vector<' : "boost/python/suite/indexing/vector_indexing_suite.hpp"
-    , 'map<' : "boost/python/suite/indexing/map_indexing_suite.hpp"
-}
-
-INDEXING_SUITE_2_CONTAINERS = {
-      'vector<' : "boost/python/suite/indexing/vector.hpp"
-    , 'deque<' : "boost/python/suite/indexing/deque.hpp"
-    , 'list<' : "boost/python/suite/indexing/list.hpp"
-    , 'map<' : "boost/python/suite/indexing/map.hpp"
-    , 'multimap<' : "boost/python/suite/indexing/multimap.hpp"
-    , 'hash_map<' : "boost/python/suite/indexing/map.hpp"
-    , 'set<' : "boost/python/suite/indexing/set.hpp"
-    , 'hash_set<' : "boost/python/suite/indexing/set.hpp"
-    #TODO: queue, priority, stack, multimap, hash_multimap, multiset, hash_multiset
-}
-
-INDEXING_SUITE_2_MAIN_HEADER = "boost/python/suite/indexing/container_suite.hpp"
-
 class creator_t( declarations.decl_visitor_t ):
     """Creating code creators.
 
@@ -267,10 +248,6 @@ class creator_t( declarations.decl_visitor_t ):
             cls_creator.associated_decl_creators.extend( uc_creators )
 
     def _treat_indexing_suite( self ):
-        global INDEXING_SUITE_1_CONTAINERS
-        global INDEXING_SUITE_2_CONTAINERS
-        global INDEXING_SUITE_2_MAIN_HEADER
-
         def create_explanation(cls):
             msg = '//WARNING: the next line of code will not compile, because "%s" does not have operator== !'
             msg = msg % cls.indexing_suite.element_type.decl_string
@@ -285,32 +262,20 @@ class creator_t( declarations.decl_visitor_t ):
         if not self.__types_db.used_containers:
             return
 
-        used_headers = set()
-
         creators = []
         created_value_traits = set()
 
         cmp_by_name = lambda cls1, cls2: cmp( cls1.decl_string, cls2.decl_string )
         used_containers = list( self.__types_db.used_containers )
+        used_containers = filter( lambda cls: cls.indexing_suite.include_files
+                                  , used_containers )
         used_containers.sort( cmp_by_name )
         for cls in used_containers:
-            container_name = cls.name.split( '<' )[0] + '<'
-
-            if isinstance( cls.indexing_suite, decl_wrappers.indexing_suite1_t ):
-                isuite = INDEXING_SUITE_1_CONTAINERS
-            else:
-                isuite = INDEXING_SUITE_2_CONTAINERS
-
-            if not isuite.has_key( container_name ):
-                continue #not supported
-
+            map( lambda header: self.__header_files_manager.include(header, system=True) 
+                 , cls.indexing_suite.include_files )
+            
             for msg in cls.readme():
                 self.decl_logger.warn( "%s;%s" % ( cls, msg ) )
-
-            if isuite is INDEXING_SUITE_2_CONTAINERS:
-                used_headers.add( INDEXING_SUITE_2_MAIN_HEADER )
-
-            used_headers.add( isuite[ container_name ] )
 
             cls_creator = create_cls_cc( cls )
             self.__dependencies_manager.add_exported( cls )
@@ -319,7 +284,8 @@ class creator_t( declarations.decl_visitor_t ):
                 element_type = cls.indexing_suite.element_type
             except:
                 element_type = None
-            if isuite is INDEXING_SUITE_1_CONTAINERS:
+
+            if isinstance( cls.indexing_suite, decl_wrappers.indexing_suite1_t ):
                 if not ( None is element_type ) \
                    and declarations.is_class( element_type ) \
                    and not declarations.has_public_equal( element_type ):
@@ -334,17 +300,7 @@ class creator_t( declarations.decl_visitor_t ):
                         element_type_cc = code_creators.value_traits_t( value_cls )
                         self.__extmodule.adopt_declaration_creator( element_type_cc )
                 cls_creator.adopt_creator( code_creators.indexing_suite2_t(cls) )
-
-        if INDEXING_SUITE_2_MAIN_HEADER in used_headers:
-            #I want this header to be the first one.
-            used_headers.remove( INDEXING_SUITE_2_MAIN_HEADER )
-            self.__extmodule.add_system_header( INDEXING_SUITE_2_MAIN_HEADER )
-            self.__extmodule.add_include( INDEXING_SUITE_2_MAIN_HEADER )
-
-        for header in used_headers:
-            self.__extmodule.add_system_header( header )
-            self.__extmodule.add_include( header )
-
+                
         creators.reverse()
         self.__module_body.adopt_creators( creators, 0 )
 
