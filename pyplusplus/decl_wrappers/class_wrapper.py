@@ -178,10 +178,10 @@ class class_t( class_common_details_t
                , scopedef_wrapper.scopedef_t
                , declarations.class_t):
     
-    class CLASS_TYPE:
-        DEFAULT = 'default'
+    class EXPOSED_CLASS_TYPE:
+        DECLARED = 'declared'
         WRAPPER = 'wrapper'
-        ALL = ( DEFAULT, WRAPPER )
+        ALL = ( DECLARED, WRAPPER )
         
     def __init__(self, *arguments, **keywords):
         class_common_details_t.__init__( self )
@@ -201,7 +201,7 @@ class class_t( class_common_details_t
         self._properties = []
         self._redefined_funcs = None
         self._require_self_reference  = False
-        self._class_type = self.CLASS_TYPE.DEFAULT
+        self._exposed_class_type = self.EXPOSED_CLASS_TYPE.DECLARED
         
     def _get_redefine_operators( self ):
         return self._redefine_operators
@@ -210,11 +210,12 @@ class class_t( class_common_details_t
     redefine_operators = property( _get_redefine_operators, _set_redefine_operators
                                    , doc="tells Py++ to redefine operators from base class in this class, False by default")
 
-    def _get_class_type(self):
-        return self._class_type
-    def _set_class_type(self, class_type):
+    def _get_exposed_class_type(self):
+        return self._exposed_class_type
+    def _set_exposed_class_type(self, class_type):
+        assert class_type in self.EXPOSED_CLASS_TYPE.ALL
         self._class_type = class_type
-    class_type = property( _get_class_type, _set_class_type
+    exposed_class_type = property( _get_exposed_class_type, _set_exposed_class_type
                           , doc="set this value to CLASS_TYPE.WRAPPER, if you need to transfer ownership of" \
                                 "polymorphic class" )
 

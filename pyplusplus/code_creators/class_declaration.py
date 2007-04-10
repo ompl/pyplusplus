@@ -178,7 +178,7 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
 
         held_type = self._generated_held_type()
         if self.wrapper:
-            if self.declaration.class_type == self.declaration.CLASS_TYPE.WRAPPER:
+            if self.declaration.exposed_class_type == self.declaration.EXPOSED_CLASS_TYPE.WRAPPER:
                 args.append( self.wrapper.full_name )
             else:
                 if not self.target_configuration.boost_python_has_wrapper_held_type \
