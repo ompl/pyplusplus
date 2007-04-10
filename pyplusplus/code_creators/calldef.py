@@ -1251,9 +1251,11 @@ class calldef_overloads_t( registration_based.registration_based_t ):
     def create_overloads_cls( self ):
         result = [ self.overloads_class.name ]
         result.append( '( ' )
-        result.append( os.linesep + self.indent( self.create_keywords_args(), 3 ) )
+        if self.overloads_class.max_function.use_keywords:
+            result.append( os.linesep + self.indent( self.create_keywords_args(), 3 ) )
         if self.overloads_class.max_function.documentation:
-            result.append( os.linesep + self.indent( self.PARAM_SEPARATOR, 3 ) )
+            if self.overloads_class.max_function.use_keywords:
+                result.append( os.linesep + self.indent( self.PARAM_SEPARATOR, 3 ) )
             result.append( self.overloads_class.max_function.documentation )
         result.append( ' )' )
         if self.overloads_class.max_function.call_policies \
