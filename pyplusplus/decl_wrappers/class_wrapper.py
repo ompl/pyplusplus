@@ -19,7 +19,7 @@ ACCESS_TYPES = declarations.ACCESS_TYPES
 VIRTUALITY_TYPES = declarations.VIRTUALITY_TYPES
 
 class impl_details:
-    class GAEUS_VALUES: #guess always expose using scope values
+    class GUESS_VALUES: #guess always expose using scope values
         TRUE = 'true'
         FALSE = 'false'
         ALWAYS_TRUE = 'always true'
@@ -91,16 +91,16 @@ class class_common_details_t( object ):
     def guess_always_expose_using_scope_value( self ):
         if isinstance( self.indexing_suite, isuite2.indexing_suite2_t ) \
            and ( self.indexing_suite.disable_methods or self.indexing_suite.disabled_methods_groups ):
-            return impl_details.GAEUS_VALUES.ALWAYS_TRUE
+            return impl_details.GUESS_VALUES.ALWAYS_TRUE
         else:
-            return impl_details.GAEUS_VALUES.FALSE
+            return impl_details.GUESS_VALUES.FALSE
 
     def _get_always_expose_using_scope( self ):
         tmp = self.guess_always_expose_using_scope_value()
-        if tmp == impl_details.GAEUS_VALUES.ALWAYS_TRUE:
+        if tmp == impl_details.GUESS_VALUES.ALWAYS_TRUE:
             return True
         if None is self._always_expose_using_scope:
-            if impl_details.GAEUS_VALUES.TRUE == tmp:
+            if impl_details.GUESS_VALUES.TRUE == tmp:
                 self._always_expose_using_scope = True
             else:
                 self._always_expose_using_scope = False
@@ -542,7 +542,7 @@ class class_t( class_common_details_t
             return True
         #MSVC 7.1 has problem with taking reference to operator=
         if self.member_operators( is_assign, allow_empty=True, recursive=False ):
-            return impl_details.GAEUS_VALUES.ALWAYS_TRUE
+            return impl_details.GUESS_VALUES.ALWAYS_TRUE
         return super(class_t, self).guess_always_expose_using_scope_value()    
 
     def _get_require_self_reference(self):
