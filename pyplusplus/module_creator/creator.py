@@ -437,7 +437,7 @@ class creator_t( declarations.decl_visitor_t ):
                               , parent_decl.free_functions( allow_empty=True, recursive=False ) ) )
             for name in names:
                 overloads = parent_decl.free_functions( name, allow_empty=True, recursive=False )
-                overloads = filter( lambda decl: decl.use_overload_macro, overloads )
+                overloads = filter( lambda decl: decl.ignore == False and decl.use_overload_macro, overloads )
                 if not overloads:
                     continue
                 else:
@@ -504,7 +504,8 @@ class creator_t( declarations.decl_visitor_t ):
                           , cls.member_functions( allow_empty=True, recursive=False ) ) )
         for name in names:
             overloads = cls.member_functions( name, allow_empty=True, recursive=False )
-            overloads = filter( lambda decl: decl.use_overload_macro, overloads )
+            overloads = filter( lambda decl: decl.ignore == False and decl.use_overload_macro
+                                , overloads )
             if not overloads:
                 continue
             else:
