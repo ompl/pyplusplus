@@ -82,6 +82,8 @@ class class_declaration_t( scoped.scoped_t
         else:
             return self._generate_code_no_scope()
 
+    def _get_system_headers_impl( self ):
+        return []
 
 class class_t( scoped.scoped_t, registration_based.registration_based_t ):
     """
@@ -323,6 +325,9 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
             return self._generate_code_with_scope()
         else:
             return self._generate_code_no_scope()
+        
+    def _get_system_headers_impl( self ):
+        return []
 
 #open question: should I put class wrapper under some specifiec namespace?
 class class_wrapper_t( scoped.scoped_t ):
@@ -395,6 +400,9 @@ class class_wrapper_t( scoped.scoped_t ):
         answer.append( '' )
         answer.append( '};' )
         return os.linesep.join( answer )
+
+    def _get_system_headers_impl( self ):
+        return []
 
 
 

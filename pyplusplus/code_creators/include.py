@@ -47,3 +47,6 @@ class include_t(code_creator.code_creator_t):
                 return '#include <%s>' % normalize_header
             else:
                 return '#include "%s"' % normalize_header
+            
+    def _get_system_headers_impl( self ):
+        return []

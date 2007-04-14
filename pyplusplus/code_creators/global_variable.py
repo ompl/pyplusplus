@@ -30,6 +30,9 @@ class global_variable_base_t( registration_based.registration_based_t
         self._wrapper = new_wrapper
     wrapper = property( _get_wrapper, _set_wrapper )
 
+    def _get_system_headers_impl( self ):
+        return []
+    
 class global_variable_t( global_variable_base_t ):
     """
     Creates boost.python code that exposes global variable.
@@ -64,6 +67,9 @@ class array_gv_t( global_variable_base_t ):
     _PARAM_SEPARATOR = ', '
     def __init__(self, variable, wrapper ):
         global_variable_base_t.__init__( self, variable=variable, wrapper=wrapper )
+
+    def _get_system_headers_impl( self ):
+        return []
 
     def _create_impl( self ):
         if self.declaration.already_exposed:
@@ -147,3 +153,6 @@ class array_gv_wrapper_t( code_creator.code_creator_t
         answer.append('}')
         answer.append( '}' * len( self._create_namespaces() ) )
         return os.linesep.join( answer )
+
+    def _get_system_headers_impl( self ):
+        return [code_repository.array_1.file_name]

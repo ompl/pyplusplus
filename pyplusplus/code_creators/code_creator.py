@@ -100,6 +100,15 @@ class code_creator_t(object):
         assert isinstance( code, types.StringTypes )
         return self.beautify( code )
 
+    def get_system_headers( self ):
+        files = [ "boost/python.hpp" ]
+        files.extend( self._get_system_headers_impl() )
+        return filter( None, files)
+    
+    def _get_system_headers_impl( self ):
+        """Return list of system header files the generated code depends on"""
+        raise NotImplementedError(self.__class__.__name__)
+    
     def beautify( self, code ):
         """
         function that returns code without leading and trailing whitespaces.

@@ -26,6 +26,9 @@ class namespace_alias_t(code_creator.code_creator_t):
     def _create_impl(self):
         return 'namespace %s = %s;' % ( self.alias, self.full_namespace_name )
 
+    def _get_system_headers_impl( self ):
+        return []
+
 class namespace_using_t(code_creator.code_creator_t):
     def __init__( self, namespace_name ):
         code_creator.code_creator_t.__init__(self )
@@ -39,3 +42,6 @@ class namespace_using_t(code_creator.code_creator_t):
        
     def _create_impl(self):
         return 'using namespace %s;' % self.namespace_name
+    
+    def _get_system_headers_impl( self ):
+        return []

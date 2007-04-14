@@ -140,7 +140,6 @@ class module_t(compound.compound_t):
         map( lambda header: self.adopt_include( include.include_t( header=header ) )
              , headers )
 
-    
     def adopt_include(self, include_creator):
         """Insert an L{include_t} object.
 
@@ -157,7 +156,10 @@ class module_t(compound.compound_t):
                            , self.creators )
         for include_creator in includes:
             include_creator.include_dirs_optimization = include_dirs
-    
+
+    def _get_system_headers_impl( self ):
+        return []
+
     def _create_impl(self):
         self.do_include_dirs_optimization()
         index = 0
