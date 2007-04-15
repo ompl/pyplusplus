@@ -180,6 +180,8 @@ class calldef_wrapper_t( code_creator.code_creator_t
         if self.declaration.transformations:
             ft = self.declaration.transformations[0]
             files.extend( ft.required_headers() )
+        if self.declaration.call_policies:
+            files.append( self.declaration.call_policies.header_file )            
         return files
 
 class free_function_t( calldef_t ):

@@ -27,7 +27,9 @@ class module_t(compound.compound_t):
     
     def add_system_header( self, header ):
         normalize = include_directories.include_directories_t.normalize
-        self.__system_headers.append( normalize( header ) )
+        normalized_header = normalize( header )
+        if normalized_header not in self.__system_headers:
+            self.__system_headers.append( normalized_header )
 
     def is_system_header( self, header ):
         normalize = include_directories.include_directories_t.normalize
