@@ -145,6 +145,9 @@ class type_modifier_t(transformer.transformer_t):
     def configure_virtual_mem_fun( self, controller ):
         self.__configure_v_mem_fun_default( controller.default_controller ) 
 
+    def required_headers( self ):
+        """Returns list of header files that transformer generated code depends on."""
+        return []
         
 # input_t
 class input_t(type_modifier_t):
@@ -533,4 +536,8 @@ class transfer_ownership_t(type_modifier_t):
 
     def configure_virtual_mem_fun( self, controller ):
         raise NotImplementedError()
+        
+    def required_headers( self ):
+        """Returns list of header files that transformer generated code depends on."""
+        return []
 
