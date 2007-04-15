@@ -36,6 +36,7 @@ class manager_t( object ):
         self.include( call_policy.header_file, system=True )
     
     def include_ft( self, required_headers ): #include function transformation headers
+        required_headers = map( self.normalize, required_headers )
         for header in required_headers:
             # Check whether the header is already included
             system = bool( header in code_repository.headers )
