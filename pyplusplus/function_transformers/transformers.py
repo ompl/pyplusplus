@@ -225,6 +225,10 @@ class inout_t(transformer.transformer_t):
         self.__configure_v_mem_fun_override( controller.override_controller )
         self.__configure_v_mem_fun_default( controller.default_controller )
 
+    def required_headers( self ):
+        """Returns list of header files that transformer generated code depends on."""
+        return [ code_repository.convenience.file_name ]
+
 
 _seq2arr = string.Template( os.linesep.join([
               'pyplus_conv::ensure_uniform_sequence< $type >( $pylist, $array_size );'
