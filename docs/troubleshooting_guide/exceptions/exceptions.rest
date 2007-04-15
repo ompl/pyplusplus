@@ -16,7 +16,7 @@ What's the problem?
 
 It is all about module interface and user expectations. If you can translate all
 your exceptions to built-in ones, than you are fine. You don't have to read this
-"lesson", but Boost.Python `exception translator`_ documentation.
+guide, but Boost.Python `exception translator`_ documentation.
 
 .. _`exception translator` : http://boost.org/libs/python/doc/v2/exception_translator.html
 
@@ -47,7 +47,7 @@ http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/52295 .
 Files
 -----
 
-* `exceptions.cpp`_ file contains source code for the "lesson"
+* `exceptions.cpp`_ file contains source code for the guide
 
 * `sconstruct`_ file contains build instructions for scons build tool.
 
