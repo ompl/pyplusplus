@@ -10,42 +10,52 @@ Introduction
 
 .. include:: ./definition.rest
 
--------
-Content
--------
+-------------------
+What's the problem?
+-------------------
 
-This example actually consist from 2 small, well documented examples.
+It is all about module interface and user expectations. If you can translate all
+your exceptions to built-in ones, than you are fine. You don't have to read this
+"lesson", but Boost.Python `exception translator`_ documentation.
 
-The first one shows how to handle conversion between tuples: `boost::tuples::tuple`_
-and Python tuple.
+.. _`exception translator` : http://boost.org/libs/python/doc/v2/exception_translator.html
 
-.. _`boost::tuples::tuple` : http://boost.org/libs/tuple/doc/tuple_users_guide.html
+My use case was different. I was supposed to export the exception classes and make
+them play nice with the ``try ... except`` mechanism. I mean, users should be able
+to:
 
-The second one shows how to add an automatic conversion from Python tuple to
-some registered class. The class registration allows you to use its functionality
-and enjoy from automatic conversion.
+  1. "except" all exceptions using ``except Exception, err:`` statement
+
+  2. "except" the exposed library defined exception classes
+
+I thought about few possible solutions to the problem. My first attempt was to
+add a missing functionality to Boost.Python library. Well, I quickly found out
+that the task is not a trivial one.
+
+The next solution, I thought about, was to expose the exception class as-is and
+to define new class in Python, which derives from it and the built-in ``Exception``.
+I implemented it and when I run the code I've got ``TypeError``:
+"Error when calling the metaclass bases multiple bases have instance lay-out conflict".
+
+The only solution left was to use "aggregation with automatic delegation". I mean
+instead of deriving from the exception class, I will keep it as a member variable
+in a class defined in Python, which derives from the built-in ``Exception`` one.
+Every time user access an attribute, the class defined in Python will automatically
+redirect the request to the variable. This technique is explained much better here:
+http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/52295 .
 
 Files
 -----
 
-* `tuples.hpp`_ file contains Boost.Tuple to\\from Python tuple conversion
-  implementation
-
-* `tuples_tester.cpp`_ file contains few functions, which test the tuples
-  conversion functionality
-
-* `custom_rvalue.cpp`_ file contains example of registration custom r-value
-  converter
+* `exceptions.cpp`_ file contains source code for the "lesson"
 
 * `sconstruct`_ file contains build instructions for scons build tool.
 
-* `test.py`_ file contains complete unit tests for both example
+* `test.py`_ file contains complete unit test suite
 
 All files contain comments, which describe what and why was done.
 
-.. _`tuples.hpp` : ./tuples.hpp.html
-.. _`tuples_tester.cpp` : ./tuples_tester.cpp.html
-.. _`custom_rvalue.cpp` : ./custom_rvalue.cpp.html
+.. _`exceptions.cpp` : ./exceptions.cpp.html
 .. _`sconstruct` : ./sconstruct.html
 .. _`test.py` : ./test.py.html
 
@@ -53,9 +63,9 @@ All files contain comments, which describe what and why was done.
 Download
 --------
 
-`automatic_conversion.zip`_
+`exceptions.zip`_
 
-.. _`automatic_conversion.zip` : ./automatic_conversion.zip
+.. _`exceptions.zip` : ./exceptions.zip
 
 
 .. _`Py++` : ./../pyplusplus.html
