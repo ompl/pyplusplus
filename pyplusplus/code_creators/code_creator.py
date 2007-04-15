@@ -114,10 +114,13 @@ class code_creator_t(object):
         """Return list of system header files the generated code depends on"""
         raise NotImplementedError(self.__class__.__name__)
 
-    def get_system_headers( self, recursive=False ):
+    def get_system_headers( self, recursive=False, unique=False ):
         files = [ "boost/python.hpp" ]
         files.extend( self._get_system_headers_impl() )
-        return filter( None, files)
+        files = filter( None, files)
+        if unique:
+            files = self.unique_headers( files )
+        return files
 
     def beautify( self, code ):
         """

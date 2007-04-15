@@ -150,7 +150,15 @@ class module_t(compound.compound_t):
         @param include_creator: Include creator object
         @type include_creator: L{include_t}
         """
-        self.adopt_creator( include_creator, self.last_include_index() + 1 )
+        lii = self.last_include_index()
+        if lii == 0:
+            if not self.creators:
+                lii = -1
+            elif not isinstance( self.creators[0], include.include_t ):
+                lii = -1
+            else:
+                pass
+        self.adopt_creator( include_creator, lii + 1 )
 
     def do_include_dirs_optimization(self):
         include_dirs = self._get_include_dirs()
