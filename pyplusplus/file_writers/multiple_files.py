@@ -12,6 +12,7 @@ from pyplusplus import _logging_
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
+from pyplusplus import code_repository
 
 #TODO: to add namespace_alias_t classes
 class multiple_files_t(writer.writer_t):
@@ -143,15 +144,28 @@ class multiple_files_t(writer.writer_t):
     def create_include_code( self, creators, head_headers=None, tail_headers=None ):
         answer = []
         normalize = code_creators.include_directories_t.normalize
+        unique_headers = code_creators.code_creator_t.unique_headers
+        
         if head_headers:
             answer.extend( map( lambda header: '#include "%s"' % normalize( header )
                                 , head_headers ) )
 
-        # Include all 'global' include files...
-        includes = filter( lambda creator: isinstance( creator, code_creators.include_t )
-                           , self.extmodule.creators )
-        answer.extend( map( lambda creator: creator.create(), includes ) )
-
+        dependend_on_headers = []
+        for creator in creators:
+            dependend_on_headers.extend( creator.get_system_headers( recursive=True ) )
+            
+        dependend_on_headers = unique_headers( map( normalize, dependend_on_headers ) )       
+        
+        include_creators = filter( lambda creator: isinstance( creator, code_creators.include_t )
+                                   , self.extmodule.creators )
+        
+        for include_cc in include_creators:
+            if self.extmodule.is_system_header( include_cc.header ):                
+                if include_cc.header in dependend_on_headers:
+                    answer.append( include_cc.create() )
+            else:# user header file - always include
+                answer.append( include_cc.create() )
+            
         for creator in creators:
             header = self.find_out_value_traits_header( creator )
             if header:
