@@ -19,11 +19,9 @@ class manager_t( object ):
 
     def include( self, header, system=False, user_defined=False ):
         normalized_header = self.normalize( header )
-        if normalized_header in self.__already_included:
-            return
-        else:
+        if normalized_header not in self.__already_included:
             self.__already_included.add( normalized_header )
-        self.__extmodule.adopt_include( code_creators.include_t( header, user_defined=user_defined ) )
+            self.__extmodule.adopt_include( code_creators.include_t( header, user_defined=user_defined ) )
         if system:
             self.__extmodule.add_system_header( header )
 
@@ -38,7 +36,6 @@ class manager_t( object ):
     def include_ft( self, required_headers ): #include function transformation headers
         required_headers = map( self.normalize, required_headers )
         for header in required_headers:
-            # Check whether the header is already included
             system = bool( header in code_repository.headers )
             self.include( header, system=system, user_defined=True )
                 

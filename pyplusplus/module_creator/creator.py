@@ -367,7 +367,7 @@ class creator_t( declarations.decl_visitor_t ):
             self.curr_code_creator.adopt_creator( maker )
             self.__opaque_types_manager.register_opaque( maker, self.curr_decl )
         
-        if self.curr_decl.transformations:            
+        if self.curr_decl.transformations:        
             required_headers = self.curr_decl.transformations[0].required_headers()
             self.__header_files_manager.include_ft( required_headers )
                     
