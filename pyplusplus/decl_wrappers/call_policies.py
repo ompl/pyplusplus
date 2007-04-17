@@ -3,13 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""
-This modules contains definition of call policies classes. Call policies names
-are same, that used in boost.python library.
-
-For every class that implements code creation of call policies, there is a
-convinience function.
-"""
+"""Contains definition of call policies classes"""
 
 import algorithm
 import python_traits
