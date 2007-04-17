@@ -86,3 +86,4 @@ class compound_t(code_creator.code_creator_t):
         if unique:
             files = self.unique_headers( files )
         return files
+    

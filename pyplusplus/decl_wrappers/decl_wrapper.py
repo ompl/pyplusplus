@@ -31,6 +31,7 @@ class decl_wrapper_t(object):
         self._exportable_reason = None
         self._documentation = None
         self.__msgs_to_ignore = set()
+        self._include_files = []
 
     @property
     def logger( self ):
@@ -150,7 +151,6 @@ class decl_wrapper_t(object):
     def _readme_impl( self ):
         return []
 
-
     def readme( self, skip_ignored=True ):
         """This function will returns some hints/tips/description of problems
         that applied to the declarations. For example function that has argument
@@ -192,3 +192,8 @@ class decl_wrapper_t(object):
                 raise RuntimeError( "Unable to find out message id. The message is: " + msg )
             self.__msgs_to_ignore.add( msg )
     disable_warnings = disable_messages
+
+    @property
+    def include_files( self ):
+        """list of header files, to be included from the file, the generated code will be placed-in"""
+        return self._include_files
