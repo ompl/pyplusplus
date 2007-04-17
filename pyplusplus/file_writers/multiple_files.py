@@ -12,7 +12,6 @@ from pyplusplus import _logging_
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
-from pyplusplus import code_repository
 
 #TODO: to add namespace_alias_t classes
 class multiple_files_t(writer.writer_t):
@@ -44,6 +43,9 @@ class multiple_files_t(writer.writer_t):
         self.write_main = write_main
         self.written_files = []
         self.ref_count_creators = ( code_creators.opaque_type_registrator_t, )
+        self.__predefined_include_creators \
+            = filter( lambda creator: isinstance( creator, code_creators.include_t )
+                      , self.extmodule.creators )
 
     def write_file( self, fpath, content ):
         self.written_files.append( fpath )
@@ -155,12 +157,9 @@ class multiple_files_t(writer.writer_t):
             dependend_on_headers.extend( creator.get_system_headers( recursive=True ) )
             
         dependend_on_headers = unique_headers( map( normalize, dependend_on_headers ) )       
-        
-        include_creators = filter( lambda creator: isinstance( creator, code_creators.include_t )
-                                   , self.extmodule.creators )
-        
-        for include_cc in include_creators:
-            if self.extmodule.is_system_header( include_cc.header ):                
+                
+        for include_cc in self.__predefined_include_creators:
+            if include_cc.is_system:                
                 if include_cc.header in dependend_on_headers:
                     answer.append( include_cc.create() )
             else:# user header file - always include

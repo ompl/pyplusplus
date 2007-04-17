@@ -299,11 +299,6 @@ class creator_t( declarations.decl_visitor_t ):
         creators.reverse()
         self.__module_body.adopt_creators( creators, 0 )
 
-    def __include_header( self, header, system=False ):
-        self.__extmodule.adopt_include( code_creators.include_t( header ) )
-        if system:
-            self.__extmodule.add_system_header( header )
-
     def create(self, decl_headers=None):
         """Create and return the module for the extension.
 
@@ -325,14 +320,16 @@ class creator_t( declarations.decl_visitor_t ):
             creator.target_configuration = self.__target_configuration
         #last action.
         self._append_user_code()
+        
+        add_include = self.__extmodule.add_include
         #add system headers
         system_headers = self.__extmodule.get_system_headers( recursive=True, unique=True )
-        map( lambda header: self.__include_header( header, system=True )
+        map( lambda header: add_include( header, user_defined=False, system=True )
              , system_headers )
         #add user defined header files
         if decl_headers is None:
             decl_headers = declarations.declaration_files( self.__decls )        
-        map( lambda header: self.__include_header( header )
+        map( lambda header: add_include( header, user_defined=False, system=False )
              , decl_headers )
         
         self.__dependencies_manager.inform_user()

@@ -47,10 +47,14 @@ class writer_t(object):
     
     def write_code_repository(self, dir):
         """creates files defined in L{code_repository} package"""
+        system_headers = self.extmodule.get_system_headers( recursive=True )
         for cr in code_repository.all:
-            if self.__extmodule.is_system_header( cr.file_name ):
+            if cr.file_name in system_headers:
+                #check whether file from code repository is used
                 self.write_file( os.path.join( dir, cr.file_name ), cr.code )
-
+        #named_tuple.py is a special case :-(
+        self.write_file( os.path.join( dir, code_repository.named_tuple.file_name )
+                         , code_repository.named_tuple.code ) 
     @staticmethod
     def write_file( fpath, content ):
         """Write a source file.
