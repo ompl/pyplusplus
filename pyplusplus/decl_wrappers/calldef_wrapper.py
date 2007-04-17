@@ -3,19 +3,18 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""defines class that configure "callable" declaration exposing"""
+"""contains classes that allow to configure code generation for free\\member functions, operators and etc."""
 
 import os
 import user_text
 import algorithm
 import decl_wrapper
-import python_traits
 from pyplusplus import messages
 from pygccxml import declarations
 from pyplusplus import function_transformers as ft
 
 class calldef_t(decl_wrapper.decl_wrapper_t):
-    """base class for all decl_wrappers callable objects classes."""
+    """base class, for code generator configration, for function declaration classes."""
 
     BOOST_PYTHON_MAX_ARITY = 10
     """Boost.Python configuration macro value.
@@ -105,30 +104,35 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
 
     @property 
     def non_overridable_reason( self ):
+        """returns the reason the function could not be overriden"""
         return self._non_overridable_reason
 
     def mark_as_non_overridable( self, reason ):
+        """mark this function as non-overridable
+        
+        Not all fucntions could be overrided from Python, for example virtual function
+        that returns non const reference to a member variable. Py++ allows you to
+        mark these functions and provide and explanation to the user. 
+        """
         self.overridable = False
         self._non_overridable_reason = reason
 
     @property
     def transformations(self):
-        """Get method for property 'function_transformers'.
-
-        Returns a reference to the internal list (which may be modified).
-        """
+        """return list of function transformations that should be applied on the function"""
         if None is self._transformations:
             #TODO: for trivial cases get_size( int&, int& ) Py++ should guess
             #function transformers
             self._transformations = []
         return self._transformations
 
-    def add_transformation(self, *args, **keywd):
-        """Set method for property 'function_transformers'.
+    def add_transformation(self, *transformer_creators, **keywd):
+        """add new function transformation.
 
-        args is a list of transformers
+        transformer_creators - list of transformer creators, which should be applied on the function        
+        keywd - keyword arguments for L{function_transformation_t} class initialization
         """
-        self.transformations.append( ft.function_transformation_t( self, args, **keywd ) )
+        self.transformations.append( ft.function_transformation_t( self, transformer_creators, **keywd ) )
 
     def _exportable_impl_derived( self ):
         return ''
