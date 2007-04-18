@@ -164,7 +164,10 @@ class multiple_files_t(writer.writer_t):
                     answer.append( include_cc.create() )
             else:# user header file - always include
                 answer.append( include_cc.create() )
-            
+
+        map( lambda user_header: answer.append( '#include "%s"' % user_header )
+             , self.get_user_headers( creators ) )
+
         for creator in creators:
             header = self.find_out_value_traits_header( creator )
             if header:

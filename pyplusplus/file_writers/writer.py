@@ -8,6 +8,7 @@
 import os
 import time
 from pyplusplus import _logging_
+from pyplusplus import code_creators
 from pyplusplus import code_repository
 
 class writer_t(object):
@@ -98,4 +99,11 @@ class writer_t(object):
         f.write( fcontent_new )
         f.close()
         writer_t.logger.info( 'file "%s" - updated( %f seconds )' % ( fname, time.clock() - start_time ) )
-        
+    
+    def get_user_headers( self, creators ):
+        headers = []
+        creators = filter( lambda creator: isinstance( creator, code_creators.declaration_based_t )
+                           , creators )
+        map( lambda creator: headers.extend( creator.get_user_headers() )
+             , creators )
+        return code_creators.code_creator_t.unique_headers( headers )
