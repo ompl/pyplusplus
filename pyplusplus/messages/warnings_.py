@@ -7,6 +7,22 @@
 reported to user.
 """
 
+class message_type(str):
+    """implementation details"""
+    def __new__(self, value, identifier):
+        return str.__new__(self, value )
+        
+    def __init__(self, value, identifier ):
+        self.__identifier = identifier  
+        
+    @property
+    def identifier( self ):
+        return self.__identifier  
+
+    def __mod__( self, values ):
+        str_value = super( message_type, self ).__str__()
+        return message_type( str_value % values, self.identifier )
+        
 W1000 = 'Py++, by default, does not expose internal compilers declarations. '\
         'Names of those declarations usually start with "__".'
 
@@ -153,7 +169,6 @@ W1050 = 'The function returns "%s" type. You have to specify a call policies.' \
         'Be sure to take a look on Py++ defined call policies: ' \
         'http://language-binding.net/pyplusplus/documentation/functions/call_policies.html#py-defined-call-policies'
 
-
 W1051 = 'The function takes as argument (name=%s, pos=%d) "%s" type. ' \
         'You have to specify a call policies or to use "Function Transformation" ' \
         'functionality.'
@@ -170,13 +185,20 @@ for identifier, explanation in warnings.items():
         int( identifier[1:] )
     except:
         continue
-    
-    globals()[ identifier ] = 'warning %s: %s' % ( identifier, explanation )
+    msg = '%s %s: %s' % ( 'warning', identifier,  explanation)    
+    globals()[ identifier ] = message_type( msg, identifier )
 
 del warnings
 del identifier
 del explanation
 
 
+if __name__ == '__main__':
+    x = W1051 % ( 'xxxxxxxx', 122, 'yyyyyyyyyy' )
+    print x, x.__class__.__name__
 
+    print '\n\n\n'
+
+    y = W1000
+    print y
 
