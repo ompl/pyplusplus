@@ -22,7 +22,9 @@ class message_type(str):
     def __mod__( self, values ):
         str_value = super( message_type, self ).__str__()
         return message_type( str_value % values, self.identifier )
-        
+
+W0000 = '%s' #general message, usefull in few cases
+
 W1000 = 'Py++, by default, does not expose internal compilers declarations. '\
         'Names of those declarations usually start with "__".'
 

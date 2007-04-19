@@ -115,7 +115,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         mark these functions and provide and explanation to the user. 
         """
         self.overridable = False
-        self._non_overridable_reason = reason
+        self._non_overridable_reason = messages.W0000 % reason
 
     @property
     def transformations(self):
