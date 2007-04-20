@@ -1,0 +1,10 @@
+<!-- Template file for pyplusplus IDE -->
+<pyPPProject>
+	<gccXmlSettings 
+		headerPath=""
+		includePathList="[]"
+		gccXmlPath=""
+		macroList="[]"
+		/>
+	</gccXmlSettings>
+</pyPPProject>

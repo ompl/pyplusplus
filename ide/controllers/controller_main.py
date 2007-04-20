@@ -17,6 +17,20 @@ class MainController:
         
         # Give controller object to the view
         self._view.set_controller(self)
+    
+    def DoRemoveCurInclude(self):
+        """Remove current selected Include item"""
+        cur_num = self._view.currentItemInclude
+        if None == cur_num:
+            return
+        self._view.listIncludes.DeleteItem(cur_num)
+        
+    def DoRemoveCurMacro(self):
+        """Remove current selected Macro item"""
+        cur_num = self._view.currentItemMacro
+        if None == cur_num:
+            return
+        self._view.listMacros.DeleteItem(cur_num)
         
     def GenXmlCode(self):
         """ Generate XML code"""
@@ -44,26 +58,68 @@ class MainController:
         self._openFileDlgWithRelatedWxText( self._view.textGccXml, 
                                            "Choose GccXml executable",
                                            "All Files(*)|*")
+    
+    def OpenDlgEditCurInclude(self):
+        """ """
+        cur_num = self._view.currentItemInclude
+        if None == cur_num:
+            return
+        start_dir = self._view.listIncludes.GetItemText(cur_num)
+        dialog = wx.DirDialog(self._view, "Edit include directory", start_dir)
+        try:
+            if dialog.ShowModal() == wx.ID_OK:
+                self._view.listIncludes.DeleteItem(cur_num)
+                self._view.listIncludes.InsertStringItem(
+                                                     cur_num, dialog.GetPath())
+        finally:
+            dialog.Destroy()
+    
+    def OpenDlgEditCurMacro(self):
+        """ """
+        cur_num = self._view.currentItemMacro
+        if None == cur_num:
+            return
+        macro = self._view.listMacros.GetItemText(cur_num)
+        dialog = dialog_macro.MacroDialog(self._view, macro)
+        try:
+            if dialog.ShowModal() == wx.OK:
+                self._view.listMacros.DeleteItem(cur_num)
+                
+                new_macro = dialog.textMacro.GetLineText(0)
+                self._view.listMacros.InsertStringItem(cur_num, new_macro)
+        finally:
+            dialog.Destroy()
         
     def OpenDlgAddInclude(self):
         """ """
-        self._appendOutText("Add inc")
         dialog = wx.DirDialog(self._view, "Choose include directory", ".")
         try:
             if dialog.ShowModal() == wx.ID_OK:
+                
                 cur_num = self._view.listIncludes.GetItemCount()
-                self._view.listIncludes.InsertStringItem(
-                                     cur_num, dialog.GetPath())
+                dir_path = dialog.GetPath()
+                
+                # Check weather path is already in list
+                if not self._checkItemIsInList(dir_path, 
+                                               self._view.listIncludes):
+                    
+                    self._view.listIncludes.InsertStringItem(
+                                     cur_num, dir_path)
         finally:
             dialog.Destroy()
             
     def OpenDlgAddMacro(self):
         """ """
         dialog = dialog_macro.MacroDialog(self._view)
+        
         if dialog.ShowModal() == wx.OK:
-            cur_num = self._view.listDefines.GetItemCount()
-            self._view.listDefines.InsertStringItem(
-                             cur_num, dialog.textMacro.GetLineText(0))
+            
+            cur_num = self._view.listMacros.GetItemCount()
+            new_macro = dialog.textMacro.GetLineText(0)
+
+            # Check weather macro is already in list
+            if not self._checkItemIsInList(new_macro, self._view.listMacros):      
+               self._view.listMacros.InsertStringItem(cur_num, new_macro)
             
 
 
@@ -82,6 +138,14 @@ class MainController:
         finally:
             dialog.Destroy()
             
+    def _checkItemIsInList(self, item, wx_list):
+        idx = wx_list.FindItem(0, item)
+        if idx == -1:
+            return False
+        else:
+            return True
+    
+        
     def _appendOutText(self, text, type_of_text = 0):
         """ append text with different error level"""
         text_ctrl = self._view.textOutput

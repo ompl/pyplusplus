@@ -23,40 +23,35 @@ def create(parent):
 [wxID_MAINFRAMEMENUINCLUDESADDINC, wxID_MAINFRAMEMENUINCLUDESITEMS1, 
 ] = [wx.NewId() for _init_coll_menuIncludes_Items in range(2)]
 
-[wxID_MAINFRAMEMENUDEFINESADDDEF, wxID_MAINFRAMEMENUDEFINESREMOVEDEF, 
-] = [wx.NewId() for _init_coll_menuDefines_Items in range(2)]
+[wxID_MAINFRAMEMENUMACROSADDDEF, wxID_MAINFRAMEMENUMACROSREMOVEDEF, 
+] = [wx.NewId() for _init_coll_menuMacros_Items in range(2)]
 
 [wxID_MAINFRAME, wxID_MAINFRAMEBUTGCCXML, wxID_MAINFRAMEBUTGENCPP, 
  wxID_MAINFRAMEBUTGENPYPP, wxID_MAINFRAMEBUTGENXML, wxID_MAINFRAMEBUTHEADERS, 
- wxID_MAINFRAMELISTDEFINES, wxID_MAINFRAMELISTINCLUDES, 
- wxID_MAINFRAMENBSETTINGS, wxID_MAINFRAMENOTEBOOK1, 
- wxID_MAINFRAMEPANELBUTTONS, wxID_MAINFRAMEPANELCODE, wxID_MAINFRAMEPANELMAIN, 
- wxID_MAINFRAMEPANELNBSETTINGS, wxID_MAINFRAMEPANELSETTINGS, 
- wxID_MAINFRAMEPANELSHLOW, wxID_MAINFRAMEPANELSHUP, 
- wxID_MAINFRAMESPLITTERHORIZONTAL, wxID_MAINFRAMESPLITTERVERTICAL, 
- wxID_MAINFRAMESTATICTEXT1, wxID_MAINFRAMESTATICTEXT2, 
- wxID_MAINFRAMESTATICTEXT3, wxID_MAINFRAMESTATICTEXT4, 
- wxID_MAINFRAMESTATICTEXT5, wxID_MAINFRAMESTATUSBAR, wxID_MAINFRAMETEXTCTRL2, 
+ wxID_MAINFRAMELISTINCLUDES, wxID_MAINFRAMELISTMACROS, wxID_MAINFRAMENBLOW, 
+ wxID_MAINFRAMENBUPLEFT, wxID_MAINFRAMENBUPRIGHT, wxID_MAINFRAMEPANELBUTTONS, 
+ wxID_MAINFRAMEPANELMAIN, wxID_MAINFRAMEPANELNBCODE, 
+ wxID_MAINFRAMEPANELNBSETTINGS, wxID_MAINFRAMEPANELSHLOW, 
+ wxID_MAINFRAMEPANELSHUP, wxID_MAINFRAMEPANELUPLEFT, 
+ wxID_MAINFRAMEPANELUPRIGHT, wxID_MAINFRAMESPLITTERHORIZONTAL, 
+ wxID_MAINFRAMESPLITTERVERTICAL, wxID_MAINFRAMESTATICTEXT1, 
+ wxID_MAINFRAMESTATICTEXT2, wxID_MAINFRAMESTATICTEXT3, 
+ wxID_MAINFRAMESTATICTEXT4, wxID_MAINFRAMESTATUSBAR, wxID_MAINFRAMETEXTCODE, 
  wxID_MAINFRAMETEXTGCCXML, wxID_MAINFRAMETEXTHEADER, wxID_MAINFRAMETEXTOUTPUT, 
-] = [wx.NewId() for _init_ctrls in range(29)]
+] = [wx.NewId() for _init_ctrls in range(30)]
 
 class MainFrame(wx.Frame):
     """ Main frame class. Part of MVC """
 
-    def _init_coll_bsGccXml_Items(self, parent):
+    def _init_coll_bsHeader_Items(self, parent):
         # generated method, don't edit
 
-        parent.AddWindow(self.staticText2, 0, border=5,
-              flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT)
-        parent.AddWindow(self.textGccXml, 1, border=10,
-              flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM)
-        parent.AddWindow(self.butGccXml, 0, border=10,
+        parent.AddWindow(self.staticText1, 0, border=5,
+              flag=wx.LEFT | wx.ALIGN_CENTER_VERTICAL)
+        parent.AddWindow(self.textHeader, 1, border=10,
+              flag=wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.TOP)
+        parent.AddWindow(self.butHeaders, 0, border=10,
               flag=wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER_VERTICAL)
-
-    def _init_coll_bsMURCompile_Items(self, parent):
-        # generated method, don't edit
-
-        parent.AddWindow(self.textCtrl2, 1, border=0, flag=wx.EXPAND)
 
     def _init_coll_bsMain_Items(self, parent):
         # generated method, don't edit
@@ -72,22 +67,39 @@ class MainFrame(wx.Frame):
         parent.AddWindow(self.listIncludes, 1, border=10,
               flag=wx.RIGHT | wx.BOTTOM | wx.TOP | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
 
-    def _init_coll_bsHeader_Items(self, parent):
+    def _init_coll_bsULSettings_Items(self, parent):
         # generated method, don't edit
 
-        parent.AddWindow(self.staticText1, 0, border=5,
-              flag=wx.LEFT | wx.ALIGN_CENTER_VERTICAL)
-        parent.AddWindow(self.textHeader, 1, border=10,
-              flag=wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.TOP)
-        parent.AddWindow(self.butHeaders, 0, border=10,
+        parent.AddSpacer((10, 10), border=0, flag=0)
+        parent.AddSizer(self.bsHeader, 0, border=5, flag=wx.RIGHT | wx.EXPAND)
+        parent.AddSizer(self.bsGccXml, 0, border=5, flag=wx.RIGHT | wx.EXPAND)
+        parent.AddSizer(self.bsIncPath, 3, border=5, flag=wx.RIGHT | wx.EXPAND)
+        parent.AddSizer(self.bsMacros, 2, border=5, flag=wx.RIGHT | wx.EXPAND)
+
+    def _init_coll_bsGccXml_Items(self, parent):
+        # generated method, don't edit
+
+        parent.AddWindow(self.staticText2, 0, border=5,
+              flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT)
+        parent.AddWindow(self.textGccXml, 1, border=10,
+              flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM)
+        parent.AddWindow(self.butGccXml, 0, border=10,
               flag=wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER_VERTICAL)
+
+    def _init_coll_bsMacros_Items(self, parent):
+        # generated method, don't edit
+
+        parent.AddWindow(self.staticText4, 0, border=5,
+              flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT)
+        parent.AddWindow(self.listMacros, 1, border=10,
+              flag=wx.RIGHT | wx.BOTTOM | wx.TOP | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
 
     def _init_coll_bsUpLeft_Items(self, parent):
         # generated method, don't edit
 
-        parent.AddWindow(self.nbSettings, 1, border=0, flag=wx.ALL | wx.EXPAND)
+        parent.AddWindow(self.nbUpLeft, 1, border=0, flag=wx.ALL | wx.EXPAND)
 
-    def _init_coll_bsMURButtons_Items(self, parent):
+    def _init_coll_bsURButtons_Items(self, parent):
         # generated method, don't edit
 
         parent.AddWindow(self.butGenXml, 0, border=10,
@@ -106,32 +118,19 @@ class MainFrame(wx.Frame):
     def _init_coll_bsMainLow_Items(self, parent):
         # generated method, don't edit
 
-        parent.AddWindow(self.notebook1, 1, border=0, flag=wx.EXPAND)
+        parent.AddWindow(self.nbLow, 1, border=0, flag=wx.EXPAND)
 
     def _init_coll_bsUpRight_Items(self, parent):
         # generated method, don't edit
 
-        parent.AddWindow(self.staticText5, 0, border=0, flag=0)
-        parent.AddSizer(self.bsMURCompile, 1, border=4, flag=wx.TOP | wx.EXPAND)
-        parent.AddWindow(self.panelButtons, 0, border=10,
-              flag=wx.ALIGN_CENTER_HORIZONTAL | wx.TOP)
+        parent.AddWindow(self.nbUpRight, 1, border=0, flag=wx.EXPAND)
 
-    def _init_coll_bsMULSettings_Items(self, parent):
+    def _init_coll_bsURCode_Items(self, parent):
         # generated method, don't edit
 
-        parent.AddSpacer((10, 10), border=0, flag=0)
-        parent.AddSizer(self.bsHeader, 0, border=5, flag=wx.RIGHT | wx.EXPAND)
-        parent.AddSizer(self.bsGccXml, 0, border=5, flag=wx.RIGHT | wx.EXPAND)
-        parent.AddSizer(self.bsIncPath, 0, border=5, flag=wx.RIGHT | wx.EXPAND)
-        parent.AddSizer(self.bsDefines, 0, border=5, flag=wx.RIGHT | wx.EXPAND)
-
-    def _init_coll_bsDefines_Items(self, parent):
-        # generated method, don't edit
-
-        parent.AddWindow(self.staticText4, 0, border=5,
-              flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT)
-        parent.AddWindow(self.listDefines, 1, border=10,
-              flag=wx.RIGHT | wx.BOTTOM | wx.TOP | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
+        parent.AddWindow(self.textCode, 1, border=0, flag=wx.EXPAND)
+        parent.AddWindow(self.panelButtons, 0, border=5,
+              flag=wx.TOP | wx.BOTTOM | wx.ALIGN_CENTER_HORIZONTAL)
 
     def _init_coll_menuBar_Menus(self, parent):
         # generated method, don't edit
@@ -179,31 +178,37 @@ class MainFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnMenueFileExitMenu,
               id=wxID_MAINFRAMEMENUEFILEEXIT)
 
-    def _init_coll_menuDefines_Items(self, parent):
+    def _init_coll_menuMacros_Items(self, parent):
         # generated method, don't edit
 
         parent.Append(help=u'Add new define for gcc',
-              id=wxID_MAINFRAMEMENUDEFINESADDDEF, kind=wx.ITEM_NORMAL,
+              id=wxID_MAINFRAMEMENUMACROSADDDEF, kind=wx.ITEM_NORMAL,
               text=u'Add ...')
         parent.Append(help=u'Remove selected define',
-              id=wxID_MAINFRAMEMENUDEFINESREMOVEDEF, kind=wx.ITEM_NORMAL,
+              id=wxID_MAINFRAMEMENUMACROSREMOVEDEF, kind=wx.ITEM_NORMAL,
               text=u'Remove')
-        self.Bind(wx.EVT_MENU, self.OnMenueDefinesAddDefine,
-              id=wxID_MAINFRAMEMENUDEFINESADDDEF)
-        self.Bind(wx.EVT_MENU, self.OnMenueDefinesRemoveDefine,
-              id=wxID_MAINFRAMEMENUDEFINESREMOVEDEF)
+        self.Bind(wx.EVT_MENU, self.OnMenueMacroAddMacro,
+              id=wxID_MAINFRAMEMENUMACROSADDDEF)
+        self.Bind(wx.EVT_MENU, self.OnMenueMacrosRemoveMacro,
+              id=wxID_MAINFRAMEMENUMACROSREMOVEDEF)
 
-    def _init_coll_nbSettings_Pages(self, parent):
-        # generated method, don't edit
-
-        parent.AddPage(imageId=-1, page=self.panelNbSettings, select=True,
-              text=u'Settings')
-
-    def _init_coll_notebook1_Pages(self, parent):
+    def _init_coll_nbLow_Pages(self, parent):
         # generated method, don't edit
 
         parent.AddPage(imageId=-1, page=self.textOutput, select=True,
               text=u'Output')
+
+    def _init_coll_nbUpRight_Pages(self, parent):
+        # generated method, don't edit
+
+        parent.AddPage(imageId=-1, page=self.panelNbCode, select=True,
+              text=u'Code')
+
+    def _init_coll_nbUpLeft_Pages(self, parent):
+        # generated method, don't edit
+
+        parent.AddPage(imageId=-1, page=self.panelNbSettings, select=True,
+              text=u'Settings')
 
     def _init_coll_statusBar_Fields(self, parent):
         # generated method, don't edit
@@ -225,13 +230,9 @@ class MainFrame(wx.Frame):
 
         self.bsUpLeft = wx.BoxSizer(orient=wx.VERTICAL)
 
-        self.bsUpRight = wx.BoxSizer(orient=wx.VERTICAL)
+        self.bsULSettings = wx.BoxSizer(orient=wx.VERTICAL)
 
-        self.bsMULSettings = wx.BoxSizer(orient=wx.VERTICAL)
-
-        self.bsMURCompile = wx.BoxSizer(orient=wx.VERTICAL)
-
-        self.bsMURButtons = wx.BoxSizer(orient=wx.HORIZONTAL)
+        self.bsURButtons = wx.BoxSizer(orient=wx.HORIZONTAL)
 
         self.bsHeader = wx.BoxSizer(orient=wx.HORIZONTAL)
 
@@ -239,28 +240,33 @@ class MainFrame(wx.Frame):
 
         self.bsIncPath = wx.BoxSizer(orient=wx.HORIZONTAL)
 
-        self.bsDefines = wx.BoxSizer(orient=wx.HORIZONTAL)
+        self.bsMacros = wx.BoxSizer(orient=wx.HORIZONTAL)
+
+        self.bsUpRight = wx.BoxSizer(orient=wx.VERTICAL)
+
+        self.bsURCode = wx.BoxSizer(orient=wx.VERTICAL)
 
         self._init_coll_bsMain_Items(self.bsMain)
         self._init_coll_bsMainUpper_Items(self.bsMainUpper)
         self._init_coll_bsMainLow_Items(self.bsMainLow)
         self._init_coll_bsUpLeft_Items(self.bsUpLeft)
-        self._init_coll_bsUpRight_Items(self.bsUpRight)
-        self._init_coll_bsMULSettings_Items(self.bsMULSettings)
-        self._init_coll_bsMURCompile_Items(self.bsMURCompile)
-        self._init_coll_bsMURButtons_Items(self.bsMURButtons)
+        self._init_coll_bsULSettings_Items(self.bsULSettings)
+        self._init_coll_bsURButtons_Items(self.bsURButtons)
         self._init_coll_bsHeader_Items(self.bsHeader)
         self._init_coll_bsGccXml_Items(self.bsGccXml)
         self._init_coll_bsIncPath_Items(self.bsIncPath)
-        self._init_coll_bsDefines_Items(self.bsDefines)
+        self._init_coll_bsMacros_Items(self.bsMacros)
+        self._init_coll_bsUpRight_Items(self.bsUpRight)
+        self._init_coll_bsURCode_Items(self.bsURCode)
 
         self.panelSHUp.SetSizer(self.bsMainUpper)
-        self.panelSettings.SetSizer(self.bsUpLeft)
-        self.panelButtons.SetSizer(self.bsMURButtons)
+        self.panelNbCode.SetSizer(self.bsURCode)
+        self.panelUpLeft.SetSizer(self.bsUpLeft)
+        self.panelButtons.SetSizer(self.bsURButtons)
         self.panelSHLow.SetSizer(self.bsMainLow)
         self.panelMain.SetSizer(self.bsMain)
-        self.panelCode.SetSizer(self.bsUpRight)
-        self.panelNbSettings.SetSizer(self.bsMULSettings)
+        self.panelUpRight.SetSizer(self.bsUpRight)
+        self.panelNbSettings.SetSizer(self.bsULSettings)
 
     def _init_utils(self):
         # generated method, don't edit
@@ -270,20 +276,20 @@ class MainFrame(wx.Frame):
 
         self.menuIncludes = wx.Menu(title='')
 
-        self.menuDefines = wx.Menu(title='')
+        self.menuMacros = wx.Menu(title='')
 
         self._init_coll_menueFile_Items(self.menueFile)
         self._init_coll_menuBar_Menus(self.menuBar)
         self._init_coll_menuIncludes_Items(self.menuIncludes)
-        self._init_coll_menuDefines_Items(self.menuDefines)
+        self._init_coll_menuMacros_Items(self.menuMacros)
 
     def _init_ctrls(self, prnt):
         # generated method, don't edit
         wx.Frame.__init__(self, id=wxID_MAINFRAME, name=u'MainFrame',
-              parent=prnt, pos=wx.Point(0, -2), size=wx.Size(851, 620),
-              style=wx.DEFAULT_FRAME_STYLE, title=u'Py++ Code generator')
+              parent=prnt, pos=wx.Point(-3, -3), size=wx.Size(800, 600),
+              style=wx.DEFAULT_FRAME_STYLE, title=u'Py++ IDE')
         self._init_utils()
-        self.SetClientSize(wx.Size(843, 586))
+        self.SetClientSize(wx.Size(792, 566))
         self.SetMenuBar(self.menuBar)
 
         self.statusBar = wx.StatusBar(id=wxID_MAINFRAMESTATUSBAR,
@@ -292,158 +298,180 @@ class MainFrame(wx.Frame):
         self.SetStatusBar(self.statusBar)
 
         self.panelMain = wx.Panel(id=wxID_MAINFRAMEPANELMAIN, name=u'panelMain',
-              parent=self, pos=wx.Point(0, 0), size=wx.Size(843, 543),
+              parent=self, pos=wx.Point(0, 0), size=wx.Size(792, 523),
               style=wx.TAB_TRAVERSAL)
 
         self.splitterHorizontal = wx.SplitterWindow(id=wxID_MAINFRAMESPLITTERHORIZONTAL,
               name=u'splitterHorizontal', parent=self.panelMain, pos=wx.Point(5,
-              5), size=wx.Size(833, 533), style=0)
-        self.splitterHorizontal.SetNeedUpdating(False)
-        self.splitterHorizontal.SetMinimumPaneSize(0)
+              5), size=wx.Size(782, 513), style=0)
+        self.splitterHorizontal.SetMinimumPaneSize(40)
 
         self.panelSHUp = wx.Panel(id=wxID_MAINFRAMEPANELSHUP, name=u'panelSHUp',
               parent=self.splitterHorizontal, pos=wx.Point(0, 0),
-              size=wx.Size(833, 10), style=wx.TAB_TRAVERSAL)
+              size=wx.Size(782, 40), style=wx.TAB_TRAVERSAL)
 
         self.panelSHLow = wx.Panel(id=wxID_MAINFRAMEPANELSHLOW,
               name=u'panelSHLow', parent=self.splitterHorizontal,
-              pos=wx.Point(0, 14), size=wx.Size(833, 519),
+              pos=wx.Point(0, 44), size=wx.Size(782, 469),
               style=wx.TAB_TRAVERSAL)
         self.splitterHorizontal.SplitHorizontally(self.panelSHUp,
               self.panelSHLow, 300)
 
-        self.notebook1 = wx.Notebook(id=wxID_MAINFRAMENOTEBOOK1,
-              name='notebook1', parent=self.panelSHLow, pos=wx.Point(0, 0),
-              size=wx.Size(833, 519), style=0)
-        self.notebook1.SetLabel(u'Label')
+        self.nbLow = wx.Notebook(id=wxID_MAINFRAMENBLOW, name=u'nbLow',
+              parent=self.panelSHLow, pos=wx.Point(0, 0), size=wx.Size(782,
+              469), style=0)
+        self.nbLow.SetLabel(u'Label')
 
         self.textOutput = wx.TextCtrl(id=wxID_MAINFRAMETEXTOUTPUT,
-              name=u'textOutput', parent=self.notebook1, pos=wx.Point(0, 0),
-              size=wx.Size(825, 493),
+              name=u'textOutput', parent=self.nbLow, pos=wx.Point(0, 0),
+              size=wx.Size(774, 443),
               style=wx.TE_RICH | wx.TE_READONLY | wx.TE_MULTILINE, value=u'')
 
         self.splitterVertical = wx.SplitterWindow(id=wxID_MAINFRAMESPLITTERVERTICAL,
               name=u'splitterVertical', parent=self.panelSHUp, pos=wx.Point(0,
-              0), size=wx.Size(833, 5), style=wx.SP_3D)
-        self.splitterVertical.SetNeedUpdating(True)
-        self.splitterVertical.SetMinimumPaneSize(0)
+              0), size=wx.Size(782, 35), style=wx.SP_3D)
+        self.splitterVertical.SetMinimumPaneSize(40)
 
-        self.panelSettings = wx.Panel(id=wxID_MAINFRAMEPANELSETTINGS,
-              name=u'panelSettings', parent=self.splitterVertical,
-              pos=wx.Point(0, 0), size=wx.Size(10, 5), style=wx.TAB_TRAVERSAL)
+        self.panelUpLeft = wx.Panel(id=wxID_MAINFRAMEPANELUPLEFT,
+              name=u'panelUpLeft', parent=self.splitterVertical, pos=wx.Point(0,
+              0), size=wx.Size(40, 35), style=wx.TAB_TRAVERSAL)
 
-        self.panelCode = wx.Panel(id=wxID_MAINFRAMEPANELCODE, name=u'panelCode',
-              parent=self.splitterVertical, pos=wx.Point(14, 0),
-              size=wx.Size(819, 5), style=wx.TAB_TRAVERSAL)
-        self.splitterVertical.SplitVertically(self.panelSettings,
-              self.panelCode, 300)
+        self.panelUpRight = wx.Panel(id=wxID_MAINFRAMEPANELUPRIGHT,
+              name=u'panelUpRight', parent=self.splitterVertical,
+              pos=wx.Point(44, 0), size=wx.Size(738, 35),
+              style=wx.TAB_TRAVERSAL)
+        self.splitterVertical.SplitVertically(self.panelUpLeft,
+              self.panelUpRight, 50)
 
-        self.nbSettings = wx.Notebook(id=wxID_MAINFRAMENBSETTINGS,
-              name=u'nbSettings', parent=self.panelSettings, pos=wx.Point(0, 0),
-              size=wx.Size(10, 5), style=0)
-        self.nbSettings.SetLabel(u'Label')
-        self.nbSettings.SetHelpText(u'')
+        self.nbUpLeft = wx.Notebook(id=wxID_MAINFRAMENBUPLEFT, name=u'nbUpLeft',
+              parent=self.panelUpLeft, pos=wx.Point(0, 0), size=wx.Size(40, 35),
+              style=0)
+        self.nbUpLeft.SetLabel(u'Label')
+        self.nbUpLeft.SetHelpText(u'')
+
+        self.nbUpRight = wx.Notebook(id=wxID_MAINFRAMENBUPRIGHT,
+              name=u'nbUpRight', parent=self.panelUpRight, pos=wx.Point(0, 0),
+              size=wx.Size(738, 35), style=0)
 
         self.panelNbSettings = wx.Panel(id=wxID_MAINFRAMEPANELNBSETTINGS,
-              name=u'panelNbSettings', parent=self.nbSettings, pos=wx.Point(0,
-              0), size=wx.Size(2, 0), style=wx.TAB_TRAVERSAL)
+              name=u'panelNbSettings', parent=self.nbUpLeft, pos=wx.Point(0, 0),
+              size=wx.Size(32, 9), style=wx.TAB_TRAVERSAL)
         self.panelNbSettings.Show(True)
         self.panelNbSettings.SetMinSize(wx.Size(100, 100))
 
-        self.textCtrl2 = wx.TextCtrl(id=wxID_MAINFRAMETEXTCTRL2,
-              name='textCtrl2', parent=self.panelCode, pos=wx.Point(0, 17),
-              size=wx.Size(819, 0), style=wx.TE_MULTILINE, value=u'')
+        self.panelNbCode = wx.Panel(id=wxID_MAINFRAMEPANELNBCODE,
+              name=u'panelNbCode', parent=self.nbUpRight, pos=wx.Point(0, 0),
+              size=wx.Size(730, 9), style=wx.TAB_TRAVERSAL)
+
+        self.textCode = wx.TextCtrl(id=wxID_MAINFRAMETEXTCODE, name=u'textCode',
+              parent=self.panelNbCode, pos=wx.Point(0, 0), size=wx.Size(730, 0),
+              style=wx.TE_READONLY | wx.TE_MULTILINE, value=u'')
+        self.textCode.SetToolTipString(u'textCtrl2')
 
         self.panelButtons = wx.Panel(id=wxID_MAINFRAMEPANELBUTTONS,
-              name=u'panelButtons', parent=self.panelCode, pos=wx.Point(166,
-              -18), size=wx.Size(486, 23), style=wx.TAB_TRAVERSAL)
+              name=u'panelButtons', parent=self.panelNbCode, pos=wx.Point(156,
+              -20), size=wx.Size(418, 24), style=wx.TAB_TRAVERSAL)
 
         self.butGenXml = wx.Button(id=wxID_MAINFRAMEBUTGENXML,
               label=u'Generate XML code', name=u'butGenXml',
-              parent=self.panelButtons, pos=wx.Point(10, 0), size=wx.Size(140,
+              parent=self.panelButtons, pos=wx.Point(10, 0), size=wx.Size(120,
               23), style=0)
         self.butGenXml.Bind(wx.EVT_BUTTON, self.OnButGenXmlButton,
               id=wxID_MAINFRAMEBUTGENXML)
 
         self.butGenCpp = wx.Button(id=wxID_MAINFRAMEBUTGENCPP,
               label=u'Generate C++ code', name=u'butGenCpp',
-              parent=self.panelButtons, pos=wx.Point(170, 0), size=wx.Size(142,
-              23), style=0)
+              parent=self.panelButtons, pos=wx.Point(150, 0), size=wx.Size(120,
+              24), style=0)
         self.butGenCpp.Bind(wx.EVT_BUTTON, self.OnButGenCppButton,
               id=wxID_MAINFRAMEBUTGENCPP)
 
         self.butGenPyPP = wx.Button(id=wxID_MAINFRAMEBUTGENPYPP,
               label=u'Generate Py++ code', name=u'butGenPyPP',
-              parent=self.panelButtons, pos=wx.Point(332, 0), size=wx.Size(144,
+              parent=self.panelButtons, pos=wx.Point(290, 0), size=wx.Size(118,
               23), style=0)
         self.butGenPyPP.Bind(wx.EVT_BUTTON, self.OnButGenPyPPButton,
               id=wxID_MAINFRAMEBUTGENPYPP)
 
         self.textHeader = wx.TextCtrl(id=wxID_MAINFRAMETEXTHEADER,
               name=u'textHeader', parent=self.panelNbSettings, pos=wx.Point(56,
-              20), size=wx.Size(0, 21), style=0, value=u'')
+              20), size=wx.Size(0, 21), style=wx.TE_READONLY, value=u'')
 
         self.butHeaders = wx.Button(id=wxID_MAINFRAMEBUTHEADERS, label=u'...',
-              name=u'butHeaders', parent=self.panelNbSettings, pos=wx.Point(-38,
+              name=u'butHeaders', parent=self.panelNbSettings, pos=wx.Point(-11,
               19), size=wx.Size(28, 23), style=0)
         self.butHeaders.Bind(wx.EVT_BUTTON, self.OnButHeadersButton,
               id=wxID_MAINFRAMEBUTHEADERS)
+
+        self.textGccXml = wx.TextCtrl(id=wxID_MAINFRAMETEXTGCCXML,
+              name=u'textGccXml', parent=self.panelNbSettings, pos=wx.Point(56,
+              61), size=wx.Size(0, 21), style=wx.TE_READONLY, value=u'')
 
         self.staticText1 = wx.StaticText(id=wxID_MAINFRAMESTATICTEXT1,
               label=u'Header\nFile', name='staticText1',
               parent=self.panelNbSettings, pos=wx.Point(5, 15), size=wx.Size(51,
               30), style=wx.ALIGN_CENTRE)
 
+        self.staticText4 = wx.StaticText(id=wxID_MAINFRAMESTATICTEXT4,
+              label=u'Macros', name='staticText4', parent=self.panelNbSettings,
+              pos=wx.Point(5, 31), size=wx.Size(51, 25), style=wx.ALIGN_CENTRE)
+
         self.staticText2 = wx.StaticText(id=wxID_MAINFRAMESTATICTEXT2,
               label=u'GccXml', name='staticText2', parent=self.panelNbSettings,
               pos=wx.Point(5, 60), size=wx.Size(51, 23), style=wx.ALIGN_CENTRE)
 
-        self.textGccXml = wx.TextCtrl(id=wxID_MAINFRAMETEXTGCCXML,
-              name=u'textGccXml', parent=self.panelNbSettings, pos=wx.Point(56,
-              61), size=wx.Size(0, 21), style=0, value=u'')
-
         self.butGccXml = wx.Button(id=wxID_MAINFRAMEBUTGCCXML, label=u'...',
-              name=u'butGccXml', parent=self.panelNbSettings, pos=wx.Point(-38,
+              name=u'butGccXml', parent=self.panelNbSettings, pos=wx.Point(-11,
               60), size=wx.Size(28, 23), style=0)
         self.butGccXml.Bind(wx.EVT_BUTTON, self.OnButGccXmlButton,
               id=wxID_MAINFRAMEBUTGCCXML)
 
         self.staticText3 = wx.StaticText(id=wxID_MAINFRAMESTATICTEXT3,
               label=u'Include\nPath', name='staticText3',
-              parent=self.panelNbSettings, pos=wx.Point(5, 116),
-              size=wx.Size(51, 37), style=wx.ALIGN_CENTRE)
+              parent=self.panelNbSettings, pos=wx.Point(5, 74), size=wx.Size(51,
+              37), style=wx.ALIGN_CENTRE)
 
         self.listIncludes = wx.ListCtrl(id=wxID_MAINFRAMELISTINCLUDES,
               name=u'listIncludes', parent=self.panelNbSettings,
-              pos=wx.Point(56, 102), size=wx.Size(0, 66),
+              pos=wx.Point(56, 102), size=wx.Size(0, 0),
               style=wx.LC_HRULES | wx.LC_NO_HEADER | wx.LC_REPORT)
         self.listIncludes.Bind(wx.EVT_RIGHT_DOWN, self.OnListIncludesRightDown)
         self.listIncludes.Bind(wx.EVT_SIZE, self.OnListIncludesSize)
+        self.listIncludes.Bind(wx.EVT_LEFT_DCLICK,
+              self.OnListIncludesLeftDclick)
+        self.listIncludes.Bind(wx.EVT_LIST_ITEM_SELECTED,
+              self.OnListIncludesListItemSelected,
+              id=wxID_MAINFRAMELISTINCLUDES)
+        self.listIncludes.Bind(wx.EVT_LIST_ITEM_DESELECTED,
+              self.OnListIncludesListItemDeselected,
+              id=wxID_MAINFRAMELISTINCLUDES)
 
-        self.staticText4 = wx.StaticText(id=wxID_MAINFRAMESTATICTEXT4,
-              label=u'Defines', name='staticText4', parent=self.panelNbSettings,
-              pos=wx.Point(5, 209), size=wx.Size(51, 25),
-              style=wx.ALIGN_CENTRE)
-
-        self.listDefines = wx.ListCtrl(id=wxID_MAINFRAMELISTDEFINES,
-              name=u'listDefines', parent=self.panelNbSettings, pos=wx.Point(56,
-              188), size=wx.Size(0, 68),
+        self.listMacros = wx.ListCtrl(id=wxID_MAINFRAMELISTMACROS,
+              name=u'listMacros', parent=self.panelNbSettings, pos=wx.Point(56,
+              53), size=wx.Size(0, 0),
               style=wx.LC_HRULES | wx.LC_NO_HEADER | wx.LC_REPORT)
-        self.listDefines.Bind(wx.EVT_RIGHT_DOWN, self.OnListDefinesRightDown)
-        self.listDefines.Bind(wx.EVT_SIZE, self.OnListDefinesSize)
+        self.listMacros.Bind(wx.EVT_RIGHT_DOWN, self.OnListMacrosRightDown)
+        self.listMacros.Bind(wx.EVT_SIZE, self.OnListMacrosSize)
+        self.listMacros.Bind(wx.EVT_LEFT_DCLICK, self.OnListMacrosLeftDclick)
+        self.listMacros.Bind(wx.EVT_LIST_ITEM_SELECTED,
+              self.OnListMacrosListItemSelected, id=wxID_MAINFRAMELISTMACROS)
+        self.listMacros.Bind(wx.EVT_LIST_ITEM_DESELECTED,
+              self.OnListMacrosListItemDeselected, id=wxID_MAINFRAMELISTMACROS)
 
-        self.staticText5 = wx.StaticText(id=wxID_MAINFRAMESTATICTEXT5,
-              label=u'Code', name='staticText5', parent=self.panelCode,
-              pos=wx.Point(0, 0), size=wx.Size(25, 13), style=0)
-
-        self._init_coll_notebook1_Pages(self.notebook1)
-        self._init_coll_nbSettings_Pages(self.nbSettings)
+        self._init_coll_nbLow_Pages(self.nbLow)
+        self._init_coll_nbUpLeft_Pages(self.nbUpLeft)
+        self._init_coll_nbUpRight_Pages(self.nbUpRight)
 
         self._init_sizers()
 
     def __init__(self, parent):
+        
+        self.currentItemInclude = None
+        self.currentItemMacro = None
+        
         self._init_ctrls(parent)
         self._setup_ide_ctrls()
+        self.splitterVertical.SetSashPosition(300, True)
         self.SetSize((self.GetSize()[0]+1,self.GetSize()[1]+1))
         
     def OnMenueFileNewMenu(self, event):
@@ -467,8 +495,8 @@ class MainFrame(wx.Frame):
     def OnListIncludesRightDown(self, event):
         self.PopupMenu(self.menuIncludes)
 
-    def OnListDefinesRightDown(self, event):
-        self.PopupMenu(self.menuDefines)
+    def OnListMacrosRightDown(self, event):
+        self.PopupMenu(self.menuMacros)
 
     def OnButGenXmlButton(self, event):
         self._controller.GenXmlCode()
@@ -496,7 +524,7 @@ class MainFrame(wx.Frame):
     def _setup_ide_ctrls(self):
         """Do ide related settings in ctrls"""
         list_inc = self.listIncludes
-        list_def = self.listDefines
+        list_def = self.listMacros
         
         # Init list controls
         for list_ctrl in (list_inc, list_def):
@@ -508,9 +536,9 @@ class MainFrame(wx.Frame):
         list_ctrl.SetColumnWidth(0, list_ctrl.GetSize().GetWidth() - 30 )
         event.Skip()
 
-    def OnListDefinesSize(self, event):
-        """Handle resize of listDefines"""
-        list_ctrl = self.listDefines
+    def OnListMacrosSize(self, event):
+        """Handle resize of listMacros"""
+        list_ctrl = self.listMacros
         list_ctrl.SetColumnWidth(0, list_ctrl.GetSize().GetWidth() - 30 )
         event.Skip()
 
@@ -519,13 +547,39 @@ class MainFrame(wx.Frame):
         event.Skip()
 
     def OnMenueIncludesRemove(self, event):
+        self._controller.DoRemoveCurInclude()
         event.Skip()
 
-    def OnMenueDefinesAddDefine(self, event):
+    def OnMenueMacroAddMacro(self, event):
         self._controller.OpenDlgAddMacro()
         event.Skip()
         
-    def OnMenueDefinesRemoveDefine(self, event):
+    def OnMenueMacrosRemoveMacro(self, event):
+        self._controller.DoRemoveCurMacro()
+        event.Skip()
+
+    def OnListIncludesLeftDclick(self, event):
+        self._controller.OpenDlgEditCurInclude()
+        event.Skip()
+
+    def OnListMacrosLeftDclick(self, event):
+        self._controller.OpenDlgEditCurMacro()
+        event.Skip()
+
+    def OnListIncludesListItemSelected(self, event):
+        self.currentItemInclude = event.m_itemIndex
+        event.Skip()
+
+    def OnListMacrosListItemSelected(self, event):
+        self.currentItemMacro = event.m_itemIndex
+        event.Skip()
+
+    def OnListIncludesListItemDeselected(self, event):
+        self.currentItemInclude = None        
+        event.Skip()
+
+    def OnListMacrosListItemDeselected(self, event):
+        self.currentItemMacro = None
         event.Skip()
 
         

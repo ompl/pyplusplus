@@ -14,8 +14,8 @@ from views.frame_main import create as createMainFrame
 from controllers.controller_main import MainController
 
 modules ={u'dialog_macro': [0, '', u'views/dialog_macro.py'],
- u'main controller': [0, '', u'controllers/main_controller.py'],
- u'main view': [1, 'Main frame of ide', u'views/main_frame.py']}
+ u'main controller': [0, '', u'controllers/controller_main.py'],
+ u'main view': [1, 'Main frame of ide', u'views/frame_main.py']}
 
 class BoaApp(wx.App):
     def OnInit(self):
