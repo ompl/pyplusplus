@@ -41,7 +41,7 @@ def write_file( data, file_path ):
 
 def write_multiple_files( extmodule, dir_path, files_sum_repository=None ):
     """writes extmodule to multiple files"""
-    mfs = multiple_files_t( extmodule, dir_path, files_sum_repository, files_sum_repository=files_sum_repository )
+    mfs = multiple_files_t( extmodule, dir_path, files_sum_repository=files_sum_repository )
     mfs.write()
     return mfs.written_files
 
