@@ -89,6 +89,7 @@ class writer_t(object):
         fcontent_new = ''.join( fcontent_new )
         
         new_hash_value = None
+        curr_hash_value = None
         if files_sum_repository:
             new_hash_value  = files_sum_repository.get_text_value( fcontent_new )
             curr_hash_value = files_sum_repository.get_file_value( fname )
@@ -96,7 +97,10 @@ class writer_t(object):
                 writer_t.logger.debug( 'file was not changed( hash ) - done( %f seconds )'
                                        % ( time.clock() - start_time ) )
                 return
-        elif os.path.exists( fpath ):
+
+        if os.path.exists( fpath ) and None is curr_hash_value:
+            #It could be a first time the user uses files_sum_repository, don't force him
+            #to recompile the code
             #small optimization to cut down compilation time
             f = file( fpath, 'rb' )
             fcontent = f.read()
@@ -105,8 +109,8 @@ class writer_t(object):
                 writer_t.logger.debug( 'file was not changed( content ) - done( %f seconds )'
                                        % ( time.clock() - start_time ) )
                 return
-        else:
-            writer_t.logger.debug( 'file changed or it does not exist' )
+        
+        writer_t.logger.debug( 'file changed or it does not exist' )
             
         writer_t.create_backup( fpath )
         f = file( fpath, 'w+b' )
