@@ -184,7 +184,8 @@ class class_multiple_files_tester_t(unittest.TestCase):
         mb.build_code_creator('x_class_multi')
         mb.split_module( autoconfig.build_dir
                         , [ mb.class_( '::tester::x' ) ]
-                        , on_unused_file_found=lambda fpath: fpath )
+                        , on_unused_file_found=lambda fpath: fpath
+                        , use_files_sum_repository=True)
 
 
 class split_sequence_tester_t(unittest.TestCase):

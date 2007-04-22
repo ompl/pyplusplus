@@ -21,6 +21,8 @@ from writer import writer_t
 from single_file import single_file_t
 from multiple_files import multiple_files_t
 from class_multiple_files import class_multiple_files_t
+from md5sum_repository import repository_t
+from md5sum_repository import cached_repository_t
 
 def has_pypp_extenstion( fname ):
     """returns True if file has Py++ specific extension, otherwise False"""
@@ -37,14 +39,14 @@ def write_file( data, file_path ):
         sf = single_file_t( data, file_path )
         sf.write()
 
-def write_multiple_files( extmodule, dir_path ):
+def write_multiple_files( extmodule, dir_path, files_sum_repository=None ):
     """writes extmodule to multiple files"""
-    mfs = multiple_files_t( extmodule, dir_path )
+    mfs = multiple_files_t( extmodule, dir_path, files_sum_repository, files_sum_repository=files_sum_repository )
     mfs.write()
     return mfs.written_files
 
-def write_class_multiple_files( extmodule, dir_path, huge_classes ):
+def write_class_multiple_files( extmodule, dir_path, huge_classes, files_sum_repository ):
     """writes extmodule to multiple files and splits huge classes to few source files"""
-    mfs = class_multiple_files_t( extmodule, dir_path, huge_classes )
+    mfs = class_multiple_files_t( extmodule, dir_path, huge_classes, files_sum_repository=files_sum_repository )
     mfs.write()
     return mfs.written_files

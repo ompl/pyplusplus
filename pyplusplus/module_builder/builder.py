@@ -303,7 +303,11 @@ class module_builder_t(object):
         self.__merge_user_code()
         file_writers.write_file( self.code_creator, file_name )
 
-    def split_module(self, dir_name, huge_classes=None, on_unused_file_found=os.remove):
+    def split_module( self
+                      , dir_name
+                      , huge_classes=None
+                      , on_unused_file_found=os.remove
+                      , use_files_sum_repository=False):
         """
         Writes module to multiple files
 
@@ -314,13 +318,30 @@ class module_builder_t(object):
 
         @param on_unused_file_found: callable object that represents the action that should be taken on
                                      file, which is no more in use
+
+        @use_files_sum_repository: Py++ can generate file, which will contain md5 sum of every generated file.
+                                   Next time you generate code, md5sum will be loaded from the file and compared.
+                                   This could speed-up code generation process by 10-15%.
         """
         self.__merge_user_code()
+        
+        files_sum_repository = None        
+        if use_files_sum_repository:
+            cache_file = os.path.join( dir_name, self.code_creator.body.name + '.md5.sum' )
+            files_sum_repository = file_writers.cached_repository_t( cache_file )
+        
         written_files = []
         if None is huge_classes:
-            written_files = file_writers.write_multiple_files( self.code_creator, dir_name )
+            written_files = file_writers.write_multiple_files( 
+                                self.code_creator
+                                , dir_name
+                                , files_sum_repository=files_sum_repository )
         else:
-            written_files = file_writers.write_class_multiple_files( self.code_creator, dir_name, huge_classes )
+            written_files = file_writers.write_class_multiple_files( 
+                                self.code_creator
+                                , dir_name
+                                , huge_classes 
+                                , files_sum_repository=files_sum_repository )
 
         all_files = os.listdir( dir_name )
         all_files = map( lambda fname: os.path.join( dir_name, fname ), all_files )
