@@ -35,36 +35,77 @@ There were few reasons to this:
 
 
 -------------
-Version 0.8.*
+Version 0.9.0
 -------------
 
 1. Bug fixes:
-   
-   * Declaration of virtual functions that have an exception specification with 
+
+   * Declaration of virtual functions that have an exception specification with
      an empty throw was fixed. Now the exception specification is generated properly.
      Many thanks to Martin Preisler for reporting the bug.
 
 .. line-separator
 
-2. Added exposing of copy constructor and ``operator=``. ``operator=`` is exposed 
-   under "assign" name. 
+2. Added exposing of copy constructor, ``operator=`` and ``operator<<``.
+
+   * ``operator=`` is exposed under "assign" name
+
+   * ``operator<<`` is exposed under "__str__" name
 
 .. line-separator
 
-3. Added new call policy - `as_tuple`_
+3. Added new call policies:
+
+   * `as_tuple`_
+
+   * `custom_call_policies`_
+
+   * `return_range`_
 
 .. _`as_tuple` : ../documentation/functions/call_policies.html#as-tuple
+.. _`return_range`: ../documentation/functions/call_policies.html#custom-call-policies
+.. _`custom_call_policies` : ../documentation/functions/call_policies.html#custom-call-policies
 
-4. Added initial support for multi-module development. Now you can mark you declaration
-   as ``already_exposed``. "Py++" will not create code for it, but will
+4. Added an initial support for multi-module development. Now you can mark you
+   declaration as ``already_exposed`` and `Py++`_ will do the rest. For more
+   information read `multi-module development guide`_.
+
+.. _`multi-module development guide` : ../documentation/multi_module_development.html
 
 .. line-separator
 
 5. `input_c_buffer`_ - new functions transformation, which allows to pass a Python
    sequence to function, instead of pair of arguments: pointer to buffer and size.
-   
+
 .. _`input_c_buffer` : ../documentation/functions/transformation/built_in/input_c_buffer.html
 
+6. Added ability to control generated "include" directives. Now you can ask `Py++`_
+   to include a header file, when it generates code for some declaration. For more
+   information refer to `inserting code guide`_.
+
+.. _`inserting code guide` : ../documentation/inserting_code.html#header-files
+
+7. Code generation improvements: system header files ( Boost.Python or Py++ defined )
+   will be included from the generated files only in case the generated code
+   depends on them.
+
+.. line-separator
+
+8. Performance improvements: Py++ runs 1.5 - 2 times faster, than the previous one.
+
+.. line-separator
+
+9. Added ability to add code before overriden and default function calls.
+   For more information refer to `member function API documentation`_.
+
+.. _`member function API documentation` : ../documentation/apidocs/pyplusplus.decl_wrappers.calldef_wrapper.member_function_t-class.html
+
+10. `Py++`_ will generate documentation for automatically constructed properties.
+    For more information refer to `properties guide`_
+
+.. _`properties guide`: ../documentation/properties.html#documentation
+
+11. Added
 
 -------------
 Version 0.8.5

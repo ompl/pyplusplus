@@ -153,6 +153,13 @@ type of the accessors.
 It is also aware of few common prefixes for set\\get accessors: get, is, has, set,
 <<empty prefix for get accessor>>.
 
+-------------
+Documentation
+-------------
+You can use ``doc`` attribute to specify the property documentation. If you
+don't, than `Py++`_ will construct documentation, which will describe from what
+functions this property was built from.
+
 .. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org

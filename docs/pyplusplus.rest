@@ -126,12 +126,16 @@ Py++ implements both strategies.
 Features list
 -------------
 
-* `Py++`_ support almost all features found in `Boost.Python`_ library
+* `Py++`_ supports almost all features found in `Boost.Python`_ library
 
+* Using `Py++`_ you can develop few extension modules simultaneously, especially
+  when they share the code.
 
-* `Py++`_ generates code, which will help you to understand compiler generated
-  error messages
+* `Py++`_ generates code, which will help you:
 
+   * to understand compiler generated error messages
+
+   * to minimize project built time
 
 * `Py++`_ has few modes of writing code into files:
 
@@ -140,9 +144,6 @@ Features list
   * multiple files
 
   * multiple files, where single class code is split to few files
-
-* `Py++`_ will save your compilation time - it will rewrite a file, only in case
-  of change
 
 * You have full control over generated code. Your code could be inserted almost
   anywhere.

@@ -98,21 +98,21 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
 
     def set_overridable( self, overridable ):
         self._overridable = overridable
-        
+
     overridable = property( get_overridable, set_overridable
                             , doc = get_overridable.__doc__ )
 
-    @property 
+    @property
     def non_overridable_reason( self ):
         """returns the reason the function could not be overriden"""
         return self._non_overridable_reason
 
     def mark_as_non_overridable( self, reason ):
         """mark this function as non-overridable
-        
+
         Not all fucntions could be overrided from Python, for example virtual function
         that returns non const reference to a member variable. Py++ allows you to
-        mark these functions and provide and explanation to the user. 
+        mark these functions and provide and explanation to the user.
         """
         self.overridable = False
         self._non_overridable_reason = messages.W0000 % reason
@@ -129,7 +129,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
     def add_transformation(self, *transformer_creators, **keywd):
         """add new function transformation.
 
-        transformer_creators - list of transformer creators, which should be applied on the function        
+        transformer_creators - list of transformer creators, which should be applied on the function
         keywd - keyword arguments for L{function_transformation_t} class initialization
         """
         self.transformations.append( ft.function_transformation_t( self, transformer_creators, **keywd ) )
@@ -167,31 +167,31 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
                 return False
             base = declarations.remove_pointer( type_ )
             return declarations.is_pointer( base )
-        
+
         def suspicious_type( type_ ):
             if not declarations.is_reference( type_ ):
                 return False
             type_no_ref = declarations.remove_reference( type_ )
             return not declarations.is_const( type_no_ref ) \
-                   and ( declarations.is_fundamental( type_no_ref ) 
+                   and ( declarations.is_fundamental( type_no_ref )
                          or declarations.is_enum( type_no_ref ) )
         msgs = []
         #TODO: functions that takes as argument pointer to pointer to smth, could not be exported
         #see http://www.boost.org/libs/python/doc/v2/faq.html#funcptr
-        
+
         if len( self.arguments ) > calldef_t.BOOST_PYTHON_MAX_ARITY:
             msgs.append( messages.W1007 % ( calldef_t.BOOST_PYTHON_MAX_ARITY, len( self.arguments ) ) )
-        
+
         if self.transformations:
             #if user defined transformation, than I think it took care of the problems
             ft = self.transformations[0]
             if ft.alias == ft.unique_name:
                 msgs.append( messages.W1044 % ft.alias )
             return msgs
-        
+
         if suspicious_type( self.return_type ) and None is self.call_policies:
             msgs.append( messages.W1008 )
-        
+
         if ( declarations.is_pointer( self.return_type ) or is_double_ptr( self.return_type ) ) \
            and None is self.call_policies:
             msgs.append( messages.W1050 % str(self.return_type) )
@@ -204,7 +204,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
 
         if False == self.overridable:
             msgs.append( self._non_overridable_reason)
-            
+
         problematics = algorithm.registration_order.select_problematics( self )
         if problematics:
             tmp = []
@@ -223,19 +223,23 @@ class member_function_t( declarations.member_function_t, calldef_t ):
         self._default_precall_code =  []
 
     def add_override_precall_code(self, code):
+        """add code, which should be executed, before overrided member function call"""
         self._override_precall_code.append( code )
-    
+
     @property
     def override_precall_code(self):
+        """code, which should be executed, before overrided member function call"""
         return self._override_precall_code
-    
+
     def add_default_precall_code(self, code):
+        """add code, which should be executed, before this member function call"""
         self._default_precall_code.append( code )
-    
+
     @property
     def default_precall_code(self):
+        """code, which should be executed, before this member function call"""
         return self._default_precall_code
-    
+
     def get_use_overload_macro(self):
         return self._use_overload_macro
     def set_use_overload_macro(self, use_macro):
@@ -249,14 +253,14 @@ class member_function_t( declarations.member_function_t, calldef_t ):
            and self.virtuality == declarations.VIRTUALITY_TYPES.NOT_VIRTUAL:
             return messages.W1011
         return ''
-    
+
     def _readme_impl( self ):
         msgs = super( member_function_t, self )._readme_impl()
         if self.does_throw == False \
            and self.virtuality != declarations.VIRTUALITY_TYPES.NOT_VIRTUAL:
             msgs.append( messages.W1046 )
         return msgs
-    
+
 class constructor_t( declarations.constructor_t, calldef_t ):
     """defines a set of properties, that will instruct Py++ how to expose the constructor"""
     def __init__(self, *arguments, **keywords):
@@ -321,7 +325,7 @@ class operators_helper:
     """helps Py++ to deal with C++ operators"""
     inplace = [ '+=', '-=', '*=', '/=',  '%=', '>>=', '<<=', '&=', '^=', '|=' ]
     comparison = [ '==', '!=', '<', '>', '<=', '>=' ]
-    non_member = [ '+', '-', '*', '/', '%', '&', '^', '|', ] 
+    non_member = [ '+', '-', '*', '/', '%', '&', '^', '|', ]
     unary = [ '!', '~', '+', '-' ]
 
     all = inplace + comparison + non_member + unary
@@ -334,7 +338,7 @@ class operators_helper:
             return False
         if oper.symbol != '<<':
             return oper.symbol in operators_helper.all
-        
+
         args_len = len( oper.arguments )
         if isinstance( oper, declarations.member_operator_t ):# and args_len != 1:
             return False #Boost.Python does not support member operator<< :-(
@@ -377,18 +381,18 @@ class member_operator_t( declarations.member_operator_t, calldef_t ):
 
     def add_override_precall_code(self, code):
         self._override_precall_code.append( code )
-    
+
     @property
     def override_precall_code(self):
         return self._override_precall_code
-    
+
     def add_default_precall_code(self, code):
         self._default_precall_code.append( code )
-    
+
     @property
     def default_precall_code(self):
         return self._default_precall_code
-        
+
     def _get_alias( self):
         alias = super( member_operator_t, self )._get_alias()
         if alias == self.name:
@@ -493,7 +497,7 @@ class free_function_t( declarations.free_function_t, calldef_t ):
         calldef_t.__init__( self )
         self._use_overload_macro = False
         self._declaration_code = []
-    
+
     def add_declaration_code( self, code ):
         """adds the code to the declaration section"""
         self.declaration_code.append( user_text.user_text_t( code ) )

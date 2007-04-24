@@ -115,6 +115,10 @@ and\\or operator name:
 
     * return type is ``T&``, for member ``operator[]``
 
+* ``return_self``
+
+  This call policy will be used for ``operator=``.
+
 ---------------------
 Missing call policies
 ---------------------
@@ -180,6 +184,30 @@ Example:
 --------------------------
 Py++ defined call policies
 --------------------------
+
+custom_call_policies
+--------------------
+
+``custom_call_policies`` policies functionality was born to allow you to define
+your own call polices and use them with same level of convenience as built-in ones.
+
+The usage is pretty simple:
+
+.. code-block:: Python
+
+  from pyplusplus import module_builder
+  from pyplusplus.module_builder import call_policies
+
+  mb = module_builder.module_builder_t( ... )
+  mb.free_function( ... ).call_policies \
+      = call_policies.custom_call_policies( your call policies code )
+
+  Optionally you can specify name of the header file, which should be included:
+
+.. code-block:: Python
+
+   mb.free_function( ... ).call_policies \
+      = call_policies.custom_call_policies( your call policies code, "xyz.hpp" )
 
 return_pointee_value
 --------------------
