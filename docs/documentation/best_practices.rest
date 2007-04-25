@@ -141,6 +141,33 @@ Tips
   option using the ``start_with_declarations`` attribute of the
   ``pygccxml.parser.config_t`` object that you are passing to the parser.
 
+* Use `Py++`_ repository of generated files md5 sum.
+
+  `Py++`_ is able to store md5 sum of generated files in a file. Next time you 
+  will generate code, `Py++`_ will compare generated file content against the sum,
+  instead of loading the content of the previously generated file from the disk 
+  and comparing against it. 
+    
+  .. code-block:: Python
+
+    mb = module_builder_t( ... )
+    ...
+    my_big_class = mb.class_( my_big_class )
+    mb.split_module( ..., use_files_sum_repository=True )
+
+  `Py++`_ will generate file named "<your module name>.md5.sum" in the directory
+  it will generate all the files.
+  
+  Enabling this functionality should give you 10-15% of performance boost.
+  
+  * **Caveats**
+  
+    If you changed manually some of the files - don't forget to delete the relevant
+    line from "md5.sum" file. You can also delete the whole file. If the file is
+    missing, `Py++`_ will use old plain method of comparing content of the files.
+    It will not re-write "unchanged" files and you will not be forced to recompile 
+    the whole project.
+
 
 .. _`Py++` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html
