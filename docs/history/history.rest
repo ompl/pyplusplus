@@ -105,7 +105,7 @@ Version 0.9.0
 
 .. _`properties guide`: ../documentation/properties.html#documentation
 
-11. Added
+11. Added iteration functionality to ``std::map`` and ``std::multimap`` containers.
 
 -------------
 Version 0.8.5
