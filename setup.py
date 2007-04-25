@@ -90,7 +90,7 @@ if sys.argv[-1]=="sdist":
 
 
 setup( name = "Py++",
-       version = "0.8.6",
+       version = "0.9.0",
        description="Py++ is a framework of components for creating C++ code generator for Boost.Python library",
        author="Roman Yakovenko",
        author_email="roman.yakovenko@gmail.com",
