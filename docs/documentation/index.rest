@@ -14,7 +14,7 @@ task to create and maintain it. I will appreciate **any help**!
 How can you help?
 
 * Lets face it: today it is not possible to use `Py++`_ without eventually
-  looking into source code. `Py++`_ uses `Epydoc`_ to generate documentation
+  looking into source code. `Py++`_ uses `epydoc`_ to generate documentation
   from source files. So, if you found some undocumented piece of code and you
   understand what it does, please write documentation string.
 
@@ -48,7 +48,7 @@ Overview
 
 .. _`best practices`: ./best_practices.html
 
-* `documentation string`_ - explains how to automaticly extract a documentation
+* `documentation string`_ - explains how to automatically extract a documentation
   from the source files and put it as Python documentation string
 
 .. _`documentation string` : ./doc_string.html
@@ -56,7 +56,7 @@ Overview
 * `warnings`_ - `Py++`_ could be used as some kind of validator. It checks the
   exposed declarations and reports the potential errors. Thus you are able to
   create high quality Python bindings from the beginning. This document also
-  describes how to supress the errors\\warnings.
+  describes how to suppress the errors\\warnings.
 
 .. _`warnings` : ./warnings.html
 
@@ -65,7 +65,7 @@ Overview
 
 .. _`functions & operators` : ../functions/functions.html
 
-* `hints`_ - describes few techinques, which will help you with exposing template
+* `hints`_ - describes few techniques, which will help you with exposing template
   instantiations
 
 .. _`hints`: ./hints.html
@@ -94,7 +94,7 @@ Overview
 
 .. _`tutorials` : ./tutorials/tutorials.html
 
-.. _`Epydoc` : http://epydoc.sourceforge.net/
+.. _`epydoc` : http://epydoc.sourceforge.net/
 .. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org

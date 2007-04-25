@@ -18,8 +18,8 @@ they were custom transformers.
 How to ...?
 -----------
 
-Unfortunately I don't have enough time to write a complete documentation :-(.
-Meanwhile fill free to `contact me`_. You also can take a look on `built-in transformers`_
+Unfortunately I don't have enough time to write a complete documentation :-(,
+fill free to `contact me`_. You also can take a look on `built-in transformers`_
 implementation.
 
 .. _`contact me` : ../../../../links.html#id5

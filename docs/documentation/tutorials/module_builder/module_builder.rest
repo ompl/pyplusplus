@@ -114,8 +114,8 @@ module_builder_t.build_code_creator
 
 Now it is a time to create module code creator. Do you remember, in introduction
 to `Py++`_, I told you that before writing code to disc, `Py++`_ will create some
-kind of `AST`_. Well this is done by calling ``module_builder_t.build_code_creator``
-function. Right now, the only important argument to the function is ``module_name``.
+kind of `AST`_. Well calling module_builder_t.build_code_creator function does this.
+Right now, the only important argument to the function is ``module_name``.
 Self explained, is it?
 
 

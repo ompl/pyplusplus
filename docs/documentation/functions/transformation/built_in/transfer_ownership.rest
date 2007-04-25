@@ -18,7 +18,7 @@ FAQ.
 "transfer_ownership" transformer takes one argument, name or index of the
 original function argument. The argument type should be "pointer".
 
-New in version grater than 0.8.5.
+New in version greater than 0.8.5.
 
 -------
 Example

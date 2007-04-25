@@ -81,7 +81,7 @@ being exported:
   mb.calldefs( access_type_matcher_t( 'protected' ) ).exclude()
 
 The developer can create custom criteria, for example exclude all declarations
-that have 'impl' ( implementation ) string within the name.
+with 'impl' ( implementation ) string within the name.
 
 .. code-block:: Python
 
@@ -118,7 +118,7 @@ to disc.
 -----------------------
 During this step Py++ reads code creators tree and writes code to the
 disc. The result of code generation process should not be different from the one,
-that would be achieved by human. For small project writing all code into single
+which would be achieved by human. For small project writing all code into single
 file is good approach, for big ones code should be written into multiple files.
 Py++ implements both strategies.
 

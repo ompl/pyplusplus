@@ -100,7 +100,7 @@ functions:
   This method will add the code to the declaration section within the module.
 
   If you split your module to few files, `Py++`_ will add this code to the
-  cpp file, class registration code will be written in.
+  "cpp" file, class registration code will be written in.
 
   Attention: there is no defined order between wrapper code and declaration section
   code. If you have dependencies between code from declaration section and class

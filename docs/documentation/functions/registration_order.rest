@@ -91,7 +91,7 @@ If I understand right, `Boost.Python`_ tries to match in reverse order the
 overloaded functions, if it can convert `Python`_ arguments to C++ ones, it does
 this and calls the function.
 
-Now, when you understand the behaviour, it should be pretty simple to provide
+Now, when you understand the behavior, it should be pretty simple to provide
 a correct functionality:
 
 1. You can change alias of the function, by mangling the type of the argument

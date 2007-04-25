@@ -38,7 +38,7 @@ Tips
   couple minutes with a reasonable cache size.
 
   You can read more about different caches supported by `pygccxml`_ `here`__.
-  ``module_builder_t.__init__`` methods takes reference to an instance of cache
+  ``module_builder_t.__init__`` method takes reference to an instance of cache
   class or ``None``:
 
   .. code-block:: Python

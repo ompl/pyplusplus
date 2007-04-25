@@ -60,13 +60,13 @@ Unicode support
 In version 0.8.1 `Py++`_ introduced nice feature: automatic extraction and
 integration of documentation strings. I estimated wrong the influence of the
 feature on the project. First user, who actually tried it, was Gottfried Ganssauge.
-He asked me to add support for documentation string that contains unicode characters.
+He asked me to add support for documentation string that contains Unicode characters.
 These days I understand the influence. I should convert all strings in the whole
-project to be unicode strings, with encoding specified by the user. This is a
+project to be Unicode strings, with encoding specified by the user. This is a
 lot of work, but I think this is really important. So this is high priority "TODO".
 
 http://www.joelonsoftware.com/articles/Unicode.html - a nice article, which
-explains what is unicode, encoding and character sets.
+explains what is Unicode, encoding and character sets.
 
 
 .. _`Py++` : ./../pyplusplus.html

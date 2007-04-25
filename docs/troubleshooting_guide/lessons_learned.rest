@@ -8,7 +8,7 @@ Boost.Python - lessons learned
 Preamble
 --------
 
-Software development is an interactrive process. During `Py++`_ development
+Software development is an interactive process. During `Py++`_ development
 I see many interesting problems and even more interesting solutions.
 
 On this page you will find my collection of the solutions to some of the problems.

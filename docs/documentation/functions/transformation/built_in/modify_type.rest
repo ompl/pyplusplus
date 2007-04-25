@@ -16,7 +16,7 @@ Definition
 
 2. a callable, which takes as argument reference to type and returns new type
 
-New in version grater than 0.8.5.
+New in version greater than 0.8.5.
 
 Pay attention!
 --------------

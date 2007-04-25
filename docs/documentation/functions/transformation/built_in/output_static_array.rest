@@ -13,7 +13,7 @@ translation between array and `Python`_ list object. Size of array should be pre
 
 "output_static_array" transformer takes as first argument name or index of the
 original function argument. The argument should have "array" or "pointer" type.
-The second argument should an integer value, that represents array size.
+The second argument should an integer value, which represents array size.
 
 -------
 Example

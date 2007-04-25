@@ -348,7 +348,7 @@ and not readable.
 
 .. _`constraints` : http://www.python.org/doc/current/ref/identifiers.html
 
-There are few pretty good reasons for this behaviour:
+There are few pretty good reasons for this behavior:
 
 * when you just start to work on `Python`_ bindings concentrate your attention
   on really important things

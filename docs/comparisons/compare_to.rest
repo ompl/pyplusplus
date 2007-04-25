@@ -49,7 +49,7 @@ source project(s) "to talk":
   .. _`PyOgre` : http://www.ogre3d.org/wiki/index.php/PyOgre
   
   
-Some other links, that compare Boost.Python, SWIG, SIP and other tools:
+Some other links, which compares Boost.Python, SWIG, SIP and other tools:
 
 * `Evaluation of Python/C++ interfacing packages`_
 
