@@ -45,7 +45,7 @@ You don't have to worry about the number of arguments, transformers or return
 value. `Py++`_ handles pretty well such use cases.
 
 
-.. _`Py++` : ./../pyplusplus.html
+.. _`Py++` : ./../../../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

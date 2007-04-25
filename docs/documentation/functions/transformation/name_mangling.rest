@@ -79,7 +79,7 @@ There are two main reasons for such implementation\\behaviour:
 2. If you forgot to give an alias to a function, your users will still be able
    to call the function. So no need to rush and create new release.
 
-.. _`Py++` : ./../pyplusplus.html
+.. _`Py++` : ./../../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

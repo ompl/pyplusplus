@@ -63,7 +63,7 @@ Overview
 * `functions & operators`_ - contains a complete guide to exposing functions and
   operators, including "call policies" and description of different caveats
 
-.. _`functions & operators` : ../functions/functions.html
+.. _`functions & operators` : ./functions/functions.html
 
 * `hints`_ - describes few techniques, which will help you with exposing template
   instantiations

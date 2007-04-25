@@ -548,7 +548,7 @@ want you can extract the relevant piece of code from `this file`_.
 .. _`ResultConverterGenerator` : http://boost.org/libs/python/doc/v2/ResultConverter.html#ResultConverterGenerator-concept
 .. _`CallPolicies` : http://www.boost.org/libs/python/doc/v2/CallPolicies.html#CallPolicies-concept
 
-.. _`Py++` : ./../pyplusplus.html
+.. _`Py++` : ./../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

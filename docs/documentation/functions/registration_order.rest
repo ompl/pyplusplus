@@ -144,7 +144,7 @@ a correct functionality:
 
 
 
-.. _`Py++` : ./../pyplusplus.html
+.. _`Py++` : ./../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

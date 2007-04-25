@@ -142,7 +142,7 @@ and you cannot change the source code, consider contacting `Py++`_ developers.
 I am sure we will be able to help you.
 
 
-.. _`Py++` : ./../pyplusplus.html
+.. _`Py++` : ./../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
