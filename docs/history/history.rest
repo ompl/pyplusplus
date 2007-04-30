@@ -63,11 +63,11 @@ Version 0.9.0
    * `return_range`_
 
 .. _`as_tuple` : ../documentation/functions/call_policies.html#as-tuple
-.. _`return_range`: ../documentation/functions/call_policies.html#custom-call-policies
+.. _`return_range`: ../documentation/functions/call_policies.html#return-range
 .. _`custom_call_policies` : ../documentation/functions/call_policies.html#custom-call-policies
 
-4. Added an initial support for multi-module development. Now you can mark you
-   declaration as ``already_exposed`` and `Py++`_ will do the rest. For more
+4. Added an initial support for multi-module development. Now you can mark your
+   declarations as ``already_exposed`` and `Py++`_ will do the rest. For more
    information read `multi-module development guide`_.
 
 .. _`multi-module development guide` : ../documentation/multi_module_development.html
@@ -105,7 +105,8 @@ Version 0.9.0
 
 .. _`properties guide`: ../documentation/properties.html#documentation
 
-11. Added iteration functionality to ``std::map`` and ``std::multimap`` containers.
+11. Added iteration functionality to Boost.Python Indexing Suite V2 ``std::map``
+    and ``std::multimap`` containers.
 
 -------------
 Version 0.8.5
