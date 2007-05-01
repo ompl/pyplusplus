@@ -1,6 +1,6 @@
 Hello!
 
-I'm pleased to announce the 0.8.5 release of Py++.
+I'm pleased to announce the 0.9.0 release of Py++.
 
 What is Py++?
 =============
