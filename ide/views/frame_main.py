@@ -15,10 +15,10 @@ import wx
 def create(parent):
     return MainFrame(parent)
 
-[wxID_MAINFRAMEMENUEFILEEXIT, wxID_MAINFRAMEMENUEFILENEW, 
- wxID_MAINFRAMEMENUEFILEOPEN, wxID_MAINFRAMEMENUEFILERECENT, 
- wxID_MAINFRAMEMENUEFILESAVE, 
-] = [wx.NewId() for _init_coll_menueFile_Items in range(5)]
+[wxID_MAINFRAMEMENUEFILEEXIT, wxID_MAINFRAMEMENUEFILEITEMS7, 
+ wxID_MAINFRAMEMENUEFILENEW, wxID_MAINFRAMEMENUEFILEOPEN, 
+ wxID_MAINFRAMEMENUEFILERECENT, wxID_MAINFRAMEMENUEFILESAVE, 
+] = [wx.NewId() for _init_coll_menueFile_Items in range(6)]
 
 [wxID_MAINFRAMEMENUINCLUDESADDINC, wxID_MAINFRAMEMENUINCLUDESITEMS1, 
 ] = [wx.NewId() for _init_coll_menuIncludes_Items in range(2)]
@@ -154,20 +154,24 @@ class MainFrame(wx.Frame):
     def _init_coll_menueFile_Items(self, parent):
         # generated method, don't edit
 
-        parent.Append(help=u'Create new Project', id=wxID_MAINFRAMEMENUEFILENEW,
-              kind=wx.ITEM_NORMAL, text=u'&New Project')
-        parent.Append(help=u'Open existing Project',
+        parent.Append(help=u'Create new project with default settings',
+              id=wxID_MAINFRAMEMENUEFILENEW, kind=wx.ITEM_NORMAL,
+              text=u'&New project')
+        parent.Append(help=u'Open existing project',
               id=wxID_MAINFRAMEMENUEFILEOPEN, kind=wx.ITEM_NORMAL,
-              text=u'&Open  Project')
-        parent.Append(help=u'Save current Project',
+              text=u'&Open  project')
+        parent.Append(help=u'Save current project',
               id=wxID_MAINFRAMEMENUEFILESAVE, kind=wx.ITEM_NORMAL,
-              text=u'&Save  Project')
+              text=u'&Save  project')
+        parent.Append(help=u'Save current project under a different filename',
+              id=wxID_MAINFRAMEMENUEFILEITEMS7, kind=wx.ITEM_NORMAL,
+              text=u'S&ave as ...')
         parent.AppendSeparator()
-        parent.AppendMenu(help=u'Open recently used Project',
-              id=wxID_MAINFRAMEMENUEFILERECENT, submenu=wx.Menu(),
-              text=u'Recent  Projects')
+        parent.AppendMenu(help=u'Open recently used project',
+              id=wxID_MAINFRAMEMENUEFILERECENT, submenu=self.menueRecentPrj,
+              text=u'&Recent  projects')
         parent.AppendSeparator()
-        parent.Append(help='', id=wxID_MAINFRAMEMENUEFILEEXIT,
+        parent.Append(help=u'Exit IDE', id=wxID_MAINFRAMEMENUEFILEEXIT,
               kind=wx.ITEM_NORMAL, text=u'&Exit')
         self.Bind(wx.EVT_MENU, self.OnMenueFileNewMenu,
               id=wxID_MAINFRAMEMENUEFILENEW)
@@ -177,6 +181,10 @@ class MainFrame(wx.Frame):
               id=wxID_MAINFRAMEMENUEFILESAVE)
         self.Bind(wx.EVT_MENU, self.OnMenueFileExitMenu,
               id=wxID_MAINFRAMEMENUEFILEEXIT)
+        self.Bind(wx.EVT_MENU, self.OnMenueFileSaveAsMenu,
+              id=wxID_MAINFRAMEMENUEFILEITEMS7)
+        self.Bind(wx.EVT_MENU, self.OnMenueFileRecentMenu,
+              id=wxID_MAINFRAMEMENUEFILERECENT)
 
     def _init_coll_menuMacros_Items(self, parent):
         # generated method, don't edit
@@ -212,13 +220,12 @@ class MainFrame(wx.Frame):
 
     def _init_coll_statusBar_Fields(self, parent):
         # generated method, don't edit
-        parent.SetFieldsCount(3)
+        parent.SetFieldsCount(2)
 
-        parent.SetStatusText(number=0, text=u'<helptextOrStatus>')
-        parent.SetStatusText(number=1, text=u'<parseTime>')
-        parent.SetStatusText(number=2, text=u'<compileTime>')
+        parent.SetStatusText(number=0, text=u'')
+        parent.SetStatusText(number=1, text=u'')
 
-        parent.SetStatusWidths([-1, -1, -1])
+        parent.SetStatusWidths([-1, -1])
 
     def _init_sizers(self):
         # generated method, don't edit
@@ -278,6 +285,8 @@ class MainFrame(wx.Frame):
 
         self.menuMacros = wx.Menu(title='')
 
+        self.menueRecentPrj = wx.Menu(title=u'')
+
         self._init_coll_menueFile_Items(self.menueFile)
         self._init_coll_menuBar_Menus(self.menuBar)
         self._init_coll_menuIncludes_Items(self.menuIncludes)
@@ -286,11 +295,12 @@ class MainFrame(wx.Frame):
     def _init_ctrls(self, prnt):
         # generated method, don't edit
         wx.Frame.__init__(self, id=wxID_MAINFRAME, name=u'MainFrame',
-              parent=prnt, pos=wx.Point(-3, -3), size=wx.Size(800, 600),
-              style=wx.DEFAULT_FRAME_STYLE, title=u'Py++ IDE')
+              parent=prnt, pos=wx.Point(0, 0), size=wx.Size(800, 600),
+              style=wx.DEFAULT_FRAME_STYLE, title=u'Py++ IDE ()')
         self._init_utils()
         self.SetClientSize(wx.Size(792, 566))
         self.SetMenuBar(self.menuBar)
+        self.Bind(wx.EVT_CLOSE, self.OnMainFrameClose)
 
         self.statusBar = wx.StatusBar(id=wxID_MAINFRAMESTATUSBAR,
               name=u'statusBar', parent=self, style=0)
@@ -366,7 +376,7 @@ class MainFrame(wx.Frame):
         self.textCode = wx.TextCtrl(id=wxID_MAINFRAMETEXTCODE, name=u'textCode',
               parent=self.panelNbCode, pos=wx.Point(0, 0), size=wx.Size(730, 0),
               style=wx.TE_READONLY | wx.TE_MULTILINE, value=u'')
-        self.textCode.SetToolTipString(u'textCtrl2')
+        self.textCode.SetHelpText(u'')
 
         self.panelButtons = wx.Panel(id=wxID_MAINFRAMEPANELBUTTONS,
               name=u'panelButtons', parent=self.panelNbCode, pos=wx.Point(156,
@@ -376,6 +386,8 @@ class MainFrame(wx.Frame):
               label=u'Generate XML code', name=u'butGenXml',
               parent=self.panelButtons, pos=wx.Point(10, 0), size=wx.Size(120,
               23), style=0)
+        self.butGenXml.SetToolTipString(u'')
+        self.butGenXml.SetHelpText(u'Help for button')
         self.butGenXml.Bind(wx.EVT_BUTTON, self.OnButGenXmlButton,
               id=wxID_MAINFRAMEBUTGENXML)
 
@@ -465,28 +477,34 @@ class MainFrame(wx.Frame):
         self._init_sizers()
 
     def __init__(self, parent):
-        
+                
         self.currentItemInclude = None
         self.currentItemMacro = None
         
         self._init_ctrls(parent)
-        self._setup_ide_ctrls()
-        self.splitterVertical.SetSashPosition(300, True)
-        self.SetSize((self.GetSize()[0]+1,self.GetSize()[1]+1))
+        self._setup_ide_ctrls()        
         
     def OnMenueFileNewMenu(self, event):
+        self._controller.DoProjectNew()
         event.Skip()
 
     def OnMenueFileOpenMenu(self, event):
+        self._controller.OpenDlgLoadProject()
         event.Skip()
 
     def OnMenueFileSaveMenu(self, event):
+        self._controller.OpenDlgSaveProject()
         event.Skip()
+        
+    def OnMenueFileSaveAsMenu(self, event):
+        self._controller.OpenDlgSaveProject(new_file=True)
+        event.Skip()        
 
     def OnMenueFileRecentMenu(self, event):
         event.Skip()
 
     def OnMenueFileExitMenu(self, event):
+        self._controller.ExitIde()
         event.Skip()
 
     def OnTextGenCodeRightDown(self, event):
@@ -581,6 +599,17 @@ class MainFrame(wx.Frame):
     def OnListMacrosListItemDeselected(self, event):
         self.currentItemMacro = None
         event.Skip()
+
+    def OnMenueRecentPrjItems0Menu(self, event):
+        print "OnMenueRecentPrjItems0Menu"
+        event.Skip()
+
+    def OnMainFrameClose(self, event):
+        if not self._controller.ExitIde():
+            return() # Don't close
+        else:
+            event.Skip()
+
 
         
         

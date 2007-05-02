@@ -1,0 +1,11 @@
+<pyPPProject>
+	<gccXmlSettings 
+		gccXmlPath="" 
+		headerPath="" 
+		includePathList="[]" 
+		macroList="[]" />		
+	<guiGeometry 
+		horizontalSplitter="350" 
+		size="(0, 0, 800, 600)" 
+		verticalSplitter="300" />
+</pyPPProject>

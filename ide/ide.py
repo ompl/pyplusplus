@@ -28,6 +28,9 @@ class BoaApp(wx.App):
         
         self.main.Show()
         self.SetTopWindow(self.main)
+        
+        controller.DoProjectNew()
+        
         return True
 
 def main():
