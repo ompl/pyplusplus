@@ -311,7 +311,6 @@ class MainController:
         self.CountCodeGenSec(reset=True)
         
         params = self._get_gccxml_params(False)
-
         gen_xml_obj = AsyncExecHandler(code_generator.gen_xml, params)
         self._start_async_exec(gen_xml_obj)        
         
@@ -626,14 +625,15 @@ class MainController:
                 'gccXmlSettings.includePathList'))
         macro_list = eval(self._prj_settings.get_param(
            'gccXmlSettings.macroList'))
-        
+        header_file = self._prj_settings.get_param('gccXmlSettings.headerPath')
         if verbose:
             self._append_out_text(" "+ gcc_xml)
             self._append_out_text(" "+ str(inc_path_list))
             self._append_out_text(" "+ str(macro_list))
+            self._append_out_text(" "+ header_file)
             
         
-        return (gcc_xml, inc_path_list, macro_list)
+        return (gcc_xml, inc_path_list, macro_list, header_file)
                 
     def _setup_ide_settings(self):
         
