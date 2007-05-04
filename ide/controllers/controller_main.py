@@ -319,8 +319,8 @@ class MainController:
         Open dialog to get header file
         '''
         self._open_file_dlg_text_ctrl( self._view.textHeader, 
-                                           "Choose a Header file",
-                                           "Header (*.h)|*.h|All Files(*)|*")
+           "Choose a Header file","C/C++ files (*.h,*.hpp,*.hxx,*.c,"\
+           "*.cpp,*.cxx)|*.h;*.hpp;*.hxx;*.c;*.cpp;*.cxx|All Files(*)|*")
                         
     def OpenDlgGccXml(self):
         '''
@@ -415,7 +415,7 @@ class MainController:
                         
         dialog = wx.FileDialog(self._view, "Load existing Py++ project", 
             self.param.last_prj_path.get(), 
-            "", "Project files (*.xml)|*.xml|All Files(*)|*", wx.OPEN)
+            "", "Project files (*.pypp)|*.pypp|All Files(*)|*", wx.OPEN)
         
         try:
             if dialog.ShowModal() == wx.ID_OK:
@@ -544,7 +544,7 @@ class MainController:
         
         dialog = wx.FileDialog(self._view, 
            "Save Py++ project to new file",  self.param.last_prj_path.get(), "", 
-           "Project files (*.xml)|*.xml|All Files(*)|*", wx.FD_SAVE)
+           "Project files (*.pypp)|*.pypp|All Files(*)|*", wx.FD_SAVE)
        
         if dialog.ShowModal() == wx.ID_OK:
                 
@@ -594,6 +594,12 @@ class MainController:
                                       file_filter="All Files(*)|*", 
                                       dir_path="."):
         """Open file open dialog and insert file in related wxText ctrl"""
+
+        cur_file = related_wx_text.GetValue()
+
+        if  cur_file != "":
+            dir_path = os.path.dirname(related_wx_text.GetValue())
+
         dialog = wx.FileDialog(self._view, caption_txt, 
                                dir_path, "", file_filter, wx.OPEN)
         try:
@@ -643,17 +649,23 @@ class MainController:
         prj_list.reverse()
         for prj in prj_list:
             self._add_to_prj_history(prj)
-        
+
+    # Change the title string:
+    # tilte := "<ConstPart> (<prj_name> in <prj_path>) <changedTag>"
     def _set_prj_filename_in_title(self, filename):
-        
+
         if filename == self._prjTemplateFile:
-            filename = "New project"
+            prj_description = "New project"
+        else:
+            prj_name = os.path.basename(filename)
+            prj_path = os.path.dirname(filename)
+            prj_description = prj_name + " in " + prj_path
             
         title_str = self._view.GetTitle()
         start_idx = title_str.find("(")
         end_idx = title_str.find(")")
         fnamstr = title_str[start_idx:end_idx+1]
-        title_str = title_str.replace(fnamstr, "(" + filename + ")")
+        title_str = title_str.replace(fnamstr, "(" + prj_description + ")")
         self._view.SetTitle(title_str)
         
     def _reset_settings_changed(self):

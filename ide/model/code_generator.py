@@ -64,7 +64,7 @@ def gen_cpp(params, q_result, q_error):
                 , working_directory=os.path.split( header_file )[0]
                 , include_paths=include_paths
                 , define_symbols=params[2] )
-
+    
         mb.build_code_creator( "pyplusplus" )
         mb.code_creator.user_defined_directories.extend( include_paths )
         code = mb.code_creator.create()
