@@ -42,7 +42,7 @@ containers = {
     , 'hash_map' : "boost/python/suite/indexing/map.hpp"
     , 'set' : "boost/python/suite/indexing/set.hpp"
     , 'hash_set' : "boost/python/suite/indexing/set.hpp"
-    #TODO: queue, priority, stack, multimap, hash_multimap, multiset, hash_multiset
+    #TODO: queue, priority, stack, hash_multimap, multiset, hash_multiset
 }
 
 class indexing_suite2_t( object ):
@@ -82,7 +82,7 @@ class indexing_suite2_t( object ):
     def set_use_container_suite( self, value ):
         self._use_container_suite = value
     use_container_suite = property( get_use_container_suite, set_use_container_suite )
-    
+
     def _get_container_class( self ):
         return self.__container_class
     container_class = property( _get_container_class
@@ -99,12 +99,12 @@ class indexing_suite2_t( object ):
     element_type = property( _get_element_type
                              , doc="Reference to container value_type( mapped_type ) type" )
 
-    def _get_call_policies( self ):      
+    def _get_call_policies( self ):
         if self.__call_policies:
             return self.__call_policies
         if self.container_traits not in declarations.sequential_container_traits:
             #TODO: find out why map's don't like the policy
-            return self.__call_policies 
+            return self.__call_policies
         element_type = None
         try:
             element_type = self.element_type
@@ -115,7 +115,7 @@ class indexing_suite2_t( object ):
         if declarations.is_pointer( element_type ):
             self.__call_policies = call_policies.return_internal_reference()
         return self.__call_policies
-        
+
     def _set_call_policies( self, call_policies ):
         self.__call_policies = call_policies
     call_policies = property( _get_call_policies, _set_call_policies
@@ -175,7 +175,7 @@ class indexing_suite2_t( object ):
             if name not in containers:
                 self.__include_files = [] #not supported
             else:
-                #impl details: the order of header files is IMPORTANT        
+                #impl details: the order of header files is IMPORTANT
                 self.__include_files = [ "boost/python/suite/indexing/container_suite.hpp"
                                          , containers[ name ] ]
         return self.__include_files
