@@ -80,12 +80,6 @@ Who is using Py++?
 
     .. _`OIS` : http://www.wreckedgames.com/wiki/index.php/WreckedLibs:OIS
 
-* Nicolas Tessore is using `Py++`_ to create Python bindings for `NifTools`_
-  project. You can read in his `blog`_ what he thinks about `Py++`_.
-
-  .. _`NifTools` : http://www.niftools.org/wiki/index.php/NIF_File_Format_Library_and_Tools
-  .. _`blog` : http://ni-te.de/blog/?p=10
-
 * I am :-). I created Python bindings for next libraries:
 
   * `Boost.Date_Time`_
