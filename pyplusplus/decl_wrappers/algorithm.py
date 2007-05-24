@@ -129,18 +129,22 @@ class registration_order:
             else:
                 pass
         return None
-    
+
     @staticmethod
     def select_problematics( calldef ):
         """Return list of problematic functions for function "calldef" """
         if 1 != len( calldef.required_args ):
             return []
+        arg_type = calldef.arguments[0].type
+        if declarations.is_pointer( arg_type ) \
+           and isinstance( arg_type.base, declarations.calldef_type_t ):
+            return []
         problematics = []
         for f in calldef.overloads:
             if 1 != len( f.required_args ):
                 continue
+            if f.ignore:
+                continue
             if None != registration_order.is_related( calldef.arguments[0].type, f.arguments[0].type ):
                 problematics.append( f )
         return problematics
-
-    
