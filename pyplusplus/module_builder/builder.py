@@ -307,7 +307,7 @@ class module_builder_t(object):
                       , dir_name
                       , huge_classes=None
                       , on_unused_file_found=os.remove
-                      , use_files_sum_repository=False):
+                      , use_files_sum_repository=True):
         """
         Writes module to multiple files
 
