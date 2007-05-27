@@ -136,8 +136,7 @@ class registration_order:
         if 1 != len( calldef.required_args ):
             return []
         arg_type = calldef.arguments[0].type
-        if declarations.is_pointer( arg_type ) \
-           and isinstance( arg_type.base, declarations.calldef_type_t ):
+        if declarations.is_calldef_pointer( arg_type ):
             return []
         problematics = []
         for f in calldef.overloads:
