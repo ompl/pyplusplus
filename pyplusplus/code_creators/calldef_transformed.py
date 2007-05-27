@@ -392,7 +392,7 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
         tmpl_values['py_arg_expressions'] = ''
         if cntrl.py_arg_expressions:
             tmpl_values['py_arg_expressions'] \
-                = ', ' + declarations.call_invocation.join( '', cntrl.py_arg_expressions )
+                = ', ' + self.PARAM_SEPARATOR.join( cntrl.py_arg_expressions )
             
         tmpl_values['save_py_result'] = "bpl::object %s = " % cntrl.py_result_variable.name
         tmpl_values['py_return'] = ''
