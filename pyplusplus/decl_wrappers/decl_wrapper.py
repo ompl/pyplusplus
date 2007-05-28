@@ -11,7 +11,8 @@ from pygccxml import declarations
 from pyplusplus import messages
 
 class decl_wrapper_t(object):
-    """code generator declaration configuration base class
+    """code generator declaration configuration base class
+
     This class contains configuration that could be applied to all declarations.
     """
     
@@ -104,10 +105,15 @@ class decl_wrapper_t(object):
         return self._get_already_exposed_impl()
     def _set_already_exposed( self, value ):
         self._already_exposed = value
-    already_exposed = property( _get_already_exposed, _set_already_exposed                                , doc="boolean flag, which says whether the declaration is already exposed or not" )
+    already_exposed = property( _get_already_exposed, _set_already_exposed
+                                , doc="boolean flag, which says whether the declaration is already exposed or not" )
 
-    def exclude( self ):
-        """exclude "self" and child declarations from being exposed."""
+    def exclude( self, compilation_errors=False ):
+        """exclude "self" and child declarations from being exposed.
+        
+        If compile_time_errors is True, than only declarations, which will cause
+        compilation error will be excluded
+        """
         self.ignore = True
 
     def include( self, already_exposed=False ):

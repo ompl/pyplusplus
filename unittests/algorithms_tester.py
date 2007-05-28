@@ -202,6 +202,34 @@ class doc_extractor_tester_t( unittest.TestCase ):
         escaped_doc = module_builder.doc_extractor_i.escape_doc('Hello "Py++"')
         self.failUnless( escaped_doc == '"Hello \\"Py++\\""' )
 
+class exclude_erronious_tester_t( unittest.TestCase ):    
+    def test(self):
+        
+        code = """
+            namespace xyz{
+            
+                struct good{};
+                
+                typedef void (*ff1)( int, int );
+                
+                void f_bad( ff1 );
+                
+            }
+        """
+        
+        mb = module_builder.module_builder_t( 
+                [ module_builder.create_text_fc( code ) ]
+                , gccxml_path=autoconfig.gccxml.executable )
+        
+        xyz = mb.namespace( name='xyz' )
+        xyz.include()
+        
+        xyz.exclude(compilation_errors=True)
+        
+        self.failUnless( xyz.ignore == False )
+        self.failUnless( xyz.class_( 'good' ).ignore == False )
+        self.failUnless( xyz.free_fun( 'f_bad' ).ignore == True )
+
 def create_suite():
     suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(doc_extractor_tester_t))
@@ -213,8 +241,7 @@ def create_suite():
     suite.addTest( unittest.makeSuite(class_multiple_files_tester_t))
     suite.addTest( unittest.makeSuite(readme_tester_t))
     suite.addTest( unittest.makeSuite(split_sequence_tester_t))
-
-
+    suite.addTest( unittest.makeSuite(exclude_erronious_tester_t))
     return suite
 
 def run_suite():

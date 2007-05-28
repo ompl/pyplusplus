@@ -9,10 +9,10 @@ reported to user.
 
 class message_type(str):
     """implementation details"""
-    def __new__(self, value, identifier):
+    def __new__(self, value, identifier=None):
         return str.__new__(self, value )
         
-    def __init__(self, value, identifier ):
+    def __init__(self, value, identifier=None):
         self.__identifier = identifier  
         
     @property
@@ -21,159 +21,193 @@ class message_type(str):
 
     def __mod__( self, values ):
         str_value = super( message_type, self ).__str__()
-        return message_type( str_value % values, self.identifier )
+        return self.__class__( str_value % values, self.identifier )
 
-W0000 = '%s' #general message, usefull in few cases
+class warning( message_type ):
+    prefix = 'warning'
 
-W1000 = 'Py++, by default, does not expose internal compilers declarations. '\
-        'Names of those declarations usually start with "__".'
+class compilation_error( message_type ):
+    prefix = 'compilation error'
 
-W1001 = 'Py++, by default, does not expose internal declarations. ' \
-        'GCC-XML reports that these declaration belong to "<internal>" header.'
+class execution_error( message_type ):
+    prefix = 'execution error'
 
-W1002 = 'Py++, by default, does not expose compiler generated declarations.'
+W0000 = warning( '%s' ) #general message, usefull in few cases
 
-W1003 = 'Virtual functions that returns const reference cannot be overridden from Python. ' \
-        'Reason: boost::python::override::operator()(...) saves the result of the marshaling ' \
-        '(from Python to C++) on the stack. Thus operator() returns reference ' \
-        'to a temporary variable. Consider to use "Function Transformation" functionality ' \
-        'to solve the problem.'
+W1000 = compilation_error( 
+            'Py++, by default, does not expose internal compilers declarations. '
+            'Names of those declarations usually start with "__".' )
 
-W1004 = 'Boost.Python library can not expose function, which takes as argument/returns ' \
-        'pointer to function. ' \
-        ' See http://www.boost.org/libs/python/doc/v2/faq.html#funcptr for more information.'
+W1001 = compilation_error( 
+            'Py++, by default, does not expose internal declarations. '
+            'GCC-XML reports that these declaration belong to "<internal>" header.' )
 
-W1005 = 'Py++ cannot expose function that takes as argument/returns instance of non-public class. ' \
-        'Generated code will not compile.'
+W1002 = compilation_error( 
+            'Py++, by default, does not expose compiler generated declarations.' )
 
-W1006 = 'Py++ need your help to expose function that takes as argument/returns C++ arrays. ' \
-        'Take a look on "Function Transformation" functionality and define the transformation.'
+W1003 = warning( 
+            'Virtual functions that returns const reference cannot be overridden from Python. ' 
+            'Reason: boost::python::override::operator()(...) saves the result of the marshaling ' 
+            '(from Python to C++) on the stack. Thus operator() returns reference ' 
+            'to a temporary variable. Consider to use "Function Transformation" functionality ' 
+            'to solve the problem.' )
 
-W1007 = 'The function has more than %d arguments ( %d ). ' \
-        'You should adjust BOOST_PYTHON_MAX_ARITY macro. ' \
-        'For more information see: http://www.boost.org/libs/python/doc/v2/configuration.html'
+W1004 = compilation_error( 
+            'Boost.Python library can not expose function, which takes as argument/returns ' 
+            'pointer to function. ' 
+            ' See http://www.boost.org/libs/python/doc/v2/faq.html#funcptr for more information.' )
 
-W1008 = 'The function returns non-const reference to "Python immutable" type. ' \
-        'The value cannot be modified from Python. '
+W1005 = compilation_error( 
+            'Py++ cannot expose function that takes as argument/returns instance of non-public class. ' 
+            'Generated code will not compile.' )
 
-W1009 = 'The function takes as argument (name=%s, pos=%d) non-const reference ' \
-        'to Python immutable type - function could not be called from Python. ' \
-         'Take a look on "Function Transformation" functionality and define the transformation.'
+W1006 = compilation_error( 
+            'Py++ need your help to expose function that takes as argument/returns C++ arrays. '
+            'Take a look on "Function Transformation" functionality and define the transformation.' )
 
-W1010 = 'The function introduces registration order problem. ' \
-        'For more information about the problem read next document: ' \
-        'http://language-binding.net/pyplusplus/documentation/functions/registration_order.html ' \
-        'Problematic functions list: %s'
+W1007 = warning( 
+            'The function has more than %d arguments ( %d ). ' 
+            'You should adjust BOOST_PYTHON_MAX_ARITY macro. ' 
+            'For more information see: http://www.boost.org/libs/python/doc/v2/configuration.html' )
 
-W1011 = "Py++ doesn't export private not virtual functions."
+W1008 = warning( 
+            'The function returns non-const reference to "Python immutable" type. ' 
+            'The value cannot be modified from Python. ' )
 
-W1012 = 'Py++ does not exports compiler generated constructors.'
+W1009 = execution_error( 
+            'The function takes as argument (name=%s, pos=%d) non-const reference ' 
+            'to Python immutable type - function could not be called from Python. ' 
+            'Take a look on "Function Transformation" functionality and define the transformation.' )
 
-W1013 = "Py++ doesn't export private constructor."        
+W1010 = execution_error(
+            'The function introduces registration order problem. ' 
+            'For more information about the problem read next document: ' 
+            'http://language-binding.net/pyplusplus/documentation/functions/registration_order.html ' 
+            'Problematic functions list: %s' )
 
-W1014 = '"%s" is not supported. ' \
-        'See Boost.Python documentation: http://www.boost.org/libs/python/doc/v2/operators.html#introduction.'
+W1011 = warning( "Py++ doesn't export private not virtual functions." )
 
-W1015 = "Py++ doesn't export private operators."        
+W1012 = compilation_error( 'Py++ does not exports compiler generated constructors.' )
 
-W1016 = 'Py++ does not exports non-const casting operators with user defined type as return value. ' \
-        'This could be change in future.'
+W1013 = compilation_error( "Py++ doesn't export private constructor." )
 
-W1017 = "Py++ doesn't export non-public casting operators."                    
+W1014 = compilation_error( 
+            '"%s" is not supported. '
+            'See Boost.Python documentation: http://www.boost.org/libs/python/doc/v2/operators.html#introduction.' )
 
-W1018 = 'Py++ can not expose unnamed classes.'
+W1015 = compilation_error( "Py++ doesn't export private operators." )
 
-W1019 = 'Py++ can not expose private class.'
+W1016 = warning( 
+            'Py++ does not exports non-const casting operators with user defined type as return value. ' 
+            'This could be change in future.' )
 
-W1020 = "Py++ will generate class wrapper - hand written code should be added to the wrapper class"
+W1017 = compilation_error( "Py++ doesn't export non-public casting operators." )
 
-W1021 = "Py++ will generate class wrapper - hand written code should be added to the wrapper class null constructor body" 
+W1018 = compilation_error( 'Py++ can not expose unnamed classes.' )
 
-W1022 = "Py++ will generate class wrapper - hand written code should be added to the wrapper class copy constructor body"
+W1019 = compilation_error( 'Py++ can not expose private class.' )
 
-W1023 = "Py++ will generate class wrapper - there are few functions that should be redefined in class wrapper. " \
-        "The functions are: %s."
+W1020 = warning( "Py++ will generate class wrapper - hand written code should be added to the wrapper class" )
 
-W1024 = 'Py++ will generate class wrapper - class contains "%s" - bit field member variable'
+W1021 = warning( "Py++ will generate class wrapper - hand written code should be added to the wrapper class null constructor body" )
 
-W1025 = 'Py++ will generate class wrapper - class contains "%s" - T* member variable'
+W1022 = warning( "Py++ will generate class wrapper - hand written code should be added to the wrapper class copy constructor body" )
 
-W1026 = 'Py++ will generate class wrapper - class contains "%s" - T& member variable'
+W1023 = warning( 
+            "Py++ will generate class wrapper - there are few functions that should be redefined in class wrapper. "
+            "The functions are: %s." )
 
-W1027 = 'Py++ will generate class wrapper - class contains "%s" - array member variable'
+W1024 = warning( 'Py++ will generate class wrapper - class contains "%s" - bit field member variable' )
 
-W1028 = 'Py++ will generate class wrapper - class contains definition of nested class "%s", which requires wrapper class'
+W1025 = warning( 'Py++ will generate class wrapper - class contains "%s" - T* member variable' )
 
-W1029 = "Py++ will generate class wrapper - hand written code should be added to the wrapper class constructor body"
+W1026 = warning( 'Py++ will generate class wrapper - class contains "%s" - T& member variable' )
 
-W1030 = 'Py++ will generate class wrapper - class contains "%s" - [pure] virtual member function'
+W1027 = warning( 'Py++ will generate class wrapper - class contains "%s" - array member variable' )
 
-W1031 = 'Py++ will generate class wrapper - user asked to expose non - public member function "%s"'
+W1028 = warning( 'Py++ will generate class wrapper - class contains definition of nested class "%s", which requires wrapper class' )
 
-W1032 = "Boost.Python library does not support enums with duplicate values. " \
-        "You can read more about this here: " \
-        "http://boost.org/libs/python/todo.html#support-for-enums-with-duplicate-values . " \
-        "The quick work around is to add new class variable to the exported enum, from Python. "
+W1029 = warning( "Py++ will generate class wrapper - hand written code should be added to the wrapper class constructor body" )
 
-W1033 = "Py++ can not expose unnamed variables"
+W1030 = warning( 'Py++ will generate class wrapper - class contains "%s" - [pure] virtual member function' )
 
-W1034 = "Py++ can not expose alignment bit."
+W1031 = warning( 'Py++ will generate class wrapper - user asked to expose non - public member function "%s"' )
 
-W1035 = "Py++ can not expose static pointer member variables. This could be changed in future."
+W1032 = execution_error( 
+            "Boost.Python library does not support enums with duplicate values. " 
+            "You can read more about this here: " 
+            "http://boost.org/libs/python/todo.html#support-for-enums-with-duplicate-values . " 
+            "The quick work around is to add new class variable to the exported enum, from Python. " )
 
-W1036 = "Py++ can not expose pointer to Python immutable member variables. This could be changed in future."
+W1033 = compilation_error( "Py++ can not expose unnamed variables" )
 
-W1037 = "Boost.Python library can not expose variables, which are pointer to function." \
-        " See http://www.boost.org/libs/python/doc/v2/faq.html#funcptr for more information."
+W1034 = compilation_error( "Py++ can not expose alignment bit." )
 
-W1038 = "Py++ can not expose variables of with unnamed type."
+W1035 = compilation_error( "Py++ can not expose static pointer member variables. This could be changed in future." )
 
-W1039 = "Py++ doesn't expose private or protected member variables."
+W1036 = compilation_error( "Py++ can not expose pointer to Python immutable member variables. This could be changed in future." )
 
-W1040 = 'The declaration is unexposed, but there are other declarations, which refer to it. ' \
-        'This could cause "no to_python converter found" run time error. ' \
-        'Declarations: %s'
+W1037 = compilation_error( 
+            "Boost.Python library can not expose variables, which are pointer to function." 
+            " See http://www.boost.org/libs/python/doc/v2/faq.html#funcptr for more information." )
 
-W1041 = 'Property "%s" could not be created. There is another exposed declaration with the same name( alias )." ' \
-        'The property will make it inaccessible.'
+W1038 = compilation_error( "Py++ can not expose variables of with unnamed type." )
 
-W1042 = 'Py++ can not find out container value_type( mapped_type ). ' \
-        'The container class is template instantiation declaration and not definition. ' \
-        'This container class will be exported, but there is a possibility, that ' \
-        'generated code will not compile or will lack some functionality. ' \
-        'The solution to the problem is to create a variable of the class.' 
+W1039 = compilation_error( "Py++ doesn't expose private or protected member variables." )
 
-W1043 = 'Py++ created an ugly alias ("%s") for template instantiated class.'
+W1040 = execution_error( 
+            'The declaration is unexposed, but there are other declarations, which refer to it. '
+            'This could cause "no to_python converter found" run time error. ' 
+            'Declarations: %s' )
 
-W1044 = 'Py++ created an ugly alias ("%s") for function wrapper.'
+W1041 = warning( 
+            'Property "%s" could not be created. There is another exposed declaration with the same name( alias )." ' 
+            'The property will make it inaccessible.' )
 
-W1045 = 'Py++ does not expose static arrays with unknown size. ' \
-        'You can fix this by setting array size to the actual one.' \
-        'For more information see "array_t" class documentation.'
+W1042 = warning(
+            'Py++ can not find out container value_type( mapped_type ). '
+            'The container class is template instantiation declaration and not definition. '
+            'This container class will be exported, but there is a possibility, that '
+            'generated code will not compile or will lack some functionality. '
+            'The solution to the problem is to create a variable of the class.' )
 
-W1046 = 'The virtual function was declared with empty throw. ' \
-        'Adding the ability to override the function from Python breaks the exception specification. ' \
-        'The function wrapper can throw any exception. ' \
-        'In case of exception in run-time, the behaviour of the program is undefined! '
+W1043 = warning( 'Py++ created an ugly alias ("%s") for template instantiated class.' )
 
-W1047 = 'There are two or more classes that use same alias("%s"). ' \
-        'Duplicated aliases causes few problems, but the main one is that some ' \
-        'of the classes will not be exposed to Python.' \
-        'Other classes : %s'
+W1044 = warning( 'Py++ created an ugly alias ("%s") for function wrapper.' )
 
-W1048 = 'There are two or more aliases within "pyplusplus::aliases" namespace for ' \
-        'the class. Py++ selected "%s" as class alias. Other aliases: %s'
+W1045 = compilation_error( 
+            'Py++ does not expose static arrays with unknown size. '
+            'You can fix this by setting array size to the actual one.'
+            'For more information see "array_t" class documentation.' )
 
-W1049 = 'This method could not be overriden in Python - method returns reference ' \
-        'to local variable!'
+W1046 = warning( 
+            'The virtual function was declared with empty throw. ' 
+            'Adding the ability to override the function from Python breaks the exception specification. ' 
+            'The function wrapper can throw any exception. ' 
+            'In case of exception in run-time, the behaviour of the program is undefined! ' )
 
-W1050 = 'The function returns "%s" type. You have to specify a call policies.' \
-        'Be sure to take a look on Py++ defined call policies: ' \
-        'http://language-binding.net/pyplusplus/documentation/functions/call_policies.html#py-defined-call-policies'
+W1047 = warning(
+            'There are two or more classes that use same alias("%s"). '
+            'Duplicated aliases causes few problems, but the main one is that some '
+            'of the classes will not be exposed to Python.'
+            'Other classes : %s' )
 
-W1051 = 'The function takes as argument (name=%s, pos=%d) "%s" type. ' \
-        'You have to specify a call policies or to use "Function Transformation" ' \
-        'functionality.'
+W1048 = warning( 
+            'There are two or more aliases within "pyplusplus::aliases" namespace for '
+            'the class. Py++ selected "%s" as class alias. Other aliases: %s' )
+
+W1049 = warning( 
+            'This method could not be overriden in Python - method returns reference ' 
+            'to local variable!' )
+
+W1050 = compilation_error(
+            'The function returns "%s" type. You have to specify a call policies.' 
+            'Be sure to take a look on Py++ defined call policies: ' 
+            'http://language-binding.net/pyplusplus/documentation/functions/call_policies.html#py-defined-call-policies' )
+
+W1051 = warning( 'The function takes as argument (name=%s, pos=%d) "%s" type. '
+                 'You have to specify a call policies or to use "Function Transformation" '
+                 'functionality.' )
 
 
 warnings = globals()
@@ -186,9 +220,9 @@ for identifier, explanation in warnings.items():
     try:
         int( identifier[1:] )
     except:
-        continue
-    msg = '%s %s: %s' % ( 'warning', identifier,  explanation)    
-    globals()[ identifier ] = message_type( msg, identifier )
+        continue        
+    msg = '%s %s: %s' % ( explanation.__class__.prefix, identifier, str(explanation) )   
+    globals()[ identifier ] = explanation.__class__( msg, identifier )
 
 del warnings
 del identifier
@@ -197,7 +231,8 @@ del explanation
 
 if __name__ == '__main__':
     x = W1051 % ( 'xxxxxxxx', 122, 'yyyyyyyyyy' )
-    print x, x.__class__.__name__
+    print x
+    print x.__class__.__name__
 
     print '\n\n\n'
 
