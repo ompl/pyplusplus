@@ -469,6 +469,10 @@ class class_t( class_common_details_t
                 #should test whether this function has been added or not
                 for f_impl in not_reimplemented_funcs:
                     if is_same_function( f, f_impl ):
+                        if declarations.is_base_and_derived( f_impl.parent, f.parent ):
+                            #add function from the most derived class
+                            not_reimplemented_funcs.remove( f_impl )
+                            not_reimplemented_funcs.add( f )                       
                         break
                 else:
                     #should test whether this function is implemented in base class
