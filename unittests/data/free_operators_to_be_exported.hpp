@@ -10,6 +10,11 @@ namespace free_operators{
 
 struct number{
     int i;
+    
+    number operator*( int ii ) const {
+        number n2 = { i * ii };
+        return n2;
+    }
 };
 
 number operator+( const number& x, int y ){ 
@@ -22,6 +27,17 @@ number operator+( const number& x, int y ){
 bool operator!( const number& x ){
     return !x.i;
 }
+
+number operator*( const number& n,  double i ){
+    number n2 = { n.i * i };
+    return n2;
+}
+
+number operator*( double i, const number& n ){
+    number n2 = { n.i * i };
+    return n2;
+}
+
 
 }
     
