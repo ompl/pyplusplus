@@ -175,16 +175,15 @@ class creator_t( declarations.decl_visitor_t ):
                           , self.__extmodule.body.creators )
             adopt_operator_impl( operator, found )
         else:
-            arg_type = declarations.base_type( operator.arguments[0].type )
-            if isinstance( arg_type, declarations.fundamental_t ):
-                arg_type = declarations.base_type( operator.arguments[1].type )
-            elif isinstance( arg_type, declarations.declarated_t ) and arg_type.declaration.ignore:
-                arg_type = declarations.base_type( operator.arguments[1].type )
-            else:
-                pass
-            assert isinstance( arg_type, declarations.declarated_t )
-            found = find( lambda decl: arg_type.declaration is decl
-                          , self.__extmodule.body.creators )
+            #select all to be exposed declarations
+            included = filter( lambda decl: decl.ignore == False, operator.class_types )
+            if not included:
+                msg = 'Py++ bug found!' \
+                      ' For some reason Py++ decided to expose free operator "%s", when all class types related to the operator definition are excluded.' \
+                      ' Please report this bug. Thanks! '
+                raise RuntimeError( msg % str( operator ) )
+
+            found = find( lambda decl: included[0] is decl, self.__extmodule.body.creators )
             adopt_operator_impl( operator, found )
 
     def _is_registered_smart_pointer_creator( self, creator, db ):

@@ -17,12 +17,15 @@ struct number{
     }
 };
 
+struct rational{
+    int x, y;
+};
+
 number operator+( const number& x, int y ){ 
     number z;
     z.i = x.i + y;
     return z;
 }
-
 
 bool operator!( const number& x ){
     return !x.i;
@@ -36,6 +39,15 @@ number operator*( const number& n,  double i ){
 number operator*( double i, const number& n ){
     number n2 = { n.i * i };
     return n2;
+}
+
+rational operator*( int i, const rational& r ){
+    rational rr = { r.x * i, r.y };
+    return rr;
+}
+
+bool operator!( const rational& x ){
+    return !x.x;
 }
 
 

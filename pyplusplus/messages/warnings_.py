@@ -205,10 +205,13 @@ W1050 = compilation_error(
             'Be sure to take a look on Py++ defined call policies: ' 
             'http://language-binding.net/pyplusplus/documentation/functions/call_policies.html#py-defined-call-policies' )
 
-W1051 = warning( 'The function takes as argument (name=%s, pos=%d) "%s" type. '
-                 'You have to specify a call policies or to use "Function Transformation" '
-                 'functionality.' )
+W1051 = warning( 
+            'The function takes as argument (name=%s, pos=%d) "%s" type. '
+            'You have to specify a call policies or to use "Function Transformation" '
+            'functionality.' )
 
+W1052 = warning( 
+            'Py++ will not expose free operator "%s" - all classes, this operator works on, are excluded.' )
 
 warnings = globals()
 

@@ -369,6 +369,13 @@ class operators_helper:
             return ''
         if not operators_helper.is_supported( oper ):
             return messages.W1014 % oper.name
+        if isinstance( oper, declarations.free_operator_t ):
+            #Py++ should find out whether the relevant class is exposed to Python
+            #and if not, than this operator should not be exposed too
+            included = filter( lambda decl: decl.ignore == False, oper.class_types )
+            if not included:
+                return messages.W1052 % str(oper)
+                    
         return ''
 
 class member_operator_t( declarations.member_operator_t, calldef_t ):
