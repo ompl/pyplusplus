@@ -13,20 +13,20 @@ from pyplusplus.module_builder import call_policies
 
 decref_code = \
 """
-virtual ~%(cls)s(){
-    if (this->m_pyobj) {
-        //Py_DECREF(this->m_pyobj);
-        this->m_pyobj = 0;
+    virtual ~%(cls)s(){
+        if (this->m_pyobj) {
+            //Py_DECREF(this->m_pyobj);
+            this->m_pyobj = 0;
+        }
     }
-}
 """
 
 incref_code = \
 """
-if( !this->m_pyobj) {
-    this->m_pyobj = boost::python::detail::wrapper_base_::get_owner(*this);
-    Py_INCREF(this->m_pyobj);
-}
+        if( !this->m_pyobj) {
+            this->m_pyobj = boost::python::detail::wrapper_base_::get_owner(*this);
+            Py_INCREF(this->m_pyobj);
+        }
 """
 
 impl_conv_code = \
@@ -70,6 +70,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
         schedule = mb.mem_fun( 'schedule' )
         schedule.add_transformation( ft.transfer_ownership(0), alias='schedule' )
+        simulator = mb.class_( 'simulator_t' )
+        simulator.mem_fun( 'get_event' ).call_policies \
+            = call_policies.return_internal_reference()
         
     def run_tests( self, module):
         class py_event_t( module.event_t ):
