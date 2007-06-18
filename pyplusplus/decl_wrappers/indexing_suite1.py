@@ -32,16 +32,21 @@ class indexing_suite1_t( object ):
         self.__container_traits = container_traits
         self.__include_files = None
 
-    def _get_container_class( self ):
+    @property
+    def container_class( self ):
+        """reference to the parent( STD container ) class"""
         return self.__container_class
-    container_class = property( _get_container_class
-                                , doc="Reference to STD container class" )
 
-    def _get_element_type(self):
+    @property
+    def element_type(self):
+        """reference to container value_type( mapped_type ) type"""
         return self.__container_traits.element_type( self.container_class )
-    element_type = property( _get_element_type
-                            , doc="Reference to container value_type( mapped_type ) type" )
-
+        
+    @property
+    def container_traits( self ):
+        "reference to container traits. See pygccxml documentation for more information."
+        return self.__container_traits
+    
     def _get_no_proxy( self ):
         if self.__no_proxy is None:
             self.__no_proxy = python_traits.is_immutable( self.element_type )
