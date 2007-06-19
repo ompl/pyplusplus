@@ -122,6 +122,27 @@ class readme_tester_t( unittest.TestCase ):
         minus_minus = xxx.operator( symbol='--' )
         self.failUnless( 1 == len( minus_minus.readme() ), os.linesep.join( minus_minus.readme() ) )
 
+
+class use_function_signature_bug_tester_t( unittest.TestCase ):
+    CODE = \
+    """
+    struct base{
+        void f();
+    };
+
+    struct derived : public base {
+        void f(int i);
+        using base::f;
+    };    
+    """
+    def test(self):
+        mb = module_builder.module_builder_t(
+            [ module_builder.create_text_fc( self.CODE )]
+            , gccxml_path=autoconfig.gccxml.executable )
+        d = mb.class_( 'derived' )
+        f = d.mem_fun( 'f' )
+        self.failUnless( f.create_with_signature == True )
+
 class class_multiple_files_tester_t(unittest.TestCase):
     CLASS_DEF = \
     """
@@ -242,6 +263,8 @@ def create_suite():
     suite.addTest( unittest.makeSuite(readme_tester_t))
     suite.addTest( unittest.makeSuite(split_sequence_tester_t))
     suite.addTest( unittest.makeSuite(exclude_erronious_tester_t))
+    suite.addTest( unittest.makeSuite(use_function_signature_bug_tester_t))
+    
     return suite
 
 def run_suite():
