@@ -160,7 +160,10 @@ class return_internal_reference_t( compound_policy_t ):
         return '::boost::python::return_internal_reference'
 
     def _get_args(self, function_creator):
-        return [ str( self.position ) ]
+        if self.position == 1:
+            return [] #don't generate default template arguments
+        else:
+            return [ str( self.position ) ]
 
 def return_internal_reference( arg_pos=1, base=None):
     """create boost::python::return_internal_reference call policies code generator"""
