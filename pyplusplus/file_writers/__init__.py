@@ -31,22 +31,22 @@ def has_pypp_extenstion( fname ):
             return True
     return False
 
-def write_file( data, file_path ):
+def write_file( data, file_path, encoding='ascii' ):
     """writes data to file"""
     if isinstance( data, types.StringTypes ):
-        writer_t.write_file( data, file_path )
+        writer_t.write_file( data, file_path, encoding=encoding )
     else:
-        sf = single_file_t( data, file_path )
+        sf = single_file_t( data, file_path, encoding=encoding )
         sf.write()
 
-def write_multiple_files( extmodule, dir_path, files_sum_repository=None ):
+def write_multiple_files( extmodule, dir_path, files_sum_repository=None, encoding='ascii' ):
     """writes extmodule to multiple files"""
-    mfs = multiple_files_t( extmodule, dir_path, files_sum_repository=files_sum_repository )
+    mfs = multiple_files_t( extmodule, dir_path, files_sum_repository=files_sum_repository, encoding=encoding )
     mfs.write()
     return mfs.written_files
 
-def write_class_multiple_files( extmodule, dir_path, huge_classes, files_sum_repository ):
+def write_class_multiple_files( extmodule, dir_path, huge_classes, files_sum_repository, encoding='ascii' ):
     """writes extmodule to multiple files and splits huge classes to few source files"""
-    mfs = class_multiple_files_t( extmodule, dir_path, huge_classes, files_sum_repository=files_sum_repository )
+    mfs = class_multiple_files_t( extmodule, dir_path, huge_classes, files_sum_repository=files_sum_repository, encoding=encoding )
     mfs.write()
     return mfs.written_files

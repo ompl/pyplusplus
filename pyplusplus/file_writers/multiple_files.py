@@ -22,7 +22,7 @@ class multiple_files_t(writer.writer_t):
     HEADER_EXT = '.pypp.hpp'
     SOURCE_EXT = '.pypp.cpp'
 
-    def __init__(self, extmodule, directory_path, write_main=True, files_sum_repository=None):
+    def __init__(self, extmodule, directory_path, write_main=True, files_sum_repository=None, encoding='ascii'):
         """Constructor.
 
         @param extmodule: The root of a code creator tree
@@ -34,7 +34,7 @@ class multiple_files_t(writer.writer_t):
             that calls all the registration methods.
         @type write_main: boolean
         """
-        writer.writer_t.__init__( self, extmodule, files_sum_repository )
+        writer.writer_t.__init__( self, extmodule, files_sum_repository, encoding=encoding )
         self.__directory_path = directory_path
         self.create_dir( directory_path )
         self.include_creators = []  # List of include_t creators that contain the generated headers
@@ -49,7 +49,7 @@ class multiple_files_t(writer.writer_t):
 
     def write_file( self, fpath, content ):
         self.written_files.append( fpath )
-        writer.writer_t.write_file( fpath, content, self.files_sum_repository )
+        writer.writer_t.write_file( fpath, content, self.files_sum_repository, self.encoding )
 
     def create_dir( self, directory_path ):
         """Create the output directory if it doesn't already exist.
