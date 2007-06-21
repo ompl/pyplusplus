@@ -38,7 +38,8 @@ class module_builder_t(object):
                   , optimize_queries=True
                   , ignore_gccxml_output=False
                   , indexing_suite_version=1
-                  , cflags=""):
+                  , cflags=""
+                  , encoding='ascii'):
         """
         @param files: list of files, declarations from them you want to export
         @type files: list of strings or L{file_configuration_t} instances
@@ -61,6 +62,7 @@ class module_builder_t(object):
         """
         object.__init__( self )
         self.logger = _logging_.loggers.module_builder
+        self.__encoding = encoding
         gccxml_config = parser.config_t(
             gccxml_path=gccxml_path
             , working_directory=working_directory
@@ -95,9 +97,14 @@ class module_builder_t(object):
         self.__registrations_code_head = []
         self.__registrations_code_tail = []
 
-    def _get_global_ns( self ):
+    @property
+    def global_ns( self ):
+        """reference to global namespace"""
         return self.__global_ns
-    global_ns = property( _get_global_ns, doc="reference to global namespace" )
+
+    @property
+    def encoding( self ):
+        return self.__encoding
 
     def run_query_optimizer(self):
         """
@@ -301,7 +308,7 @@ class module_builder_t(object):
         @type file_name: string
         """
         self.__merge_user_code()
-        file_writers.write_file( self.code_creator, file_name )
+        file_writers.write_file( self.code_creator, file_name, encoding=self.encoding )
 
     def split_module( self
                       , dir_name
@@ -335,13 +342,15 @@ class module_builder_t(object):
             written_files = file_writers.write_multiple_files( 
                                 self.code_creator
                                 , dir_name
-                                , files_sum_repository=files_sum_repository )
+                                , files_sum_repository=files_sum_repository
+                                , encoding=self.encoding)
         else:
             written_files = file_writers.write_class_multiple_files( 
                                 self.code_creator
                                 , dir_name
                                 , huge_classes 
-                                , files_sum_repository=files_sum_repository )
+                                , files_sum_repository=files_sum_repository
+                                , encoding=self.encoding)
 
         all_files = os.listdir( dir_name )
         all_files = map( lambda fname: os.path.join( dir_name, fname ), all_files )
