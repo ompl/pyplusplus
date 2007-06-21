@@ -7,6 +7,7 @@
 #define __member_variables_to_be_exported_hpp__
 #include <memory>
 #include <string>
+#include <iostream>
 
 namespace member_variables{ 
 
@@ -76,7 +77,8 @@ struct data_t{
     static char* reserved;
 };
 
-struct tree_node_t{   
+struct tree_node_t{
+    
     data_t *data;
     tree_node_t *left;
     tree_node_t *right;    
@@ -90,15 +92,7 @@ struct tree_node_t{
     {}
     
     ~tree_node_t(){
-        if( left ){
-            delete left;
-        }
-        if( right ){
-            delete right;
-        }
-        if( data ){
-            delete data;
-        }
+        std::cout << "\n~tree_node_t";
     }
 };
 
