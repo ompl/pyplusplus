@@ -54,8 +54,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             self.failUnless( kv.key == "x" and kv.value == "y" )
         for k, v in name2value:
             self.failUnless( k == "x" and v == "y" )
-        for k, v in name2value.iteritems():
-            self.failUnless( k == "x" and v == "y" )
+        #~ for k, v in name2value.iteritems():
+            #~ self.failUnless( k == "x" and v == "y" )
             
         items_ptr = module.items_ptr_t()
         items_ptr.append( item )

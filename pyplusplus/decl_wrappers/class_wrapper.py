@@ -74,19 +74,19 @@ class class_common_details_t( object ):
     indexing_suite_version = property( _get_indexing_suite_version, _set_indexing_suite_version
                                        , doc="indexing suite version")
 
-    def _get_indexing_suite( self ):
+    @property
+    def indexing_suite( self ):
+        """reference to indexing suite configuration class. 
+        
+        If the class is not STD container, this property will contain None"
+        """
         if self._indexing_suite is None:
-            for container_traits in declarations.all_container_traits:
-                if container_traits.is_my_case( self ):
-                    if self._isuite_version == 1:
-                        self._indexing_suite = isuite1.indexing_suite1_t( self, container_traits )
-                    else:
-                        self._indexing_suite = isuite2.indexing_suite2_t( self, container_traits )
-                    break
+            if self.container_traits:
+                if self._isuite_version == 1:
+                    self._indexing_suite = isuite1.indexing_suite1_t( self )
+                else:
+                    self._indexing_suite = isuite2.indexing_suite2_t( self )
         return self._indexing_suite
-    indexing_suite = property( _get_indexing_suite
-                               , doc="reference to indexing suite configuration class. " \
-                                    +"If the class is not STD container, returns None")
 
     def guess_always_expose_using_scope_value( self ):
         if isinstance( self.indexing_suite, isuite2.indexing_suite2_t ) \

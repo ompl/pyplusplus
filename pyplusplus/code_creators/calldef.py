@@ -168,8 +168,7 @@ class calldef_wrapper_t( code_creator.code_creator_t
             if not self.declaration.exceptions:
                 return ''
             else:
-                exceptions = map( lambda exception: 
-                                        algorithm.create_identifier( self, declarations.full_name( exception ) )
+                exceptions = map( lambda exception: algorithm.create_identifier( self, exception.decl_string )
                                   , self.declaration.exceptions )
                 return ' throw( ' + self.PARAM_SEPARATOR.join( exceptions ) + ' )'
         else:

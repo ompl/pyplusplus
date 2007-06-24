@@ -24,12 +24,11 @@ class indexing_suite1_t( object ):
     indexing suite.
     """
 
-    def __init__( self, container_class, container_traits, no_proxy=None, derived_policies=None ):
+    def __init__( self, container_class, no_proxy=None, derived_policies=None ):
         object.__init__( self )
         self.__no_proxy = no_proxy
         self.__derived_policies = derived_policies
         self.__container_class = container_class
-        self.__container_traits = container_traits
         self.__include_files = None
 
     @property
@@ -40,12 +39,12 @@ class indexing_suite1_t( object ):
     @property
     def element_type(self):
         """reference to container value_type( mapped_type ) type"""
-        return self.__container_traits.element_type( self.container_class )
+        return self.container_class.container_traits.element_type( self.container_class )
         
     @property
     def container_traits( self ):
         "reference to container traits. See pygccxml documentation for more information."
-        return self.__container_traits
+        return self.container_class.container_traits
     
     def _get_no_proxy( self ):
         if self.__no_proxy is None:

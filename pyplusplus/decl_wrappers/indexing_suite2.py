@@ -66,11 +66,10 @@ class indexing_suite2_t( object ):
         , 'insert' : ( 'method_append', 'method_insert', 'method_extend' )
     }
 
-    def __init__( self, container_class, container_traits ):
+    def __init__( self, container_class ):
         object.__init__( self )
         self.__call_policies = None
         self.__container_class = container_class
-        self.__container_traits = container_traits
         self._disabled_methods = set()
         self._disabled_groups = set()
         self._default_applied = False
@@ -83,21 +82,20 @@ class indexing_suite2_t( object ):
         self._use_container_suite = value
     use_container_suite = property( get_use_container_suite, set_use_container_suite )
 
-    def _get_container_class( self ):
+    @property
+    def container_class( self ):
+        """reference to the parent( STD container ) class"""
         return self.__container_class
-    container_class = property( _get_container_class
-                                , doc="Reference to STD container class" )
 
-    def _get_container_traits( self ):
-        return self.__container_traits
-    container_traits = property( _get_container_traits
-                                 , doc="Reference to container traits. See "
-                                       "pygccxml documentation for STD container traits.")
-
-    def _get_element_type(self):
-        return self.__container_traits.element_type( self.container_class )
-    element_type = property( _get_element_type
-                             , doc="Reference to container value_type( mapped_type ) type" )
+    @property
+    def element_type(self):
+        """reference to container value_type( mapped_type ) type"""
+        return self.container_traits.element_type( self.container_class )
+        
+    @property
+    def container_traits( self ):
+        "reference to container traits. See pygccxml documentation for more information."
+        return self.container_class.container_traits
 
     def _get_call_policies( self ):
         if self.__call_policies:
