@@ -46,6 +46,9 @@ class multiple_files_t(writer.writer_t):
         self.__predefined_include_creators \
             = filter( lambda creator: isinstance( creator, code_creators.include_t )
                       , self.extmodule.creators )
+        self.__value_traits = filter( lambda x: isinstance(x, code_creators.value_traits_t)
+                                      , self.extmodule.creators )
+
 
     def write_file( self, fpath, content ):
         self.written_files.append( fpath )
@@ -130,6 +133,16 @@ class multiple_files_t(writer.writer_t):
             return None
         if not isinstance( code_creator.declaration.indexing_suite, decl_wrappers.indexing_suite2_t ):
             return None
+        
+        #sometimes, for some reason I expose containers as regular classes ( hash_map )
+        #and in this case I do generate include to
+        classes = ( code_creators.indexing_suite1_t, code_creators.indexing_suite2_t )
+        for cont_code_creator in code_creator.creators:
+            if isinstance( cont_code_creator, classes ):
+                break
+        else:
+            return None
+        
         try:
             element_type = code_creator.declaration.indexing_suite.element_type
             class_traits = declarations.class_traits
@@ -365,9 +378,7 @@ class multiple_files_t(writer.writer_t):
 
         self.extmodule.do_include_dirs_optimization()
 
-        value_traits_classes = filter( lambda x: isinstance(x, code_creators.value_traits_t )
-                                       , self.extmodule.creators )
-        map( self.split_value_traits, value_traits_classes )
+        map( self.split_value_traits, self.__value_traits )
 
         # Obtain a list of all class creators...
         class_creators = filter( lambda x: isinstance(x, ( code_creators.class_t, code_creators.class_declaration_t ) )
