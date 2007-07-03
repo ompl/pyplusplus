@@ -16,6 +16,7 @@ extern color non_const_var;
 struct data{ int value; };
 extern data garray[10];
 
+extern double arr_of_doubles[100];
 void init_garray();
 
 }

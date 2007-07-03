@@ -11,7 +11,8 @@ const color const_var = red;
 color non_const_var = blue;
 
 data garray[10];
-
+double arr_of_doubles[100];
+    
 void init_garray(){
     for( int i =0; i < 10; ++i ){
         garray[i].value = -i;
