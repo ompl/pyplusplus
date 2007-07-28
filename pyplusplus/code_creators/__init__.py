@@ -82,6 +82,10 @@ from calldef_transformed import free_fun_transformed_t
 from calldef_transformed import free_fun_transformed_wrapper_t
 from calldef_transformed import mem_fun_v_transformed_t
 from calldef_transformed import mem_fun_v_transformed_wrapper_t
+#TODO: FT for constructor
+#~ from calldef_transformed import constructor_transformed_t
+#~ from calldef_transformed import constructor_transformed_wrapper_t
+
 
 from global_variable import global_variable_base_t
 from global_variable import global_variable_t
