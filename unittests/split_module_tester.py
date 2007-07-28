@@ -19,6 +19,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         fundamental_tester_base.fundamental_tester_base_t.__init__(
             self
             , tester_t.EXTENSION_NAME
+            , indexing_suite_version=2
             , *args )
         self.files = []
 
@@ -41,6 +42,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         nested = item.class_( 'nested_t' )
         nested.add_declaration_code( '//hello nested decl' )
         nested.add_registration_code( '//hello nested reg', False )
+        mb.free_fun( 'create_empty_mapping' ).include()
 
     def generate_source_files( self, mb ):
         files = mb.split_module( autoconfig.build_dir, on_unused_file_found=lambda fpath: fpath )
