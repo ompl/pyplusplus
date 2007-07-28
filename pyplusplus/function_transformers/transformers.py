@@ -535,7 +535,11 @@ class transfer_ownership_t(type_modifier_t):
         self.__configure_sealed( controller )
 
     def configure_virtual_mem_fun( self, controller ):
-        raise NotImplementedError()
+        raise NotImplementedError(self.__class__.__name__)
+
+#TODO: FT for constructor
+    #~ def configure_constructor( self, controller ):
+        #~ self.__configure_sealed( controller )
         
     def required_headers( self ):
         """Returns list of header files that transformer generated code depends on."""
