@@ -74,16 +74,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( tree.left )
         self.failUnless( tree.left.data.value == 1 )
         
-        try:
-            tree.right = module.create_tree()
-            self.failUnless( 'Attribute error exception should be raised!' )
-        except AttributeError:
-            pass
-        #self.failUnless( tree.right.parent is None )
-        #self.failUnless( tree.right.data.value == 0 )
-        #self.failUnless( tree.right.right is None )
-        #self.failUnless( tree.right.left )
-        #self.failUnless( tree.right.left.data.value == 1 )
+        tree.right = module.create_tree()
+        self.failUnless( tree.right.parent is None )
+        self.failUnless( tree.right.data.value == 0 )
+        self.failUnless( tree.right.right is None )
+        self.failUnless( tree.right.left )
+        self.failUnless( tree.right.left.data.value == 1 )
         
         mem_var_str = module.mem_var_str_t()
         mem_var_str.identity( module.mem_var_str_t.class_name )
