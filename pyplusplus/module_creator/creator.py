@@ -389,6 +389,21 @@ class creator_t( declarations.decl_visitor_t ):
             class_wrapper = self.curr_code_creator.wrapper
             cwrapper = code_creators.constructor_wrapper_t( constructor=self.curr_decl )
             class_wrapper.adopt_creator( cwrapper )
+#TODO: FT for constructor            
+            #~ if self.curr_decl.transformations:
+                #~ cwrapper = code_creators.constructor_transformed_wrapper_t( constructor=self.curr_decl )
+                #~ class_wrapper.adopt_creator( cwrapper )
+        #~ else:
+            #~ if self.curr_decl.transformations:
+                #~ cwrapper = code_creators.constructor_transformed_wrapper_t( constructor=self.curr_decl )
+                #~ class_wrapper.adopt_creator( cwrapper )
+                #~ self.__module_body.adopt_creator( cwrapper )
+                #~ self.curr_code_creator.associated_decl_creators.append( cwrapper )
+                
+        #~ maker = None
+        #~ if self.curr_decl.transformations:
+            #~ maker = code_creators.constructor_transformed_t( constructor=self.curr_decl )
+        #~ else:
         maker = code_creators.constructor_t( constructor=self.curr_decl, wrapper=cwrapper )
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
