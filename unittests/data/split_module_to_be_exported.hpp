@@ -6,6 +6,11 @@
 #ifndef __split_module_to_be_exported_hpp__
 #define __split_module_to_be_exported_hpp__
 
+#include "boost/shared_ptr.hpp"
+//#include BOOST_HASH_MAP_HEADER
+#include <map>
+#include <string>
+
 namespace split_module{
 
 struct op_struct{};
@@ -37,6 +42,13 @@ struct item_t{
 
     struct nested_t{};
 };
+
+//typedef BOOST_STD_EXTENSION_NAMESPACE::hash_map< std::string, boost::shared_ptr< item_t > > str2item_t;
+typedef std::map< std::string, boost::shared_ptr< item_t > > str2item_t;
+inline str2item_t create_empty_mapping(){
+    return str2item_t();
+}
+
 }
 
 
