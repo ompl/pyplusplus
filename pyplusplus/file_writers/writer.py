@@ -94,6 +94,7 @@ class writer_t(object):
         fcontent_new.append( content )
         fcontent_new.append( os.linesep ) #keep gcc happy
         fcontent_new = ''.join( fcontent_new )
+        fcontent_new = unicode( fcontent_new, encoding ) 
         
         new_hash_value = None
         curr_hash_value = None
@@ -105,7 +106,7 @@ class writer_t(object):
                                        % ( time.clock() - start_time ) )
                 return
 
-        if os.path.exists( fpath ) and None is curr_hash_value:
+        if None is curr_hash_value and os.path.exists( fpath ):
             #It could be a first time the user uses files_sum_repository, don't force him
             #to recompile the code
             #small optimization to cut down compilation time
@@ -121,7 +122,7 @@ class writer_t(object):
             
         writer_t.create_backup( fpath )
         f = codecs.open( fpath, 'w+b', encoding )
-        f.write( unicode( fcontent_new, encoding ) )
+        f.write( fcontent_new, encoding )
         f.close()
         if new_hash_value:
             files_sum_repository.update_value( fname, new_hash_value )
