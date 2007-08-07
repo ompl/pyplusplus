@@ -94,7 +94,8 @@ class writer_t(object):
         fcontent_new.append( content )
         fcontent_new.append( os.linesep ) #keep gcc happy
         fcontent_new = ''.join( fcontent_new )
-        fcontent_new = unicode( fcontent_new, encoding ) 
+        if not isinstance( fcontent_new, unicode ):
+            fcontent_new = unicode( fcontent_new, encoding ) 
         
         new_hash_value = None
         curr_hash_value = None
