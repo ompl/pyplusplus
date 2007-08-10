@@ -123,7 +123,7 @@ class writer_t(object):
             
         writer_t.create_backup( fpath )
         f = codecs.open( fpath, 'w+b', encoding )
-        f.write( fcontent_new, encoding )
+        f.write( fcontent_new )
         f.close()
         if new_hash_value:
             files_sum_repository.update_value( fname, new_hash_value )
