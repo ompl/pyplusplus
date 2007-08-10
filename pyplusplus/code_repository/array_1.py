@@ -25,6 +25,9 @@ code = \
 #include "boost/mpl/if.hpp"
 #include "boost/type_traits/is_same.hpp"
 #include "boost/type_traits/is_fundamental.hpp"
+#include "boost/python/converter/registry.hpp"
+
+#include <iostream>
 
 //1 - dimension
 namespace pyplusplus{ namespace containers{ namespace static_sized{
@@ -49,6 +52,20 @@ struct is_immutable{
     );
 
 };
+
+template<class T>
+bool is_registered(){
+    namespace bpl = boost::python;
+    bpl::handle<> class_obj( bpl::objects::registered_class_object( bpl::type_id< T >()));
+    return class_obj.get() ? true : false;
+}
+
+template< class T >
+void register_alias( const char* name ){
+    namespace bpl = boost::python;
+    bpl::handle<> class_obj( bpl::objects::registered_class_object( bpl::type_id< T >()));
+    boost::python::scope().attr( name ) = bpl::object( class_obj );
+}
 
 }//details
 
@@ -124,31 +141,52 @@ private:
 
 };
 
-template< class TItemType, long unsigned int size, typename CallPolicies >
-void register_const_array_1(const char* name){
-    typedef const_array_1_t< TItemType, size > wrapper_t;
-    boost::python::class_< wrapper_t >( name, boost::python::no_init )
-        .def( "__getitem__"
-              , &wrapper_t::item_ref
-              , ( boost::python::arg("index") )
-              , CallPolicies() )
-        .def( "__len__", &wrapper_t::len );
-}
+template< class TItemType
+          , long unsigned int size
+          , typename CallPolicies=boost::python::default_call_policies >
+struct register_const_array_1{
+    register_const_array_1(const char* name){
+        namespace bpl = boost::python;
+        typedef const_array_1_t< TItemType, size > wrapper_t;
 
-template< class TItemType, long unsigned int size, typename CallPolicies >
-void register_array_1(const char* name){
-    typedef array_1_t< TItemType, size > wrapper_t;
-    boost::python::class_< wrapper_t >( name, boost::python::no_init )
-        .def( "__getitem__"
-              , &wrapper_t::item_ref
-              , ( boost::python::arg("index") )
-              , CallPolicies() )
-        .def( "__setitem__"
-              , &wrapper_t::set_item
-              , ( boost::python::arg("index"), boost::python::arg("value") )
-              , CallPolicies()  )
-        .def( "__len__", &wrapper_t::len );
-}
+        if( details::is_registered< wrapper_t >() ){
+            details::register_alias< wrapper_t >( name );
+        }
+        else{
+            bpl::class_< wrapper_t >( name, bpl::no_init )
+                .def( "__getitem__"
+                      , &wrapper_t::item_ref
+                      , ( bpl::arg("index") )
+                      , CallPolicies() )
+                .def( "__len__", &wrapper_t::len );
+        }
+    }
+};
+
+template< class TItemType
+          , long unsigned int size
+          , typename CallPolicies=boost::python::default_call_policies >
+struct register_array_1{
+    register_array_1(const char* name){
+        namespace bpl = boost::python;
+        typedef array_1_t< TItemType, size > wrapper_t;
+        if( details::is_registered< wrapper_t >() ){
+            details::register_alias< wrapper_t >( name );
+        }
+        else{
+            bpl::class_< wrapper_t >( name, bpl::no_init )
+                .def( "__getitem__"
+                      , &wrapper_t::item_ref
+                      , ( bpl::arg("index") )
+                      , CallPolicies() )
+                .def( "__setitem__"
+                      , &wrapper_t::set_item
+                      , ( bpl::arg("index"), bpl::arg("value") )
+                      , CallPolicies()  )
+                .def( "__len__", &wrapper_t::len );
+        }
+    }
+};
 
 } /*pyplusplus*/ } /*containers*/ } /*static_sized*/
 

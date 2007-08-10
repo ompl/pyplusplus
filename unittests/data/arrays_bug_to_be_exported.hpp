@@ -12,6 +12,11 @@ struct item{ int values[10]; };
 
 struct container{ item items[10]; };
 
+struct const_item{ const int values[10]; };
+
+struct const_container{ const const_item items[10]; };
+
+
 };
 
 #endif//__arrays_bug_to_be_exported_hpp__

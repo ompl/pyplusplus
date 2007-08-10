@@ -17,7 +17,11 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             self
             , tester_t.EXTENSION_NAME
             , *args )
-    
+
+    def customize(self, mb ):
+        mb.add_registration_code( 'pyplusplus::containers::static_sized::register_array_1< int, 10 >( "X1" );' )
+        mb.add_registration_code( 'pyplusplus::containers::static_sized::register_array_1< int, 10 >( "X2" );' )
+            
     def run_tests( self, module):
         m = module.arrays_bug
         c = m.container()
@@ -25,6 +29,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         c.items[0].values[0] = 1
         y = c.items[0]
         c.items[0] = m.item()
+        
+        self.failUnless( id(module.X1) == id(module.X2) == id( c.items[0].values.__class__ ) )
         
 def create_suite():
     suite = unittest.TestSuite()    
