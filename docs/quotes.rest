@@ -94,6 +94,24 @@ Who is using Py++?
 
   You can download the bindings from https://sourceforge.net/project/showfiles.php?group_id=118209 .
 
+* European Space Agency - `ReSP`_ project
+
+  `ReSP`_ is an Open-Source hardware simulation platform targeted for
+  multiprocessor systems. ReSP will provide a framework for composing a
+  system by connecting components chosen from a given repository or
+  developped by the designer. ReSP will provide also also a framework for
+  fault injection campaigns for the analysis of the reliability level of the
+  system.
+
+  `ReSP`_ engineers are developping the simulator core in Python language for exploiting
+  reflective capabilities (missing in a pure C++ environment) that can be
+  exploited for connecting components in a dynamic way and for enabling
+  non-intrusive fault injection activity. Components will be described in
+  SystemC and TLM libraries that are high level hardware description
+  languages based on C++.
+
+  .. _`ReSP` : http://www.esa.int/TEC/Microelectronics/
+
 .. _`Py++` : ./pyplusplus.html
 .. _`Python Computer Graphics Kit` : http://cgkit.sourceforge.net/
 .. _`TnFOX`: http://www.nedprod.com/TnFOX/
