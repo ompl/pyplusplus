@@ -7,13 +7,12 @@
 This module is a collection of unrelated algorithms, that works on code creators
 tree.
 """
+import os
 import math
 from pygccxml import declarations
-from pyplusplus import code_creators
-    
+from pyplusplus import code_creators  
 
 class missing_call_policies:
-
     @staticmethod
     def _selector( creator ):
         if not isinstance( creator, code_creators.declaration_based_t ):
@@ -40,7 +39,6 @@ class missing_call_policies:
         for creator in creators:
             creator.parent.remove_creator( creator )
     
-
 def split_sequence(seq, bucket_size):
     #split sequence to buclets, where every will contain maximum bucket_size items
     seq_len = len( seq )
@@ -53,4 +51,93 @@ def split_sequence(seq, bucket_size):
         to = min( ( i + 1) * bucket_size, seq_len )
         buckets.append( seq[ from_ : to ] )
     return buckets
+    
+
+class exposed_decls_db_t( object ):
+    class row_creator_t( declarations.decl_visitor_t ):
+        def __init__( self, field_delimiter ):
+            self.__decl = None
+            self.__formatted = None
+            self.__field_delimiter = field_delimiter
+
+        def get_full_name(self):
+            return declarations.full_name( self.__decl )
+
+        def __call__( self, decl ):
+            if not isinstance( decl.parent, declarations.namespace_t ):
+                return None #we don't want to dump class internal declarations
+            self.__decl = decl
+            self.__formatted = None
+            try:
+                declarations.apply_visitor( self, decl )
+            except NotImplementedError:
+                pass
+            return self.__formatted
+
+        def visit_free_function( self ):
+            self.__formatted = '%s%s%s' % ( self.get_full_name()
+                                            , self.__field_delimiter
+                                            , self.__decl.function_type().decl_string )
+
+        def visit_class_declaration(self ):
+            self.__formatted = self.get_full_name()
+            
+        def visit_class(self ):
+            self.__formatted = self.get_full_name()
+            
+        def visit_enumeration(self ):
+            self.__formatted = self.get_full_name()
+
+        def visit_variable(self ):
+            self.__formatted = self.get_full_name()
         
+    def __init__( self, activated=False ):
+        self.__activated = activated
+        self.__exposed = {}
+        self.__row_creator = self.row_creator_t(field_delimiter='@')
+        self.__key_delimiter = '?'
+        self.__row_delimiter = os.linesep
+        
+    def __create_key( self, decl ):
+        return decl.__class__.__name__ 
+    
+    @property
+    def activated( self ):
+        return self.__activated
+    
+    def expose( self, decl ):
+        if not self.__activated:
+            return None
+        row = self.__row_creator( decl )
+        if row is None:
+            return None
+        key = self.__create_key( decl )
+        if not self.__exposed.has_key( key ):
+            self.__exposed[ key ] = set()
+        self.__exposed[ key ].add( row )
+    
+    def save( self, fpath ):
+        f = file( fpath, 'w+b' )
+        for key, items in self.__exposed.iteritems():
+            for item in items:
+                f.write( '%s%s%s%s' % ( key, self.__key_delimiter, item, self.__row_delimiter ) )
+        f.close()
+    
+    def load( self, fpath ):
+        self.__exposed = {}
+        f = file( fpath, 'r+b' )
+        for line in f:
+            key, row = line.split( self.__key_delimiter)
+            if not self.__exposed.has_key( key ):
+                self.__exposed[ key ] = set()
+            self.__exposed[ key ].add( row[:len(self.__row_delimiter)] )
+
+    def is_exposed( self, decl ):
+        assert self.activated
+        key = self.__create_key( decl )
+        if not self.__exposed.has_key( key ):
+            return False
+        row = self.__row_creator( decl )
+        return row in self.__exposed[ key ]
+
+

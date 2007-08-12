@@ -71,6 +71,7 @@ import function_transformations_tester
 import throw_tester
 import duplicate_aliases_tester
 import non_overridable_tester
+import exposed_decls_db_tester
 
 def create_suite(times):
     testers = [
@@ -138,6 +139,7 @@ def create_suite(times):
         , throw_tester
         , duplicate_aliases_tester
         , non_overridable_tester
+        , exposed_decls_db_tester
     ]
 
     main_suite = unittest.TestSuite()
