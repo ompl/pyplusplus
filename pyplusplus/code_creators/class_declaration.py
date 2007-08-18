@@ -122,13 +122,12 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
             base_classes[ id( hierarchy_info.related_class ) ] = hierarchy_info
         base_classes_size = len( base_classes )
         creators = {}
+        creators_len = 0
         for creator in algorithm.make_flatten_generator( self.top_parent.body.creators ):
-            if not isinstance( creator, class_t ):
-                continue
-            if id(creator.declaration) in base_classes:
+            if isinstance( creator, class_t ) and id(creator.declaration) in base_classes:
                 creators[ id(creator.declaration) ] = creator
-            if len( creators ) == base_classes_size:
-                break #all classes has been found
+                if len( creators ) == base_classes_size:
+                    break #all classes has been found
         return base_classes, creators
 
     def _get_base_operators(self, base_classes, base_creators):
