@@ -30,6 +30,7 @@ class indexing_suite1_t( object ):
         self.__derived_policies = derived_policies
         self.__container_class = container_class
         self.__include_files = None
+        self.__element_type = None
 
     @property
     def container_class( self ):
@@ -39,7 +40,9 @@ class indexing_suite1_t( object ):
     @property
     def element_type(self):
         """reference to container value_type( mapped_type ) type"""
-        return self.container_class.container_traits.element_type( self.container_class )
+        if self.__element_type is None:
+            self.__element_type = self.container_class.container_traits.element_type( self.container_class )
+        return self.__element_type
         
     @property
     def container_traits( self ):
