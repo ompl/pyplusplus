@@ -148,18 +148,7 @@ class class_common_details_t( object ):
                             +" BOOST_PYTHON_OPAQUE_SPECIALIZED_TYPE_ID macro in a right places." )
 
     def _get_already_exposed_impl( self ):
-        if not self.indexing_suite:
-            return self._already_exposed 
-        try:
-            et = self.indexing_suite.element_type
-            et = declarations.remove_const( et )
-            et = declarations.remove_pointer( et )
-            et = declarations.remove_declarated( et )
-            if isinstance(et, declarations.declaration_t):
-                return et._already_exposed
-            return False
-        except:
-            return False
+        return self._already_exposed 
     
     @property
     def class_var_name(self):
