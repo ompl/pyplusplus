@@ -17,13 +17,13 @@ class indexing_suite1_t( registration_based.registration_based_t
         registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=container )
 
-    def _get_configuration( self ):
+    @property
+    def configuration( self ):        
         return self.declaration.indexing_suite
-    configuration = property( _get_configuration )
 
-    def _get_container( self ):
+    @property
+    def container( self ):
         return self.declaration
-    container = property( _get_container )
 
     def guess_suite_name( self ):
         if self.container.name.startswith( 'vector' ):
