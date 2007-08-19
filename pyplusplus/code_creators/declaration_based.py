@@ -54,3 +54,7 @@ class declaration_based_t:
     def get_user_headers( self, recursive=False, unique=False ):
         """return list of user header files to be included from the generated file"""
         return self.declaration.include_files
+
+    def register_exposed( self, exposed_db ):
+        """Register exposed declaration in L{exposed data base<utils.exposed_decls_db_t>}"""
+        exposed_db.expose( self.declaration )

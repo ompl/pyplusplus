@@ -52,7 +52,8 @@ class creator_t( declarations.decl_visitor_t ):
                   , types_db=None
                   , target_configuration=None
                   , enable_indexing_suite=True
-                  , doc_extractor=None):
+                  , doc_extractor=None
+                  , already_exposed_dbs=None):
         """Constructor.
 
         @param decls: Declarations that should be exposed in the final module.
@@ -62,6 +63,7 @@ class creator_t( declarations.decl_visitor_t ):
         @param types_db: ...todo...
         @param target_configuration: A target configuration object can be used to customize the generated source code to a particular compiler or a particular version of Boost.Python.
         @param doc_extractor: callable, that takes as argument declaration reference and returns documentation string
+        @param already_exposed_dbs: list of files/directories other modules, this module depends on, generated their code too
         @type decls: list of declaration_t
         @type module_name: str
         @type boost_python_ns_name: str
@@ -69,6 +71,7 @@ class creator_t( declarations.decl_visitor_t ):
         @type types_db: L{types_database_t<types_database.types_database_t>}
         @type target_configuration: L{target_configuration_t<code_creators.target_configuration_t>}
         @type doc_extractor: callable
+        @type already_exposed_dbs: list of strings
         """
         declarations.decl_visitor_t.__init__(self)
         self.logger = _logging_.loggers.module_builder
@@ -95,8 +98,12 @@ class creator_t( declarations.decl_visitor_t ):
             self.__extmodule.adopt_creator( bp_ns_alias )
 
         self.__module_body = code_creators.module_body_t( name=module_name )
-        self.__extmodule.adopt_creator( self.__module_body )
 
+        self.__extmodule.adopt_creator( self.__module_body )
+        
+        self.__opaque_types_manager = opaque_types_manager.manager_t( self.__extmodule )
+        self.__dependencies_manager = dependencies_manager.manager_t(self.decl_logger, already_exposed_dbs)
+        
         prepared_decls = self._prepare_decls( decls, doc_extractor )
         self.__decls = sort_algorithms.sort( prepared_decls )
 
@@ -105,18 +112,42 @@ class creator_t( declarations.decl_visitor_t ):
         self.__array_1_registered = set() #(type.decl_string,size)
         self.__free_operators = []
         self.__exposed_free_fun_overloads = set()
-        self.__opaque_types_manager = opaque_types_manager.manager_t( self.__extmodule )
-        self.__dependencies_manager = dependencies_manager.manager_t(self.decl_logger)
-        
-    def _prepare_decls( self, decls, doc_extractor ):
-        decls = declarations.make_flatten( decls )
 
-        for decl in decls:
+
+    def __print_readme( self, decl ):
+        readme = decl.readme()
+        if not readme:
+            return 
+        
+        if not decl.exportable:
+            reason = readme[0]
+            readme = readme[1:]
+            self.decl_logger.warn( "%s;%s" % ( decl, reason ) )
+
+        for msg in readme:
+            self.decl_logger.warn( "%s;%s" % ( decl, msg ) )
+
+    def _prepare_decls( self, decls, doc_extractor ):
+        to_be_exposed = []
+        for decl in declarations.make_flatten( decls ):
             if decl.ignore:
                 continue
-            
-            if decl.already_exposed:
+
+            if isinstance( decl, declarations.namespace_t ):
                 continue
+            
+            if not decl.exportable:
+                #leave only decls that user wants to export and that could be exported
+                self.__print_readme( decl )
+                continue
+            
+            if self.__dependencies_manager.is_already_exposed( decl ):
+                #check wether this is already exposed in other module
+                continue
+ 
+            if isinstance( decl.parent, declarations.namespace_t ):
+                #leave only declarations defined under namespace, but remove namespaces
+                to_be_exposed.append( decl )
             
             #Right now this functionality introduce a bug: declarations that should
             #not be exported for some reason are not marked as such. I will need to
@@ -128,29 +159,13 @@ class creator_t( declarations.decl_visitor_t ):
 
             #if isinstance( decl, declarations.variable_t ):
                 #self.__types_db.update( decl )
-            if doc_extractor and decl.exportable:
+                
+            if doc_extractor:
                 decl.documentation = doc_extractor( decl )
 
-            readme = decl.readme()
-            if not readme:
-                continue
+            self.__print_readme( decl )
             
-            if not decl.exportable:
-                reason = readme[0]
-                readme = readme[1:]
-                self.decl_logger.warn( "%s;%s" % ( decl, reason ) )
-
-            for msg in readme:
-                self.decl_logger.warn( "%s;%s" % ( decl, msg ) )
-
-        #leave only declarations defined under namespace, but remove namespaces
-        decls = filter( lambda x: not isinstance( x, declarations.namespace_t ) \
-                                   and isinstance( x.parent, declarations.namespace_t )
-                         , decls )
-        #leave only decls that user wants to export and that could be exported
-        decls = filter( lambda x: x.ignore == False and x.exportable == True, decls )
-
-        return decls
+        return to_be_exposed
 
     def _adopt_free_operator( self, operator ):
         def adopt_operator_impl( operator, found_creators ):

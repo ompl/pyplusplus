@@ -28,31 +28,44 @@ class tester_t(unittest.TestCase):
         int VVV;
         void FFF( int );
     }
+    namespace ns_skip{
+        enum a123{ a1=1 };
+        struct b123{
+            struct c123{};
+        };
+        int fff();
+        int i;
+    }
     """
     def __init__(self, *args ):
         unittest.TestCase.__init__(self, *args)
 
     def test(self):
-        db = pypp_utils.exposed_decls_db_t(activated=True)
+        db = pypp_utils.exposed_decls_db_t()
         config = parser.config_t( gccxml_path=autoconfig.gccxml.executable )
         global_ns = declarations.get_global_namespace( parser.parse_string( self.CODE, config ) )
         ns = global_ns.namespace( 'ns' )
         for d in ns.decls(recursive=True):
             db.expose( d )
-            
-        select_exposed = lambda decl: decl.name == decl.name.upper() \
-                                      and not isinstance( decl, declarations.member_calldef_t )
-        
-        for x in ns.decls( select_exposed ):
+                    
+        for x in ns.decls(recursive=True):
             self.failUnless( db.is_exposed( x ) == True )
-        
+
+        ns_skip = global_ns.namespace( 'ns_skip' )
+        for x in ns_skip.decls(recursive=True):
+            self.failUnless( db.is_exposed( x ) == False )
+
         db.save( os.path.join( autoconfig.build_dir, 'exposed.db.pypp' ) )
-                
-        db2 = pypp_utils.exposed_decls_db_t(activated=True)
+
+        db2 = pypp_utils.exposed_decls_db_t()
         db2.load( os.path.join( autoconfig.build_dir, 'exposed.db.pypp' ) )
-        for x in ns.decls( select_exposed ):
+        for x in ns.decls(recursive=True):
             self.failUnless( db.is_exposed( x ) == True )
-        
+
+        ns_skip = global_ns.namespace( 'ns_skip' )
+        for x in ns_skip.decls(recursive=True):
+            self.failUnless( db.is_exposed( x ) == False )
+
 
 def create_suite():
     suite = unittest.TestSuite()

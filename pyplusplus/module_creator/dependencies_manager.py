@@ -6,18 +6,26 @@
 """defines class, which informs user about used, but unexposed declarations"""
 
 import os
+from pyplusplus import utils 
 from pyplusplus import messages
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 
+
 class manager_t( object ):
-    def __init__( self, logger ):
+    def __init__( self, logger, already_exposed=None ):
         object.__init__( self )
         self.__exported_decls = []
         self.__logger = logger
-        
+        self.__already_exposed_db = utils.exposed_decls_db_t()
+        if already_exposed:
+            map( self.__already_exposed_db.load, already_exposed )
+            
     def add_exported( self, decl ):
         self.__exported_decls.append( decl )  
+
+    def is_already_exposed( self, decl ):
+        return decl.already_exposed or self.__already_exposed_db.is_exposed( decl )
 
     def __select_duplicate_aliases( self, decls ):
         duplicated = {}
@@ -71,7 +79,7 @@ class manager_t( object ):
         if self.__is_std_decl( decl ):
             #TODO add element_type to the list of dependencies
             return [] #std declarations should be exported by Py++!
-        if decl.already_exposed:
+        if self.is_already_exposed( decl ):
             return []
         dependencies = decl.i_depend_on_them(recursive=False)
         if isinstance( decl, declarations.class_t ):

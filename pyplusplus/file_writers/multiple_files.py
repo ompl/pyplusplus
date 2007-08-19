@@ -375,7 +375,8 @@ class multiple_files_t(writer.writer_t):
         """
 
         self.write_code_repository( self.__directory_path )
-
+        self.save_exposed_decls_db( self.__directory_path )
+        
         self.extmodule.do_include_dirs_optimization()
 
         map( self.split_value_traits, self.__value_traits )

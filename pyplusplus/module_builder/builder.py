@@ -12,6 +12,7 @@ import warnings
 from pygccxml import parser
 from pygccxml import declarations as decls_package
 
+from pyplusplus import utils
 from pyplusplus import _logging_
 from pyplusplus import decl_wrappers
 from pyplusplus import file_writers
@@ -96,7 +97,8 @@ class module_builder_t(object):
 
         self.__registrations_code_head = []
         self.__registrations_code_tail = []
-
+        self.__already_exposed_modules = []
+        
     @property
     def global_ns( self ):
         """reference to global namespace"""
@@ -105,6 +107,9 @@ class module_builder_t(object):
     @property
     def encoding( self ):
         return self.__encoding
+
+    def register_module_dependency( self, other_module_generate_code_dir ):
+        self.__already_exposed_modules.append( other_module_generate_code_dir )
 
     def run_query_optimizer(self):
         """
@@ -250,7 +255,8 @@ class module_builder_t(object):
                                               , types_db
                                               , target_configuration
                                               , enable_indexing_suite
-                                              , doc_extractor)
+                                              , doc_extractor
+                                              , self.__already_exposed_modules)
         self.__code_creator = creator.create()
         self.__code_creator.replace_included_headers(self.__parsed_files)
         #I think I should ask users, what they expect

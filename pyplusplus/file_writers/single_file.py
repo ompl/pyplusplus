@@ -20,9 +20,10 @@ class single_file_t(writer.writer_t):
         return self.__fname
     
     def write(self):        
+        target_dir = os.path.split( self.file_name )[0]
         headers = self.get_user_headers( [self.extmodule] )        
         map( lambda header: self.extmodule.add_include( header )
              , headers )
-        self.write_code_repository( os.path.split( self.file_name )[0] )
+        self.write_code_repository( target_dir )
         self.write_file( self.file_name, self.extmodule.create(), encoding=self.encoding )
-        
+        self.save_exposed_decls_db( target_dir )

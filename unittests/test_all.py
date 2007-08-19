@@ -72,6 +72,7 @@ import throw_tester
 import duplicate_aliases_tester
 import non_overridable_tester
 import exposed_decls_db_tester
+import already_exposed_tester
 
 def create_suite(times):
     testers = [
@@ -140,6 +141,7 @@ def create_suite(times):
         , duplicate_aliases_tester
         , non_overridable_tester
         , exposed_decls_db_tester
+        , already_exposed_tester
     ]
 
     main_suite = unittest.TestSuite()

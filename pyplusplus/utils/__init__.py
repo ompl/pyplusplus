@@ -54,6 +54,7 @@ def split_sequence(seq, bucket_size):
     
 
 class exposed_decls_db_t( object ):
+    DEFAULT_FILE_NAME = 'exposed_decl.pypp.txt'
     class row_creator_t( declarations.decl_visitor_t ):
         def __init__( self, field_delimiter ):
             self.__decl = None
@@ -64,8 +65,6 @@ class exposed_decls_db_t( object ):
             return declarations.full_name( self.__decl )
 
         def __call__( self, decl ):
-            if not isinstance( decl.parent, declarations.namespace_t ):
-                return None #we don't want to dump class internal declarations
             self.__decl = decl
             self.__formatted = None
             try:
@@ -91,32 +90,15 @@ class exposed_decls_db_t( object ):
         def visit_variable(self ):
             self.__formatted = self.get_full_name()
         
-    def __init__( self, activated=False ):
-        self.__activated = activated
+    def __init__( self ):
         self.__exposed = {}
         self.__row_creator = self.row_creator_t(field_delimiter='@')
         self.__key_delimiter = '?'
         self.__row_delimiter = os.linesep
         
-    def __create_key( self, decl ):
-        return decl.__class__.__name__ 
-    
-    @property
-    def activated( self ):
-        return self.__activated
-    
-    def expose( self, decl ):
-        if not self.__activated:
-            return None
-        row = self.__row_creator( decl )
-        if row is None:
-            return None
-        key = self.__create_key( decl )
-        if not self.__exposed.has_key( key ):
-            self.__exposed[ key ] = set()
-        self.__exposed[ key ].add( row )
-    
     def save( self, fpath ):
+        if os.path.isdir( fpath ):
+            fpath = os.path.join( fpath, self.DEFAULT_FILE_NAME )
         f = file( fpath, 'w+b' )
         for key, items in self.__exposed.iteritems():
             for item in items:
@@ -124,16 +106,41 @@ class exposed_decls_db_t( object ):
         f.close()
     
     def load( self, fpath ):
-        self.__exposed = {}
+        if os.path.isdir( fpath ):
+            fpath = os.path.join( fpath, self.DEFAULT_FILE_NAME )        
         f = file( fpath, 'r+b' )
         for line in f:
             key, row = line.split( self.__key_delimiter)
+            row = row.replace( self.__row_delimiter, '' )
             if not self.__exposed.has_key( key ):
                 self.__exposed[ key ] = set()
-            self.__exposed[ key ].add( row[:len(self.__row_delimiter)] )
+            self.__exposed[ key ].add( row )
 
-    def is_exposed( self, decl ):
-        assert self.activated
+    def __create_key( self, decl ):
+        return decl.__class__.__name__ 
+    
+    def expose( self, decl ):
+        if not isinstance( decl.parent, declarations.namespace_t ):
+            return None #we don't want to dump class internal declarations
+        row = self.__row_creator( decl )
+        if row is None:
+            return None
+        key = self.__create_key( decl )
+        if not self.__exposed.has_key( key ):
+            self.__exposed[ key ] = set()
+        self.__exposed[ key ].add( row )
+
+    def __get_under_ns_decl( self, decl ):
+        while True:
+            if isinstance( decl.parent, declarations.namespace_t ):
+                return decl
+            else:
+                decl = decl.parent
+
+    def is_exposed( self, decl_ ):
+        if isinstance( decl_, declarations.namespace_t ):
+            return False#namespaces are always exposed
+        decl = self.__get_under_ns_decl( decl_ )
         key = self.__create_key( decl )
         if not self.__exposed.has_key( key ):
             return False

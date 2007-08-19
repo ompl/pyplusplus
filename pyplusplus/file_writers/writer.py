@@ -8,10 +8,11 @@
 import os
 import time
 import codecs
+import md5sum_repository
+from pyplusplus import utils
 from pyplusplus import _logging_
 from pyplusplus import code_creators
 from pyplusplus import code_repository
-import md5sum_repository
 
 class writer_t(object):
     """Base class for all module/code writers.
@@ -30,6 +31,8 @@ class writer_t(object):
         self.__encoding=encoding
         if None is files_sum_repository:
             self.__files_sum_repository = md5sum_repository.dummy_repository_t()
+        self.__exposed_decls_db = utils.exposed_decls_db_t()
+        self.__extmodule.register_exposed( self.__exposed_decls_db  )
 
     @property
     def encoding( self ):
@@ -136,3 +139,8 @@ class writer_t(object):
         map( lambda creator: headers.extend( creator.get_user_headers() )
              , creators )
         return code_creators.code_creator_t.unique_headers( headers )
+
+    def save_exposed_decls_db( self, file_path ):
+        self.__exposed_decls_db.save( file_path )
+        
+        
