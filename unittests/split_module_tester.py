@@ -7,8 +7,9 @@ import os
 import sys
 import unittest
 import autoconfig
+from pyplusplus import utils
 import fundamental_tester_base
-
+from pygccxml import declarations
 from pyplusplus import module_builder
 from pyplusplus.module_builder import call_policies
 
@@ -25,6 +26,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def customize( self, mb ):
         mb.global_ns.exclude()
+
+        exposed_db = utils.exposed_decls_db_t()
+        exposed_db.expose( declarations.remove_declarated( mb.global_ns.typedef( 'naive_matrix_t' ).type ) )
+        exposed_db.save( autoconfig.build_dir )
+        mb.register_module_dependency( autoconfig.build_dir )
+        
         sm = mb.global_ns.namespace( name='split_module' )
         sm.include()
         sm.class_( 'op_struct' ).exclude()

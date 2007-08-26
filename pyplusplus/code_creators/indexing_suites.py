@@ -169,8 +169,11 @@ class value_traits_t( code_creator.code_creator_t
         pass # for inner class this code will generate error :-((((
 
     def _create_impl( self ):
-        if self.declaration.already_exposed:
-            return ''
+        #if self.declaration.already_exposed:
+        #    return ''
+        #This is the error to skip generation in case the class is already exposed,
+        #because we still expose container, so it needs to know how to work with 
+        #the value_type
         return self.generate_value_traits()
 
     def _get_system_headers_impl( self ):

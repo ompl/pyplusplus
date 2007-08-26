@@ -9,9 +9,17 @@
 #include "boost/shared_ptr.hpp"
 //#include BOOST_HASH_MAP_HEADER
 #include <map>
+#include <vector>
 #include <string>
 
 namespace split_module{
+
+typedef std::vector< std::vector< int > > naive_matrix_t;
+
+inline naive_matrix_t create_zero_matrix( unsigned int x ){
+    return naive_matrix_t();
+}
+
 
 struct op_struct{};
 

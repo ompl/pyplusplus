@@ -143,6 +143,7 @@ class creator_t( declarations.decl_visitor_t ):
             
             if self.__dependencies_manager.is_already_exposed( decl ):
                 #check wether this is already exposed in other module
+                decl.already_exposed = True
                 continue
  
             if isinstance( decl.parent, declarations.namespace_t ):
@@ -282,9 +283,12 @@ class creator_t( declarations.decl_visitor_t ):
         used_containers = filter( lambda cls: cls.indexing_suite.include_files
                                   , used_containers )
         used_containers.sort( cmp_by_name )
-        for cls in used_containers:            
-            for msg in cls.readme():
-                self.decl_logger.warn( "%s;%s" % ( cls, msg ) )
+        for cls in used_containers: 
+            self.__print_readme( cls )
+
+            if self.__dependencies_manager.is_already_exposed( cls ):
+                cls.already_exposed = True
+                continue
 
             cls_creator = create_cls_cc( cls )
             self.__dependencies_manager.add_exported( cls )

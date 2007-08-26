@@ -147,9 +147,6 @@ class class_common_details_t( object ):
                             +"Thus it will be able to generate code, that uses " \
                             +" BOOST_PYTHON_OPAQUE_SPECIALIZED_TYPE_ID macro in a right places." )
 
-    def _get_already_exposed_impl( self ):
-        return self._already_exposed 
-    
     @property
     def class_var_name(self):
         return self.alias + '_exposer'

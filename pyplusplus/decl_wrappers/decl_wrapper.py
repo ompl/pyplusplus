@@ -98,14 +98,11 @@ class decl_wrapper_t(object):
     ignore = property( _get_ignore, _set_ignore
                        , doc="boolean flag, which says whether to export declaration to Python or not" )
 
-    def _get_already_exposed_impl( self ):
+    def get_already_exposed( self ):
         return self._already_exposed
-
-    def _get_already_exposed( self ):
-        return self._get_already_exposed_impl()
-    def _set_already_exposed( self, value ):
+    def set_already_exposed( self, value ):
         self._already_exposed = value
-    already_exposed = property( _get_already_exposed, _set_already_exposed
+    already_exposed = property( get_already_exposed, set_already_exposed
                                 , doc="boolean flag, which says whether the declaration is already exposed or not" )
 
     def exclude( self, compilation_errors=False ):
