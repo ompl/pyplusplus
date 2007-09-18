@@ -160,6 +160,8 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
                 continue
             if base_creators.has_key( id(base_desc.related_class) ):
                 bases.append( algorithm.create_identifier( self, base_desc.related_class.decl_string ) )
+            elif base_desc.related_class.already_exposed:
+                bases.append( base_desc.related_class.decl_string )
         if not bases:
             return None
         bases_identifier = algorithm.create_identifier( self, '::boost::python::bases' )

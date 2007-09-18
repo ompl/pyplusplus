@@ -8,28 +8,30 @@ import sys
 import unittest
 import autoconfig
 from pyplusplus import utils
+from pyplusplus import module_builder
 import fundamental_tester_base
 
-class tester_t(fundamental_tester_base.fundamental_tester_base_t):
-    EXTENSION_NAME = 'already_exposed'
-    
-    def __init__( self, *args ):
-        fundamental_tester_base.fundamental_tester_base_t.__init__( 
-            self
-            , tester_t.EXTENSION_NAME
-            , *args )
-                                                                    
-    def customize(self, mb ):
+class tester_t( unittest.TestCase ):    
+    def test(self):
+        fpath = os.path.join( autoconfig.data_directory, 'already_exposed_to_be_exported.hpp' )
+        mb = module_builder.module_builder_t( [module_builder.create_source_fc( fpath )]
+                                              , gccxml_path=autoconfig.gccxml.executable )
+        
         exposed_db = utils.exposed_decls_db_t()
-        map( exposed_db.expose, mb.decls(recursive=True) )
+        ae = mb.namespace( 'already_exposed' )
+        map( exposed_db.expose, ae.decls(recursive=True) )
         exposed_db.save( autoconfig.build_dir )
         mb.register_module_dependency( autoconfig.build_dir )
         mb.decls().exclude()
         mb.namespace( 'already_exposed' ).include()
+        mb.class_( 'ae_derived' ).include()
 
-    def run_tests(self, module):        
-        self.failUnless(  'ae_t' not in dir( module ) )
-        self.failUnless(  'ae_e' not in dir( module ) )
+        mb.build_code_creator( 'xxx' )
+        
+        body = mb.code_creator.body
+        self.failUnless( 1 == len( body.creators ) )
+        ae_derived_code = body.creators[0].create()
+        self.failUnless( mb.class_( 'ae_base' ).decl_string in ae_derived_code )
     
 def create_suite():
     suite = unittest.TestSuite()    

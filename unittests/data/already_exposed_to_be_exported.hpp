@@ -12,6 +12,11 @@ struct ae_t{};
 
 enum ae_e { x1, x2 };
 
+struct ae_base{};
+
 }
+
+struct ae_derived : public already_exposed::ae_base
+{};
 
 #endif//__already_exposed_to_be_exported_hpp__

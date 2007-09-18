@@ -97,8 +97,12 @@ class manager_t( object ):
                     continue
                 if self.__is_std_decl( depend_on_decl ):
                     continue
-                if isinstance( depend_on_decl, declarations.class_types ) and depend_on_decl.opaque:
-                    continue
+                if isinstance( depend_on_decl, decl_wrappers.decl_wrapper_t ):
+                    if depend_on_decl.already_exposed:
+                        continue
+                    if isinstance( depend_on_decl, declarations.class_types ):
+                        if depend_on_decl.opaque:
+                            continue
                 if id( depend_on_decl ) not in exported_ids:
                     report = messages.filter_disabled_msgs([messages.W1040], depend_on_decl.disabled_messaged )
                     if report:
