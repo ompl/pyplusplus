@@ -20,7 +20,9 @@ class single_file_t(writer.writer_t):
         return self.__fname
     
     def write(self):        
-        target_dir = os.path.split( self.file_name )[0]
+        target_dir = os.path.dirname( self.file_name )
+        if not target_dir:
+            target_dir = os.getcwd()
         headers = self.get_user_headers( [self.extmodule] )        
         map( lambda header: self.extmodule.add_include( header )
              , headers )
