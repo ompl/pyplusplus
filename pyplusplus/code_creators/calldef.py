@@ -140,6 +140,11 @@ class calldef_t( registration_based.registration_based_t
             files.append( self.declaration.call_policies.header_file )
         return files
 
+    def register_exposed( self, exposed_db ):
+        """Register exposed declaration in L{exposed data base<utils.exposed_decls_db_t>}"""
+        exposed_db.expose( self.declaration )
+
+
 class calldef_wrapper_t( code_creator.code_creator_t
                          , declaration_based.declaration_based_t):
     def __init__(self, function ):
@@ -182,6 +187,11 @@ class calldef_wrapper_t( code_creator.code_creator_t
         if self.declaration.call_policies:
             files.append( self.declaration.call_policies.header_file )            
         return files
+
+    def register_exposed( self, exposed_db ):
+        """Register exposed declaration in L{exposed data base<utils.exposed_decls_db_t>}"""
+        exposed_db.expose( self.declaration )
+
 
 class free_function_t( calldef_t ):
     def __init__( self, function ):
@@ -863,7 +873,7 @@ class static_method_t( declaration_based.declaration_based_t
         return 'staticmethod( "%s" )' % self.function_code_creator.alias
 
     def _get_system_headers_impl( self ):
-        return []
+        return []        
 
 class constructor_wrapper_t( calldef_wrapper_t ):
     """
@@ -1070,6 +1080,10 @@ class operator_t( registration_based.registration_based_t
     def _get_system_headers_impl( self ):
         return []
 
+    def register_exposed( self, exposed_db ):
+        """Register exposed declaration in L{exposed data base<utils.exposed_decls_db_t>}"""
+        exposed_db.expose( self.declaration )
+
 class casting_operator_t( registration_based.registration_based_t
                           , declaration_based.declaration_based_t ):
     """
@@ -1093,6 +1107,11 @@ class casting_operator_t( registration_based.registration_based_t
 
     def _get_system_headers_impl( self ):
         return []
+
+    def register_exposed( self, exposed_db ):
+        """Register exposed declaration in L{exposed data base<utils.exposed_decls_db_t>}"""
+        exposed_db.expose( self.declaration )
+
 
 class casting_member_operator_t( registration_based.registration_based_t
                                  , declaration_based.declaration_based_t ):
@@ -1131,6 +1150,12 @@ class casting_member_operator_t( registration_based.registration_based_t
 
     def _get_system_headers_impl( self ):
         return []
+        
+    def register_exposed( self, exposed_db ):
+        """Register exposed declaration in L{exposed data base<utils.exposed_decls_db_t>}"""
+        exposed_db.expose( self.declaration )
+
+        
 
 class casting_constructor_t( registration_based.registration_based_t
                              , declaration_based.declaration_based_t ):
@@ -1209,6 +1234,11 @@ class calldef_overloads_class_t( code_creator.code_creator_t ):
     @property
     def name( self ):
         return '%s_%s_overloads' % ( self.parent_decl.alias, self.alias )
+        
+    def register_exposed( self, exposed_db ):
+        """Register exposed declaration in L{exposed data base<utils.exposed_decls_db_t>}"""
+        for f in self.functions:
+            exposed_db.expose( f )
 
 class mem_fun_overloads_class_t( calldef_overloads_class_t ):
     def __init__( self, mem_funs ):

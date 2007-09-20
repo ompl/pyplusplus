@@ -38,6 +38,11 @@ class member_variable_base_t( registration_based.registration_based_t
         if self.declaration.setter_call_policies:
             files.append( self.declaration.setter_call_policies.header_file )
         return files
+        
+    def register_exposed( self, exposed_db ):
+        """Register exposed declaration in L{exposed data base<utils.exposed_decls_db_t>}"""
+        exposed_db.expose( self.declaration )
+
 
 class member_variable_t( member_variable_base_t ):
     """

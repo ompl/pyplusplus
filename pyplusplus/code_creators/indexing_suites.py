@@ -51,6 +51,11 @@ class indexing_suite1_t( registration_based.registration_based_t
 
     def _get_system_headers_impl( self ):
         return self.configuration.include_files
+        
+    def register_exposed( self, exposed_db ):
+        """Register exposed declaration in L{exposed data base<utils.exposed_decls_db_t>}"""
+        exposed_db.expose( self.declaration )
+        
 
 class indexing_suite2_t( registration_based.registration_based_t
                          , declaration_based.declaration_based_t ):
@@ -121,6 +126,11 @@ class indexing_suite2_t( registration_based.registration_based_t
     def _get_system_headers_impl( self ):
         return self.declaration.indexing_suite.include_files
 
+    def register_exposed( self, exposed_db ):
+        """Register exposed declaration in L{exposed data base<utils.exposed_decls_db_t>}"""
+        exposed_db.expose( self.declaration )
+
+
 class value_traits_t( code_creator.code_creator_t
                       , declaration_based.declaration_based_t ):
     def __init__( self, value_class ):
@@ -178,3 +188,8 @@ class value_traits_t( code_creator.code_creator_t
 
     def _get_system_headers_impl( self ):
         return ['boost/python/suite/indexing/value_traits.hpp']
+        
+    def register_exposed( self, exposed_db ):
+        """Register exposed declaration in L{exposed data base<utils.exposed_decls_db_t>}"""
+        exposed_db.expose( self.declaration )
+
