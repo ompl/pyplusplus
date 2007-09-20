@@ -6,6 +6,8 @@
 #ifndef __enums_to_be_exported_hpp__
 #define __enums_to_be_exported_hpp__
 
+enum Chisla{ nol, odin, dva, tri };
+
 namespace enums{ 
 
 enum color{ 

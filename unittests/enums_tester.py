@@ -18,6 +18,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , *args )
                                                                     
     def customize(self, mb ):
+        mb.enum( 'Chisla' ).include()
+        
         color = mb.enumeration( 'color' )
         color.alias = 'Color'
         color.value_aliases['red'] = 'RED'

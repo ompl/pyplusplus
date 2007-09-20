@@ -8,6 +8,8 @@ import sys
 import unittest
 import autoconfig
 from pygccxml import parser
+from pyplusplus import utils
+from pygccxml import declarations
 from pyplusplus import module_builder
 
 LICENSE = """// Copyright 2004 Roman Yakovenko.
@@ -45,6 +47,21 @@ class fundamental_tester_base_t( unittest.TestCase ):
         except:
             was_exception = True
         self.failUnless(was_exception, 'exception has not been raised during execution.')
+
+    def __test_already_exposed( self, mb ):
+        exposed_db = utils.exposed_decls_db_t()
+        exposed_db.load( autoconfig.build_dir )
+        irrelevant_decl_types = ( declarations.typedef_t
+                                  , declarations.namespace_t
+                                  , declarations.free_operator_t )
+        for d in mb.decls():            
+            if d.ignore or not d.exportable or isinstance( d, irrelevant_decl_types ):
+                continue
+            if d.parent and not d.parent.name:                
+                continue #unnamed classes
+            self.failUnless( exposed_db.is_exposed( d )
+                             , '''Declaration "%s" is exposed, but for some reason it isn't marked as such.'''
+                               % str( d ) )
 
     def customize(self, generator):
         pass
@@ -86,6 +103,7 @@ class fundamental_tester_base_t( unittest.TestCase ):
         mb.code_creator.precompiled_header = "boost/python.hpp"
         mb.code_creator.license = LICENSE
         self.generate_source_files( mb )
+        self.__test_already_exposed( mb )
 
     def _create_sconstruct(self, sources ):
         sources_str = []
