@@ -34,6 +34,7 @@ struct point{
     const color prefered_color;
     static int instance_count;
     static const color default_color;
+    static const point zero_point;
 };
 
 struct bit_fields_t{

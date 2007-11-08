@@ -11,10 +11,13 @@ import unittest
 #__pychecker__ = 'limit=1000'
 #import pychecker.checker
 
+this_module_dir_path = os.path.abspath ( os.path.dirname( sys.modules[__name__].__file__) )
 
-build_dir = os.path.abspath( os.path.join( os.curdir, 'temp' ) )
-data_directory = os.path.abspath( os.path.join( os.curdir, 'data' ) )
-sys.path.append( os.path.join( os.curdir, '..' ) )
+data_directory = os.path.join( this_module_dir_path, 'data' )
+build_directory = os.path.join( this_module_dir_path, 'temp' )
+build_dir = build_directory 
+
+sys.path.append( os.path.dirname( this_module_dir_path ) )
 
 from environment import scons, boost, python, gccxml
 

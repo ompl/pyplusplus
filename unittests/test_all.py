@@ -2,8 +2,13 @@
 # Distributed under the Boost Software License, Version 1.0. (See
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
+
+import os
+import re
 import sys
-import unittest
+import time
+
+import autoconfig
 
 import classes_tester
 import abstract_classes_tester
@@ -74,93 +79,160 @@ import non_overridable_tester
 import exposed_decls_db_tester
 import already_exposed_tester
 
-def create_suite(times):
-    testers = [
-        algorithms_tester
-        , module_body_tester
-        , enums_tester
-        , free_functions_tester
-        , unnamed_enums_tester
-        , namespaces_tester
-        , classes_tester
-        , global_variables_tester
-        , member_variables_tester
-        , member_functions_tester
-        , call_policies_tester
-        , pointer_to_function_as_argument
-        , operators_tester
-        , abstract_tester
-        , statics_tester
-        , regression1_tester
-        , casting_tester
-        , finalizables_tester
-        , free_operators_tester
-        , operators_bug_tester
-        , smart_pointers_tester
-        , special_operators_tester
-        , module_properties_tester
-        , internal_classes_tester
-        , temporary_variable_tester
-        , recursive_tester
-        , class_order_tester
-        , noncopyable_tester
-        , regression2_tester
-        , regression3_tester
-        , class_order2_tester
-        , class_order3_tester
-        , class_order4_tester
-        , optional_tester
-        , index_operator_tester
-        , dwrapper_printer_tester
-        , mdecl_wrapper_tester
-        , user_text_tester
-        , free_function_ignore_bug_tester
-        , optional_bug_tester
-        , pointer_as_arg_tester
-        , factory_tester
-        , private_assign_tester
-        , protected_tester
-        , indexing_suites_tester
-        , hierarchy3_tester
-        , vector3_tester
-        , default_args_tester
-        , abstract_classes_tester
-        , indexing_suites2_tester
-        , unnamed_classes_tester
-        , cppexceptions_tester
-        , no_init_tester
-        , overloads_macro_tester
-        , split_module_tester
-        , properties_tester
-        , arrays_bug_tester
-        , convenience_tester
-        , inner_class_bug_tester
-        , declarations_order_bug_tester
-        , function_transformations_tester
-        , throw_tester
-        , duplicate_aliases_tester
-        , non_overridable_tester
-        , exposed_decls_db_tester
-        , already_exposed_tester
-    ]
+testers = [
+    algorithms_tester
+    , module_body_tester
+    , enums_tester
+    , free_functions_tester
+    , unnamed_enums_tester
+    , namespaces_tester
+    , classes_tester
+    , global_variables_tester
+    , member_variables_tester
+    , member_functions_tester
+    , call_policies_tester
+    , pointer_to_function_as_argument
+    , operators_tester
+    , abstract_tester
+    , statics_tester
+    , regression1_tester
+    , casting_tester
+    , finalizables_tester
+    , free_operators_tester
+    , operators_bug_tester
+    , smart_pointers_tester
+    , special_operators_tester
+    , module_properties_tester
+    , internal_classes_tester
+    , temporary_variable_tester
+    , recursive_tester
+    , class_order_tester
+    , noncopyable_tester
+    , regression2_tester
+    , regression3_tester
+    , class_order2_tester
+    , class_order3_tester
+    , class_order4_tester
+    , optional_tester
+    , index_operator_tester
+    , dwrapper_printer_tester
+    , mdecl_wrapper_tester
+    , user_text_tester
+    , free_function_ignore_bug_tester
+    , optional_bug_tester
+    , pointer_as_arg_tester
+    , factory_tester
+    , private_assign_tester
+    , protected_tester
+    , indexing_suites_tester
+    , hierarchy3_tester
+    , vector3_tester
+    , default_args_tester
+    , abstract_classes_tester
+    , indexing_suites2_tester
+    , unnamed_classes_tester
+    , cppexceptions_tester
+    , no_init_tester
+    , overloads_macro_tester
+    , split_module_tester
+    , properties_tester
+    , arrays_bug_tester
+    , convenience_tester
+    , inner_class_bug_tester
+    , declarations_order_bug_tester
+    , function_transformations_tester
+    , throw_tester
+    , duplicate_aliases_tester
+    , non_overridable_tester
+    , exposed_decls_db_tester
+    , already_exposed_tester
+]
 
-    main_suite = unittest.TestSuite()
-    for i in range( times ):
-        for tester in testers:
-            main_suite.addTest( tester.create_suite() )
+class process_tester_runner_t( object ):
+    
+    class module_stat_t( object ):
+        bottom_line_re = re.compile( 'Ran\s(?P<num_of_tests>\d+)\stests?\sin\s(?P<seconds>\d+\.?\d*)s')
+        test_name_re = re.compile( '(?P<name>.+ \(.+\))\s\.\.\.' )
+        failed_test_re = re.compile( '(FAIL|ERROR)\:\s(?P<name>.+ \(.+\))' )
+        
+        def __init__( self, module, output, exit_status ):
+            self.module = module
+            self.output = output
+            
+            self.test_results = {} #test name : result
+            self.num_of_tests = 0
+            self.total_run_time = 0
+            self.exit_status = exit_status
 
-    return main_suite
+            self.__update()
 
-def run_suite(times=1):
-    return unittest.TextTestRunner(verbosity=2).run( create_suite(times) ).wasSuccessful
+        def __update( self ):
+            match_found = self.bottom_line_re.search( self.output )
+            if match_found:                
+                self.num_of_tests += int( match_found.group( 'num_of_tests' ) )
+                self.total_run_time += float( match_found.group( 'seconds' ) )
+                
+            for match_found in self.test_name_re.finditer( self.output ):
+                self.test_results[ match_found.group( 'name' ) ] = 'ok'
+                
+            for match_found in self.failed_test_re.finditer( self.output ):
+                self.test_results[ match_found.group( 'name' ) ] = 'FAIL'
+
+            assert( self.num_of_tests == len( self.test_results ) )
+
+    def __init__( self, modules ):
+        self.__modules = modules
+        self.__statistics = []
+        self.__total_time = 0
+            
+    def __run_single( self, module ):
+        command_line = ' '.join([ sys.executable, module.__file__[:-1] ]) #pyc -> py
+        input_, output = os.popen4( command_line )
+        input_.close()
+        report = []
+        while True:
+            data = output.readline()
+            report.append( data )
+            if not data:
+                break
+            else:
+                print data,
+        exit_status = output.close()
+        self.__statistics.append( self.module_stat_t( module, ''.join( report ), exit_status ) )
+            
+    def __dump_statistics( self ):
+        num_of_tests = 0
+        test_results = {}
+        total_tests_only_run_time = 0
+        for stat in self.__statistics:
+            num_of_tests += stat.num_of_tests
+            total_tests_only_run_time += stat.total_run_time
+            test_results.update( stat.test_results )
+        
+        test_failed = len( filter( lambda result: result != 'ok', test_results.values() ) )
+        
+        for name, result in test_results.iteritems():
+            if result != 'ok':
+                print '! ',
+            print name, ' - ', result
+        print '----------------------------------------------------------------------'                
+        print 'Ran %d test in %fs. Multi-processing overhead: %fs.' \
+               % ( num_of_tests, self.__total_time, self.__total_time - total_tests_only_run_time )
+        print ' '
+        if test_failed:
+            print os.linesep.join(['FAILED  (failures=%d)' % test_failed, 'False'])            
+        else:
+            print 'ok'      
+
+    def __call__( self ):
+        start_time = time.time()
+        for m in self.__modules:
+            self.__run_single( m )
+        self.__total_time = time.time() - start_time
+        self.__dump_statistics()
+
 
 if __name__ == "__main__":
-    times = 1
-    if len(sys.argv) > 1:
-        try:
-            times = int( sys.argv[1] )
-        except Exception, error:
-            print str( error )
-            print 'first argument should be integer, it says how many times to run tests.'
+    runner = process_tester_runner_t( testers )
+    runner()
 
-    run_suite(times)

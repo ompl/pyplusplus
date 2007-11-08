@@ -2,6 +2,8 @@ import os
 import sys
 import getpass
 
+this_module_dir_path = os.path.abspath ( os.path.dirname( sys.modules[__name__].__file__) )
+
 class boost:
     libs = ''
     include = ''
@@ -11,7 +13,13 @@ class python:
     include = ''
 
 class gccxml:
-    executable = ''
+    gccxml_07_path = os.path.join( this_module_dir_path, '..', 'gccxml_bin', 'v07', sys.platform, 'bin' )
+    gccxml_09_path = os.path.join( this_module_dir_path, '..', 'gccxml_bin', 'v09', sys.platform, 'bin' )
+
+    gccxml_path = gccxml_09_path
+    gccxml_version = '__GCCXML_09__'
+
+    executable = gccxml_path
 
 class scons:
     suffix = ''
@@ -31,13 +39,11 @@ if 'roman' in getpass.getuser():
         boost.include = 'd:/dev/boost_cvs'
         python.libs = 'e:/python25/libs'
         python.include = 'e:/python25/include'
-        gccxml.executable = r'd:/dev/gccxml_cvs/gccxml-bin/bin/release/gccxml.exe'
     else:
         scons.suffix = '.so'
         boost.libs = ['/home/roman/boost_cvs/libs/python/build/bin-stage' ]
         boost.include = '/home/roman/boost_cvs'
         python.include = '/usr/include/python2.4'
-        gccxml.executable = '/home/roman/gccxml/bin/gccxml'
 
 
 _my_path = None
