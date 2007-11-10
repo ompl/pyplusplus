@@ -46,13 +46,13 @@ sys.path.append( build_dir )
 
 os.chdir( build_dir )
 
-if sys.platform == 'linux2':
-    LD_LIBRARY_PATH = 'LD_LIBRARY_PATH'
-    if not os.environ.has_key( LD_LIBRARY_PATH ) \
-       or not set( scons_config.libpath ).issubset( set( os.environ[LD_LIBRARY_PATH].split(':') ) ):
-        #see http://hathawaymix.org/Weblog/2004-12-30
-        print 'error: LD_LIBRARY_PATH has not been set'
-else:
+#~ if sys.platform == 'linux2':
+    #~ LD_LIBRARY_PATH = 'LD_LIBRARY_PATH'
+    #~ if not os.environ.has_key( LD_LIBRARY_PATH ) \
+       #~ or not set( scons_config.libpath ).issubset( set( os.environ[LD_LIBRARY_PATH].split(':') ) ):
+        #~ #see http://hathawaymix.org/Weblog/2004-12-30
+        #~ print 'error: LD_LIBRARY_PATH has not been set'
+if sys.platform == 'win32':
     PATH = os.environ.get( 'PATH', '' )
     PATH=PATH + ';' + ';'.join( scons_config.libpath )
     os.environ['PATH'] = PATH

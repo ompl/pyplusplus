@@ -153,7 +153,8 @@ class process_tester_runner_t( object ):
     class module_stat_t( object ):
         bottom_line_re = re.compile( 'Ran\s(?P<num_of_tests>\d+)\stests?\sin\s(?P<seconds>\d+\.?\d*)s')
         test_name_re = re.compile( '(?P<name>.+ \(.+\))\s\.\.\.' )
-        failed_test_re = re.compile( '(FAIL|ERROR)\:\s(?P<name>.+ \(.+\))' )
+        failed_test_re = re.compile( 'FAIL\:\s(?P<name>.+ \(.+\))' )
+        error_test_re = re.compile( 'ERROR\:\s(?P<name>.+ \(.+\))' )
         
         def __init__( self, module, output, exit_status ):
             self.module = module
@@ -177,6 +178,9 @@ class process_tester_runner_t( object ):
                 
             for match_found in self.failed_test_re.finditer( self.output ):
                 self.test_results[ match_found.group( 'name' ) ] = 'FAIL'
+
+            for match_found in self.error_test_re.finditer( self.output ):
+                self.test_results[ match_found.group( 'name' ) ] = 'ERROR'
 
             assert( self.num_of_tests == len( self.test_results ) )
 
