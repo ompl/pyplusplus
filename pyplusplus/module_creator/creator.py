@@ -571,18 +571,32 @@ class creator_t( declarations.decl_visitor_t ):
             else:
                 self.__extmodule.adopt_declaration_creator( wrapper )
             if declarations.has_trivial_copy( self.curr_decl ):
-                #~ #I don't know but sometimes boost.python requieres
-                #~ #to construct wrapper from wrapped classe
-                copy_constr = self.curr_decl.constructor( lambda c: c.is_copy_constructor, recursive=False )
-                if not self.curr_decl.noncopyable and copy_constr.is_artificial:
-                    cccc = code_creators.copy_constructor_wrapper_t( constructor=copy_constr )
-                    wrapper.adopt_creator( cccc )
-                null_constr = declarations.find_trivial_constructor(self.curr_decl)
-                if null_constr and null_constr.is_artificial:
-                    #this constructor is not going to be exposed
-                    tcons = code_creators.null_constructor_wrapper_t( constructor=null_constr )
-                    wrapper.adopt_creator( tcons )
-
+                #next constructors are not present in code, but compiler generated
+                #Boost.Python requiers them to be declared in the wrapper class
+                if '0.9' in self.curr_decl.compiler:
+                    copy_constr = self.curr_decl.constructors( lambda c: c.is_copy_constructor
+                                                               , recursive=False
+                                                               , allow_empty=True)
+                    if not copy_constr:
+                        cccc = code_creators.copy_constructor_wrapper_t( class_=self.curr_decl)
+                        wrapper.adopt_creator( cccc )
+                    trivial_constr = self.curr_decl.constructors( lambda c: c.is_trivial_constructor
+                                                                  , recursive=False
+                                                                  , allow_empty=True)
+                    if not trivial_constr:
+                        tcons = code_creators.null_constructor_wrapper_t( class_=self.curr_decl )
+                        wrapper.adopt_creator( tcons )                    
+                else:
+                    copy_constr = self.curr_decl.constructor( lambda c: c.is_copy_constructor, recursive=False )
+                    if not self.curr_decl.noncopyable and copy_constr.is_artificial:
+                        cccc = code_creators.copy_constructor_wrapper_t( class_=self.curr_decl)
+                        wrapper.adopt_creator( cccc )
+                    null_constr = declarations.find_trivial_constructor(self.curr_decl)
+                    if null_constr and null_constr.is_artificial:
+                        #this constructor is not going to be exposed
+                        tcons = code_creators.null_constructor_wrapper_t( class_=self.curr_decl )
+                        wrapper.adopt_creator( tcons )
+                    
         exposed = self.expose_overloaded_mem_fun_using_macro( cls_decl, cls_cc )
 
         cls_parent_cc.adopt_creator( cls_cc )
