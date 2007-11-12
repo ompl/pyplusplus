@@ -570,23 +570,38 @@ class creator_t( declarations.decl_visitor_t ):
                 self.curr_code_creator.wrapper.adopt_creator( wrapper )
             else:
                 self.__extmodule.adopt_declaration_creator( wrapper )
-            if declarations.has_trivial_copy( self.curr_decl ):
-                #next constructors are not present in code, but compiler generated
-                #Boost.Python requiers them to be declared in the wrapper class
-                if '0.9' in self.curr_decl.compiler:
-                    copy_constr = self.curr_decl.constructors( lambda c: c.is_copy_constructor
-                                                               , recursive=False
-                                                               , allow_empty=True)
-                    if not copy_constr:
-                        cccc = code_creators.copy_constructor_wrapper_t( class_=self.curr_decl)
-                        wrapper.adopt_creator( cccc )
-                    trivial_constr = self.curr_decl.constructors( lambda c: c.is_trivial_constructor
-                                                                  , recursive=False
-                                                                  , allow_empty=True)
+            #next constructors are not present in code, but compiler generated
+            #Boost.Python requiers them to be declared in the wrapper class
+            if '0.9' in self.curr_decl.compiler:
+                copy_constr = self.curr_decl.constructors( lambda c: c.is_copy_constructor
+                                                           , recursive=False
+                                                           , allow_empty=True)
+                add_to_wrapper = False
+                if declarations.has_trivial_copy( self.curr_decl ):
+                    #find out whether user or compiler defined it
+                    if self.curr_decl.noncopyable:
+                        add_to_wrapper = False
+                    elif not copy_constr: 
+                        add_to_wrapper = True #compiler defined will not be exposed manually later
+                    elif copy_constr[0].is_artificial:
+                        add_to_wrapper = True #compiler defined will not be exposed manually later
+                if add_to_wrapper:
+                    cccc = code_creators.copy_constructor_wrapper_t( class_=self.curr_decl)
+                    wrapper.adopt_creator( cccc )
+                trivial_constr = self.curr_decl.constructors( lambda c: c.is_trivial_constructor
+                                                              , recursive=False
+                                                              , allow_empty=True)
+                add_to_wrapper = False
+                if declarations.has_trivial_constructor( self.curr_decl ):
                     if not trivial_constr:
-                        tcons = code_creators.null_constructor_wrapper_t( class_=self.curr_decl )
-                        wrapper.adopt_creator( tcons )                    
-                else:
+                        add_to_wrapper = True
+                    elif trivial_constr[0].is_artificial:
+                        add_to_wrapper = True
+                if add_to_wrapper:
+                    tcons = code_creators.null_constructor_wrapper_t( class_=self.curr_decl )
+                    wrapper.adopt_creator( tcons )                    
+            else:
+                if declarations.has_trivial_copy( self.curr_decl ):
                     copy_constr = self.curr_decl.constructor( lambda c: c.is_copy_constructor, recursive=False )
                     if not self.curr_decl.noncopyable and copy_constr.is_artificial:
                         cccc = code_creators.copy_constructor_wrapper_t( class_=self.curr_decl)
