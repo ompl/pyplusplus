@@ -37,14 +37,14 @@ source project(s) "to talk":
   
   * `Python-Ogre`_ sources:
   
-    http://python-ogre.python-hosting.com/browser/trunk/python-ogre/code_generators/ogre/
+    http://python-ogre.svn.sourceforge.net/viewvc/python-ogre/trunk/python-ogre/code_generators/ogre/
      
-    http://python-ogre.python-hosting.com/browser/trunk/python-ogre/code_generators/common_utils/
+    http://python-ogre.svn.sourceforge.net/viewvc/python-ogre/trunk/python-ogre/code_generators/common_utils/
         
     Pay attention: functionality defined in "common_utils" package is used by 
     other scripts too. 
   
-  .. _`Python-OGRE` : http://python-ogre.python-hosting.com/
+  .. _`Python-OGRE` : http://www.python-ogre.org
 
   .. _`PyOgre` : http://www.ogre3d.org/wiki/index.php/PyOgre
   
