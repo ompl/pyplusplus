@@ -190,6 +190,9 @@ class process_tester_runner_t( object ):
         self.__total_time = 0
             
     def __run_single( self, module ):
+        test_file_name = module.__file__[:-1]
+        if test_file_name.endswith( 'pyc' ):
+            test_file_name = test_file_name[:-1]
         command_line = ' '.join([ sys.executable, module.__file__[:-1] ]) #pyc -> py
         input_, output = os.popen4( command_line )
         input_.close()
@@ -208,11 +211,12 @@ class process_tester_runner_t( object ):
         num_of_tests = 0
         test_results = {}
         total_tests_only_run_time = 0
+        exit_status = 0
         for stat in self.__statistics:
             num_of_tests += stat.num_of_tests
             total_tests_only_run_time += stat.total_run_time
             test_results.update( stat.test_results )
-        
+            exit_status = max( exit_status, stat.exit_status )
         test_failed = len( filter( lambda result: result != 'ok', test_results.values() ) )
         
         for name, result in test_results.iteritems():
@@ -220,6 +224,7 @@ class process_tester_runner_t( object ):
                 print '! ',
             print name, ' - ', result
         print '----------------------------------------------------------------------'                
+        print 'Final exit status: ', exit_status
         print 'Ran %d test in %fs. Multi-processing overhead: %fs.' \
                % ( num_of_tests, self.__total_time, self.__total_time - total_tests_only_run_time )
         print ' '
