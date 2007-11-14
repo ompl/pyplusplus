@@ -167,20 +167,26 @@ class process_tester_runner_t( object ):
 
             self.__update()
 
+        def __create_unique_name( self, name ):
+            if '__main__.' in name:
+                name = name.replace( '__main__', os.path.basename( self.module.__file__)[:-4] )
+            return name
+
         def __update( self ):
             match_found = self.bottom_line_re.search( self.output )
             if match_found:                
                 self.num_of_tests += int( match_found.group( 'num_of_tests' ) )
                 self.total_run_time += float( match_found.group( 'seconds' ) )
                 
+            uname = self.__create_unique_name
             for match_found in self.test_name_re.finditer( self.output ):
-                self.test_results[ match_found.group( 'name' ) ] = 'ok'
+                self.test_results[ uname( match_found.group( 'name' ) ) ] = 'ok'
                 
             for match_found in self.failed_test_re.finditer( self.output ):
-                self.test_results[ match_found.group( 'name' ) ] = 'FAIL'
+                self.test_results[ uname( match_found.group( 'name' ) ) ] = 'FAIL'
 
             for match_found in self.error_test_re.finditer( self.output ):
-                self.test_results[ match_found.group( 'name' ) ] = 'ERROR'
+                self.test_results[ uname( match_found.group( 'name' ) ) ] = 'ERROR'
 
             assert( self.num_of_tests == len( self.test_results ) )
 
