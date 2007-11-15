@@ -17,9 +17,9 @@ class gccxml:
     gccxml_09_path = os.path.join( this_module_dir_path, '..', 'gccxml_bin', 'v09', sys.platform, 'bin' )
 
     gccxml_path = gccxml_09_path
-    gccxml_version = '__GCCXML_07__'
-    if '0.9' in gccxml_version:
-        gccxml_version = '__GCCXML_09__'
+    gccxml_version = '__GCCXML_09__'
+    if '0.7' in gccxml_version:
+        gccxml_version = '__GCCXML_07__'
 
     executable = gccxml_path
 

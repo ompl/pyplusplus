@@ -78,6 +78,24 @@ import duplicate_aliases_tester
 import non_overridable_tester
 import exposed_decls_db_tester
 import already_exposed_tester
+import bpmodule_tester
+import custom_smart_ptr_classes_tester
+import custom_string_tester
+import final_classes_tester
+#gui_tester
+#gui_wizard_tester
+#
+import mem_fun_with_exception_tester
+import overriden_virtual_functions_bug_tester
+import split_module_bug_tester
+import tnfox_bugs_tester
+import transfer_ownership_old_tester
+import transfer_ownership_tester
+import unicode_bug
+
+
+
+
 
 testers = [
     algorithms_tester
@@ -146,6 +164,17 @@ testers = [
     , non_overridable_tester
     , exposed_decls_db_tester
     , already_exposed_tester
+    , bpmodule_tester
+    , custom_smart_ptr_classes_tester
+    , custom_string_tester
+    , final_classes_tester
+    , mem_fun_with_exception_tester
+    , overriden_virtual_functions_bug_tester
+    , split_module_bug_tester
+    , tnfox_bugs_tester
+    , transfer_ownership_old_tester
+    , transfer_ownership_tester
+    , unicode_bug
 ]
 
 class process_tester_runner_t( object ):
@@ -199,7 +228,7 @@ class process_tester_runner_t( object ):
         test_file_name = module.__file__[:-1]
         if test_file_name.endswith( 'pyc' ):
             test_file_name = test_file_name[:-1]
-        command_line = ' '.join([ sys.executable, module.__file__[:-1] ]) #pyc -> py
+        command_line = ' '.join([ sys.executable, test_file_name ]) #pyc -> py
         input_, output = os.popen4( command_line )
         input_.close()
         report = []
