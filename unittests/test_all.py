@@ -92,6 +92,7 @@ import tnfox_bugs_tester
 import transfer_ownership_old_tester
 import transfer_ownership_tester
 import unicode_bug
+import include_exclude_bug_tester
 
 
 
@@ -175,6 +176,7 @@ testers = [
     , transfer_ownership_old_tester
     , transfer_ownership_tester
     , unicode_bug
+    , include_exclude_bug_tester
 ]
 
 class process_tester_runner_t( object ):
