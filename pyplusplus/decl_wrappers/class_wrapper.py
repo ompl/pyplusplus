@@ -325,7 +325,9 @@ class class_t( class_common_details_t
 
     def set_constructors_body( self, body ):
         """Sets the body for all constructors"""
-        self.constructors().body = body
+        constrs = self.constructors(allow_empty=True, recursive=False)
+        if constrs:
+            constrs.body = body
         self.null_constructor_body = body
         self.copy_constructor_body = body
 
