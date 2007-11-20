@@ -245,6 +245,13 @@ struct transfer_ownership_tester_t{
     }
 };
 
+struct render_queue_listener_t{
+	virtual void 
+	render_queue_ended( int group_id
+					    , const std::string& invocation
+						, bool& repeat_this_invocation ){};
+};
+
 }
 
 #endif//__function_transformations_to_be_exported_hpp__

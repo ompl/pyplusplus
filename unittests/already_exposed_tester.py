@@ -13,17 +13,17 @@ import fundamental_tester_base
 
 class tester_t( unittest.TestCase ):    
     def test(self):
+        exposed_db = utils.exposed_decls_db_t()
+        
         fpath = os.path.join( autoconfig.data_directory, 'already_exposed_to_be_exported.hpp' )
         mb = module_builder.module_builder_t( [module_builder.create_source_fc( fpath )]
                                               , gccxml_path=autoconfig.gccxml.executable )
         
-        exposed_db = utils.exposed_decls_db_t()
-        ae = mb.namespace( 'already_exposed' )
-        map( exposed_db.expose, ae.decls(recursive=True) )
+        mb.global_ns.exclude()
+        mb.namespace( 'already_exposed' ).include()
+        exposed_db.register_decls( mb.global_ns )
         exposed_db.save( autoconfig.build_dir )
         mb.register_module_dependency( autoconfig.build_dir )
-        mb.decls().exclude()
-        mb.namespace( 'already_exposed' ).include()
         mb.class_( 'ae_derived' ).include()
 
         mb.build_code_creator( 'xxx' )

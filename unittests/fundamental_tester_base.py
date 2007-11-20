@@ -55,13 +55,24 @@ class fundamental_tester_base_t( unittest.TestCase ):
                                   , declarations.namespace_t
                                   , declarations.free_operator_t )
         for d in mb.decls():            
-            if d.ignore or not d.exportable or isinstance( d, irrelevant_decl_types ):
+            if not d.exportable:
                 continue
-            if d.parent and not d.parent.name:                
-                continue #unnamed classes
-            self.failUnless( exposed_db.is_exposed( d )
-                             , '''Declaration "%s" is exposed, but for some reason it isn't marked as such.'''
-                               % str( d ) )
+            elif isinstance( d, declarations.free_operator_t ):
+                continue
+            elif d.ignore:
+                if exposed_db.is_exposed( d ):
+                    i = 0
+                self.failUnless( not exposed_db.is_exposed( d )
+                                 , '''Declaration "%s" is NOT exposed, but for some reason it is marked as such.'''
+                                   % str( d ) )
+            #if d.ignore or not d.exportable or isinstance( d, irrelevant_decl_types ):
+                #continue
+            #if d.parent and not d.parent.name:                
+                #continue #unnamed classes
+            else:
+                self.failUnless( exposed_db.is_exposed( d )
+                                 , '''Declaration "%s" is exposed, but for some reason it isn't marked as such.'''
+                                   % str( d ) )
 
     def customize(self, generator):
         pass

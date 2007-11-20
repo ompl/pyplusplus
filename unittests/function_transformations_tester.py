@@ -91,6 +91,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         tester = transfer_ownership_tester.mem_fun( 'tester' )
         tester.add_transformation( ft.transfer_ownership( 0 ) )
         
+        render_queue_listener_t = mb.class_( 'render_queue_listener_t' )
+        render_queue_ended = render_queue_listener_t.mem_fun( 'render_queue_ended' )
+        render_queue_ended.add_transformation( ft.inout(2) )
+        
     def run_tests(self, module):
         """Run the actual unit tests.
         """

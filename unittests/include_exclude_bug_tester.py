@@ -19,7 +19,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , *args )
 
     def customize(self, mb ):
-        pass
+        mb.mem_fun( '::Ogre::Any::swap' ).exclude()
         
     def run_tests( self, module):
         pass

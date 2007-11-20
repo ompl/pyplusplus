@@ -27,8 +27,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def customize( self, mb ):
         mb.global_ns.exclude()
 
+        nm_t = declarations.remove_declarated( mb.global_ns.typedef( 'naive_matrix_t' ).type ) 
+        nm_t.include()
+
         exposed_db = utils.exposed_decls_db_t()
-        exposed_db.expose( declarations.remove_declarated( mb.global_ns.typedef( 'naive_matrix_t' ).type ) )
+        
+        exposed_db.register_decls( mb.global_ns )
         exposed_db.save( autoconfig.build_dir )
         mb.register_module_dependency( autoconfig.build_dir )
         

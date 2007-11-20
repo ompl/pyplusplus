@@ -9,6 +9,7 @@ import unittest
 import autoconfig
 from pygccxml import parser
 from pygccxml import declarations
+from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
 from pyplusplus import module_creator
 from pyplusplus import module_builder
@@ -43,15 +44,22 @@ class tester_t(unittest.TestCase):
     def test(self):
         db = pypp_utils.exposed_decls_db_t()
         config = parser.config_t( gccxml_path=autoconfig.gccxml.executable )
-        global_ns = declarations.get_global_namespace( parser.parse_string( self.CODE, config ) )
+
+        reader = parser.project_reader_t( config, None, decl_wrappers.dwfactory_t() )
+        decls = reader.read_files( [parser.create_text_fc(self.CODE)] )
+    
+        global_ns = declarations.get_global_namespace( decls )
         ns = global_ns.namespace( 'ns' )
-        for d in ns.decls(recursive=True):
-            db.expose( d )
+        ns_skip = global_ns.namespace( 'ns_skip' )
+
+        global_ns.exclude()        
+        ns.include()
+        
+        db.register_decls( global_ns )
                     
         for x in ns.decls(recursive=True):
             self.failUnless( db.is_exposed( x ) == True )
-
-        ns_skip = global_ns.namespace( 'ns_skip' )
+            
         for x in ns_skip.decls(recursive=True):
             self.failUnless( db.is_exposed( x ) == False )
 
@@ -65,7 +73,6 @@ class tester_t(unittest.TestCase):
         ns_skip = global_ns.namespace( 'ns_skip' )
         for x in ns_skip.decls(recursive=True):
             self.failUnless( db.is_exposed( x ) == False )
-
 
 def create_suite():
     suite = unittest.TestSuite()

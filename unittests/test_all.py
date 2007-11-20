@@ -179,58 +179,28 @@ testers = [
     , include_exclude_bug_tester
 ]
 
-class process_tester_runner_t( object ):
+class module_runner_t( object ):
+    bottom_line_re = re.compile( 'Ran\s(?P<num_of_tests>\d+)\stests?\sin\s(?P<seconds>\d+\.?\d*)s')
+    test_name_re = re.compile( '(?P<name>.+ \(.+\))\s\.\.\.' )
+    failed_test_re = re.compile( 'FAIL\:\s(?P<name>.+ \(.+\))' )
+    error_test_re = re.compile( 'ERROR\:\s(?P<name>.+ \(.+\))' )
     
-    class module_stat_t( object ):
-        bottom_line_re = re.compile( 'Ran\s(?P<num_of_tests>\d+)\stests?\sin\s(?P<seconds>\d+\.?\d*)s')
-        test_name_re = re.compile( '(?P<name>.+ \(.+\))\s\.\.\.' )
-        failed_test_re = re.compile( 'FAIL\:\s(?P<name>.+ \(.+\))' )
-        error_test_re = re.compile( 'ERROR\:\s(?P<name>.+ \(.+\))' )
+    def __init__( self, module ):
+        self.module = module
+        self.output = None
         
-        def __init__( self, module, output, exit_status ):
-            self.module = module
-            self.output = output
-            
-            self.test_results = {} #test name : result
-            self.num_of_tests = 0
-            self.total_run_time = 0
-            self.exit_status = exit_status
+        self.test_results = {} #test name : result
+        self.num_of_tests = 0
+        self.total_run_time = 0
+        self.exit_status = None
 
-            self.__update()
-
-        def __create_unique_name( self, name ):
-            if '__main__.' in name:
-                name = name.replace( '__main__', os.path.basename( self.module.__file__)[:-4] )
-            return name
-
-        def __update( self ):
-            match_found = self.bottom_line_re.search( self.output )
-            if match_found:                
-                self.num_of_tests += int( match_found.group( 'num_of_tests' ) )
-                self.total_run_time += float( match_found.group( 'seconds' ) )
-                
-            uname = self.__create_unique_name
-            for match_found in self.test_name_re.finditer( self.output ):
-                self.test_results[ uname( match_found.group( 'name' ) ) ] = 'ok'
-                
-            for match_found in self.failed_test_re.finditer( self.output ):
-                self.test_results[ uname( match_found.group( 'name' ) ) ] = 'FAIL'
-
-            for match_found in self.error_test_re.finditer( self.output ):
-                self.test_results[ uname( match_found.group( 'name' ) ) ] = 'ERROR'
-
-            assert( self.num_of_tests == len( self.test_results ) )
-
-    def __init__( self, modules ):
-        self.__modules = modules
-        self.__statistics = []
-        self.__total_time = 0
-            
-    def __run_single( self, module ):
-        test_file_name = module.__file__[:-1]
+    def __call__( self ):
+        print os.linesep, '<*> start %s tester' % os.path.basename( self.module.__file__)
+        
+        test_file_name = self.module.__file__
         if test_file_name.endswith( 'pyc' ):
             test_file_name = test_file_name[:-1]
-        command_line = ' '.join([ sys.executable, test_file_name ]) #pyc -> py
+        command_line = ' '.join([ sys.executable, test_file_name ])
         input_, output = os.popen4( command_line )
         input_.close()
         report = []
@@ -241,15 +211,47 @@ class process_tester_runner_t( object ):
                 break
             else:
                 print data,
-        exit_status = output.close()
-        self.__statistics.append( self.module_stat_t( module, ''.join( report ), exit_status ) )
+        self.output = ''.join( report )                
+        self.exit_status = output.close()
+        self.__update()
+        print '<***> finish %s tester' % os.path.basename( self.module.__file__)
+        
+    def __create_unique_name( self, name ):
+        if '__main__.' in name:
+            name = name.replace( '__main__', os.path.basename( self.module.__file__)[:-4] )
+        return name
+
+    def __update( self ):
+        match_found = self.bottom_line_re.search( self.output )
+        if match_found:                
+            self.num_of_tests += int( match_found.group( 'num_of_tests' ) )
+            self.total_run_time += float( match_found.group( 'seconds' ) )
+            
+        uname = self.__create_unique_name
+        for match_found in self.test_name_re.finditer( self.output ):
+            self.test_results[ uname( match_found.group( 'name' ) ) ] = 'ok'
+            
+        for match_found in self.failed_test_re.finditer( self.output ):
+            self.test_results[ uname( match_found.group( 'name' ) ) ] = 'FAIL'
+
+        for match_found in self.error_test_re.finditer( self.output ):
+            self.test_results[ uname( match_found.group( 'name' ) ) ] = 'ERROR'
+
+        assert( self.num_of_tests == len( self.test_results ) )
+
+
+class process_tester_runner_t( object ):
+    
+    def __init__( self, modules ):
+        self.__m_runners = [ module_runner_t(m) for m in modules ]
+        self.__total_time = 0
             
     def __dump_statistics( self ):
         num_of_tests = 0
         test_results = {}
         total_tests_only_run_time = 0
         exit_status = 0
-        for stat in self.__statistics:
+        for stat in self.__m_runners:
             num_of_tests += stat.num_of_tests
             total_tests_only_run_time += stat.total_run_time
             test_results.update( stat.test_results )
@@ -272,8 +274,7 @@ class process_tester_runner_t( object ):
 
     def __call__( self ):
         start_time = time.time()
-        for m in self.__modules:
-            self.__run_single( m )
+        [ m() for m in self.__m_runners ]
         self.__total_time = time.time() - start_time
         self.__dump_statistics()
 
