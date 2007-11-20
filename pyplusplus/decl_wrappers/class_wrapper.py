@@ -438,11 +438,11 @@ class class_t( class_common_details_t
             if base.access == ACCESS_TYPES.PRIVATE:
                 continue
             base_cls = base.related_class
-            funcs.update( base_cls.member_functions( query, allow_empty=True ) )
-            funcs.update( base_cls.member_operators( relevant_opers & query, allow_empty=True ) )
+            funcs.update( base_cls.member_functions( query, recursive=False, allow_empty=True ) )
+            funcs.update( base_cls.member_operators( relevant_opers & query, recursive=False, allow_empty=True ) )
 
-            defined_funcs.update( base_cls.member_functions( all_not_pure_virtual, allow_empty=True ) )
-            defined_funcs.update( base_cls.member_operators( all_not_pure_virtual & relevant_opers, allow_empty=True ) )
+            defined_funcs.update( base_cls.member_functions( all_not_pure_virtual, recursive=False, allow_empty=True ) )
+            defined_funcs.update( base_cls.member_operators( all_not_pure_virtual & relevant_opers, recursive=False, allow_empty=True ) )
 
         not_reimplemented_funcs = set()
         is_same_function = declarations.is_same_function
