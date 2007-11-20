@@ -33,11 +33,6 @@ class global_variable_base_t( registration_based.registration_based_t
     def _get_system_headers_impl( self ):
         return []
 
-    def register_exposed( self, exposed_db ):
-        """Register exposed declaration in L{exposed data base<utils.exposed_decls_db_t>}"""
-        exposed_db.expose( self.declaration )
-
-
 class global_variable_t( global_variable_base_t ):
     """
     Creates boost.python code that exposes global variable.

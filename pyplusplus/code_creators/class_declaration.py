@@ -404,13 +404,3 @@ class class_wrapper_t( scoped.scoped_t ):
 
     def _get_system_headers_impl( self ):
         return []
-
-    def register_exposed( self, exposed_db ):
-        """Register exposed declaration in L{exposed data base<utils.exposed_decls_db_t>}"""
-        exposed_db.expose( self.declaration )
-
-
-
-
-
-
