@@ -97,7 +97,6 @@ class module_builder_t(object):
 
         self.__registrations_code_head = []
         self.__registrations_code_tail = []
-        self.__already_exposed_modules = []
         
     @property
     def global_ns( self ):
@@ -109,7 +108,9 @@ class module_builder_t(object):
         return self.__encoding
 
     def register_module_dependency( self, other_module_generate_code_dir ):
-        self.__already_exposed_modules.append( other_module_generate_code_dir )
+        db = utils.exposed_decls_db_t()
+        db.load( other_module_generate_code_dir )
+        db.update_decls( self.global_ns )
 
     def run_query_optimizer(self):
         """
@@ -255,8 +256,7 @@ class module_builder_t(object):
                                               , types_db
                                               , target_configuration
                                               , enable_indexing_suite
-                                              , doc_extractor
-                                              , self.__already_exposed_modules)
+                                              , doc_extractor)
         self.__code_creator = creator.create()
         self.__code_creator.replace_included_headers(self.__parsed_files)
         #I think I should ask users, what they expect
@@ -266,11 +266,12 @@ class module_builder_t(object):
 
         return self.__code_creator
 
-    def _get_module( self ):
+    @property
+    def code_creator( self ):
+        "reference to L{code_creators.module_t} instance"
         if not self.__code_creator:
             raise RuntimeError( "self.module is equal to None. Did you forget to call build_code_creator function?" )
         return self.__code_creator
-    code_creator = property( _get_module, doc="reference to L{code_creators.module_t} instance" )
 
     def has_code_creator( self ):
         """

@@ -52,8 +52,7 @@ class creator_t( declarations.decl_visitor_t ):
                   , types_db=None
                   , target_configuration=None
                   , enable_indexing_suite=True
-                  , doc_extractor=None
-                  , already_exposed_dbs=None):
+                  , doc_extractor=None ):
         """Constructor.
 
         @param decls: Declarations that should be exposed in the final module.
@@ -91,7 +90,7 @@ class creator_t( declarations.decl_visitor_t ):
         if not self.__types_db:
             self.__types_db = types_database.types_database_t()
 
-        self.__extmodule = code_creators.module_t()
+        self.__extmodule = code_creators.module_t( declarations.get_global_namespace(decls) )
         if boost_python_ns_name:
             bp_ns_alias = code_creators.namespace_alias_t( alias=boost_python_ns_name
                                                            , full_namespace_name='::boost::python' )
@@ -102,7 +101,7 @@ class creator_t( declarations.decl_visitor_t ):
         self.__extmodule.adopt_creator( self.__module_body )
         
         self.__opaque_types_manager = opaque_types_manager.manager_t( self.__extmodule )
-        self.__dependencies_manager = dependencies_manager.manager_t(self.decl_logger, already_exposed_dbs)
+        self.__dependencies_manager = dependencies_manager.manager_t(self.decl_logger)
         
         prepared_decls = self._prepare_decls( decls, doc_extractor )
         self.__decls = sort_algorithms.sort( prepared_decls )
@@ -141,9 +140,8 @@ class creator_t( declarations.decl_visitor_t ):
                 self.__print_readme( decl )
                 continue
             
-            if self.__dependencies_manager.is_already_exposed( decl ):
+            if decl.already_exposed:
                 #check wether this is already exposed in other module
-                decl.already_exposed = True
                 continue
  
             if isinstance( decl.parent, declarations.namespace_t ):
@@ -286,8 +284,7 @@ class creator_t( declarations.decl_visitor_t ):
         for cls in used_containers: 
             self.__print_readme( cls )
 
-            if self.__dependencies_manager.is_already_exposed( cls ):
-                cls.already_exposed = True
+            if cls.already_exposed:
                 continue
 
             cls_creator = create_cls_cc( cls )
