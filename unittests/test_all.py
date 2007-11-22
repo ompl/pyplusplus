@@ -93,7 +93,7 @@ import transfer_ownership_old_tester
 import transfer_ownership_tester
 import unicode_bug
 import include_exclude_bug_tester
-
+import vector_with_shared_data_tester
 
 
 
@@ -177,6 +177,7 @@ testers = [
     , transfer_ownership_tester
     , unicode_bug
     , include_exclude_bug_tester
+    , vector_with_shared_data_tester
 ]
 
 class module_runner_t( object ):
