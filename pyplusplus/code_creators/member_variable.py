@@ -621,7 +621,7 @@ class mem_var_ref_wrapper_t( code_creator.code_creator_t
             return False
         if declarations.has_destructor( decl ) and not declarations.has_public_destructor( decl ):
             return False
-        if not declarations.has_trivial_copy(decl):
+        if not declarations.has_copy_constructor(decl):
             return False
         return True
     has_setter = property( _get_has_setter )

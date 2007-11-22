@@ -572,7 +572,7 @@ class creator_t( declarations.decl_visitor_t ):
             if '0.9' in self.curr_decl.compiler:
                 copy_constr = self.curr_decl.find_copy_constructor()
                 add_to_wrapper = False
-                if declarations.has_trivial_copy( self.curr_decl ):
+                if declarations.has_copy_constructor( self.curr_decl ):
                     #find out whether user or compiler defined it
                     if self.curr_decl.noncopyable:
                         add_to_wrapper = False
@@ -594,7 +594,7 @@ class creator_t( declarations.decl_visitor_t ):
                     tcons = code_creators.null_constructor_wrapper_t( class_=self.curr_decl )
                     wrapper.adopt_creator( tcons )                    
             else:
-                if declarations.has_trivial_copy( self.curr_decl ):
+                if declarations.has_copy_constructor( self.curr_decl ):
                     copy_constr = self.curr_decl.find_copy_constructor()
                     if not self.curr_decl.noncopyable and copy_constr.is_artificial:
                         cccc = code_creators.copy_constructor_wrapper_t( class_=self.curr_decl)
