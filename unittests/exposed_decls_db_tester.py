@@ -37,6 +37,20 @@ class tester_t(unittest.TestCase):
         int fff();
         int i;
     }
+
+    struct yyy{
+        struct{ int i;};
+    };
+    
+    struct zzz{
+        union{
+           int x; float y;
+        };
+    };
+    
+    namespace{
+        int xxxx;
+    }
     """
     def __init__(self, *args ):
         unittest.TestCase.__init__(self, *args)

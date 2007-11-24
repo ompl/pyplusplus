@@ -74,8 +74,14 @@ class exposed_decls_db_t( object ):
         def find_out_normalized_name( self, decl ):
             if decl.name: 
                 return decl.name
-            else:#unnamed enums, classes, unions
+            elif decl.location:#unnamed enums, classes, unions
                 return str( decl.location.as_tuple() )
+            elif isinstance( decl, declarations.namespace_t ):
+                return '' #I don't really care about unnamed namespaces
+            elif isinstance( decl, declarations.enumeration_t ):
+                return str( decl.values )
+            else: #it could be unname struct\class but location should exist
+                raise RuntimeError( "Unable to create normalized name for declaration: " + str(decl))
 
         def __init_from_str( self, row ):
             self.exposed_sign, self.key, self.normalized_name, self.signature \
