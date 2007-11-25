@@ -78,9 +78,7 @@ class exposed_decls_db_t( object ):
                 return str( decl.location.as_tuple() )
             elif isinstance( decl, declarations.namespace_t ):
                 return '' #I don't really care about unnamed namespaces
-            elif isinstance( decl, declarations.enumeration_t ):
-                return str( decl.values )
-            else: #it could be unname struct\class but location should exist
+            else: #this should nevere happen
                 raise RuntimeError( "Unable to create normalized name for declaration: " + str(decl))
 
         def __init_from_str( self, row ):
