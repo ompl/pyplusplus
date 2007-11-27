@@ -227,7 +227,7 @@ class multiple_files_t(writer.writer_t):
             answer.append( self.extmodule.license.create() )
 
         head_headers = [ file_name + self.HEADER_EXT ]
-        answer.append( self.create_include_code( creators, head_headers ) )
+        answer.append( self.create_include_code( creators, tail_headers=head_headers ) )
 
         answer.append( '' )
         answer.append( self.create_namespaces_code( creators ) )
