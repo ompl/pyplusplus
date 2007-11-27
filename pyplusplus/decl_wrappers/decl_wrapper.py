@@ -78,9 +78,9 @@ class decl_wrapper_t(object):
                         and self.aliases[0].name not in container_aliases:
                             self._alias = self.aliases[0].name
                     else:
-                        self._alias = self._generate_valid_name()
+                        self._alias = algorithm.create_valid_name( self.partial_name )
                 else:
-                    self._alias = self.name
+                    self._alias = self.partial_name
         return self._alias
     def _set_alias(self, alias):
         self._alias = alias

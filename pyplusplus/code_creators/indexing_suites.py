@@ -33,7 +33,7 @@ class indexing_suite1_t( registration_based.registration_based_t
 
     def _create_suite_declaration( self ):
         suite_identifier = algorithm.create_identifier( self, self.guess_suite_name() )
-        args = [ self.container.decl_string ]
+        args = [ self.container.partial_decl_string ]
         try:
             no_proxy = str( self.configuration.no_proxy ).lower()
         except:

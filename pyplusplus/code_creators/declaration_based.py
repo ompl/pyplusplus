@@ -43,7 +43,7 @@ class declaration_based_t:
     
     @property
     def decl_identifier( self ):
-        return algorithm.create_identifier( self, self.declaration.decl_string )
+        return algorithm.create_identifier( self, self.declaration.partial_decl_string )
     
     @property
     def documentation( self ):

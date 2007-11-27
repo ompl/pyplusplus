@@ -222,7 +222,8 @@ class member_variable_wrapper_t( code_creator.code_creator_t
 
         return declarations.free_function_type_t.create_decl_string(
                 return_type=self.declaration.type
-                , arguments_types=arguments_types )
+                , arguments_types=arguments_types
+                , with_defaults=False)
     getter_type = property( _get_getter_type )
 
     def _get_setter_full_name(self):
@@ -237,7 +238,8 @@ class member_variable_wrapper_t( code_creator.code_creator_t
 
         return declarations.free_function_type_t.create_decl_string(
                 return_type=declarations.void_t()
-                , arguments_types=arguments_types )
+                , arguments_types=arguments_types
+                , with_defaults=False)
     setter_type = property( _get_setter_type )
 
     def _get_has_setter( self ):
@@ -344,7 +346,8 @@ class bit_field_wrapper_t( code_creator.code_creator_t
                 return_type=self.declaration.type
                 , class_decl_string=self.parent.full_name
                 , arguments_types=[]
-                , has_const=True )
+                , has_const=True
+                , with_defaults=False)
     getter_type = property( _get_getter_type )
 
     def _get_setter_full_name(self):
@@ -356,7 +359,8 @@ class bit_field_wrapper_t( code_creator.code_creator_t
                 return_type=declarations.void_t()
                 , class_decl_string=self.parent.full_name
                 , arguments_types=[self.declaration.type]
-                , has_const=False )
+                , has_const=False
+                , with_defaults=False)
     setter_type = property( _get_setter_type )
 
     def _get_has_setter( self ):

@@ -159,9 +159,9 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
             if base_desc.access != declarations.ACCESS_TYPES.PUBLIC:
                 continue
             if base_creators.has_key( id(base_desc.related_class) ):
-                bases.append( algorithm.create_identifier( self, base_desc.related_class.decl_string ) )
+                bases.append( algorithm.create_identifier( self, base_desc.related_class.partial_decl_string ) )
             elif base_desc.related_class.already_exposed:
-                bases.append( base_desc.related_class.decl_string )
+                bases.append( base_desc.related_class.partial_decl_string )
         if not bases:
             return None
         bases_identifier = algorithm.create_identifier( self, '::boost::python::bases' )
@@ -186,14 +186,14 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
             else:
                 if not self.target_configuration.boost_python_has_wrapper_held_type \
                    or self.declaration.require_self_reference:
-                    args.append( algorithm.create_identifier( self, self.declaration.decl_string ) )
+                    args.append( self.decl_identifier )
                 if self.declaration.require_self_reference:
                     if not held_type:
                         args.append( self.wrapper.full_name )
                 else:
                     args.append( self.wrapper.full_name )
         else:
-            args.append( algorithm.create_identifier( self, self.declaration.decl_string ) )
+            args.append( self.decl_identifier )
             
         bases = self._generate_bases(base_creators)
         if bases:
@@ -308,7 +308,7 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
 
         code = os.linesep.join( result )
 
-        result = [ '{ //%s' % declarations.full_name( self.declaration ) ]
+        result = [ '{ //%s' % declarations.full_name( self.declaration, with_defaults=False ) ]
         result.append( self.indent( code ) )
         result.append( '}' )
 

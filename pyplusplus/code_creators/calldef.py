@@ -126,7 +126,7 @@ class calldef_t( registration_based.registration_based_t
         if not self.works_on_instance:
             #indenting and adding scope
             code = ''.join( result )
-            result = [ '{ //%s' % declarations.full_name( self.declaration ) ]
+            result = [ '{ //%s' % self.decl_identifier ]
             result.append( os.linesep * 2 )
             result.append( self.indent( code ) )
             result.append( os.linesep * 2 )
@@ -158,7 +158,7 @@ class calldef_wrapper_t( code_creator.code_creator_t
         return arg_utils.args_declaration()
 
     def wrapped_class_identifier( self ):
-        return algorithm.create_identifier( self, declarations.full_name( self.declaration.parent ) )
+        return algorithm.create_identifier( self, self.declaration.parent.partial_decl_string )
 
     def unoverriden_function_body( self ):
         return 'throw std::logic_error("%s");' % self.declaration.non_overridable_reason
@@ -168,7 +168,7 @@ class calldef_wrapper_t( code_creator.code_creator_t
             if not self.declaration.exceptions:
                 return ''
             else:
-                exceptions = map( lambda exception: algorithm.create_identifier( self, exception.decl_string )
+                exceptions = map( lambda exception: algorithm.create_identifier( self, exception.partial_decl_string )
                                   , self.declaration.exceptions )
                 return ' throw( ' + self.PARAM_SEPARATOR.join( exceptions ) + ' )'
         else:
@@ -192,7 +192,8 @@ class free_function_t( calldef_t ):
         return self.def_identifier()
 
     def create_function_type_alias_code( self, exported_class_alias=None  ):
-        return 'typedef ' + self.declaration.function_type().create_typedef( self.function_type_alias ) + ';'
+        f_type = self.declaration.function_type()
+        return 'typedef ' + f_type.create_typedef( self.function_type_alias, with_defaults=False ) + ';'
 
     def create_function_ref_code(self, use_function_alias=False):
         if use_function_alias:
@@ -200,7 +201,7 @@ class free_function_t( calldef_t ):
                    % ( self.function_type_alias, declarations.full_name( self.declaration ) )
         elif self.declaration.create_with_signature:
             return '(%s)( &%s )' \
-                   % ( self.declaration.function_type().decl_string
+                   % ( self.declaration.function_type().partial_decl_string
                        , declarations.full_name( self.declaration ) )
         else:
             return '&%s' % declarations.full_name( self.declaration )
@@ -212,7 +213,7 @@ class mem_fun_t( calldef_t ):
 
     def create_function_type_alias_code( self, exported_class_alias=None  ):
         ftype = self.declaration.function_type()
-        return 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias )
+        return 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias, with_defaults=False )
 
     def create_function_ref_code(self, use_function_alias=False):
         if use_function_alias:
