@@ -82,6 +82,7 @@ import bpmodule_tester
 import custom_smart_ptr_classes_tester
 import custom_string_tester
 import final_classes_tester
+import templates_tester
 #gui_tester
 #gui_wizard_tester
 #
@@ -178,6 +179,7 @@ testers = [
     , unicode_bug
     , include_exclude_bug_tester
     , vector_with_shared_data_tester
+    , templates_tester
 ]
 
 class module_runner_t( object ):
