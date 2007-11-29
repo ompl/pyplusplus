@@ -54,6 +54,10 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
     def _get_create_with_signature(self):
         if None is self._create_with_signature:
             self._create_with_signature = bool( self.overloads )
+            
+            if not self._create_with_signature and declarations.templates.is_instantiation( self.name ):
+                self._create_with_signature = True
+
             if not self._create_with_signature and isinstance( self.parent, declarations.class_t ):
                 for hi in self.parent.recursive_bases:
                     if hi.access_type == 'private':
