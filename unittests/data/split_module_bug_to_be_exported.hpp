@@ -16,4 +16,10 @@ inline opaque_pointer get_opaque2(){ return 0; }
 typedef std::vector<int> int_vector;
 inline int_vector get_vector(){ return int_vector(); }
 
+struct image_t{
+    int i;
+};
+
+void do_smth(std::vector< image_t > &images);
+
 #endif//__split_module_to_be_exported_hpp__
