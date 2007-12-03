@@ -126,7 +126,7 @@ class calldef_t( registration_based.registration_based_t
         if not self.works_on_instance:
             #indenting and adding scope
             code = ''.join( result )
-            result = [ '{ //%s' % self.decl_identifier ]
+            result = [ '{ //%s' % declarations.full_name( self.declaration ) ]
             result.append( os.linesep * 2 )
             result.append( self.indent( code ) )
             result.append( os.linesep * 2 )

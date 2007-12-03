@@ -95,7 +95,7 @@ import transfer_ownership_tester
 import unicode_bug
 import include_exclude_bug_tester
 import vector_with_shared_data_tester
-
+import constructors_bug_tester
 
 
 
@@ -180,6 +180,7 @@ testers = [
     , include_exclude_bug_tester
     , vector_with_shared_data_tester
     , templates_tester
+    , constructors_bug_tester
 ]
 
 class module_runner_t( object ):
