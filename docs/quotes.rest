@@ -46,6 +46,31 @@ libraries fairly easily. "
 Who is using Py++?
 ------------------
 
+* European Space Agency - `ReSP`_ project
+
+  `ReSP`_ is an Open-Source hardware simulation platform targeted for
+  multiprocessor systems. ReSP will provide a framework for composing a
+  system by connecting components chosen from a given repository or
+  developped by the designer. ReSP will provide also also a framework for
+  fault injection campaigns for the analysis of the reliability level of the
+  system.
+
+  `ReSP`_ engineers are developping the simulator core in Python language for exploiting
+  reflective capabilities (missing in a pure C++ environment) that can be
+  exploited for connecting components in a dynamic way and for enabling
+  non-intrusive fault injection activity. Components will be described in
+  SystemC and TLM libraries that are high level hardware description
+  languages based on C++.
+
+  .. _`ReSP` : http://www.esa.int/TEC/Microelectronics/
+
+* Allen Bierbaum, the author of `PyOpenSG`_ project, is using `Py++`_ to create
+  Python bindings for `OpenSG`_
+  
+  `OpenSG`_ - is a portable scenegraph system to create realtime graphics 
+  programs, e.g. for virtual reality applications.  
+  
+
 * Matthias Baas, the author of `Python Computer Graphics Kit`_ project, is using
   `Py++`_ to create Python bindings for `Maya C++ SDK`__.
 
@@ -94,30 +119,14 @@ Who is using Py++?
 
   You can download the bindings from https://sourceforge.net/project/showfiles.php?group_id=118209 .
 
-* European Space Agency - `ReSP`_ project
-
-  `ReSP`_ is an Open-Source hardware simulation platform targeted for
-  multiprocessor systems. ReSP will provide a framework for composing a
-  system by connecting components chosen from a given repository or
-  developped by the designer. ReSP will provide also also a framework for
-  fault injection campaigns for the analysis of the reliability level of the
-  system.
-
-  `ReSP`_ engineers are developping the simulator core in Python language for exploiting
-  reflective capabilities (missing in a pure C++ environment) that can be
-  exploited for connecting components in a dynamic way and for enabling
-  non-intrusive fault injection activity. Components will be described in
-  SystemC and TLM libraries that are high level hardware description
-  languages based on C++.
-
-  .. _`ReSP` : http://www.esa.int/TEC/Microelectronics/
-
 .. _`Py++` : ./pyplusplus.html
 .. _`Python Computer Graphics Kit` : http://cgkit.sourceforge.net/
 .. _`TnFOX`: http://www.nedprod.com/TnFOX/
-.. _`PyOpenSG`: https://realityforge.vrsource.org/view/PyOpenSG/WebHome
 .. _`Python-OGRE` : http://www.python-ogre.org
 .. _`OGRE` : http://www.ogre3d.org/index.php?option=com_content&task=view&id=19&Itemid=79
+.. _`PyOpenSG` : https://realityforge.vrsource.org/trac/pyopensg
+.. _`OpenSG` : http://opensg.vrsource.org/trac
+
 ..
    Local Variables:
    mode: indented-text

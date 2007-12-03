@@ -12,7 +12,7 @@ Pyste
 any more. Nevertheless, users request to compare `Py++`_ and `Pyste`_. You
 can read `here`_ the comparison.
 
-.. _`here` : ./Pyste.html
+.. _`here` : ./pyste.html
 
 ----------
 SWIG & SIP

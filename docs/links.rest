@@ -96,6 +96,23 @@ Libraries inspired by Boost.Python
 .. _`Sq Plus` : http://wiki.squirrel-lang.org/default.aspx/SquirrelWiki/SqPlus.html
 .. _`Squirrel` : http://wiki.squirrel-lang.org/
 
+-----------------------------
+Projects inspired by Py++ :-) 
+-----------------------------
+
+* `PyBindGen`_ -  a new project for producing Python extensions
+
+.. _`PyBindGen` : https://launchpad.net/pybindgen
+
+-----
+Blogs
+-----
+
+* http://www.shocksolution.com/math_tools/boost.python/index.html - this site 
+  contains few usefull Boost.Python examples and tutorials.
+
+
+
 ..
    Local Variables:
    mode: indented-text
