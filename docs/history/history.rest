@@ -20,6 +20,7 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Andy Miller
 * Martin Preisler
 * Meghana Haridev
+
 ------------
 Project name
 ------------
