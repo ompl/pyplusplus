@@ -96,7 +96,7 @@ import unicode_bug
 import include_exclude_bug_tester
 import vector_with_shared_data_tester
 import constructors_bug_tester
-
+import precompiled_header_tester
 
 
 testers = [
@@ -181,6 +181,7 @@ testers = [
     , vector_with_shared_data_tester
     , templates_tester
     , constructors_bug_tester
+    , precompiled_header_tester
 ]
 
 class module_runner_t( object ):
