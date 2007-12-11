@@ -111,7 +111,12 @@ Blogs
 * http://www.shocksolution.com/math_tools/boost.python/index.html - this site 
   contains few usefull Boost.Python examples and tutorials.
 
+-------------
+Build systems
+-------------
 
+http://www.scons.org/wiki/GCCXMLBuilder - Joseph Lisee shows how to integrate 
+Py++ scripts with Scons.
 
 ..
    Local Variables:

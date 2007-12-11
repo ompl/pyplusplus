@@ -126,7 +126,7 @@ class calldef_t( registration_based.registration_based_t
         if not self.works_on_instance:
             #indenting and adding scope
             code = ''.join( result )
-            result = [ '{ //%s' % declarations.full_name( self.declaration ) ]
+            result = [ '{ //%s' % declarations.full_name( self.declaration, with_defaults=False ) ]
             result.append( os.linesep * 2 )
             result.append( self.indent( code ) )
             result.append( os.linesep * 2 )
@@ -196,16 +196,13 @@ class free_function_t( calldef_t ):
         return 'typedef ' + f_type.create_typedef( self.function_type_alias, with_defaults=False ) + ';'
 
     def create_function_ref_code(self, use_function_alias=False):
+        fname = declarations.full_name( self.declaration, with_defaults=False )
         if use_function_alias:
-            return '%s( &%s )' \
-                   % ( self.function_type_alias, declarations.full_name( self.declaration ) )
+            return '%s( &%s )' % ( self.function_type_alias, fname )
         elif self.declaration.create_with_signature:
-            return '(%s)( &%s )' \
-                   % ( self.declaration.function_type().partial_decl_string
-                       , declarations.full_name( self.declaration ) )
+            return '(%s)( &%s )' % ( self.declaration.function_type().partial_decl_string, fname )
         else:
-            return '&%s' % declarations.full_name( self.declaration )
-
+            return '&%s' % fname
 
 class mem_fun_t( calldef_t ):
     def __init__( self, function ):
@@ -216,16 +213,13 @@ class mem_fun_t( calldef_t ):
         return 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias, with_defaults=False )
 
     def create_function_ref_code(self, use_function_alias=False):
+        fname = declarations.full_name( self.declaration, with_defaults=False ) 
         if use_function_alias:
-            return '%s( &%s )' \
-                   % ( self.function_type_alias, declarations.full_name( self.declaration ) )
+            return '%s( &%s )' % ( self.function_type_alias, fname )
         elif self.declaration.create_with_signature:
-            return '(%s)( &%s )' \
-                   % ( self.declaration.function_type().decl_string
-                       , declarations.full_name( self.declaration ) )
+            return '(%s)( &%s )' % ( self.declaration.function_type().partial_decl_string, fname )
         else:
-            return '&%s' % declarations.full_name( self.declaration )
-
+            return '&%s' % fname
 
 class mem_fun_pv_t( calldef_t ):
     def __init__( self, function, wrapper ):
@@ -236,20 +230,19 @@ class mem_fun_pv_t( calldef_t ):
         return 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias )
 
     def create_function_ref_code(self, use_function_alias=False):
+        fname = declarations.full_name( self.declaration, with_defaults=False ) 
         if use_function_alias:
             return '%s( %s(&%s) )' \
                    % ( self.pure_virtual_identifier()
                        , self.function_type_alias
-                       , declarations.full_name( self.declaration ) )
+                       , fname )
         elif self.declaration.create_with_signature:
             return '%s( (%s)(&%s) )' \
                    % ( self.pure_virtual_identifier()
-                       , self.declaration.function_type().decl_string
-                       , declarations.full_name( self.declaration ) )
+                       , self.declaration.function_type().partial_decl_string
+                       , fname )
         else:
-            return '%s( &%s )' \
-                   % ( self.pure_virtual_identifier()
-                       , declarations.full_name( self.declaration ) )
+            return '%s( &%s )' % ( self.pure_virtual_identifier(), fname)
 
 class mem_fun_pv_wrapper_t( calldef_wrapper_t ):
     def __init__( self, function ):
@@ -263,7 +256,7 @@ class mem_fun_pv_wrapper_t( calldef_wrapper_t ):
             constness = ' const '
 
         return template % {
-            'return_type' : self.declaration.return_type.decl_string
+            'return_type' : self.declaration.return_type.partial_decl_string
             , 'name' : self.declaration.name
             , 'args' : self.args_declaration()
             , 'constness' : constness
@@ -318,24 +311,25 @@ class mem_fun_v_t( calldef_t ):
         return None
 
     def create_function_ref_code(self, use_function_alias=False):
+        fname = declarations.full_name( self.declaration, with_defaults=False )
         result = []
         if use_function_alias:
-            result.append( '%s(&%s)'
-                           % ( self.function_type_alias, declarations.full_name( self.declaration ) ) )
+            result.append( '%s(&%s)' % ( self.function_type_alias, fname) )
             if self.wrapper:
                 result.append( self.param_sep() )
                 result.append( '%s(&%s)'
                                 % ( self.default_function_type_alias, self.wrapper.default_full_name() ) )
         elif self.declaration.create_with_signature:
             result.append( '(%s)(&%s)'
-                           % ( self.declaration.function_type().decl_string
-                               , declarations.full_name( self.declaration ) ) )
+                           % ( self.declaration.function_type().partial_decl_string
+                               , fname) )
             if self.wrapper:
                 result.append( self.param_sep() )
                 result.append( '(%s)(&%s)'
-                               % ( self.wrapper.function_type().decl_string, self.wrapper.default_full_name() ) )
+                               % ( self.wrapper.function_type().partial_decl_string
+                                   , self.wrapper.default_full_name() ) )
         else:
-            result.append( '&%s'% declarations.full_name( self.declaration ) )
+            result.append( '&%s'% fname )
             if self.wrapper:
                 result.append( self.param_sep() )
                 result.append( '&%s' % self.wrapper.default_full_name() )
@@ -801,7 +795,7 @@ class constructor_t( calldef_t ):
             #Function parameters declared consts are ignored by C++
             #except for the purpose of function definitions
             temp = declarations.remove_const( temp )
-        return algorithm.create_identifier( self, temp.decl_string )
+        return algorithm.create_identifier( self, temp.partial_decl_string )
 
     def _generate_definition_args(self):
         answer = []

@@ -6,10 +6,12 @@
 import os
 import sys
 import shutil
+import logging
 import unittest
 import autoconfig
 from pygccxml import parser
 from pygccxml import declarations
+from pyplusplus import messages
 from pyplusplus import code_creators
 from pyplusplus import module_creator
 from pyplusplus import module_builder
@@ -18,6 +20,9 @@ from pyplusplus import function_transformers as ft
 
 class ogre_generate_tester_t(unittest.TestCase):        
     def test(self):
+        module_builder.set_logger_level( logging.CRITICAL )
+        messages.disable( *messages.all_warning_msgs )
+        
         ogre_file = autoconfig.data_directory.replace( 'pyplusplus_dev', 'pygccxml_dev' )
         ogre_file = parser.create_gccxml_fc( os.path.join( ogre_file, 'ogre1.4.xml' ) )
 
@@ -25,8 +30,15 @@ class ogre_generate_tester_t(unittest.TestCase):
                 [ ogre_file ]
                 , gccxml_path=autoconfig.gccxml.executable 
                 , indexing_suite_version=2)
+    
         mb.global_ns.exclude()
         mb.namespace('Ogre').include()
+        
+        x = mb.global_ns.decls( lambda d: 'Animation*' in d.name and 'MapIterator' in d.name )
+        for y in x:
+            print y.name
+            print y.partial_name
+            print declarations.full_name( y, with_defaults=False )
         
         target_dir = os.path.join( autoconfig.build_directory, 'ogre' )
         if os.path.exists( target_dir ):

@@ -215,6 +215,8 @@ W1052 = warning(
 
 warnings = globals()
 
+all_warning_msgs = []
+
 for identifier, explanation in warnings.items():
     if len( identifier ) != 5:
         continue
@@ -225,7 +227,10 @@ for identifier, explanation in warnings.items():
     except:
         continue        
     msg = '%s %s: %s' % ( explanation.__class__.prefix, identifier, str(explanation) )   
-    globals()[ identifier ] = explanation.__class__( msg, identifier )
+    msg_inst = explanation.__class__( msg, identifier )
+    globals()[ identifier ] = msg_inst
+    all_warning_msgs.append( msg_inst )
+    
 
 del warnings
 del identifier
