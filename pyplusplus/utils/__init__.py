@@ -40,7 +40,7 @@ class missing_call_policies:
             creator.parent.remove_creator( creator )
     
 def split_sequence(seq, bucket_size):
-    #split sequence to buclets, where every will contain maximum bucket_size items
+    #split sequence to buckets, where every will contain maximum bucket_size items
     seq_len = len( seq )
     if seq_len <= bucket_size:
         return [ seq ] 

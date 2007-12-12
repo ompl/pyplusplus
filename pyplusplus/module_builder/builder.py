@@ -317,6 +317,20 @@ class module_builder_t(object):
         self.__merge_user_code()
         file_writers.write_file( self.code_creator, file_name, encoding=self.encoding )
 
+    def __work_on_unused_files( self, dir_name, written_files, on_unused_file_found ):
+        all_files = os.listdir( dir_name )
+        all_files = map( lambda fname: os.path.join( dir_name, fname ), all_files )
+        all_files = filter( file_writers.has_pypp_extenstion, all_files )
+
+        unused_files = set( all_files ).difference( set( written_files ) )
+        for fpath in unused_files:
+            try:
+                if on_unused_file_found is os.remove:
+                    self.logger.info( 'removing file "%s"' % fpath )
+                on_unused_file_found( fpath )
+            except Exception, error:
+                self.logger.exception( "Exception was catched, while executing 'on_unused_file_found' function."  )
+
     def split_module( self
                       , dir_name
                       , huge_classes=None
@@ -358,21 +372,48 @@ class module_builder_t(object):
                                 , huge_classes 
                                 , files_sum_repository=files_sum_repository
                                 , encoding=self.encoding)
-
-        all_files = os.listdir( dir_name )
-        all_files = map( lambda fname: os.path.join( dir_name, fname ), all_files )
-        all_files = filter( file_writers.has_pypp_extenstion, all_files )
-
-        unused_files = set( all_files ).difference( set( written_files ) )
-        for fpath in unused_files:
-            try:
-                if on_unused_file_found is os.remove:
-                    self.logger.info( 'removing file "%s"' % fpath )
-                on_unused_file_found( fpath )
-            except Exception, error:
-                self.logger.exception( "Exception was catched, while executing 'on_unused_file_found' function."  )
+        self.__work_on_unused_files( dir_name, written_files, on_unused_file_found )
 
         return written_files
+
+    def balanced_split_module( self
+                               , dir_name
+                               , number_of_files
+                               , on_unused_file_found=os.remove
+                               , use_files_sum_repository=True):
+        """
+        Writes module to fixed number of multiple cpp files
+
+        @param number_of_files: the desired number of generated cpp files
+        @type number_of_files: int
+
+        @param dir_name: directory name
+        @type dir_name: string
+
+        @param on_unused_file_found: callable object that represents the action that should be taken on
+                                     file, which is no more in use
+
+        @use_files_sum_repository: Py++ can generate file, which will contain md5 sum of every generated file.
+                                   Next time you generate code, md5sum will be loaded from the file and compared.
+                                   This could speed-up code generation process by 10-15%.
+        """
+        self.__merge_user_code()
+        
+        files_sum_repository = None        
+        if use_files_sum_repository:
+            cache_file = os.path.join( dir_name, self.code_creator.body.name + '.md5.sum' )
+            files_sum_repository = file_writers.cached_repository_t( cache_file )
+        
+        written_files = file_writers.write_balanced_files( self.code_creator
+                                                           , dir_name
+                                                           , number_of_buckets=number_of_files
+                                                           , files_sum_repository=files_sum_repository
+                                                           , encoding=self.encoding)
+                                                           
+        self.__work_on_unused_files( dir_name, written_files, on_unused_file_found )
+
+        return written_files
+
 
     #select decl(s) interfaces
     def decl( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):

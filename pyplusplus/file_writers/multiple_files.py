@@ -290,6 +290,13 @@ class multiple_files_t(writer.writer_t):
             self.logger.error( os.linesep.join( msg ) )
             raise
 
+    def split_classes( self ):
+        # Obtain a list of all class creators...
+        class_creators = filter( lambda x: isinstance(x, ( code_creators.class_t, code_creators.class_declaration_t ) )
+                                 , self.extmodule.body.creators )
+        # ...and write a .h/.cpp file for each class
+        map( self.split_class, class_creators )
+
     def create_value_traits_header_name( self, value_class ):
         return "_" + value_class.alias + "__value_traits" + self.HEADER_EXT
 
@@ -307,6 +314,9 @@ class multiple_files_t(writer.writer_t):
                         , self.create_header( header_name.replace( '.', '_' )
                                               , value_traits.create() ) )
         value_traits.create = lambda: ''
+
+    def split_values_traits( self ):
+        map( self.split_value_traits, self.__value_traits )
 
     def split_creators( self, creators, pattern, function_name, registrator_pos ):
         """Write non-class creators into a particular .h/.cpp file.
@@ -379,14 +389,8 @@ class multiple_files_t(writer.writer_t):
         
         self.extmodule.do_include_dirs_optimization()
 
-        map( self.split_value_traits, self.__value_traits )
-
-        # Obtain a list of all class creators...
-        class_creators = filter( lambda x: isinstance(x, ( code_creators.class_t, code_creators.class_declaration_t ) )
-                                 , self.extmodule.body.creators )
-        # ...and write a .h/.cpp file for each class
-        map( self.split_class, class_creators )
-
+        self.split_values_traits()
+        self.split_classes()        
         self.split_enums()
         self.split_global_variables()
         self.split_free_functions()

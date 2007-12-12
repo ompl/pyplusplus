@@ -97,6 +97,7 @@ import include_exclude_bug_tester
 import vector_with_shared_data_tester
 import constructors_bug_tester
 import precompiled_header_tester
+import balanced_files_tester
 
 
 testers = [
@@ -182,6 +183,7 @@ testers = [
     , templates_tester
     , constructors_bug_tester
     , precompiled_header_tester
+    , balanced_files_tester
 ]
 
 class module_runner_t( object ):
