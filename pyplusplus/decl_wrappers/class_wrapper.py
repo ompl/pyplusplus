@@ -177,7 +177,7 @@ class class_t( class_common_details_t
         self._redefine_operators = False
         self._held_type = None
         self._noncopyable = None
-        self._wrapper_alias = self._generate_valid_name() + "_wrapper"
+        self._wrapper_alias = self._generate_valid_name(self.partial_name) + "_wrapper"
         self._registration_code = []
         self._declaration_code = []
         self._wrapper_code = []

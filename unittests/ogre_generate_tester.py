@@ -41,9 +41,9 @@ class ogre_generate_tester_t(unittest.TestCase):
             print declarations.full_name( y, with_defaults=False )
         
         target_dir = os.path.join( autoconfig.build_directory, 'ogre' )
-        if os.path.exists( target_dir ):
-            shutil.rmtree( target_dir )
-        os.mkdir( target_dir )
+        #~ if os.path.exists( target_dir ):
+            #~ shutil.rmtree( target_dir )
+        #~ os.mkdir( target_dir )
         
         mb.build_code_creator( 'Ogre3d' )
         mb.split_module( target_dir ) 

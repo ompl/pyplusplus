@@ -106,7 +106,7 @@ class smart_pointers_converter_t( registration_based.registration_based_t
     smart_ptr = property( _get_smart_ptr, _set_smart_ptr )    
 
     def _instantiate_smart_ptr( self, decl ):
-        identifier = algorithm.create_identifier( self, decl.decl_string )
+        identifier = algorithm.create_identifier( self, decl.partial_decl_string )
         return templates.join( self.smart_ptr, [identifier] )
     
     def _create_impl(self): 
