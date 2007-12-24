@@ -118,11 +118,3 @@ Memory managment
   from Python and pass ownership to C++ code. You don't want the headache associated 
   with this task.
 
-..
-   Local Variables:
-   mode: indented-text
-   indent-tabs-mode: nil
-   sentence-end-double-space: t
-   fill-column: 70
-   End:
-

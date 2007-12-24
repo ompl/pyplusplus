@@ -139,11 +139,3 @@ of any base class to be exposed\\registered before a derive one.
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
 
-..
-   Local Variables:
-   mode: indented-text
-   indent-tabs-mode: nil
-   sentence-end-double-space: t
-   fill-column: 70
-   End:
-

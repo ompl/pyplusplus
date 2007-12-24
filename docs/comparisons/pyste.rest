@@ -438,11 +438,3 @@ of time and motivation prevents him to work on `Pyste`_.
 .. _`ReleaseForge` : http://releaseforge.sourceforge.net
 .. _`boost.type_traits` : http://www.boost.org/libs/type_traits/index.html
 .. _`elementtree` : http://effbot.org/
-..
-   Local Variables:
-   mode: indented-text
-   indent-tabs-mode: nil
-   sentence-end-double-space: t
-   fill-column: 70
-   End:
-

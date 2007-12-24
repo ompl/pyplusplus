@@ -263,11 +263,3 @@ http://sourceforge.net/project/showfiles.php?group_id=118209.
 .. _`GCC-XML`: http://www.gccxml.org
 .. _`Py++` : ./../../pyplusplus.html
 
-..
-   Local Variables:
-   mode: indented-text
-   indent-tabs-mode: nil
-   sentence-end-double-space: t
-   fill-column: 70
-   End:
-

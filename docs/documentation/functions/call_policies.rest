@@ -553,10 +553,3 @@ want you can extract the relevant piece of code from `this file`_.
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
 
-..
-   Local Variables:
-   mode: indented-text
-   indent-tabs-mode: nil
-   sentence-end-double-space: t
-   fill-column: 70
-   End:

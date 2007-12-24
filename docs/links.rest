@@ -118,11 +118,3 @@ Build systems
 http://www.scons.org/wiki/GCCXMLBuilder - Joseph Lisee shows how to integrate 
 Py++ scripts with Scons.
 
-..
-   Local Variables:
-   mode: indented-text
-   indent-tabs-mode: nil
-   sentence-end-double-space: t
-   fill-column: 70
-   End:
-

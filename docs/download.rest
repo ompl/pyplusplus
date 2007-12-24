@@ -63,10 +63,3 @@ Dependencies
 .. _`Py++` : ./pyplusplus.html
 .. _`pygccxml` : ./../pygccxml/pygccxml.html
 
-..
-   Local Variables:
-   mode: indented-text
-   indent-tabs-mode: nil
-   sentence-end-double-space: t
-   fill-column: 70
-   End:

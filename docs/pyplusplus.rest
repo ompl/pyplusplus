@@ -143,12 +143,14 @@ Features list
 
   * multiple files
 
+  * fixed set of multiple files
+
   * multiple files, where single class code is split to few files
 
 * You have full control over generated code. Your code could be inserted almost
   anywhere.
 
-* Your license is written at the top of every file
+* Your license is written at the top of every generated file
 
 * `Py++`_ will check the "completeness" of the bindings. It will check for you
   that the exposed declarations don't have references to unexposed ones.
@@ -173,12 +175,3 @@ License
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
 .. _`Boost Software License`: http://boost.org/more/license_info.html
-
-..
-   Local Variables:
-   mode: indented-text
-   indent-tabs-mode: nil
-   sentence-end-double-space: t
-   fill-column: 70
-   End:
-

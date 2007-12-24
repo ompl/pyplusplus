@@ -42,11 +42,3 @@ On this page you will find my collection of the solutions to some of the problem
 .. _`pygccxml` : http://www.language-binding.net/pygccxml/pygccxml.html
 .. _`SourceForge`: http://sourceforge.net/index.php
 
-..
-   Local Variables:
-   mode: indented-text
-   indent-tabs-mode: nil
-   sentence-end-double-space: t
-   fill-column: 70
-   End:
-

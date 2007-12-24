@@ -127,10 +127,3 @@ Who is using Py++?
 .. _`PyOpenSG` : https://realityforge.vrsource.org/trac/pyopensg
 .. _`OpenSG` : http://opensg.vrsource.org/trac
 
-..
-   Local Variables:
-   mode: indented-text
-   indent-tabs-mode: nil
-   sentence-end-double-space: t
-   fill-column: 70
-   End:
