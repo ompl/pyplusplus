@@ -43,6 +43,8 @@ SVN Version
    * Py++ will not expose free operators, if at least one of the classes, it works
      on, is not exposed.
      Many thanks to Meghana Haridev for reporting the bug.
+     
+2. Added ability to completely disable warnings reporting.
     
 -------------
 Version 0.9.0

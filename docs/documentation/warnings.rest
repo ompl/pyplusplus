@@ -128,7 +128,9 @@ edit it:
 .. code-block:: Python
 
    messages.disable( messages.W1020 )
-
+   
+   #you also can disable warnings reporting at all:
+   messages.disable( *messages.all_warning_msgs )
 
 Logging API
 -----------
