@@ -42,6 +42,15 @@ libraries fairly easily. "
 
   Andy Miller, a developer of `Python-OGRE`_ project
 
+"... I tried Py++ and it indeed automatically handles the case I outlined above 
+concerning C-array members, and with much less tedious writing of registration 
+code. I also found it convenient to use to insert some other C++ code for each 
+of my structures that normally I wrote by hand. The API docs and examples on your 
+webpage were very helpful. "
+
+  David Carpman
+
+
 ------------------
 Who is using Py++?
 ------------------
