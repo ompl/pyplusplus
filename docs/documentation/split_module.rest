@@ -1,0 +1,71 @@
+=================================
+Splitting generated code to files
+=================================
+
+.. contents:: Table of contents
+
+------------
+Introduction
+------------
+
+`Py++`_ provides 4 different strategies for splitting the generated code into files:
+
+* single file
+
+* multiple files
+
+* fixed set of multiple files
+
+* multiple files, where single class code is split to few files
+
+-----------
+Single file
+-----------
+
+If you just start with `Py++`_ or you are developing small module, than you should 
+start with this strategy. It is simple - all source code generated to single file.
+
+Of course this solution has it's price - every time you change the code you will
+have to recompile it. If you expose 2 or more declarations this is annoying and 
+time-consuming operation. 
+
+Usage example
+-------------
+
+.. code-block:: Python
+
+   from pyplusplus import module_builder
+   
+   mb = module_builder.module_builder_t(...)
+   mb.build_code_creator( ... )
+   mb.write_module( file name )
+
+--------------
+Multiple files
+--------------
+
+I believe this is the most widely used strategy. `Py++`_ splits generated code 
+as follows:
+
+* every class has it's own source & header file
+* all free enumerations are written to a single source file
+* all free functions are written to a single source file
+* all global variables are written to a single source file
+* source file, which contains complete code for module registration
+
+The main advantage of this mode is that you don't have to recompile the whole 
+project if only single declaration was changed. Thus this mode suites well huge
+projects.
+
+There are few problems with this mode:
+
+1. There are use cases, when the generated file names are too long. 
+
+
+
+
+.. _`Py++` : ./../pyplusplus.html
+.. _`pygccxml` : ./../../pygccxml/pygccxml.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Python`: http://www.python.org
+.. _`GCC-XML`: http://www.gccxml.org
