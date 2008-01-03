@@ -209,10 +209,22 @@ Class ``module_builder_t`` contains 3 functions, related to file generation:
   * ``huge_classes`` - list of names of huge classes
   * ``on_unused_file_found`` - callable object, which is called every time
     `Py++`_ found that previously generated file is not in use anymore.
-  * ``use_files_sum_repository`` - Py++ can generate file, which will contain md5 
-    sum of every generated file. Next time you generate code, md5sum will be loaded 
-    from the file and compared. This could speed-up code generation process by 10-15%
-    on big projects.
+  * ``use_files_sum_repository``
+    `Py++`_ is able to store md5 sum of the generated files in a file. Next 
+    time you will generate code, Py++ will compare generated file content 
+    against the sum, instead of loading the content of the previously generated
+    file from the disk and comparing against it. 
+
+    "<your module name>.md5.sum" is the file, that will be generated in the
+    ``dir_name`` directory.
+
+    Enabling this functionality should give you 10-15% of performance boost.
+
+    Warning: If you changed manually some of the files - don't forget to delete
+    the relevant line from "md5.sum" file. You can also delete the whole file. 
+    If the file is missing, Py++ will use old plain method of comparing content 
+    of the files. It will not re-write "unchanged" files and you will not be 
+    forced to recompile the whole project.
 
 *  
   .. code-block:: Python
@@ -226,9 +238,6 @@ Class ``module_builder_t`` contains 3 functions, related to file generation:
 
   * ``number_of_files`` - the desired number of generated source files
   
-
-
-
 
 .. _`Py++` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html

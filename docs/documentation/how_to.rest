@@ -376,6 +376,35 @@ generate files with short name, you have to set class alias:
 The nice thing about this approach is that now `Python`_ users have "normal"
 class name and you have short file name.
 
+-------------------
+Full\relative paths
+-------------------
+
+Consider next file layout:
+::
+
+  boost/
+    date_time/
+      ptime.hpp
+      time_duration.hpp
+      date_time.hpp //main header, which include all other header files
+
+Py++ currently does not handle relative paths as input very well, so it is 
+recommended that you use ``os.path.abspath()`` to transform the header file to 
+be processed into an absolute path:
+  
+.. code-block:: Python
+    
+   #Next code will expose nothing
+   mb = module_builder( [ 'date_time/date_time.hpp' ], ... ) 
+   mb.split_module( ... )
+
+   #while this one will work as expected
+   import os
+   mb = module_builder( [ os.path.abspath('date_time/date_time.hpp') ], ... ) 
+   mb.split_module( ... )
+
+
 .. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
