@@ -8,9 +8,13 @@ How to ... ?
 
 .. _`How to deal with templates?` : ./templates.html
 
-`How to add custom exception translation?`_
+`How to register an exception translation?`_
 
-.. _ `How to add custom exception translation?` : custom_exception_translation.html
+.. _`How to register an exception translation?` : exception_translation.html
+
+`Fatal error C1204:Compiler limit: internal structure overflow`_
+
+.. _`Fatal error C1204:Compiler limit: internal structure overflow` : ./fatal_error_c1204.html
 
 -------------------------------------------------------
 How to expose function, which has hand-written wrapper?
@@ -67,24 +71,6 @@ could be integrated with `Py++`_.
   window.registration_code( registration_code )
 
 That's all.
-
--------------------------------------------------------------
-Fatal error C1204:Compiler limit: internal structure overflow
--------------------------------------------------------------
-
-If you get this error, than the generated file is too big. You will have to split
-it to few files. Well, not you but `Py++`_, you will only have to tell it to do
-that.
-
-If you are using ``module_builder_t.write_module`` method, consider to switch
-to ``module_builder_t.split_module``.
-
-If you are using ``split_module``, but still the generated code for some class
-could not be compiled, because of the error, you can ask `Py++`_ to split the
-code generated for class to be split to few cpp files.
-
-For more information, please read the documentation.
-
 
 -------------------------------------
 Py++ generated file name is too long!
