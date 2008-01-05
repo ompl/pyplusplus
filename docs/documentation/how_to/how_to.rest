@@ -1,0 +1,175 @@
+============
+How to ... ?
+============
+
+.. contents:: Table of contents
+
+`How to deal with templates?`_
+
+.. _`How to deal with templates?` : ./templates.html
+
+`How to add custom exception translation?`_
+
+.. _ `How to add custom exception translation?` : custom_exception_translation.html
+
+-------------------------------------------------------
+How to expose function, which has hand-written wrapper?
+-------------------------------------------------------
+.. code-block:: C++
+
+  struct window_t{
+      ...
+      void get_size( int& height, int& widht ) const;
+  };
+
+You can not expose ``get_size`` function as is - ``int`` is immutable type in
+Python. So, we need to create a wrapper to the function:
+
+.. code-block:: C++
+
+  boost::python::tuple get_size_wrapper( const window_t& win ){
+      int height(0), width( 0 );
+      win.get_size( height, widht );
+      return boost::python::make_tuple( height, width );
+  }
+
+.. code-block:: C++
+
+  class_<window_t>( ... )
+      .def( "get_size", &get_size_wrapper )
+      ...
+  ;
+
+Now, after you know how this problem is solved. I will show how this solution
+could be integrated with `Py++`_.
+
+.. code-block:: Python
+
+  wrapper_code = \
+  """
+     static boost::python::tuple get_size( const window_t& win ){
+        int height(0), width( 0 );
+        win.get_size( height, width );
+        return boost::python::make_tuple( height, width );
+    }
+  """
+
+.. code-block:: Python
+
+  registration_code = 'def( "get_size", &%s::get_size )' % window.wrapper_alias
+
+.. code-block:: Python
+
+  mb = module_builder_t( ... )
+  window = mb.class_( "window_t" )
+  window.member_function( "get_size" ).exclude()
+  window.add_wrapper_code( wrapper_code )
+  window.registration_code( registration_code )
+
+That's all.
+
+-------------------------------------------------------------
+Fatal error C1204:Compiler limit: internal structure overflow
+-------------------------------------------------------------
+
+If you get this error, than the generated file is too big. You will have to split
+it to few files. Well, not you but `Py++`_, you will only have to tell it to do
+that.
+
+If you are using ``module_builder_t.write_module`` method, consider to switch
+to ``module_builder_t.split_module``.
+
+If you are using ``split_module``, but still the generated code for some class
+could not be compiled, because of the error, you can ask `Py++`_ to split the
+code generated for class to be split to few cpp files.
+
+For more information, please read the documentation.
+
+
+-------------------------------------
+Py++ generated file name is too long!
+-------------------------------------
+There are use cases, when `Py++`_ generated file name is too long. In some cases
+the code generation process even fails because of this. What can you do in order
+to eliminate the problem?
+
+First of all the problem arises when you expose template instantiated classes
+and you did not set the class alias.
+
+Let me explain:
+
+.. code-block:: C++
+
+  template < class T>
+  struct holder{ ... };
+
+
+Lets say that you want to export ``holder< int >`` class. Class name in `Python`_
+has few `constraints`_. `Py++`_ is aware of the `constraints`_ and if you didn't
+set an alias to the class, `Py++`_ will do it for you. In this case,
+"holder_less_int_grate\_" is the generated alias. Obviously it is much longer
+and not readable.
+
+.. _`constraints` : http://www.python.org/doc/current/ref/identifiers.html
+
+There are few pretty good reasons for this behavior:
+
+* when you just start to work on `Python`_ bindings concentrate your attention
+  on really important things
+
+* if you forgot to set the class alias your users still can use the class
+  functionality, however the class name will be a little bit ugly.
+
+
+In this case the generate alias for ``holder`` instantiation is relatively short.
+Imagine how long it could be for ``std::map`` instantiation.
+
+`Py++`_ uses class alias for the file name. So if you want to force `Py++`_ to
+generate files with short name, you have to set class alias:
+
+.. code-block:: Python
+
+  from pyplusplus import module_builder
+
+  mb = module_builder_t( ... )
+  holder = mb.class_( 'holder< int >' )
+  holder.alias = 'IntHolder'
+  #next line has same effect as the previous one:
+  holder.rename( 'IntHolder' )
+
+The nice thing about this approach is that now `Python`_ users have "normal"
+class name and you have short file name.
+
+-------------------
+Full\relative paths
+-------------------
+
+Consider next file layout:
+::
+
+  boost/
+    date_time/
+      ptime.hpp
+      time_duration.hpp
+      date_time.hpp //main header, which include all other header files
+
+Py++ currently does not handle relative paths as input very well, so it is
+recommended that you use ``os.path.abspath()`` to transform the header file to
+be processed into an absolute path:
+
+.. code-block:: Python
+
+   #Next code will expose nothing
+   mb = module_builder( [ 'date_time/date_time.hpp' ], ... )
+   mb.split_module( ... )
+
+   #while this one will work as expected
+   import os
+   mb = module_builder( [ os.path.abspath('date_time/date_time.hpp') ], ... )
+   mb.split_module( ... )
+
+
+.. _`Py++` : ./../pyplusplus.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Python`: http://www.python.org
+.. _`GCC-XML`: http://www.gccxml.org
