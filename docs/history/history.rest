@@ -43,9 +43,45 @@ Version 0.9.5
    * Py++ will not expose free operators, if at least one of the classes, it works
      on, is not exposed.
      Many thanks to Meghana Haridev for reporting the bug.
-     
+
 2. Added ability to completely disable warnings reporting.
-    
+
+3. All logging is now done to ``stderr`` instead of ``stdout``.
+
+4. Generated code improvements:
+
+   * ``default_call_policies`` is not generated
+
+   * ``return_internal_reference`` call policies - default arguments are not
+     generated
+
+   * STD containers are generated without default arguments. For example instead
+     of ``std::vector< int, std::allocator< int > >``, in many cases `Py++`_ will
+     generate ``std::vector< int >``.
+
+5. `create_with_signature`_ algorithm was improved. `Py++`_ will generate correct
+   code in one more use case.
+
+.. _`create_with_signature` : ../documentation/functions/overloading.html
+
+6. Added ability to exclude declarations from being exposed, if they will cause
+   compilation to fail.
+
+7. Starting from this version, `Py++`_ provides a complete solution for
+   `multi-module development`_.
+
+.. _`multi-module development` : ../documentation/multi_module_development.html
+
+8. Classes, which expose C arrays will be registered only once.
+
+9. Starting from this version, `Py++`_ supports a code generation with different
+   encodings.
+
+10. There is a new strategy to split code into files. It is IDE friendly. Be sure
+    to read `the updated documentation`_.
+
+.. _`the updated documentation` : ../documentation/split_module.html
+
 -------------
 Version 0.9.0
 -------------
