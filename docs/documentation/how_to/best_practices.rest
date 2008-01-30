@@ -23,7 +23,7 @@ First of all, let me to define "big project". "Big project" is a project with
 few hundred of header files. `Py++`_ was born to create `Python`_ bindings
 for such projects. If you take a look `here`__ you will find few such projects.
 
-.. __ : ./../../pyplusplus/quotes.html
+.. __ : ./../../quotes.html
 
 Tips
 ----
@@ -109,7 +109,7 @@ Tips
       mb = module_builder( [ os.path.abspath('date_time/date_time.hpp') ], ... ) 
 
 .. _`this error` : http://boost.org/libs/python/doc/v2/faq.html#c1204
-.. __ : ./../../pygccxml/design.html
+.. __ : ./../../../pygccxml/design.html
 
 * Keep the declaration tree small.
 
@@ -170,7 +170,7 @@ Tips
 
 
 .. _`Py++` : ./../pyplusplus.html
-.. _`pygccxml` : ./../../pygccxml/pygccxml.html
+.. _`pygccxml` : ./../../../pygccxml/pygccxml.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

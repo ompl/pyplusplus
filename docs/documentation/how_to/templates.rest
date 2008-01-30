@@ -79,8 +79,6 @@ pretty easy to blend together the generated code and the existing one:
 Function ``create_text_fc`` allows you to extract declarations from the string,
 which contains valid C++ code. It creates temporal header file and compiles it.
 
-.. __ : ./../../../pygccxml/design.html#parser-configuration-classes
-
 ----------------------------------
 Functions templated on return type
 ----------------------------------

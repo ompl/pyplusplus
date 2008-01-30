@@ -207,7 +207,7 @@ Every declaration class has the following methods:
   is not exportable.
 
 
-.. _`Formatter` : http://docs.python.org/lib/node357.html
+.. _`Formatter` : http://docs.python.org/lib/node422.html
 .. _`logging` : http://docs.python.org/lib/module-logging.html
 .. _`Py++` : ./../pyplusplus.html
 .. _`pygccxml` : ./../../pygccxml/pygccxml.html

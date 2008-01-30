@@ -58,7 +58,7 @@ Help resources
 * http://boost.cvs.sourceforge.net/boost/boost/libs/python/test/ - `Boost.Python`_
   unit tests. They could be very, very helpful.
 
-* http://svn.sourceforge.net/viewvc/pygccxml/pyplusplus_dev/unittests/ - `Py++`_
+* http://pygccxml.svn.sourceforge.net/viewvc/pygccxml/pyplusplus_dev/unittests/ - `Py++`_
   unit tests. They could be even more helpful!
 
 -------------

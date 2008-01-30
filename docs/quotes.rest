@@ -100,11 +100,6 @@ Who is using Py++?
 
     .. _`CEGUI` : http://www.cegui.org.uk/wiki/index.php/Main_Page
 
-  * `Newton`_ - Newton Game Dynamics, a closed source (but free) physics and
-    collisions library.
-
-    .. _`Newton` : http://www.newtondynamics.com/apache2-default/
-
   * `ODE`_ - an open source, high performance library for simulating rigid body
     dynamics.
 
@@ -112,7 +107,10 @@ Who is using Py++?
 
   * `OIS`_ - an object oriented input system.
 
-    .. _`OIS` : http://www.wreckedgames.com/wiki/index.php/WreckedLibs:OIS
+    .. _`OIS` : http://www.wreckedgames.com/forum/
+    
+  * All in all, `Python-OGRE`_ project contains bindings for more than 30 libraries.
+    You can find code generation scripts here: https://python-ogre.svn.sourceforge.net/svnroot/python-ogre/trunk/python-ogre/code_generators/
 
 * I am :-). I created Python bindings for next libraries:
 

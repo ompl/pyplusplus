@@ -34,9 +34,9 @@ There were few reasons to this:
 
 3. Users always changed the name of the projects. I saw at least 6 different names.
 
------------
-SVN Version 
------------
+-------------
+Version 0.9.5
+-------------
 
 1. Bug fixes:
 
@@ -89,7 +89,7 @@ Version 0.9.0
 5. `input_c_buffer`_ - new functions transformation, which allows to pass a Python
    sequence to function, instead of pair of arguments: pointer to buffer and size.
 
-.. _`input_c_buffer` : ../documentation/functions/transformation/built_in/input_c_buffer.html
+.. _`input_c_buffer` : ../documentation/functions/transformation/input_c_buffer.html
 
 6. Added ability to control generated "include" directives. Now you can ask `Py++`_
    to include a header file, when it generates code for some declaration. For more
@@ -131,7 +131,7 @@ Version 0.8.5
 2. "Py++" introduces new functionality, which allows you to control messages and
    warnings: `how to disable warnings?`_ .
 
-.. _`how to disable warnings?` : ../documentation/feedback.html#how-to-disable-warning-s
+.. _`how to disable warnings?` : ../documentation/warnings.html
 
 3. Added new algorithm, which controls the registration order of the functions.
    See `registration order document`_
