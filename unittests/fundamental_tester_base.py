@@ -130,6 +130,7 @@ class fundamental_tester_base_t( unittest.TestCase ):
 
     def _create_extension(self):
         cmd = autoconfig.scons.cmd_build % self.__generated_scons_file_name
+        print cmd
         output = os.popen( cmd )
         scons_reports = []
         while True:

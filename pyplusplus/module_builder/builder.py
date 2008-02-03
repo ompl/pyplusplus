@@ -348,7 +348,7 @@ class module_builder_t(object):
                       , dir_name
                       , huge_classes=None
                       , on_unused_file_found=os.remove
-                      , use_files_sum_repository=True):
+                      , use_files_sum_repository=False):
         """
         Writes module to multiple files
 
@@ -393,7 +393,7 @@ class module_builder_t(object):
                                , dir_name
                                , number_of_files
                                , on_unused_file_found=os.remove
-                               , use_files_sum_repository=True):
+                               , use_files_sum_repository=False):
         """
         Writes module to fixed number of multiple cpp files
 
