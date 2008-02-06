@@ -55,7 +55,7 @@ class calldef_t( registration_based.registration_based_t
         if self.declaration.call_policies.is_default():
             return ''
         return self.declaration.call_policies.create( self )
-                
+
     def create_def_code( self ):
         if not self.works_on_instance:
             return '%s.def' % self.parent.class_var_name
@@ -180,7 +180,7 @@ class calldef_wrapper_t( code_creator.code_creator_t
             ft = self.declaration.transformations[0]
             files.extend( ft.required_headers() )
         if self.declaration.call_policies:
-            files.append( self.declaration.call_policies.header_file )            
+            files.append( self.declaration.call_policies.header_file )
         return files
 
 class free_function_t( calldef_t ):
@@ -213,7 +213,7 @@ class mem_fun_t( calldef_t ):
         return 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias, with_defaults=False )
 
     def create_function_ref_code(self, use_function_alias=False):
-        fname = declarations.full_name( self.declaration, with_defaults=False ) 
+        fname = declarations.full_name( self.declaration, with_defaults=False )
         if use_function_alias:
             return '%s( &%s )' % ( self.function_type_alias, fname )
         elif self.declaration.create_with_signature:
@@ -230,7 +230,7 @@ class mem_fun_pv_t( calldef_t ):
         return 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias )
 
     def create_function_ref_code(self, use_function_alias=False):
-        fname = declarations.full_name( self.declaration, with_defaults=False ) 
+        fname = declarations.full_name( self.declaration, with_defaults=False )
         if use_function_alias:
             return '%s( %s(&%s) )' \
                    % ( self.pure_virtual_identifier()
@@ -300,14 +300,14 @@ class mem_fun_v_t( calldef_t ):
         result = []
 
         ftype = self.declaration.function_type()
-        result.append( 'typedef %s;' 
+        result.append( 'typedef %s;'
                        % ftype.create_typedef( self.function_type_alias
                                                , exported_class_alias
                                                , with_defaults=False)  )
         if self.wrapper:
             result.append( os.linesep )
             ftype = self.wrapper.function_type()
-            result.append( 'typedef %s;' 
+            result.append( 'typedef %s;'
                            % ftype.create_typedef( self.default_function_type_alias
                                                    , with_defaults=False) )
         return ''.join( result )
@@ -613,7 +613,7 @@ class mem_fun_protected_v_wrapper_t( calldef_wrapper_t ):
 
     def create_virtual_body(self):
         template = []
-        
+
         precall_code = self.declaration.override_precall_code
         if precall_code:
             template.append( os.linesep.join( precall_code ) )
@@ -758,7 +758,7 @@ class mem_fun_private_v_wrapper_t( calldef_wrapper_t ):
             return self.unoverriden_function_body()
 
         template = []
-        
+
         precall_code = self.declaration.override_precall_code
         if precall_code:
             template.append( os.linesep.join( precall_code ) )
@@ -863,7 +863,7 @@ class static_method_t( declaration_based.declaration_based_t
         return 'staticmethod( "%s" )' % self.function_code_creator.alias
 
     def _get_system_headers_impl( self ):
-        return []        
+        return []
 
 class constructor_wrapper_t( calldef_wrapper_t ):
     """
@@ -966,7 +966,7 @@ class null_constructor_wrapper_t( code_creator.code_creator_t
     def __init__( self, class_ ):
         code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=class_ )
-        
+
     def _create_constructor_call( self ):
         return algorithm.create_identifier( self, self.declaration.decl_string ) + '()'
 
@@ -1037,7 +1037,7 @@ class operator_t( registration_based.registration_based_t
         if self.declaration.symbol == '<<':
             str_identifier = algorithm.create_identifier( self, '::boost::python::self_ns::str' )
             return '%s( %s )' % ( str_identifier, self_identifier )
-        
+
         answer = [ None, self.declaration.symbol, None ]
         self_position = self._findout_self_position()
         if self_position == self.SELF_POSITION.FIRST:
@@ -1130,7 +1130,7 @@ class casting_member_operator_t( registration_based.registration_based_t
 
     def _get_system_headers_impl( self ):
         return []
-        
+
 class casting_constructor_t( registration_based.registration_based_t
                              , declaration_based.declaration_based_t ):
     """
@@ -1141,6 +1141,7 @@ class casting_constructor_t( registration_based.registration_based_t
     def __init__( self, constructor ):
         registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=constructor )
+        self.works_on_instance = False
 
     def _create_impl(self):
         implicitly_convertible = algorithm.create_identifier( self, '::boost::python::implicitly_convertible' )
@@ -1207,7 +1208,7 @@ class calldef_overloads_class_t( code_creator.code_creator_t ):
     @property
     def name( self ):
         return '%s_%s_overloads' % ( self.parent_decl.alias, self.alias )
-        
+
 class mem_fun_overloads_class_t( calldef_overloads_class_t ):
     def __init__( self, mem_funs ):
         #precondition: all member functions belong to same class and

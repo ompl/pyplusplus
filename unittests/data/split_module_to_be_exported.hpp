@@ -57,6 +57,14 @@ inline str2item_t create_empty_mapping(){
     return str2item_t();
 }
 
+class CodeInject
+{
+public:
+CodeInject(int value_) : value(value_) {}
+
+int value;
+};
+
 }
 
 
