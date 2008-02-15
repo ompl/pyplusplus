@@ -84,6 +84,7 @@ import custom_string_tester
 import final_classes_tester
 import templates_tester
 import deepcopy_tester
+import override_bug_tester
 #gui_tester
 #gui_wizard_tester
 #
@@ -187,6 +188,7 @@ testers = [
     , balanced_files_tester
     , ft_inout_tester
     , deepcopy_tester
+    , override_bug_tester
 ]
 
 class module_runner_t( object ):

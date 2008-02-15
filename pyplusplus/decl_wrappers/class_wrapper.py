@@ -429,9 +429,11 @@ class class_t( class_common_details_t
         all_included = declarations.custom_matcher_t( lambda decl: decl.ignore == False and decl.exportable )
         all_protected = declarations.access_type_matcher_t( 'protected' ) & all_included
         all_pure_virtual = declarations.virtuality_type_matcher_t( VIRTUALITY_TYPES.PURE_VIRTUAL )
+        all_public_virtual = declarations.virtuality_type_matcher_t( VIRTUALITY_TYPES.VIRTUAL ) \
+                             & declarations.access_type_matcher_t( 'public' )
         all_not_pure_virtual = ~all_pure_virtual
 
-        query = all_protected | all_pure_virtual
+        query = all_protected | all_pure_virtual | all_public_virtual
         relevant_opers = declarations.custom_matcher_t( lambda decl: decl.symbol in ('()', '[]') )
         funcs = set()
         defined_funcs = set()
