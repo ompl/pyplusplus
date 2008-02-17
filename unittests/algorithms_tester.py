@@ -251,6 +251,24 @@ class exclude_erronious_tester_t( unittest.TestCase ):
         self.failUnless( xyz.class_( 'good' ).ignore == False )
         self.failUnless( xyz.free_fun( 'f_bad' ).ignore == True )
 
+class exclude_ellipsis_tester_t( unittest.TestCase ):    
+    def test(self):
+        
+        code = """
+            namespace xyz{
+                void do_smth( int, ... );
+            }
+        """
+        
+        mb = module_builder.module_builder_t( 
+                [ module_builder.create_text_fc( code ) ]
+                , gccxml_path=autoconfig.gccxml.executable )
+        
+        do_smth = mb.free_fun( 'do_smth' )
+        
+        self.failUnless( do_smth.exportable == False )
+        print do_smth.why_not_exportable()
+        
 def create_suite():
     suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(doc_extractor_tester_t))
@@ -264,7 +282,7 @@ def create_suite():
     suite.addTest( unittest.makeSuite(split_sequence_tester_t))
     suite.addTest( unittest.makeSuite(exclude_erronious_tester_t))
     suite.addTest( unittest.makeSuite(use_function_signature_bug_tester_t))
-    
+    suite.addTest( unittest.makeSuite(exclude_ellipsis_tester_t))
     return suite
 
 def run_suite():

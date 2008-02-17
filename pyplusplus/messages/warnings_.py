@@ -213,6 +213,9 @@ W1051 = warning(
 W1052 = warning( 
             'Py++ will not expose free operator "%s" - all classes, this operator works on, are excluded.' )
 
+W1053 = warning( 
+            'Py++ will not expose function "%s" - the function has variable-argument list, spicified by ellipsis (...).' )
+
 warnings = globals()
 
 all_warning_msgs = []

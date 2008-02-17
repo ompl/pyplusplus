@@ -159,6 +159,8 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         all_types = [ arg.type for arg in self.arguments ]
         all_types.append( self.return_type )
         for some_type in all_types:
+            if isinstance( some_type, declarations.ellipsis_t ):
+                return messages.W1053 % str( self )
             units = declarations.decompose_type( some_type )
             ptr2functions = filter( lambda unit: isinstance( unit, declarations.calldef_type_t )
                                     , units )
