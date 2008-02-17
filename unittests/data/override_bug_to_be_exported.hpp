@@ -13,7 +13,7 @@ namespace override_bug{
 class A
 {
   public:
-   virtual void foo() const {}
+   virtual int foo() const {return int('a');}
    virtual ~A(){}
 };
 
@@ -21,8 +21,8 @@ class B: public A
 {
 };
 
-inline void invoke_foo( const A& a ){
-    a.foo();
+inline int invoke_foo( const A& a ){
+    return a.foo();
 };
 } 
 

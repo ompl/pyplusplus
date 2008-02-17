@@ -428,25 +428,30 @@ class class_t( class_common_details_t
 
         all_included = declarations.custom_matcher_t( lambda decl: decl.ignore == False and decl.exportable )
         all_protected = declarations.access_type_matcher_t( 'protected' ) & all_included
-        all_pure_virtual = declarations.virtuality_type_matcher_t( VIRTUALITY_TYPES.PURE_VIRTUAL )
-        all_public_virtual = declarations.virtuality_type_matcher_t( VIRTUALITY_TYPES.VIRTUAL ) \
-                             & declarations.access_type_matcher_t( 'public' )
+        all_pure_virtual = declarations.virtuality_type_matcher_t( VIRTUALITY_TYPES.PURE_VIRTUAL )        
+        all_virtual = declarations.virtuality_type_matcher_t( VIRTUALITY_TYPES.VIRTUAL ) \
+                      & (declarations.access_type_matcher_t( 'public' ) \
+                      | declarations.access_type_matcher_t( 'protected' ))        
         all_not_pure_virtual = ~all_pure_virtual
 
-        query = all_protected | all_pure_virtual | all_public_virtual
+        query = all_protected | all_pure_virtual 
+        mf_query = query | all_virtual 
         relevant_opers = declarations.custom_matcher_t( lambda decl: decl.symbol in ('()', '[]') )
-        funcs = set()
-        defined_funcs = set()
+        funcs = []
+        defined_funcs = []
 
         for base in self.recursive_bases:
             if base.access == ACCESS_TYPES.PRIVATE:
                 continue
             base_cls = base.related_class
-            funcs.update( base_cls.member_functions( query, recursive=False, allow_empty=True ) )
-            funcs.update( base_cls.member_operators( relevant_opers & query, recursive=False, allow_empty=True ) )
+            #funcs.extend( base_cls.member_functions( query, recursive=False, allow_empty=True ) )
+            #funcs.extend( base_cls.member_operators( relevant_opers & query, recursive=False, allow_empty=True ) )
 
-            defined_funcs.update( base_cls.member_functions( all_not_pure_virtual, recursive=False, allow_empty=True ) )
-            defined_funcs.update( base_cls.member_operators( all_not_pure_virtual & relevant_opers, recursive=False, allow_empty=True ) )
+            funcs.extend( base_cls.member_functions( mf_query, recursive=False, allow_empty=True ) )
+            funcs.extend( base_cls.member_operators( relevant_opers & query, recursive=False, allow_empty=True ) )
+
+            defined_funcs.extend( base_cls.member_functions( all_not_pure_virtual, recursive=False, allow_empty=True ) )
+            defined_funcs.extend( base_cls.member_operators( all_not_pure_virtual & relevant_opers, recursive=False, allow_empty=True ) )
 
         not_reimplemented_funcs = set()
         is_same_function = declarations.is_same_function
@@ -473,8 +478,10 @@ class class_t( class_common_details_t
                             if is_same_function( f, f_defined ):
                                 break
                         else:
-                            not_reimplemented_funcs.add( f )
-        functions = list( not_reimplemented_funcs )
+                            not_reimplemented_funcs.add( f )        
+        functions = filter( lambda f: not f.ignore and f.exportable
+                            , list( not_reimplemented_funcs ) )
+                            
         functions.sort( cmp=lambda f1, f2: cmp( ( f1.name, f1.location.as_tuple() )
                                                 , ( f2.name, f2.location.as_tuple() ) ) )
         self._redefined_funcs = functions

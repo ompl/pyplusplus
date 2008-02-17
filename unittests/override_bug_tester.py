@@ -22,8 +22,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             def __init__( self ):
                 module.B.__init__( self )
             def foo( self ):
-                print "C.foo"
-        module.invoke_foo( C() )
+                return ord( 'c' )
+        self.failUnless( ord('c') == module.invoke_foo( C() ) )
                 
 def create_suite():
     suite = unittest.TestSuite()    
