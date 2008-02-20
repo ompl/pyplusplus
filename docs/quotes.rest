@@ -112,6 +112,14 @@ Who is using Py++?
   * All in all, `Python-OGRE`_ project contains bindings for more than 30 libraries.
     You can find code generation scripts here: https://python-ogre.svn.sourceforge.net/svnroot/python-ogre/trunk/python-ogre/code_generators/
 
+* `Rising Sun Pictures`_ company is using `Py++`_ to create Python bindings for 
+  `Apple Shake API`_. `PyShake`_ enables running of Python code from within Shake
+  and by exposing the Shake API to Python.
+  
+  .. _`Rising Sun Pictures` : http://open.rsp.com.au/
+  .. _`Apple Shake API` : http://www.apple.com/shake/
+  .. _`PyShake` :  http://open.rsp.com.au/projects/pyshake
+
 * I am :-). I created Python bindings for next libraries:
 
   * `Boost.Date_Time`_
