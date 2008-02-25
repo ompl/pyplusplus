@@ -69,6 +69,9 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
                             break
                     if self._create_with_signature:
                         break
+                if not self._create_with_signature:
+                    self._create_with_signature \
+                        = bool( self.parent.calldefs( self.name, recursive=False, allow_empty=True ) )
         return self._create_with_signature
                
     def _set_create_with_signature(self, create_with_signature):
