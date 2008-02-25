@@ -60,16 +60,16 @@ int eval(Base1* obj) {
 }
 
 
-class AA
+struct AA
 {
   public:
    virtual void do_smth(int& i) const { i = 'a' ;}
    virtual ~AA(){}
 };
 
-class BB: public AA
+struct BB: public AA
 {
-    virtual void do_smth(int& i) const { i = 'b' ;}
+    virtual void do_smth(int& i, int& j) const { i = j = 'b' ;}
 };
 
 } 

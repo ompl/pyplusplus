@@ -21,8 +21,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def customize( self, mb ):
         mb.class_("Derived2").member_functions("eval_c").exclude()
         mb.class_( 'BB' ).include()
-        do_smth = mb.mem_funs( 'do_smth' )
-        do_smth.add_transformation( FT.output(0) )
+        do_smth = mb.mem_fun( '::override_bug::AA::do_smth' )
+        do_smth.add_transformation( FT.output(0), alias='do_smth_a' )
+        do_smth = mb.mem_fun( '::override_bug::BB::do_smth' )
+        do_smth.add_transformation( FT.output(0), FT.output(1), alias='do_smth_b' )
 
     def run_tests(self, module):        
         class C( module.B ):
@@ -41,6 +43,11 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                 return 300 # ignored because eval_c excluded
                 
         self.failUnless( 22223 == module.eval( Derived4() ) )
+        
+        bb = module.BB()
+        print dir( bb )
+        x = bb.do_smth_b()
+        self.failUnless( x[0] == x[1] == ord( 'b' ) )
         
         # Notes:
         # would return 22222 before any patch, since Derived3 wouldn't have a wrapper
