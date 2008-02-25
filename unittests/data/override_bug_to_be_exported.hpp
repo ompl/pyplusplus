@@ -60,6 +60,18 @@ int eval(Base1* obj) {
 }
 
 
+class AA
+{
+  public:
+   virtual void do_smth(int& i) const { i = 'a' ;}
+   virtual ~AA(){}
+};
+
+class BB: public AA
+{
+    virtual void do_smth(int& i) const { i = 'b' ;}
+};
+
 } 
 
 #endif//__final_classes_to_be_exported_hpp__

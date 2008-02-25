@@ -34,6 +34,99 @@ There were few reasons to this:
 
 3. Users always changed the name of the projects. I saw at least 6 different names.
 
+-----------
+Version SVN
+-----------
+
+1. The algorithm, which calculates what member functions should be redefined in derived 
+   class wrappers was improved. For example:
+
+   .. code-block:: C++
+
+      struct A{
+          virtual void foo() {}
+      };
+
+      class B: public A{
+      };
+      
+   Previous version of `Py++`_ didn't generate wrapper for class ``B``, even 
+   though ``B`` inherits ``A``'s virtual function. Now if you have the following 
+   Python code:
+
+   .. code-block:: Python
+
+      class C(B):
+        def __init__( self ):
+            B.__init__(self)
+        def foo(self):
+            print "C.foo"
+
+   then when ``foo`` is invoked on this instance on the C++ side of things, the 
+   Python code won't be executed as the wrapper is missing.
+
+   If you use "function transformation" functionality, than it is possible the 
+   generated code will not compile. Consider next example:
+
+   .. code-block:: C++
+
+      struct A{
+          virtual void foo(int& i) {/*do smth*/}
+      };
+
+      class B: public A{
+          virtual void foo(int& i) {/*do smth else*/}
+      };
+
+   The `Py++`_ code:
+
+   .. code-block:: Python
+
+      from pyplusplus import module_builder
+      from pyplusplus import function_transformers as FT
+
+      mb = module_builder_t( ... )
+      foo = mb.mem_funs( 'foo' )
+      foo.add_transformation( FT.output(0) )
+
+   The generated code of wrapper class, for class ``B``, will contain next code:
+
+   .. code-block:: C++
+
+      virtual void foo() {
+          ...
+      }
+    
+      static boost::python::tuple default_foo( ::B & inst ){
+          ...
+      }
+
+      virtual void foo() {
+          ...
+      }
+    
+      static boost::python::tuple default_foo( ::B & inst ){
+          ...
+      }
+
+   Yes, the functions will be defined twice! In the previous version, the functions
+   were also defined twice but in the different classes. It was unclear, what 
+   function will be called in this or that situation. 
+   
+   If you have such situation, I suggest you to give aliases to the functions:
+   
+   .. code-block:: Python
+   
+   
+      from pyplusplus import module_builder
+      from pyplusplus import function_transformers as FT
+
+      mb = module_builder_t( ... )
+      for f in mb.mem_funs( 'foo' )
+          foo.add_transformation( FT.output(0), alias=f.name + '_' + f.parent.name )
+
+   
+
 -------------
 Version 0.9.5
 -------------

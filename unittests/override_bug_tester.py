@@ -7,6 +7,7 @@ import os
 import sys
 import unittest
 import fundamental_tester_base
+from pyplusplus import function_transformers as FT
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'override_bug'
@@ -19,6 +20,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def customize( self, mb ):
         mb.class_("Derived2").member_functions("eval_c").exclude()
+        mb.class_( 'BB' ).include()
+        do_smth = mb.mem_funs( 'do_smth' )
+        do_smth.add_transformation( FT.output(0) )
 
     def run_tests(self, module):        
         class C( module.B ):
