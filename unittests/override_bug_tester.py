@@ -25,7 +25,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         do_smth.add_transformation( FT.output(0), alias='do_smth_a' )
         do_smth = mb.mem_fun( '::override_bug::BB::do_smth' )
         do_smth.add_transformation( FT.output(0), FT.output(1), alias='do_smth_b' )
-
+        mb.class_( 'XX' ).mem_fun( 'do_smth' ).exclude()
+        
     def run_tests(self, module):        
         class C( module.B ):
             def __init__( self ):

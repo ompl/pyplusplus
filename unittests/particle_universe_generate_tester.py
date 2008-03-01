@@ -33,6 +33,7 @@ class ogre_generate_tester_t(unittest.TestCase):
         mb.global_ns.exclude()
         mb.namespace('ParticleUniverse').include()
         mb.namespace('Ogre').include()
+        mb.namespace('Ogre').classes().already_exposed = True
 
         target_dir = os.path.join( autoconfig.build_directory, 'particle_universe' )
         #~ if os.path.exists( target_dir ):

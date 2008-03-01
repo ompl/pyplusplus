@@ -72,6 +72,16 @@ struct BB: public AA
     virtual void do_smth(int& i, int& j) const { i = j = 'b' ;}
 };
 
+class XX
+{
+    virtual void do_smth(int& i, int& j) const = 0;
+};
+
+class YY : public XX{
+    public:
+        virtual int do_smth() {};
+};
+
 } 
 
 #endif//__final_classes_to_be_exported_hpp__
