@@ -430,8 +430,8 @@ class class_t( class_common_details_t
         all_protected = declarations.access_type_matcher_t( 'protected' ) & all_included
         all_pure_virtual = declarations.virtuality_type_matcher_t( VIRTUALITY_TYPES.PURE_VIRTUAL )        
         all_virtual = declarations.virtuality_type_matcher_t( VIRTUALITY_TYPES.VIRTUAL ) \
-                      & (declarations.access_type_matcher_t( 'public' ) \
-                      | declarations.access_type_matcher_t( 'protected' ))        
+                      & ( declarations.access_type_matcher_t( 'public' ) \
+                          | declarations.access_type_matcher_t( 'protected' ))        
         all_not_pure_virtual = ~all_pure_virtual
 
         query = all_protected | all_pure_virtual 
@@ -444,8 +444,6 @@ class class_t( class_common_details_t
             if base.access == ACCESS_TYPES.PRIVATE:
                 continue
             base_cls = base.related_class
-            #funcs.extend( base_cls.member_functions( query, recursive=False, allow_empty=True ) )
-            #funcs.extend( base_cls.member_operators( relevant_opers & query, recursive=False, allow_empty=True ) )
 
             funcs.extend( base_cls.member_functions( mf_query, recursive=False, allow_empty=True ) )
             funcs.extend( base_cls.member_operators( relevant_opers & query, recursive=False, allow_empty=True ) )
@@ -479,7 +477,8 @@ class class_t( class_common_details_t
                                 break
                         else:
                             not_reimplemented_funcs.add( f )        
-        functions = filter( lambda f: not f.ignore and f.exportable
+        functions = filter( lambda f: ( False == f.ignore and True == f.exportable )
+                                      or all_pure_virtual( f )
                             , list( not_reimplemented_funcs ) )
                             
         functions.sort( cmp=lambda f1, f2: cmp( ( f1.name, f1.location.as_tuple() )
