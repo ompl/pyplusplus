@@ -82,6 +82,11 @@ class YY : public XX{
         virtual int do_smth() {};
 };
 
+class ZZ : private YY{
+public:
+    void do_nothing() {}
+};
+
 } 
 
 #endif//__final_classes_to_be_exported_hpp__
