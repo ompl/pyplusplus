@@ -14,6 +14,7 @@ class A
 {
   public:
    virtual int foo() const {return int('a');}
+   int foo( int a, int b ) { return a + b;}
    virtual ~A(){}
 };
 
@@ -79,7 +80,7 @@ class XX
 
 class YY : public XX{
     public:
-        virtual int do_smth() {};
+        virtual void do_smth() {};
 };
 
 class ZZ : private YY{
