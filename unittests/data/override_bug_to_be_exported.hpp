@@ -13,13 +13,22 @@ namespace override_bug{
 class A
 {
   public:
+
    virtual int foo() const {return int('a');}
    int foo( int a, int b ) { return a + b;}
+
+   int ddd(){ return 111;}
    virtual ~A(){}
 };
 
 class B: public A
 {
+};
+
+class D: public B
+{
+public:
+    int foo( int a, int b ){ return a*b; }
 };
 
 inline int invoke_foo( const A& a ){
@@ -88,7 +97,7 @@ public:
     void do_nothing() {}
 };
 
-} 
+}
 
 #endif//__final_classes_to_be_exported_hpp__
 
