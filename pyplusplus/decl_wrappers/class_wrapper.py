@@ -481,8 +481,43 @@ class class_t( class_common_details_t
                                       or all_pure_virtual( f )
                             , list( not_reimplemented_funcs ) )
                             
+
+        #Boost.Python is not able to call for non-virtual function, from the base
+        #class if there is a virtual function with the same within base class
+        #See override_bug tester for more information
+
+        def buggy_bpl_filter( f ):
+            if f.parent is self: 
+                return False
+            if f.access_type != ACCESS_TYPES.PUBLIC:
+                return False
+            if f.virtuality != VIRTUALITY_TYPES.NOT_VIRTUAL:
+                return False
+            #we need to check that we don't have "same" function in this class
+            this_funs = self.decls( name=f.name
+                                    , decl_type=declarations.calldef_t
+                                    , recursive=False
+                                    , allow_empty=True )
+            for this_f in this_funs:
+                if is_same_function( this_f, f ):
+                    #there is already the function in the class, so no need to redefined it
+                    return False
+            else:
+                return True
+
+        tmp = {} # id : f
+        for redefined_f in functions:
+            #redefined is virtual, I am not interested in virtual functions
+            for rfo in redefined_f.overloads:
+                if id(rfo) in tmp:
+                    continue
+                if buggy_bpl_filter( rfo ):
+                    tmp[ id(rfo) ] = rfo
+        functions.extend( tmp.values() )
+
         functions.sort( cmp=lambda f1, f2: cmp( ( f1.name, f1.location.as_tuple() )
                                                 , ( f2.name, f2.location.as_tuple() ) ) )
+
         self._redefined_funcs = functions
         return self._redefined_funcs
 
