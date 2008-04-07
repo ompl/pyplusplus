@@ -101,6 +101,7 @@ import constructors_bug_tester
 import precompiled_header_tester
 import balanced_files_tester
 import ft_inout_tester
+import split_module_indexing_suite_bug_tester
 
 testers = [
     algorithms_tester
@@ -189,6 +190,7 @@ testers = [
     , ft_inout_tester
     , deepcopy_tester
     , override_bug_tester
+    , split_module_indexing_suite_bug_tester
 ]
 
 class module_runner_t( object ):
