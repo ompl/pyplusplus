@@ -149,6 +149,9 @@ class multiple_files_t(writer.writer_t):
             if not class_traits.is_my_case( element_type ):
                 return None
             value_class = class_traits.get_declaration( element_type )
+            if value_class.less_than_comparable and value_class.equality_comparable:
+                return None #Py++ doesn't create value traits for class that has 
+                            # = and < operators available
             return self.create_value_traits_header_name( value_class )
         except RuntimeError, error:
             decls_logger = _logging_.loggers.declarations

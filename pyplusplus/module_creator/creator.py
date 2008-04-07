@@ -305,7 +305,9 @@ class creator_t( declarations.decl_visitor_t ):
                 class_traits = declarations.class_traits
                 if not ( None is element_type ) and class_traits.is_my_case( element_type ):
                     value_cls = class_traits.get_declaration( element_type )
-                    if value_cls not in created_value_traits:
+                    has_prerequisits = value_cls.less_than_comparable \
+                                       and value_cls.equality_comparable                    
+                    if ( not has_prerequisits ) and ( value_cls not in created_value_traits ):
                         created_value_traits.add( value_cls )
                         element_type_cc = code_creators.value_traits_t( value_cls )
                         self.__extmodule.adopt_declaration_creator( element_type_cc )
