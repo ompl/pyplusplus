@@ -51,6 +51,14 @@ webpage were very helpful. "
   David Carpman
 
 
+"... I started a few months ago to develop a set of Python bindings for 
+OpenCascade modeling/visualization library. After a quick tour to evaluate 
+different solutions, my choice lead me to Py++, which is a very convenient 
+tool : I was able to achieve the first release of my project only two weeks after 
+the project start !"
+
+  Paviot Thomas
+
 ------------------
 Who is using Py++?
 ------------------
@@ -119,6 +127,12 @@ Who is using Py++?
   .. _`Rising Sun Pictures` : http://open.rsp.com.au/
   .. _`Apple Shake API` : http://www.apple.com/shake/
   .. _`PyShake` :  http://open.rsp.com.au/projects/pyshake
+
+* Paviot Thomas, the author of `pythonOCC`_ project, is using `Py++`_ to create 
+  Python bindings for `OpenCascade`_, a 3D modeling & numerical simulation library.
+
+  .. _`pythonOCC` : http://www.minerva-plm.org/pythonOCC/
+  .. _`OpenCascade` : http://www.opencascade.org/
 
 * I am :-). I created Python bindings for next libraries:
 
