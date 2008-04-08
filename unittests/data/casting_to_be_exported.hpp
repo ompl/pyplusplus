@@ -30,6 +30,9 @@ struct x{
     int value;
 };
 
+struct zzzz{
+    operator y const() const { return y(); }
+};
 
 int identity( int z ){ return z; }
 
