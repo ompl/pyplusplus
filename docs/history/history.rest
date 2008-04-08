@@ -21,6 +21,7 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Martin Preisler
 * Meghana Haridev
 * Julian Scheid
+* Oliver Schweitzer
 
 -----------
 Version SVN
@@ -133,7 +134,10 @@ Version SVN
      and I will introduce such configuration option.
 
    Sorry for inconvenience.
-   
+
+2. Few bugs, related to Indeing Suite 2, were fixed. Many thanks to Oliver Schweitzer
+   for reporting them.
+
 -------------
 Version 0.9.5
 -------------
