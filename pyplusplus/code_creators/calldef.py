@@ -1078,6 +1078,7 @@ class casting_operator_t( registration_based.registration_based_t
     def __init__( self, operator ):
         registration_based.registration_based_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=operator )
+        self.works_on_instance = False
 
     def _create_impl(self):
         #TODO add comment in case of non const operator
