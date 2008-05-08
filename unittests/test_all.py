@@ -103,6 +103,7 @@ import balanced_files_tester
 import ft_inout_tester
 import split_module_indexing_suite_bug_tester
 import inner_tmpl_class_tester
+import bug_covariant_returns_tester
 
 testers = [
     algorithms_tester
@@ -193,6 +194,7 @@ testers = [
     , override_bug_tester
     , split_module_indexing_suite_bug_tester
     , inner_tmpl_class_tester
+    , bug_covariant_returns_tester
 ]
 
 class module_runner_t( object ):
