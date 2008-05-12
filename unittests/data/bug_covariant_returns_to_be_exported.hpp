@@ -32,5 +32,42 @@ public:
     }
 
 };
- 
+
+
+struct FObjectState {};
+    
+struct DObjectState;
+
+
+struct FSerializable {
+public:
+    virtual FObjectState* saveState() const = 0;
+};
+
+struct DSerializable {
+public:
+    virtual DObjectState* saveState() const = 0;
+};
+
+
+class FMachinePart : public FSerializable {
+};
+
+class DMachinePart : public DSerializable {
+};
+
+
+class FComponent : public FMachinePart {
+public:
+    // methods inherited from Serializable interface
+    virtual FObjectState* saveState() const{ return 0; }
+};
+
+
+class DComponent : public DMachinePart {
+public:
+    // methods inherited from Serializable interface
+    virtual DObjectState* saveState() const{ return 0; }
+};
+
 #endif//__bug_virtual_functions_overload_to_be_exported_hpp__
