@@ -216,6 +216,8 @@ W1052 = warning(
 W1053 = warning( 
             'Py++ will not expose function "%s" - the function has variable-argument list, spicified by ellipsis (...).' )
 
+W1054 = compilation_error( 'Py++ can not expose unions.' )
+
 warnings = globals()
 
 all_warning_msgs = []

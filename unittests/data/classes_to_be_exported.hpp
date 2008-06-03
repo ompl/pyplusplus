@@ -95,6 +95,15 @@ struct protected_derived : protected protected_base{};
 
 }
 
+union Word
+{
+       short word;
+       struct
+       {
+               char low, high;
+       };
+};
+
 }//classes 
 
 namespace pyplusplus{ namespace aliases{

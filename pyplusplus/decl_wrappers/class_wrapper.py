@@ -337,6 +337,8 @@ class class_t( class_common_details_t
         if not self.name:
             return messages.W1018
             #it is possible to do so, but not for unnamed classes defined under namespace.
+        if self.class_type == declarations.CLASS_TYPES.UNION:
+            return messages.W1054
         if isinstance( self.parent, declarations.namespace_t ):
             return ''
         if not self in self.parent.public_members:

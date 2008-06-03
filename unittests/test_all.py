@@ -104,6 +104,7 @@ import ft_inout_tester
 import split_module_indexing_suite_bug_tester
 import inner_tmpl_class_tester
 import bug_covariant_returns_tester
+import embeded_tester
 
 testers = [
     algorithms_tester
@@ -195,6 +196,7 @@ testers = [
     , split_module_indexing_suite_bug_tester
     , inner_tmpl_class_tester
     , bug_covariant_returns_tester
+    , embeded_tester
 ]
 
 class module_runner_t( object ):
