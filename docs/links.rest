@@ -78,11 +78,11 @@ Mailing lists
 
 
 ----------------------------------
-Libraries inspired by Boost.Python 
+Libraries inspired by Boost.Python
 ----------------------------------
 
 * `Luabind`_ - interfacing C++ and `Lua`_
-  
+
 .. _`Luabind` : http://www.rasterbar.com/products/luabind/docs.html
 .. _`Lua` : http://www.lua.org/
 
@@ -97,7 +97,7 @@ Libraries inspired by Boost.Python
 .. _`Squirrel` : http://wiki.squirrel-lang.org/
 
 -----------------------------
-Projects inspired by Py++ :-) 
+Projects inspired by Py++ :-)
 -----------------------------
 
 * `PyBindGen`_ -  a new project for producing Python extensions
@@ -108,13 +108,13 @@ Projects inspired by Py++ :-)
 Blogs
 -----
 
-* http://www.shocksolution.com/math_tools/boost.python/index.html - this site 
-  contains few usefull Boost.Python examples and tutorials.
+* http://www.shocksolution.com/math_tools/boost.python/index.html - this site
+  contains few useful Boost.Python examples and tutorials.
 
 -------------
 Build systems
 -------------
 
-http://www.scons.org/wiki/GCCXMLBuilder - Joseph Lisee shows how to integrate 
+http://www.scons.org/wiki/GCCXMLBuilder - Joseph Lisee shows how to integrate
 Py++ scripts with Scons.
 
