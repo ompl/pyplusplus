@@ -244,10 +244,14 @@ class creator_t( declarations.decl_visitor_t ):
         ctext_t = code_creators.custom_text_t
         for cls_creator in class_creators:
             cls_decl = cls_creator.declaration
-            #uc = user code
-            uc_creators = map( lambda uc: ctext_t( uc.text, uc.works_on_instance )
-                                      , cls_decl.registration_code )
-            cls_creator.adopt_creators( uc_creators )
+
+            uc_creators_head = map( lambda uc: ctext_t( uc.text, uc.works_on_instance )
+                                    , cls_decl.registration_code_head )
+            cls_creator.adopt_creators( uc_creators_head, 0 )
+
+            uc_creators_tail = map( lambda uc: ctext_t( uc.text, uc.works_on_instance )
+                                    , cls_decl.registration_code_tail )
+            cls_creator.adopt_creators( uc_creators_tail )
 
             uc_creators = map( lambda uc: ctext_t( uc.text ), cls_decl.wrapper_code )
             if uc_creators:

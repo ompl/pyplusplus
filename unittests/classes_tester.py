@@ -22,6 +22,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         apple = mb.class_( 'apple' )
         self.failUnless( apple.alias == 'the_tastest_fruit' )
         apple.alias = 'apple'
+        apple.add_registration_code( "/*head*/", works_on_instance=False, tail=False )
+        apple.add_registration_code( "/*tail*/", works_on_instance=False, tail=True )
 
         protected_static_t = mb.class_( 'protected_static_t' )
         self.failUnless( 'PROTECTED_STATIC' in protected_static_t.alias)

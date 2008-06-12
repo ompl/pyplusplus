@@ -178,7 +178,8 @@ class class_t( class_common_details_t
         self._held_type = None
         self._noncopyable = None
         self._wrapper_alias = None 
-        self._registration_code = []
+        self._registration_code_head = []
+        self._registration_code_tail = []
         self._declaration_code = []
         self._wrapper_code = []
         self._null_constructor_body = ''
@@ -236,17 +237,33 @@ class class_t( class_common_details_t
     def declaration_code( self ):
         """
         List of strings, that contains valid C++ code, that will be added to
-        the class registration section
+        the class declaration section
         """
         return self._declaration_code
 
     @property
-    def registration_code( self ):
+    def registration_code_head( self ):
         """
         List of strings, that contains valid C++ code, that will be added to
+        the head of the class registration section
+        """
+        return self._registration_code_head
+
+    @property
+    def registration_code_tail( self ):
+        """
+        List of strings, that contains valid C++ code, that will be added to
+        the tail of the class registration section
+        """
+        return self._registration_code_tail
+
+    @property
+    def registration_code( self ):
+        """
+        List of strings, that contains all C++ code, that will be added to
         the class registration section
         """
-        return self._registration_code
+        return self.registration_code_head + self.registration_code_tail
 
     @property
     def wrapper_code( self ):
@@ -311,13 +328,20 @@ class class_t( class_common_details_t
         """adds the code to the declaration section"""
         self.declaration_code.append( user_text.user_text_t( code ) )
 
-    def add_registration_code( self, code, works_on_instance=True ):
+    def add_registration_code( self, code, works_on_instance=True, tail=True ):
         """adds the code to the class registration section
 
-        works_on_instance: If true, the custom code can be applied directly to obj inst.
-        Example: ObjInst."CustomCode"
+        @param works_on_instance: If true, the custom code can be applied directly to obj inst. Example: ObjInst.code
+        @type works_on_instance: bool
+
+        @param tail: if True, the custom code is appended to the end of the class registration code.
+        @type tail: bool
         """
-        self.registration_code.append( user_text.class_user_text_t( code, works_on_instance ) )
+        if tail:
+            self.registration_code_tail.append( user_text.class_user_text_t( code, works_on_instance ) )
+        else:
+            self.registration_code_head.append( user_text.class_user_text_t( code, works_on_instance ) )
+            
     #preserving backward computability
     add_code = add_registration_code
 
