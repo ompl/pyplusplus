@@ -43,10 +43,10 @@ if 'roman' in getpass.getuser():
         python.include = 'e:/python25/include'
     else:
         scons.suffix = '.so'
-        boost.libs = ['/home/roman/boost_cvs/libs/python/build/bin-stage' ]
-        boost.include = '/home/roman/boost_cvs'
-        python.include = '/usr/include/python2.4'
-
+        scons.ccflags = ['-DBOOST_PYTHON_NO_PY_SIGNATURES' ]
+        boost.libs = ['/home/roman/include/libs' ]
+        boost.include = '/home/roman/boost_svn'
+        python.include = '/usr/include/python2.5'
 
 _my_path = None
 try:
