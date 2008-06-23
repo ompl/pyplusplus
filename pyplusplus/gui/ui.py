@@ -10,6 +10,7 @@ TODO: It could be nice, if GUI will save the user settings beetwen runs.
 """
 
 import os
+import sys
 import time
 import Tkinter
 import tkFileDialog
@@ -112,6 +113,13 @@ class parser_configuration_ui_t(custom_frame_t):
         temp.grid( row=10, column=1, columnspan=2, sticky=Tkinter.NE + Tkinter.W)
 
         map( lambda i:  self.rowconfigure( i, weight=1 ), range(11) )
+        
+        this_module_dir_path = os.path.abspath ( os.path.dirname( sys.modules[__name__].__file__) )
+        this_module_dir_path = this_module_dir_path.replace( '\\', '/' )
+        this_module_dir_path = this_module_dir_path.lower()
+        if this_module_dir_path.endswith( '/sources/pyplusplus_dev/pyplusplus/gui' ):
+            gccxml_09_path = os.path.join( this_module_dir_path, '..', '..', '..', 'gccxml_bin', 'v09', sys.platform, 'bin' )
+            self._gccxml_location.insert( 0, gccxml_09_path )
             
     def _select_gccxml_executable( self ):
         file_name = tkFileDialog.askopenfilename()
