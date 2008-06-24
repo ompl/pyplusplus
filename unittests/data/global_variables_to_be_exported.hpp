@@ -21,4 +21,7 @@ void init_garray();
 
 }
 
+
+extern const char someSin[256];
+
 #endif//__global_variables_to_be_exported_hpp__

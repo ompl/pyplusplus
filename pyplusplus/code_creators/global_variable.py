@@ -122,7 +122,7 @@ class array_gv_wrapper_t( code_creator.code_creator_t
 
     def _create_namespaces(self):
         ns_names = declarations.declaration_path( self.declaration.parent )
-        if len(ns_names) > 1 and ns_names[0] == '::':
+        if len(ns_names) >= 1 and ns_names[0] == '::':
             ns_names = ns_names[1:]
         return ns_names
 
