@@ -19,7 +19,6 @@ from pyplusplus import _logging_
 ACCESS_TYPES = declarations.ACCESS_TYPES
 VIRTUALITY_TYPES = declarations.VIRTUALITY_TYPES
 
-#TODO: don't export functions that returns non const pointer to fundamental types
 #TODO: add print decl_wrapper.readme messages
 #class Foo{
 #      union {
@@ -575,44 +574,21 @@ class creator_t( declarations.decl_visitor_t ):
                 self.curr_code_creator.wrapper.adopt_creator( wrapper )
             else:
                 self.__extmodule.adopt_declaration_creator( wrapper )
-            #next constructors are not present in code, but compiler generated
-            #Boost.Python requiers them to be declared in the wrapper class
-            if '0.9' in self.curr_decl.compiler:
-                copy_constr = self.curr_decl.find_copy_constructor()
-                add_to_wrapper = False
-                if declarations.has_copy_constructor( self.curr_decl ):
-                    #find out whether user or compiler defined it
-                    if self.curr_decl.noncopyable:
-                        add_to_wrapper = False
-                    elif not copy_constr:
-                        add_to_wrapper = True #compiler defined will not be exposed manually later
-                    elif copy_constr.is_artificial:
-                        add_to_wrapper = True #compiler defined will not be exposed manually later
-                if add_to_wrapper:
-                    cccc = code_creators.copy_constructor_wrapper_t( class_=self.curr_decl)
-                    wrapper.adopt_creator( cccc )
-                trivial_constr = self.curr_decl.find_trivial_constructor()
-                add_to_wrapper = False
-                if declarations.has_trivial_constructor( self.curr_decl ):
-                    if not trivial_constr:
-                        add_to_wrapper = True
-                    elif trivial_constr.is_artificial:
-                        add_to_wrapper = True
-                if add_to_wrapper:
-                    tcons = code_creators.null_constructor_wrapper_t( class_=self.curr_decl )
-                    wrapper.adopt_creator( tcons )
-            else:
-                if declarations.has_copy_constructor( self.curr_decl ):
-                    copy_constr = self.curr_decl.find_copy_constructor()
-                    if not self.curr_decl.noncopyable and copy_constr.is_artificial:
-                        cccc = code_creators.copy_constructor_wrapper_t( class_=self.curr_decl)
-                        wrapper.adopt_creator( cccc )
-                    null_constr = self.curr_decl.find_trivial_constructor()
-                    if null_constr and null_constr.is_artificial:
-                        #this constructor is not going to be exposed
-                        tcons = code_creators.null_constructor_wrapper_t( class_=self.curr_decl )
-                        wrapper.adopt_creator( tcons )
 
+            #next constructors are not present in code, but compiler generated
+            #Boost.Python requiers them to be declared in the wrapper class            
+            noncopyable_vars = self.curr_decl.find_noncopyable_vars()
+            
+            copy_constr = self.curr_decl.find_copy_constructor()
+            if not self.curr_decl.noncopyable and copy_constr and copy_constr.is_artificial:
+                cccc = code_creators.copy_constructor_wrapper_t( class_=self.curr_decl)
+                wrapper.adopt_creator( cccc )
+
+            trivial_constr = self.curr_decl.find_trivial_constructor()            
+            if trivial_constr and trivial_constr.is_artificial and not noncopyable_vars:
+                tcons = code_creators.null_constructor_wrapper_t( class_=self.curr_decl )
+                wrapper.adopt_creator( tcons )
+                
         exposed = self.expose_overloaded_mem_fun_using_macro( cls_decl, cls_cc )
 
         cls_parent_cc.adopt_creator( cls_cc )
