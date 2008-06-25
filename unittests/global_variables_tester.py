@@ -27,7 +27,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( 10 == len( module.garray ) )
         for index in range( 10 ):
             self.failUnless( -index == module.garray[index].value )
-
+        self.failUnless( 3 == len( module.someSin )
+                         and module.someSin[0] == 'A' 
+                         and module.someSin[1] == 'B'
+                         and module.someSin[2] == '\0' )
 def create_suite():
     suite = unittest.TestSuite()    
     suite.addTest( unittest.makeSuite(tester_t))

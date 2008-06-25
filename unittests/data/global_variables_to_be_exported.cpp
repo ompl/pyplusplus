@@ -20,3 +20,5 @@ void init_garray(){
 }
 
 }
+
+const char someSin[3] = "AB";
