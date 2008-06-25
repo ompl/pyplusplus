@@ -13,13 +13,10 @@ class python:
     include = ''
 
 class gccxml:
-    gccxml_07_path = os.path.join( this_module_dir_path, '..', 'gccxml_bin', 'v07', sys.platform, 'bin' )
     gccxml_09_path = os.path.join( this_module_dir_path, '..', 'gccxml_bin', 'v09', sys.platform, 'bin' )
 
     gccxml_path = gccxml_09_path
     gccxml_version = '__GCCXML_09__'
-    if '0.7' in gccxml_version:
-        gccxml_version = '__GCCXML_07__'
 
     executable = gccxml_path
 
@@ -36,9 +33,9 @@ if 'roman' in getpass.getuser():
 
     if sys.platform == 'win32':
         scons.suffix = '.pyd'
-        scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope' ]
-        boost.libs = [ 'd:/dev/boost_cvs/libs/python/build/bin-stage' ]
-        boost.include = 'd:/dev/boost_cvs'
+        scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope', '-DBOOST_PYTHON_NO_PY_SIGNATURES' ]
+        boost.libs = [ 'd:/dev/boost_svn/bin.v2/libs/python/build/msvc-7.1/release' ]
+        boost.include = 'd:/dev/boost_svn'
         python.libs = 'e:/python25/libs'
         python.include = 'e:/python25/include'
     else:
