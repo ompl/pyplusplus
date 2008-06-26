@@ -218,15 +218,14 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
             result.append( ', %s' % self.documentation )
         used_init = None
         inits = filter( lambda x: isinstance( x, calldef.constructor_t ), self.creators )
-        if ( self.declaration.is_abstract \
-             or not declarations.has_any_non_copyconstructor(self.declaration) ) \
-           and not self.wrapper \
-           or ( declarations.has_destructor( self.declaration )
-                and not declarations.has_public_destructor( self.declaration ) ):
-            #TODO: or self.declaration has public constructor and destructor
+        has_nonpublic_destructor = declarations.has_destructor( self.declaration ) \
+                                   and not declarations.has_public_destructor( self.declaration )
+        if has_nonpublic_destructor \
+           or ( self.declaration.is_abstract and not self.wrapper ) \
+           or not declarations.has_any_non_copyconstructor(self.declaration):
             result.append( ", " )
             result.append( algorithm.create_identifier( self, '::boost::python::no_init' ) )
-        elif not declarations.has_trivial_constructor( self.declaration ):
+        elif not self.declaration.find_trivial_constructor():
             if inits:
                 used_init = inits[0]
                 result.append( ", " )
