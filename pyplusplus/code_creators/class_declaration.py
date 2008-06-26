@@ -220,9 +220,17 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
         inits = filter( lambda x: isinstance( x, calldef.constructor_t ), self.creators )
         has_nonpublic_destructor = declarations.has_destructor( self.declaration ) \
                                    and not declarations.has_public_destructor( self.declaration )
+        
+        #select all public constructors and exclude copy constructor
+        cs = self.declaration.constructors( lambda c: not c.is_copy_constructor and c.access_type == 'public'
+                                                      , recursive=False, allow_empty=True )
+        has_suitable_constructor = bool( cs )
+        if cs and len(cs) == 1 and cs[0].is_trivial_constructor and self.declaration.find_noncopyable_vars():
+            has_suitable_constructor = False
+
         if has_nonpublic_destructor \
            or ( self.declaration.is_abstract and not self.wrapper ) \
-           or not declarations.has_any_non_copyconstructor(self.declaration):
+           or not has_suitable_constructor:
             result.append( ", " )
             result.append( algorithm.create_identifier( self, '::boost::python::no_init' ) )
         elif not self.declaration.find_trivial_constructor():
