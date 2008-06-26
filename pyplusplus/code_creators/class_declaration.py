@@ -148,7 +148,11 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
         return operator_creators
 
     def _generate_noncopyable(self):
-        if self.declaration.noncopyable:
+        noncopyable_vars = self.declaration.find_noncopyable_vars()
+        copy_constr = self.declaration.find_copy_constructor()
+            
+        if self.declaration.noncopyable \
+           or copy_constr and copy_constr.is_artificial and noncopyable_vars:
             return algorithm.create_identifier( self, '::boost::noncopyable' )
 
     def _generate_bases(self, base_creators):
