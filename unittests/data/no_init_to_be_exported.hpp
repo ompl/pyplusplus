@@ -43,6 +43,11 @@ get_value( const boost::shared_ptr< value_i >& v ){
     }
 }
 
+struct event_t{
+    template< class TData >
+    event_t( TData& ){};
+};
+
 }
 
 #endif//__no_init_to_be_exported_hpp__
