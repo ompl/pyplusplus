@@ -228,12 +228,14 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
         if cs and len(cs) == 1 and cs[0].is_trivial_constructor and self.declaration.find_noncopyable_vars():
             has_suitable_constructor = False
 
+        trivial_constructor = self.declaration.find_trivial_constructor()
+
         if has_nonpublic_destructor \
            or ( self.declaration.is_abstract and not self.wrapper ) \
            or not has_suitable_constructor:
             result.append( ", " )
             result.append( algorithm.create_identifier( self, '::boost::python::no_init' ) )
-        elif not self.declaration.find_trivial_constructor():
+        elif not trivial_constructor or trivial_constructor.access_type != 'public':
             if inits:
                 used_init = inits[0]
                 result.append( ", " )

@@ -48,6 +48,13 @@ struct event_t{
     event_t( TData& ){};
 };
 
+struct map_iterator_t{
+    map_iterator_t( int i ){}
+    map_iterator_t( const map_iterator_t& ){}
+private:
+    map_iterator_t(){};
+};
+
 }
 
 #endif//__no_init_to_be_exported_hpp__

@@ -105,6 +105,7 @@ import split_module_indexing_suite_bug_tester
 import inner_tmpl_class_tester
 import bug_covariant_returns_tester
 import embeded_tester
+#import ogre_generate_tester
 
 testers = [
     algorithms_tester
@@ -197,6 +198,7 @@ testers = [
     , inner_tmpl_class_tester
     , bug_covariant_returns_tester
     , embeded_tester
+#    , ogre_generate_tester too much time
 ]
 
 class module_runner_t( object ):

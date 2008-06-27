@@ -24,7 +24,7 @@ class ogre_generate_tester_t(unittest.TestCase):
         messages.disable( *messages.all_warning_msgs )
         
         ogre_file = autoconfig.data_directory.replace( 'pyplusplus_dev', 'pygccxml_dev' )
-        ogre_file = parser.create_gccxml_fc( os.path.join( ogre_file, 'ogre1.4.xml' ) )
+        ogre_file = parser.create_gccxml_fc( os.path.join( ogre_file, 'ogre.1.7.xml' ) )
 
         mb = module_builder.module_builder_t(
                 [ ogre_file ]
