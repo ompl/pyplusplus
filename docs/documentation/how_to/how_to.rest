@@ -68,14 +68,11 @@ could be integrated with `Py++`_.
 
 .. code-block:: Python
 
-  registration_code = 'def( "get_size", &%s::get_size )' % window.wrapper_alias
-
-.. code-block:: Python
-
   mb = module_builder_t( ... )
   window = mb.class_( "window_t" )
   window.member_function( "get_size" ).exclude()
   window.add_wrapper_code( wrapper_code )
+  registration_code = 'def( "get_size", &%s::get_size )' % window.wrapper_alias
   window.registration_code( registration_code )
 
 That's all.
