@@ -21,6 +21,7 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
         self._apply_smart_ptr_wa = False
         self._is_read_only = None
         self._use_make_functions = None
+        self._expose_address = None
     
     __call_policies_doc__ = \
     """There are usecase, when exporting member variable forces Py++ to
@@ -89,6 +90,26 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
         self._use_make_functions = value
     use_make_functions = property( get_use_make_functions, set_use_make_functions
                                    , doc=__use_make_functions_doc__)
+
+    __expose_address_doc__ = \
+    """There are some cases when Boost.Python doesn't provide a convenient way
+    to expose the variable to Python. For example:
+    
+    double* x[10];
+    //or
+    char* buffer; //in case you want to modify the buffer in place
+    
+    In this cases Py++ doesn't help too. In these cases it is possible to expose 
+    the actual address of the variable. After that, you can use built-in "ctypes"
+    package to edit the content of the variable.    
+    """
+    def get_expose_address( self ):
+        return self._expose_address
+    def set_expose_address( self, value ):
+        self._expose_address = value
+    expose_address = property( get_expose_address, set_expose_address
+                               , doc= __expose_address_doc__ )
+
     
     def __find_out_is_read_only(self):
         type_ = declarations.remove_alias( self.type )
@@ -127,14 +148,15 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
             return messages.W1033
         if self.bits == 0 and self.name == "":
             return messages.W1034
-        if declarations.is_array( self.type ) and declarations.array_size( self.type ) < 1:
-            return messages.W1045
+        if not self.expose_address:
+            if declarations.is_array( self.type ) and declarations.array_size( self.type ) < 1:
+                return messages.W1045
         type_ = declarations.remove_alias( self.type )
         type_ = declarations.remove_const( type_ )
         if declarations.is_pointer( type_ ):
-            if self.type_qualifiers.has_static:
+            if not self.expose_address and self.type_qualifiers.has_static:
                 return messages.W1035
-            if python_traits.is_immutable( type_.base ):
+            if not self.expose_address and python_traits.is_immutable( type_.base ):
                 return messages.W1036
 
             units = declarations.decompose_type( type_ )

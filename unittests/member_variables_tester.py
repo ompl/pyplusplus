@@ -5,35 +5,39 @@
 
 import os
 import sys
+import ctypes
 import unittest
 import fundamental_tester_base
+import pdb
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'member_variables'
-    
+
     def __init__( self, *args ):
-        fundamental_tester_base.fundamental_tester_base_t.__init__( 
+        fundamental_tester_base.fundamental_tester_base_t.__init__(
             self
             , tester_t.EXTENSION_NAME
             , *args )
-                                                                    
-    def customize(self, mb ):        
+
+    def customize(self, mb ):
         mb.variable( 'prefered_color' ).alias = 'PreferedColor'
         mb.classes().always_expose_using_scope = True
+        image = mb.class_( 'image_t' )
+        image.var( 'data' ).expose_address = True
 
     def change_default_color( self, module ):
         module.point.default_color = module.point.color.blue
-    
+
     def change_prefered_color( self, module ):
-        xypoint = module.point()        
+        xypoint = module.point()
         xypoint.PreferedColor = module.point.color.blue
-    
+
     def set_b( self, bf, value ):
         bf.b = value
-        
-    def run_tests(self, module):  
+
+    def run_tests(self, module):
         self.failIfRaisesAny( module.point )
-        xypoint = module.point()        
+        xypoint = module.point()
         self.failUnless( module.point.instance_count == 1)
         self.failUnless( xypoint.instance_count == 1)
         self.failUnless( module.point.default_color == module.point.color.red)
@@ -49,43 +53,52 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( 1 == bf.a )
         self.failUnless( bf.b == module.get_b( bf ) )
         self.failIfNotRaisesAny( lambda: self.set_b( bf, 23 ) )
-        
+
         array = module.array_t()
         self.failUnless( len( array.vars ) == 3 )
         for i in range( len( array.vars ) ):
             self.failUnless( array.vars[i].value == -9 )
         self.failUnless( len( array.ivars ) == 10 )
-        
+
         ivars = array.ivars
         del array #testing call policies
         for i in range(20):
             for index in range(10):
                 self.failUnless( ivars[index] == -index )
-        
+
         array = module.array_t()
         for index in range( len(array.ivars) ):
             array.ivars[index] = index * index
             self.failUnless( array.get_ivars_item( index ) == index * index )
-        
+
         tree = module.create_tree()
         self.failUnless( tree.parent is None )
         self.failUnless( tree.data.value == 0 )
         self.failUnless( tree.right is None )
         self.failUnless( tree.left )
         self.failUnless( tree.left.data.value == 1 )
-        
+
         tree.right = module.create_tree()
         self.failUnless( tree.right.parent is None )
         self.failUnless( tree.right.data.value == 0 )
         self.failUnless( tree.right.right is None )
         self.failUnless( tree.right.left )
         self.failUnless( tree.right.left.data.value == 1 )
-        
+
         mem_var_str = module.mem_var_str_t()
         mem_var_str.identity( module.mem_var_str_t.class_name )
-        
+
+        image = module.image_t()
+
+        #pdb.set_trace()
+        data_type = ctypes.POINTER( ctypes.c_int )
+        data = data_type.from_address( image.data )
+        for j in range(5):
+            print '%d : %d' % ( j, data[j] )
+
+
 def create_suite():
-    suite = unittest.TestSuite()    
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

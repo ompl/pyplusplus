@@ -9,12 +9,12 @@
 #include <string>
 #include <iostream>
 
-namespace member_variables{ 
+namespace member_variables{
 
 struct point{
     enum color{ red, green, blue };
-    
-    point() 
+
+    point()
     : prefered_color( blue )
       , x( -1 )
       , y( 2 )
@@ -42,7 +42,7 @@ struct bit_fields_t{
     unsigned int a : 1;
     unsigned int : 0;
     const unsigned int b : 11;
-};  
+};
 
 unsigned int get_a(const bit_fields_t& inst);
 void set_a( bit_fields_t& inst, unsigned int new_value );
@@ -55,17 +55,17 @@ struct array_t{
         }
     }
 
-    struct variable_t{ 
+    struct variable_t{
         variable_t() : value(-9){}
-        int value; 
+        int value;
     };
 
     int get_ivars_item( int index ){
         return ivars[index];
     }
-    
+
     const variable_t vars[3];
-    int ivars[10];  
+    int ivars[10];
     int ivars2[10];
 };
 
@@ -78,10 +78,10 @@ struct data_t{
 };
 
 struct tree_node_t{
-    
+
     data_t *data;
     tree_node_t *left;
-    tree_node_t *right;    
+    tree_node_t *right;
     const tree_node_t *parent;
 
     tree_node_t(const tree_node_t* parent=0)
@@ -90,7 +90,7 @@ struct tree_node_t{
       , right( 0 )
       , parent( parent )
     {}
-    
+
     ~tree_node_t(){
         std::cout << "\n~tree_node_t";
     }
@@ -108,7 +108,7 @@ struct fundamental_t{
     fundamental_t( EFruit& fruit, const int& i )
     : m_fruit( fruit ), m_i( i )
     {}
-    
+
     EFruit& m_fruit;
     const int& m_i;
 };
@@ -149,6 +149,18 @@ struct faulty {
    allocator_t allocator;
 };
 
+}
+
+namespace ctypes{
+    struct image_t{
+        image_t(){
+            data = new int[5];
+            for(int i=0; i<5; i++){
+                data[i] = i;
+            }
+        }
+        int* data;
+    };
 }
 
 }

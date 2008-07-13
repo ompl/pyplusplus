@@ -309,7 +309,7 @@ class creator_t( declarations.decl_visitor_t ):
                 if not ( None is element_type ) and class_traits.is_my_case( element_type ):
                     value_cls = class_traits.get_declaration( element_type )
                     has_prerequisits = value_cls.less_than_comparable \
-                                       and value_cls.equality_comparable                    
+                                       and value_cls.equality_comparable
                     if ( not has_prerequisits ) and ( value_cls not in created_value_traits ):
                         created_value_traits.add( value_cls )
                         element_type_cc = code_creators.value_traits_t( value_cls )
@@ -576,19 +576,19 @@ class creator_t( declarations.decl_visitor_t ):
                 self.__extmodule.adopt_declaration_creator( wrapper )
 
             #next constructors are not present in code, but compiler generated
-            #Boost.Python requiers them to be declared in the wrapper class            
+            #Boost.Python requiers them to be declared in the wrapper class
             noncopyable_vars = self.curr_decl.find_noncopyable_vars()
-            
+
             copy_constr = self.curr_decl.find_copy_constructor()
             if not self.curr_decl.noncopyable and copy_constr and copy_constr.is_artificial:
                 cccc = code_creators.copy_constructor_wrapper_t( class_=self.curr_decl)
                 wrapper.adopt_creator( cccc )
 
-            trivial_constr = self.curr_decl.find_trivial_constructor()            
+            trivial_constr = self.curr_decl.find_trivial_constructor()
             if trivial_constr and trivial_constr.is_artificial and not noncopyable_vars:
                 tcons = code_creators.null_constructor_wrapper_t( class_=self.curr_decl )
                 wrapper.adopt_creator( tcons )
-                
+
         exposed = self.expose_overloaded_mem_fun_using_macro( cls_decl, cls_cc )
 
         cls_parent_cc.adopt_creator( cls_cc )
@@ -654,6 +654,15 @@ class creator_t( declarations.decl_visitor_t ):
     def visit_variable(self):
         self.__types_db.update( self.curr_decl )
         self.__dependencies_manager.add_exported( self.curr_decl )
+
+        if self.curr_decl.expose_address:
+            creator_type = None
+            if isinstance( self.curr_decl.parent, declarations.namespace_t ):
+                creator_type = code_creators.global_variable_addressof_t
+            else:
+                creator_type = code_creators.member_variable_addressof_t
+            self.curr_code_creator.adopt_creator( creator_type(self.curr_decl) )
+            return
 
         if declarations.is_array( self.curr_decl.type ):
             if self._register_array_1( self.curr_decl.type ):

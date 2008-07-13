@@ -91,6 +91,7 @@ from global_variable import global_variable_base_t
 from global_variable import global_variable_t
 from global_variable import array_gv_t
 from global_variable import array_gv_wrapper_t
+from global_variable import global_variable_addressof_t
 
 from member_variable import member_variable_base_t
 from member_variable import member_variable_t
@@ -101,6 +102,7 @@ from member_variable import array_mv_t
 from member_variable import array_mv_wrapper_t
 from member_variable import mem_var_ref_t
 from member_variable import mem_var_ref_wrapper_t
+from member_variable import member_variable_addressof_t
 
 from class_declaration import class_t
 from class_declaration import class_wrapper_t

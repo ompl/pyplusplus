@@ -6,7 +6,7 @@
 #ifndef __global_variables_to_be_exported_hpp__
 #define __global_variables_to_be_exported_hpp__
 
-namespace global_variables{ 
+namespace global_variables{
 
 enum color{ red, green, blue };
 
@@ -18,6 +18,12 @@ extern data garray[10];
 
 extern double arr_of_doubles[100];
 void init_garray();
+
+extern int some_value;
+
+int get_some_value();
+
+unsigned int get_some_value_address();
 
 }
 

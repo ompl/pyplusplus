@@ -30,7 +30,7 @@ class member_variable_base_t( registration_based.registration_based_t
     def _set_wrapper( self, new_wrapper ):
         self._wrapper = new_wrapper
     wrapper = property( _get_wrapper, _set_wrapper )
-    
+
     def _get_system_headers_impl( self ):
         files = []
         if self.declaration.getter_call_policies:
@@ -38,7 +38,7 @@ class member_variable_base_t( registration_based.registration_based_t
         if self.declaration.setter_call_policies:
             files.append( self.declaration.setter_call_policies.header_file )
         return files
-        
+
 class member_variable_t( member_variable_base_t ):
     """
     Creates boost.python code that exposes member variable.
@@ -130,12 +130,12 @@ class member_variable_t( member_variable_base_t ):
                 doc = self.documentation
             add_property = 'add_property'
         add_property_args = [ '"%s"' % self.alias ]
-        getter_code = declarations.call_invocation.join( 
+        getter_code = declarations.call_invocation.join(
                           make_getter
                         , [ '&' + self.decl_identifier
                             , self.declaration.getter_call_policies.create( self ) ]
                         , os.linesep + self.indent( self.PARAM_SEPARATOR, 6) )
-        
+
         add_property_args.append( getter_code )
         if not self.declaration.is_read_only:
             setter_code = ''
@@ -143,14 +143,14 @@ class member_variable_t( member_variable_base_t ):
             if self.declaration.setter_call_policies \
                and not self.declaration.setter_call_policies.is_default():
                    setter_args.append( self.declaration.setter_call_policies.create( self ) )
-            setter_code = declarations.call_invocation.join( 
+            setter_code = declarations.call_invocation.join(
                               make_setter
                             , setter_args
                             , os.linesep + self.indent( self.PARAM_SEPARATOR, 6) )
             add_property_args.append( setter_code)
         if doc:
             add_property_args.append( doc )
-        return declarations.call_invocation.join( 
+        return declarations.call_invocation.join(
                     add_property
                     , add_property_args
                     , os.linesep + self.indent( self.PARAM_SEPARATOR, 4 ) )
@@ -391,7 +391,7 @@ class array_mv_t( member_variable_base_t ):
         answer = []
         answer.append( 'typedef %s;' % self.wrapper.wrapper_creator_type.create_typedef( 'array_wrapper_creator' ) )
         answer.append( os.linesep * 2 )
-        
+
         doc = ''
         if self.declaration.type_qualifiers.has_static:
             answer.append( self.parent.class_var_name + '.add_static_property' )
@@ -425,7 +425,7 @@ class array_mv_t( member_variable_base_t ):
         answer.append( os.linesep )
         answer.append( '}' )
         return ''.join( answer )
-    
+
     def _get_system_headers_impl( self ):
         return []
 
@@ -445,7 +445,7 @@ class array_mv_wrapper_t( code_creator.code_creator_t
     @property
     def wrapper_type( self ):
         tmpl = "%(namespace)s::%(constness)sarray_1_t< %(item_type)s, %(array_size)d>"
-        
+
         constness = ''
         if declarations.is_const( self.declaration.type ):
             constness = 'const_'
@@ -463,14 +463,14 @@ class array_mv_wrapper_t( code_creator.code_creator_t
         if declarations.is_const( self.declaration.type ):
             wrapped_cls_type = declarations.const_t( wrapped_cls_type )
         return declarations.reference_t( wrapped_cls_type )
-    
+
     @property
     def wrapper_creator_type(self):
         return declarations.free_function_type_t(
                 return_type=self.wrapper_type
                 , arguments_types=[self.wrapped_class_type] )
-    
-    @property 
+
+    @property
     def wrapper_creator_name(self):
         return '_'.join( ['pyplusplus', self.declaration.name, 'wrapper'] )
 
@@ -494,7 +494,7 @@ class array_mv_wrapper_t( code_creator.code_creator_t
 
     def _get_system_headers_impl( self ):
         return [code_repository.array_1.file_name]
-    
+
 
 class mem_var_ref_t( member_variable_base_t ):
     """
@@ -644,3 +644,39 @@ class mem_var_ref_wrapper_t( code_creator.code_creator_t
 
     def _get_system_headers_impl( self ):
         return []
+
+class member_variable_addressof_t( member_variable_base_t ):
+    """
+    Creates boost.python code that exposes address of member variable.
+
+    This functionality is pretty powerful if you use it with "ctypes" -
+    standard package.
+
+    """
+    def __init__(self, variable, wrapper=None ):
+        member_variable_base_t.__init__( self, variable=variable, wrapper=wrapper )
+
+    def _create_impl( self ):
+        doc = '' #static property does not support documentation
+        if self.declaration.type_qualifiers.has_static:
+            add_property = 'add_static_property'
+        else:
+            if self.documentation:
+                doc = self.documentation
+            add_property = 'add_property'
+        answer = [ add_property ]
+        answer.append( '( ' )
+        answer.append('"%s"' % self.alias)
+        answer.append( self.PARAM_SEPARATOR )
+
+        answer.append( 'pyplus_conv::make_addressof_getter(&%s)'
+                       % self.decl_identifier )
+        if doc:
+            answer.append( self.PARAM_SEPARATOR )
+            answer.append( doc )
+        answer.append( ' ) ' )
+
+        return ''.join( answer )
+
+    def _get_system_headers_impl( self ):
+        return [code_repository.ctypes_integration.file_name]

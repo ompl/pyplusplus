@@ -56,7 +56,7 @@ class global_variable_t( global_variable_base_t ):
         else:
             obj_identifier = algorithm.create_identifier( self, '::boost::python::object' )
             ref_identifier = algorithm.create_identifier( self, '::boost::ref' )
-            result.append( ' = %s( %s( %s ) );' % ( obj_identifier, ref_identifier, self.decl_identifier ) )       
+            result.append( ' = %s( %s( %s ) );' % ( obj_identifier, ref_identifier, self.decl_identifier ) )
         return ''.join( result )
 
 class array_gv_t( global_variable_base_t ):
@@ -74,7 +74,7 @@ class array_gv_t( global_variable_base_t ):
     def _create_impl( self ):
         if self.declaration.already_exposed:
             return ''
-        
+
         answer = []
         answer.append( algorithm.create_identifier( self, '::boost::python::scope' ) )
         answer.append( '().attr("%s")' % self.alias )
@@ -141,7 +141,7 @@ class array_gv_wrapper_t( code_creator.code_creator_t
     def _create_impl( self ):
         if self.declaration.already_exposed:
             return ''
-        
+
         answer = [self._create_namespaces_name()]
         answer.append( self.wrapper_type.decl_string )
         answer.append( ''.join([ self.wrapper_creator_name, '(){']) )
@@ -157,3 +157,28 @@ class array_gv_wrapper_t( code_creator.code_creator_t
 
     def _get_system_headers_impl( self ):
         return [code_repository.array_1.file_name]
+
+class global_variable_addressof_t( global_variable_base_t ):
+    """
+    Creates boost.python code that exposes address of global variable.
+
+    This functionality is pretty powerful if you use it with "ctypes" -
+    standard package.
+    """
+    def __init__(self, variable ):
+        global_variable_base_t.__init__( self, variable=variable )
+
+    def _create_impl(self):
+        if self.declaration.already_exposed:
+            return ''
+
+        assert isinstance( self.declaration, pygccxml.declarations.variable_t )
+        result = []
+        #TODO: porting to 64Bit is welcome
+        result.append( algorithm.create_identifier( self, '::boost::python::scope' ) )
+        result.append( '().attr("%s")' % self.alias )
+        result.append( ' = boost::uint32_t( boost::addressof( %s ) );' % self.decl_identifier )
+        return ''.join( result )
+
+    def _get_system_headers_impl( self ):
+        return [code_repository.ctypes_integration.file_name]

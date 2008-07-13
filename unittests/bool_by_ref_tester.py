@@ -33,7 +33,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                 module.listener.__init__(self)
             def listen( self, id, name,  skip):
                 print "Python: listen called with", id, name, skip
-                return True ## Test always returns True...
+                return 11## Test always returns True...
         
         c = list1()
         ret = module.callListener( c )
