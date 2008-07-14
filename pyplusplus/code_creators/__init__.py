@@ -68,6 +68,7 @@ from calldef import static_method_t
 from calldef import casting_operator_t
 from calldef import mem_fun_overloads_t
 from calldef import free_fun_overloads_t
+from calldef import destructor_wrapper_t
 from calldef import casting_constructor_t
 from calldef import constructor_wrapper_t
 from calldef import mem_fun_overloads_class_t

@@ -624,6 +624,10 @@ class creator_t( declarations.decl_visitor_t ):
         for property_def in cls_decl.properties:
             cls_cc.adopt_creator( code_creators.property_t(property_def) )
 
+        if wrapper and cls_decl.destructor_code:
+            destructor = code_creators.destructor_wrapper_t( class_=cls_decl )
+            wrapper.adopt_creator( destructor )
+
         self.curr_decl = cls_decl
         self.curr_code_creator = cls_parent_cc
 

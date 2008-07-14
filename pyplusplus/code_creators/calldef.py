@@ -1157,6 +1157,24 @@ class casting_constructor_t( registration_based.registration_based_t
     def _get_system_headers_impl( self ):
         return []
 
+class destructor_wrapper_t( code_creator.code_creator_t
+                            , declaration_based.declaration_based_t ):
+    """
+    Creates class wrapper destructor from the code provided by the user
+    """
+    def __init__( self, class_ ):
+        code_creator.code_creator_t.__init__( self )
+        declaration_based.declaration_based_t.__init__( self, declaration=class_ )
+
+    def _create_impl(self):
+        answer = [ 'virtual ~%s(){' % self.declaration.wrapper_alias ]
+        answer.append( self.indent( os.linesep.join( self.declaration.destructor_code ) ) )
+        answer.append( '}' )
+        return os.linesep.join( answer )
+
+    def _get_system_headers_impl( self ):
+        return []
+
 
 class calldef_overloads_class_t( code_creator.code_creator_t ):
     def __init__( self, functions ):
