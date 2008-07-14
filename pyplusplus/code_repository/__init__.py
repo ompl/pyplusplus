@@ -19,15 +19,15 @@ import named_tuple
 import convenience
 import return_range
 import call_policies
-#import ctypes_integration
+import ctypes_integration
 
 all = [ array_1
         , gil_guard
         , convenience
         , call_policies
         , named_tuple
-        , return_range ]
-        #, ctypes_integration ]
+        , return_range
+        , ctypes_integration ]
 
 headers = map( lambda f: f.file_name, all )
 
