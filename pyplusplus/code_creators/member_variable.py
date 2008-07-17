@@ -669,8 +669,11 @@ class member_variable_addressof_t( member_variable_base_t ):
         answer.append('"%s"' % self.alias)
         answer.append( self.PARAM_SEPARATOR )
 
-        answer.append( 'pyplus_conv::make_addressof_getter(&%s)'
-                       % self.decl_identifier )
+        if self.declaration.type_qualifiers.has_static:
+            answer.append( 'not implemented' )
+        else:
+            answer.append( 'pyplus_conv::make_addressof_getter(&%s)'
+                           % self.decl_identifier )
         if doc:
             answer.append( self.PARAM_SEPARATOR )
             answer.append( doc )

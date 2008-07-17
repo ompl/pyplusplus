@@ -190,6 +190,7 @@ class class_t( class_common_details_t
         self._redefined_funcs = None
         self._require_self_reference  = False
         self._exposed_class_type = self.EXPOSED_CLASS_TYPE.DECLARED
+        self._expose_this = None
 
     def _get_redefine_operators( self ):
         return self._redefine_operators
@@ -628,3 +629,10 @@ class class_t( class_common_details_t
         self._require_self_reference = require_self_reference
     require_self_reference = property( _get_require_self_reference, _set_require_self_reference
                      , doc="boolean, if True the first argument to the constructor will be reference to self object" )
+
+    def _get_expose_this( self ):
+        return self._expose_this
+    def _set_expose_this( self, new_value ):
+        self._expose_this = new_value
+    expose_this = property( _get_expose_this, _set_expose_this
+                           , doc="boolean, if True an object address( this pointer ) will be exposed to Python as integer.")

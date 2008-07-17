@@ -593,6 +593,10 @@ class creator_t( declarations.decl_visitor_t ):
 
         cls_parent_cc.adopt_creator( cls_cc )
         self.curr_code_creator = cls_cc
+
+        if cls_decl.expose_this:
+            cls_cc.adopt_creator( code_creators.expose_this_t( cls_decl ) )
+
         for decl in exportable_members:
             if decl in exposed:
                 continue

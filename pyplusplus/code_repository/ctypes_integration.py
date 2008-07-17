@@ -37,12 +37,29 @@ addressof( const TType &inst, const TMemVarType TType::* offset){
     return boost::uintmax_t( boost::addressof( inst.*offset ) );
 }
 
+template< typename TType >
+boost::uintmax_t
+addressof_inst( const TType &inst){
+    return boost::uintmax_t( boost::addressof( inst ) );
+}
+
+
 template< typename TType, typename TMemVarType >
 boost::python::object
 make_addressof_getter( const TMemVarType TType::* offset ){
     namespace bpl = boost::python;
     namespace pyppc = pyplusplus::convenience;
     return bpl::make_function( boost::bind( &pyppc::addressof< TType, TMemVarType >, _1, offset )
+                               , bpl::default_call_policies()
+                               , boost::mpl::vector< boost::uintmax_t, const TType& >() );
+}
+
+template< typename TType >
+boost::python::object
+make_addressof_inst_getter(){
+    namespace bpl = boost::python;
+    namespace pyppc = pyplusplus::convenience;
+    return bpl::make_function( boost::bind( &pyppc::addressof_inst< TType >, _1 )
                                , bpl::default_call_policies()
                                , boost::mpl::vector< boost::uintmax_t, const TType& >() );
 }
