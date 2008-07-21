@@ -160,6 +160,8 @@ namespace ctypes{
             }
         }
         int* data;
+
+        static int* none_image;
     };
 }
 

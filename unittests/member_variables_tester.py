@@ -24,6 +24,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.classes().always_expose_using_scope = True
         image = mb.class_( 'image_t' )
         image.var( 'data' ).expose_address = True
+        image.var( 'none_image' ).expose_address = True
 
     def change_default_color( self, module ):
         module.point.default_color = module.point.color.blue
@@ -96,6 +97,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         for j in range(5):
             print '%d : %d' % ( j, data[j] )
 
+        data_type = ctypes.POINTER( ctypes.c_int )
+        data = data_type.from_address( module.image_t.none_image )
+        self.failUnless( 1997 == data.contents.value )
 
 def create_suite():
     suite = unittest.TestSuite()

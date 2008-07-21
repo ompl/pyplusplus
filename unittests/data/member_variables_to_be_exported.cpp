@@ -5,7 +5,7 @@
 
 #include "member_variables_to_be_exported.hpp"
 
-namespace member_variables{ 
+namespace member_variables{
 
 int point::instance_count = 0;
 const point::color point::default_color = point::red;
@@ -28,17 +28,24 @@ std::auto_ptr<tree_node_t> create_tree(){
     std::auto_ptr<tree_node_t> root( new tree_node_t() );
     root->data = new data_t();
     root->data->value = 0;
-    
+
     root->left = new tree_node_t( root.get() );
     root->left->data = new data_t();
     root->left->data->value = 1;
-    
-    return root;    
+
+    return root;
 }
 
 }
 
-namespace statics{ 
+namespace statics{
     std::string mem_var_str_t::class_name( "mem_var_str_t" );
 }
+
+
+namespace ctypes{
+    int xxx = 1997;
+    int* image_t::none_image = &xxx;
+}
+
 }

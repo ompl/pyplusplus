@@ -656,30 +656,30 @@ class member_variable_addressof_t( member_variable_base_t ):
     def __init__(self, variable, wrapper=None ):
         member_variable_base_t.__init__( self, variable=variable, wrapper=wrapper )
 
-    def _create_impl( self ):
-        doc = '' #static property does not support documentation
-        if self.declaration.type_qualifiers.has_static:
-            add_property = 'add_static_property'
-        else:
-            if self.documentation:
-                doc = self.documentation
-            add_property = 'add_property'
-        answer = [ add_property ]
+    def _create_m_var( self ):
+        answer = [ 'add_property' ]
         answer.append( '( ' )
         answer.append('"%s"' % self.alias)
         answer.append( self.PARAM_SEPARATOR )
-
-        if self.declaration.type_qualifiers.has_static:
-            answer.append( 'not implemented' )
-        else:
-            answer.append( 'pyplus_conv::make_addressof_getter(&%s)'
-                           % self.decl_identifier )
-        if doc:
+        answer.append( 'pyplus_conv::make_addressof_getter(&%s)'
+                       % self.decl_identifier )
+        if self.documentation:
             answer.append( self.PARAM_SEPARATOR )
-            answer.append( doc )
+            answer.append( self.documentation )
         answer.append( ' ) ' )
-
         return ''.join( answer )
 
+    def _create_s_var( self ):
+        return 'def( %(def_visitor)s("%(name)s", %(var)s) )' \
+               % {   'def_visitor' : 'pyplus_conv::register_addressof_static_var'
+                   , 'name' : self.alias
+                   , 'var' : self.decl_identifier }
+
+
+    def _create_impl( self ):
+        if self.declaration.type_qualifiers.has_static:
+            return self._create_s_var()
+        else:
+            return self._create_m_var()
     def _get_system_headers_impl( self ):
         return [code_repository.ctypes_integration.file_name]
