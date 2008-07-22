@@ -8,6 +8,10 @@
 
 struct arrays_bug{
 
+struct array_of_arrays{
+    double* f[4];
+};    
+    
 struct item{ int values[10]; };
 
 struct container{ item items[10]; };
