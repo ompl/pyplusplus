@@ -220,6 +220,8 @@ W1054 = compilation_error( 'Py++ can not expose unions.' )
 
 W1055 = warning( "Py++ will generate class wrapper - hand written code should be added to the wrapper class destructor body" )
 
+W1056 = compilation_error( "Py++ can not expose array of pointers of Python immutable types. Take a look on 'ctypes integration' feature." )
+
 warnings = globals()
 
 all_warning_msgs = []

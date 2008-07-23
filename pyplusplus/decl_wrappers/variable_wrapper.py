@@ -8,6 +8,7 @@
 import decl_wrapper
 import python_traits
 import call_policies
+import python_traits
 from pyplusplus import messages
 from pygccxml import declarations
 
@@ -144,6 +145,8 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
     is_read_only = property( get_is_read_only, set_is_read_only )
 
     def _exportable_impl( self ):
+        if self.name == 'f':
+            i = 0
         if not self.name:
             return messages.W1033
         if self.bits == 0 and self.name == "":
@@ -172,4 +175,10 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
         if isinstance( self.parent, declarations.class_t ):
             if self.access_type != declarations.ACCESS_TYPES.PUBLIC:
                 return messages.W1039
+        if declarations.is_array( type_ ):
+            item_type = declarations.array_item_type( type_ )
+            if declarations.is_pointer( item_type ):
+                item_type_no_ptr = declarations.remove_pointer( item_type )
+                if python_traits.is_immutable( item_type_no_ptr ):
+                    return messages.W1056
         return ''
