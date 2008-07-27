@@ -9,14 +9,15 @@
 #include <stdexcept>
 
 inline unsigned long
-sum_matrix( unsigned int** matrix, unsigned int rows, unsigned int columns ){
+sum_matrix( unsigned int* matrix, unsigned int rows, unsigned int columns ){
     if( !matrix ){
         throw std::runtime_error( "matrix is null" );
     }
     unsigned long result = 0;
     for( unsigned int r = 0; r < rows; ++r ){
         for( unsigned int c = 0; c < columns; ++c ){
-            result += matrix[r][c];
+            result += *matrix;
+            ++matrix;
         }
     }
     return result;

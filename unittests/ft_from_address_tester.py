@@ -29,10 +29,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.calldef( 'sum_matrix' ).add_transformation( ft.from_address(0) )
 
     def run_tests(self, module):
-        rows = 1
-        columns = 1
+        rows = 10
+        columns = 7
         matrix_type = ctypes.c_uint * columns * rows
-        print matrix_type
         sum = 0
         counter = 0
         matrix = matrix_type()
@@ -41,10 +40,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                 matrix[r][c] = counter
                 sum += counter
                 counter += 1
-        print 'matrix filled'
         result = module.sum_matrix( ctypes.addressof( matrix ), rows, columns )
-        print 'result: ', result
-        print 'sum   : ', sum
+        self.failUnless( result == sum )
 
 def create_suite():
     suite = unittest.TestSuite()
