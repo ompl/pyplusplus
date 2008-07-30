@@ -33,14 +33,22 @@ namespace pyplusplus{ namespace convenience{
 
 template< typename TType, typename TMemVarType >
 boost::uint32_t
-addressof( const TType &inst, const TMemVarType TType::* offset){
+addressof( const TType* inst_ptr, const TMemVarType TType::* offset){
+    if( !inst_ptr ){
+        throw std::runtime_error( "unable to dereference null pointer" );
+    }
+    const TType& inst = *inst_ptr;
     return boost::uint32_t( boost::addressof( inst.*offset ) );
 }
 
 template< typename TType >
 boost::uint32_t
-addressof_inst( const TType &inst){
-    return boost::uint32_t( boost::addressof( inst ) );
+addressof_inst( const TType* inst_ptr){
+    if( !inst_ptr ){
+        throw std::runtime_error( "unable to dereference null pointer" );
+    }
+
+    return boost::uint32_t( inst_ptr );
 }
 
 template< typename TType, typename TMemVarType >
@@ -50,7 +58,7 @@ make_addressof_getter( const TMemVarType TType::* offset ){
     namespace pyppc = pyplusplus::convenience;
     return bpl::make_function( boost::bind( &pyppc::addressof< TType, TMemVarType >, _1, offset )
                                , bpl::default_call_policies()
-                               , boost::mpl::vector< boost::uint32_t, const TType& >() );
+                               , boost::mpl::vector< boost::uint32_t, const TType* >() );
 }
 
 template< typename TType >
@@ -60,7 +68,7 @@ make_addressof_inst_getter(){
     namespace pyppc = pyplusplus::convenience;
     return bpl::make_function( boost::bind( &pyppc::addressof_inst< TType >, _1 )
                                , bpl::default_call_policies()
-                               , boost::mpl::vector< boost::uint32_t, const TType& >() );
+                               , boost::mpl::vector< boost::uint32_t, const TType* >() );
 }
 
 class register_addressof_static_var : public boost::python::def_visitor<register_addressof_static_var>
@@ -72,7 +80,7 @@ public:
     template< typename TVarType >
     register_addressof_static_var( const char* name, const TVarType& var )
     : m_name( name )
-      , m_address( addressof_inst( var ) )
+      , m_address( addressof_inst( boost::addressof( var ) ) )
     {}
 
     template <class classT>

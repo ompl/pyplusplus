@@ -163,6 +163,17 @@ namespace ctypes{
 
         static int* none_image;
     };
+    
+    class Andy{
+    protected:
+        Andy() : userData(NULL) {}
+   
+        virtual ~Andy()    {}
+
+    public:
+        void * userData;
+    };
+
 }
 
 }
