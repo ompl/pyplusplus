@@ -27,10 +27,10 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 Version SVN
 -----------
 
-1. The algorithm, which calculates what member functions should be redefined in 
+1. The algorithm, which calculates what member functions should be redefined in
    derived class wrappers, was improved. Many thanks to Julian Scheid for the bug
    fix.
-   
+
    The change explanation.
 
    .. code-block:: C++
@@ -41,9 +41,9 @@ Version SVN
 
       class B: public A{
       };
-      
-   Previous version of `Py++`_ didn't generate wrapper for class ``B``, even 
-   though ``B`` inherits ``A``'s virtual function. Now if you have the following 
+
+   Previous version of `Py++`_ didn't generate wrapper for class ``B``, even
+   though ``B`` inherits ``A``'s virtual function. Now if you have the following
    Python code:
 
    .. code-block:: Python
@@ -54,13 +54,13 @@ Version SVN
         def foo(self):
             print "C.foo"
 
-   then when ``foo`` is invoked on this instance on the C++ side of things, the 
+   then when ``foo`` is invoked on this instance on the C++ side of things, the
    Python code won't be executed as the wrapper was missing.
 
    **Warning!** **There is a possibility that your generated code will not work!**
    **Keep reading.**
 
-   If you use "function transformation" functionality, than it is possible the 
+   If you use "function transformation" functionality, than it is possible the
    generated code will **NOT** work. Consider next example:
 
    .. code-block:: C++
@@ -89,31 +89,31 @@ Version SVN
    .. code-block:: C++
 
       namespace bp = boost::python;
-      
+
       struct B_wrapper : B, bp::wrapper< B > {
           virtual void foo( int & i ) const  { ... }
-          
+
           static boost::python::tuple default_foo( ::B const & inst )
           { ... }
-          
-          virtual void foo( int & i ) const  
+
+          virtual void foo( int & i ) const
           { ... }
-          
+
           static boost::python::object default_foo( ::A const & inst )
           { ... }
       };
       ...
-      bp::class_< B_wrapper, bp::bases< A > >( "B" )    
+      bp::class_< B_wrapper, bp::bases< A > >( "B" )
           .def( "foo", (boost::python::tuple (*)( ::B const & ))( &B_wrapper::default_foo ) )
           .def( "foo", (boost::python::object (*)( ::A const & ))( &B_wrapper::default_foo ) );
 
-   As you can see, after applying the transformation both functions have same 
-   signature. Do you know what function will be called in some situation? I do - 
+   As you can see, after applying the transformation both functions have same
+   signature. Do you know what function will be called in some situation? I do -
    the wrong one :-(.
 
-   Unfortunately, there is no easy work around or some trick that you can use, 
+   Unfortunately, there is no easy work around or some trick that you can use,
    which will not break the existing code. I see few solutions to the problem:
-   
+
    * change the alias of the functions
      .. code-block:: Python
 
@@ -129,14 +129,20 @@ Version SVN
    * `Py++`_ can introduce a configuration, that will preserve the previous behaviour.
      I think this is a wrong way to go and doing the API changes is the 'right'
      longer term solution.
-     
+
      If you **absolutely need** to preserve API backward compatible, contact me
      and I will introduce such configuration option.
 
    Sorry for inconvenience.
 
-2. Few bugs, related to Indeing Suite 2, were fixed. Many thanks to Oliver Schweitzer
+2. Few bugs, related to Indexing Suite 2, were fixed. Many thanks to Oliver Schweitzer
    for reporting them.
+
+3. New and highly experimental feature was introduced -
+   `Boost.Python and ctypes integration`_.
+   ../documentation/ctypes_integration.html
+
+.. _`Boost.Python and ctypes integration` : ../documentation/ctypes_integration.html
 
 -------------
 Version 0.9.5
