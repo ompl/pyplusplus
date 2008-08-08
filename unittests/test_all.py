@@ -105,6 +105,8 @@ import split_module_indexing_suite_bug_tester
 import inner_tmpl_class_tester
 import bug_covariant_returns_tester
 import embeded_tester
+import unions_tester
+import cp_return_addressof_tester
 #import ogre_generate_tester
 
 testers = [
@@ -198,6 +200,8 @@ testers = [
     , inner_tmpl_class_tester
     , bug_covariant_returns_tester
     , embeded_tester
+    , unions_tester
+    , cp_return_addressof_tester
 #    , ogre_generate_tester too much time
 ]
 
