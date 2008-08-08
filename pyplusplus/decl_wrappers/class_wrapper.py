@@ -191,6 +191,7 @@ class class_t( class_common_details_t
         self._require_self_reference  = False
         self._exposed_class_type = self.EXPOSED_CLASS_TYPE.DECLARED
         self._expose_this = None
+        self._expose_sizeof = None
 
     def _get_redefine_operators( self ):
         return self._redefine_operators
@@ -635,6 +636,13 @@ class class_t( class_common_details_t
         self._expose_this = new_value
     expose_this = property( _get_expose_this, _set_expose_this
                            , doc="boolean, if True an object address( this pointer ) will be exposed to Python as integer.")
+
+    def _get_expose_sizeof( self ):
+        return self._expose_sizeof
+    def _set_expose_sizeof( self, new_value ):
+        self._expose_sizeof = new_value
+    expose_sizeof = property( _get_expose_sizeof, _set_expose_sizeof
+                              , doc="boolean, if True the sizeof(obj) will be exposed to Python as integer.")
 
     @property
     def introduces_new_scope(self):

@@ -592,6 +592,9 @@ class creator_t( declarations.decl_visitor_t ):
         if cls_decl.expose_this:
             cls_cc.adopt_creator( code_creators.expose_this_t( cls_decl ) )
 
+        if cls_decl.expose_sizeof:
+            cls_cc.adopt_creator( code_creators.expose_sizeof_t( cls_decl ) )
+
         for decl in exportable_members:
             if decl in exposed:
                 continue

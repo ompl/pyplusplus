@@ -19,6 +19,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def customize(self, mb ):
         mb.classes().expose_this = True
+        mb.classes().expose_sizeof = True
         mb.class_( 'fundamental2' ).alias = 'FUNDAMENTAL2'
         apple = mb.class_( 'apple' )
         self.failUnless( apple.alias == 'the_tastest_fruit' )
@@ -53,6 +54,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( -24 == module.protected_static_t().invert_sign(24) )
         self.failUnless( 67 == module.protected_static_t().invert_sign(-67) )
         self.failUnless( module.protected_static_t().this )
+        self.failUnless( module.protected_static_t().sizeof )
 
 def create_suite():
     suite = unittest.TestSuite()

@@ -26,6 +26,7 @@ code = \
 #include "boost/mpl/vector.hpp"
 #include "boost/function.hpp"
 #include "boost/cstdint.hpp"
+#include "boost/type.hpp"
 #include "boost/bind.hpp"
 
 
@@ -93,6 +94,29 @@ private:
     boost::uint32_t m_address;
     const char* m_name;
 };
+
+
+class register_sizeof : public boost::python::def_visitor<register_sizeof>
+{
+    friend class boost::python::def_visitor_access;
+
+public:
+
+    template< typename TType >
+    register_sizeof( boost::type< TType > )
+    : m_sizeof( sizeof( TType ) )
+    {}
+
+    template <class classT>
+    void visit(classT& c) const{
+        boost::python::scope cls_scope( c );
+        cls_scope.attr("sizeof") = m_sizeof;
+    }
+
+private:
+    size_t m_sizeof;
+};
+
 
 } /*pyplusplus*/ } /*convenience*/
 

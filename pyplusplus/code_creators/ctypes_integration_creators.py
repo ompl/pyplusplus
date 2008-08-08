@@ -37,3 +37,19 @@ class  expose_this_t( registration_based.registration_based_t
 
     def _get_system_headers_impl( self ):
         return [code_repository.ctypes_integration.file_name]
+
+class  expose_sizeof_t( registration_based.registration_based_t
+                        , declaration_based.declaration_based_t ):
+    """
+    creates code that expose address of the object to Python
+    """
+
+    def __init__(self, class_ ):
+        registration_based.registration_based_t.__init__( self )
+        declaration_based.declaration_based_t.__init__( self, declaration=class_)
+
+    def _create_impl(self):
+        return 'def( pyplus_conv::register_sizeof( boost::type< %s >() ) )' % self.decl_identifier
+
+    def _get_system_headers_impl( self ):
+        return [code_repository.ctypes_integration.file_name]

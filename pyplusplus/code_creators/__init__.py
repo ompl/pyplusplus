@@ -137,3 +137,4 @@ from opaque_type_registrator import opaque_type_registrator_t
 from properties import property_t
 
 from ctypes_integration_creators import expose_this_t
+from ctypes_integration_creators import expose_sizeof_t
