@@ -6,7 +6,7 @@
 """defines class, which informs user about used, but unexposed declarations"""
 
 import os
-from pyplusplus import utils 
+from pyplusplus import utils
 from pyplusplus import messages
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
@@ -17,19 +17,19 @@ class manager_t( object ):
         object.__init__( self )
         self.__exported_decls = []
         self.__logger = logger
-            
+
     def add_exported( self, decl ):
-        self.__exported_decls.append( decl )  
+        self.__exported_decls.append( decl )
 
     def __select_duplicate_aliases( self, decls ):
         duplicated = {}
         for decl in decls:
             if not duplicated.has_key( decl.alias ):
                 duplicated[ decl.alias ] = set()
-            duplicated[ decl.alias ].add( decl )        
+            duplicated[ decl.alias ].add( decl )
         for alias, buggy_decls in duplicated.items():
             if 1 == len( buggy_decls ):
-                del duplicated[ alias ]        
+                del duplicated[ alias ]
         return duplicated
 
     def __report_duplicate_aliases_impl( self, control_decl, duplicated ):
@@ -39,7 +39,7 @@ class manager_t( object ):
             warning = messages.W1047 % ( control_decl.alias
                                          , os.linesep.join( map( str, buggy_decls ) ) )
             self.__logger.warn( "%s;%s" % ( control_decl, warning ) )
-            
+
         if isinstance( control_decl, declarations.class_t ):
             query = lambda i_decl: isinstance( i_decl, declarations.class_types ) \
                                    and i_decl.ignore == False
@@ -55,7 +55,7 @@ class manager_t( object ):
         duplicated = self.__select_duplicate_aliases( decls )
         for decl in decls:
             self.__report_duplicate_aliases_impl( decl, duplicated )
-    
+
     def __is_std_decl( self, decl ):
         #Every class under std should be exported by Boost.Python and\\or Py++
         #Also this is not the case right now, I prefer to hide the warnings
@@ -80,7 +80,7 @@ class manager_t( object ):
             dependencies = filter( lambda d: d.access_type != declarations.ACCESS_TYPES.PRIVATE
                                    , dependencies )
         return dependencies
-    
+
     def __find_out_used_but_not_exported( self ):
         used_not_exported = []
         exported_ids = set( map( lambda d: id( d ), self.__exported_decls ) )
@@ -97,10 +97,13 @@ class manager_t( object ):
                     if isinstance( depend_on_decl, declarations.class_types ):
                         if depend_on_decl.opaque:
                             continue
+                    if isinstance( decl, declarations.variable_t ):
+                        if not decl.expose_value:
+                            continue
                 if id( depend_on_decl ) not in exported_ids:
                     report = messages.filter_disabled_msgs([messages.W1040], depend_on_decl.disabled_messaged )
                     if report:
-                        used_not_exported.append( dependency )                    
+                        used_not_exported.append( dependency )
         return used_not_exported
 
     def __group_by_unexposed( self, dependencies ):
@@ -118,7 +121,7 @@ class manager_t( object ):
         for dependency in dependencies:
             decls.append( os.linesep + ' ' + str( dependency.declaration ) )
         return "%s;%s" % ( depend_on_decl, messages.W1040 % ''.join( decls ) )
-        
+
     def inform_user( self ):
         used_not_exported_decls = self.__find_out_used_but_not_exported()
         groups = self.__group_by_unexposed( used_not_exported_decls )

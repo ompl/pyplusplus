@@ -99,11 +99,11 @@ W1015 = compilation_error( "Py++ doesn't export private operators." )
 
 W1016 = warning(
             'Py++ does not exports non-const casting operators with user defined type as return value. '
-            'This could be change in future.' )
+            'This could be changed in future.' )
 
 W1017 = compilation_error( "Py++ doesn't export non-public casting operators." )
 
-W1018 = compilation_error( 'Py++ can not expose unnamed classes.' )
+W1018 = compilation_error( 'Py++ can not expose anonymous class "%s", declared in a namespace.' )
 
 W1019 = compilation_error( 'Py++ can not expose private class.' )
 
@@ -139,7 +139,7 @@ W1032 = execution_error(
             "http://boost.org/libs/python/todo.html#support-for-enums-with-duplicate-values . "
             "The quick work around is to add new class variable to the exported enum, from Python. " )
 
-W1033 = compilation_error( "Py++ can not expose unnamed variables" )
+W1033 = compilation_error( "Py++ can not expose anonymous variables" )
 
 W1034 = compilation_error( "Py++ can not expose alignment bit." )
 
@@ -151,7 +151,7 @@ W1037 = compilation_error(
             "Boost.Python library can not expose variables, which are pointer to function."
             " See http://www.boost.org/libs/python/doc/v2/faq.html#funcptr for more information." )
 
-W1038 = compilation_error( "Py++ can not expose variables of with unnamed type." )
+W1038 = compilation_error( "Py++ can not expose variables of with anonymous type." )
 
 W1039 = compilation_error( "Py++ doesn't expose private or protected member variables." )
 
@@ -221,6 +221,21 @@ W1054 = compilation_error( 'Py++ can not expose unions.' )
 W1055 = warning( "Py++ will generate class wrapper - hand written code should be added to the wrapper class destructor body" )
 
 W1056 = compilation_error( "Py++ can not expose array of pointers of Python immutable types. Take a look on 'ctypes integration' feature." )
+
+W1057 = compilation_error( 'Py++ can not expose "%s" - it does not belong to named class.' )
+
+W1058 = compilation_error( 'Py++ can not expose "%s" it belongs to anonymous class'
+                           ' and requires additional code to expose.'
+                           ' This could be changed in future.')
+
+W1059 = compilation_error( 'Py++ can not expose "%s" - it requires additional code to expose.'
+                           ' This could be changed in future.')
+
+W1060 = compilation_error( 'Py++ can not expose "%s" - it has name, Py++ only exposes anonymous unions.'
+                           ' This could be changed in future.')
+
+W1061 = compilation_error( 'Py++ can not expose "%s" - its type is "%s".'
+                           ' This could be changed in future.')
 
 warnings = globals()
 

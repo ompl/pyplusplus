@@ -6,7 +6,7 @@
 import os
 import sys
 import time
-
+import types
 import warnings
 
 from pygccxml import parser
@@ -97,7 +97,7 @@ class module_builder_t(object):
 
         self.__registrations_code_head = []
         self.__registrations_code_tail = []
-        
+
     @property
     def global_ns( self ):
         """reference to global namespace"""
@@ -108,19 +108,19 @@ class module_builder_t(object):
         return self.__encoding
 
     def register_module_dependency( self, other_module_generated_code_dir ):
-        """``already_exposed`` solution is pretty good when you mix hand-written 
-        modules with Py++ generated. It doesn't work/scale for "true" 
-        multi-module development. This is exactly the reason why ``Py++``_ 
+        """``already_exposed`` solution is pretty good when you mix hand-written
+        modules with Py++ generated. It doesn't work/scale for "true"
+        multi-module development. This is exactly the reason why ``Py++``_
         offers "semi automatic" solution.
 
-        For every exposed module, ``Py++``_ generates "exposed_decl.pypp.txt" file. 
-        This file contains the list of all parsed declarations and whether they 
-        were included or excluded. Later, when you work on another module, you 
-        can tell ``Py++``_ that the current module depends on the previously 
-        generated one. ``Py++``_ will load "exposed_decl.pypp.txt" file and 
+        For every exposed module, ``Py++``_ generates "exposed_decl.pypp.txt" file.
+        This file contains the list of all parsed declarations and whether they
+        were included or excluded. Later, when you work on another module, you
+        can tell ``Py++``_ that the current module depends on the previously
+        generated one. ``Py++``_ will load "exposed_decl.pypp.txt" file and
         update the declarations.
         """
-        
+
         db = utils.exposed_decls_db_t()
         db.load( other_module_generated_code_dir )
         db.update_decls( self.global_ns )
@@ -305,6 +305,23 @@ class module_builder_t(object):
         else:
             self.__registrations_code_head.append( code )
 
+    def add_constants( self, **keywds ):
+        """adds code that exposes some constants to Python.
+
+        For example:
+            mb.add_constants( version='"1.2.3"' )
+        or
+            mb.add_constants( **{ version:'"1.2.3"' } )
+        will generate next code:
+            boost::python::scope().attr("version") = "1.2.3";
+        """
+        tmpl = 'boost::python::scope().attr("%(name)s") = %(value)s;'
+        for name, value in keywds.items():
+            if not isinstance( value, types.StringTypes ):
+                value = str( value )
+            self.add_registration_code( tmpl % dict( name=name, value=value) )
+
+
     def __merge_user_code( self ):
         for code in self.__declarations_code_tail:
             self.code_creator.add_declaration_code( code, -1 )
@@ -365,24 +382,24 @@ class module_builder_t(object):
                                    This could speed-up code generation process by 10-15%.
         """
         self.__merge_user_code()
-        
-        files_sum_repository = None        
+
+        files_sum_repository = None
         if use_files_sum_repository:
             cache_file = os.path.join( dir_name, self.code_creator.body.name + '.md5.sum' )
             files_sum_repository = file_writers.cached_repository_t( cache_file )
-        
+
         written_files = []
         if None is huge_classes:
-            written_files = file_writers.write_multiple_files( 
+            written_files = file_writers.write_multiple_files(
                                 self.code_creator
                                 , dir_name
                                 , files_sum_repository=files_sum_repository
                                 , encoding=self.encoding)
         else:
-            written_files = file_writers.write_class_multiple_files( 
+            written_files = file_writers.write_class_multiple_files(
                                 self.code_creator
                                 , dir_name
-                                , huge_classes 
+                                , huge_classes
                                 , files_sum_repository=files_sum_repository
                                 , encoding=self.encoding)
         self.__work_on_unused_files( dir_name, written_files, on_unused_file_found )
@@ -411,18 +428,18 @@ class module_builder_t(object):
                                    This could speed-up code generation process by 10-15%.
         """
         self.__merge_user_code()
-        
-        files_sum_repository = None        
+
+        files_sum_repository = None
         if use_files_sum_repository:
             cache_file = os.path.join( dir_name, self.code_creator.body.name + '.md5.sum' )
             files_sum_repository = file_writers.cached_repository_t( cache_file )
-        
+
         written_files = file_writers.write_balanced_files( self.code_creator
                                                            , dir_name
                                                            , number_of_buckets=number_of_files
                                                            , files_sum_repository=files_sum_repository
                                                            , encoding=self.encoding)
-                                                           
+
         self.__work_on_unused_files( dir_name, written_files, on_unused_file_found )
 
         return written_files
@@ -470,7 +487,7 @@ class module_builder_t(object):
                                         , header_file=header_file
                                         , recursive=recursive)
     var = variable
-    
+
     def variables( self, name=None, function=None, type=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.scopedef_t} class documentation"""
         return self.global_ns.variables( name=name
@@ -480,7 +497,7 @@ class module_builder_t(object):
                                          , header_file=header_file
                                          , recursive=recursive)
     vars = variables
-    
+
     def calldef( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.scopedef_t} class documentation"""
         return self.global_ns.calldef( name=name
@@ -651,7 +668,7 @@ class module_builder_t(object):
                                              , header_file=header_file
                                              , recursive=recursive )
     free_fun = free_function
-    
+
     def free_functions( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.namespace_t} class documentation"""
         return self.global_ns.free_functions( name=name
@@ -662,7 +679,7 @@ class module_builder_t(object):
                                               , header_file=header_file
                                               , recursive=recursive)
     free_funs = free_functions
-    
+
     def free_operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """Please see L{decl_wrappers.namespace_t} class documentation"""
         return self.global_ns.free_operator( name=name

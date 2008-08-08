@@ -370,10 +370,16 @@ class class_t( class_common_details_t
 
     def _exportable_impl( self ):
         if not self.name:
-            return messages.W1018
-            #it is possible to do so, but not for unnamed classes defined under namespace.
+            named_parent = declarations.get_named_parent( self )
+            if not named_parent:
+                return messages.W1057 % str( self )
+            if isinstance( named_parent, declarations.namespace_t ):
+                return messages.W1018 % str( self )
         if self.class_type == declarations.CLASS_TYPES.UNION:
-            return messages.W1054
+            if self.is_wrapper_needed():
+                return messages.W1059 % str( self )
+            if self.name:
+                return messages.W1060 % str( self )
         if isinstance( self.parent, declarations.namespace_t ):
             return ''
         if not self in self.parent.public_members:
@@ -587,14 +593,7 @@ class class_t( class_common_details_t
             if isinstance( member, declarations.destructor_t ):
                 continue
             if isinstance( member, declarations.variable_t ):
-                if member.bits:
-                    explanation.append( messages.W1024 % member.name )
-                if declarations.is_pointer( member.type ):
-                    explanation.append( messages.W1025 % member.name )
-                if declarations.is_reference( member.type ):
-                    explanation.append( messages.W1026 % member.name )
-                if declarations.is_array( member.type ):
-                    explanation.append( messages.W1027 % member.name)
+                explanation.extend( member.is_wrapper_needed() )
             if isinstance( member, declarations.class_t ) and member.is_wrapper_needed():
                 explanation.append( messages.W1028 % member.name)
             if isinstance( member, declarations.calldef_t ):
@@ -636,3 +635,16 @@ class class_t( class_common_details_t
         self._expose_this = new_value
     expose_this = property( _get_expose_this, _set_expose_this
                            , doc="boolean, if True an object address( this pointer ) will be exposed to Python as integer.")
+
+    @property
+    def introduces_new_scope(self):
+        """returns True, if during exposing this class, new scope will be created
+
+        For example, anonymous structs will be exposed in a parent scope.
+        """
+        if not self.name:
+            return False
+        elif self.class_type == declarations.CLASS_TYPES.UNION:
+            return False
+        else:
+            return True

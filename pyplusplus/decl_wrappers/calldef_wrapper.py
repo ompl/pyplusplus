@@ -54,7 +54,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
     def _get_create_with_signature(self):
         if None is self._create_with_signature:
             self._create_with_signature = bool( self.overloads )
-            
+
             if not self._create_with_signature and declarations.templates.is_instantiation( self.name ):
                 self._create_with_signature = True
 
@@ -73,7 +73,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
                     self._create_with_signature \
                         = bool( self.parent.calldefs( self.name, recursive=False, allow_empty=True ) )
         return self._create_with_signature
-               
+
     def _set_create_with_signature(self, create_with_signature):
         self._create_with_signature = create_with_signature
     create_with_signature = property( _get_create_with_signature, _set_create_with_signature
@@ -159,6 +159,8 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         return ''
 
     def _exportable_impl( self ):
+        if not self.parent.name:
+            return messages.W1057 % str( self )
         all_types = [ arg.type for arg in self.arguments ]
         all_types.append( self.return_type )
         for some_type in all_types:
@@ -398,7 +400,7 @@ class operators_helper:
             included = filter( lambda decl: decl.ignore == False, oper.class_types )
             if not included:
                 return messages.W1052 % str(oper)
-                    
+
         return ''
 
 class member_operator_t( declarations.member_operator_t, calldef_t ):

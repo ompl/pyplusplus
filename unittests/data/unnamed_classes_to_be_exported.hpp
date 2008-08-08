@@ -6,19 +6,19 @@
 #ifndef __unnamed_enums_to_be_exported_hpp__
 #define __unnamed_enums_to_be_exported_hpp__
 
-namespace unnamed_enums{ 
+namespace unnamed_enums{
 
-class color{
+struct color{
     union{
         struct {
             float r,g,b,a;
         };
         float val[4];
-    };    
+    };
 };
 
 struct{
-    int x;    
+    int x;
 } unnamed_struct_with_mem_var_x;
 
 }

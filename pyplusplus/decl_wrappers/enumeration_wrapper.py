@@ -75,3 +75,8 @@ class enumeration_t(decl_wrapper.decl_wrapper_t, declarations.enumeration_t):
             if len( set( name2value.keys() ) ) != len( set( name2value.values() ) ):
                 msgs.append( messages.W1032 )
         return msgs
+
+    def _exportable_impl( self ):
+        if not self.parent.name:
+            return messages.W1057 % str( self )
+        return ''

@@ -8,5 +8,4 @@ names = { 'containers' : 'STL containers'
           , 'best_practices' : 'best practices'
           , 'multi_module_development' :  'multi-module development'
           , 'split_module' : 'splitting generated code to files'
-          , 'ctypes_integration' : 'ctypes integration'
 }

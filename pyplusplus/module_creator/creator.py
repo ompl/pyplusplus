@@ -19,16 +19,6 @@ from pyplusplus import _logging_
 ACCESS_TYPES = declarations.ACCESS_TYPES
 VIRTUALITY_TYPES = declarations.VIRTUALITY_TYPES
 
-#TODO: add print decl_wrapper.readme messages
-#class Foo{
-#      union {
-#           struct {
-#                   float r,g,b,a;
-#           };
-#           float val[4];
-#       };
-# };
-
 class creator_t( declarations.decl_visitor_t ):
     """Creating code creators.
 
@@ -561,7 +551,11 @@ class creator_t( declarations.decl_visitor_t ):
         exportable_members = self.curr_decl.get_exportable_members(sort_algorithms.sort)
 
         wrapper = None
-        cls_cc = code_creators.class_t( class_inst=self.curr_decl )
+        cls_cc = None
+        if cls_decl.introduces_new_scope:
+            cls_cc = code_creators.class_t( class_inst=self.curr_decl )
+        else:
+            cls_cc = self.curr_code_creator
 
         if self.curr_decl.is_wrapper_needed():
             wrapper = code_creators.class_wrapper_t( declaration=self.curr_decl
@@ -591,7 +585,8 @@ class creator_t( declarations.decl_visitor_t ):
 
         exposed = self.expose_overloaded_mem_fun_using_macro( cls_decl, cls_cc )
 
-        cls_parent_cc.adopt_creator( cls_cc )
+        if cls_decl.introduces_new_scope:
+            cls_parent_cc.adopt_creator( cls_cc )
         self.curr_code_creator = cls_cc
 
         if cls_decl.expose_this:
@@ -670,6 +665,9 @@ class creator_t( declarations.decl_visitor_t ):
             else:
                 creator_type = code_creators.member_variable_addressof_t
             self.curr_code_creator.adopt_creator( creator_type(self.curr_decl) )
+            return
+
+        if not self.curr_decl.expose_value:
             return
 
         if declarations.is_array( self.curr_decl.type ):
