@@ -5,6 +5,7 @@
 
 import os
 import sys
+import pdb
 import ctypes
 import unittest
 import fundamental_tester_base
@@ -21,6 +22,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             self
             , tester_t.EXTENSION_NAME
             , *args )
+
+    def customize(self, mb):
+        mb.add_declaration_code('extern "C"{ int mmm( int i, int j ){ return i + j; } }' )
 
     def run_tests(self, module):
         obj = module.data_t()
@@ -40,6 +44,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         obj2.set_i( 1977 )
         self.failUnless( obj2.i == 1977 )
 
+        mdll = ctypes.cdll.LoadLibrary( module.__file__ )
+        self.failUnless( 4 == mdll.mmm( 1, 3 ) )
 
 def create_suite():
     suite = unittest.TestSuite()
