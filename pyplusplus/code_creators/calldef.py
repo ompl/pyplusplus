@@ -51,10 +51,12 @@ class calldef_t( registration_based.registration_based_t
         arg_utils = calldef_utils.argument_utils_t( self.declaration, algorithm.make_id_creator( self ) )
         return arg_utils.keywords_args()
 
-    def create_call_policies( self ):
-        if self.declaration.call_policies.is_default():
+    def create_call_policies( self, default_generates_code_too=False ):
+        if False == default_generates_code_too \
+           and self.declaration.call_policies.is_default():
             return ''
-        return self.declaration.call_policies.create( self )
+        else:
+            return self.declaration.call_policies.create( self )
 
     def create_def_code( self ):
         if not self.works_on_instance:
@@ -220,6 +222,81 @@ class mem_fun_t( calldef_t ):
             return '(%s)( &%s )' % ( self.declaration.function_type().partial_decl_string, fname )
         else:
             return '&%s' % fname
+
+class make_constructor_t( calldef_t ):
+    def __init__( self, function ):
+        calldef_t.__init__( self, function=function )
+
+    def make_cnstr_identifier( self ):
+        return algorithm.create_identifier( self, '::boost::python::make_constructor' )
+
+    def create_function_type_alias_code( self, exported_class_alias=None  ):
+        ftype = self.declaration.function_type()
+        return 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias, with_defaults=False )
+
+    def create_function_ref_code(self, use_function_alias=False):
+        fname = declarations.full_name( self.declaration, with_defaults=False )
+        if use_function_alias:
+            return '%s( &%s )' % ( self.function_type_alias, fname )
+        elif self.declaration.create_with_signature:
+            return '(%s)( &%s )' % ( self.declaration.function_type().partial_decl_string, fname )
+        else:
+            return '&%s' % fname
+
+    def _create_impl( self ):
+        if self.declaration.already_exposed:
+            return ''
+
+        result = []
+
+        if not self.works_on_instance:
+            result.append( self.create_function_type_alias_code() )
+            result.append( os.linesep * 2 )
+
+        result.append( self.create_def_code() + '( ' )
+        result.append( os.linesep + self.indent( '"__init__"' ) )
+
+        result.append( self.param_sep() )
+        result.append( self.make_cnstr_identifier()  + '( ')
+        result.append( self.create_function_ref_code( not self.works_on_instance ) )
+
+        keywd_args = None
+        if self.declaration.use_keywords:
+            keywd_args = self.create_keywords_args()
+
+        if self.declaration.call_policies:
+            default_generates_code_too = bool( keywd_args )
+            c_p_code = self.create_call_policies( default_generates_code_too )
+            if c_p_code:
+                result.append( self.indent( self.param_sep(), 3 ) )
+                result.append( c_p_code )
+
+        if keywd_args:
+            result.append( self.indent( self.param_sep(), 3 ) )
+            result.append( keywd_args )
+            
+        result.append( ' )' ) #make_constructor
+        
+        doc = self.create_doc()
+        if doc:            
+            result.append( self.param_sep() )
+            result.append( doc )
+
+        result.append( ' )' )
+        if not self.works_on_instance:
+            result.append( ';' )
+
+        if not self.works_on_instance:
+            #indenting and adding scope
+            code = ''.join( result )
+            result = [ '{ //%s' % declarations.full_name( self.declaration, with_defaults=False ) ]
+            result.append( os.linesep * 2 )
+            result.append( self.indent( code ) )
+            result.append( os.linesep * 2 )
+            result.append( '}' )
+
+        return ''.join( result )
+
 
 class mem_fun_pv_t( calldef_t ):
     def __init__( self, function, wrapper ):

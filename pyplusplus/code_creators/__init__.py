@@ -44,6 +44,7 @@ from enum import enum_t
 
 from calldef import free_function_t
 from calldef import mem_fun_t
+from calldef import make_constructor_t
 
 from calldef import mem_fun_pv_t
 from calldef import mem_fun_pv_wrapper_t

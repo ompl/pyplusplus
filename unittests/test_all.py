@@ -107,6 +107,7 @@ import bug_covariant_returns_tester
 import embeded_tester
 import unions_tester
 import cp_return_addressof_tester
+import make_constructor_tester
 #import ogre_generate_tester
 
 testers = [
@@ -202,6 +203,7 @@ testers = [
     , embeded_tester
     , unions_tester
     , cp_return_addressof_tester
+    , make_constructor_tester
 #    , ogre_generate_tester too much time
 ]
 

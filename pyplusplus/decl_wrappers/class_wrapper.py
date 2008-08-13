@@ -192,6 +192,23 @@ class class_t( class_common_details_t
         self._exposed_class_type = self.EXPOSED_CLASS_TYPE.DECLARED
         self._expose_this = None
         self._expose_sizeof = None
+        self._fake_constructors = []
+        
+    @property
+    def fake_constructors(self):
+        """list of fake constructors"""
+        return self._fake_constructors
+    
+    def add_fake_constructors( self, f ):
+        """f - reference to a calldef_t object or list of them
+        
+        boost::python::make_constructor allows to register a C++ function, as a
+        class constructor. 
+        """
+        if isinstance( f, declarations.calldef_t ):
+            self._fake_constructors.add( f )
+        else:
+            self._fake_constructors.extend( f )
 
     def _get_redefine_operators( self ):
         return self._redefine_operators

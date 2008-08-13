@@ -78,8 +78,9 @@ class creator_t( declarations.decl_visitor_t ):
         self.__types_db = types_db
         if not self.__types_db:
             self.__types_db = types_database.types_database_t()
-
-        self.__extmodule = code_creators.module_t( declarations.get_global_namespace(decls) )
+        
+        global_ns = declarations.get_global_namespace(decls)
+        self.__extmodule = code_creators.module_t( global_ns )
         if boost_python_ns_name:
             bp_ns_alias = code_creators.namespace_alias_t( alias=boost_python_ns_name
                                                            , full_namespace_name='::boost::python' )
@@ -100,7 +101,9 @@ class creator_t( declarations.decl_visitor_t ):
         self.__array_1_registered = set() #(type.decl_string,size)
         self.__free_operators = []
         self.__exposed_free_fun_overloads = set()
-
+        self.__fake_constructors = set()
+        for cls in global_ns.classes(recursive=True, allow_empty=True):
+            self.__fake_constructors.update( cls.fake_constructors )
 
     def __print_readme( self, decl ):
         readme = decl.readme()
@@ -347,9 +350,13 @@ class creator_t( declarations.decl_visitor_t ):
         return self.__extmodule
 
     def visit_member_function( self ):
-        fwrapper = None
         self.__types_db.update( self.curr_decl )
         self.__dependencies_manager.add_exported( self.curr_decl )
+
+        if self.curr_decl in self.__fake_constructors:
+            return
+        
+        fwrapper = None
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
 
@@ -453,6 +460,12 @@ class creator_t( declarations.decl_visitor_t ):
     def visit_free_function( self ):
         if self.curr_decl in self.__exposed_free_fun_overloads:
             return
+        
+        if self.curr_decl in self.__fake_constructors:
+            self.__types_db.update( self.curr_decl )
+            self.__dependencies_manager.add_exported( self.curr_decl )
+            return
+        
         elif self.curr_decl.use_overload_macro:
             parent_decl = self.curr_decl.parent
             names = set( map( lambda decl: decl.name
@@ -595,6 +608,9 @@ class creator_t( declarations.decl_visitor_t ):
         if cls_decl.expose_sizeof:
             cls_cc.adopt_creator( code_creators.expose_sizeof_t( cls_decl ) )
 
+        for fc in cls_decl.fake_constructors:
+            cls_cc.adopt_creator( code_creators.make_constructor_t( fc ) )
+            
         for decl in exportable_members:
             if decl in exposed:
                 continue
