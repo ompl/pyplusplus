@@ -47,7 +47,7 @@ example:
   .. code-block:: Python
 
     import ctypes
-    import <your module> import data_t
+    from <your module> import data_t
 
     #lets define our union
     class actual_data_t( ctypes.Union ):
