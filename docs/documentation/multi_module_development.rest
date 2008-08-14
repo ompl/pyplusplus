@@ -70,7 +70,7 @@ to `Py++`_ that the declaration is already exposed in another module:
   mb_core.build_code_creator( 'png' )
   mb.write_module( 'png.cpp' )
 
-`Py++`_ will generate code very similar to the next one:
+`Py++`_ will generate code very similar to the the following one:
 
 .. code-block:: C++
 

@@ -18,7 +18,7 @@ Why?
 
 I am sure you want to ask why and where `Py++`_ uses name mangling? `Py++`_ uses
 name mangling to create function-wrappers for overloaded and\\or free functions.
-Consider next use case:
+Consider the following use case:
 
   .. code-block:: C++
 

@@ -34,7 +34,7 @@ Example
 
 Lets say that you need to expose "do_smth" function. According to the FAQ, you
 have to create small wrapper, which will take ``std::auto_ptr`` as an argument.
-Next `Py++`_ code does it for you:
+The following `Py++`_ code does it for you:
 
   .. code-block:: Python
 

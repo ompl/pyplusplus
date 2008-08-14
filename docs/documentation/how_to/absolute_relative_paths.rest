@@ -4,8 +4,7 @@ Absolute\\relative paths
 
 **Absolute\\relative paths**
 
-Consider next fileers, the average number of characters per line is
-less than 2.  Please cs layout:
+Consider the following layout:
 ::
 
   boost/

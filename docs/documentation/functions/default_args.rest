@@ -9,7 +9,7 @@ Introduction
 ------------
 
 There is more than one way to export function with default arguments. Before we
-proceed, please take a look on next class:
+proceed, please take a look on the following class:
 
 .. code-block:: C++
 

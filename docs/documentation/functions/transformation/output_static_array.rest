@@ -32,8 +32,8 @@ Example
        int x,y,z;
    };
 
-In order to expose ``get_values`` member function we need to create small wrapper:
-Next `Py++`_ code does it for you:
+In order to expose ``get_values`` member function we need to create small wrapper.
+The following `Py++`_ code does it for you:
 
   .. code-block:: Python
 

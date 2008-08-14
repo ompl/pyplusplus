@@ -65,7 +65,7 @@ producing the correct code:
    mb = module_builder.module_builder_t( ... )
    get_size = mb.mem_fun( 'image_t::get_size' )
    get_size.add_transformation( FT.output(0), FT.output(1) )
-   #Next line has same effect
+   #the following line has same effect
    get_size.add_transformation( FT.output('width'), FT.output('height') )
 
 `Py++`_ will generate a code, very similar to one found in 

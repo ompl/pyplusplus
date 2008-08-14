@@ -11,7 +11,7 @@ Introduction
 Things get a little bit complex, when you have to export overloaded functions.
 In general the solution is to explicitly say to compiler what function you
 want to export, by specifying its type. Before we proceed, please take a look
-on next class:
+on the following class:
 
 .. code-block:: C++
 
@@ -76,11 +76,11 @@ and have a weakness.
 Overloaded template function
 ----------------------------
 
-I am sure you already know next fact, but still I want to remind it:
+I am sure you already know the following fact, but still I want to remind it:
 
 * `GCC-XML`_ doesn't report about un-instantiated templates
 
-It is very important to understand it. Lets take a look on next source code:
+It is very important to understand it. Lets take a look on the following source code:
 
 .. code-block:: C++
 

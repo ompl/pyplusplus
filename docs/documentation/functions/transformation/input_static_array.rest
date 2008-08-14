@@ -34,7 +34,7 @@ Example
    };
 
 In order to expose ``init`` member function we need to create small wrapper:
-Next `Py++`_ code does it for you:
+The following `Py++`_ code does it for you:
 
   .. code-block:: Python
 

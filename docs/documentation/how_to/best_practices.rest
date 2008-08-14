@@ -58,7 +58,7 @@ Tips
   come to conclusion, that in order to improve compilation speed, user should
   be able to control( to be able to generate ) precompiled header file. He
   implemented an initial version of the functionality. After small discussion,
-  we agreed on next interface:
+  we agreed on the following interface:
 
   .. code-block:: Python
 
@@ -86,7 +86,7 @@ Tips
 
   * **Caveats**
    
-    Consider next file layout:
+    Consider the following file layout:
     ::
 
       boost/
@@ -101,7 +101,7 @@ Tips
     
     .. code-block:: Python
     
-      #Next code will expose nothing
+      #the following code will expose nothing
       mb = module_builder( [ 'date_time/date_time.hpp' ], ... ) 
 
       #while this one will work as expected

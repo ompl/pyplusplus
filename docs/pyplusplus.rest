@@ -23,7 +23,7 @@ Code generation process
 
 `Boost.Python`_ library allows you to expose C++ code to `Python`_ in quick and
 elegant way. Code generation process, using Py++ consists from few steps.
-Next paragraphs will tell you more about every step.
+The following paragraphs will tell you more about every step.
 
 
 *"read declarations"*

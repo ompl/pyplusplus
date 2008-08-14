@@ -198,9 +198,9 @@ things:
 
           void
           do_smth(expensive_to_copy* x, const expensive_to_copy& y){
-              //Pyste generates next code
+              //Pyste generates the following code
               //call_method< void >(self, "do_smth", x, y);
-              //Py++ generates next code
+              //Py++ generates the following code
               *this->get_override("do_smth")( boost::python::ptr(x), boost::ref(y) );
               //------------------------------^^^^^^^^^^^^^^^^^^-----^^^^^^^^^^
           }
@@ -290,7 +290,7 @@ depends on `pygccxml`_ project.
 Features list
 -------------
 `Py++`_ supports almost all features `Pyste`_ implements. `Py++`_,
-version 0.8.0, does not implements next functionality, implemented by `Pyste`_:
+version 0.8.0, does not implements the following functionality, implemented by `Pyste`_:
 
     * *pow* operator
 
@@ -324,7 +324,7 @@ Nice features list
 ------------------
 
 Both `Pyste`_ and `Py++`_ generate working code. As we already saw in some
-cases `Py++`_ do better job. `Py++`_ allows next customization on
+cases `Py++`_ do better job. `Py++`_ allows the following customization on
 generated code:
 
     * To define std and user directories. *include_t* code creator will take
@@ -409,7 +409,7 @@ P.S.
 
 This comparison was a little unfair. First of all `Pyste`_ is no more under
 active development\\support. Second, `Pyste`_ has been written 2 years ago and
-had different goal. Next definitions will help you to understand the main
+had different goal. The following definitions will help you to understand the main
 difference between `Pyste`_ and `Py++`_.
 
  `Pyste`_

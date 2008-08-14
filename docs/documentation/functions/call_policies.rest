@@ -432,7 +432,7 @@ interface.
 
 `Boost.Python`_ call policies are stateless classes, which do not care any
 information about the invoked function or object. In out case we have to pass
-next information:
+dependency_libraries information:
 
 * the size of array
 
@@ -451,7 +451,7 @@ array.
 
 * default constructor
 
-* call operator with next signature:
+* call operator with the following signature:
 
   .. code-block:: C++
 
@@ -462,7 +462,7 @@ array.
   Pay attention: this operator will be invoked **after** the function. This
   call policy is **not thread-safe**!
 
-For our case, next class could be defined:
+For our case, the following class could be defined:
 
 .. code-block:: C++
 
@@ -490,7 +490,7 @@ to treat functions, where the user asked to get access to the part of the array.
       ...
   };
 
-Next "get size" class treats this situation:
+The following "get size" class treats this situation:
 
 .. code-block:: C++
 

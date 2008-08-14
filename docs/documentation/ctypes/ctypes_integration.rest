@@ -77,7 +77,7 @@ Future directions
 -----------------
 
 The functionality is going to be developed father and I intend to add
-next features:
+the following features:
 
 * to port this functionality to 64bit systems
 

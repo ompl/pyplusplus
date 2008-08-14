@@ -8,7 +8,7 @@ How to deal with templates?
 Introduction
 ------------
 
-I would like to introduce next piece of code I will use for most exlanations.
+I would like to introduce the following piece of code. I am going to use it for most exlanations.
 
 .. code-block:: C++
 

@@ -36,7 +36,7 @@ C arrays
 Boost.Python doesn't handle ``C arrays``, the only exception are ``char*`` and
 ``wchar_t*``.
 
-Consider next function:
+Consider the following function:
 
 .. code-block:: C++
 

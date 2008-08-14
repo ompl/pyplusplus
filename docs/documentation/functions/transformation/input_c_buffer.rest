@@ -26,8 +26,8 @@ Example
       void write( char* buffer, int size ) const;	
   };
 
-In order to expose ``write`` member function we need to create small wrapper:
-Next `Py++`_ code does it for you:
+In order to expose ``write`` member function we need to create small wrapper.
+The following `Py++`_ code does it for you:
 
   .. code-block:: Python
 

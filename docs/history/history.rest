@@ -61,7 +61,7 @@ Version SVN
    **Keep reading.**
 
    If you use "function transformation" functionality, than it is possible the
-   generated code will **NOT** work. Consider next example:
+   generated code will **NOT** work. Consider the following example:
 
    .. code-block:: C++
 
@@ -466,7 +466,7 @@ Py++, especially Matthias:
 
    Sorry for the inconvenience :-(.
 
-3. Better split of extension module to files. From now next declarations will
+3. Better split of extension module to files. From now the following declarations will
    have dedicated file:
 
    * named enumerations, defined within namespace

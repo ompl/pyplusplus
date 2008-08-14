@@ -159,7 +159,7 @@ and want to change it, right?
    The `Py++`_ package defines all loggers in the ``pyplusplus._logging_`` package.
 
    Both packages define a ``loggers`` class. Those classes keep references to
-   different loggers. The ``loggers`` classes look very similar to the next class:
+   different loggers. The ``loggers`` classes look very similar to the following class:
 
    .. code-block:: Python
 

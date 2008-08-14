@@ -61,7 +61,7 @@ If it doesn't than:
 Call policies
 -------------
 
-Consider next use case:
+Consider the following use case:
 
 .. code-block:: C++
 
@@ -144,7 +144,7 @@ This part of the algorithm is responsible to recognize the pair of "get" and "se
 accessors, which constructs the property. `Py++`_ does it by analyzing name and
 type of the accessors.
 
-`Py++`_ understands next coding conventions:
+`Py++`_ understands the following coding conventions:
 
 * lowercase_with_underscores
 * UpperCamel

@@ -64,7 +64,7 @@ source code:
 Registration order pitfalls
 ---------------------------
 
-Do you want to guess what is the output of the next program:
+Do you want to guess what is the output of the following program:
 
 .. code-block:: Python
 

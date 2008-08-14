@@ -32,7 +32,7 @@ Installation
 ------------
 
 In command prompt or shell change current directory to be "pyplusplus-X.Y.Z".
-"X.Y.Z" is version of `Py++`_. Type next command:
+"X.Y.Z" is version of `Py++`_. Type the following command:
 
 | ``python setup.py install``
 

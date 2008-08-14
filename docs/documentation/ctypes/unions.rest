@@ -20,7 +20,7 @@ instead it will expose the address of the variable and the rest is done from the
 Example
 --------
 
-For this example I am going to use next code:
+For this example I am going to use the following code:
 
   .. code-block:: C++
 

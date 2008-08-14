@@ -16,7 +16,7 @@ almost any place.
 Insert code to module
 ---------------------
 
-Almost every ``Boost.Python`` module has next structure:
+Almost every ``Boost.Python`` module has the following structure:
 
 .. code-block:: C++
 
@@ -58,7 +58,7 @@ Insert code to class
 --------------------
 
 ``class_t`` declaration defines few methods, which add user code to the generated one.
-Lets take a look on next use case:
+Lets take a look on the following use case:
 
 .. code-block:: C++
 
@@ -119,7 +119,7 @@ functions:
     win = window_t( )
     height, width = win.get_size()
 
-  If you will pass ``works_on_instance=False`` next code will be generated:
+  If you will pass ``works_on_instance=False`` the following code will be generated:
 
   .. code-block:: C++
 
@@ -153,13 +153,13 @@ Insert code to class wrapper
 ----------------------------
 
 There are use cases, when you have to add code to `class wrapper`_. Please take a
-look on next thread: http://mail.python.org/pipermail/c++-sig/2006-June/010791.html .
+look on the following thread: http://mail.python.org/pipermail/c++-sig/2006-June/010791.html .
 
 
 .. _`class wrapper` : http://boost.org/libs/python/doc/tutorial/doc/html/python/exposing.html#python.class_virtual_functions
 
 
-The short description is next: there are classes with parent/child relationship.
+The short description is the following: there are classes with parent/child relationship.
 Parent keeps child class instances using raw pointer. When parent die, it also
 destroys children classes. It is not an option to switch to ``boost::shared_ptr``.
 

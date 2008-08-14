@@ -50,7 +50,7 @@ I believe this is the most widely used strategy. `Py++`_ splits generated code
 as follows:
 
 * every class has it's own source & header file
-* next declarations are split to separate source files:
+* the following declarations are split to separate source files:
 
   * named & unnamed enumerations
 
@@ -102,10 +102,10 @@ Multiple files, where single class code is split to few files
 This mode solves the problem, I mentioned earlier - you have to expose huge class
 and you have problems to compile generated code. 
 
-`Py++`_ will split huge class to files using next strategy:
+`Py++`_ will split huge class to files using the following strategy:
 
 * every generated source file can contain maximum 20 exposed declarations
-* next declarations are split to separate source files:
+* the following declarations are split to separate source files:
 
   * enumerations
 

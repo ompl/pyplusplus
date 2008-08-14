@@ -134,7 +134,7 @@ Who is using Py++?
   .. _`pythonOCC` : http://www.minerva-plm.org/pythonOCC/
   .. _`OpenCascade` : http://www.opencascade.org/
 
-* I am :-). I created Python bindings for next libraries:
+* I am :-). I created Python bindings for the following libraries:
 
   * `Boost.Date_Time`_
   * `Boost.CRC`_
