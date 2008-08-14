@@ -28,7 +28,7 @@ is pretty simple:
   .. code-block:: Python
 
     import ctypes
-    import <your module> import <your class> as data_t
+    from <your module> import <your class> as data_t
 
     d = data_t()
     print d.this
