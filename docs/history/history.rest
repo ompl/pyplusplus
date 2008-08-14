@@ -115,6 +115,7 @@ Version SVN
    which will not break the existing code. I see few solutions to the problem:
 
    * change the alias of the functions
+
      .. code-block:: Python
 
        from pyplusplus import module_builder
@@ -140,9 +141,12 @@ Version SVN
 
 3. New and highly experimental feature was introduced -
    `Boost.Python and ctypes integration`_.
-   ../documentation/ctypes_integration.html
 
 .. _`Boost.Python and ctypes integration` : ../documentation/ctypes_integration.html
+
+4. Support for `boost::python::make_constructor`_ functionality was added.
+
+.. _`boost::python::make_constructor` : ../documentation/functions/make_constructor.html
 
 -------------
 Version 0.9.5
