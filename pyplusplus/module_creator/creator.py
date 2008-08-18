@@ -9,6 +9,7 @@ import sort_algorithms
 import dependencies_manager
 import opaque_types_manager
 import call_policies_resolver
+import fake_constructors_manager
 
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
@@ -78,7 +79,7 @@ class creator_t( declarations.decl_visitor_t ):
         self.__types_db = types_db
         if not self.__types_db:
             self.__types_db = types_database.types_database_t()
-        
+
         global_ns = declarations.get_global_namespace(decls)
         self.__extmodule = code_creators.module_t( global_ns )
         if boost_python_ns_name:
@@ -101,9 +102,7 @@ class creator_t( declarations.decl_visitor_t ):
         self.__array_1_registered = set() #(type.decl_string,size)
         self.__free_operators = []
         self.__exposed_free_fun_overloads = set()
-        self.__fake_constructors = set()
-        for cls in global_ns.classes(recursive=True, allow_empty=True):
-            self.__fake_constructors.update( cls.fake_constructors )
+        self.__fc_manager = fake_constructors_manager.manager_t( global_ns )
 
     def __print_readme( self, decl ):
         readme = decl.readme()
@@ -353,9 +352,9 @@ class creator_t( declarations.decl_visitor_t ):
         self.__types_db.update( self.curr_decl )
         self.__dependencies_manager.add_exported( self.curr_decl )
 
-        if self.curr_decl in self.__fake_constructors:
+        if self.__fc_manager.is_fake_constructor( self.curr_decl ):
             return
-        
+
         fwrapper = None
         if None is self.curr_decl.call_policies:
             self.curr_decl.call_policies = self.__call_policies_resolver( self.curr_decl )
@@ -460,12 +459,12 @@ class creator_t( declarations.decl_visitor_t ):
     def visit_free_function( self ):
         if self.curr_decl in self.__exposed_free_fun_overloads:
             return
-        
-        if self.curr_decl in self.__fake_constructors:
+
+        if self.__fc_manager.is_fake_constructor( self.curr_decl ):
             self.__types_db.update( self.curr_decl )
             self.__dependencies_manager.add_exported( self.curr_decl )
             return
-        
+
         elif self.curr_decl.use_overload_macro:
             parent_decl = self.curr_decl.parent
             names = set( map( lambda decl: decl.name
@@ -608,9 +607,6 @@ class creator_t( declarations.decl_visitor_t ):
         if cls_decl.expose_sizeof:
             cls_cc.adopt_creator( code_creators.expose_sizeof_t( cls_decl ) )
 
-        for fc in cls_decl.fake_constructors:
-            cls_cc.adopt_creator( code_creators.make_constructor_t( fc ) )
-            
         for decl in exportable_members:
             if decl in exposed:
                 continue
@@ -645,6 +641,10 @@ class creator_t( declarations.decl_visitor_t ):
         if wrapper and cls_decl.destructor_code:
             destructor = code_creators.destructor_wrapper_t( class_=cls_decl )
             wrapper.adopt_creator( destructor )
+
+        for fc in cls_decl.fake_constructors:
+            if self.__fc_manager.should_generate_code( fc ):
+                cls_cc.adopt_creator( code_creators.make_constructor_t( fc ) )
 
         self.curr_decl = cls_decl
         self.curr_code_creator = cls_parent_cc

@@ -237,6 +237,15 @@ W1060 = compilation_error( 'Py++ can not expose "%s" - it has name, Py++ only ex
 W1061 = compilation_error( 'Py++ can not expose "%s" - its type is "%s".'
                            ' This could be changed in future.')
 
+W1062 = compilation_error( '"%s" contains "fake constructor" "%s", that was excluded.'
+                           ' Py++ will not generate "__init__" method, based on that function.')
+
+W1063 = compilation_error( '"%s" contains "fake constructor" "%s", that is exportable.'
+                           ' Py++ will not generate "__init__" method, based on that function.')
+
+W1064 = compilation_error( 'Py++ can not expose "%s" as "fake constructor" of "%s".'
+                           ' Only the following function types supported: %s' )
+
 warnings = globals()
 
 all_warning_msgs = []

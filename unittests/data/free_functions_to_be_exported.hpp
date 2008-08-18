@@ -6,6 +6,8 @@
 #ifndef __free_functions_to_be_exported_hpp__
 #define __free_functions_to_be_exported_hpp__
 
+#include <stddef.h>
+
 namespace free_functions{
 
 inline int one(){ 
@@ -14,6 +16,9 @@ inline int one(){
 
 inline int plus(int a, const int b=21){ 
     return a+b; 
+}
+
+inline void do_smth( size_t , int ){
 }
 
 }

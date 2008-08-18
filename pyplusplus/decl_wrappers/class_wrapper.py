@@ -169,6 +169,9 @@ class class_t( class_common_details_t
         WRAPPER = 'wrapper'
         ALL = ( DECLARED, WRAPPER )
 
+    FAKE_CONSTRUCTOR_TYPES = ( declarations.member_function_t, declarations.free_function_t )
+    FAKE_CONSTRUCTOR_TYPE_NAMES = 'member and free functions'
+
     def __init__(self, *arguments, **keywords):
         class_common_details_t.__init__( self )
         declarations.class_t.__init__(self, *arguments, **keywords )
@@ -193,17 +196,17 @@ class class_t( class_common_details_t
         self._expose_this = None
         self._expose_sizeof = None
         self._fake_constructors = []
-        
+
     @property
     def fake_constructors(self):
         """list of fake constructors"""
         return self._fake_constructors
-    
+
     def add_fake_constructors( self, f ):
         """f - reference to a calldef_t object or list of them
-        
+
         boost::python::make_constructor allows to register a C++ function, as a
-        class constructor. 
+        class constructor.
         """
         if isinstance( f, declarations.calldef_t ):
             self._fake_constructors.add( f )
@@ -624,7 +627,16 @@ class class_t( class_common_details_t
         return explanation
 
     def _readme_impl( self ):
-        return self.is_wrapper_needed()
+        explanation = self.is_wrapper_needed()
+        for fc in self.fake_constructors:
+            if fc.ignore:
+                explanation.append( messages.W1062 % ( str( self ), str( fc ) ) )
+            if not fc.exportable:
+                explanation.append( messages.W1063 % ( str( self ), str( fc ) ) )
+            if not isinstance( fc, self.FAKE_CONSTRUCTOR_TYPES ):
+                explanation.append( messages.W1064
+                                    % ( str( fc ), str( self ), self.FAKE_CONSTRUCTOR_TYPE_NAMES ) )
+        return explanation
 
     def guess_always_expose_using_scope_value( self ):
         def is_assign( oper ):
