@@ -76,12 +76,14 @@ class manager_t( object ):
         if decl.already_exposed:
             return []
         dependencies = decl.i_depend_on_them(recursive=False)
+        
         if isinstance( decl, declarations.class_t ):
             dependencies = filter( lambda d: d.access_type != declarations.ACCESS_TYPES.PRIVATE
-                                   , dependencies )
+                                   , dependencies )            
+            
         return dependencies
 
-    def __has_unexposed_dependency( self, exported_ids, depend_on_decl ):       
+    def __has_unexposed_dependency( self, exported_ids, depend_on_decl, dependency ):       
         sptr_traits = declarations.smart_pointer_traits
                 
         if None is depend_on_decl:
@@ -93,7 +95,7 @@ class manager_t( object ):
         if sptr_traits.is_smart_pointer( depend_on_decl ):
             try:
                 value_type = sptr_traits.value_type( depend_on_decl )
-                return self.__has_unexposed_dependency( exported_ids, value_type )
+                return self.__has_unexposed_dependency( exported_ids, value_type, dependency )
             except RuntimeError:
                 pass 
                 
@@ -103,9 +105,23 @@ class manager_t( object ):
             if isinstance( depend_on_decl, declarations.class_types ):
                 if depend_on_decl.opaque:
                     return 
+                if dependency.hint == "base class":
+                    return #base class for some class don't have to be exported
             if isinstance( depend_on_decl, declarations.variable_t ):
                 if not decl.expose_value:
                     return 
+        
+        if isinstance( dependency.decl, declarations.variable_t ):
+            #the only dependency of the variable is its type
+            if not dependency.decl.expose_value:
+                return 
+                
+        if dependency.hint == "return type":
+            #in this case we don't check, the return type but the function
+            if isinstance( dependency.decl, declarations.calldef_t ):
+                if dependency.decl.return_type and dependency.decl.call_policies \
+                   and decl_wrappers.is_return_opaque_pointer_policy( dependency.decl.call_policies ):
+                   return
 
         return id( depend_on_decl ) not in exported_ids
             
@@ -115,7 +131,7 @@ class manager_t( object ):
         for decl in self.__exported_decls:
             for dependency in self.__build_dependencies( decl ):        
                 depend_on_decl = dependency.find_out_depend_on_declaration()                
-                if self.__has_unexposed_dependency( exported_ids, depend_on_decl ):
+                if self.__has_unexposed_dependency( exported_ids, depend_on_decl, dependency ):
                     if messages.filter_disabled_msgs([messages.W1040], depend_on_decl.disabled_messages ):
                         #need to report dependency errors
                         used_not_exported.append(dependency)

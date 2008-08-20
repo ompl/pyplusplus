@@ -6,7 +6,7 @@
 #ifndef __mem_fun_with_exception_to_be_exported_hpp__
 #define __mem_fun_with_exception_to_be_exported_hpp__
 
-#include <exception>
+#include <stdexcept>
 
 namespace mem_fun_with_exception{ 
 
