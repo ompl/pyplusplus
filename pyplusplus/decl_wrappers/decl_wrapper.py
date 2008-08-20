@@ -185,10 +185,11 @@ class decl_wrapper_t(object):
         return messages.filter_disabled_msgs( msgs, self.__msgs_to_ignore )
 
     @property
-    def disabled_messaged( self ):
+    def disabled_messages( self ):
         """list of messages to ignore"""
         return self.__msgs_to_ignore
-
+	disabled_messaged = disabled_messages
+	
     def disable_messages( self, *args ):
         """set messages, which should not be reported to you
         

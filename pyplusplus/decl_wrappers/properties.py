@@ -262,7 +262,7 @@ class properties_finder_t:
 
     def __report_illegal_property( self, property_ ):
         logger = _logging_.loggers.declarations
-        if not messages.filter_disabled_msgs([messages.W1041], property_.fget.parent.disabled_messaged ):
+        if not messages.filter_disabled_msgs([messages.W1041], property_.fget.parent.disabled_messages ):
             return #user disabled property warning        
         logger.warn( "%s;%s" % ( property_.fget.parent, messages.W1041 % property_ ) )
         

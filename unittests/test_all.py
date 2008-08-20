@@ -108,6 +108,7 @@ import embeded_tester
 import unions_tester
 import cp_return_addressof_tester
 import make_constructor_tester
+import return_auto_ptr_tester
 #import ogre_generate_tester
 
 testers = [
@@ -204,6 +205,7 @@ testers = [
     , unions_tester
     , cp_return_addressof_tester
     , make_constructor_tester
+    , return_auto_ptr_tester
 #    , ogre_generate_tester too much time
 ]
 

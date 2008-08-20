@@ -81,29 +81,44 @@ class manager_t( object ):
                                    , dependencies )
         return dependencies
 
+    def __has_unexposed_dependency( self, exported_ids, depend_on_decl ):       
+        sptr_traits = declarations.smart_pointer_traits
+                
+        if None is depend_on_decl:
+            return
+            
+        if self.__is_std_decl( depend_on_decl ):
+            return 
+            
+        if sptr_traits.is_smart_pointer( depend_on_decl ):
+            try:
+                value_type = sptr_traits.value_type( depend_on_decl )
+                return self.__has_unexposed_dependency( exported_ids, value_type )
+            except RuntimeError:
+                pass 
+                
+        if isinstance( depend_on_decl, decl_wrappers.decl_wrapper_t ):
+            if depend_on_decl.already_exposed:
+                return 
+            if isinstance( depend_on_decl, declarations.class_types ):
+                if depend_on_decl.opaque:
+                    return 
+            if isinstance( depend_on_decl, declarations.variable_t ):
+                if not decl.expose_value:
+                    return 
+
+        return id( depend_on_decl ) not in exported_ids
+            
     def __find_out_used_but_not_exported( self ):
         used_not_exported = []
         exported_ids = set( map( lambda d: id( d ), self.__exported_decls ) )
         for decl in self.__exported_decls:
-            for dependency in self.__build_dependencies( decl ):
-                depend_on_decl = dependency.find_out_depend_on_declaration()
-                if None is depend_on_decl:
-                    continue
-                if self.__is_std_decl( depend_on_decl ):
-                    continue
-                if isinstance( depend_on_decl, decl_wrappers.decl_wrapper_t ):
-                    if depend_on_decl.already_exposed:
-                        continue
-                    if isinstance( depend_on_decl, declarations.class_types ):
-                        if depend_on_decl.opaque:
-                            continue
-                    if isinstance( decl, declarations.variable_t ):
-                        if not decl.expose_value:
-                            continue
-                if id( depend_on_decl ) not in exported_ids:
-                    report = messages.filter_disabled_msgs([messages.W1040], depend_on_decl.disabled_messaged )
-                    if report:
-                        used_not_exported.append( dependency )
+            for dependency in self.__build_dependencies( decl ):        
+                depend_on_decl = dependency.find_out_depend_on_declaration()                
+                if self.__has_unexposed_dependency( exported_ids, depend_on_decl ):
+                    if messages.filter_disabled_msgs([messages.W1040], depend_on_decl.disabled_messages ):
+                        #need to report dependency errors
+                        used_not_exported.append(dependency)
         return used_not_exported
 
     def __group_by_unexposed( self, dependencies ):
