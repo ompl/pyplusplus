@@ -20,9 +20,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , *args )
    
     def customize( self, mb ):
-        pass
-        #~ r_input = mb.class_( 'r_input_t' )
-        #~ r_input.held_type = 'std::auto_ptr< %s >' % r_input.decl_string
+        r_input = mb.class_( 'r_input_t' )
+        r_input.held_type = 'std::auto_ptr< %s >' % r_input.decl_string
    
     def create_py_input( self, module, rows, cols ):
         class py_input_t( module.generic_input_t ):
@@ -43,12 +42,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         a = self.create_py_input( module, 3, 7 )
         c = a.create_r_input()
         self.failUnless( c.rows() == 3 and c.cols() == 7 )
-        try:
-            b = module.process_input(a)
-            self.failUnless( b.rows() == 3 and b.cols() == 7 )
-        except TypeError, err:
-            print err
-            
+        b = module.process_input(a)
+        self.failUnless( b.rows() == 3 and b.cols() == 7 )
         c = a.create_r_input_shared()
         self.failUnless( c.rows() == 3 and c.cols() == 7 )
         b = module.process_input_shared(a)

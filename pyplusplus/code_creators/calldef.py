@@ -274,11 +274,11 @@ class make_constructor_t( calldef_t ):
         if keywd_args:
             result.append( self.indent( self.param_sep(), 3 ) )
             result.append( keywd_args )
-            
+
         result.append( ' )' ) #make_constructor
-        
+
         doc = self.create_doc()
-        if doc:            
+        if doc:
             result.append( self.param_sep() )
             result.append( doc )
 
@@ -341,6 +341,7 @@ class mem_fun_pv_wrapper_t( calldef_wrapper_t ):
         }
 
     def create_body( self ):
+        auto_ptr_traits = declarations.auto_ptr_traits
         if not self.declaration.overridable:
             return self.unoverriden_function_body()
         template = []
@@ -348,18 +349,28 @@ class mem_fun_pv_wrapper_t( calldef_wrapper_t ):
         if precall_code:
             template.append( os.linesep.join( precall_code ) )
         template.append( '%(override)s func_%(alias)s = this->get_override( "%(alias)s" );' )
-        template.append( '%(return_)sfunc_%(alias)s( %(args)s );')
+        if self.declaration.return_type \
+           and auto_ptr_traits.is_smart_pointer( self.declaration.return_type ):
+            template.append( 'boost::python::object %(alias)s_result = func_%(alias)s( %(args)s );' )
+            template.append( 'return boost::python::extract< %(return_type)s >( %(alias)s_result );' )
+        else:
+            template.append( '%(return_)sfunc_%(alias)s( %(args)s );')
         template = os.linesep.join( template )
 
         return_ = ''
         if not declarations.is_void( self.declaration.return_type ):
             return_ = 'return '
 
+        return_type = ''
+        if self.declaration.return_type:
+           return_type = self.declaration.return_type.decl_string
+
         return template % {
             'override' : self.override_identifier()
             , 'alias' : self.declaration.alias
             , 'return_' : return_
             , 'args' : self.function_call_args()
+            , 'return_type' : return_type
         }
 
     def _create_impl(self):
