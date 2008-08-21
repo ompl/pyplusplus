@@ -32,7 +32,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
         exposed_db = utils.exposed_decls_db_t()
 
-        exposed_db.register_decls( mb.global_ns )
+        exposed_db.register_decls( mb.global_ns, [] )
         exposed_db.save( autoconfig.build_dir )
         mb.register_module_dependency( autoconfig.build_dir )
 

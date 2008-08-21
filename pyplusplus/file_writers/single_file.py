@@ -23,6 +23,8 @@ class single_file_t(writer.writer_t):
         target_dir = os.path.dirname( self.file_name )
         if not target_dir:
             target_dir = os.getcwd()
+        if not os.path.exists( target_dir ):
+            os.makedirs( target_dir )
         headers = self.get_user_headers( [self.extmodule] )        
         map( lambda header: self.extmodule.add_include( header )
              , headers )

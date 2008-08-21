@@ -69,7 +69,7 @@ class tester_t(unittest.TestCase):
         global_ns.exclude()        
         ns.include()
         
-        db.register_decls( global_ns )
+        db.register_decls( global_ns, [] )
                     
         for x in ns.decls(recursive=True):
             self.failUnless( db.is_exposed( x ) == True )

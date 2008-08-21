@@ -85,13 +85,17 @@ class exposed_decls_db_t( object ):
             self.exposed_sign, self.key, self.normalized_name, self.signature \
                 = row.split( self.FIELD_DELIMITER )
 
+        def update_key( self, cls ):
+            self.key = cls.__name__
+            
         def __init_from_decl( self, decl ):
             if decl.ignore:
                 self.exposed_sign = self.UNEXPOSED_DECL_SIGN
             else:
                 self.exposed_sign = self.EXPOSED_DECL_SIGN
-            self.key = decl.__class__.__name__
-            self.signature = decl.decl_string
+            self.update_key( decl.__class__ )
+            
+            self.signature = decl.create_decl_string( with_defaults=False )
             if isinstance( decl, declarations.calldef_t ):
                 self.signature = self.signature + decl.function_type().decl_string
             self.normalized_name = self.find_out_normalized_name( decl )
@@ -137,9 +141,8 @@ class exposed_decls_db_t( object ):
                 self.__registry[ row.key ][row.normalized_name] = [row]
             else:
                 self.__registry[ row.key ][row.normalized_name].append(row)
-        
-    def __find_in_registry( self, decl ):
-        row = self.row_t( decl )
+    
+    def __find_row_in_registry( self, row ):
         try:
             decls = filter( lambda rrow: rrow.does_refer_same_decl( row )
                             , self.__registry[ row.key ][ row.normalized_name ] )
@@ -149,7 +152,24 @@ class exposed_decls_db_t( object ):
                 return None
         except KeyError:
             return None
-    
+        
+    def __find_in_registry( self, decl ):
+        row = self.row_t( decl )
+        found = self.__find_row_in_registry( row )
+        if found:
+            return found        
+        if isinstance( decl, declarations.class_t ):
+            row.update_key( declarations.class_declaration_t )
+            found = self.__find_row_in_registry( row )
+            if found:
+                return found        
+        if isinstance( decl, declarations.class_declaration_t ):
+            row.update_key( declarations.class_t )
+            found = self.__find_row_in_registry( row )
+            if found:
+                return found        
+        return None
+        
     def is_exposed( self, decl ):
         row = self.__find_in_registry( decl)
         return row and self.row_t.EXPOSED_DECL_SIGN == row.exposed_sign
@@ -166,6 +186,15 @@ class exposed_decls_db_t( object ):
                 decl.ignore = True
                 decl.already_exposed = False
 
-    def register_decls( self, global_ns ):
+    def register_decls( self, global_ns, special_decls ):
+        """register decls in the database
+        
+        global_ns - reference to the global namespace object 
+        special_decls - set of declarations, which were exposed, even so they 
+        were not ``included``. For example std containers.
+        """        
         for decl in global_ns.decls():
-            self.__update_registry( self.row_t( decl ) )
+            row = self.row_t( decl )
+            if decl in special_decls:
+                row.exposed_sign = row.EXPOSED_DECL_SIGN    
+            self.__update_registry( row )

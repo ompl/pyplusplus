@@ -44,8 +44,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         obj2.set_i( 1977 )
         self.failUnless( obj2.i == 1977 )
 
-        mdll = ctypes.cdll.LoadLibrary( module.__file__ )
-        self.failUnless( 4 == mdll.mmm( 1, 3 ) )
+        if 'win' not in sys.platform:
+            mdll = ctypes.cdll.LoadLibrary( module.__file__ )
+            self.failUnless( 4 == mdll.mmm( 1, 3 ) )
 
 def create_suite():
     suite = unittest.TestSuite()

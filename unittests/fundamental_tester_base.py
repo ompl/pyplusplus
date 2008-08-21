@@ -54,14 +54,17 @@ class fundamental_tester_base_t( unittest.TestCase ):
         irrelevant_decl_types = ( declarations.typedef_t
                                   , declarations.namespace_t
                                   , declarations.free_operator_t )
+        specially_exposed_decls = mb.code_creator.specially_exposed_decls                                  
         for d in mb.decls():            
             if not d.exportable:
                 continue
             elif isinstance( d, declarations.free_operator_t ):
                 continue
             elif d.ignore:
+                if d in specially_exposed_decls:
+                    continue
                 if exposed_db.is_exposed( d ):
-                    i = 0
+                    i = 0                
                 self.failUnless( not exposed_db.is_exposed( d )
                                  , '''Declaration "%s" is NOT exposed, but for some reason it is marked as such.'''
                                    % str( d ) )

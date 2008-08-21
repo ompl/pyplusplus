@@ -253,6 +253,21 @@ class creator_t( declarations.decl_visitor_t ):
             self.__extmodule.adopt_creators( uc_creators, insert_pos )
             cls_creator.associated_decl_creators.extend( uc_creators )
 
+    def __get_exposed_containers(self):
+        """list of exposed declarations, which were not ``included``, but still  
+        were exposed. For example, std containers
+        
+        std containers exposed by Py++, even if the user didn't ``include`` them.
+        """
+        cmp_by_name = lambda cls1, cls2: cmp( cls1.decl_string, cls2.decl_string )
+        used_containers = list( self.__types_db.used_containers )
+        used_containers = filter( lambda cls: cls.indexing_suite.include_files
+                                  , used_containers )
+        used_containers.sort( cmp_by_name )                                                                    
+        used_containers = filter( lambda cnt: cnt.already_exposed == False
+                                  , used_containers )
+        return used_containers
+        
     def _treat_indexing_suite( self ):
         def create_explanation(cls):
             msg = '//WARNING: the next line of code will not compile, because "%s" does not have operator== !'
@@ -271,16 +286,8 @@ class creator_t( declarations.decl_visitor_t ):
         creators = []
         created_value_traits = set()
 
-        cmp_by_name = lambda cls1, cls2: cmp( cls1.decl_string, cls2.decl_string )
-        used_containers = list( self.__types_db.used_containers )
-        used_containers = filter( lambda cls: cls.indexing_suite.include_files
-                                  , used_containers )
-        used_containers.sort( cmp_by_name )
-        for cls in used_containers:
+        for cls in self.__get_exposed_containers():
             self.__print_readme( cls )
-
-            if cls.already_exposed:
-                continue
 
             cls_creator = create_cls_cc( cls )
             self.__dependencies_manager.add_exported( cls )
