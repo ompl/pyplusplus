@@ -73,7 +73,7 @@ class exposed_decls_db_t( object ):
 
         def find_out_normalized_name( self, decl ):
             if decl.name: 
-                return decl.name
+                return decl.partial_name
             elif decl.location:#unnamed enums, classes, unions
                 return str( decl.location.as_tuple() )
             elif isinstance( decl, declarations.namespace_t ):
@@ -93,11 +93,13 @@ class exposed_decls_db_t( object ):
                 self.exposed_sign = self.UNEXPOSED_DECL_SIGN
             else:
                 self.exposed_sign = self.EXPOSED_DECL_SIGN
+            
             self.update_key( decl.__class__ )
             
             self.signature = decl.create_decl_string( with_defaults=False )
             if isinstance( decl, declarations.calldef_t ):
                 self.signature = self.signature + decl.function_type().decl_string
+                
             self.normalized_name = self.find_out_normalized_name( decl )
             
         def __str__( self ):
