@@ -117,7 +117,7 @@ Special syntax should be introduce to support
        PointTmpl = mb.module.template('Point')
        Point = PointTmpl( 'int' )
 
-  This is a trivial example, which is why it looks grate. Consider the following class:
+  This is a trivial example, which is why it looks great. Consider the following class:
 
     .. code-block:: C++
 

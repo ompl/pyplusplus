@@ -62,7 +62,7 @@ def create_valid_name(name):
         return name
     replace_table = {
           '<'  : '_less_'
-        , '>'  : '_grate_'
+        , '>'  : '_greater_'
         , '::' : '_scope_'
         , ','  : '_comma_'
         , ' '  : '_'

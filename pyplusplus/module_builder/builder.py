@@ -522,7 +522,6 @@ class module_builder_t(object):
         """Please see L{decl_wrappers.scopedef_t} class documentation"""
         return self.global_ns.operator( name=name
                                         , symbol=symbol
-                                        , function=function
                                         , decl_type=decl_type
                                         , return_type=return_type
                                         , arg_types=arg_types
@@ -534,7 +533,6 @@ class module_builder_t(object):
         """Please see L{decl_wrappers.scopedef_t} class documentation"""
         return self.global_ns.operators( name=name
                                          , symbol=symbol
-                                         , function=function
                                          , decl_type=decl_type
                                          , return_type=return_type
                                          , arg_types=arg_types

@@ -20,7 +20,7 @@ Let me explain.
 
 As you know, a class name in `Python`_ has few `constraints`_ and `Py++`_ is aware
 of them. "holder< int >" is illegal class name, so `Py++`_ will generate another
-one - "holder_less_int_grate\_". Pretty ugly and even long, but at least it is
+one - "holder_less_int_greater\_". Pretty ugly and even long, but at least it is
 legal one.
 
 .. _`constraints` : http://www.python.org/doc/current/ref/identifiers.html
