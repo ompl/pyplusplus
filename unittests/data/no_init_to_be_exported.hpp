@@ -54,7 +54,24 @@ struct map_iterator_t{
 private:
     map_iterator_t(){};
 };
+/*
+class Data{
+private:
+    Data(){}
+};
 
+class Value : public Data{
+public:
+    int get1() { return 1; }
+};
+
+class Primitive : public Value
+{};
+
+class Boolean : public Primitive{
+    bool value;
+};
+*/
 }
 
 #endif//__no_init_to_be_exported_hpp__
