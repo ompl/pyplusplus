@@ -196,6 +196,7 @@ class class_t( class_common_details_t
         self._expose_this = None
         self._expose_sizeof = None
         self._fake_constructors = []
+        self._no_init = None
 
     @property
     def fake_constructors(self):
@@ -685,3 +686,38 @@ class class_t( class_common_details_t
             return False
         else:
             return True
+
+    def _get_no_init( self ):
+        if None is self._no_init and False == bool( self.indexing_suite ):
+            #select all public constructors and exclude copy constructor
+            cs = self.constructors( lambda c: not c.is_copy_constructor and c.access_type == 'public'
+                                    , recursive=False, allow_empty=True )
+            
+            has_suitable_constructor = bool( cs )
+            if cs and len(cs) == 1 and cs[0].is_trivial_constructor and self.find_noncopyable_vars():
+                has_suitable_constructor = False
+    
+            has_nonpublic_destructor = declarations.has_destructor( self ) \
+                                       and not declarations.has_public_destructor( self )
+    
+            trivial_constructor = self.find_trivial_constructor()
+    
+            if has_nonpublic_destructor \
+               or ( self.is_abstract and not self.is_wrapper_needed() ) \
+               or not has_suitable_constructor:
+                self._no_init = True
+            elif not trivial_constructor or trivial_constructor.access_type != 'public':
+                exportable_cs = filter( lambda c: c.exportable and c.ignore == False
+                                        , cs )
+                if not exportable_cs:
+                    self._no_init = True
+            else:
+                pass
+        if None is self._no_init:
+            self._no_init = False
+        return self._no_init
+    def _set_no_init( self, value ):
+        self._no_init = value
+        
+    no_init = property( _get_no_init, _set_no_init
+                        , doc="If True, class will be registered with 'boost::python::no_init'" )

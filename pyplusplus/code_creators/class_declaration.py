@@ -217,38 +217,18 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
         if self.documentation:
             result.append( ', %s' % self.documentation )
         used_init = None
-        inits = filter( lambda x: isinstance( x, calldef.constructor_t ), self.creators )
-        has_nonpublic_destructor = declarations.has_destructor( self.declaration ) \
-                                   and not declarations.has_public_destructor( self.declaration )
-        
-        #select all public constructors and exclude copy constructor
-        cs = self.declaration.constructors( lambda c: not c.is_copy_constructor and c.access_type == 'public'
-                                                      , recursive=False, allow_empty=True )
-        has_suitable_constructor = bool( cs )
-        if cs and len(cs) == 1 and cs[0].is_trivial_constructor and self.declaration.find_noncopyable_vars():
-            has_suitable_constructor = False
+        inits = filter( lambda x: isinstance( x, calldef.constructor_t ), self.creators )        
 
         trivial_constructor = self.declaration.find_trivial_constructor()
-
-        if has_nonpublic_destructor \
-           or ( self.declaration.is_abstract and not self.wrapper ) \
-           or not has_suitable_constructor:
+    
+        if self.declaration.no_init:
             result.append( ", " )
             result.append( algorithm.create_identifier( self, '::boost::python::no_init' ) )
-        elif not trivial_constructor or trivial_constructor.access_type != 'public':
+        else:
             if inits:
                 used_init = inits[0]
                 result.append( ", " )
                 result.append( used_init.create_init_code() )
-            elif self.declaration.indexing_suite:
-                pass #in this case all constructors are exposed by indexing suite
-            else:#it is possible to class to have public accessed constructor
-                 #that could not be exported by boost.python library
-                 #for example constructor takes as argument pointer to function
-                result.append( ", " )
-                result.append( algorithm.create_identifier( self, '::boost::python::no_init' ) )
-        else:
-            pass
         result.append( ' )' )
         return ( ''.join( result ), used_init )
 
