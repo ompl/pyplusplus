@@ -15,6 +15,14 @@ typedef std::vector< std::string > strings_t;
 
 inline void do_nothing( const strings_t& ){}
 
+inline strings_t get_names(){
+    strings_t names;
+    names.push_back( "a" );
+    names.push_back( "a" );
+    names.push_back( "a" );
+    return names;
+}
+
 struct item_t{    
     item_t() : value( -1 ){}
     

@@ -41,6 +41,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         items.append( item )
         self.failUnless( module.get_value( items, 0 ).value == 1977 )
         self.failUnless( len( items ) == 1 )
+        names = module.get_names()
+        self.failUnless( len( names ) == 3 )
+        self.failUnless( names[0] == names[1] == names[2]== "a" )
     
 def create_suite():
     suite = unittest.TestSuite()    
