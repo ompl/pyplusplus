@@ -1010,18 +1010,22 @@ class copy_constructor_wrapper_t( code_creator.code_creator_t
     """
     Creates wrapper class constructor from wrapped class instance.
     """
-    def __init__( self, class_ ):
+    def __init__( self, constructor ):
         code_creator.code_creator_t.__init__( self )
-        declaration_based.declaration_based_t.__init__( self, declaration=class_ )
+        declaration_based.declaration_based_t.__init__( self, declaration=constructor )
+        
+    @property
+    def parent_class( self ):
+        return self.declaration.parent
 
     def _create_declaration(self):
         result = []
-        result.append( self.declaration.wrapper_alias )
+        result.append( self.parent_class.wrapper_alias )
         result.append( '(' )
         if not self.target_configuration.boost_python_has_wrapper_held_type \
-           or self.declaration.require_self_reference:
+           or self.parent_class.require_self_reference:
             result.append( 'PyObject* self, ' )
-        declarated = declarations.declarated_t( self.declaration )
+        declarated = declarations.declarated_t( self.parent_class )
         const_decl = declarations.const_t( declarated )
         const_ref_decl = declarations.reference_t( const_decl )
         identifier = algorithm.create_identifier( self, const_ref_decl.decl_string )
@@ -1030,7 +1034,7 @@ class copy_constructor_wrapper_t( code_creator.code_creator_t
         return ''.join( result )
 
     def _create_constructor_call( self ):
-        answer = [ algorithm.create_identifier( self, self.declaration.decl_string ) ]
+        answer = [ algorithm.create_identifier( self, self.parent_class.decl_string ) ]
         answer.append( '( arg )' )
         return ''.join( answer )
 
@@ -1039,7 +1043,7 @@ class copy_constructor_wrapper_t( code_creator.code_creator_t
         answer.append( ': ' + self._create_constructor_call() )
         answer.append( '  , ' +  self.parent.boost_wrapper_identifier + '(){' )
         answer.append( self.indent( '// copy constructor' ) )
-        answer.append( self.indent( self.declaration.copy_constructor_body ) )
+        answer.append( self.indent( self.declaration.body ) )
         answer.append( '}' )
         return os.linesep.join( answer )
 
@@ -1051,23 +1055,27 @@ class null_constructor_wrapper_t( code_creator.code_creator_t
     """
     Creates wrapper for compiler generated null constructor.
     """
-    def __init__( self, class_ ):
+    def __init__( self, constructor ):
         code_creator.code_creator_t.__init__( self )
-        declaration_based.declaration_based_t.__init__( self, declaration=class_ )
-
+        declaration_based.declaration_based_t.__init__( self, declaration=constructor )
+        
+    @property
+    def parent_class( self ):
+        return self.declaration.parent
+        
     def _create_constructor_call( self ):
-        return algorithm.create_identifier( self, self.declaration.decl_string ) + '()'
+        return algorithm.create_identifier( self, self.parent_class.decl_string ) + '()'
 
     def _create_impl(self):
-        answer = [ self.declaration.wrapper_alias + '(' ]
+        answer = [ self.parent_class.wrapper_alias + '(' ]
         if not self.target_configuration.boost_python_has_wrapper_held_type \
-           or self.declaration.require_self_reference:
+           or self.parent_class.require_self_reference:
             answer[0] = answer[0] + 'PyObject* self'
         answer[0] = answer[0] + ')'
         answer.append( ': ' + self._create_constructor_call() )
         answer.append( '  , ' +  self.parent.boost_wrapper_identifier + '(){' )
         answer.append( self.indent( '// null constructor' ) )
-        answer.append( self.indent( self.declaration.null_constructor_body ) )
+        answer.append( self.indent( self.declaration.body ) )
         answer.append( '}' )
         return os.linesep.join( answer )
 

@@ -185,8 +185,6 @@ class class_t( class_common_details_t
         self._registration_code_tail = []
         self._declaration_code = []
         self._wrapper_code = []
-        self._null_constructor_body = ''
-        self._copy_constructor_body = ''
         self._destructor_code = []
         self._exception_translation_code = None
         self._properties = []
@@ -298,16 +296,29 @@ class class_t( class_common_details_t
         return self._wrapper_code
 
     def _get_null_constructor_body(self):
-        return self._null_constructor_body
+        c = self.find_trivial_constructor()
+        if c:
+            return c.body
+        else:
+            return ''        
     def _set_null_constructor_body(self, body):
-        self._null_constructor_body = body
+        c = self.find_trivial_constructor()
+        if c:
+            c.body = body
     null_constructor_body = property( _get_null_constructor_body, _set_null_constructor_body
-                                      , doc="null constructor code, that will be added as is to the null constructor of class-wrapper")
+                                      , doc="null constructor code, that will be added as is to the null constructor of class-wrapper" )
 
     def _get_copy_constructor_body(self):
-        return self._copy_constructor_body
+        c = self.find_copy_constructor()
+        if c:
+            return c.body
+        else:
+            return ''        
+
     def _set_copy_constructor_body(self, body):
-        self._copy_constructor_body = body
+        c = self.find_copy_constructor()
+        if c:
+            c.body = body
     copy_constructor_body = property( _get_copy_constructor_body, _set_copy_constructor_body
                                       , doc="copy constructor code, that will be added as is to the copy constructor of class-wrapper")
 

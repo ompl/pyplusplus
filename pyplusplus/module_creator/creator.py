@@ -594,12 +594,12 @@ class creator_t( declarations.decl_visitor_t ):
 
             copy_constr = self.curr_decl.find_copy_constructor()
             if not self.curr_decl.noncopyable and copy_constr and copy_constr.is_artificial:
-                cccc = code_creators.copy_constructor_wrapper_t( class_=self.curr_decl)
+                cccc = code_creators.copy_constructor_wrapper_t( constructor=copy_constr)
                 wrapper.adopt_creator( cccc )
 
             trivial_constr = self.curr_decl.find_trivial_constructor()
             if trivial_constr and trivial_constr.is_artificial and not noncopyable_vars:
-                tcons = code_creators.null_constructor_wrapper_t( class_=self.curr_decl )
+                tcons = code_creators.null_constructor_wrapper_t( constructor=trivial_constr )
                 wrapper.adopt_creator( tcons )
 
         exposed = self.expose_overloaded_mem_fun_using_macro( cls_decl, cls_cc )

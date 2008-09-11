@@ -268,7 +268,41 @@ class exclude_ellipsis_tester_t( unittest.TestCase ):
         
         self.failUnless( do_smth.exportable == False )
         print do_smth.why_not_exportable()
+
+class constructors_code_tester_t( unittest.TestCase ):    
+    def test(self):
         
+        code = """
+            namespace xyz{
+                struct Y;
+                
+                struct X{
+                    X();
+                    X( const X& );       
+                    X( Y* );
+                };
+            }
+        """
+        
+        mb = module_builder.module_builder_t( 
+                [ module_builder.create_text_fc( code ) ]
+                , gccxml_path=autoconfig.gccxml.executable )
+        
+        x = mb.class_( 'X' )
+        x.include()
+        x.constructors().body = '    //all constructors body'
+        x.null_constructor_body = '    //null constructor body'
+        x.copy_constructor_body = '    //copy constructor body'
+        
+        mb.build_code_creator( 'XXX' )
+        code = mb.code_creator.create()
+        tmp = code.split( x.null_constructor_body )
+        self.failUnless( len( tmp ) == 2 )
+        tmp = code.split( x.copy_constructor_body )
+        self.failUnless( len( tmp ) == 2 )
+        tmp = code.split( '    //all constructors body' )
+        self.failUnless( len( tmp ) == 2 )
+
 def create_suite():
     suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(doc_extractor_tester_t))
@@ -283,6 +317,7 @@ def create_suite():
     suite.addTest( unittest.makeSuite(exclude_erronious_tester_t))
     suite.addTest( unittest.makeSuite(use_function_signature_bug_tester_t))
     suite.addTest( unittest.makeSuite(exclude_ellipsis_tester_t))
+    suite.addTest( unittest.makeSuite(constructors_code_tester_t))
     return suite
 
 def run_suite():
