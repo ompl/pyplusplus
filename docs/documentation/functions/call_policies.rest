@@ -200,14 +200,14 @@ The usage is pretty simple:
 
   mb = module_builder.module_builder_t( ... )
   mb.free_function( ... ).call_policies \
-      = call_policies.custom_call_policies( your call policies code )
+      = call_policies.custom_call_policies( <<<your call policies code>>> )
 
   Optionally you can specify name of the header file, which should be included:
 
 .. code-block:: Python
 
    mb.free_function( ... ).call_policies \
-      = call_policies.custom_call_policies( your call policies code, "xyz.hpp" )
+      = call_policies.custom_call_policies( <<<your call policies code>>>, "xyz.hpp" )
 
 return_addressof
 ----------------

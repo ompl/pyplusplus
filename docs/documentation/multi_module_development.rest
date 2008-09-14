@@ -146,7 +146,7 @@ Usage example:
 .. code-block:: Python
 
    mb = module_builder_t( ... )   
-   mb.register_module_dependency( other module generated code directory )
+   mb.register_module_dependency( <<<other module generated code directory>>> )
 
 
 ------

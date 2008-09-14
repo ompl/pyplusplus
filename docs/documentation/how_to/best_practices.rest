@@ -44,7 +44,7 @@ Tips
   .. code-block:: Python
 
     from module_builder import *
-    mb = module_builder_t( ..., cache=file_cache_t( path to project cache file ), ... )
+    mb = module_builder_t( ..., cache=file_cache_t( <<<path to project cache file>>> ), ... )
 
 * Single header file, will also improve performance compiling the generated bindings.
 

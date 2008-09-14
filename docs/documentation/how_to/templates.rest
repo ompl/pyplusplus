@@ -73,7 +73,7 @@ pretty easy to blend together the generated code and the existing one:
 
    code = generate_instantiations_string( ... )
 
-   mb = module_builder_t( [ create_text_fc( code ), other header files ], ... )
+   mb = module_builder_t( [ create_text_fc( code ), <<<other file names>>> ], ... )
    ...
 
 Function ``create_text_fc`` allows you to extract declarations from the string,

@@ -40,7 +40,7 @@ Usage example
    
    mb = module_builder.module_builder_t(...)
    mb.build_code_creator( ... )
-   mb.write_module( file name )
+   mb.write_module( <<<file name>>> )
 
 --------------
 Multiple files
@@ -92,7 +92,7 @@ Usage example
    
    mb = module_builder.module_builder_t(...)
    mb.build_code_creator( ... )
-   mb.split_module( directory name )
+   mb.split_module( <<<directory name>>> )
 
 
 -------------------------------------------------------------
@@ -133,7 +133,7 @@ Usage example
    
    mb = module_builder.module_builder_t(...)
    mb.build_code_creator( ... )
-   mb.split_module( directory name, [ list of huge classes names ] )
+   mb.split_module( <<<directory name>>>, [ <<<list of huge classes names>>> ] )
 
 ---------------------------
 Fixed set of multiple files
@@ -154,7 +154,7 @@ Usage example
    
    mb = module_builder.module_builder_t(...)
    mb.build_code_creator( ... )
-   mb.balanced_split_module( directory name, number of generated source files )
+   mb.balanced_split_module( <<<directory name>>>, <<<number of generated source files>>> )
 
 
 ------------------

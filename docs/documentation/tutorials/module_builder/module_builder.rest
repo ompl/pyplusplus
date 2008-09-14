@@ -126,7 +126,7 @@ do it with one line of code only:
 
 .. code-block:: Python
 
-  mb.code_creator.license = your license text
+  mb.code_creator.license = <<<your license text>>>
 
 After you call this function, I recommend you not to change declarations
 configuration. In most cases the change will take effect, in some cases it will

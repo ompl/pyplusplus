@@ -88,14 +88,10 @@ code:
 .. code-block:: Python
 
   mb = module_builder_t( ... )
-
-.. code-block:: Python
-
+  
   details = mb.namespace( 'details' )
   details.exclude()
-
-.. code-block:: Python
-
+  
   my_class = mb.class_( 'my_class' )
   my_class.rename("MyClass")
 
