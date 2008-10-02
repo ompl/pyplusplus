@@ -243,7 +243,7 @@ class inout_t(transformer.transformer_t):
         tmpl = string.Template(
             '$name = boost::python::extract< $type >( pyplus_conv::get_out_argument( $py_result, "$name" ) );' )
         store_py_result_in_arg = tmpl.substitute( name=self.arg.name
-                                                  , type=self.arg.type.decl_string
+                                                  , type=remove_ref_or_ptr( self.arg.type ).decl_string
                                                   , py_result=controller.py_result_variable.name )
         controller.add_py_post_call_code( store_py_result_in_arg )
 

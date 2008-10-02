@@ -28,6 +28,19 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         set_flag = mb.calldefs( 'set_flag' )
         set_flag.add_transformation( ft.inout(1) )
         
+        call_set_flag = mb.calldefs( 'call_set_flag' )
+        call_set_flag.add_transformation( ft.inout(2) )
+        
+    def create_py_inventor( self, module ):
+        class pyinventor( module.base ):
+            def __init__( self ):
+                module.base.__init__( self )
+                
+            def set_flag( self, value, flag ):
+                flag = not value
+                return flag
+        return pyinventor()
+        
     def run_tests(self, module):
         x = False
         self.failUnless( True == module.set_flag( True, x ) )
@@ -35,9 +48,23 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         b = module.base()
         self.failUnless( True == b.set_flag( True, x ) )
         self.failUnless( False == b.set_flag( False, x ) )
+
+        self.failUnless( True == module.call_set_flag( b, True, x ) )
+        self.failUnless( False == module.call_set_flag( b, False, x ) )
+       
         inventor = module.inventor()        
         self.failUnless( False == inventor.set_flag( True, x ) )
         self.failUnless( True == inventor.set_flag( False, x ) )
+        
+        self.failUnless( False == module.call_set_flag( inventor, True, x ) )
+        self.failUnless( True == module.call_set_flag( inventor, False, x ) )
+        
+        inventor = self.create_py_inventor( module )      
+        self.failUnless( False == inventor.set_flag( True, x ) )
+        self.failUnless( True == inventor.set_flag( False, x ) )
+        
+        self.failUnless( False == module.call_set_flag( inventor, True, x ) )
+        self.failUnless( True == module.call_set_flag( inventor, False, x ) )
         
         
 def create_suite():

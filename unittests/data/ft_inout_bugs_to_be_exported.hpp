@@ -17,4 +17,8 @@ struct inventor : base{
     }    
 };
 
+inline void call_set_flag( base& x, bool value, bool& flag ){
+    x.set_flag( value, flag );
+}
+
 }
