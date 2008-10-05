@@ -1,0 +1,68 @@
+====================
+return_pointee_value
+====================
+
+.. contents:: Table of contents
+
+----------
+Definition
+----------
+
+Class ``return_pointee_value`` is a model of `ResultConverterGenerator`_  which
+can be used to wrap C++ functions returning any pointer, such that the pointee of
+return value is copied into a new Python object.
+
+-------
+Example
+-------
+
+.. code-block:: C++
+
+  float* get_value(){
+      static float value = 0.5;
+      return &value;
+  }
+
+  float* get_null_value(){
+    return (float*)( 0 );
+  }
+
+  namespace bpl = boost::python;
+  BOOST_PYTHON_MODULE(my_module){
+    def( "get_value"
+         , bpl::return_value_policy< pyplusplus::call_policies::return_pointee_value<> >() );
+
+    def( "get_null_value"
+         , bpl::return_value_policy< pyplusplus::call_policies::return_pointee_value<> >() );
+  }
+
+The `Py++`_ code is not that different from what you already know:
+
+.. code-block:: Python
+
+  from pyplusplus import module_builder
+  from pyplusplus.module_builder import call_policies
+
+  mb = module_builder.module_builder_t( ... )
+  mb.free_function( return_type='float *' ).call_policies \
+      = call_policies.return_value_policy( call_policies.return_pointee_value )
+
+Python code:
+
+.. code-block:: Python
+
+  import my_module
+
+  assert 0.5 == my_module.get_value()
+  assert None is my_module.get_null_value()
+
+
+
+.. _`ResultConverterGenerator` : http://boost.org/libs/python/doc/v2/ResultConverter.html#ResultConverterGenerator-concept
+.. _`CallPolicies` : http://www.boost.org/libs/python/doc/v2/CallPolicies.html#CallPolicies-concept
+
+.. _`Py++` : ./../../../pyplusplus.html
+.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
+.. _`Python`: http://www.python.org
+.. _`GCC-XML`: http://www.gccxml.org
+
