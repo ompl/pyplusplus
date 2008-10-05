@@ -51,6 +51,15 @@ class multiple_files_t(writer.writer_t):
 
 
     def write_file( self, fpath, content ):
+        if fpath in self.written_files:
+            msg = ['Py++ is going to write different content to the same file(%s).' % fpath]
+            msg.append('The following is a short list of possible explanations for this behaviour:' )
+            msg.append('* Py++ bug, in this case, please report it' )
+            msg.append('* module_builder_t contains two or more classes with the same alias')
+            msg.append('* module_builder_t contains two or more classes with the same wrapper alias')
+            msg.append('Please carefully review Py++ warning messages. It should contain an additional information.')
+            raise RuntimeError( os.linesep.join(msg) )
+
         self.written_files.append( fpath )
         writer.writer_t.write_file( fpath, content, self.files_sum_repository, self.encoding )
 
@@ -133,7 +142,7 @@ class multiple_files_t(writer.writer_t):
             return None
         if not isinstance( code_creator.declaration.indexing_suite, decl_wrappers.indexing_suite2_t ):
             return None
-        
+
         #sometimes, for some reason I expose containers as regular classes ( hash_map )
         #and in this case I do generate include to
         classes = ( code_creators.indexing_suite1_t, code_creators.indexing_suite2_t )
@@ -142,7 +151,7 @@ class multiple_files_t(writer.writer_t):
                 break
         else:
             return None
-        
+
         try:
             element_type = code_creator.declaration.indexing_suite.element_type
             class_traits = declarations.class_traits
@@ -150,20 +159,20 @@ class multiple_files_t(writer.writer_t):
                 return None
             value_class = class_traits.get_declaration( element_type )
             if value_class.less_than_comparable and value_class.equality_comparable:
-                return None #Py++ doesn't create value traits for class that has 
+                return None #Py++ doesn't create value traits for class that has
                             # = and < operators available
             return self.create_value_traits_header_name( value_class )
         except RuntimeError, error:
             decls_logger = _logging_.loggers.declarations
             if not messages.filter_disabled_msgs([messages.W1042], code_creator.declaration.disabled_messages ):
-                return #user disabled property warning        
+                return #user disabled property warning
             decls_logger.warn( "%s;%s" % ( code_creator.declaration, messages.W1042 ) )
 
     def create_include_code( self, creators, head_headers=None, tail_headers=None ):
         answer = []
         normalize = code_creators.include_directories_t.normalize
         unique_headers = code_creators.code_creator_t.unique_headers
-        
+
         if head_headers:
             answer.extend( map( lambda header: '#include "%s"' % normalize( header )
                                 , head_headers ) )
@@ -171,11 +180,11 @@ class multiple_files_t(writer.writer_t):
         dependend_on_headers = []
         for creator in creators:
             dependend_on_headers.extend( creator.get_system_headers( recursive=True ) )
-            
-        dependend_on_headers = unique_headers( map( normalize, dependend_on_headers ) )       
-                
+
+        dependend_on_headers = unique_headers( map( normalize, dependend_on_headers ) )
+
         for include_cc in self.__predefined_include_creators:
-            if include_cc.is_system:                
+            if include_cc.is_system:
                 if include_cc.header in dependend_on_headers:
                     answer.append( include_cc.create() )
             else:# user header file - always include
@@ -389,11 +398,11 @@ class multiple_files_t(writer.writer_t):
 
         self.write_code_repository( self.__directory_path )
         self.save_exposed_decls_db( self.__directory_path )
-        
+
         self.extmodule.do_include_dirs_optimization()
 
         self.split_values_traits()
-        self.split_classes()        
+        self.split_classes()
         self.split_enums()
         self.split_global_variables()
         self.split_free_functions()
