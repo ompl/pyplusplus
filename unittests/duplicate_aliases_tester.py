@@ -21,6 +21,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def customize(self, mb):
         classes = mb.classes( lambda decl: 'duplicate_aliases' in decl.name )
         classes.alias = 'duplicate_aliases'
+        classes.wrapper_alias = 'wrapper_duplicate_aliases'
     
     def run_tests( self, module):
         #check compilation

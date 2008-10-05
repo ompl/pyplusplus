@@ -32,6 +32,10 @@ class compilation_error( message_type ):
 class execution_error( message_type ):
     prefix = 'execution error'
 
+class code_generation_error( message_type ):
+    prefix = 'code generation error'
+
+
 W0000 = warning( '%s' ) #general message, usefull in few cases
 
 W1000 = compilation_error(
@@ -245,6 +249,16 @@ W1063 = compilation_error( '"%s" contains "fake constructor" "%s", that is expor
 
 W1064 = compilation_error( 'Py++ can not expose "%s" as "fake constructor" of "%s".'
                            ' Only the following function types supported: %s' )
+
+W1065 = code_generation_error(
+            'There are two or more classes that use same class wrapper alias("%s"). '
+            'Duplicated class wrapper aliases causes few problems, but the main one is that during '
+            'files generation Py++ uses class wrapper aliases for the file names. '
+            'Py++ will rewrite the file content and at best will introduce compile time error. '
+            'The worst case scenario: you will discover the problem during run-time.'
+            'Use `wrapper_alias` property to change class wrapper alias value'
+            'Other classes : %s' )
+
 
 warnings = globals()
 
