@@ -13,35 +13,6 @@ This page is an official `Py++`_ "TODO" page.
 For small features, the description of the feature and it's implementation will
 be written here. Big features will get their own page.
 
----------------
-Unnamed classes
----------------
-
-There is no technical reason why unnamed classes/structs/unions are not exported
-
-by `Py++`_:
-
-.. code-block:: C++
-
-  class Foo{
-      union {
-          struct {
-              float r,g,b,a;
-          };
-          float val[4];
-      };
-  };
-
-
-Implementation details
-----------------------
-
-As it seems to me, the only code that should be changed is
-"pyplusplus/module_creator/creator.py" file. To be more specific: all code creators,
-for declarations in unnamed classes, should be created under named class.
-
-The coding itself should take something like 4 - 5 hours, including unit test.
-
 ------------------------------------------
 Domain Specific Language ( DSL ) challenge
 ------------------------------------------
