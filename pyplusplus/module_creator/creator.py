@@ -651,6 +651,7 @@ class creator_t( declarations.decl_visitor_t ):
 
         for fc in cls_decl.fake_constructors:
             if self.__fc_manager.should_generate_code( fc ):
+                self.__dependencies_manager.add_exported( fc )
                 cls_cc.adopt_creator( code_creators.make_constructor_t( fc ) )
 
         self.curr_decl = cls_decl
