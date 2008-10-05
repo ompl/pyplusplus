@@ -73,7 +73,7 @@ Defaults
 --------
 
 `Py++`_ is able to "guess" few call policies, base on analysis of return type
-and\\or operator name:
+and\\or callable name:
 
 * ``default_call_policies``:
 
@@ -134,7 +134,7 @@ happen:
 
     /* undefined call policies */
 
-  comment, in place of call policy. If `Py++`_ was wrong and function doesn't
+  comment, instead of call policy. If `Py++`_ was wrong and function doesn't
   need call policy the generate code will compile fine, otherwise you will get a
   compilation error.
 
@@ -153,7 +153,7 @@ In this case, it requires from you to define specialization for the
 
 Actually you should define ``boost::python::type_id`` specialization also in case
 a function takes the opaque type as an argument. `Py++`_ can do it for you, all
-you need is to say to mark a declaration as opaque.
+you need is to mark a declaration as opaque.
 
 Example:
 
