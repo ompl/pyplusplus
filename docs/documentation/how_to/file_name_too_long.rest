@@ -23,7 +23,7 @@ of them. "holder< int >" is illegal class name, so `Py++`_ will generate another
 one - "holder_less_int_greater\_". Pretty ugly and even long, but at least it is
 legal one.
 
-.. _`constraints` : http://www.python.org/doc/current/ref/identifiers.html
+.. _`constraints` : http://www.python.org/doc/2.5.2/ref/identifiers.html
 
 It is pretty simple to change the alias of the class, or any other declaration:
 

@@ -1,4 +1,4 @@
-# Copyright 2004 Roman Yakovenko.
+# Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0. (See
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
@@ -34,7 +34,7 @@ import messages
 
 from _logging_ import multi_line_formatter_t
 
-__version__ = '0.9.5'
+__version__ = '1.0.0'
 
 import pygccxml
 if not hasattr( pygccxml, '__revision__' ) or pygccxml.__revision__ < 1080:

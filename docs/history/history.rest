@@ -24,7 +24,7 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Oliver Schweitzer
 
 -----------
-Version SVN
+Version 1.0
 -----------
 
 1. The algorithm, which calculates what member functions should be redefined in
@@ -142,7 +142,7 @@ Version SVN
 3. New and highly experimental feature was introduced -
    `Boost.Python and ctypes integration`_.
 
-.. _`Boost.Python and ctypes integration` : ../documentation/ctypes_integration.html
+.. _`Boost.Python and ctypes integration` : ../documentation/ctypes/ctypes_integration.html
 
 4. Support for `boost::python::make_constructor`_ functionality was added.
 
@@ -224,9 +224,9 @@ Version 0.9.0
 
    * `return_range`_
 
-.. _`as_tuple` : ../documentation/functions/call_policies.html#as-tuple
-.. _`return_range`: ../documentation/functions/call_policies.html#return-range
-.. _`custom_call_policies` : ../documentation/functions/call_policies.html#custom-call-policies
+.. _`as_tuple` : ../documentation/functions/call_policies/as_tuple.html
+.. _`return_range`: ../documentation/functions/call_policies/return_range.html
+.. _`custom_call_policies` : ../documentation/functions/call_policies/custom_call_policies.html
 
 4. Added an initial support for multi-module development. Now you can mark your
    declarations as ``already_exposed`` and `Py++`_ will do the rest. For more
