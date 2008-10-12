@@ -83,7 +83,7 @@ the following features:
 
 * to add ability to expose "C" functions without using `Boost.Python`_.
 
-.. _`new call policy was created` : ./../../documentation/functions/call_policies.html#return-addressof
+.. _`new call policy was created` : ./../../documentation/functions/call_policies/return_addressof.html
 .. _`ctypes` : http://docs.python.org/lib/module-ctypes.html
 .. _`from_address` : http://docs.python.org/lib/ctypes-data-types.html
 .. _`Py++` : ./../../pyplusplus.html
