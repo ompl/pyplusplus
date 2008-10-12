@@ -1,4 +1,4 @@
-========================
+﻿========================
 Py++ development history
 ========================
 
@@ -22,6 +22,8 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Meghana Haridev
 * Julian Scheid
 * Oliver Schweitzer
+* Hernán Ordiales
+* Bernd Fritzke
 
 -----------
 Version 1.0
@@ -147,6 +149,12 @@ Version 1.0
 4. Support for `boost::python::make_constructor`_ functionality was added.
 
 .. _`boost::python::make_constructor` : ../documentation/functions/make_constructor.html
+
+5. Support for unions and unnamed classes was added.
+
+6. Doxygen documentation extractor was improved. Many thanks to Hernán Ordiales.
+
+7. Py++ documentation was improved. Many thanks to Bernd Fritzke.
 
 -------------
 Version 0.9.5

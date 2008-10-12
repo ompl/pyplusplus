@@ -1,6 +1,6 @@
 Hello!
 
-I'm pleased to announce the 0.9.0 release of Py++.
+I'm pleased to announce the 1.0 release of Py++.
 
 What is Py++?
 =============
@@ -21,34 +21,24 @@ What's new?
 Features
 --------
 
-* Added exposing of copy constructor, ``operator=`` and ``operator<<``.
-   * ``operator=`` is exposed under "assign" name
-   * ``operator<<`` is exposed under "__str__" name
+* Algorightm, which defines what virtual functions should be redefined was improved.
 
-* Added new call policies:
-    * as_tuple
-    * custom_call_policies
-    * return_range
+* Exposing "C" code became easier - Py++ is able to generate ``ctypes`` friendly code.
 
-* Added an initial support for multi-module development. Now you can mark your
-  declarations as ``already_exposed`` and `Py++`_ will do the rest.
+* Support for ``boost::python::make_constructor`` functionality was added.
 
-* `input_c_buffer`_ - new functions transformation, which allows to pass a Python
-  sequence to C++ function, instead of pair of arguments: pointer to buffer and size.
+* Support for unions and unnamed classes was added.
 
-* Added ability to control generated "include" directives. Now you can ask Py++
-  to include a header file, when it generates code for some declaration.
+Bug fixes
+---------
 
-* Code generation improvements: system header files (Boost.Python or Py++ defined)
-  will be included from the generated files only in case the generated code
-  depends on them.
+* Indexing Suite V2 - few bugs were fixed. 
+  
+  
+Contributors:
 
-* Performance: Py++ runs 1.5 - 2 times faster.
-
-* Py++ will generate documentation for automatically constructed properties.
-
-* Added iteration functionality to Boost.Python Indexing Suite V2 ``std::map``
-  and ``std::multimap`` containers.
+* Julian Scheid
+* Oliver Schweitzer
 
 
 For a more complete list, with links to documentation, please see the news:
