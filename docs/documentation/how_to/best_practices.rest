@@ -169,7 +169,7 @@ Tips
     the whole project.
 
 
-.. _`Py++` : ./../pyplusplus.html
+.. _`Py++` : ./../../pyplusplus.html
 .. _`pygccxml` : ./../../../pygccxml/pygccxml.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org

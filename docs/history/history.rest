@@ -302,7 +302,7 @@ Version 0.8.5
 
 5. Support for opaque types was added. Read more about this feature `here`__.
 
-.. __ : ../documentation/functions/call_policies.html#special-case
+.. __ : ../documentation/functions/call_policies/call_policies.html#special-case
 
 6. It is possible to configure "Py++" to generate faster ( compilation time )
    code for indexing suite version 2. See API documentation.
