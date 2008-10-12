@@ -298,7 +298,7 @@ Version 0.8.5
 
 4. New "Py++" defined `return_pointee_value`_ call policy was introduced.
 
-.. _`return_pointee_value` : ../documentation/functions/call_policies.html#py-defined-call-policies
+.. _`return_pointee_value` : ../documentation/functions/call_policies/return_pointee_value.html
 
 5. Support for opaque types was added. Read more about this feature `here`__.
 
