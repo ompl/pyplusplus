@@ -40,7 +40,8 @@ class module_builder_t(object):
                   , ignore_gccxml_output=False
                   , indexing_suite_version=1
                   , cflags=""
-                  , encoding='ascii'):
+                  , encoding='ascii'
+                  , compiler=None):
         """
         @param files: list of files, declarations from them you want to export
         @type files: list of strings or L{file_configuration_t} instances
@@ -72,7 +73,8 @@ class module_builder_t(object):
             , undefine_symbols=undefine_symbols
             , start_with_declarations=start_with_declarations
             , ignore_gccxml_output=ignore_gccxml_output
-            , cflags=cflags)
+            , cflags=cflags
+            , compiler=compiler)
 
         #may be in future I will add those directories to user_defined_directories
         #to self.__code_creator.
