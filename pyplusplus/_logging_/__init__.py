@@ -9,19 +9,29 @@
 import os
 import sys
 import logging
+import cStringIO
 from multi_line_formatter import multi_line_formatter_t
 
-def _create_logger_( name ):    
+def create_handler( stream=None ):
+    handler = None
+    if stream:
+        handler = logging.StreamHandler(stream)
+    else:
+        handler = logging.StreamHandler(stream)
+    handler.setFormatter( multi_line_formatter_t( os.linesep + '%(levelname)s: %(message)s' ) )
+    return handler
+
+def _create_logger_( name, stream=None ):    
     """implementation details"""
     logger = logging.getLogger(name)
-    handler = logging.StreamHandler()
-    handler.setFormatter( multi_line_formatter_t( os.linesep + '%(levelname)s: %(message)s' ) )
-    logger.addHandler(handler)
+    logger.propagate = False
+    logger.addHandler( create_handler(stream) )
     logger.setLevel(logging.INFO)
     return logger
 
 class loggers:
     """class-namespace, defines few loggers classes, used in the project"""
+    stream = None
     
     file_writer = _create_logger_( 'pyplusplus.file_writer' )
     """logger for classes that write code to files"""
@@ -45,4 +55,10 @@ class loggers:
     
     all = [ root, file_writer, module_builder, declarations ]
     """contains all logger classes, defined by the class"""
-    
+
+    @staticmethod
+    def make_inmemory():
+        loggers.stream = cStringIO.StringIO()
+        for logger in loggers.all:
+            map( lambda h: logger.removeHandler( h ), logger.handlers[:] )
+            logger.addHandler( create_handler( loggers.stream ) )
