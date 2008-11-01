@@ -57,6 +57,7 @@ import pointer_as_arg_tester
 import factory_tester
 import private_assign_tester
 import protected_tester
+import protected_bug_tester
 import indexing_suites_tester
 import indexing_suites2_tester
 import hierarchy3_tester
@@ -206,6 +207,7 @@ testers = [
     , cp_return_addressof_tester
     , make_constructor_tester
     , return_auto_ptr_tester
+    , protected_bug_tester
 #    , ogre_generate_tester too much time
 ]
 
