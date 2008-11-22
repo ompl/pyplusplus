@@ -22,6 +22,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def customize( self, mb ):
         mb.global_ns.exclude()
 
+        mb.free_function( 'create_randome_rationals' ).include()
+
         xxx = mb.class_( 'XXX' )
         xxx.include()
         xxx_ref = declarations.reference_t( declarations.const_t( declarations.declarated_t( xxx ) ) )
@@ -61,6 +63,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
         bad_rational = mb.class_('bad_rational' )
         bad_rational.include()
+        mb.namespace( 'Geometry' ).include()
+        mb.namespace( 'Geometry' ).class_( 'VecOfInts' ).exclude()
 
     def run_tests(self, module):
         pyrational = module.pyrational

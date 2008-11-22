@@ -400,8 +400,34 @@ class operators_helper:
             included = filter( lambda decl: decl.ignore == False, oper.class_types )
             if not included:
                 return messages.W1052 % str(oper)
-
         return ''
+
+    @staticmethod
+    def target_class( oper ):
+        """this functions returns reference to class/class declaration
+        in scope of which, the operator should be exposed."""
+        if isinstance( oper.parent, declarations.class_t ):
+            return oper.parent
+        #now we deal with free operators
+        def find_class( type_ ):
+            type_ = declarations.remove_reference( type_ )
+            if declarations.is_class( type_ ):
+                return declarations.class_traits.get_declaration( type_ )
+            elif declarations.is_class_declaration( type_ ):
+                return declarations.class_declaration_traits.get_declaration( type_ )
+            else:
+                return None
+
+        arg_1_class = find_class( oper.arguments[0].type )
+        arg_2_class = None
+        if 2 == len( oper.arguments ):
+            arg_2_class = find_class( oper.arguments[1].type )
+
+        if arg_1_class:
+            return arg_1_class
+        else:
+            return arg_2_class
+
 
 class member_operator_t( declarations.member_operator_t, calldef_t ):
     """defines a set of properties, that will instruct Py++ how to expose the member operator"""
@@ -446,6 +472,9 @@ class member_operator_t( declarations.member_operator_t, calldef_t ):
             return messages.W1015
         return operators_helper.exportable( self )
 
+    @property
+    def target_class( self ):
+        return self.parent
 
 class casting_operator_t( declarations.casting_operator_t, calldef_t ):
     """defines a set of properties, that will instruct Py++ how to expose the casting operator"""
@@ -557,6 +586,22 @@ class free_operator_t( declarations.free_operator_t, calldef_t ):
     def __init__(self, *arguments, **keywords):
         declarations.free_operator_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
+        self._target_class = None
 
     def _exportable_impl_derived( self ):
         return operators_helper.exportable( self )
+
+    def get_target_class( self ):
+        if self._target_class is None:
+            self._target_class = operators_helper.target_class( self )
+        return self._target_class
+
+    def set_target_class( self, class_ ):
+        self._target_class = class_
+
+    _target_class_doc_ = "reference to class_t or class_declaration_t object." \
+                       + " There are use cases, where Py++ doesn't guess right, in what scope" \
+                       + " free operator should be registered( exposed ). If this is your use case " \
+                       + " than setting the class will allow you to quickly fix the situation. "
+
+    target_class = property( get_target_class, set_target_class, doc=_target_class_doc_ )

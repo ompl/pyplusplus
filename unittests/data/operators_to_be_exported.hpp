@@ -8,21 +8,22 @@
 
 #include "boost/rational.hpp"
 #include <iostream>
+#include <vector>
 
 namespace pyplusplus{ namespace rational{
 
 typedef boost::rational< long int > pyrational;
 
 struct helper{
-    
+
     void instantiate(){
         sizeof( pyrational );
         boost::gcd<long int>( 1, 1);
         boost::lcm<long int>( 1, 1);
-        std::cout << pyrational( 1,1);        
+        std::cout << pyrational( 1,1);
         pyrational x(1,1);
         x = pyrational( 2, 3 );
-        
+
     }
 };
 
@@ -36,14 +37,46 @@ inline std::ostream& operator<<(std::ostream& s, XXX const& x){
 
 //Boost.Python does not support member operator<<
 struct YYY{
-    std::ostream& operator<<(std::ostream& s) const{        
+    std::ostream& operator<<(std::ostream& s) const{
         return s;
         //return s << "<YYY instance at " << reinterpret_cast<unsigned long>( this )<< ">";
     }
 };
 
+typedef std::vector< pyrational > rationals_t;
+
+inline rationals_t&
+operator+=( rationals_t& v, const pyrational& n ){
+    for( rationals_t::iterator i = v.begin(); i != v.end(); ++i ){
+        *i += n;
+    }
+    return v;
+}
+
+inline rationals_t create_randome_rationals(){
+    return rationals_t();
+}
+
 
 } }
-    
+
+
+namespace Geometry{
+
+    namespace PointsUtils{
+        struct VecOfInts{};
+        //typedef std::vector<int> VecOfInts;
+    }
+
+    class Class2 {
+        int i;
+    };
+
+    extern PointsUtils::VecOfInts&
+    operator += ( PointsUtils::VecOfInts &vec, const Class2&){
+        return vec;
+    }
+}
+
 
 #endif//__operators_to_be_exported_hpp__
