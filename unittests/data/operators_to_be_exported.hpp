@@ -65,18 +65,33 @@ namespace Geometry{
 
     namespace PointsUtils{
         struct VecOfInts{};
-        //typedef std::vector<int> VecOfInts;
+    }
+
+    class Class {
+        int i;
+    };
+
+    //this one should not be generated
+    extern PointsUtils::VecOfInts&
+    operator += ( PointsUtils::VecOfInts &vec, const Class&){
+        return vec;
+    }
+}
+
+namespace Geometry2{
+
+    namespace PointsUtils2{
+        typedef std::vector<int> VecOfInts2;
     }
 
     class Class2 {
         int i;
     };
 
-    extern PointsUtils::VecOfInts&
-    operator += ( PointsUtils::VecOfInts &vec, const Class2&){
+    extern PointsUtils2::VecOfInts2&
+    operator += ( PointsUtils2::VecOfInts2 &vec, const Class2&){
         return vec;
     }
 }
-
 
 #endif//__operators_to_be_exported_hpp__

@@ -312,6 +312,7 @@ class process_tester_runner_t( object ):
 
 
 if __name__ == "__main__":
+    os.nice( 20 )
     runner = process_tester_runner_t( testers )
     runner()
 

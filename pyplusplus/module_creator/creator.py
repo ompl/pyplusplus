@@ -101,6 +101,7 @@ class creator_t( declarations.decl_visitor_t ):
         self.curr_decl = None
         self.__array_1_registered = set() #(type.decl_string,size)
         self.__free_operators = []
+        self.__std_containers_free_operators = {}
         self.__exposed_free_fun_overloads = set()
         self.__fc_manager = fake_constructors_manager.manager_t( global_ns )
 
@@ -174,30 +175,13 @@ class creator_t( declarations.decl_visitor_t ):
                 pass
             else:
                 assert not "Found %d class code creators" % len(creator)
-                
+
         find = code_creators.creator_finder.find_by_declaration
         if operator.target_class and operator.target_class.ignore == False:
             found = find( lambda decl: operator.target_class is decl
                           , self.__extmodule.body.creators )
             adopt_operator_impl( operator, found )
-        """
-        find = code_creators.creator_finder.find_by_declaration
-        if isinstance( operator.parent, declarations.class_t ):
-            found = find( lambda decl: operator.parent is decl
-                          , self.__extmodule.body.creators )
-            adopt_operator_impl( operator, found )
-        else:
-            #select all to be exposed declarations
-            included = filter( lambda decl: decl.ignore == False, operator.class_types )
-            if not included:
-                msg = 'Py++ bug found!' \
-                      ' For some reason Py++ decided to expose free operator "%s", when all class types related to the operator definition are excluded.' \
-                      ' Please report this bug. Thanks! '
-                raise RuntimeError( msg % str( operator ) )
 
-            found = find( lambda decl: included[0] is decl, self.__extmodule.body.creators )
-            adopt_operator_impl( operator, found )
-        """
     def _is_registered_smart_pointer_creator( self, creator, db ):
         for registered in db:
             if not isinstance( creator, registered.__class__ ):
@@ -292,7 +276,6 @@ class creator_t( declarations.decl_visitor_t ):
 
         creators = []
         created_value_traits = set()
-
         for cls in self.__get_exposed_containers():
             self.__print_readme( cls )
 
@@ -321,6 +304,12 @@ class creator_t( declarations.decl_visitor_t ):
                         element_type_cc = code_creators.value_traits_t( value_cls )
                         self.__extmodule.adopt_declaration_creator( element_type_cc )
                 cls_creator.adopt_creator( code_creators.indexing_suite2_t(cls) )
+
+            scfo = self.__std_containers_free_operators
+            if cls in scfo:
+                for operator in scfo[cls]:
+                    self.__dependencies_manager.add_exported( operator )
+                    cls_creator.adopt_creator( code_creators.operator_t( operator=operator ) )
 
         creators.reverse()
         self.__module_body.adopt_creators( creators, 0 )
@@ -535,7 +524,17 @@ class creator_t( declarations.decl_visitor_t ):
 
     def visit_free_operator( self ):
         self.__types_db.update( self.curr_decl )
-        self.__free_operators.append( self.curr_decl )
+
+        operator = self.curr_decl
+        target_class = operator.target_class
+        scfo = self.__std_containers_free_operators
+        if target_class and target_class.indexing_suite:
+            if target_class not in scfo:
+                scfo[ target_class ] = [ operator ]
+            else:
+                scfo[ target_class ].append( operator )
+        else:
+            self.__free_operators.append( self.curr_decl )
 
     def visit_class_declaration(self ):
         pass

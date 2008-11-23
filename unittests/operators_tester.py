@@ -66,6 +66,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.namespace( 'Geometry' ).include()
         mb.namespace( 'Geometry' ).class_( 'VecOfInts' ).exclude()
 
+        mb.namespace( 'Geometry2' ).include()
+
     def run_tests(self, module):
         pyrational = module.pyrational
         self.failUnless( pyrational( 28, 7) == 4 )
@@ -99,6 +101,15 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
         y = module.YYY()
         print str( y )
+
+        vec = module.vector_less__int__greater_()
+        ins_cls_2 = module.Class2()
+        vec += ins_cls_2
+
+        ins_cls_1 = module.Class()
+        def tmp():
+            vec += ins_cls_1
+        self.failIfNotRaisesAny( tmp )
 
 def create_suite():
     suite = unittest.TestSuite()
