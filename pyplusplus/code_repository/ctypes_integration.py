@@ -25,7 +25,6 @@ code = \
 #include "boost/utility/addressof.hpp"
 #include "boost/mpl/vector.hpp"
 #include "boost/function.hpp"
-#include "boost/cstdint.hpp"
 #include "boost/type.hpp"
 #include "boost/bind.hpp"
 
@@ -33,23 +32,23 @@ code = \
 namespace pyplusplus{ namespace convenience{
 
 template< typename TType, typename TMemVarType >
-boost::uint32_t
+size_t
 addressof( const TType* inst_ptr, const TMemVarType TType::* offset){
     if( !inst_ptr ){
         throw std::runtime_error( "unable to dereference null pointer" );
     }
     const TType& inst = *inst_ptr;
-    return boost::uint32_t( boost::addressof( inst.*offset ) );
+    return size_t( boost::addressof( inst.*offset ) );
 }
 
 template< typename TType >
-boost::uint32_t
+size_t
 addressof_inst( const TType* inst_ptr){
     if( !inst_ptr ){
         throw std::runtime_error( "unable to dereference null pointer" );
     }
 
-    return boost::uint32_t( inst_ptr );
+    return size_t( inst_ptr );
 }
 
 template< typename TType, typename TMemVarType >
@@ -59,7 +58,7 @@ make_addressof_getter( const TMemVarType TType::* offset ){
     namespace pyppc = pyplusplus::convenience;
     return bpl::make_function( boost::bind( &pyppc::addressof< TType, TMemVarType >, _1, offset )
                                , bpl::default_call_policies()
-                               , boost::mpl::vector< boost::uint32_t, const TType* >() );
+                               , boost::mpl::vector< size_t, const TType* >() );
 }
 
 template< typename TType >
@@ -69,7 +68,7 @@ make_addressof_inst_getter(){
     namespace pyppc = pyplusplus::convenience;
     return bpl::make_function( boost::bind( &pyppc::addressof_inst< TType >, _1 )
                                , bpl::default_call_policies()
-                               , boost::mpl::vector< boost::uint32_t, const TType* >() );
+                               , boost::mpl::vector< size_t, const TType* >() );
 }
 
 class register_addressof_static_var : public boost::python::def_visitor<register_addressof_static_var>
@@ -91,7 +90,7 @@ public:
     }
 
 private:
-    boost::uint32_t m_address;
+    size_t m_address;
     const char* m_name;
 };
 

@@ -177,7 +177,7 @@ class global_variable_addressof_t( global_variable_base_t ):
         #TODO: porting to 64Bit is welcome
         result.append( algorithm.create_identifier( self, '::boost::python::scope' ) )
         result.append( '().attr("%s")' % self.alias )
-        result.append( ' = boost::uint32_t( boost::addressof( %s ) );' % self.decl_identifier )
+        result.append( ' = size_t( boost::addressof( %s ) );' % self.decl_identifier )
         return ''.join( result )
 
     def _get_system_headers_impl( self ):
