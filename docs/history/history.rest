@@ -24,6 +24,13 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Oliver Schweitzer
 * Hernán Ordiales
 * Bernd Fritzke
+* Andrei Vermel
+
+-----------
+SVN Version
+-----------
+
+1. The bug related to exposing free operators was fixed. Many thanks to Andrei Vermel.
 
 -----------
 Version 1.0
