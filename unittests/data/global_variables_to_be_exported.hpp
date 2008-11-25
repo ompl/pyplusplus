@@ -6,6 +6,8 @@
 #ifndef __global_variables_to_be_exported_hpp__
 #define __global_variables_to_be_exported_hpp__
 
+#include <cstdlib>
+
 namespace global_variables{
 
 enum color{ red, green, blue };
@@ -23,7 +25,7 @@ extern int some_value;
 
 int get_some_value();
 
-unsigned int get_some_value_address();
+size_t get_some_value_address();
 
 }
 

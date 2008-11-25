@@ -21,7 +21,7 @@ void init_garray(){
 
 int some_value = -7;
 int get_some_value(){ return some_value; }
-unsigned int get_some_value_address(){ return (unsigned int)( &some_value ); }
+size_t get_some_value_address(){ return size_t( &some_value ); }
 
 }
 
