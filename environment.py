@@ -39,6 +39,8 @@ if 'roman' in getpass.getuser():
         python.libs = 'e:/python25/libs'
         python.include = 'e:/python25/include'
     else:
+        os.nice( 20 )
+        print 'test process niceness: 20'
         scons.suffix = '.so'
         scons.ccflags = ['-DBOOST_PYTHON_NO_PY_SIGNATURES' ]
         boost.libs = ['/home/roman/include/libs' ]
