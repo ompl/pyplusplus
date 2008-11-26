@@ -82,7 +82,7 @@ struct make_addressof_holder{
             return bpl::detail::none();
         }
         else{
-            boost::uint32_t addressof_p = reinterpret_cast< boost::uint32_t >( p );
+            size_t addressof_p = size_t( p );
             bpl::object p_address( addressof_p );
             return bpl::incref( p_address.ptr() );
         }
