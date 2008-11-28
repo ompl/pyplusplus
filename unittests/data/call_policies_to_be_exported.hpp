@@ -11,7 +11,7 @@
 namespace call_policies{
 
 struct dummy{
-    int id() { return int( this ); }
+    size_t id() { return (size_t)( this ); }
 };
 
 namespace return_arg{
@@ -87,7 +87,7 @@ struct arrays{
 };
 
 struct return_range_image_t{
-    return_range_image_t() 
+    return_range_image_t()
     : raw_data( "" )
     {
         raw_data += '1';
@@ -96,17 +96,17 @@ struct return_range_image_t{
     }
 
     ~return_range_image_t(){}
-    
+
     std::string raw_data;
-    
+
     const char* get_raw_data_const() const{
         return raw_data.c_str();
     }
-    
+
     char* get_raw_data(){
         return &raw_data.at(0);
     }
-    
+
     return_range_image_t* create_images(){
         return_range_image_t* images = new return_range_image_t[3];
         return_range_image_t x;
@@ -122,6 +122,6 @@ struct return_range_image_t{
     }
 };
 
-} 
+}
 
 #endif//__call_policies_to_be_exported_hpp__

@@ -12,9 +12,9 @@ namespace deepcopy{
 
 struct item_t{
     item_t(){
-        id = reinterpret_cast< int >( this );
+        id = (size_t)( this );
     }
-    int id;
+    size_t id;
 };
 
 typedef std::vector< item_t > items_t;
