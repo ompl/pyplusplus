@@ -15,16 +15,16 @@ this_module_dir_path = os.path.abspath ( os.path.dirname( sys.modules[__name__].
 
 data_directory = os.path.join( this_module_dir_path, 'data' )
 build_directory = os.path.join( this_module_dir_path, 'temp' )
-build_dir = build_directory 
+build_dir = build_directory
 
 sys.path.append( os.path.dirname( this_module_dir_path ) )
 
-from environment import scons, boost, python, gccxml
+from environment import scons, boost, python, gccxml, indexing_suite
 
 class scons_config:
     libs = ['boost_python']
     libpath = [ python.libs ] + boost.libs
-    cpppath = [ boost.include, python.include ]
+    cpppath = [ boost.include, python.include, indexing_suite.include ]
     include_dirs = cpppath + [data_directory]
 
     @staticmethod
@@ -40,7 +40,7 @@ class scons_config:
             , "    , SHLIBPREFIX=''"
             , "    , SHLIBSUFFIX='%s'" % scons.suffix #explicit better then implicit
             , ")"
-            , "env.AddPostAction('%(target)s', 'mt.exe -nologo -manifest %(target)s.pyd.manifest -outputresource:%(target)s.pyd;2'  )" ]          
+            , "env.AddPostAction('%(target)s', 'mt.exe -nologo -manifest %(target)s.pyd.manifest -outputresource:%(target)s.pyd;2'  )" ]
         return os.linesep.join( code )
 
 #I need this in order to allow Python to load just compiled modules

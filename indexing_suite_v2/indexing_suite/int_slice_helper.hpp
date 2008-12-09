@@ -9,6 +9,7 @@
 // History
 // =======
 // 2003/10/13   rmg     File creation
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: int_slice_helper.hpp,v 1.1.2.10 2004/02/08 18:57:42 raoulgough Exp $
 //
@@ -17,7 +18,7 @@
 #define BOOST_PYTHON_INDEXING_INT_SLICE_HELPER_HPP
 
 # include <boost/python/errors.hpp>
-# include <boost/python/suite/indexing/workaround.hpp>
+# include <indexing_suite/workaround.hpp>
 
 namespace boost { namespace python { namespace indexing {
   template<typename Algorithms, typename SliceType>

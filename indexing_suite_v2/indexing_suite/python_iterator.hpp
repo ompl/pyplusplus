@@ -13,6 +13,7 @@
 // History
 // =======
 // 2003/ 9/10   rmg     File creation
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: python_iterator.hpp,v 1.1.2.5 2003/11/24 16:35:09 raoulgough Exp $
 //

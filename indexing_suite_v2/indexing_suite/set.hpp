@@ -11,6 +11,7 @@
 // History
 // =======
 // 2003/10/28   rmg     File creation from algo_selector.hpp
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: set.hpp,v 1.1.2.6 2004/02/08 18:57:42 raoulgough Exp $
 //
@@ -18,9 +19,9 @@
 #ifndef BOOST_PYTHON_INDEXING_SET_HPP
 #define BOOST_PYTHON_INDEXING_SET_HPP
 
-#include <boost/python/suite/indexing/container_traits.hpp>
-#include <boost/python/suite/indexing/container_suite.hpp>
-#include <boost/python/suite/indexing/algorithms.hpp>
+#include <indexing_suite/container_traits.hpp>
+#include <indexing_suite/container_suite.hpp>
+#include <indexing_suite/algorithms.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <set>
 
@@ -85,13 +86,13 @@ namespace boost { namespace python { namespace indexing {
     typedef typename Parent::index_param index_param;
 
     static void      insert     (container &, index_param);
-  
+
     template<typename PythonClass, typename Policy>
     static void visit_container_class( PythonClass &pyClass, Policy const &policy)
     {
       ContainerTraits::visit_container_class (pyClass, policy);
-      pyClass.def( "add", &self_type::insert );        
-    }  
+      pyClass.def( "add", &self_type::insert );
+    }
 
   };
 

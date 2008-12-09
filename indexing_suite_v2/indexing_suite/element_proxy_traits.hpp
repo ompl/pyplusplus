@@ -17,6 +17,7 @@
 // History
 // =======
 // 2003/10/23   rmg     File creation
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: element_proxy_traits.hpp,v 1.1.2.5 2003/12/05 17:36:14 raoulgough Exp $
 //
@@ -24,8 +25,8 @@
 #ifndef BOOST_PYTHON_INDEXING_ELEMENT_PROXY_TRAITS_HPP
 #define BOOST_PYTHON_INDEXING_ELEMENT_PROXY_TRAITS_HPP
 
-#include <boost/python/suite/indexing/element_proxy.hpp>
-#include <boost/python/suite/indexing/value_traits.hpp>
+#include <indexing_suite/element_proxy.hpp>
+#include <indexing_suite/value_traits.hpp>
 #include <boost/python/register_ptr_to_python.hpp>
 #include <boost/python/implicit.hpp>
 

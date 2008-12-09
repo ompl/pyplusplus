@@ -10,6 +10,7 @@
 // History
 // =======
 // 2003/10/ 8   rmg     File creation
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: proxy_iterator.hpp,v 1.1.2.8 2003/12/05 17:36:14 raoulgough Exp $
 //
@@ -63,7 +64,7 @@ namespace boost { namespace python { namespace indexing {
       : ptr (p), index (i)
     {
     }
- 
+
     proxy_iterator (container_proxy_type *p, raw_iterator iter)
       : ptr (p), index (iter - p->raw_container().begin())
     {

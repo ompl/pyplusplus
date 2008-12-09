@@ -34,14 +34,14 @@ insert_methods = method_append | method_insert | method_extend
 
 
 containers = {
-      'vector' : "boost/python/suite/indexing/vector.hpp"
-    , 'deque' : "boost/python/suite/indexing/deque.hpp"
-    , 'list' : "boost/python/suite/indexing/list.hpp"
-    , 'map' : "boost/python/suite/indexing/map.hpp"
-    , 'multimap' : "boost/python/suite/indexing/multimap.hpp"
-    , 'hash_map' : "boost/python/suite/indexing/map.hpp"
-    , 'set' : "boost/python/suite/indexing/set.hpp"
-    , 'hash_set' : "boost/python/suite/indexing/set.hpp"
+      'vector' : "indexing_suite/vector.hpp"
+      , 'deque' : "indexing_suite/deque.hpp"
+      , 'list' : "indexing_suite/list.hpp"
+      , 'map' : "indexing_suite/map.hpp"
+      , 'multimap' : "indexing_suite/multimap.hpp"
+      , 'hash_map' : "indexing_suite/map.hpp"
+      , 'set' : "indexing_suite/set.hpp"
+      , 'hash_set' : "indexing_suite/set.hpp"
     #TODO: queue, priority, stack, hash_multimap, multiset, hash_multiset
 }
 
@@ -91,7 +91,7 @@ class indexing_suite2_t( object ):
     def element_type(self):
         """reference to container value_type( mapped_type ) type"""
         return self.container_traits.element_type( self.container_class )
-        
+
     @property
     def container_traits( self ):
         "reference to container traits. See pygccxml documentation for more information."
@@ -174,6 +174,6 @@ class indexing_suite2_t( object ):
                 self.__include_files = [] #not supported
             else:
                 #impl details: the order of header files is IMPORTANT
-                self.__include_files = [ "boost/python/suite/indexing/container_suite.hpp"
+                self.__include_files = [ "indexing_suite/container_suite.hpp"
                                          , containers[ name ] ]
         return self.__include_files

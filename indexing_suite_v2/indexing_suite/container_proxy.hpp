@@ -21,6 +21,7 @@
 // =======
 // 2003/ 8/26   rmg     File creation
 // 2003/10/23   rmg     Change pointer container from map to sequence
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: container_proxy.hpp,v 1.1.2.28 2004/02/08 18:57:42 raoulgough Exp $
 //
@@ -28,21 +29,21 @@
 #ifndef BOOST_PYTHON_INDEXING_CONTAINER_PROXY_HPP
 #define BOOST_PYTHON_INDEXING_CONTAINER_PROXY_HPP
 
-#include <boost/python/suite/indexing/proxy_iterator.hpp>
-#include <boost/python/suite/indexing/shared_proxy_impl.hpp>
-#include <boost/python/suite/indexing/element_proxy.hpp>
-#include <boost/python/suite/indexing/element_proxy_traits.hpp>
-#include <boost/python/suite/indexing/workaround.hpp>
-#include <boost/python/suite/indexing/methods.hpp>
+#include <indexing_suite/proxy_iterator.hpp>
+#include <indexing_suite/shared_proxy_impl.hpp>
+#include <indexing_suite/element_proxy.hpp>
+#include <indexing_suite/element_proxy_traits.hpp>
+#include <indexing_suite/workaround.hpp>
+#include <indexing_suite/methods.hpp>
 
 #include <vector>
 #include <cassert>
 #include <boost/shared_ptr.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/iterator/iterator_traits.hpp>
-#include <boost/python/suite/indexing/container_traits.hpp>
-#include <boost/python/suite/indexing/container_suite.hpp>
-#include <boost/python/suite/indexing/algorithms.hpp>
+#include <indexing_suite/container_traits.hpp>
+#include <indexing_suite/container_suite.hpp>
+#include <indexing_suite/algorithms.hpp>
 
 namespace boost { namespace python { namespace indexing {
 

@@ -11,6 +11,7 @@
 // History
 // =======
 // 2003/ 8/23   rmg     File creation
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: suite_utils.hpp,v 1.1.2.7 2003/11/24 14:28:31 raoulgough Exp $
 //

@@ -11,6 +11,7 @@
 // History
 // =======
 // 2003/10/28   rmg     File creation from algo_selector.hpp
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: map.hpp,v 1.1.2.6 2004/02/08 18:57:42 raoulgough Exp $
 //
@@ -18,12 +19,12 @@
 #ifndef BOOST_PYTHON_INDEXING_MAP_HPP
 #define BOOST_PYTHON_INDEXING_MAP_HPP
 
-#include <boost/python/suite/indexing/container_traits.hpp>
-#include <boost/python/suite/indexing/container_suite.hpp>
-#include <boost/python/suite/indexing/algorithms.hpp>
+#include <indexing_suite/container_traits.hpp>
+#include <indexing_suite/container_suite.hpp>
+#include <indexing_suite/algorithms.hpp>
 #include <boost/detail/workaround.hpp>
 #include <map>
-#include <boost/python/suite/indexing/pair.hpp>
+#include <indexing_suite/pair.hpp>
 
 namespace boost { namespace python { namespace indexing {
   /////////////////////////////////////////////////////////////////////////
@@ -98,22 +99,22 @@ namespace boost { namespace python { namespace indexing {
     // Version to return only the mapped type
 
     static boost::python::list keys( container & );
-  
+
     static void      assign     (container &, index_param, value_param);
     static void      insert     (container &, index_param, value_param);
-  
+
     template<typename PythonClass, typename Policy>
     static void visit_container_class( PythonClass &pyClass, Policy const &policy)
     {
       ContainerTraits::visit_container_class (pyClass, policy);
-      pyClass.def( "keys", &self_type::keys );     
-        
+      pyClass.def( "keys", &self_type::keys );
+
       typedef BOOST_DEDUCED_TYPENAME most_derived::container::value_type value_type;
       mapping::register_value_type< PythonClass, value_type, Policy >( pyClass );
       //now we can expose iterators functionality
       pyClass.def( "__iter__", python::iterator< BOOST_DEDUCED_TYPENAME most_derived::container >() );
-    }  
-  
+    }
+
   };
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
@@ -175,7 +176,7 @@ namespace boost { namespace python { namespace indexing {
     return most_derived::find_or_throw (c, ix)->second;
   }
 
-  
+
   template<typename ContainerTraits, typename Ovr>
   boost::python::list
   map_algorithms<ContainerTraits, Ovr>::keys( container &c )
@@ -192,10 +193,10 @@ namespace boost { namespace python { namespace indexing {
         }
         //}
     }
-        
+
     return _keys;
   }
-  
+
   /////////////////////////////////////////////////////////////////////////
   // Assign a value at a particular index (map version)
   /////////////////////////////////////////////////////////////////////////

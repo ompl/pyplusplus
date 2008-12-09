@@ -11,6 +11,7 @@
 // History
 // =======
 // 2003/10/21   rmg     File creation
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: workaround.hpp,v 1.1.2.3 2003/11/17 19:27:13 raoulgough Exp $
 //

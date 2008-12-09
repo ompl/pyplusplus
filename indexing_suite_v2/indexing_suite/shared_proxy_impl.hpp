@@ -16,6 +16,7 @@
 // History
 // =======
 // 2003/ 8/29   rmg     File creation from container_proxy.hh
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: shared_proxy_impl.hpp,v 1.1.2.8 2003/11/24 14:28:31 raoulgough Exp $
 //
@@ -24,7 +25,7 @@
 #define BOOST_PYTHON_INDEXING_SHARED_PROXY_IMPL_HPP
 
 #include <memory>
-#include <boost/python/suite/indexing/workaround.hpp>
+#include <indexing_suite/workaround.hpp>
 
 namespace boost { namespace python { namespace indexing {
   template<class ContainerProxy>

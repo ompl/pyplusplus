@@ -12,6 +12,7 @@
 // History
 // =======
 // 2003/ 9/11   rmg     File creation from container_suite.hpp
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: visitor.hpp,v 1.1.2.16 2004/02/08 18:57:42 raoulgough Exp $
 //
@@ -19,8 +20,8 @@
 #ifndef BOOST_PYTHON_INDEXING_VISITOR_HPP
 #define BOOST_PYTHON_INDEXING_VISITOR_HPP
 
-#include <boost/python/suite/indexing/slice_handler.hpp>
-#include <boost/python/suite/indexing/suite_utils.hpp> // Get index_style_t
+#include <indexing_suite/slice_handler.hpp>
+#include <indexing_suite/suite_utils.hpp> // Get index_style_t
 
 #include <boost/python/def_visitor.hpp>
 #include <boost/python/iterator.hpp>

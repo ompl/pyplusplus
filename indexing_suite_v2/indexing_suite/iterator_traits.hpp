@@ -15,6 +15,7 @@
 // =======
 // 2003/ 8/23   rmg     File creation as iterator_suite.hpp
 // 2003/ 9/12   rmg     Renamed iterator_traits.hpp
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: iterator_traits.hpp,v 1.1.2.14 2004/02/08 18:57:42 raoulgough Exp $
 //
@@ -22,9 +23,9 @@
 #ifndef BOOST_PYTHON_INDEXING_ITERATOR_TRAITS_HPP
 #define BOOST_PYTHON_INDEXING_ITERATOR_TRAITS_HPP
 
-#include <boost/python/suite/indexing/suite_utils.hpp>
-#include <boost/python/suite/indexing/methods.hpp>
-//#include <boost/python/suite/indexing/workaround.hpp>
+#include <indexing_suite/suite_utils.hpp>
+#include <indexing_suite/methods.hpp>
+//#include <indexing_suite/workaround.hpp>
 
 //#include <boost/call_traits.hpp>
 //#include <boost/type_traits.hpp>
@@ -154,7 +155,7 @@ namespace boost { namespace python { namespace indexing {
     forward_iter_sizer       &sizer (std::forward_iterator_tag *);
     bidirectional_iter_sizer &sizer (std::bidirectional_iterator_tag *);
     random_access_iter_sizer &sizer (std::random_access_iterator_tag *);
-  
+
     template<size_t Size> struct traits_by_size {
       // Default implementation gives only the most basic support
       template<typename Iterator>

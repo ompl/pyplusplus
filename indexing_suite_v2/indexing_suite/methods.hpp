@@ -11,6 +11,7 @@
 // History
 // =======
 // 2004/ 1/11   rmg     File creation
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: methods.hpp,v 1.1.2.1 2004/02/08 18:57:42 raoulgough Exp $
 //

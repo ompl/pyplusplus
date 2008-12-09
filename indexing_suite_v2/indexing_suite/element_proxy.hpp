@@ -12,6 +12,7 @@
 // History
 // =======
 // 2003/ 9/15   rmg     File creation from container_proxy.hpp
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: element_proxy.hpp,v 1.1.2.10 2003/12/03 12:18:51 raoulgough Exp $
 //
@@ -19,7 +20,7 @@
 #ifndef BOOST_PYTHON_INDEXING_ELEMENT_PROXY_HPP
 #define BOOST_PYTHON_INDEXING_ELEMENT_PROXY_HPP
 
-#include <boost/python/suite/indexing/shared_proxy_impl.hpp>
+#include <indexing_suite/shared_proxy_impl.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/get_pointer.hpp>
 #include <boost/utility/addressof.hpp>
@@ -168,7 +169,7 @@ namespace boost { namespace python { namespace indexing {
 
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 }} // namespace python::indexing
-#endif 
+#endif
 
   template<typename ContainerProxy>
   typename ContainerProxy::raw_value_type *
@@ -181,7 +182,7 @@ namespace boost { namespace python { namespace indexing {
     // Don't hide these other get_pointer overloads
     using boost::get_pointer;
 }} // namespace python::indexing
-#endif 
+#endif
 }
 
 #endif // BOOST_PYTHON_INDEXING_ELEMENT_PROXY_HPP

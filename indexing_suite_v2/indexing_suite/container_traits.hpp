@@ -15,6 +15,7 @@
 // 2003/ 9/ 8   rmg     Renamed container_traits.hpp
 // 2003/10/28   rmg     Split container-specific versions into separate headers
 // 2004/ 1/28   rmg     Convert to bitset-based feature selection
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: container_traits.hpp,v 1.1.2.15 2004/02/08 18:57:42 raoulgough Exp $
 //
@@ -22,9 +23,9 @@
 #ifndef BOOST_PYTHON_INDEXING_CONTAINER_TRAITS_HPP
 #define BOOST_PYTHON_INDEXING_CONTAINER_TRAITS_HPP
 
-#include <boost/python/suite/indexing/suite_utils.hpp>
-#include <boost/python/suite/indexing/methods.hpp>
-#include <boost/python/suite/indexing/value_traits.hpp>
+#include <indexing_suite/suite_utils.hpp>
+#include <indexing_suite/methods.hpp>
+#include <indexing_suite/value_traits.hpp>
 
 #include <boost/type_traits.hpp>
 #include <boost/call_traits.hpp>

@@ -13,6 +13,7 @@
 // =======
 // 2003/ 9/ 9   rmg     File creation as iterator_pair.hpp
 // 2003/10/27   rmg     Renamed iterator_range.hpp
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: iterator_range.hpp,v 1.1.2.7 2004/02/08 18:57:42 raoulgough Exp $
 //
@@ -27,10 +28,10 @@
 #include <boost/type_traits/ice.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/iterator/iterator_traits.hpp>
-#include <boost/python/suite/indexing/container_traits.hpp>
-#include <boost/python/suite/indexing/container_suite.hpp>
-#include <boost/python/suite/indexing/algorithms.hpp>
-#include <boost/python/suite/indexing/iterator_traits.hpp>
+#include <indexing_suite/container_traits.hpp>
+#include <indexing_suite/container_suite.hpp>
+#include <indexing_suite/algorithms.hpp>
+#include <indexing_suite/iterator_traits.hpp>
 
 namespace boost { namespace python { namespace indexing {
   template<typename Iterator>

@@ -18,7 +18,7 @@ class indexing_suite1_t( registration_based.registration_based_t
         declaration_based.declaration_based_t.__init__( self, declaration=container )
 
     @property
-    def configuration( self ):        
+    def configuration( self ):
         return self.declaration.indexing_suite
 
     @property
@@ -46,12 +46,12 @@ class indexing_suite1_t( registration_based.registration_based_t
                 args.append( no_proxy)
         return declarations.templates.join( suite_identifier, args )
 
-    def _create_impl(self):        
+    def _create_impl(self):
         return "def( %s() )" %  self._create_suite_declaration()
 
     def _get_system_headers_impl( self ):
         return self.configuration.include_files
-        
+
 class indexing_suite2_t( registration_based.registration_based_t
                          , declaration_based.declaration_based_t ):
     def __init__(self, container ):
@@ -87,7 +87,7 @@ class indexing_suite2_t( registration_based.registration_based_t
     def _create_impl( self ):
         if self.declaration.already_exposed:
             return ''
-        
+
         answer = []
         if self.does_user_disable_methods():
             answer.append( self.generate_algorithm_mask() )
@@ -172,10 +172,9 @@ class value_traits_t( code_creator.code_creator_t
         #if self.declaration.already_exposed:
         #    return ''
         #This is the error to skip generation in case the class is already exposed,
-        #because we still expose container, so it needs to know how to work with 
+        #because we still expose container, so it needs to know how to work with
         #the value_type
         return self.generate_value_traits()
 
     def _get_system_headers_impl( self ):
-        return ['boost/python/suite/indexing/value_traits.hpp']
-        
+        return ['indexing_suite/value_traits.hpp']

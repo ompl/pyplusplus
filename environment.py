@@ -4,6 +4,9 @@ import getpass
 
 this_module_dir_path = os.path.abspath ( os.path.dirname( sys.modules[__name__].__file__) )
 
+class indexing_suite:
+    include = os.path.join( this_module_dir_path, 'indexing_suite_v2' )
+
 class boost:
     libs = ''
     include = ''

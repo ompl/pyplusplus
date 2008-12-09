@@ -11,6 +11,7 @@
 // History
 // =======
 // 2003/ 9/ 9   rmg     File creation
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: slice_handler.hpp,v 1.1.2.10 2003/11/24 16:35:52 raoulgough Exp $
 //
@@ -26,8 +27,8 @@
 #include <boost/mpl/apply.hpp>
 #include <algorithm>
 
-#include <boost/python/suite/indexing/slice.hpp>
-#include <boost/python/suite/indexing/python_iterator.hpp>
+#include <indexing_suite/slice.hpp>
+#include <indexing_suite/python_iterator.hpp>
 
 namespace boost { namespace python { namespace indexing {
   template<class Algorithms, class Policy>

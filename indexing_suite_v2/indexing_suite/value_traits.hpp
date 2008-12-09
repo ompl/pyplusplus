@@ -12,6 +12,7 @@
 // History
 // =======
 // 2003/ 9/12   rmg     File creation
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: value_traits.hpp,v 1.1.2.6 2003/12/05 17:36:12 raoulgough Exp $
 //

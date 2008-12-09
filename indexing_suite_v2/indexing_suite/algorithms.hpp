@@ -13,6 +13,7 @@
 // 2003/ 9/11   rmg     File creation from suite_utils.hpp
 // 2003/10/28   rmg     Split container-specific versions into separate headers
 // 2006/10/25   Roman   Adding keys function to assoc_algorithms class
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: algorithms.hpp,v 1.1.2.15 2004/02/08 18:57:42 raoulgough Exp $
 //
@@ -20,12 +21,12 @@
 #ifndef BOOST_PYTHON_INDEXING_ALGORITHMS_HPP
 #define BOOST_PYTHON_INDEXING_ALGORITHMS_HPP
 
-#include <boost/python/suite/indexing/suite_utils.hpp>
+#include <indexing_suite/suite_utils.hpp>
 
 #include <boost/type_traits.hpp>
 #include <boost/python/errors.hpp>
-#include <boost/python/suite/indexing/int_slice_helper.hpp>
-#include <boost/python/suite/indexing/slice.hpp>
+#include <indexing_suite/int_slice_helper.hpp>
+#include <indexing_suite/slice.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/limits.hpp>
 #include <algorithm>
@@ -158,7 +159,7 @@ namespace boost { namespace python { namespace indexing {
       ContainerTraits::visit_container_class (pyClass, policy);
     }
 
-  
+
   protected:
     static iterator  find_or_throw (container &, index_param);
   };
@@ -214,7 +215,7 @@ namespace boost { namespace python { namespace indexing {
           {
             throw std::out_of_range (msg);
           }
-  
+
         result = bound + ix;
       }
 

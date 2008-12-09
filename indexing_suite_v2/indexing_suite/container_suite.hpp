@@ -12,6 +12,7 @@
 // =======
 // 2003/ 8/23   rmg     File creation
 // 2003/ 9/ 8   rmg     Extracted trait facilities into container_traits.hpp
+// 2008/12/08   Roman   Change indexing suite layout
 //
 // $Id: container_suite.hpp,v 1.1.2.7 2004/02/08 18:57:42 raoulgough Exp $
 //
@@ -19,9 +20,9 @@
 #ifndef BOOST_PYTHON_INDEXING_CONTAINER_SUITE_HPP
 #define BOOST_PYTHON_INDEXING_CONTAINER_SUITE_HPP
 
-#include <boost/python/suite/indexing/methods.hpp>
-#include <boost/python/suite/indexing/algorithms.hpp>
-#include <boost/python/suite/indexing/visitor.hpp>
+#include <indexing_suite/methods.hpp>
+#include <indexing_suite/algorithms.hpp>
+#include <indexing_suite/visitor.hpp>
 
 #include <boost/python/return_by_value.hpp>
 #include <boost/python/return_value_policy.hpp>
