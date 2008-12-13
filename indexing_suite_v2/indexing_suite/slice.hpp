@@ -26,7 +26,7 @@
 #include <algorithm>
 
 namespace boost { namespace python { namespace indexing {
-  struct BOOST_PYTHON_DECL slice : public boost::python::object
+  struct /*BOOST_PYTHON_DECL*/ slice : public boost::python::object
   {
     // This is just a thin wrapper around boost::python::object
     // so that it is possible to register a special converter for
@@ -61,7 +61,7 @@ namespace boost { namespace python { namespace indexing {
     {}
   };
 
-  struct BOOST_PYTHON_DECL integer_slice
+  struct /*BOOST_PYTHON_DECL*/ integer_slice
   {
     // This class provides a convenient interface to Python slice
     // objects that contain integer bound and stride values.

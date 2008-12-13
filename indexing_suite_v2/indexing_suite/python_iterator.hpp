@@ -28,7 +28,7 @@
 #include <boost/python/handle.hpp>
 
 namespace boost { namespace python { namespace indexing {
-  struct BOOST_PYTHON_DECL python_iterator
+  struct /*BOOST_PYTHON_DECL*/ python_iterator
   {
     python_iterator (boost::python::object obj)
     : m_iter_obj (handle<> (PyObject_GetIter (obj.ptr()))),
