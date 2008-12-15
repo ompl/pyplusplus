@@ -30,8 +30,9 @@ class scons_config:
     @staticmethod
     def create_sconstruct():
         code = [
-              "env = Environment()"
-            , "env.SharedLibrary( target=r'%(target)s'"
+              "import sys"
+            , "env = Environment()"
+            , "t = env.SharedLibrary( target=r'%(target)s'"
             , "    , source=[ %(sources)s ]"
             , "    , LIBS=[ %s ]" % ','.join( [ 'r"%s"' % lib for lib in scons_config.libs ] )
             , "    , LIBPATH=[ %s ]" % ','.join( [ 'r"%s"' % path for path in scons_config.libpath ] )
@@ -39,8 +40,9 @@ class scons_config:
             , "    , CCFLAGS=[ %s ]" % ','.join( [ 'r"%s"' % flag for flag in scons.ccflags ] )
             , "    , SHLIBPREFIX=''"
             , "    , SHLIBSUFFIX='%s'" % scons.suffix #explicit better then implicit
-            , ")"
-            , "env.AddPostAction('%(target)s', 'mt.exe -nologo -manifest %(target)s.pyd.manifest -outputresource:%(target)s.pyd;2'  )" ]
+            , ")"         
+            , "if 'linux' not in sys.platform:"
+            , "    env.AddPostAction(t, 'mt.exe -nologo -manifest %(target)s.pyd.manifest -outputresource:%(target)s.pyd;2'  )" ]          
         return os.linesep.join( code )
 
 #I need this in order to allow Python to load just compiled modules

@@ -337,6 +337,25 @@ class virtual_mem_fun_controller_t( controller_base_t ):
     def default_controller( self ):
         return self.__default_cntrl
 
+class pure_virtual_mem_fun_controller_t( virtual_mem_fun_controller_t ):
+    def __init__( self, function ):
+        virtual_mem_fun_controller_t.__init__(self, function)
+        
+    class override_fun_controller_t( virtual_mem_fun_controller_t.override_fun_controller_t ):
+        def __init__( self, function ):
+            virtual_mem_fun_controller_t.override_fun_controller_t.__init__(self, function)
+            
+        @property
+        def template( self ):
+            return templates.pure_virtual_mem_fun.override
+
+    class default_fun_controller_t( virtual_mem_fun_controller_t.default_fun_controller_t ):
+        def __init__( self, function ):
+            virtual_mem_fun_controller_t.default_fun_controller_t.__init__(self,function)   
+
+        @property
+        def template( self ):
+            return templates.pure_virtual_mem_fun.default
 
 #TODO: FT for constructor
 

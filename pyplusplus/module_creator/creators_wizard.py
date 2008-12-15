@@ -30,8 +30,12 @@ def find_out_mem_fun_creator_classes( decl ):
             else:
                 maker_cls = code_creators.mem_fun_t
         elif decl.virtuality == VIRTUALITY_TYPES.PURE_VIRTUAL:
-            fwrapper_cls = code_creators.mem_fun_pv_wrapper_t
-            maker_cls = code_creators.mem_fun_pv_t
+            if decl.transformations:
+                maker_cls = code_creators.mem_fun_v_transformed_t
+                fwrapper_cls = code_creators.mem_fun_v_transformed_wrapper_t
+            else:
+                fwrapper_cls = code_creators.mem_fun_pv_wrapper_t
+                maker_cls = code_creators.mem_fun_pv_t
         else:
             if decl.transformations:
                 fwrapper_cls = code_creators.mem_fun_v_transformed_wrapper_t

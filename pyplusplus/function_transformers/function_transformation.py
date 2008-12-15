@@ -18,6 +18,8 @@ class function_transformation_t:
         if isinstance( function.parent, declarations.class_t ):
             if declarations.VIRTUALITY_TYPES.NOT_VIRTUAL == function.virtuality:
                 self.__controller = controllers.mem_fun_controller_t( function )
+            elif declarations.VIRTUALITY_TYPES.PURE_VIRTUAL == function.virtuality:
+                self.__controller = controllers.pure_virtual_mem_fun_controller_t( function )                
             else:
                 self.__controller = controllers.virtual_mem_fun_controller_t( function )
         else:

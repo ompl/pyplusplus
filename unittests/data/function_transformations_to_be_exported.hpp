@@ -249,7 +249,7 @@ struct render_queue_listener_t{
 	virtual void 
 	render_queue_ended( int group_id
 					    , const std::string& invocation
-						, bool& repeat_this_invocation ){};
+						, bool& repeat_this_invocation ) = 0;
 };
 
 }

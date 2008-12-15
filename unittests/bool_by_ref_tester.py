@@ -26,6 +26,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         set_flag = mb.mem_fun( '::tests::listener::listen' )
         set_flag.add_transformation( ft.inout(2) )
         
+        set_flag = mb.mem_fun( '::tests::listener::listenPV' )
+        set_flag.add_transformation( ft.inout(2) )
        
     def run_tests(self, module):
         class list1 ( module.listener ):
@@ -33,10 +35,15 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                 module.listener.__init__(self)
             def listen( self, id, name,  skip):
                 print "Python: listen called with", id, name, skip
-                return 11## Test always returns True...
-        
+                return skip + 1 ## Test always returns True...
+            def listenPV( self, id, name,  skip):
+                print "Python: listenPV called with", id, name, skip
+                return skip + 1 ## Test always returns True...
+
         c = list1()
         ret = module.callListener( c )
+        print ret
+        ret = module.callListenerPV ( c )
         print ret
         
 def create_suite():
