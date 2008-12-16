@@ -97,6 +97,15 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         data = data_type.from_address( image.data )
         for j in range(5):
             self.failUnless( j == data[j] )
+            
+        int_array = ctypes.c_int * 5
+        array = int_array()
+        for i in range( 5 ):
+            array[i] = 2*i
+        image.data = ctypes.addressof(array)
+        data = data_type.from_address( image.data )
+        for j in range(5):
+            self.failUnless( j*2 == data[j] )
  
         data_type = ctypes.POINTER( ctypes.c_int )
         data = data_type.from_address( module.image_t.none_image )

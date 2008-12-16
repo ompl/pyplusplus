@@ -656,15 +656,26 @@ class member_variable_addressof_t( member_variable_base_t ):
     def __init__(self, variable, wrapper=None ):
         member_variable_base_t.__init__( self, variable=variable, wrapper=wrapper )
 
+    def has_setter( self ) :
+        return declarations.is_pointer( self.declaration.type ) \
+               and not declarations.is_const( self.declaration.type )
+
     def _create_m_var( self ):
+        param_sep = self.PARAM_SEPARATOR
+        if self.has_setter() or self.documentation:
+            param_sep = os.linesep + self.indent( self.PARAM_SEPARATOR, 3 )
         answer = [ 'add_property' ]
         answer.append( '( ' )
         answer.append('"%s"' % self.alias)
-        answer.append( self.PARAM_SEPARATOR )
+        answer.append( param_sep )
         answer.append( 'pyplus_conv::make_addressof_getter(&%s)'
                        % self.decl_identifier )
+        if self.has_setter():
+            answer.append( param_sep )
+            answer.append( 'pyplus_conv::make_address_setter(&%s)'
+                           % self.decl_identifier )            
         if self.documentation:
-            answer.append( self.PARAM_SEPARATOR )
+            answer.append( param_sep  )
             answer.append( self.documentation )
         answer.append( ' ) ' )
         return ''.join( answer )

@@ -41,6 +41,16 @@ addressof( const TType* inst_ptr, const TMemVarType TType::* offset){
     return size_t( boost::addressof( inst.*offset ) );
 }
 
+template< typename TType, typename TMemVarType>
+void
+assign_address( TType* inst_ptr, TMemVarType TType::* offset, size_t address ){
+    if( !inst_ptr ){
+        throw std::runtime_error( "unable to dereference null pointer" );
+    }
+    TType& inst = *inst_ptr;
+    inst.*offset = reinterpret_cast< TMemVarType >( address );
+}
+
 template< typename TType >
 size_t
 addressof_inst( const TType* inst_ptr){
@@ -60,6 +70,17 @@ make_addressof_getter( const TMemVarType TType::* offset ){
                                , bpl::default_call_policies()
                                , boost::mpl::vector< size_t, const TType* >() );
 }
+
+template< typename TType, typename TMemVarType >
+boost::python::object
+make_address_setter( TMemVarType TType::* offset ){
+    namespace bpl = boost::python;
+    namespace pyppc = pyplusplus::convenience;
+    return bpl::make_function( boost::bind( &pyppc::assign_address< TType, TMemVarType >, _1, offset, _2 )
+                               , bpl::default_call_policies()
+                               , boost::mpl::vector< void, TType*, size_t >() );
+}
+
 
 template< typename TType >
 boost::python::object
