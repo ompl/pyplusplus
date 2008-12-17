@@ -7,6 +7,7 @@ import os
 import sys
 import unittest
 import autoconfig
+import pygccxml
 from pygccxml import parser
 from pyplusplus import utils
 from pygccxml import declarations
@@ -54,8 +55,8 @@ class fundamental_tester_base_t( unittest.TestCase ):
         irrelevant_decl_types = ( declarations.typedef_t
                                   , declarations.namespace_t
                                   , declarations.free_operator_t )
-        specially_exposed_decls = mb.code_creator.specially_exposed_decls                                  
-        for d in mb.decls():            
+        specially_exposed_decls = mb.code_creator.specially_exposed_decls
+        for d in mb.decls():
             if not d.exportable:
                 continue
             elif isinstance( d, declarations.free_operator_t ):
@@ -64,13 +65,13 @@ class fundamental_tester_base_t( unittest.TestCase ):
                 if d in specially_exposed_decls:
                     continue
                 if exposed_db.is_exposed( d ):
-                    i = 0                
+                    i = 0
                 self.failUnless( not exposed_db.is_exposed( d )
                                  , '''Declaration "%s" is NOT exposed, but for some reason it is marked as such.'''
                                    % str( d ) )
             #if d.ignore or not d.exportable or isinstance( d, irrelevant_decl_types ):
                 #continue
-            #if d.parent and not d.parent.name:                
+            #if d.parent and not d.parent.name:
                 #continue #unnamed classes
             else:
                 self.failUnless( exposed_db.is_exposed( d )
@@ -95,17 +96,13 @@ class fundamental_tester_base_t( unittest.TestCase ):
 
     def _create_extension_source_file(self):
         global LICENSE
-        
-        #xml_file = os.path.split( self.__to_be_exported_header )[1]
-        #xml_file = os.path.join( autoconfig.build_dir, xml_file + '.xml' )
-        #xml_cached_fc = parser.create_cached_source_fc( self.__to_be_exported_header, xml_file )
 
-        #mb = module_builder.module_builder_t( [xml_cached_fc]
         mb = module_builder.module_builder_t( [self.__to_be_exported_header]
                                               , gccxml_path=autoconfig.gccxml.executable
                                               , include_paths=[autoconfig.boost.include]
                                               , undefine_symbols=['__MINGW32__']
-                                              , indexing_suite_version=self.__indexing_suite_version)
+                                              , indexing_suite_version=self.__indexing_suite_version
+                                              , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler())
         for decl in mb.decls():
             decl.documentation = '"documentation"'
         self.customize( mb )

@@ -11,12 +11,13 @@ from pyplusplus import module_builder
 
 #Configurating GCC-XML parser
 #Basically you should copy here your makefile configuration
-parser_configuration = parser.config_t( 
+parser_configuration = parser.config_t(
                             #path to GCC-XML binary
                             gccxml_path=r"c:/tools/gccxml/bin/gccxml.exe"
                             , working_directory=r"D:\pygccxml_sources\source\pyplusplus\unittests\data"
                             , include_paths=['D:/pygccxml_sources/source/pyplusplus/gui']
-                            , define_symbols=[] )
+                            , define_symbols=[]
+                            , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
 
 #Creating an instance of class that will help you to expose your declarations
 mb = module_builder.module_builder_t( [r"D:\pygccxml_sources\source\pyplusplus\unittests\data\call_policies_to_be_exported.hpp"], parser_configuration )

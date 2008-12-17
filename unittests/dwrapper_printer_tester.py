@@ -21,17 +21,18 @@ class tester_t(unittest.TestCase):
         ]
         return map( lambda f: os.path.join( autoconfig.data_directory, f )
                     , files )
-            
+
     def test(self):
         mb = module_builder.module_builder_t( self._get_files()
                                               , gccxml_path=autoconfig.gccxml.executable
                                               , include_paths=[autoconfig.boost.include]
-                                              , undefine_symbols=['__MINGW32__'])
+                                              , undefine_symbols=['__MINGW32__']
+                                              , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler())
         writer = lambda decl: None
         module_builder.print_declarations( mb.global_ns, writer=writer )
-    
+
 def create_suite():
-    suite = unittest.TestSuite()    
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

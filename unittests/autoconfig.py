@@ -21,8 +21,10 @@ sys.path.append( os.path.dirname( this_module_dir_path ) )
 
 from environment import scons, boost, python, gccxml, indexing_suite
 
+import pygccxml
+
 class scons_config:
-    libs = ['boost_python']
+    libs = []#['boost_python']
     libpath = [ python.libs ] + boost.libs
     cpppath = [ boost.include, python.include, indexing_suite.include ]
     include_dirs = cpppath + [data_directory]
@@ -32,6 +34,10 @@ class scons_config:
         code = [
               "import sys"
             , "env = Environment()"
+            , "if 'linux' not in sys.platform:"
+            , "    env['MSVS'] = {'VERSION': '%s'}" % str( pygccxml.utils.native_compiler.get_version()[1] )
+            , "    env['MSVS_VERSION'] = '%s'" % str( pygccxml.utils.native_compiler.get_version()[1] )
+            , "    Tool('msvc')(env)"
             , "t = env.SharedLibrary( target=r'%(target)s'"
             , "    , source=[ %(sources)s ]"
             , "    , LIBS=[ %s ]" % ','.join( [ 'r"%s"' % lib for lib in scons_config.libs ] )
@@ -40,9 +46,9 @@ class scons_config:
             , "    , CCFLAGS=[ %s ]" % ','.join( [ 'r"%s"' % flag for flag in scons.ccflags ] )
             , "    , SHLIBPREFIX=''"
             , "    , SHLIBSUFFIX='%s'" % scons.suffix #explicit better then implicit
-            , ")"         
-            , "if 'linux' not in sys.platform:"
-            , "    env.AddPostAction(t, 'mt.exe -nologo -manifest %(target)s.pyd.manifest -outputresource:%(target)s.pyd;2'  )" ]          
+            , ")" ]
+            #~ , "if 'linux' not in sys.platform:"
+            #~ , "    env.AddPostAction(t, 'mt.exe -nologo -manifest %(target)s.pyd.manifest -outputresource:%(target)s.pyd;2'  )" ]
         return os.linesep.join( code )
 
 #I need this in order to allow Python to load just compiled modules

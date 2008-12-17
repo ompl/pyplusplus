@@ -7,6 +7,7 @@ import os
 import sys
 import unittest
 import autoconfig
+import pygccxml
 from pygccxml import parser
 from pygccxml import declarations
 from pyplusplus import code_creators
@@ -24,7 +25,8 @@ class make_flatten_tester_t(unittest.TestCase):
     def test(self):
         mb = module_builder.module_builder_t(
                 [ module_builder.create_text_fc( 'namespace enums{ enum { OK=1 }; }' ) ]
-                , gccxml_path=autoconfig.gccxml.executable )
+                , gccxml_path=autoconfig.gccxml.executable
+                , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
         mb.namespace( name='::enums' ).include()
         mb.build_code_creator('dummy')
         flatten = code_creators.make_flatten(mb.code_creator.creators)
@@ -34,7 +36,7 @@ class creator_finder_tester_t( unittest.TestCase ):
     def test_find_by_declaration(self):
         mb = module_builder.module_builder_t(
             [ module_builder.create_text_fc( 'namespace enums{ enum color{ red = 1}; }' )]
-            , gccxml_path=autoconfig.gccxml.executable )
+            , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
         mb.namespace( name='::enums' ).include()
         enum_matcher = declarations.match_declaration_t( name='color' )
         mb.build_code_creator( 'dummy' )
@@ -46,7 +48,7 @@ class creator_finder_tester_t( unittest.TestCase ):
     def test_find_by_class_instance(self):
         mb = module_builder.module_builder_t(
             [ module_builder.create_text_fc( 'namespace enums{ enum color{ red = 1}; }' )]
-            , gccxml_path=autoconfig.gccxml.executable )
+            , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
         mb.namespace( name='::enums' ).include()
         mb.build_code_creator('dummy')
         enum_found = code_creators.creator_finder.find_by_class_instance(
@@ -67,7 +69,7 @@ class class_organizer_tester_t(unittest.TestCase):
         return answer
 
     def test(self):
-        config = parser.config_t( gccxml_path=autoconfig.gccxml.executable )
+        config = parser.config_t( gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
         code = []
         code.append('struct a{};')
         code.append('struct b{};')
@@ -95,7 +97,7 @@ class exclude_function_with_array_arg_tester_t( unittest.TestCase ):
     def test(self):
         mb = module_builder.module_builder_t(
             [ module_builder.create_text_fc( 'namespace arr{ struct x{ x( int arr[3][3], int ){} x( const x arr[3][3], int ){} }; }' )]
-            , gccxml_path=autoconfig.gccxml.executable )
+            , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
         arr = mb.namespace( name='arr' )
         mem_funs = arr.calldefs( 'x', arg_types=[None,None] )
         for x in mem_funs:
@@ -115,7 +117,7 @@ class readme_tester_t( unittest.TestCase ):
     def test(self):
         mb = module_builder.module_builder_t(
             [ module_builder.create_text_fc( self.CODE )]
-            , gccxml_path=autoconfig.gccxml.executable )
+            , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
         xxx = mb.namespace( name='xxx' )
         fun = xxx.calldef( 'do_smth' )
         self.failUnless( fun.readme() == [] )
@@ -133,12 +135,12 @@ class use_function_signature_bug_tester_t( unittest.TestCase ):
     struct derived : public base {
         void f(int i);
         using base::f;
-    };    
+    };
     """
     def test(self):
         mb = module_builder.module_builder_t(
             [ module_builder.create_text_fc( self.CODE )]
-            , gccxml_path=autoconfig.gccxml.executable )
+            , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
         d = mb.class_( 'derived' )
         f = d.mem_fun( 'f' )
         self.failUnless( f.create_with_signature == True )
@@ -172,11 +174,11 @@ class class_multiple_files_tester_t(unittest.TestCase):
         int m_dummy;
 
         struct x_nested{};
-        
+
         float* get_rate(){
             return 0;
         }
-        
+
         virtual void get_size( int& i, int& j ){
             i = 0;
             j = 0;
@@ -187,7 +189,7 @@ class class_multiple_files_tester_t(unittest.TestCase):
     def test(self):
         mb = module_builder.module_builder_t(
                 [ module_builder.create_text_fc( self.CLASS_DEF ) ]
-                , gccxml_path=autoconfig.gccxml.executable )
+                , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
         mb.namespace( name='::tester' ).include()
         x = mb.class_( 'x' )
         x.add_registration_code( '//hello world reg' )
@@ -223,77 +225,77 @@ class doc_extractor_tester_t( unittest.TestCase ):
         escaped_doc = module_builder.doc_extractor_i.escape_doc('Hello "Py++"')
         self.failUnless( escaped_doc == '"Hello \\"Py++\\""' )
 
-class exclude_erronious_tester_t( unittest.TestCase ):    
+class exclude_erronious_tester_t( unittest.TestCase ):
     def test(self):
-        
+
         code = """
             namespace xyz{
-            
+
                 struct good{};
-                
+
                 typedef void (*ff1)( int, int );
-                
+
                 void f_bad( ff1 );
-                
+
             }
         """
-        
-        mb = module_builder.module_builder_t( 
+
+        mb = module_builder.module_builder_t(
                 [ module_builder.create_text_fc( code ) ]
-                , gccxml_path=autoconfig.gccxml.executable )
-        
+                , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+
         xyz = mb.namespace( name='xyz' )
         xyz.include()
-        
+
         xyz.exclude(compilation_errors=True)
-        
+
         self.failUnless( xyz.ignore == False )
         self.failUnless( xyz.class_( 'good' ).ignore == False )
         self.failUnless( xyz.free_fun( 'f_bad' ).ignore == True )
 
-class exclude_ellipsis_tester_t( unittest.TestCase ):    
+class exclude_ellipsis_tester_t( unittest.TestCase ):
     def test(self):
-        
+
         code = """
             namespace xyz{
                 void do_smth( int, ... );
             }
         """
-        
-        mb = module_builder.module_builder_t( 
+
+        mb = module_builder.module_builder_t(
                 [ module_builder.create_text_fc( code ) ]
-                , gccxml_path=autoconfig.gccxml.executable )
-        
+                , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+
         do_smth = mb.free_fun( 'do_smth' )
-        
+
         self.failUnless( do_smth.exportable == False )
         print do_smth.why_not_exportable()
 
-class constructors_code_tester_t( unittest.TestCase ):    
+class constructors_code_tester_t( unittest.TestCase ):
     def test(self):
-        
+
         code = """
             namespace xyz{
                 struct Y;
-                
+
                 struct X{
                     X();
-                    X( const X& );       
+                    X( const X& );
                     X( Y* );
                 };
             }
         """
-        
-        mb = module_builder.module_builder_t( 
+
+        mb = module_builder.module_builder_t(
                 [ module_builder.create_text_fc( code ) ]
-                , gccxml_path=autoconfig.gccxml.executable )
-        
+                , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+
         x = mb.class_( 'X' )
         x.include()
         x.constructors().body = '    //all constructors body'
         x.null_constructor_body = '    //null constructor body'
         x.copy_constructor_body = '    //copy constructor body'
-        
+
         mb.build_code_creator( 'XXX' )
         code = mb.code_creator.create()
         tmp = code.split( x.null_constructor_body )
