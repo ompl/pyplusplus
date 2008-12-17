@@ -7,6 +7,7 @@ import os
 import sys
 import unittest
 import autoconfig
+import pygccxml
 from pygccxml import declarations
 from pyplusplus import module_builder
 

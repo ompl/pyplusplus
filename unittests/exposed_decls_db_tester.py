@@ -7,6 +7,7 @@ import os
 import sys
 import unittest
 import autoconfig
+import pygccxml
 from pygccxml import parser
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
@@ -25,7 +26,7 @@ class tester_t(unittest.TestCase):
             enum bbb{ b=2 };
             void fff();
         };
-        
+
         int VVV;
         void FFF( int );
     }
@@ -41,13 +42,13 @@ class tester_t(unittest.TestCase):
     struct yyy{
         struct{ int i;};
     };
-    
+
     struct zzz{
         union{
            int x; float y;
         };
     };
-    
+
     namespace{
         int xxxx;
     }
@@ -57,23 +58,24 @@ class tester_t(unittest.TestCase):
 
     def test(self):
         db = pypp_utils.exposed_decls_db_t()
-        config = parser.config_t( gccxml_path=autoconfig.gccxml.executable )
+        config = parser.config_t( gccxml_path=autoconfig.gccxml.executable
+                                  , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
 
         reader = parser.project_reader_t( config, None, decl_wrappers.dwfactory_t() )
         decls = reader.read_files( [parser.create_text_fc(self.CODE)] )
-    
+
         global_ns = declarations.get_global_namespace( decls )
         ns = global_ns.namespace( 'ns' )
         ns_skip = global_ns.namespace( 'ns_skip' )
 
-        global_ns.exclude()        
+        global_ns.exclude()
         ns.include()
-        
+
         db.register_decls( global_ns, [] )
-                    
+
         for x in ns.decls(recursive=True):
             self.failUnless( db.is_exposed( x ) == True )
-            
+
         for x in ns_skip.decls(recursive=True):
             self.failUnless( db.is_exposed( x ) == False )
 

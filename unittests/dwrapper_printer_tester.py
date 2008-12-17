@@ -7,6 +7,7 @@ import os
 import sys
 import unittest
 import autoconfig
+import pygccxml
 from pyplusplus import module_builder
 
 class tester_t(unittest.TestCase):
