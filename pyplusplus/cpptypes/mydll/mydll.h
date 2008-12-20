@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 class __declspec(dllexport) number_t{
 public:
 	number_t();
@@ -10,8 +12,9 @@ public:
 	void set_value(int x);
 
 	number_t clone() const;
-
+	std::auto_ptr<number_t> clone_ptr() const;
 private:
 	int m_value;
 };
 
+template class __declspec(dllexport) std::auto_ptr< number_t >;

@@ -1,7 +1,6 @@
 import ctypes
 import unittest
-import decorators
-
+import name_mapping
 mydll = ctypes.CPPDLL( './mydll/release/mydll.dll' )
 
 #we should keep somewhere decorated-undecorated name mappings
@@ -11,70 +10,86 @@ mydll = ctypes.CPPDLL( './mydll/release/mydll.dll' )
 #      GCCXML reports mangled and demangled names of the function, but it is not a cross platform( compile ) solution.
 #      It looks like I will have to cause mspdb package to work ( from where ctypes loads dlls? ctypes.windll.msvcr90 ???
 
-
-tmp = [ ( "number_t::number_t(class number_t const &)", "??0number_t@@QAE@ABV0@@Z" )
-        , ( "number_t::number_t(int)", "??0number_t@@QAE@H@Z" )
-        , ( "number_t::number_t(void)", "??0number_t@@QAE@XZ" )
-        , ( "number_t::~number_t(void)", "??1number_t@@UAE@XZ" )
-        , ( "class number_t & number_t::operator=(class number_t const &)", "??4number_t@@QAEAAV0@ABV0@@Z" )
-        , ( "const number_t::'vftable'", "??_7number_t@@6B@" )
-        , ( "int number_t::get_value(void)", "?get_value@number_t@@QBEHXZ" )
-        , ( "void number_t::print_it(void)", "?print_it@number_t@@QBEXXZ" )
-        , ( "void number_t::set_value(int)", "?set_value@number_t@@QAEXH@Z" ) ]
-
-mydll.name_mapping = {}
-for n1, n2 in tmp:
-    mydll.name_mapping[n1] = n2
-    mydll.name_mapping[n2] = n1
+mydll.name_mapping = name_mapping.data
 
 # what is the best way to treat overloaded constructors
 class public( object ):
-    def __init__(self, dll, this, name, restype=None, argtypes=None ):
-        self.this = this #reference to class instance
+    def __init__(self, dll, name, restype=None, argtypes=None ):
         self.name = name
         self.func = getattr( dll, dll.name_mapping[name] )
         self.func.restype = restype
-        this_call_arg_types = [ ctypes.POINTER( this._obj.__class__ ) ]
-        if argtypes:
-            this_call_arg_types.extend( argtypes )
-        self.func.argtypes = this_call_arg_types
+        self.func.argtypes = argtypes
 
     def __call__(self, *args, **keywd ):
-        return self.func( self.this, *args,  **keywd )
+        return self.func( *args,  **keywd )
 
 class mem_fun_factory( object ):
-    def __init__( self, dll, this ):
+    def __init__( self, dll, class_ ):
         self.dll = dll
-        self.this = this
+        self.this_type = ctypes.POINTER( class_ )
 
-    def __call__( self, *args, **keywd ):
-        return public( self.dll, self.this, *args, **keywd )
+    def __call__( self, name, **keywd ):
+        if 'argtypes' not in keywd:
+            keywd['argtypes'] = [ self.this_type ]
+        else:
+            keywd['argtypes'].insert( 0, self.this_type )
+        return public( self.dll, name, **keywd )
+
 
 class Number(ctypes.Structure):
     #http://www.phpcompiler.org/articles/virtualinheritance.html,
     _fields_ = [("vptr", ctypes.POINTER(ctypes.c_void_p)),
                 ("m_value", ctypes.c_int)]
 
+    _methods_ = {}
+
     def __init__(self, x=None):
-        mem_fun = mem_fun_factory( mydll, ctypes.byref( self ) )
-        self.get_value = mem_fun( 'int number_t::get_value(void)', restype=ctypes.c_int )
-        self.set_value = mem_fun( 'void number_t::set_value(int)', argtypes=[ctypes.c_int])
-        self.print_it = mem_fun( 'void number_t::print_it(void)' )
-        self.assign = mem_fun( "class number_t & number_t::operator=(class number_t const &)"
-                               , restype=ctypes.POINTER(Number)
-                               , argtypes=[ctypes.POINTER(Number)] )
+        self.__this = ctypes.byref( self )
         #overloading example
         if None is x:
-            mem_fun( 'number_t::number_t(void)' )()
+            self._methods_['default_constructor']( self.__this )
         elif isinstance( x, int ):
-            mem_fun( 'number_t::number_t(int)', argtypes=[ctypes.c_int] )( x )
+            self._methods_['from_int_constructor']( self.__this, x )
         elif isinstance( x, Number ):
-            mem_fun( 'number_t::number_t(class number_t const &)', argtypes=[ctypes.POINTER(Number)] )( ctypes.byref( x ) )
+            self._methods_['copy_constructor']( self.__this, ctypes.byref( x ) )
         else:
             raise RuntimeError( "Wrong argument" )
 
+    def get_value( self, *args, **keywd ):
+        return self._methods_['get_value']( self.__this, *args, **keywd )
+
+    def set_value( self, *args, **keywd ):
+        return self._methods_['set_value']( self.__this, *args, **keywd )
+
+    def print_it( self, *args, **keywd ):
+        return self._methods_['print_it']( self.__this, *args, **keywd )
+
+    def assign( self, *args, **keywd ):
+        return self._methods_['assign']( self.__this, *args, **keywd )
+
     def __del__(self):
-        public( mydll, ctypes.byref(self), "number_t::~number_t(void)" )()
+        self._methods_['destructor']( self.__this )
+
+
+mem_fun = mem_fun_factory( mydll, Number )
+Number._methods_ = {
+    #constructors
+      'default_constructor' : mem_fun( 'number_t::number_t(void)' )
+    , 'from_int_constructor' : mem_fun( 'number_t::number_t(int)', argtypes=[ctypes.c_int] )
+    , 'copy_constructor' : mem_fun( 'number_t::number_t(number_t const &)', argtypes=[ctypes.POINTER(Number)] )
+    #member functions
+    , 'get_value' : mem_fun( 'int number_t::get_value(void)', restype=ctypes.c_int )
+    , 'set_value' : mem_fun( 'void number_t::set_value(int)', argtypes=[ctypes.c_int])
+    , 'print_it' : mem_fun( 'void number_t::print_it(void)' )
+    #operator=
+    , 'assign' : mem_fun( "number_t & number_t::operator=(number_t const &)"
+                           , restype=ctypes.POINTER(Number)
+                           , argtypes=[ctypes.POINTER(Number)] )
+    #destructor
+    , 'destructor' : mem_fun( 'number_t::~number_t(void)' )
+}
+del mem_fun
+
 
 class tester_t( unittest.TestCase ):
     def test_constructors(self):
@@ -129,5 +144,12 @@ TODO:
     class X{...};
     class Y{ X x; public: const X& get_x() const { return x;} };
     I think our solution should be very similar to Boost.Python call policies. It is definitely possible to go without it.
+* template classes:
+    in the following use case, the members of std:auto_ptr class are not exported
+    class number_t{...};
+    std::auto_ptr<number_t> do_smth();
+    The user will have to change the code to add
+        template class __declspec(dllexport) std::auto_ptr< number_t >;
+    and recompile
 
 """

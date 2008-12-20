@@ -34,6 +34,10 @@ number_t number_t::clone() const{
 	return number_t(*this);
 }
 
+std::auto_ptr<number_t> number_t::clone_ptr() const{
+	return std::auto_ptr<number_t>( new number_t( *this ) );
+}
+
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
