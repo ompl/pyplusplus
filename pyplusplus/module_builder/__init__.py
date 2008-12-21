@@ -12,7 +12,7 @@ Also take a look on tutorials. You can find them on Py++
 U{web site<http://www.language-binding.net>}
 """
 
-from builder import module_builder_t
+from extension_builder import extension_module_builder_t as module_builder_t
 
 #aliases for functionality located in pygccxml.parser module
 from pygccxml.parser import COMPILATION_MODE
