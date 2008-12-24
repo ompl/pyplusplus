@@ -110,6 +110,7 @@ import unions_tester
 import cp_return_addressof_tester
 import make_constructor_tester
 import return_auto_ptr_tester
+import ctypes_pof_tester
 #import ogre_generate_tester
 
 testers = [
@@ -208,6 +209,7 @@ testers = [
     , make_constructor_tester
     , return_auto_ptr_tester
     , protected_bug_tester
+    , ctypes_pof_tester
 #    , ogre_generate_tester too much time
 ]
 
@@ -306,7 +308,11 @@ class process_tester_runner_t( object ):
 
     def __call__( self ):
         start_time = time.time()
-        [ m() for m in self.__m_runners ]
+        for index, tester in enumerate( self.__m_runners ):
+            print '\n\n{[<@>]}running tests complition: %d%%' % int( index * 100.0 // len(self.__m_runners) )
+            print     '--------------------------------^^^^^\n\n'
+            ( index, len(self.__m_runners) )
+            tester()
         self.__total_time = time.time() - start_time
         self.__dump_statistics()
 
