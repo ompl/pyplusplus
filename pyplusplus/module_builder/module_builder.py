@@ -9,9 +9,8 @@ import sys
 from pyplusplus import _logging_
 from pyplusplus import decl_wrappers
 
-class base_builder_t(object):
-    """
-    """
+class module_builder_t(object):
+    """base class for different module builders."""
 
     def __init__( self, global_ns=None, encoding='ascii' ):
         """

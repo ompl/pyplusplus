@@ -7,8 +7,8 @@ import os
 import sys
 import time
 import types
-import builder
 import warnings
+import module_builder
 
 from pygccxml import parser
 from pygccxml import declarations as decls_package
@@ -20,7 +20,7 @@ from pyplusplus import file_writers
 from pyplusplus import code_creators
 from pyplusplus import module_creator as mcreator_package
 
-class extension_module_builder_t(builder.base_builder_t):
+class builder_t(module_builder.module_builder_t):
     """
     This class provides users with simple and intuitive interface to Py++
     and/or pygccxml functionality. If this is your first attempt to use Py++
@@ -63,7 +63,7 @@ class extension_module_builder_t(builder.base_builder_t):
 
         @param cflags: Raw string to be added to gccxml command line.
         """
-        builder.base_builder_t.__init__( self, global_ns=None, encoding=encoding )
+        module_builder.module_builder_t.__init__( self, global_ns=None, encoding=encoding )
 
         gccxml_config = parser.config_t( gccxml_path=gccxml_path
                                          , working_directory=working_directory
