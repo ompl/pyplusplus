@@ -265,8 +265,8 @@ You can think about ``code creators tree`` as some kind of `AST`_.
 ``Code creators tree`` construction
 -----------------------------------
 
-``pyplusplus.module_creator`` package is responsible for the tree construction.
-``pyplusplus.module_creator.creator_t`` is the main class of the package. It
+``pyplusplus.creators_factory`` package is responsible for the tree construction.
+``pyplusplus.creators_factory.creator_t`` is the main class of the package. It
 creates the tree in few steps:
 
 1. It builds set of exposed declarations.

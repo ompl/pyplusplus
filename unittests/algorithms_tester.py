@@ -11,7 +11,7 @@ import pygccxml
 from pygccxml import parser
 from pygccxml import declarations
 from pyplusplus import code_creators
-from pyplusplus import module_creator
+from pyplusplus import creators_factory
 from pyplusplus import module_builder
 from pyplusplus import utils as pypp_utils
 from pyplusplus import function_transformers as ft
@@ -85,7 +85,7 @@ class class_organizer_tester_t(unittest.TestCase):
 
         global_ns = parser.parse_string( os.linesep.join( code ), config )
         decls = global_ns[0].declarations
-        dorder = module_creator.findout_desired_order( decls )
+        dorder = creators_factory.findout_desired_order( decls )
         self.failUnless( len( code ) == len( dorder ), 'all classes should stay within the list' )
         for i in range( 1, len(dorder) ):
             bases = set( self._findout_base_classes( dorder[i] ) )

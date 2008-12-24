@@ -25,7 +25,7 @@ then consider to read documentation of L{module_builder} package.
 
 import code_creators
 import file_writers
-import module_creator
+import creators_factory
 import code_repository
 import utils
 import decl_wrappers

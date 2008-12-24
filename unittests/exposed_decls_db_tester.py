@@ -12,7 +12,7 @@ from pygccxml import parser
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
-from pyplusplus import module_creator
+from pyplusplus import creators_factory
 from pyplusplus import module_builder
 from pyplusplus import utils as pypp_utils
 from pyplusplus import function_transformers as ft

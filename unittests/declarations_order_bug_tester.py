@@ -8,7 +8,7 @@ import sys
 import unittest
 import fundamental_tester_base
 from pyplusplus.module_builder import call_policies
-from pyplusplus.module_creator import sort_algorithms
+from pyplusplus.creators_factory import sort_algorithms
 
 class tester_base_t(fundamental_tester_base.fundamental_tester_base_t):
     def __init__( self, name, *args ):

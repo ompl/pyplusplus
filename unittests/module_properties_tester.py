@@ -8,7 +8,7 @@ import sys
 import unittest
 import autoconfig
 from pyplusplus import code_creators 
-from pyplusplus import module_creator
+from pyplusplus import creators_factory
 
 class tester_t(unittest.TestCase):
     def __init__(self, *args ):

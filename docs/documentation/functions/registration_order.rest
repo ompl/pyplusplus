@@ -110,7 +110,7 @@ a correct functionality:
 
    .. code-block:: Python
 
-     from pyplusplus.module_creator import sort_algorithms
+     from pyplusplus.creators_factory import sort_algorithms
 
      sort_algorithms.USE_CALLDEF_ORGANIZER = True
      # The functionality is available from version 0.8.3

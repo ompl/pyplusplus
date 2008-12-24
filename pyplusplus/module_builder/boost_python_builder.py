@@ -18,7 +18,7 @@ from pyplusplus import _logging_
 from pyplusplus import decl_wrappers
 from pyplusplus import file_writers
 from pyplusplus import code_creators
-from pyplusplus import module_creator as mcreator_package
+from pyplusplus import creators_factory
 
 class builder_t(module_builder.module_builder_t):
     """
@@ -165,7 +165,7 @@ class builder_t(module_builder.module_builder_t):
     def __apply_decls_defaults(self, decls):
         flatten_decls = decls_package.make_flatten( decls )
         self.__filter_by_location( flatten_decls )
-        call_policies_resolver = mcreator_package.built_in_resolver_t()
+        call_policies_resolver = creators_factory.built_in_resolver_t()
         calldefs = filter( lambda decl: isinstance( decl, decls_package.calldef_t )
                            , flatten_decls )
         map( lambda calldef: calldef.set_call_policies( call_policies_resolver( calldef ) )
@@ -234,7 +234,7 @@ class builder_t(module_builder.module_builder_t):
 
             self.global_ns.constructors(allow_empty=True).allow_implicit_conversion = False
 
-        creator = mcreator_package.creator_t( self.global_ns
+        creator = creators_factory.creator_t( self.global_ns
                                               , module_name
                                               , boost_python_ns_name
                                               , call_policies_resolver_
