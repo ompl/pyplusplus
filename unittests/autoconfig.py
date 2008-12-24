@@ -23,6 +23,24 @@ from environment import scons, boost, python, gccxml, indexing_suite
 
 import pygccxml
 
+compiler = pygccxml.utils.native_compiler.get_gccxml_compiler()
+print 'GCCXML configured to simulate compiler ', compiler
+gccxml_version = '__GCCXML_09__'
+class cxx_parsers_cfg:
+    keywd = { 'working_directory' : data_directory
+              , 'define_symbols' : [ gccxml_version ]
+              , 'compiler' : compiler
+              , 'gccxml_path': gccxml.executable }
+
+    if 'win' in sys.platform:
+        keywd['define_symbols'].append( '__PYGCCXML_%s__' % compiler.upper() )
+        if 'msvc9' == compiler:
+            keywd['define_symbols'].append( '_HAS_TR1=0' )
+
+    gccxml = pygccxml.parser.gccxml_configuration_t( **keywd )
+
+
+
 class scons_config:
     libs = []#['boost_python']
     libpath = [ python.libs ] + boost.libs

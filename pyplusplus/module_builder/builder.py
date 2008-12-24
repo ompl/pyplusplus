@@ -13,10 +13,7 @@ class base_builder_t(object):
     """
     """
 
-    def __init__( self
-                  , global_ns=None
-                  , encoding='ascii'
-                  , working_directory='.' ):
+    def __init__( self, global_ns=None, encoding='ascii' ):
         """
         """
         object.__init__( self )
@@ -25,8 +22,9 @@ class base_builder_t(object):
         self.__global_ns = global_ns
 
     def __get_global_ns( self ):
+        if not self.__global_ns:
+            raise RuntimeError( "Reference to global namespace declaration was not set." )
         return self.__global_ns
-
     def __set_global_ns( self, global_ns ):
         self.__global_ns = global_ns
 

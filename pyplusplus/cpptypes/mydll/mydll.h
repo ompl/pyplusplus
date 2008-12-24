@@ -9,6 +9,7 @@ public:
 	virtual ~number_t();
 	void print_it() const;
 	int get_value() const;
+	int get_value(){ return m_value; }
 	void set_value(int x);
 
 	number_t clone() const;
@@ -18,3 +19,7 @@ private:
 };
 
 template class __declspec(dllexport) std::auto_ptr< number_t >;
+
+typedef std::auto_ptr< number_t > number_aptr_t;
+
+void __declspec(dllexport) do_smth( number_aptr_t& );

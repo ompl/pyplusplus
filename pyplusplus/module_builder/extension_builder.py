@@ -63,10 +63,7 @@ class extension_module_builder_t(builder.base_builder_t):
 
         @param cflags: Raw string to be added to gccxml command line.
         """
-        builder.base_builder_t.__init__( self
-                                         , global_ns=None
-                                         , encoding=encoding
-                                         , working_directory=working_directory )
+        builder.base_builder_t.__init__( self, global_ns=None, encoding=encoding )
 
         gccxml_config = parser.config_t( gccxml_path=gccxml_path
                                          , working_directory=working_directory
@@ -78,10 +75,7 @@ class extension_module_builder_t(builder.base_builder_t):
                                          , cflags=cflags
                                          , compiler=compiler)
 
-        #may be in future I will add those directories to user_defined_directories
-        #to self.__code_creator.
-        self.__working_dir = os.path.abspath( working_directory )
-
+        #may be in future I will add those directories to user_defined_directories to self.__code_creator.
         self.__parsed_files = map( decls_package.filtering.normalize_path
                                    , parser.project_reader_t.get_os_file_names( files ) )
         tmp = map( lambda file_: os.path.split( file_ )[0], self.__parsed_files )
@@ -250,11 +244,6 @@ class extension_module_builder_t(builder.base_builder_t):
                                               , doc_extractor)
         self.__code_creator = creator.create()
         self.__code_creator.replace_included_headers(self.__parsed_files)
-        #I think I should ask users, what they expect
-        #self.__code_creator.user_defined_directories.append( self.__working_dir )
-        #map( self.__code_creator.user_defined_directories.append
-        #     , self.__parsed_dirs )
-
         return self.__code_creator
 
     @property

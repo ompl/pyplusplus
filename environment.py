@@ -49,6 +49,18 @@ if 'roman' in getpass.getuser():
         boost.libs = ['/home/roman/include/libs' ]
         boost.include = '/home/roman/boost_svn'
         python.include = '/usr/include/python2.5'
+elif 'root' == getpass.getuser():
+
+    scons.cmd_build = 'scons --file=%s'
+    scons.cmd_clean = 'scons --clean --file=%s'
+
+    if sys.platform == 'win32':
+        scons.suffix = '.pyd'
+        scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope', '-DBOOST_PYTHON_NO_PY_SIGNATURES' ]
+        boost.libs = [ 'd:/dev/boost_svn/bin.v2/libs/python/build/msvc-7.1/release/threading-multi' ]
+        boost.include = 'd:/dev/boost_svn'
+        python.libs = 'e:/python25/libs'
+        python.include = 'e:/python25/include'
 
 _my_path = None
 try:
