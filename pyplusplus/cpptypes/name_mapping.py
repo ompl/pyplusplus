@@ -25,8 +25,7 @@ pprint.pprint( d )
 Obviously the result is too big and some additional work should be done.
 """
 
-data = \
-{u'??$?6U?$char_traits@D@std@@@std@@YAAAV?$basic_ostream@DU?$char_traits@D@std@@@0@AAV10@PBD@Z': u'std::basic_ostream<char,std::char_traits<char> > & std::operator<<<std::char_traits<char> >(std::basic_ostream<char,std::char_traits<char> > &,char const *)',
+data = {u'??$?6U?$char_traits@D@std@@@std@@YAAAV?$basic_ostream@DU?$char_traits@D@std@@@0@AAV10@PBD@Z': u'std::basic_ostream<char,std::char_traits<char> > & std::operator<<<std::char_traits<char> >(std::basic_ostream<char,std::char_traits<char> > &,char const *)',
  u'??0?$auto_ptr@Vnumber_t@@@std@@QAE@AAV01@@Z': u'std::auto_ptr<number_t>::auto_ptr<number_t>(std::auto_ptr<number_t> &)',
  u'??0?$auto_ptr@Vnumber_t@@@std@@QAE@PAVnumber_t@@@Z': u'std::auto_ptr<number_t>::auto_ptr<number_t>(number_t *)',
  u'??0?$auto_ptr@Vnumber_t@@@std@@QAE@U?$auto_ptr_ref@Vnumber_t@@@1@@Z': u'std::auto_ptr<number_t>::auto_ptr<number_t>(std::auto_ptr_ref<number_t>)',
@@ -91,4 +90,9 @@ data = \
  u'void operator delete[](void *)': u'??_V@YAXPAX@Z',
  u"void std::auto_ptr<number_t>::`default constructor closure'(void)": u'??_F?$auto_ptr@Vnumber_t@@@std@@QAEXXZ',
  u'void std::auto_ptr<number_t>::reset(number_t *)': u'?reset@?$auto_ptr@Vnumber_t@@@std@@QAEXPAVnumber_t@@@Z',
- u'void terminate(void)': u'?terminate@@YAXXZ'}
+ u'void terminate(void)': u'?terminate@@YAXXZ'
+}
+
+
+ddd
+

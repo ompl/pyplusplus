@@ -139,3 +139,8 @@ from properties import property_t
 
 from ctypes_integration_creators import expose_this_t
 from ctypes_integration_creators import expose_sizeof_t
+
+#pure ctypes
+from import_ import import_t
+from library_reference import library_reference_t
+from name_mapping import name_mapping_t

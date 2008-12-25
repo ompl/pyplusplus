@@ -9,8 +9,8 @@ import types
 class code_creator_t(object):
     """
     code_creator_t is the base class for all code creators.
-    
-    This class defines the interface that every code creator should implement. 
+
+    This class defines the interface that every code creator should implement.
     Also it provides few convenience functions.
 
     The purpose of a code creator is the generation of a block of C++
@@ -33,16 +33,16 @@ class code_creator_t(object):
         self._parent = None
         self._target_configuration = None
         self._works_on_instance = True
-        
+
 
     def _get_works_on_instance(self):
         return self._works_on_instance
     def _set_works_on_instance(self, works_on_instance):
         self._works_on_instance = works_on_instance
     works_on_instance = property( _get_works_on_instance, _set_works_on_instance )
-        
+
     def _get_parent( self ):
-        return self._parent 
+        return self._parent
     def _set_parent( self, new_parent ):
         if new_parent:
             assert isinstance( new_parent, code_creator_t )
@@ -52,7 +52,7 @@ class code_creator_t(object):
                        doc="""Parent code creator or None if this is the root node.
                        @type: L{code_creator_t}
                        """)
-    
+
     def _get_target_configuration( self ):
         return self._target_configuration
     def _set_target_configuration( self, config ):
@@ -62,7 +62,7 @@ class code_creator_t(object):
                                      doc="""Target configuration.
                                      @type: L{target_configuration_t}
                                      """)
-    
+
     def _get_top_parent(self):
         parent = self.parent
         me = self
@@ -80,17 +80,17 @@ class code_creator_t(object):
 
     def _create_impl(self):
         """
-        function that all derived classes should implement. This function 
+        function that all derived classes should implement. This function
         actually creates code and returns it. Return value of this function is
         string.
 
         @rtype: str
         """
         raise NotImplementedError()
-    
+
     def create(self):
         """
-        this function should be used in order to get code that should be 
+        this function should be used in order to get code that should be
         generated.
 
         @returns: Returns a text block of C++ source code.
@@ -109,7 +109,7 @@ class code_creator_t(object):
                 used.add( h )
                 uheaders.append( h )
         return uheaders
-    
+
     def _get_system_headers_impl( self ):
         """Return list of system header files the generated code depends on"""
         raise NotImplementedError(self.__class__.__name__)
@@ -132,13 +132,13 @@ class code_creator_t(object):
         """
         assert isinstance( code, types.StringTypes )
         return code.strip()
-    
+
     @staticmethod
     def indent( code, size=1 ):
         """
         function that implements code indent algorithm.
 
-        @param code: C++ code block.
+        @param code: C++/Python code block.
         @type code: str
         @param size: The number of indentation levels that the code is shifted
         @type size: int
@@ -149,11 +149,11 @@ class code_creator_t(object):
         return code_creator_t.__INDENTATION * size\
                + code.replace( os.linesep
                                , os.linesep + code_creator_t.__INDENTATION * size )
-    
+
     @staticmethod
     def unindent( code ):
         """
-        function that implements code unindent algorithm. 
+        function that implements code unindent algorithm.
 
         @param code: C++ code block.
         @type code: str
@@ -165,7 +165,7 @@ class code_creator_t(object):
         return code.replace( os.linesep + code_creator_t.__INDENTATION
                                , os.linesep )
 
-    @staticmethod   
+    @staticmethod
     def is_comment( line ):
         """
         function that returns true if content of the line is comment, otherwise
@@ -178,4 +178,10 @@ class code_creator_t(object):
         assert isinstance( line, types.StringTypes )
         l = line.lstrip()
         return l.startswith( '//' ) or l.startswith( '/*' )
-    
+
+    @staticmethod
+    def iif( condition, true_, false_ ):
+        if condition:
+            return true_
+        else:
+            return false_
