@@ -107,7 +107,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
 
     @property
     def code_creator( self ):
-        "reference to L{code_creators.module_t} instance"
+        "reference to L{code_creators.ctypes_module_t} instance"
         if not self.__code_creator:
             raise RuntimeError( "self.module is equal to None. Did you forget to call build_code_creator function?" )
         return self.__code_creator

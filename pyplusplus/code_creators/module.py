@@ -7,15 +7,16 @@ import os
 import custom
 import license
 import include
-import namespace    
+import namespace
 import compound
 import algorithm
+import base_module
 import module_body
 import declaration_based
 import include_directories
 from pygccxml import utils
 
-class module_t(compound.compound_t):
+class bpmodule_t(base_module.base_module_t):
     """This class represents the source code for the entire extension module.
 
     The root of the code creator tree is always a module_t object.
@@ -23,20 +24,14 @@ class module_t(compound.compound_t):
     def __init__(self, global_ns):
         """Constructor.
         """
-        compound.compound_t.__init__(self)
+        base_module.base_module_t.__init__(self, global_ns)
         self.__body = None
-        self.__global_ns = global_ns
-        
-    @property
-    def global_ns(self):
-        "reference to global_ns ( namespace_t ) declaration"
-        return self.__global_ns
-            
+
     def _get_include_dirs(self):
-        include_dirs = algorithm.creator_finder.find_by_class_instance( 
+        include_dirs = algorithm.creator_finder.find_by_class_instance(
             what=include_directories.include_directories_t
             , where=self.creators
-            , recursive=False)        
+            , recursive=False)
         if 0 == len( include_dirs ):
             include_dirs = include_directories.include_directories_t()
             if self.license:
@@ -46,9 +41,9 @@ class module_t(compound.compound_t):
             return include_dirs
         elif 1 == len( include_dirs ):
             return include_dirs[0]
-        else: 
+        else:
             assert not "only single instance of include_directories_t should exist"
-            
+
     def _get_std_directories(self):
         include_dirs = self._get_include_dirs()
         return include_dirs.std
@@ -59,7 +54,7 @@ class module_t(compound.compound_t):
         return include_dirs.user_defined
     user_defined_directories = property( _get_user_defined_directories )
 
-    @property 
+    @property
     def body(self):
         """Return reference to L{module_body_t} code creator"""
         if None is self.__body:
@@ -69,23 +64,6 @@ class module_t(compound.compound_t):
             if found:
                 self.__body = found[0]
         return self.__body
-
-    def _get_license( self ):
-        if isinstance( self.creators[0], license.license_t ):
-            return self.creators[0]
-        return None
-    
-    def _set_license( self, license_text ):
-        if not isinstance( license_text, license.license_t ):
-            license_inst = license.license_t( license_text )
-        if isinstance( self.creators[0], license.license_t ):
-            self.remove_creator( self.creators[0] )
-        self.adopt_creator( license_inst, 0 )
-    license = property( _get_license, _set_license,
-                        doc="""License text.
-
-                        The license text will always be the first children node.
-                        @type: str or L{license_t}""")
 
     def last_include_index(self):
         """Return the children index of the last L{include_t} object.
@@ -109,9 +87,9 @@ class module_t(compound.compound_t):
                 to_be_removed.append( creator )
             elif isinstance( creator, module_body.module_body_t ):
                 break
-        
+
         for creator in to_be_removed:
-            if creator.is_system: 
+            if creator.is_system:
                 if not leave_system_headers:
                     self.remove_creator( creator )
             elif creator.is_user_defined:
@@ -146,9 +124,6 @@ class module_t(compound.compound_t):
         for include_creator in includes:
             include_creator.include_dirs_optimization = include_dirs
 
-    def _get_system_headers_impl( self ):
-        return []
-
     def _create_impl(self):
         self.do_include_dirs_optimization()
         index = 0
@@ -159,19 +134,19 @@ class module_t(compound.compound_t):
             else:
                 includes.append( self.creators[index].create() )
         code = compound.compound_t.create_internal_code( self.creators[index:] )
-        code = self.unindent(code)        
+        code = self.unindent(code)
         return os.linesep.join( includes ) + 2 * os.linesep + code + os.linesep
-    
+
     def add_include( self, header, user_defined=True, system=False ):
         creator = include.include_t( header=header, user_defined=user_defined, system=system )
         self.adopt_include( creator )
-    
+
     def add_namespace_usage( self, namespace_name ):
         self.adopt_creator( namespace.namespace_using_t( namespace_name )
                             , self.last_include_index() + 1 )
 
     def add_namespace_alias( self, alias, full_namespace_name ):
-        self.adopt_creator( namespace.namespace_alias_t( 
+        self.adopt_creator( namespace.namespace_alias_t(
                                 alias=alias
                                 , full_namespace_name=full_namespace_name )
                             , self.last_include_index() + 1 )
@@ -179,21 +154,21 @@ class module_t(compound.compound_t):
     def adopt_declaration_creator( self, creator ):
         self.adopt_creator( creator, self.creators.index( self.body ) )
 
-    def add_declaration_code( self, code, position ):        
+    def add_declaration_code( self, code, position ):
         self.adopt_declaration_creator( custom.custom_text_t( code ) )
-        
-    @utils.cached    
+
+    @utils.cached
     def specially_exposed_decls(self):
-        """list of exposed declarations, which were not ``included``, but still  
+        """list of exposed declarations, which were not ``included``, but still
         were exposed. For example, std containers.
         """
         decls = set()
         #select all declaration based code creators
         ccs = filter( lambda cc: isinstance( cc, declaration_based.declaration_based_t )
                       , algorithm.make_flatten_list( self ) )
-        #leave only "ignored"                       
+        #leave only "ignored"
         ccs = filter( lambda cc: cc.declaration.ignore == True, ccs )
-        
+
         decls = map( lambda cc: cc.declaration, ccs )
-        
+
         return set( decls )

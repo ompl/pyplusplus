@@ -13,7 +13,7 @@ class include_t(code_creator.code_creator_t):
     def __init__( self, header, user_defined=False, system=False ):
         code_creator.code_creator_t.__init__(self)
         self._header = include_directories.include_directories_t.normalize( header )
-        self._include_dirs_optimization = None #This parameter will be set from module_t.create function
+        self._include_dirs_optimization = None #This parameter will be set from bpmodule_t.create function
         self._user_defined = user_defined
         self._system = system
         self.__created_code = None

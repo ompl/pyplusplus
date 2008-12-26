@@ -3,7 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""defines a class that writes L{code_creators.module_t} to multiple files"""
+"""defines a class that writes L{code_creators.bpmodule_t} to multiple files"""
 
 import os
 import writer
@@ -26,7 +26,7 @@ class multiple_files_t(writer.writer_t):
         """Constructor.
 
         @param extmodule: The root of a code creator tree
-        @type extmodule: module_t
+        @type extmodule: bpmodule_t
         @param directory_path: The output directory where the source files are written
         @type directory_path: str
 

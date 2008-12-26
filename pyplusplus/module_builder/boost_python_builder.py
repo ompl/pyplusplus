@@ -208,7 +208,7 @@ class builder_t(module_builder.module_builder_t):
                        , enable_indexing_suite=True
                        , doc_extractor=None):
         """
-        Creates L{module_t} code creator.
+        Creates L{bpmodule_t} code creator.
 
         @param module_name: module name
         @type module_name: string
@@ -248,7 +248,7 @@ class builder_t(module_builder.module_builder_t):
 
     @property
     def code_creator( self ):
-        "reference to L{code_creators.module_t} instance"
+        "reference to L{code_creators.bpmodule_t} instance"
         if not self.__code_creator:
             raise RuntimeError( "self.module is equal to None. Did you forget to call build_code_creator function?" )
         return self.__code_creator

@@ -116,7 +116,7 @@ from include_directories import include_directories_t
 
 from license import license_t
 
-from module import module_t
+from module import bpmodule_t
 
 from smart_pointers import held_type_t
 from smart_pointers import smart_pointers_converter_t
