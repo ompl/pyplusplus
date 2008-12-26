@@ -49,12 +49,15 @@ class scons_config:
 
     @staticmethod
     def create_sconstruct():
+        msvc_compiler = ''
+        if 'linux' not in sys.platform:
+            msvc_compiler = str( pygccxml.utils.native_compiler.get_version()[1] )
         code = [
               "import sys"
             , "env = Environment()"
             , "if 'linux' not in sys.platform:"
-            , "    env['MSVS'] = {'VERSION': '%s'}" % str( pygccxml.utils.native_compiler.get_version()[1] )
-            , "    env['MSVS_VERSION'] = '%s'" % str( pygccxml.utils.native_compiler.get_version()[1] )
+            , "    env['MSVS'] = {'VERSION': '%s'}" % msvc_compiler
+            , "    env['MSVS_VERSION'] = '%s'" % msvc_compiler
             , "    Tool('msvc')(env)"
             , "t = env.SharedLibrary( target=r'%(target)s'"
             , "    , source=[ %(sources)s ]"
