@@ -20,7 +20,7 @@ from pyplusplus import _logging_
 ACCESS_TYPES = declarations.ACCESS_TYPES
 VIRTUALITY_TYPES = declarations.VIRTUALITY_TYPES
 
-class creator_t( declarations.decl_visitor_t ):
+class bpcreator_t( declarations.decl_visitor_t ):
     """Creating code creators.
 
     This class takes a set of declarations as input and creates a code
