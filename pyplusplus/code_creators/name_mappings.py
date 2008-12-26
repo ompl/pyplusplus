@@ -24,7 +24,7 @@ class name_mapping_t(code_creator.code_creator_t):
             items_undecorated.append( tmpl % ( undecorated, blob ) )
 
         result = []
-        result.append('%s.undecorated_names = {#mapping between decorated and undecorated names' % self._dictionary_var_name ]
+        result.append('%s.undecorated_names = {#mapping between decorated and undecorated names' % self._dictionary_var_name )
         for s in items_undecorated:
             result.append( self.indent( s ) )
         for s in items_decorated:

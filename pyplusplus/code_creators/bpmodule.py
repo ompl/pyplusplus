@@ -5,18 +5,17 @@
 
 import os
 import custom
-import license
+import module
 import include
 import namespace
 import compound
 import algorithm
-import base_module
 import module_body
 import declaration_based
 import include_directories
 from pygccxml import utils
 
-class bpmodule_t(base_module.base_module_t):
+class bpmodule_t(module.module_t):
     """This class represents the source code for the entire extension module.
 
     The root of the code creator tree is always a module_t object.
@@ -24,7 +23,7 @@ class bpmodule_t(base_module.base_module_t):
     def __init__(self, global_ns):
         """Constructor.
         """
-        base_module.base_module_t.__init__(self, global_ns)
+        module.module_t.__init__(self, global_ns)
         self.__body = None
 
     def _get_include_dirs(self):
