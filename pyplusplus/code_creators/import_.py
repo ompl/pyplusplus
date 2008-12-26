@@ -14,7 +14,7 @@ class import_t(code_creator.code_creator_t):
         self._module_name = module_name
 
     def _create_impl(self):
-        return 'import %(module)s' % dict( module=self.module_name )
+        return 'import %(module)s' % dict( module=self._module_name )
 
     def _get_system_headers_impl( self ):
         return []

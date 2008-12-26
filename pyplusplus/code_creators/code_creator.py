@@ -63,7 +63,12 @@ class code_creator_t(object):
                                      @type: L{target_configuration_t}
                                      """)
 
-    def _get_top_parent(self):
+    @property
+    def top_parent(self):
+        """top_parent - reference to top parent code creator
+
+        @type: L{code_creator_t}
+        """
         parent = self.parent
         me = self
         while True:
@@ -72,11 +77,6 @@ class code_creator_t(object):
             else:
                 me = parent
                 parent = me.parent
-    """top_parent - reference to top parent code creator"""
-    top_parent = property( _get_top_parent,
-                           doc="""Root of the code creator tree.
-                           @type: L{code_creator_t}
-                           """)
 
     def _create_impl(self):
         """
@@ -185,3 +185,16 @@ class code_creator_t(object):
             return true_
         else:
             return false_
+
+
+class separator_t(code_creator_t):
+    """Creates Python import directive"""
+    def __init__( self, num=1):
+        code_creator_t.__init__(self)
+        self.__code = os.linesep * num
+
+    def _create_impl(self):
+        return self.__code
+
+    def _get_system_headers_impl( self ):
+        return []

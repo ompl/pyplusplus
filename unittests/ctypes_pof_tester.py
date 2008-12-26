@@ -19,6 +19,8 @@ class tester_t(unittest.TestCase):
 
     def test(self):
         mb = ctypes_module_builder_t( [self.header], self.symbols_file, autoconfig.cxx_parsers_cfg.gccxml )
+        mb.build_code_creator( self.symbols_file )
+        print mb.code_creator.create()
 
 def create_suite():
     suite = unittest.TestSuite()

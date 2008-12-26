@@ -13,11 +13,11 @@ class compound_t(code_creator.code_creator_t):
         @param parent: Parent code creator.
         @type parent: L{code_creator_t}
         """
-        code_creator.code_creator_t.__init__( self ) 
+        code_creator.code_creator_t.__init__( self )
         self._creators = []
-        
+
     def _get_creators(self):
-        return self._creators    
+        return self._creators
     creators = property(_get_creators,
                         doc="""A list of children nodes.
                         @type: list of L{code_creator_t}""")
@@ -58,10 +58,10 @@ class compound_t(code_creator.code_creator_t):
         @type creator: L{code_creator_t}
         """
         creator.parent = None
-        del self._creators[ self._creators.index( creator ) ]    
+        del self._creators[ self._creators.index( creator ) ]
 
     @staticmethod
-    def create_internal_code( creators ):
+    def create_internal_code( creators, indent_code=True ):
         """Concatenate the code from a list of code creators.
 
         @param creators: A list with code creators
@@ -70,20 +70,20 @@ class compound_t(code_creator.code_creator_t):
         """
         internals = map( lambda expr: expr.create(), creators )
         internals = filter(None, internals )
-        internals = map( lambda code: code_creator.code_creator_t.indent( code )
-                         , internals )
+        if indent_code:
+            internals = map( lambda code: code_creator.code_creator_t.indent( code )
+                             , internals )
         for index in range( len( internals ) - 1):
             internals[index] = internals[index] + os.linesep
         return os.linesep.join( internals )
-        
+
     def get_system_headers( self, recursive=False, unique=False ):
         files = [ "boost/python.hpp" ]
         files.extend( self._get_system_headers_impl() )
         if recursive:
-            for creator in self._creators: 
+            for creator in self._creators:
                 files.extend( creator.get_system_headers(recursive, unique=False) )
         files = filter( None, files )
         if unique:
             files = self.unique_headers( files )
         return files
-    

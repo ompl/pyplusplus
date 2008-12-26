@@ -92,18 +92,13 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
             if isinstance( d, decls_package.class_t ):
                 d.parent.include()
 
-    def build_code_creator( self ):
-        pass
-        #~ creator = creators_factory.creator_t( self.global_ns
-                                              #~ , module_name
-                                              #~ , boost_python_ns_name
-                                              #~ , call_policies_resolver_
-                                              #~ , types_db
-                                              #~ , target_configuration
-                                              #~ , enable_indexing_suite
-                                              #~ , doc_extractor)
-        #~ self.__code_creator = creator.create()
-        #~ return self.__code_creator
+    def build_code_creator( self, library_path, doc_extractor=None ):
+        creator = creators_factory.ctypes_creator_t( self.global_ns
+                                                    , library_path
+                                                    , self.__blob2undecorated
+                                                    , doc_extractor)
+        self.__code_creator = creator.create()
+        return self.__code_creator
 
     @property
     def code_creator( self ):

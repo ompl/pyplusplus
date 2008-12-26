@@ -126,15 +126,17 @@ class bpmodule_t(module.module_t):
     def _create_impl(self):
         self.do_include_dirs_optimization()
         index = 0
-        includes = []
+        code = []
         for index in range( len( self.creators ) ):
             if not isinstance( self.creators[index], include.include_t ):
                 break
             else:
-                includes.append( self.creators[index].create() )
-        code = compound.compound_t.create_internal_code( self.creators[index:] )
-        code = self.unindent(code)
-        return os.linesep.join( includes ) + 2 * os.linesep + code + os.linesep
+                code.append( self.creators[index].create() )
+        if code:
+            code.append( 2* os.linesep )
+        code.append( self.create_internal_code( self.creators[index:], indent_code=False ))
+        code.append( os.linesep )
+        return os.linesep.join( code )
 
     def add_include( self, header, user_defined=True, system=False ):
         creator = include.include_t( header=header, user_defined=user_defined, system=system )

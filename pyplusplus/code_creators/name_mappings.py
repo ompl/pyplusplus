@@ -7,13 +7,12 @@ import os
 import code_creator
 
 
-class name_mapping_t(code_creator.code_creator_t):
+class name_mappings_t(code_creator.code_creator_t):
     """creates dictionery { [un]decorated name : [un]decorated name }"""
 
     def __init__( self, exported_symbols ):
         code_creator.code_creator_t.__init__(self)
         self._exported_symbols = exported_symbols
-
 
     def _create_impl(self):
         tmpl = '"%s" : "%s", '
@@ -24,14 +23,14 @@ class name_mapping_t(code_creator.code_creator_t):
             items_undecorated.append( tmpl % ( undecorated, blob ) )
 
         result = []
-        result.append('%s.undecorated_names = {#mapping between decorated and undecorated names' % self._dictionary_var_name )
+        result.append( '%s.undecorated_names = {#mapping between decorated and undecorated names'
+                       % self.top_parent.library_var_name )
         for s in items_undecorated:
             result.append( self.indent( s ) )
         for s in items_decorated:
             result.append( self.indent( s ) )
         result.append( '}' )
         return os.linesep.join( result )
-
 
     def _get_system_headers_impl( self ):
         return []
