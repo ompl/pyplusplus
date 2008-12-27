@@ -42,7 +42,7 @@ class cxx_parsers_cfg:
 
 
 class scons_config:
-    libs = []#['boost_python']
+    libs = []
     libpath = [ python.libs ] + boost.libs
     cpppath = [ boost.include, python.include, indexing_suite.include ]
     include_dirs = cpppath + [data_directory]
@@ -52,6 +52,8 @@ class scons_config:
         msvc_compiler = ''
         if 'linux' not in sys.platform:
             msvc_compiler = str( pygccxml.utils.native_compiler.get_version()[1] )
+        else:
+            scons_config.libs.append( 'boost_python' )
         code = [
               "import sys"
             , "env = Environment()"
