@@ -16,14 +16,14 @@ from pyplusplus import code_repository
 
 class writer_t(object):
     """Base class for all module/code writers.
-    
+
     All writers should have similar usage::
-    
+
       w = writer_class(module, file, ...)
       w.write()
     """
     logger = _logging_.loggers.file_writer
-    
+
     def __init__(self, extmodule, files_sum_repository=None, encoding='ascii'):
         object.__init__(self)
         self.__extmodule = extmodule
@@ -32,14 +32,15 @@ class writer_t(object):
         if None is files_sum_repository:
             self.__files_sum_repository = md5sum_repository.dummy_repository_t()
         self.__exposed_decls_db = utils.exposed_decls_db_t()
-        self.__exposed_decls_db.register_decls( extmodule.global_ns
-                                                , extmodule.specially_exposed_decls )        
+        if isinstance( self.__extmodule, code_creators.bpmodule_t ):
+            self.__exposed_decls_db.register_decls( extmodule.global_ns
+                                                    , extmodule.specially_exposed_decls )
 
     @property
     def encoding( self ):
         """encoding name used to write generated code to files"""
         return self.__encoding
-            
+
     @property
     def extmodule(self):
         """The root of the code creator tree ( code_creators.module_t )"""
@@ -52,17 +53,17 @@ class writer_t(object):
     def write(self):
         """ Main write method.  Should be overridden by derived classes. """
         raise NotImplementedError()
-       
+
     @staticmethod
     def create_backup(fpath):
         """creates backup of the file, by renaming it to C{fpath + ~}"""
         if not os.path.exists( fpath ):
-            return         
+            return
         backup_fpath = fpath + '~'
         if os.path.exists( backup_fpath ):
             os.remove( backup_fpath )
         os.rename( fpath, backup_fpath )
-    
+
     def write_code_repository(self, dir):
         """creates files defined in L{code_repository} package"""
         system_headers = self.extmodule.get_system_headers( recursive=True )
@@ -72,7 +73,7 @@ class writer_t(object):
                 self.write_file( os.path.join( dir, cr.file_name ), cr.code )
         #named_tuple.py is a special case :-(
         self.write_file( os.path.join( dir, code_repository.named_tuple.file_name )
-                         , code_repository.named_tuple.code ) 
+                         , code_repository.named_tuple.code )
     @staticmethod
     def write_file( fpath, content, files_sum_repository=None, encoding='ascii' ):
         """Write a source file.
@@ -99,8 +100,8 @@ class writer_t(object):
         fcontent_new.append( os.linesep ) #keep gcc happy
         fcontent_new = ''.join( fcontent_new )
         if not isinstance( fcontent_new, unicode ):
-            fcontent_new = unicode( fcontent_new, encoding ) 
-        
+            fcontent_new = unicode( fcontent_new, encoding )
+
         new_hash_value = None
         curr_hash_value = None
         if files_sum_repository:
@@ -122,9 +123,9 @@ class writer_t(object):
                 writer_t.logger.debug( 'file was not changed( content ) - done( %f seconds )'
                                        % ( time.clock() - start_time ) )
                 return
-        
+
         writer_t.logger.debug( 'file changed or it does not exist' )
-            
+
         writer_t.create_backup( fpath )
         f = codecs.open( fpath, 'w+b', encoding )
         f.write( fcontent_new )
@@ -132,7 +133,7 @@ class writer_t(object):
         if new_hash_value:
             files_sum_repository.update_value( fname, new_hash_value )
         writer_t.logger.info( 'file "%s" - updated( %f seconds )' % ( fname, time.clock() - start_time ) )
-    
+
     def get_user_headers( self, creators ):
         headers = []
         creators = filter( lambda creator: isinstance( creator, code_creators.declaration_based_t )
@@ -143,5 +144,5 @@ class writer_t(object):
 
     def save_exposed_decls_db( self, file_path ):
         self.__exposed_decls_db.save( file_path )
-        
-        
+
+

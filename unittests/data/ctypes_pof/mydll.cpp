@@ -2,6 +2,8 @@
 #include "windows.h"
 #include <iostream>
 
+namespace pof{
+
 number_t::number_t() 
 : m_value(0) 
 {	
@@ -37,6 +39,10 @@ number_t number_t::clone() const{
 std::auto_ptr<number_t> number_t::clone_ptr() const{
 	return std::auto_ptr<number_t>( new number_t( *this ) );
 }
+
+}
+
+using namespace pof;
 
 void do_smth( number_aptr_t& ){
 }

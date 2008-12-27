@@ -84,12 +84,12 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         is_exported = lambda d: msvc.undecorate_decl( d ) in undecorated
 
         included_decls = set()
-        included_decls.update( self.global_ns.calldefs( is_exported, allow_empty=True ) )
-        included_decls.update( self.global_ns.variables( is_exported, allow_empty=True ) )
+        included_decls.update( self.global_ns.calldefs( is_exported, allow_empty=True, recursive=True ) )
+        included_decls.update( self.global_ns.variables( is_exported, allow_empty=True, recursive=True ) )
 
         for d in included_decls:
             d.include()
-            if isinstance( d, decls_package.class_t ):
+            if isinstance( d.parent, decls_package.class_t ):
                 d.parent.include()
 
     def build_code_creator( self, library_path, doc_extractor=None ):
@@ -120,7 +120,6 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         @param file_name: file name
         @type file_name: string
         """
-        self.__merge_user_code()
         file_writers.write_file( self.code_creator, file_name, encoding=self.encoding )
 
 

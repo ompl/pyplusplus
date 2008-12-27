@@ -166,7 +166,7 @@ class code_creator_t(object):
                                , os.linesep )
 
     @staticmethod
-    def is_comment( line ):
+    def is_comment( line, language='C++' ):
         """
         function that returns true if content of the line is comment, otherwise
         false.
@@ -174,10 +174,19 @@ class code_creator_t(object):
         @param line: C++ source code
         @type line: str
         @rtype: bool
+
+        @param language: the programming language, the line was written in. Possible values: C++, Python
+        @type line: str
         """
         assert isinstance( line, types.StringTypes )
         l = line.lstrip()
-        return l.startswith( '//' ) or l.startswith( '/*' )
+        if language == 'C++':
+            return l.startswith( '//' ) or l.startswith( '/*' )
+        elif language == 'Python':
+            return l.startswith( '#' )
+        else:
+            raise RuntimeError( "Language %s is not supported. The possible values are: Python, C++"
+                                % language )
 
     @staticmethod
     def iif( condition, true_, false_ ):

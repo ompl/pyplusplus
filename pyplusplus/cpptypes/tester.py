@@ -10,13 +10,13 @@ mydll = ctypes.CPPDLL( './mydll/release/mydll.dll' )
 #      GCCXML reports mangled and demangled names of the function, but it is not a cross platform( compile ) solution.
 #      It looks like I will have to cause mspdb package to work ( from where ctypes loads dlls? ctypes.windll.msvcr90 ???
 
-mydll.name_mapping = name_mapping.data
+mydll.undecorated_names = name_mapping.data
 
 # what is the best way to treat overloaded constructors
-class public( object ):
+class mem_fun_callable( object ):
     def __init__(self, dll, name, restype=None, argtypes=None ):
         self.name = name
-        self.func = getattr( dll, dll.name_mapping[name] )
+        self.func = getattr( dll, dll.undecorated_names[name] )
         self.func.restype = restype
         self.func.argtypes = argtypes
 
@@ -35,7 +35,7 @@ class mem_fun_factory( object ):
             keywd['argtypes'] = [ self.this_type ]
         else:
             keywd['argtypes'].insert( 0, self.this_type )
-        return public( self.dll, name, **keywd )
+        return mem_fun_callable( self.dll, name, **keywd )
 
     def __get_ns_name(self):
         if self.namespace:

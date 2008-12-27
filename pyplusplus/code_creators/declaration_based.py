@@ -5,6 +5,7 @@
 
 import algorithm
 import code_creator
+from pygccxml import utils
 
 class declaration_based_t:
     """Code creator that is based on a declaration.
@@ -18,12 +19,12 @@ class declaration_based_t:
         @type parent: code_creator_t
         """
         self._decl = declaration
-        
+
     def _generate_valid_name(self, name=None):
         if name == None:
             name = self.declaration.name
         return algorithm.create_valid_name( name )
-        
+
     @property
     def declaration(self):
         """The declaration this code creator is based on.
@@ -33,23 +34,39 @@ class declaration_based_t:
 
     def _get_alias_impl( self ):
         return self.declaration.alias
-    
-    def _get_alias(self):  
-        return self._get_alias_impl()    
+
+    def _get_alias(self):
+        return self._get_alias_impl()
     def _set_alias(self, alias):
         self.declaration.alias = alias
     alias = property( _get_alias, _set_alias )
-    
+
+    @utils.cached
+    def undecorated_decl_name( self ):
+        from pygccxml import msvc #prevent import on Linux
+        return msvc.undecorate_decl( self.declaration )
+
+    @utils.cached
+    def complete_py_name( self ):
+        aliases = []
+        current = self.declaration
+        while current:
+            aliases.append( current.alias )
+            current = current.parent
+        del aliases[-1] # :: from the global namespace
+        aliases.reverse()
+        return '.'.join( aliases )
+
     @property
     def decl_identifier( self ):
         return algorithm.create_identifier( self, self.declaration.partial_decl_string )
-    
+
     @property
     def documentation( self ):
         if None is self.declaration.documentation:
             return ''
         return self.declaration.documentation
-    
+
     def get_user_headers( self, recursive=False, unique=False ):
         """return list of user header files to be included from the generated file"""
         return self.declaration.include_files

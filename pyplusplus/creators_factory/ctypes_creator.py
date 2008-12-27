@@ -3,7 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-
+import sort_algorithms
 import dependencies_manager
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
@@ -24,16 +24,18 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         self.logger = _logging_.loggers.module_builder
         self.decl_logger = _logging_.loggers.declarations
 
+        self.global_ns = global_ns
+
         self.__library_path = library_path
         self.__exported_symbols = exported_symbols
-
-        self.__extmodule = code_creators.ctypes_module_t( global_ns )
+        self.module = code_creators.ctypes_module_t( global_ns )
         self.__dependencies_manager = dependencies_manager.manager_t(self.decl_logger)
 
         #~ prepared_decls = self.__prepare_decls( global_ns, doc_extractor )
         #~ self.__decls = sort_algorithms.sort( prepared_decls )
         self.curr_decl = global_ns
-        self.curr_code_creator = self.__extmodule
+        self.curr_code_creator = self.module
+        self.__class2introduction = {}
 
     def __print_readme( self, decl ):
         readme = decl.readme()
@@ -47,6 +49,12 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
         for msg in readme:
             self.decl_logger.warn( "%s;%s" % ( decl, msg ) )
+
+    def __should_generate_code( self, decl ):
+        if decl.ignore or decl.already_exposed:
+            return False
+        return True
+
 
     #~ def __prepare_decls( self, global_ns, doc_extractor ):
         #~ to_be_exposed = []
@@ -74,6 +82,27 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
         #~ return to_be_exposed
 
+    def __contains_exported( self, decl ):
+        return bool( decl.decls( self.__should_generate_code, recursive=True, allow_empty=True ) )
+
+    # - implement better 0(n) algorithm
+    def __add_class_introductions( self, cc, class_ ):
+        ci_creator = code_creators.class_introduction_t( class_ )
+        self.__class2introduction[ class_ ] = ci_creator
+        cc.adopt_creator( ci_creator )
+        classes = class_.classes( recursive=False, allow_empty=True)
+        classes = sort_algorithms.sort_classes( classes )
+        for internal_class in classes:
+            if self.__contains_exported( internal_class ):
+                self.__add_class_introductions( ci_creator, internal_class )
+
+    # - implement better 0(n) algorithm
+    def __add_namespaces( self, cc, ns ):
+        ns_creator = code_creators.namespace_as_pyclass_t( ns )
+        cc.adopt_creator( ns_creator )
+        for internal_ns in ns.namespaces( recursive=False, allow_empty=True):
+            if self.__contains_exported( ns ):
+                self.__add_namespaces( ns_creator, internal_ns )
 
     def create(self ):
         """Create and return the module for the extension.
@@ -82,20 +111,43 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         @rtype: L{module_t<code_creators.module_t>}
         """
         # Invoke the appropriate visit_*() method on all decls
-        self.__extmodule.adopt_creator( code_creators.import_t( 'ctypes' ) )
-        self.__extmodule.adopt_creator( code_creators.separator_t() )
-        self.__extmodule.adopt_creator( code_creators.library_reference_t( self.__library_path ) )
-        self.__extmodule.adopt_creator( code_creators.name_mappings_t( self.__exported_symbols ) )
-        self.__extmodule.adopt_creator( code_creators.separator_t() )
+        ccc = self.curr_code_creator
+        ccc.adopt_creator( code_creators.import_t( 'ctypes' ) )
+        ccc.adopt_creator( code_creators.separator_t() )
+        ccc.adopt_creator( code_creators.library_reference_t( self.__library_path ) )
+        ccc.adopt_creator( code_creators.name_mappings_t( self.__exported_symbols ) )
+        ccc.adopt_creator( code_creators.separator_t() )
+        #adding namespaces
+        for ns in self.global_ns.namespaces( recursive=False, allow_empty=True):
+            if self.__contains_exported( ns ):
+                self.__add_namespaces( ccc, ns )
+        #adding class introductions
+        f = lambda cls: self.__should_generate_code( cls ) \
+                        and isinstance( cls.parent, declarations.namespace_t )
+        ns_classes = self.global_ns.classes( f, recursive=True, allow_empty=True)
+        ns_classes = sort_algorithms.sort_classes( ns_classes )
+        for class_ in ns_classes:
+            if self.__contains_exported( ns ):
+                self.__add_class_introductions( ccc, class_ )
+
+        ccc.adopt_creator( code_creators.embedded_code_repository_t( code_repository.ctypes_cpp_utils ) )
 
         declarations.apply_visitor( self, self.curr_decl )
 
         self.__dependencies_manager.inform_user()
 
-        return self.__extmodule
+        return self.module
 
     def visit_member_function( self ):
         self.__dependencies_manager.add_exported( self.curr_decl )
+        cls_intro_cc = self.__class2introduction[ self.curr_decl.parent ]
+        cls_intro_cc.adopt_creator( code_creators.mem_fun_introduction_t( self.curr_decl ) )
+        #~ if self.curr_decl.virtuality == VIRTUALITY_TYPES.NOT_VIRTUAL:
+            #~ cls_intro_cc.adopt_creator( code_creators.mem_fun_introduction_t( self.curr_decl ) )
+        #~ elif self.curr_decl.virtuality == VIRTUALITY_TYPES.VIRTUAL:
+            #~ cls_intro_cc.adopt_creator( code_creators.vmem_fun_introduction_t( self.curr_decl ) )
+        #~ else:
+            #~ pass
 
     def visit_constructor( self ):
         self.__dependencies_manager.add_exported( self.curr_decl )
@@ -118,13 +170,19 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
     def visit_class_declaration(self ):
         self.__dependencies_manager.add_exported( self.curr_decl )
 
-    def visit_class(self ):
+    def visit_class(self):
         self.__dependencies_manager.add_exported( self.curr_decl )
+        #fields definition should be recursive using the visitor
+        self.curr_code_creator.adopt_creator( code_creators.fields_definition_t( self.curr_decl ) )
+        self.curr_code_creator.adopt_creator( code_creators.methods_definition_t( self.curr_decl ) )
+        class_ = self.curr_decl
+        for decl in self.curr_decl.decls( recursive=False, allow_empty=True ):
+            if self.__should_generate_code( decl ):
+                self.curr_decl = decl
+                declarations.apply_visitor( self, decl )
+        self.curr_decl = class_
 
     def visit_enumeration(self):
-        self.__dependencies_manager.add_exported( self.curr_decl )
-
-    def visit_namespace(self):
         self.__dependencies_manager.add_exported( self.curr_decl )
 
     def visit_typedef(self):
@@ -132,3 +190,13 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
     def visit_variable(self):
         self.__dependencies_manager.add_exported( self.curr_decl )
+
+    def visit_namespace(self ):
+        ns = self.curr_decl
+        for decl in self.curr_decl.decls( recursive=False, allow_empty=True ):
+            if isinstance( decl, declarations.namespace_t) or self.__should_generate_code( decl ):
+                self.curr_decl = decl
+                declarations.apply_visitor( self, decl )
+        self.curr_decl = ns
+
+

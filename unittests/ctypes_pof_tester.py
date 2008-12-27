@@ -16,11 +16,17 @@ class tester_t(unittest.TestCase):
         self.project_dir = os.path.join( autoconfig.data_directory, 'ctypes_pof' )
         self.header = os.path.join( self.project_dir, 'mydll.h' )
         self.symbols_file = os.path.join( self.project_dir, 'release', 'mydll.dll' )
+        self.module_name = 'ctypes_pof'
 
     def test(self):
         mb = ctypes_module_builder_t( [self.header], self.symbols_file, autoconfig.cxx_parsers_cfg.gccxml )
+        #~ mb.global_ns.include()
         mb.build_code_creator( self.symbols_file )
-        print mb.code_creator.create()
+        mb.write_module( os.path.join( autoconfig.build_directory, self.module_name + '.py' ) )
+        #mb.code_creator.create()
+        sys.path.append( autoconfig.build_directory )
+        import ctypes_pof
+
 
 def create_suite():
     suite = unittest.TestSuite()

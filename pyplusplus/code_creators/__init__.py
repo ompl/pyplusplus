@@ -146,4 +146,10 @@ from ctypes_module import ctypes_module_t
 from import_ import import_t
 from library_reference import library_reference_t
 from name_mappings import name_mappings_t
-
+from namespace_as_pyclass import namespace_as_pyclass_t
+from class_introduction import class_introduction_t
+from mem_fun_introduction import mem_fun_introduction_t
+from mem_fun_introduction import vmem_fun_introduction_t
+from fields_definition import fields_definition_t
+from embedded_code_repository import embedded_code_repository_t
+from methods_definition import methods_definition_t
