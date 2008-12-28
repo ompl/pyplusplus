@@ -20,13 +20,14 @@ class tester_t(unittest.TestCase):
 
     def test(self):
         mb = ctypes_module_builder_t( [self.header], self.symbols_file, autoconfig.cxx_parsers_cfg.gccxml )
-        #~ mb.global_ns.include()
+        #~ mb.print_declarations()
         mb.build_code_creator( self.symbols_file )
         mb.write_module( os.path.join( autoconfig.build_directory, self.module_name + '.py' ) )
         #mb.code_creator.create()
         sys.path.append( autoconfig.build_directory )
         import ctypes_pof
-
+        print ctypes_pof.identity( 23 )
+        self.failUnless( ctypes_pof.identity( 23 ) == 23 )
 
 def create_suite():
     suite = unittest.TestSuite()

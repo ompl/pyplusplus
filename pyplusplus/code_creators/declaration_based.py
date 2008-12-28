@@ -48,14 +48,7 @@ class declaration_based_t:
 
     @utils.cached
     def complete_py_name( self ):
-        aliases = []
-        current = self.declaration
-        while current:
-            aliases.append( current.alias )
-            current = current.parent
-        del aliases[-1] # :: from the global namespace
-        aliases.reverse()
-        return '.'.join( aliases )
+        return algorithm.complete_py_name( self.declaration )
 
     @property
     def decl_identifier( self ):

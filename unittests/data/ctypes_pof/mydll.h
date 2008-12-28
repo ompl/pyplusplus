@@ -26,3 +26,9 @@ template class __declspec(dllexport) std::auto_ptr< pof::number_t >;
 typedef std::auto_ptr< pof::number_t > number_aptr_t;
 
 void __declspec(dllexport) do_smth( number_aptr_t& );
+
+extern "C"{
+
+int __declspec(dllexport) identity( int );
+
+}

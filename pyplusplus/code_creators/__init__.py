@@ -153,3 +153,4 @@ from mem_fun_introduction import vmem_fun_introduction_t
 from fields_definition import fields_definition_t
 from embedded_code_repository import embedded_code_repository_t
 from methods_definition import methods_definition_t
+from function_definition import c_function_definition_t

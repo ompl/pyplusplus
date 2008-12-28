@@ -11,7 +11,7 @@ tree.
 from pyplusplus.decl_wrappers.algorithm import *
 
 
-import types 
+import types
 import namespace
 
 def _make_flatten_list( creator_or_creators ):
@@ -69,14 +69,14 @@ class creator_finder:
     This class is used as container for different find algorithms.
     """
     "creator_finder - this class used as namespace"
-    
+
     @staticmethod
     def find_by_declaration( declaration_matcher, where, recursive=True ):
-        """Finds code creator by declaration. 
-        declaration_matcher should be callable, that takes single argument 
+        """Finds code creator by declaration.
+        declaration_matcher should be callable, that takes single argument
         declaration, and returns True or False
         where - code creator or list of code creators
-        This function returns a list of all relevant code creators 
+        This function returns a list of all relevant code creators
         """
         import declaration_based #prevent cyclic import
         search_area = where
@@ -85,14 +85,14 @@ class creator_finder:
         return filter( lambda inst: isinstance( inst, declaration_based.declaration_based_t ) \
                                     and declaration_matcher( inst.declaration )
                        , search_area )
-    
+
     @staticmethod
     def find_by_declaration_single( declaration_matcher, where, recursive=True ):
         answer = creator_finder.find_by_declaration( declaration_matcher, where, recursive )
         if len( answer ) == 1:
             return answer[0]
         return None
-    
+
     @staticmethod
     def find_by_class_instance( what, where, recursive=True ):
         search_area = where
@@ -101,4 +101,15 @@ class creator_finder:
         return filter( lambda inst: isinstance( inst, what ), search_area )
 
 def make_id_creator( code_creator ):
-    return lambda decl_string: create_identifier( code_creator, decl_string )        
+    return lambda decl_string: create_identifier( code_creator, decl_string )
+
+def complete_py_name( decl ):
+    aliases = []
+    current = decl
+    while current:
+        aliases.append( current.alias )
+        current = current.parent
+    del aliases[-1] # :: from the global namespace
+    aliases.reverse()
+    return '.'.join( aliases )
+

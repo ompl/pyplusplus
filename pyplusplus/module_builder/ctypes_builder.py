@@ -80,8 +80,10 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
 
     def __include_declarations( self ):
         self.global_ns.exclude()
-        undecorated = set( self.__blob2undecorated.values() )
-        is_exported = lambda d: msvc.undecorate_decl( d ) in undecorated
+        b2u = self.__blob2undecorated
+        undecorated = set( b2u.values() )
+        is_exported = lambda d: msvc.undecorate_decl( d ) in undecorated \
+                                or d.name in b2u and b2u[d.name] == d.name #treatment of C functions
 
         included_decls = set()
         included_decls.update( self.global_ns.calldefs( is_exported, allow_empty=True, recursive=True ) )

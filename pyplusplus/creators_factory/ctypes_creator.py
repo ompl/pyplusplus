@@ -5,11 +5,12 @@
 
 import sort_algorithms
 import dependencies_manager
+from pygccxml import msvc
+from pyplusplus import _logging_
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
 from pyplusplus import code_repository
-from pyplusplus import _logging_
 
 ACCESS_TYPES = declarations.ACCESS_TYPES
 VIRTUALITY_TYPES = declarations.VIRTUALITY_TYPES
@@ -163,6 +164,10 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
     def visit_free_function( self ):
         self.__dependencies_manager.add_exported( self.curr_decl )
+        if self.curr_decl.name in self.__exported_symbols \
+           and self.curr_decl.name == self.__exported_symbols[ self.curr_decl.name ]:
+           #we deal with c function
+            self.curr_code_creator.adopt_creator( code_creators.c_function_definition_t( self.curr_decl ) )
 
     def visit_free_operator( self ):
         self.__dependencies_manager.add_exported( self.curr_decl )
