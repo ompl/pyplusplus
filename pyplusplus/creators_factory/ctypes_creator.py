@@ -32,11 +32,14 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         self.module = code_creators.ctypes_module_t( global_ns )
         self.__dependencies_manager = dependencies_manager.manager_t(self.decl_logger)
 
+        self.__class_ccs = code_creators.bookmark_t()
+
         #~ prepared_decls = self.__prepare_decls( global_ns, doc_extractor )
         #~ self.__decls = sort_algorithms.sort( prepared_decls )
         self.curr_decl = global_ns
         self.curr_code_creator = self.module
         self.__class2introduction = {}
+        self.__namespace2pyclass = {}
 
     def __print_readme( self, decl ):
         readme = decl.readme()
@@ -97,14 +100,6 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
             if self.__contains_exported( internal_class ):
                 self.__add_class_introductions( ci_creator, internal_class )
 
-    # - implement better 0(n) algorithm
-    def __add_namespaces( self, cc, ns ):
-        ns_creator = code_creators.namespace_as_pyclass_t( ns )
-        cc.adopt_creator( ns_creator )
-        for internal_ns in ns.namespaces( recursive=False, allow_empty=True):
-            if self.__contains_exported( ns ):
-                self.__add_namespaces( ns_creator, internal_ns )
-
     def create(self ):
         """Create and return the module for the extension.
 
@@ -119,17 +114,18 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         ccc.adopt_creator( code_creators.name_mappings_t( self.__exported_symbols ) )
         ccc.adopt_creator( code_creators.separator_t() )
         #adding namespaces
-        for ns in self.global_ns.namespaces( recursive=False, allow_empty=True):
-            if self.__contains_exported( ns ):
-                self.__add_namespaces( ccc, ns )
-        #adding class introductions
+        global_ns_cc = code_creators.bookmark_t()
+        ccc.adopt_creator( global_ns_cc )
+        ccc.adopt_creator( self.__class_ccs )
+        self.__namespace2pyclass[ self.global_ns ] = global_ns_cc
+        #adding class introductions - special case because of hierarchy
         f = lambda cls: self.__should_generate_code( cls ) \
                         and isinstance( cls.parent, declarations.namespace_t )
         ns_classes = self.global_ns.classes( f, recursive=True, allow_empty=True)
         ns_classes = sort_algorithms.sort_classes( ns_classes )
         for class_ in ns_classes:
-            if self.__contains_exported( ns ):
-                self.__add_class_introductions( ccc, class_ )
+            if self.__contains_exported( class_ ):
+                self.__add_class_introductions( self.__class_ccs, class_ )
 
         ccc.adopt_creator( code_creators.embedded_code_repository_t( code_repository.ctypes_cpp_utils ) )
 
@@ -174,6 +170,8 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
     def visit_class_declaration(self ):
         self.__dependencies_manager.add_exported( self.curr_decl )
+        ci_creator = code_creators.class_introduction_t( self.curr_decl )
+        self.curr_code_creator.adopt_creator( ci_creator )
 
     def visit_class(self):
         self.__dependencies_manager.add_exported( self.curr_decl )
@@ -197,6 +195,11 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         self.__dependencies_manager.add_exported( self.curr_decl )
 
     def visit_namespace(self ):
+        if self.global_ns is not self.curr_decl:
+            ns_creator = code_creators.namespace_as_pyclass_t( self.curr_decl )
+            self.__namespace2pyclass[ self.curr_decl ] = ns_creator
+            self.__namespace2pyclass[ self.curr_decl.parent ].adopt_creator( ns_creator )
+
         ns = self.curr_decl
         for decl in self.curr_decl.decls( recursive=False, allow_empty=True ):
             if isinstance( decl, declarations.namespace_t) or self.__should_generate_code( decl ):

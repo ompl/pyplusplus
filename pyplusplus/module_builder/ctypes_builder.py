@@ -84,15 +84,18 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         undecorated = set( b2u.values() )
         is_exported = lambda d: msvc.undecorate_decl( d ) in undecorated \
                                 or d.name in b2u and b2u[d.name] == d.name #treatment of C functions
-
+        #include exported declarations
         included_decls = set()
         included_decls.update( self.global_ns.calldefs( is_exported, allow_empty=True, recursive=True ) )
         included_decls.update( self.global_ns.variables( is_exported, allow_empty=True, recursive=True ) )
-
+        #include declarations, on which exported declarations depend
+        they_depend_on_us = decls_package.dependency_info_t.they_depend_on_us
+        included_decls.update( they_depend_on_us( included_decls ) )
         for d in included_decls:
+            print str(d)
             d.include()
-            if isinstance( d.parent, decls_package.class_t ):
-                d.parent.include()
+            if isinstance( d, decls_package.class_t ):
+                d.top_class.include()
 
     def build_code_creator( self, library_path, doc_extractor=None ):
         creator = creators_factory.ctypes_creator_t( self.global_ns

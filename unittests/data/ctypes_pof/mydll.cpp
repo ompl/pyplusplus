@@ -47,7 +47,7 @@ using namespace pof;
 void do_smth( number_aptr_t& ){
 }
 
-int identity( int i){ return i;}
+int identity( int some_data){ return some_data;}
 
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,

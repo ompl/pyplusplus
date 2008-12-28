@@ -26,8 +26,8 @@ class tester_t(unittest.TestCase):
         #mb.code_creator.create()
         sys.path.append( autoconfig.build_directory )
         import ctypes_pof
-        print ctypes_pof.identity( 23 )
-        self.failUnless( ctypes_pof.identity( 23 ) == 23 )
+        #the following code fails - difference in the calling conventions
+        self.failUnless( ctypes_pof.identity( int(111) ) == 111 )
 
 def create_suite():
     suite = unittest.TestSuite()

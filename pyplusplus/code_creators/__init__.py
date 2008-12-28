@@ -141,6 +141,8 @@ from properties import property_t
 from ctypes_integration_creators import expose_this_t
 from ctypes_integration_creators import expose_sizeof_t
 
+from bookmark import bookmark_t
+
 #pure ctypes
 from ctypes_module import ctypes_module_t
 from import_ import import_t
