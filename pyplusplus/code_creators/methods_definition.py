@@ -21,9 +21,9 @@ class methods_definition_t(compound.compound_t, declaration_based.declaration_ba
         result = []
         scope = declarations.algorithm.declaration_path( self.declaration )
         del scope[0] #del :: from the global namespace
+        del scope[-1] #del self from the list
 
-
-        result.append( '%(mem_fun_factory_var_name)s = mem_fun_factory( %(library_var_name)s, %(complete_py_name)s, "%(class_name)s", "%(ns)s" )'
+        result.append( '%(mem_fun_factory_var_name)s = ctypes_utils.mem_fun_factory( %(library_var_name)s, %(complete_py_name)s, "%(class_name)s", "%(ns)s" )'
                        % dict( mem_fun_factory_var_name=self.mem_fun_factory_var_name
                                , library_var_name=self.top_parent.library_var_name
                                , complete_py_name=self.complete_py_name

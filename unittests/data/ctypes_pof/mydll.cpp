@@ -49,6 +49,8 @@ void do_smth( number_aptr_t& ){
 
 int identity( int some_data){ return some_data;}
 
+int identity_cpp( int data){ return data; }
+
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved

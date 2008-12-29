@@ -92,7 +92,6 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         they_depend_on_us = decls_package.dependency_info_t.they_depend_on_us
         included_decls.update( they_depend_on_us( included_decls ) )
         for d in included_decls:
-            print str(d)
             d.include()
             if isinstance( d, decls_package.class_t ):
                 d.top_class.include()

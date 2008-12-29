@@ -9,14 +9,9 @@ import ctypes_formatter
 import declaration_based
 from pygccxml import declarations
 
-"""
-BSCGetBaseArray = _libraries['msbsc70.dll'].BSCGetBaseArray
-BSCGetBaseArray.restype = BOOL
-BSCGetBaseArray.argtypes = [POINTER(Bsc), IINST, POINTER(POINTER(IINST)), POINTER(ULONG)]
+#TODO - unable to call C function, if dll was loaded as CPPDLL
 
-"""
-
-class c_function_definition_t(code_creator.code_creator_t, declaration_based.declaration_based_t):
+class function_definition_t(code_creator.code_creator_t, declaration_based.declaration_based_t):
     def __init__( self, free_fun ):
         code_creator.code_creator_t.__init__(self)
         declaration_based.declaration_based_t.__init__( self, free_fun )
@@ -37,11 +32,10 @@ class c_function_definition_t(code_creator.code_creator_t, declaration_based.dec
 
     def _create_impl(self):
         result = []
-        result.append( '#%s' % self.undecorated_decl_name )
-        result.append( '#TODO - unable to call C function, if dll was loaded as CPPDLL' )
-        result.append( '%(alias)s = %(library_var_name)s.%(alias)s'
+        result.append( '%(alias)s = getattr( %(library_var_name)s, %(library_var_name)s.undecorated_names["%(undecorated_decl_name)s"] )'
                        % dict( alias=self.declaration.alias
-                               , library_var_name=self.top_parent.library_var_name ) )
+                               , library_var_name=self.top_parent.library_var_name
+                               , undecorated_decl_name=self.undecorated_decl_name) )
 
         if not declarations.is_void( self.ftype.return_type ):
             result.append( '%(alias)s.restype = %(restype)s'

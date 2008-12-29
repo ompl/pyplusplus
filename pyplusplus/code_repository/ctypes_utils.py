@@ -3,20 +3,18 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-file_name = "ctypes_cpp_utils.py"
+file_name = "ctypes_utils.py"
 
-license = \
+code = \
 """# Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0. (See
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
-"""
 
+import ctypes
 
-code = \
-"""
 # what is the best way to treat overloaded constructors
-class mem_fun_callable( object ):
+class native_callable( object ):
     def __init__(self, dll, name, restype=None, argtypes=None ):
         self.name = name
         self.func = getattr( dll, dll.undecorated_names[name] )
@@ -25,6 +23,36 @@ class mem_fun_callable( object ):
 
     def __call__(self, *args, **keywd ):
         return self.func( *args,  **keywd )
+
+class native_overloaded_callable( object ):
+    def __init__(self, restype=None ):
+        self.__functions = {} # argtypes : function
+        self.restype = restype
+
+    def register( self, dll, name, argtypes=None ):
+        f = getattr( dll, dll.undecorated_names[name] )
+        f.restype = self.restype
+        f.argtypes = argtypes
+        self.__functions[ argtypes ] = f
+        return self
+
+    def register_callable( self, callable ):
+        #TODO: check restype
+        self.__functions[ tuple(callable.func.argtypes) ] = callable.func
+        return self
+
+    def __call__( self, *args ):
+        types = None
+        if args:
+            types = tuple(arg.__class__ for arg in args)
+        f = self.__functions.get(types)
+        if f is None:
+            return f(*args)
+        else:
+            raise TypeError("no match")
+
+def multi_method( restype=None ):
+    return native_overloaded_callable( restype )
 
 class mem_fun_factory( object ):
     def __init__( self, dll, wrapper, class_name, namespace='' ):
@@ -38,7 +66,7 @@ class mem_fun_factory( object ):
             keywd['argtypes'] = [ self.this_type ]
         else:
             keywd['argtypes'].insert( 0, self.this_type )
-        return mem_fun_callable( self.dll, name, **keywd )
+        return native_callable( self.dll, name, **keywd )
 
     def __get_ns_name(self):
         if self.namespace:
@@ -59,7 +87,7 @@ class mem_fun_factory( object ):
                      , **keywd )
 
     def copy_constructor( self ):
-        return self( '%(ns)s%(class_name)s::%(class_name)s(%(class_name)s const &)'
+        return self( '%(ns)s%(class_name)s::%(class_name)s(%(ns)s%(class_name)s const &)'
                         % dict( ns=self.__get_ns_name()
                                 , class_name=self.class_name )
                      , argtypes=[self.this_type] )
@@ -89,4 +117,5 @@ class mem_fun_factory( object ):
                                 , method_name=name
                                 , args=argtypes_str )
                      , **keywd )
+
 """

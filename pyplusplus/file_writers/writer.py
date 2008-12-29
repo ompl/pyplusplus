@@ -71,9 +71,14 @@ class writer_t(object):
             if cr.file_name in system_headers:
                 #check whether file from code repository is used
                 self.write_file( os.path.join( dir, cr.file_name ), cr.code )
-        #named_tuple.py is a special case :-(
-        self.write_file( os.path.join( dir, code_repository.named_tuple.file_name )
-                         , code_repository.named_tuple.code )
+        #Python files are a special case
+        if isinstance( self.extmodule, code_creators.bpmodule_t ):
+            self.write_file( os.path.join( dir, code_repository.named_tuple.file_name )
+                             , code_repository.named_tuple.code )
+        else:
+            self.write_file( os.path.join( dir, code_repository.ctypes_utils.file_name )
+                             , code_repository.ctypes_utils.code )
+
     @staticmethod
     def write_file( fpath, content, files_sum_repository=None, encoding='ascii' ):
         """Write a source file.

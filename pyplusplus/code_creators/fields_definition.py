@@ -8,6 +8,11 @@ import code_creator
 import declaration_based
 from pygccxml import declarations
 
+#TODO: don't hide public member variables
+#TODO: how _fields_ should be defined in a class hierarchy
+#TODO: fix 64bit issue with calculating vtable pointer size
+
+
 class fields_definition_t(code_creator.code_creator_t, declaration_based.declaration_based_t):
     def __init__( self, class_ ):
         code_creator.code_creator_t.__init__(self)
@@ -15,13 +20,11 @@ class fields_definition_t(code_creator.code_creator_t, declaration_based.declara
 
     def _create_impl(self):
         result = []
-        result.append( '%(complete_py_name)s._fields_ = [ #class member variables definition list'
-                       % dict( complete_py_name=self.complete_py_name ) )
+        result.append( '%(complete_py_name)s._fields_ = [ #class %(decl_identifier)s'
+                       % dict( complete_py_name=self.complete_py_name
+                               , decl_identifier=self.decl_identifier) )
         if self.declaration.has_vtable:
             result.append( self.indent( '("_vtable_", ctypes.POINTER(ctypes.c_void_p)),' ) )
-        result.append( self.indent( "#TODO: don't hide public member variables" ) )
-        result.append( self.indent( "#TODO: how _fields_ should be defined in a class hierarchy" ) )
-        result.append( self.indent( "#TODO: fix 64bit issue with calculating vtable pointer size" ) )
         result.append( self.indent( '("__hidden__", ctypes.c_char * %d),'
                                       % ( self.declaration.byte_size - 4*int(self.declaration.has_vtable) ) ) )
         result.append( ']' )

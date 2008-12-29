@@ -32,3 +32,5 @@ extern "C"{
 int __declspec(dllexport) identity( int );
 
 }
+
+int __declspec(dllexport) identity_cpp( int );

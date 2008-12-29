@@ -32,14 +32,22 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         self.module = code_creators.ctypes_module_t( global_ns )
         self.__dependencies_manager = dependencies_manager.manager_t(self.decl_logger)
 
+        #bookmark for class introductions
         self.__class_ccs = code_creators.bookmark_t()
+        #bookmark for class deinitions
+        self.__class_defs_ccs = code_creators.bookmark_t()
 
         #~ prepared_decls = self.__prepare_decls( global_ns, doc_extractor )
         #~ self.__decls = sort_algorithms.sort( prepared_decls )
         self.curr_decl = global_ns
         self.curr_code_creator = self.module
+        #mapping between class declaration and class introduction code creator
         self.__class2introduction = {}
+        #mapping between namespace and its code creator
         self.__namespace2pyclass = {}
+        #set of all included namespaces
+        #~ self.__included_nss = set()
+        #~ for decl in self.global_ns
 
     def __print_readme( self, decl ):
         readme = decl.readme()
@@ -109,9 +117,13 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         # Invoke the appropriate visit_*() method on all decls
         ccc = self.curr_code_creator
         ccc.adopt_creator( code_creators.import_t( 'ctypes' ) )
+        ccc.adopt_creator( code_creators.import_t( code_repository.ctypes_utils.file_name  ) )
+
         ccc.adopt_creator( code_creators.separator_t() )
+
         ccc.adopt_creator( code_creators.library_reference_t( self.__library_path ) )
         ccc.adopt_creator( code_creators.name_mappings_t( self.__exported_symbols ) )
+
         ccc.adopt_creator( code_creators.separator_t() )
         #adding namespaces
         global_ns_cc = code_creators.bookmark_t()
@@ -127,7 +139,7 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
             if self.__contains_exported( class_ ):
                 self.__add_class_introductions( self.__class_ccs, class_ )
 
-        ccc.adopt_creator( code_creators.embedded_code_repository_t( code_repository.ctypes_cpp_utils ) )
+        ccc.adopt_creator( self.__class_defs_ccs )
 
         declarations.apply_visitor( self, self.curr_decl )
 
@@ -148,9 +160,16 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
     def visit_constructor( self ):
         self.__dependencies_manager.add_exported( self.curr_decl )
+        cls_intro_cc = self.__class2introduction[ self.curr_decl.parent ]
+        has_constructor = filter( lambda cc: isinstance( cc, code_creators.constructor_introduction_t )
+                                  , cls_intro_cc.creators )
+        if not has_constructor:
+            cls_intro_cc.adopt_creator( code_creators.constructor_introduction_t( self.curr_decl ) )
 
     def visit_destructor( self ):
         self.__dependencies_manager.add_exported( self.curr_decl )
+        cls_intro_cc = self.__class2introduction[ self.curr_decl.parent ]
+        cls_intro_cc.adopt_creator( code_creators.destructor_introduction_t( self.curr_decl ) )
 
     def visit_member_operator( self ):
         self.__dependencies_manager.add_exported( self.curr_decl )
@@ -162,22 +181,23 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         self.__dependencies_manager.add_exported( self.curr_decl )
         if self.curr_decl.name in self.__exported_symbols \
            and self.curr_decl.name == self.__exported_symbols[ self.curr_decl.name ]:
-           #we deal with c function
-            self.curr_code_creator.adopt_creator( code_creators.c_function_definition_t( self.curr_decl ) )
+            return #it is notpossible to call C function from CPPDLL
+        else:
+            self.curr_code_creator.adopt_creator( code_creators.function_definition_t( self.curr_decl ) )
 
     def visit_free_operator( self ):
         self.__dependencies_manager.add_exported( self.curr_decl )
 
     def visit_class_declaration(self ):
         self.__dependencies_manager.add_exported( self.curr_decl )
-        ci_creator = code_creators.class_introduction_t( self.curr_decl )
-        self.curr_code_creator.adopt_creator( ci_creator )
+        ci_creator = code_creators.class_declaration_introduction_t( self.curr_decl )
+        self.__class_ccs.adopt_creator( ci_creator )
 
     def visit_class(self):
         self.__dependencies_manager.add_exported( self.curr_decl )
         #fields definition should be recursive using the visitor
-        self.curr_code_creator.adopt_creator( code_creators.fields_definition_t( self.curr_decl ) )
-        self.curr_code_creator.adopt_creator( code_creators.methods_definition_t( self.curr_decl ) )
+        self.__class_defs_ccs.adopt_creator( code_creators.fields_definition_t( self.curr_decl ) )
+        self.__class_defs_ccs.adopt_creator( code_creators.methods_definition_t( self.curr_decl ) )
         class_ = self.curr_decl
         for decl in self.curr_decl.decls( recursive=False, allow_empty=True ):
             if self.__should_generate_code( decl ):
@@ -195,6 +215,8 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         self.__dependencies_manager.add_exported( self.curr_decl )
 
     def visit_namespace(self ):
+        if not self.__contains_exported( self.curr_decl ):
+            return
         if self.global_ns is not self.curr_decl:
             ns_creator = code_creators.namespace_as_pyclass_t( self.curr_decl )
             self.__namespace2pyclass[ self.curr_decl ] = ns_creator

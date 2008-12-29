@@ -19,7 +19,7 @@ import named_tuple
 import convenience
 import return_range
 import call_policies
-import ctypes_cpp_utils
+import ctypes_utils
 import ctypes_integration
 
 all = [ array_1
@@ -28,7 +28,7 @@ all = [ array_1
         , call_policies
         , named_tuple
         , return_range
-        , ctypes_cpp_utils
+        , ctypes_utils
         , ctypes_integration ]
 
 headers = map( lambda f: f.file_name, all )

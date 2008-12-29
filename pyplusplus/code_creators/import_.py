@@ -3,6 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import os
 import code_creator
 import include_directories
 
@@ -14,7 +15,7 @@ class import_t(code_creator.code_creator_t):
         self._module_name = module_name
 
     def _create_impl(self):
-        return 'import %(module)s' % dict( module=self._module_name )
+        return 'import %(module)s' % dict( module=os.path.splitext(self._module_name)[0] )
 
     def _get_system_headers_impl( self ):
         return []

@@ -150,9 +150,14 @@ from library_reference import library_reference_t
 from name_mappings import name_mappings_t
 from namespace_as_pyclass import namespace_as_pyclass_t
 from class_introduction import class_introduction_t
+from class_introduction import class_declaration_introduction_t
 from mem_fun_introduction import mem_fun_introduction_t
 from mem_fun_introduction import vmem_fun_introduction_t
+from mem_fun_introduction import constructor_introduction_t
+from mem_fun_introduction import destructor_introduction_t
+
+
 from fields_definition import fields_definition_t
 from embedded_code_repository import embedded_code_repository_t
 from methods_definition import methods_definition_t
-from function_definition import c_function_definition_t
+from function_definition import function_definition_t
