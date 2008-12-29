@@ -24,6 +24,7 @@ class class_introduction_t(compound.compound_t, declaration_based.declaration_ba
 
         if isinstance( self.declaration.parent, declarations.namespace_t ) \
            and self.declaration.parent is not self.declaration.top_parent: #not a global namespace
+            result.append("")
             result.append( '%(ns_full_name)s = %(name)s'
                            % dict( ns_full_name=self.complete_py_name, name=self.alias ))
         return os.linesep.join( result )

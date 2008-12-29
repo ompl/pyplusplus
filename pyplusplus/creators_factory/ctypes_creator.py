@@ -43,6 +43,8 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         self.curr_code_creator = self.module
         #mapping between class declaration and class introduction code creator
         self.__class2introduction = {}
+        #mapping between classs and its methods definition dictionary
+        self.__class2methods_def = {}
         #mapping between namespace and its code creator
         self.__namespace2pyclass = {}
         #set of all included namespaces
@@ -160,16 +162,36 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
     def visit_constructor( self ):
         self.__dependencies_manager.add_exported( self.curr_decl )
+        md_cc = self.__class2methods_def[ self.curr_decl.parent ]
         cls_intro_cc = self.__class2introduction[ self.curr_decl.parent ]
-        has_constructor = filter( lambda cc: isinstance( cc, code_creators.constructor_introduction_t )
-                                  , cls_intro_cc.creators )
-        if not has_constructor:
-            cls_intro_cc.adopt_creator( code_creators.constructor_introduction_t( self.curr_decl ) )
+        init_def_cc = code_creators.init_definition_t( self.curr_decl )
+        #TODO: calculate only exported constructors
+        if 1 == len( self.curr_decl.parent.constructors(recursive=False, allow_empty=True ) ):
+            #this is the first and the last and the only class constructor
+            md_cc.adopt_creator( code_creators.init_definition_t( self.curr_decl ) )
+            cls_intro_cc.adopt_creator( code_creators.init_introduction_t(self.curr_decl) )
+        else:
+            has_constructor = filter( lambda cc: isinstance( cc, code_creators.init_introduction_t )
+                                      , cls_intro_cc.creators )
+            if not has_constructor:
+                cls_intro_cc.adopt_creator( code_creators.init_introduction_t(self.curr_decl) )
+
+            multi_init_def = filter( lambda cc: isinstance( cc, code_creators.multi_init_definition_t )
+                                     , md_cc.creators )
+            if not multi_init_def:
+                multi_init_def = code_creators.multi_init_definition_t()
+                md_cc.adopt_creator( multi_init_def )
+                multi_init_def.adopt_creator( init_def_cc )
+            else:
+                multi_init_def[0].adopt_creator( init_def_cc )
 
     def visit_destructor( self ):
         self.__dependencies_manager.add_exported( self.curr_decl )
         cls_intro_cc = self.__class2introduction[ self.curr_decl.parent ]
-        cls_intro_cc.adopt_creator( code_creators.destructor_introduction_t( self.curr_decl ) )
+        cls_intro_cc.adopt_creator( code_creators.del_introduction_t( self.curr_decl ) )
+
+        md_cc = self.__class2methods_def[ self.curr_decl.parent ]
+        md_cc.adopt_creator( code_creators.del_definition_t( self.curr_decl ) )
 
     def visit_member_operator( self ):
         self.__dependencies_manager.add_exported( self.curr_decl )
@@ -197,7 +219,9 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         self.__dependencies_manager.add_exported( self.curr_decl )
         #fields definition should be recursive using the visitor
         self.__class_defs_ccs.adopt_creator( code_creators.fields_definition_t( self.curr_decl ) )
-        self.__class_defs_ccs.adopt_creator( code_creators.methods_definition_t( self.curr_decl ) )
+        md_cc = code_creators.methods_definition_t( self.curr_decl )
+        self.__class2methods_def[ self.curr_decl ] = md_cc
+        self.__class_defs_ccs.adopt_creator( md_cc )
         class_ = self.curr_decl
         for decl in self.curr_decl.decls( recursive=False, allow_empty=True ):
             if self.__should_generate_code( decl ):

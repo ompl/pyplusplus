@@ -11,6 +11,7 @@ code = \
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import os
 import ctypes
 
 # what is the best way to treat overloaded constructors
@@ -25,21 +26,8 @@ class native_callable( object ):
         return self.func( *args,  **keywd )
 
 class native_overloaded_callable( object ):
-    def __init__(self, restype=None ):
-        self.__functions = {} # argtypes : function
-        self.restype = restype
-
-    def register( self, dll, name, argtypes=None ):
-        f = getattr( dll, dll.undecorated_names[name] )
-        f.restype = self.restype
-        f.argtypes = argtypes
-        self.__functions[ argtypes ] = f
-        return self
-
-    def register_callable( self, callable ):
-        #TODO: check restype
-        self.__functions[ tuple(callable.func.argtypes) ] = callable.func
-        return self
+    def __init__(self, functions ):
+        self.__functions = functions
 
     def __call__( self, *args ):
         types = None
@@ -47,12 +35,34 @@ class native_overloaded_callable( object ):
             types = tuple(arg.__class__ for arg in args)
         f = self.__functions.get(types)
         if f is None:
-            return f(*args)
+            msg = ['Unable to find a function that match the arguments you passed.']
+            msg.append( 'First argument type is "this" type.' )
+            msg.append( 'This function call argument types: ' + str( types ) )
+            msg.append( 'Registered methods argument types: ' )
+            for key in self.__functions.iterkeys():
+                msg.append('    ' + str(key))
+            raise TypeError(os.linesep.join(msg))
         else:
-            raise TypeError("no match")
+            return f(*args)
 
-def multi_method( restype=None ):
-    return native_overloaded_callable( restype )
+class multi_method_registry_t:
+    def __init__( self, factory, restype ):
+        self.factory = factory
+        self.restype = restype
+        self.__functions = {}
+
+    def register( self, callable_or_name, argtypes=None ):
+        if isinstance( callable_or_name, native_callable ):
+            callable = callable_or_name
+        else:
+            name = callable_or_name
+            callable = self.factory( name, restype=self.restype, argtypes=argtypes )
+        self.__functions[ tuple(callable.func.argtypes) ] = callable.func
+        return self
+
+    def finalize(self):
+        return native_overloaded_callable( self.__functions )
+
 
 class mem_fun_factory( object ):
     def __init__( self, dll, wrapper, class_name, namespace='' ):
@@ -92,9 +102,13 @@ class mem_fun_factory( object ):
                                 , class_name=self.class_name )
                      , argtypes=[self.this_type] )
 
-    def destructor( self ):
-        return self( '%(ns)s%(class_name)s::~%(class_name)s(void)'
+    def destructor( self, is_virtual=False ):
+        virtuality = ''
+        if is_virtual:
+            virtuality = 'virtual '
+        return self( '%(virtuality)s%(ns)s%(class_name)s::~%(class_name)s(void)'
                         % dict( ns=self.__get_ns_name()
+                                , virtuality=virtuality
                                 , class_name=self.class_name ) )
 
     def operator_assign( self ):
@@ -118,4 +132,6 @@ class mem_fun_factory( object ):
                                 , args=argtypes_str )
                      , **keywd )
 
+    def multi_method( self, restype=None ):
+        return multi_method_registry_t( self, restype )
 """

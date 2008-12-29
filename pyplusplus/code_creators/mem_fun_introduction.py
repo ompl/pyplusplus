@@ -16,7 +16,7 @@ class mem_fun_introduction_t(code_creator.code_creator_t, declaration_based.decl
     def _create_impl(self):
         tmpl = ['def %(alias)s( self, *args ):']
         tmpl.append( self.indent('"""%(name)s"""') )
-        tmpl.append( self.indent("return self._methods_['%(alias)s']( ctypes.byref( self ), *args )") )
+        tmpl.append( self.indent("return self._methods_['%(alias)s']( ctypes.pointer( self ), *args )") )
         return os.linesep.join( tmpl ) \
                % dict( alias=self.declaration.alias, name=self.undecorated_decl_name )
 
@@ -31,7 +31,7 @@ class vmem_fun_introduction_t(code_creator.code_creator_t, declaration_based.dec
     def _create_impl(self):
         tmpl = ['def %(alias)s( self, *args ):']
         tmpl.append( self.indent('"""%(name)s"""') )
-        tmpl.append( self.indent("return self._vtable_['%(ordinal)d'].%(alias)s( ctypes.byref( self ), *args )") )
+        tmpl.append( self.indent("return self._vtable_['%(ordinal)d'].%(alias)s( ctypes.pointer( self ), *args )") )
         return os.linesep.join( tmpl ) \
                % dict( alias=self.declaration.alias
                        , name=self.undecorated_decl_name
@@ -40,7 +40,7 @@ class vmem_fun_introduction_t(code_creator.code_creator_t, declaration_based.dec
     def _get_system_headers_impl( self ):
         return []
 
-class constructor_introduction_t(code_creator.code_creator_t, declaration_based.declaration_based_t):
+class init_introduction_t(code_creator.code_creator_t, declaration_based.declaration_based_t):
     def __init__( self, constructor ):
         code_creator.code_creator_t.__init__(self)
         declaration_based.declaration_based_t.__init__( self, constructor )
@@ -48,14 +48,14 @@ class constructor_introduction_t(code_creator.code_creator_t, declaration_based.
     def _create_impl(self):
         tmpl = ['def __init__( self, *args ):']
         tmpl.append( self.indent('"""%(name)s"""') )
-        tmpl.append( self.indent("return self._methods_['__init__']( ctypes.byref( self ), *args )") )
+        tmpl.append( self.indent("return self._methods_['__init__']( ctypes.pointer( self ), *args )") )
         return os.linesep.join( tmpl ) \
                % dict( alias=self.declaration.alias, name=self.undecorated_decl_name )
 
     def _get_system_headers_impl( self ):
         return []
 
-class destructor_introduction_t(code_creator.code_creator_t, declaration_based.declaration_based_t):
+class del_introduction_t(code_creator.code_creator_t, declaration_based.declaration_based_t):
     def __init__( self, constructor ):
         code_creator.code_creator_t.__init__(self)
         declaration_based.declaration_based_t.__init__( self, constructor )
@@ -63,7 +63,7 @@ class destructor_introduction_t(code_creator.code_creator_t, declaration_based.d
     def _create_impl(self):
         tmpl = ['def __del__( self ):']
         tmpl.append( self.indent('"""%(name)s"""') )
-        tmpl.append( self.indent("return self._methods_['__del__']( ctypes.byref( self ) )") )
+        tmpl.append( self.indent("return self._methods_['__del__']( ctypes.pointer( self ) )") )
         return os.linesep.join( tmpl ) \
                % dict( name=self.undecorated_decl_name )
 

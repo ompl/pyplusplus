@@ -153,11 +153,14 @@ from class_introduction import class_introduction_t
 from class_introduction import class_declaration_introduction_t
 from mem_fun_introduction import mem_fun_introduction_t
 from mem_fun_introduction import vmem_fun_introduction_t
-from mem_fun_introduction import constructor_introduction_t
-from mem_fun_introduction import destructor_introduction_t
+from mem_fun_introduction import init_introduction_t
+from mem_fun_introduction import del_introduction_t
 
 
 from fields_definition import fields_definition_t
 from embedded_code_repository import embedded_code_repository_t
 from methods_definition import methods_definition_t
 from function_definition import function_definition_t
+from function_definition import init_definition_t
+from function_definition import multi_init_definition_t
+from function_definition import del_definition_t
