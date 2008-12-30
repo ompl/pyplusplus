@@ -87,3 +87,18 @@ class compound_t(code_creator.code_creator_t):
         if unique:
             files = self.unique_headers( files )
         return files
+
+    def find_by_creator_class( self, class_, unique=True, recursive=False ):
+        #I will add missing functionality later
+        assert recursive == False
+        found = filter( lambda cc: isinstance( cc, class_ ), self.creators )
+        if not found:
+            return None
+        elif 1 == len( found ):
+            return found
+        else:
+            if unique:
+                raise LookupError( "Too many creators(%d) of type %s were found."
+                                   % ( len( found ), class_.__name__ ) )
+            else:
+                return found

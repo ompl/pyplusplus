@@ -17,6 +17,20 @@ class methods_definition_t(compound.compound_t, declaration_based.declaration_ba
     def mem_fun_factory_var_name(self):
         return "mfcreator"
 
+    def find_mutli_method( self, alias ):
+        import function_definition
+        mmdef_t = function_definition.multi_method_definition_t
+        multi_method_defs = self.find_by_creator_class( mmdef_t, unique=False )
+        if None is multi_method_defs:
+            return
+        multi_method_defs = filter( lambda cc: cc.multi_method_alias == alias
+                                    , multi_method_defs )
+        if multi_method_defs:
+            return multi_method_defs[0]
+        else:
+            return None
+
+
     def _create_impl(self):
         result = []
         scope = declarations.algorithm.declaration_path( self.declaration )

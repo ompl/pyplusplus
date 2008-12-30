@@ -26,12 +26,36 @@ class tester_t(unittest.TestCase):
         #mb.code_creator.create()
         sys.path.append( autoconfig.build_directory )
         import ctypes_pof
+
         #the following code fails - difference in the calling conventions
         #TODO: the following test failes, because of the wrong calling convention used
         #self.failUnless( ctypes_pof.identity_cpp( int(111) ) == 111 )
+
+        #testing constructors
         n0 = ctypes_pof.pof.number_t()
-        n1 = ctypes_pof.pof.number_t( ctypes.c_long(1) )
-        n2 = ctypes_pof.pof.number_t( ctypes.pointer(n1), 1 )
+        self.failUnless( 0 == n0.get_value() )
+        n1 = ctypes_pof.pof.number_t( ctypes.c_long(32) )
+        self.failUnless( 32 == n1.get_value() )
+        n2 = ctypes_pof.pof.number_t( ctypes.pointer(n1) )
+        self.failUnless( 32 == n2.get_value() )
+
+        #testing get/set value
+        n0.set_value( 1977 )
+        self.failUnless( 1977 == n0.get_value() )
+
+    #the following functionality is still missing
+    #~ def test_operator_assign( self ):
+        #~ obj1 = number_t(1)
+        #~ obj2 = number_t(2)
+        #~ x = obj1.operator_assign( obj2 )
+        #~ #there are special cases, where ctypes could introduce "optimized" behaviour and not create new python object
+        #~ self.failUnless( x is obj1 )
+        #~ self.failUnless( obj1.m_value == obj2.m_value )
+
+    #~ def test_clone( self ):
+        #~ obj1 = number_t(1)
+        #~ obj2 = obj1.clone()
+        #~ self.fail( obj1.get_value() == obj2.get_value() )
 
 
     #~ def test_bsc( self ):

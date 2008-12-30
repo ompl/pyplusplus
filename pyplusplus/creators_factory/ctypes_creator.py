@@ -151,8 +151,26 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
     def visit_member_function( self ):
         self.__dependencies_manager.add_exported( self.curr_decl )
+        md_cc = self.__class2methods_def[ self.curr_decl.parent ]
         cls_intro_cc = self.__class2introduction[ self.curr_decl.parent ]
-        cls_intro_cc.adopt_creator( code_creators.mem_fun_introduction_t( self.curr_decl ) )
+        mem_fun_def_cc = code_creators.mem_fun_definition_t( self.curr_decl )
+        #TODO: calculate only exported functions
+        if 0 == len( self.curr_decl.overloads):
+            #this is the first and the last and the only class constructor
+            md_cc.adopt_creator( mem_fun_def_cc )
+            cls_intro_cc.adopt_creator( code_creators.mem_fun_introduction_t(self.curr_decl) )
+        else:
+            has_introduction = cls_intro_cc.find_by_creator_class( code_creators.mem_fun_introduction_t, unique=False )
+            has_introduction = filter( lambda cc: cc.alias == mem_fun_def_cc.alias, has_introduction )
+            if not has_introduction:
+                cls_intro_cc.adopt_creator( code_creators.mem_fun_introduction_t(self.curr_decl) )
+
+            multi_method_def = md_cc.find_mutli_method( mem_fun_def_cc.alias )
+            if not multi_method_def:
+                multi_method_def = code_creators.multi_method_definition_t ()
+                md_cc.adopt_creator( multi_method_def )
+            multi_method_def.adopt_creator( mem_fun_def_cc )
+
         #~ if self.curr_decl.virtuality == VIRTUALITY_TYPES.NOT_VIRTUAL:
             #~ cls_intro_cc.adopt_creator( code_creators.mem_fun_introduction_t( self.curr_decl ) )
         #~ elif self.curr_decl.virtuality == VIRTUALITY_TYPES.VIRTUAL:
@@ -166,24 +184,20 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         cls_intro_cc = self.__class2introduction[ self.curr_decl.parent ]
         init_def_cc = code_creators.init_definition_t( self.curr_decl )
         #TODO: calculate only exported constructors
-        if 1 == len( self.curr_decl.parent.constructors(recursive=False, allow_empty=True ) ):
+        if 0 == len( self.curr_decl.overloads):
             #this is the first and the last and the only class constructor
-            md_cc.adopt_creator( code_creators.init_definition_t( self.curr_decl ) )
+            md_cc.adopt_creator( init_def_cc )
             cls_intro_cc.adopt_creator( code_creators.init_introduction_t(self.curr_decl) )
         else:
-            has_constructor = filter( lambda cc: isinstance( cc, code_creators.init_introduction_t )
-                                      , cls_intro_cc.creators )
+            has_constructor = cls_intro_cc.find_by_creator_class( code_creators.init_introduction_t )
             if not has_constructor:
                 cls_intro_cc.adopt_creator( code_creators.init_introduction_t(self.curr_decl) )
 
-            multi_init_def = filter( lambda cc: isinstance( cc, code_creators.multi_init_definition_t )
-                                     , md_cc.creators )
-            if not multi_init_def:
-                multi_init_def = code_creators.multi_init_definition_t()
-                md_cc.adopt_creator( multi_init_def )
-                multi_init_def.adopt_creator( init_def_cc )
-            else:
-                multi_init_def[0].adopt_creator( init_def_cc )
+            multi_method_def = md_cc.find_mutli_method( init_def_cc.alias )
+            if not multi_method_def:
+                multi_method_def = code_creators.multi_method_definition_t ()
+                md_cc.adopt_creator( multi_method_def )
+            multi_method_def.adopt_creator( init_def_cc )
 
     def visit_destructor( self ):
         self.__dependencies_manager.add_exported( self.curr_decl )

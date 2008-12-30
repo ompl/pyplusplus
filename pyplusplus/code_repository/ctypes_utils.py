@@ -72,7 +72,7 @@ class mem_fun_factory( object ):
         self.this_type = ctypes.POINTER( wrapper )
 
     def __call__( self, name, **keywd ):
-        if 'argtypes' not in keywd:
+        if 'argtypes' not in keywd or keywd['argtypes'] is None:
             keywd['argtypes'] = [ self.this_type ]
         else:
             keywd['argtypes'].insert( 0, self.this_type )
