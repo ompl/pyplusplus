@@ -3,5 +3,5 @@ Import('*')
 t = env.SharedLibrary( target=r'easybmp'
                        , source=[ r'EasyBMP.cpp' ]
                        , CCFLAGS=[ r"/MD",r"/EHsc",r"/GR",r"/Zc:wchar_t",r"/Zc:forScope" ]
-                       , LINKFLAGS=[r"/MAP"]
+                       , LINKFLAGS=[r"/MAP:binaries\easybmp.map", r"/MAPINFO:EXPORTS"]
                        , SHLIBSUFFIX='.dll' )
