@@ -163,3 +163,4 @@ from function_definition import init_definition_t
 from function_definition import multi_method_definition_t
 from function_definition import del_definition_t
 from function_definition import mem_fun_definition_t
+from typedef_as_pyvar import typedef_as_pyvar_t

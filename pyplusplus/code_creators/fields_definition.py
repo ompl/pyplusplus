@@ -5,6 +5,7 @@
 
 import os
 import code_creator
+import ctypes_formatter
 import declaration_based
 from pygccxml import declarations
 
@@ -25,8 +26,17 @@ class fields_definition_t(code_creator.code_creator_t, declaration_based.declara
                                , decl_identifier=self.decl_identifier) )
         if self.declaration.has_vtable:
             result.append( self.indent( '("_vtable_", ctypes.POINTER(ctypes.c_void_p)),' ) )
-        result.append( self.indent( '("__hidden__", ctypes.c_char * %d),'
-                                      % ( self.declaration.byte_size - 4*int(self.declaration.has_vtable) ) ) )
+
+        vars = self.declaration.vars( allow_empty=True, recursive=False )
+        if not vars:
+            result.append( self.indent( '("__empty__", ctypes.c_char * 4)' ) )
+        else:
+            vars = vars.to_list()
+            vars.sort( key=lambda d: d.location.line )
+            for v in vars:
+                result.append( self.indent( '("%(name)s", %(type)s),'
+                               % dict( name=v.name
+                                       ,type=ctypes_formatter.as_ctype( v.type ) ) ) )
         result.append( ']' )
         return os.linesep.join( result )
 

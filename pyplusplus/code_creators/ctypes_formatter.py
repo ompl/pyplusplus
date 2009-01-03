@@ -133,7 +133,12 @@ class type_converter_t(declarations.type_visitor_t):
         #~ raise NotImplementedError()
 
     def visit_declarated( self ):
-        return self.decl_formatter( self.user_type.declaration )
+        #TODO: the follwoing code removes typedefs
+        if isinstance( self.user_type.declaration, declarations.typedef_t ):
+            base_visitor = type_converter_t( self.user_type.declaration.type, self.decl_formatter )
+            return declarations.apply_visitor( base_visitor, base_visitor.user_type )
+        else:
+            return self.decl_formatter( self.user_type.declaration )
 
     def visit_restrict( self ):
         base_visitor = type_converter_t( self.user_type.base, self.decl_formatter )

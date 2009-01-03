@@ -36,7 +36,8 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         self.__class_ccs = code_creators.bookmark_t()
         #bookmark for class deinitions
         self.__class_defs_ccs = code_creators.bookmark_t()
-
+        #bookmark for typedef definitions
+        self.__typedefs_ccs =  code_creators.bookmark_t()
         #~ prepared_decls = self.__prepare_decls( global_ns, doc_extractor )
         #~ self.__decls = sort_algorithms.sort( prepared_decls )
         self.curr_decl = global_ns
@@ -138,10 +139,13 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         ns_classes = self.global_ns.classes( f, recursive=True, allow_empty=True)
         ns_classes = sort_algorithms.sort_classes( ns_classes )
         for class_ in ns_classes:
-            if self.__contains_exported( class_ ):
-                self.__add_class_introductions( self.__class_ccs, class_ )
+            self.__add_class_introductions( self.__class_ccs, class_ )
 
         ccc.adopt_creator( self.__class_defs_ccs )
+
+        ccc.adopt_creator( code_creators.separator_t() )
+
+        ccc.adopt_creator( self.__typedefs_ccs )
 
         declarations.apply_visitor( self, self.curr_decl )
 
@@ -248,6 +252,7 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
     def visit_typedef(self):
         self.__dependencies_manager.add_exported( self.curr_decl )
+        self.__typedefs_ccs.adopt_creator( code_creators.typedef_as_pyvar_t( self.curr_decl ) )
 
     def visit_variable(self):
         self.__dependencies_manager.add_exported( self.curr_decl )
