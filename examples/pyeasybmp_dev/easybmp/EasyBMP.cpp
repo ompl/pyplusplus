@@ -116,6 +116,7 @@ void BMFH::display( void )
 RGBApixel BMP::GetPixel( int i, int j ) const
 {
  using namespace std;
+ std::cout << "\nGetPixel(" << i << "," << j << ")\n";
  bool Warn = false;
  if( i >= Width )
  { i = Width-1; Warn = true; }

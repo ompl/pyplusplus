@@ -21,10 +21,10 @@
 
 #ifndef _EasyBMP_Custom_Math_Functions_
 #define _EasyBMP_Custom_Math_Functions_
-inline double Square( double number )
+inline double  __declspec(dllexport) Square( double number )
 { return number*number; }
 
-inline int IntSquare( int number )
+inline int  __declspec(dllexport)  IntSquare( int number )
 { return number*number; }
 #endif
 
@@ -40,7 +40,7 @@ int IntPow( int base, int exponent );
 #ifndef _EasyBMP_DataStructures_h_
 #define _EasyBMP_DataStructures_h_
 
-inline bool IsBigEndian()
+inline bool  __declspec(dllexport) IsBigEndian()
 {
  short word = 0x0001;
  if((*(char *)& word) != 0x01 )
@@ -48,10 +48,10 @@ inline bool IsBigEndian()
  return false;
 }
 
-inline ebmpWORD FlipWORD( ebmpWORD in )
+inline ebmpWORD  __declspec(dllexport) FlipWORD( ebmpWORD in )
 { return ( (in >> 8) | (in << 8) ); }
 
-inline ebmpDWORD FlipDWORD( ebmpDWORD in )
+inline ebmpDWORD  __declspec(dllexport) FlipDWORD( ebmpDWORD in )
 {
  return ( ((in&0xFF000000)>>24) | ((in&0x000000FF)<<24) |
           ((in&0x00FF0000)>>8 ) | ((in&0x0000FF00)<<8 )   );
