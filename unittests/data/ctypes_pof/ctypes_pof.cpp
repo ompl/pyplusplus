@@ -1,18 +1,18 @@
-#include "mydll.h"
+#include "ctypes_pof.h"
 #include "windows.h"
 #include <iostream>
 
 namespace pof{
 
-number_t::number_t() 
-: m_value(0) 
-{	
+number_t::number_t()
+: m_value(0)
+{
 //	std::cout << "{C++} number_t( 0 )" << std::endl;
 }
 
 
-number_t::number_t(int value) 
-: m_value(value) 
+number_t::number_t(int value)
+: m_value(value)
 {
 //	std::cout << "{C++} number_t( " << value << " )" << std::endl;
 }
@@ -21,7 +21,7 @@ number_t::~number_t() {
 //	std::cout << "{C++} ~number_t()" << std::endl;
 }
 void number_t::print_it() const {
-	std::cout << "{C++} value: " << m_value << std::endl; 
+	std::cout << "{C++} value: " << m_value << std::endl;
 }
 
 int number_t::get_value() const{
@@ -51,19 +51,19 @@ int identity( int some_data){ return some_data;}
 
 int identity_cpp( int data){ return data; }
 
-BOOL APIENTRY DllMain( HMODULE hModule,
-                       DWORD  ul_reason_for_call,
-                       LPVOID lpReserved
-					 )
-{
-	switch (ul_reason_for_call)
-	{
-	case DLL_PROCESS_ATTACH:
-	case DLL_THREAD_ATTACH:
-	case DLL_THREAD_DETACH:
-	case DLL_PROCESS_DETACH:
-		break;
-	}
-	return TRUE;
-}
+//~ BOOL APIENTRY DllMain( HMODULE hModule,
+                       //~ DWORD  ul_reason_for_call,
+                       //~ LPVOID lpReserved
+					 //~ )
+//~ {
+	//~ switch (ul_reason_for_call)
+	//~ {
+	//~ case DLL_PROCESS_ATTACH:
+	//~ case DLL_THREAD_ATTACH:
+	//~ case DLL_THREAD_DETACH:
+	//~ case DLL_PROCESS_DETACH:
+		//~ break;
+	//~ }
+	//~ return TRUE;
+//~ }
 

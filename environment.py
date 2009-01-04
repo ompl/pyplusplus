@@ -25,15 +25,11 @@ class gccxml:
 
 class scons:
     suffix = ''
-    cmd_build = ''
-    cmd_clean = ''
+    cmd_build = 'scons'
+    cmd_clean = 'scons --clean'
     ccflags = []
 
 if 'roman' in getpass.getuser():
-
-    scons.cmd_build = 'scons --file=%s'
-    scons.cmd_clean = 'scons --clean --file=%s'
-
     if sys.platform == 'win32':
         scons.suffix = '.pyd'
         scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope', '-DBOOST_PYTHON_NO_PY_SIGNATURES' ]
@@ -50,10 +46,6 @@ if 'roman' in getpass.getuser():
         boost.include = '/home/roman/boost_svn'
         python.include = '/usr/include/python2.5'
 elif 'root' == getpass.getuser():
-
-    scons.cmd_build = 'scons --file=%s'
-    scons.cmd_clean = 'scons --clean --file=%s'
-
     if sys.platform == 'win32':
         scons.suffix = '.pyd'
         scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope', '-DBOOST_PYTHON_NO_PY_SIGNATURES' ]

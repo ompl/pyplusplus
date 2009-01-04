@@ -128,24 +128,6 @@ class fundamental_tester_base_t( unittest.TestCase ):
         sconstruct_file.write( sconstruct_script )
         sconstruct_file.close()
 
-    def _create_extension(self):
-        cmd = autoconfig.scons.cmd_build % self.__generated_scons_file_name
-        print cmd
-        output = os.popen( cmd )
-        scons_reports = []
-        while True:
-            data = output.readline()
-            scons_reports.append( data )
-            if not data:
-                break
-        exit_status = output.close()
-        scons_msg = ''.join(scons_reports)
-        if scons_msg:
-            print os.linesep
-            print scons_msg
-        if exit_status:
-            raise RuntimeError( "unable to compile extension. error: %s" % scons_msg )
-
     def _clean_build( self, sconstruct_file ):
         cmd = autoconfig.scons.cmd_clean % sconstruct_file
         output = os.popen( cmd )
@@ -166,7 +148,7 @@ class fundamental_tester_base_t( unittest.TestCase ):
             self._create_extension_source_file()
             sources = self.get_source_files()
             self._create_sconstruct(sources)
-            self._create_extension()
+            autoconfig.scons_config.compile( autoconfig.scons.cmd_build + ' --file=%s' % self.__generated_scons_file_name )
             pypp = __import__( self.__module_name )
             self.run_tests(pypp)
         finally:

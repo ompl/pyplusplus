@@ -1,6 +1,9 @@
 Import('*')
 
-t = env.SharedLibrary( target=r'mydll'
-                       , source=[ r'mydll.cpp' ]
-                       , CCFLAGS=[ r"/MD",r"/EHsc",r"/GR",r"/Zc:wchar_t",r"/Zc:forScope" ]
-                       , LINKFLAGS=[r"/MAP:${TARGET.base}.map", r"/MAPINFO:EXPORTS"] )
+target_name = 'ctypes_pof'
+shlib = env.SharedLibrary( target=target_name
+                           , source=[ target_name + '.cpp' ]
+                           , CCFLAGS=[ r"/MD",r"/EHsc",r"/GR",r"/Zc:wchar_t",r"/Zc:forScope" ]
+                           , LINKFLAGS=[r"/MAP:${TARGET.base}.map", r"/MAPINFO:EXPORTS"] )
+
+env.Alias( target_name, shlib )

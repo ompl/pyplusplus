@@ -7,9 +7,8 @@
 import os
 import sys
 import unittest
+import subprocess
 
-#__pychecker__ = 'limit=1000'
-#import pychecker.checker
 
 this_module_dir_path = os.path.abspath ( os.path.dirname( sys.modules[__name__].__file__) )
 
@@ -74,61 +73,32 @@ class scons_config:
             #~ , "    env.AddPostAction(t, 'mt.exe -nologo -manifest %(target)s.pyd.manifest -outputresource:%(target)s.pyd;2'  )" ]
         return os.linesep.join( code )
 
+    @staticmethod
+    def compile( cmd ) :
+        print '\n', cmd
+        process = subprocess.Popen( args=cmd
+                                    , shell=True
+                                    , stdin=subprocess.PIPE
+                                    , stdout=subprocess.PIPE
+                                    , stderr=subprocess.STDOUT
+                                    , cwd=this_module_dir_path )
+        process.stdin.close()
+
+        while process.poll() is None:
+            line = process.stdout.readline()
+            print line.rstrip()
+        for line in process.stdout.readlines():
+            print line.rstrip()
+        if process.returncode:
+            raise RuntimeError( "unable to compile extension. error: %s" % scons_msg )
+
+
 #I need this in order to allow Python to load just compiled modules
 sys.path.append( build_dir )
 
 os.chdir( build_dir )
 
-#~ if sys.platform == 'linux2':
-    #~ LD_LIBRARY_PATH = 'LD_LIBRARY_PATH'
-    #~ if not os.environ.has_key( LD_LIBRARY_PATH ) \
-       #~ or not set( scons_config.libpath ).issubset( set( os.environ[LD_LIBRARY_PATH].split(':') ) ):
-        #~ #see http://hathawaymix.org/Weblog/2004-12-30
-        #~ print 'error: LD_LIBRARY_PATH has not been set'
 if sys.platform == 'win32':
     PATH = os.environ.get( 'PATH', '' )
     PATH=PATH + ';' + ';'.join( scons_config.libpath )
     os.environ['PATH'] = PATH
-
-
-#~ try:
-    #~ import pydsc
-    #~ pydsc.include( r'D:\pygccxml_sources\sources\pyplusplus_dev' )
-    #~ pydsc.ignore( [ 'Yakovenko'
-             #~ , 'Bierbaum'
-             #~ , 'org'
-             #~ , 'http'
-             #~ , 'bool'
-             #~ , 'str'
-             #~ , 'www'
-             #~ , 'param'
-             #~ , 'txt'
-             #~ , 'decl'
-             #~ , 'decls'
-             #~ , 'namespace'
-             #~ , 'namespaces'
-             #~ , 'enum'
-             #~ , 'const'
-             #~ , 'GCC'
-             #~ , 'xcc'
-             #~ , 'TODO'
-             #~ , 'typedef'
-             #~ , 'os'
-             #~ , 'normcase'
-             #~ , 'normpath'
-             #~ , 'scopedef'
-             #~ , 'ira'#part of Matthias mail address
-             #~ , 'uka'#part of Matthias mail address
-             #~ , 'de'#part of Matthias mail address
-             #~ , 'dat'#file extension of directory cache
-             #~ , 'config'#parameter description
-             #~ , 'gccxml'#parameter description
-             #~ , 'Py++'
-             #~ , 'pygccxml'
-             #~ , 'calldef'
-             #~ , 'XXX'
-             #~ , 'wstring'
-             #~ , 'py'
-             #~ ] )
-#~ except ImportError:
-    #~ pass
