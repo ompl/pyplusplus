@@ -1,9 +1,7 @@
 Import('*')
 
-target_name = 'ctypes_pof'
-shlib = env.SharedLibrary( target=target_name
-                           , source=[ target_name + '.cpp' ]
-                           , CCFLAGS=[ r"/MD",r"/EHsc",r"/GR",r"/Zc:wchar_t",r"/Zc:forScope" ]
+target_name = 'pof'
+shlib = env.SharedLibrary( target=target_name, source=[ target_name + '.cpp' ]
                            , LINKFLAGS=[r"/MAP:${TARGET.base}.map", r"/MAPINFO:EXPORTS"] )
 
 env.Alias( target_name, shlib )

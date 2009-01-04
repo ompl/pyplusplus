@@ -28,7 +28,7 @@ gccxml_version = '__GCCXML_09__'
 class cxx_parsers_cfg:
     keywd = { 'working_directory' : data_directory
               , 'define_symbols' : [ gccxml_version ]
-              , 'compiler' : "msvc71"
+              , 'compiler' : compiler
               , 'gccxml_path': gccxml.executable }
 
     if 'win' in sys.platform:

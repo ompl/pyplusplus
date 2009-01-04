@@ -10,15 +10,19 @@ import unittest
 import autoconfig
 from pyplusplus.module_builder import ctypes_module_builder_t
 
-class tester_t(unittest.TestCase):
+class ctypes_base_tester_t(unittest.TestCase):
     _module_ref_ = None
-    def __init__( self, *args, **keywd ):
+    def __init__( self, base_name, *args, **keywd ):
         unittest.TestCase.__init__( self, *args, **keywd )
-        self.base_name = 'ctypes_pof'
+        self.__base_name = base_name
+
+    @property
+    def base_name( self ):
+        return self.__base_name
 
     @property
     def project_dir( self ):
-        return os.path.join( autoconfig.data_directory, self.base_name )
+        return os.path.join( autoconfig.data_directory, 'ctypes', self.base_name )
 
     @property
     def header( self ):
@@ -29,18 +33,24 @@ class tester_t(unittest.TestCase):
         return os.path.join( self.project_dir, 'binaries', self.base_name + '.dll' )
 
     def setUp( self ):
-        if tester_t._module_ref_:
+        if ctypes_base_tester_t._module_ref_:
             return
 
         autoconfig.scons_config.compile( autoconfig.scons.cmd_build + ' ' + self.base_name )
         mb = ctypes_module_builder_t( [self.header], self.symbols_file, autoconfig.cxx_parsers_cfg.gccxml )
         mb.build_code_creator( self.symbols_file )
-        mb.write_module( os.path.join( autoconfig.build_directory, self.module_name + '.py' ) )
-        tester_t._module_ref_ = __import__( os.path.join( autoconfig.build_directory, self.base_name + '.py' ) )
+        mb.write_module( os.path.join( self.project_dir, 'binaries', self.base_name + '.py' ) )
+        sys.path.insert( 0, os.path.join( self.project_dir, 'binaries' ) )
+        ctypes_base_tester_t._module_ref_ = __import__( self.base_name )
 
     @property
     def module_ref(self):
         return self._module_ref_
+
+
+class tester_t( ctypes_base_tester_t ):
+    def __init__( self, *args, **keywd ):
+        ctypes_base_tester_t.__init__( self, 'pof', *args, **keywd )
 
     def test_constructors(self):
         n0 = self.module_ref.pof.number_t()
@@ -73,15 +83,6 @@ class tester_t(unittest.TestCase):
         #~ obj1 = number_t(1)
         #~ obj2 = obj1.clone()
         #~ self.fail( obj1.get_value() == obj2.get_value() )
-
-
-    def test_bsc( self ):
-        root = r'E:\Documents and Settings\romany\Desktop\ToInstall\bsckit70\bscsdk'
-        mb = ctypes_module_builder_t( [os.path.join( root, 'bsc.h' )]
-                                      , os.path.join( root, 'msbsc70.dll' ), autoconfig.cxx_parsers_cfg.gccxml )
-        mb.build_code_creator( self.symbols_file )
-        mb.write_module( os.path.join( root, 'bsc.py' ) )
-
 
 def create_suite():
     suite = unittest.TestSuite()

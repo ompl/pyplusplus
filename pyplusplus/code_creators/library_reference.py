@@ -25,7 +25,7 @@ class library_reference_t(code_creator.code_creator_t):
             return library_var_name
         else:
             basename = os.path.splitext( os.path.basename( library_path ) )[0]
-            return decl_wrappers.algorithm.create_valid_name( basename )
+            return decl_wrappers.algorithm.create_valid_name( basename ) + 'lib'
 
     def _create_impl(self):
         return '%(var)s = ctypes.%(loader)s( r"%(path)s" )' \
