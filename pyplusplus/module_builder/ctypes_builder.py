@@ -88,13 +88,30 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         included_decls = set()
         included_decls.update( self.global_ns.calldefs( is_exported, allow_empty=True, recursive=True ) )
         included_decls.update( self.global_ns.variables( is_exported, allow_empty=True, recursive=True ) )
-        #include declarations, on which exported declarations depend
-        they_depend_on_us = decls_package.dependency_info_t.they_depend_on_us
-        included_decls.update( they_depend_on_us( included_decls ) )
+
+        they_depend_on_me = decls_package.dependency_info_t.they_depend_on_me
         for d in included_decls:
             d.include()
-            if isinstance( d, decls_package.class_t ):
-                d.top_class.include()
+            self.logger.info( 'including decl %s' % str(d) )
+            parent = d.parent
+            while True:
+                if isinstance( parent, decls_package.namespace_t ):
+                    break
+                else:
+                    self.logger.info( 'including parent class %s' % str(parent) )
+                    parent.ignore = False
+                    parent = parent.parent
+            for dependency in they_depend_on_me( d ):
+                self.logger.info( 'discovered dependency %s' % str(dependency) )
+                #include declarations, on which exported declarations depend
+                #I need this for classes, referenced by function arguments
+                decls_traits = ( decls_package.class_traits, decls_package.class_declaration_traits, decls_package.enum_traits )
+                for traits in decls_traits:
+                    if traits.is_my_case( dependency ):
+                        self.logger.info( 'discovered dependency %s - included' % str(dependency) )
+                        traits.get_declaration( dependency ).ignore = False
+
+            self.logger.info( 'including decl %s - done' % str(d) )
 
     def build_code_creator( self, library_path, doc_extractor=None ):
         creator = creators_factory.ctypes_creator_t( self.global_ns

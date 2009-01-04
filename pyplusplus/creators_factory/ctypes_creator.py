@@ -108,8 +108,7 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         classes = class_.classes( recursive=False, allow_empty=True)
         classes = sort_algorithms.sort_classes( classes )
         for internal_class in classes:
-            if self.__contains_exported( internal_class ):
-                self.__add_class_introductions( ci_creator, internal_class )
+            self.__add_class_introductions( ci_creator, internal_class )
 
     def create(self ):
         """Create and return the module for the extension.

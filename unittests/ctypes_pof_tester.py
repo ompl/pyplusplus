@@ -11,6 +11,7 @@ import autoconfig
 from pyplusplus.module_builder import ctypes_module_builder_t
 
 class ctypes_base_tester_t(unittest.TestCase):
+
     _module_ref_ = None
     def __init__( self, base_name, *args, **keywd ):
         unittest.TestCase.__init__( self, *args, **keywd )
@@ -33,22 +34,23 @@ class ctypes_base_tester_t(unittest.TestCase):
         return os.path.join( self.project_dir, 'binaries', self.base_name + '.dll' )
 
     def setUp( self ):
-        if ctypes_base_tester_t._module_ref_:
-            return
-
+        if self.base_name in sys.modules:
+            return sys.modules[ self.base_name ]
+        #~ import pdb
+        #~ pdb.set_trace()
         autoconfig.scons_config.compile( autoconfig.scons.cmd_build + ' ' + self.base_name )
         mb = ctypes_module_builder_t( [self.header], self.symbols_file, autoconfig.cxx_parsers_cfg.gccxml )
         mb.build_code_creator( self.symbols_file )
         mb.write_module( os.path.join( self.project_dir, 'binaries', self.base_name + '.py' ) )
         sys.path.insert( 0, os.path.join( self.project_dir, 'binaries' ) )
-        ctypes_base_tester_t._module_ref_ = __import__( self.base_name )
+        __import__( self.base_name )
 
     @property
     def module_ref(self):
-        return self._module_ref_
+        return sys.modules[ self.base_name ]
 
 
-class tester_t( ctypes_base_tester_t ):
+class pof_tester_t( ctypes_base_tester_t ):
     def __init__( self, *args, **keywd ):
         ctypes_base_tester_t.__init__( self, 'pof', *args, **keywd )
 
@@ -84,10 +86,24 @@ class tester_t( ctypes_base_tester_t ):
         #~ obj2 = obj1.clone()
         #~ self.fail( obj1.get_value() == obj2.get_value() )
 
+
+class issues_tester_t( ctypes_base_tester_t ):
+    def __init__( self, *args, **keywd ):
+        ctypes_base_tester_t.__init__( self, 'issues', *args, **keywd )
+
+    def test_return_by_value(self):
+        x = self.module_ref.return_by_value_t()
+        result = x.add( 32, 2 ).result
+        self.failUnless( 34 == result, "Expected result 34, got %d" % result)
+
+    def test_free_fun_add( self ):
+        self.failUnless( 1977 == self.module_ref.add( 77, 1900 ) )
+
 def create_suite():
     suite = unittest.TestSuite()
     if 'win' in sys.platform:
-        suite.addTest( unittest.makeSuite(tester_t))
+        suite.addTest( unittest.makeSuite(pof_tester_t))
+        suite.addTest( unittest.makeSuite(issues_tester_t))
     return suite
 
 def run_suite():

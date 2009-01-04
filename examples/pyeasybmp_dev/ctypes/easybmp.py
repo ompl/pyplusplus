@@ -4,9 +4,9 @@ import ctypes
 
 import ctypes_utils
 
-easybmp = ctypes.CPPDLL( r"E:\development\language-binding\pyplusplus_dev\examples\pyeasybmp_dev\easybmp\binaries\easybmp.dll" )
+easybmplib = ctypes.CPPDLL( r"E:\development\language-binding\pyplusplus_dev\examples\pyeasybmp_dev\easybmp\binaries\easybmp.dll" )
 
-easybmp.undecorated_names = {#mapping between decorated and undecorated names
+easybmplib.undecorated_names = {#mapping between decorated and undecorated names
     "unsigned short FlipWORD(unsigned short)" : "?FlipWORD@@YAGG@Z", 
     "BMP::BMP(void)" : "??0BMP@@QAE@XZ", 
     "bool BMP::SetPixel(int,int RGBApixel)" : "?SetPixel@BMP@@QAE_NHHURGBApixel@@@Z", 
@@ -249,7 +249,7 @@ BMFH._fields_ = [ #class BMFH
     ("bfOffBits", ctypes.c_uint),
 ]
 
-mfcreator = ctypes_utils.mem_fun_factory( easybmp, BMFH, "BMFH", "" )
+mfcreator = ctypes_utils.mem_fun_factory( easybmplib, BMFH, "BMFH" )
 BMFH._methods_ = { #class non-virtual member functions definition list
     "__init__" : mfcreator.multi_method()
                     .register( mfcreator.default_constructor() )
@@ -275,7 +275,7 @@ BMIH._fields_ = [ #class BMIH
     ("biClrImportant", ctypes.c_uint),
 ]
 
-mfcreator = ctypes_utils.mem_fun_factory( easybmp, BMIH, "BMIH", "" )
+mfcreator = ctypes_utils.mem_fun_factory( easybmplib, BMIH, "BMIH" )
 BMIH._methods_ = { #class non-virtual member functions definition list
     "__init__" : mfcreator.multi_method()
                     .register( mfcreator.default_constructor() )
@@ -294,7 +294,7 @@ RGBApixel._fields_ = [ #class RGBApixel
     ("Alpha", ctypes.c_ubyte),
 ]
 
-mfcreator = ctypes_utils.mem_fun_factory( easybmp, RGBApixel, "RGBApixel", "" )
+mfcreator = ctypes_utils.mem_fun_factory( easybmplib, RGBApixel, "RGBApixel" )
 RGBApixel._methods_ = { #class non-virtual member functions definition list
 
 }
@@ -314,7 +314,7 @@ BMP._fields_ = [ #class BMP
     ("SizeOfMetaData2", ctypes.c_int),
 ]
 
-mfcreator = ctypes_utils.mem_fun_factory( easybmp, BMP, "BMP", "" )
+mfcreator = ctypes_utils.mem_fun_factory( easybmplib, BMP, "BMP" )
 BMP._methods_ = { #class non-virtual member functions definition list
     "TellBitDepth" : mfcreator( "int BMP::TellBitDepth(void)", restype=ctypes.c_int ),
 
@@ -372,21 +372,21 @@ BMP._methods_ = { #class non-virtual member functions definition list
 }
 del mfcreator
 
-Square = getattr( easybmp, easybmp.undecorated_names["double Square(double)"] )
+Square = getattr( easybmplib, easybmplib.undecorated_names["double Square(double)"] )
 Square.restype = ctypes.c_double
 Square.argtypes = [ ctypes.c_double ]
 
-IntSquare = getattr( easybmp, easybmp.undecorated_names["int IntSquare(int)"] )
+IntSquare = getattr( easybmplib, easybmplib.undecorated_names["int IntSquare(int)"] )
 IntSquare.restype = ctypes.c_int
 IntSquare.argtypes = [ ctypes.c_int ]
 
-FlipDWORD = getattr( easybmp, easybmp.undecorated_names["unsigned int FlipDWORD(unsigned int)"] )
+FlipDWORD = getattr( easybmplib, easybmplib.undecorated_names["unsigned int FlipDWORD(unsigned int)"] )
 FlipDWORD.restype = ctypes.c_uint
 FlipDWORD.argtypes = [ ctypes.c_uint ]
 
-IsBigEndian = getattr( easybmp, easybmp.undecorated_names["bool IsBigEndian(void)"] )
+IsBigEndian = getattr( easybmplib, easybmplib.undecorated_names["bool IsBigEndian(void)"] )
 IsBigEndian.restype = ctypes.c_bool
 
-FlipWORD = getattr( easybmp, easybmp.undecorated_names["unsigned short FlipWORD(unsigned short)"] )
+FlipWORD = getattr( easybmplib, easybmplib.undecorated_names["unsigned short FlipWORD(unsigned short)"] )
 FlipWORD.restype = ctypes.c_ushort
 FlipWORD.argtypes = [ ctypes.c_ushort ]

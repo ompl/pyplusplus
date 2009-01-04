@@ -11,8 +11,9 @@ if os.path.exists( r'E:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib' ):
 env.AppendUnique( CCFLAGS=[ r"/MD",r"/EHsc",r"/GR",r"/Zc:wchar_t",r"/Zc:forScope" ] )
 env.AppendUnique( LINKFLAGS=[r"/MAP:${TARGET.base}.map", r"/MAPINFO:EXPORTS"] )
 
-SConscript( 'data/ctypes/pof/sconscript'
-            , variant_dir='data/ctypes/pof/binaries'
-            , duplicate=0
-            , exports=["env"] )
-
+scripts = [ 'pof', 'issues' ]
+for s in scripts:
+    SConscript( 'data/ctypes/%s/sconscript' % s
+                , variant_dir='data/ctypes/%s/binaries' % s
+                , duplicate=0
+                , exports=["env"] )
