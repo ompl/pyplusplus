@@ -32,7 +32,7 @@ class tester_t(unittest.TestCase):
         if tester_t._module_ref_:
             return
 
-        autoconfig.scons_config.compile( autoconfig.scons.cmd_build + ' ctypes_pof' )
+        autoconfig.scons_config.compile( autoconfig.scons.cmd_build + ' ' + self.base_name )
         mb = ctypes_module_builder_t( [self.header], self.symbols_file, autoconfig.cxx_parsers_cfg.gccxml )
         mb.build_code_creator( self.symbols_file )
         mb.write_module( os.path.join( autoconfig.build_directory, self.module_name + '.py' ) )
