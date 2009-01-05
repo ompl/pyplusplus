@@ -5,10 +5,8 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import sys
-import math
 import easybmp as pyeasybmp
 
-pyeasybmp.IntSquare = lambda x: int( math.sqrt( x ) )
 
 def grayscale_example(source, target):
     bmp = pyeasybmp.BMP()
@@ -20,15 +18,10 @@ def grayscale_example(source, target):
     print 'bit depth: ', bmp.TellBitDepth()
     print 'number of colors: ', bmp.TellNumberOfColors()
 
-    print bmp.GetPixel( 1,1 )
-
     byte = lambda x: 255 & x
 
     for j in range( bmp.TellHeight() ):
-        j += 1
         for i in range( bmp.TellWidth() ):
-            i += 1
-            print i, ', ', j
             temp = pyeasybmp.IntSquare( bmp.GetPixel(i,j).Red ) \
                    + pyeasybmp.IntSquare( bmp.GetPixel(i,j).Green ) \
                    + pyeasybmp.IntSquare( bmp.GetPixel(i,j).Blue )

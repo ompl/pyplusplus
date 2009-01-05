@@ -12,6 +12,18 @@ from pygccxml import declarations
 
 #TODO - unable to call C function, if dll was loaded as CPPDLL
 
+CCT = declarations.CALLING_CONVENTION_TYPES
+
+function_prototype_mapping = {
+    CCT.UNKNOWN : 'CFUNCTYPE'
+    , CCT.CDECL : 'CFUNCTYPE'
+    , CCT.STDCALL : 'WINFUNCTYPE'
+    , CCT.THISCALL : 'CPPMETHODTYPE'
+    , CCT.FASTCALL : '<<<fastcall unsupported>>>'
+    , CCT.SYSTEM_DEFAULT : 'CFUNCTYPE'
+}
+
+assert len( function_prototype_mapping ) == len( CCT.all )
 
 class METHOD_MODE:
     STAND_ALONE = "stand alone"
@@ -42,14 +54,17 @@ class callable_definition_t(code_creator.code_creator_t, declaration_based.decla
     def ftype( self ):
         return self.declaration.function_type()
 
-    def join_arguments( self, args ):
+    def join_arguments( self, args, group_in_list=True ):
         args_str = ''
         arg_separator = ', '
         if 1 == len( args ):
             args_str = ' ' + args[0] + ' '
         else:
             args_str = ' ' + arg_separator.join( args ) + ' '
-        return '[%s]' % args_str
+        if group_in_list:
+            return '[%s]' % args_str
+        else:
+            return args_str
 
     @property
     def mem_fun_factory_var_name( self ):
@@ -61,11 +76,11 @@ class callable_definition_t(code_creator.code_creator_t, declaration_based.decla
         else:
             return ''
 
-    def argtypes_code(self):
+    def argtypes_code(self, group_in_list=True):
         if not self.ftype.arguments_types:
             return ''
         args = map( ctypes_formatter.as_ctype, self.ftype.arguments_types )
-        return self.join_arguments( args )
+        return self.join_arguments( args, group_in_list )
 
     def _get_system_headers_impl( self ):
         return []
@@ -76,20 +91,35 @@ class function_definition_t(callable_definition_t):
         callable_definition_t.__init__( self, free_fun )
 
     def _create_impl(self):
+        global function_prototype_mapping
         result = []
-        result.append( '%(alias)s = getattr( %(library_var_name)s, %(library_var_name)s.undecorated_names["%(undecorated_decl_name)s"] )'
-                       % dict( alias=self.declaration.alias
-                               , library_var_name=self.top_parent.library_var_name
-                               , undecorated_decl_name=self.undecorated_decl_name) )
-        restype = self.restype_code()
-        if restype:
-            result.append( '%(alias)s.restype = %(restype)s'
-                           % dict( alias=self.declaration.alias, restype=restype ) )
+        result.append( '%(alias)s_type = ctypes.%(prototype)s( %(restype)s%(argtypes)s )' )
+        result.append( '%(alias)s = %(alias)s_type( ( %(library_var_name)s.undecorated_names["%(undecorated_decl_name)s"], %(library_var_name)s ) )' )
 
-        argtypes = self.argtypes_code()
-        if argtypes:
-            result.append( '%(alias)s.argtypes = %(argtypes)s'
-                           % dict( alias=self.declaration.alias, argtypes=argtypes ) )
+        restype = self.restype_code()
+        argtypes = self.argtypes_code( group_in_list=False )
+
+        return os.linesep.join( result ) \
+               % dict( alias=self.declaration.alias
+                       , prototype=function_prototype_mapping[ self.declaration.calling_convention ]
+                       , restype=self.iif( restype, restype, 'None' )
+                       , argtypes=self.iif( argtypes, ',' + argtypes, '' )
+                       , library_var_name=self.top_parent.library_var_name
+                       , undecorated_decl_name=self.undecorated_decl_name )
+
+        #~ result.append( '%(alias)s = getattr( %(library_var_name)s, %(library_var_name)s.undecorated_names["%(undecorated_decl_name)s"] )'
+                       #~ % dict( alias=self.declaration.alias
+                               #~ , library_var_name=self.top_parent.library_var_name
+                               #~ , undecorated_decl_name=self.undecorated_decl_name) )
+        #~ restype = self.restype_code()
+        #~ if restype:
+            #~ result.append( '%(alias)s.restype = %(restype)s'
+                           #~ % dict( alias=self.declaration.alias, restype=restype ) )
+
+        #~ argtypes = self.argtypes_code()
+        #~ if argtypes:
+            #~ result.append( '%(alias)s.argtypes = %(argtypes)s'
+                           #~ % dict( alias=self.declaration.alias, argtypes=argtypes ) )
 
         return os.linesep.join( result )
 
@@ -111,11 +141,10 @@ class init_definition_t( callable_definition_t ):
             tmpl = '"%(undecorated_decl_name)s", argtypes=%(args)s'
             if self.method_mode == METHOD_MODE.STAND_ALONE:
                 tmpl = '%(mfcreator)s( ' + tmpl + ' )'
-
             substitue_dict['args'] = self.argtypes_code()
             substitue_dict['undecorated_decl_name'] = self.undecorated_decl_name
         if self.method_mode == METHOD_MODE.STAND_ALONE:
-            tmp = '"%s" : %s' % ( self.declaration.alias, tmpl )
+            tmpl = '"%s" : %s,' % ( self.alias, tmpl )
         return tmpl % substitue_dict
 
 #TODO: aliases for a mem fun and const mem fun with the same name should be different
@@ -156,6 +185,12 @@ class multi_method_definition_t( compound.compound_t ):
         return self.get_first_callable().alias
 
     def _create_impl(self):
+        #small hack, this class should not be created at all if there is only one callable
+        if len( self.creators ) == 1:
+            if isinstance( self.creators[0], callable_definition_t ):
+                self.creators[0].method_mode = METHOD_MODE.STAND_ALONE
+            return self.creators[0].create()
+
         result = []
 
         return_type = self.get_first_callable().ftype.return_type
