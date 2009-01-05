@@ -5,7 +5,7 @@
 
 import sort_algorithms
 import dependencies_manager
-from pygccxml import msvc
+from pygccxml import binary_parsers
 from pyplusplus import _logging_
 from pygccxml import declarations
 from pyplusplus import decl_wrappers

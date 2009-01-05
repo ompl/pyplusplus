@@ -90,7 +90,7 @@ class scons_config:
         for line in process.stdout.readlines():
             print line.rstrip()
         if process.returncode:
-            raise RuntimeError( "unable to compile extension. error: %s" % scons_msg )
+            raise RuntimeError( "unable to compile extension. See output for the errors." )
 
 
 #I need this in order to allow Python to load just compiled modules

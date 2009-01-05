@@ -51,9 +51,9 @@ class decl_wrapper_printer_t( declarations.decl_printer_t ):
         self.writer(  ' ' * (self.level+1) * self.INDENT_SIZE
                       + "use default arguments: " + str(self.instance.use_default_arguments) + os.linesep )
         try:
-            from pygccxml import msvc
+            from pygccxml import binary_parsers
             self.writer(  ' ' * (self.level+1) * self.INDENT_SIZE
-                      + "undecorated decl: " + msvc.undecorate_decl(self.instance) + os.linesep )
+                      + "undecorated decl: " + binary_parsers.undecorate_decl(self.instance) + os.linesep )
         except:
             pass
 

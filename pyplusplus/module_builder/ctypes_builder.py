@@ -10,7 +10,7 @@ import types
 import warnings
 import module_builder
 
-from pygccxml import msvc
+from pygccxml import binary_parsers
 from pygccxml import parser
 from pygccxml import declarations as decls_package
 
@@ -55,7 +55,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         """
         module_builder.module_builder_t.__init__( self, global_ns=None, encoding=encoding )
 
-        self.__blob2undecorated = msvc.exported_symbols.load_from_file( exported_symbols_file )
+        self.__blob2undecorated = binary_parsers.exported_symbols.load_from_file( exported_symbols_file )
         self.global_ns = self.__parse_declarations( files, gccxml_config )
         self.__include_declarations()
 
@@ -82,7 +82,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         self.global_ns.exclude()
         b2u = self.__blob2undecorated
         undecorated = set( b2u.values() )
-        is_exported = lambda d: msvc.undecorate_decl( d ) in undecorated \
+        is_exported = lambda d: binary_parsers.undecorate_decl( d ) in undecorated \
                                 or d.name in b2u and b2u[d.name] == d.name #treatment of C functions
         #include exported declarations
         included_decls = set()

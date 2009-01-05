@@ -43,8 +43,8 @@ class declaration_based_t:
 
     @utils.cached
     def undecorated_decl_name( self ):
-        from pygccxml import msvc #prevent import on Linux
-        return msvc.undecorate_decl( self.declaration )
+        from pygccxml import binary_parsers #prevent import on Linux
+        return binary_parsers.undecorate_decl( self.declaration )
 
     @utils.cached
     def complete_py_name( self ):

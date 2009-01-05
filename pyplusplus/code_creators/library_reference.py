@@ -7,6 +7,18 @@ import os
 import code_creator
 from pyplusplus import decl_wrappers
 
+#TODO: add different dlls
+
+#TODO: another idea is a small refactoring in ctypes:
+#the idea is to introduce single "load shared library function", which servers
+#as a factory for function defined in the library:
+# class shared_library:
+#     def function( self, name_or_ordinal, calling convention, restype, argtypes )
+
+#TODO: why I need to preload "C" runtime ( other libraries )?
+
+#TODO: how I can find out the full path of the loaded dll
+
 class library_reference_t(code_creator.code_creator_t):
     """Creates reference to a library"""
 
