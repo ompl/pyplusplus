@@ -55,8 +55,9 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         """
         module_builder.module_builder_t.__init__( self, global_ns=None, encoding=encoding )
 
-        self.__blob2undecorated = binary_parsers.exported_symbols.load_from_file( exported_symbols_file )
         self.global_ns = self.__parse_declarations( files, gccxml_config )
+        self.__blob2decl = binary_parsers.merge_information( self.global_ns, exported_symbols_file )
+
         self.__include_declarations()
 
         self.__code_creator = None
@@ -80,14 +81,8 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
 
     def __include_declarations( self ):
         self.global_ns.exclude()
-        b2u = self.__blob2undecorated
-        undecorated = set( b2u.values() )
-        is_exported = lambda d: binary_parsers.undecorate_decl( d ) in undecorated \
-                                or d.name in b2u and b2u[d.name] == d.name #treatment of C functions
         #include exported declarations
-        included_decls = set()
-        included_decls.update( self.global_ns.calldefs( is_exported, allow_empty=True, recursive=True ) )
-        included_decls.update( self.global_ns.variables( is_exported, allow_empty=True, recursive=True ) )
+        included_decls = set( self.__blob2decl.itervalues() )
 
         they_depend_on_me = decls_package.dependency_info_t.they_depend_on_me
         for d in included_decls:
@@ -116,7 +111,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
     def build_code_creator( self, library_path, doc_extractor=None ):
         creator = creators_factory.ctypes_creator_t( self.global_ns
                                                     , library_path
-                                                    , self.__blob2undecorated
+                                                    , self.__blob2decl
                                                     , doc_extractor)
         self.__code_creator = creator.create()
         return self.__code_creator

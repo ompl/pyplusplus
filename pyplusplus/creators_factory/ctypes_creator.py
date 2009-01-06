@@ -218,11 +218,7 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
     def visit_free_function( self ):
         self.__dependencies_manager.add_exported( self.curr_decl )
-        if self.curr_decl.name in self.__exported_symbols \
-           and self.curr_decl.name == self.__exported_symbols[ self.curr_decl.name ]:
-            return #it is notpossible to call C function from CPPDLL
-        else:
-            self.curr_code_creator.adopt_creator( code_creators.function_definition_t( self.curr_decl ) )
+        self.curr_code_creator.adopt_creator( code_creators.function_definition_t( self.curr_decl ) )
 
     def visit_free_operator( self ):
         self.__dependencies_manager.add_exported( self.curr_decl )

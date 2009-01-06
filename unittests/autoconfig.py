@@ -23,6 +23,7 @@ from environment import scons, boost, python, gccxml, indexing_suite
 import pygccxml
 
 compiler = pygccxml.utils.native_compiler.get_gccxml_compiler()
+compiler = "msvc71"
 print 'GCCXML configured to simulate compiler ', compiler
 gccxml_version = '__GCCXML_09__'
 class cxx_parsers_cfg:

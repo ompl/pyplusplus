@@ -31,6 +31,10 @@ class ctypes_base_tester_t(unittest.TestCase):
 
     @property
     def symbols_file( self ):
+        return os.path.join( self.project_dir, 'binaries', self.base_name + '.map' )
+
+    @property
+    def library_file( self ):
         return os.path.join( self.project_dir, 'binaries', self.base_name + '.dll' )
 
     def setUp( self ):
@@ -40,7 +44,7 @@ class ctypes_base_tester_t(unittest.TestCase):
         #~ pdb.set_trace()
         autoconfig.scons_config.compile( autoconfig.scons.cmd_build + ' ' + self.base_name )
         mb = ctypes_module_builder_t( [self.header], self.symbols_file, autoconfig.cxx_parsers_cfg.gccxml )
-        mb.build_code_creator( self.symbols_file )
+        mb.build_code_creator( self.library_file )
         mb.write_module( os.path.join( self.project_dir, 'binaries', self.base_name + '.py' ) )
         sys.path.insert( 0, os.path.join( self.project_dir, 'binaries' ) )
         __import__( self.base_name )
