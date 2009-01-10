@@ -42,7 +42,7 @@ class library_reference_t(code_creator.code_creator_t):
     def _create_impl(self):
         return '%(var)s = ctypes.%(loader)s( r"%(path)s" )' \
                % dict( var=self.library_var_name
-                       , loader=self.iif( self._is_cpp_library, 'CPPDLL', 'CDLL' )
+                       , loader='CDLL'
                        , path=self._library_path )
 
     def _get_system_headers_impl( self ):

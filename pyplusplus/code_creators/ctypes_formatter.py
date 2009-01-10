@@ -118,8 +118,8 @@ class type_converter_t(declarations.type_visitor_t):
         return "( %s * %d )" % ( item_type, size )
 
     def visit_free_function_type( self ):
-        return_visitor = type_converter_t( self.return_type, self.decl_formatter )
-        return_type = declarations.apply_visitor(return_visitor, self.return_type)
+        return_visitor = type_converter_t( self.user_type.return_type, self.decl_formatter )
+        return_type = declarations.apply_visitor(return_visitor, self.user_type.return_type)
         argtypes = []
         for arg in self.user_type.arguments_types:
             arg_visitor = type_converter_t( arg, self.decl_formatter )

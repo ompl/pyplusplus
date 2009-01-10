@@ -102,6 +102,8 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
     # - implement better 0(n) algorithm
     def __add_class_introductions( self, cc, class_ ):
+        if not self.__should_generate_code( class_ ):
+            return
         ci_creator = code_creators.class_introduction_t( class_ )
         self.__class2introduction[ class_ ] = ci_creator
         cc.adopt_creator( ci_creator )
@@ -232,9 +234,10 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         self.__dependencies_manager.add_exported( self.curr_decl )
         #fields definition should be recursive using the visitor
         self.__class_defs_ccs.adopt_creator( code_creators.fields_definition_t( self.curr_decl ) )
-        md_cc = code_creators.methods_definition_t( self.curr_decl )
-        self.__class2methods_def[ self.curr_decl ] = md_cc
-        self.__class_defs_ccs.adopt_creator( md_cc )
+        if self.curr_decl.calldefs( self.__should_generate_code, recursive=False, allow_empty=True ):
+            md_cc = code_creators.methods_definition_t( self.curr_decl )
+            self.__class2methods_def[ self.curr_decl ] = md_cc
+            self.__class_defs_ccs.adopt_creator( md_cc )
         class_ = self.curr_decl
         for decl in self.curr_decl.decls( recursive=False, allow_empty=True ):
             if self.__should_generate_code( decl ):
