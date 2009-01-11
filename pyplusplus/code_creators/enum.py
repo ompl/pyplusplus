@@ -5,6 +5,7 @@
 
 import os
 import algorithm
+import code_creator
 import declaration_based
 import registration_based
 
@@ -36,11 +37,11 @@ class enum_t( registration_based.registration_based_t
         return '.value("%(alias)s", %(name)s)' \
                % { 'alias' : self.value_aliases.get( value_name, value_name )
                     , 'name' : algorithm.create_identifier( self, full_name + '::' + value_name ) }
-    
+
     def _create_impl(self):
         if self.declaration.already_exposed:
             return ''
-        
+
         bpl_enum = '%(bpl::enum_)s< %(name)s>("%(alias)s")' \
                    % { 'bpl::enum_' : algorithm.create_identifier( self, '::boost::python::enum_' )
                        , 'name' : algorithm.create_identifier( self, self.declaration.decl_string )
@@ -60,9 +61,24 @@ class enum_t( registration_based.registration_based_t
             values.append( self._generate_value_code( name ) )
 
         values.append( ';' )
-        
+
         values = self.indent( os.linesep.join( values ) )
         return bpl_enum + os.linesep + values
+
+    def _get_system_headers_impl( self ):
+        return []
+
+
+class pyenum_t( code_creator.code_creator_t, declaration_based.declaration_based_t ):
+    def __init__( self, enum ):
+        code_creator.code_creator_t.__init__( self )
+        declaration_based.declaration_based_t.__init__( self, declaration=enum )
+
+    def _create_impl( self ):
+        result = [ 'class %(alias)s( ctypes_utils.Enumeration ):' % dict( alias=self.alias ) ]
+        for name, value in self.declaration.values:
+            result.append( self.indent( '%(name)s = %(value)s' % dict( name=name, value=value ) ) )
+        return os.linesep.join( result )
 
     def _get_system_headers_impl( self ):
         return []

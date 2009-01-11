@@ -37,6 +37,9 @@ class ctypes_base_tester_t(unittest.TestCase):
     def library_file( self ):
         return os.path.join( self.project_dir, 'binaries', self.base_name + '.dll' )
 
+    def customize(self, mb ):
+        pass
+
     def setUp( self ):
         if self.base_name in sys.modules:
             return sys.modules[ self.base_name ]
@@ -44,6 +47,7 @@ class ctypes_base_tester_t(unittest.TestCase):
         #~ pdb.set_trace()
         autoconfig.scons_config.compile( autoconfig.scons.cmd_build + ' ' + self.base_name )
         mb = ctypes_module_builder_t( [self.header], self.symbols_file, autoconfig.cxx_parsers_cfg.gccxml )
+        self.customize( mb )
         mb.build_code_creator( self.library_file )
         mb.write_module( os.path.join( self.project_dir, 'binaries', self.base_name + '.py' ) )
         sys.path.insert( 0, os.path.join( self.project_dir, 'binaries' ) )
@@ -103,11 +107,23 @@ class issues_tester_t( ctypes_base_tester_t ):
     def test_free_fun_add( self ):
         self.failUnless( 1977 == self.module_ref.add( 77, 1900 ) )
 
+
+class enums_tester_t( ctypes_base_tester_t ):
+    def __init__( self, *args, **keywd ):
+        ctypes_base_tester_t.__init__( self, 'enums', *args, **keywd )
+
+    def customize( self, mb ):
+        mb.enums().include()
+
+    def test(self):
+        pass
+
 def create_suite():
     suite = unittest.TestSuite()
     if 'win' in sys.platform:
         suite.addTest( unittest.makeSuite(pof_tester_t))
         suite.addTest( unittest.makeSuite(issues_tester_t))
+        suite.addTest( unittest.makeSuite(enums_tester_t))
     return suite
 
 def run_suite():

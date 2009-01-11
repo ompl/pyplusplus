@@ -247,6 +247,12 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
     def visit_enumeration(self):
         self.__dependencies_manager.add_exported( self.curr_decl )
+        paretn_cc = None
+        if isinstance( self.curr_decl.parent, declarations.class_t ):
+            paretn_cc = self.__class2introduction[ self.curr_decl.parent ]
+        else:
+            paretn_cc = self.__namespace2pyclass[ self.curr_decl.parent ]
+        paretn_cc.adopt_creator( code_creators.pyenum_t( self.curr_decl ) )
 
     def visit_typedef(self):
         self.__dependencies_manager.add_exported( self.curr_decl )

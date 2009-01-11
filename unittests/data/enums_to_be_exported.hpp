@@ -6,21 +6,29 @@
 #ifndef __enums_to_be_exported_hpp__
 #define __enums_to_be_exported_hpp__
 
-enum Chisla{ nol, odin, dva, tri };
+#include "libconfig.h"
 
-namespace enums{ 
+enum EXPORT_SYMBOL Chisla{ nol, odin, dva, tri };
 
-enum color{ 
+namespace enums{
+
+enum EXPORT_SYMBOL color{
     red = 1
     , green = 2
-    , blue = 4 }; 
+    , blue = 4 };
 
-enum numbers{
+enum EXPORT_SYMBOL numbers{
     zero = 0
     , noll = 0
 };
-    
-inline int to_int( int x=red ){ return x; }
+
+struct EXPORT_SYMBOL struct_with_enum{
+    enum fruits{
+        lemon, orange, apple
+    };
+};
+
+inline int EXPORT_SYMBOL to_int( int x=red ){ return x; }
 
 }
 

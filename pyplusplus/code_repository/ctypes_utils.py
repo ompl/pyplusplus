@@ -134,4 +134,9 @@ class mem_fun_factory( object ):
 
     def multi_method( self, restype=None ):
         return multi_method_registry_t( self, restype )
+
+
+#take a look on http://code.activestate.com/recipes/413486/
+class Enumeration( object ):
+    pass
 """
