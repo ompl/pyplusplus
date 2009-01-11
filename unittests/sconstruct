@@ -1,15 +1,17 @@
 import os
+import sys
 
 env = Environment()
 
-if os.path.exists( r'E:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib' ):
-    env.Append( LIBPATH=[ r'E:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib'
-                         , r'E:\Program Files\Microsoft Visual Studio 9.0\VC\lib'] )
-    env.Append( CPPPATH=[r"E:\Program Files\Microsoft SDKs\Windows\v6.0A\Include"
-                        , r"E:\Program Files\Microsoft Visual Studio 9.0\VC\include"])
+if 'win32' in sys.platform:
+    if os.path.exists( r'E:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib' ):
+        env.Append( LIBPATH=[ r'E:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib'
+                             , r'E:\Program Files\Microsoft Visual Studio 9.0\VC\lib'] )
+        env.Append( CPPPATH=[r"E:\Program Files\Microsoft SDKs\Windows\v6.0A\Include"
+                            , r"E:\Program Files\Microsoft Visual Studio 9.0\VC\include"])
 
-env.AppendUnique( CCFLAGS=[ r"/MD",r"/EHsc",r"/GR",r"/Zc:wchar_t",r"/Zc:forScope" ] )
-env.AppendUnique( LINKFLAGS=[r"/MAP:${TARGET.base}.map", r"/MAPINFO:EXPORTS"] )
+    env.AppendUnique( CCFLAGS=[ r"/MD",r"/EHsc",r"/GR",r"/Zc:wchar_t",r"/Zc:forScope" ] )
+    env.AppendUnique( LINKFLAGS=[r"/MAP:${TARGET.base}.map", r"/MAPINFO:EXPORTS"] )
 
 scripts = [ 'pof', 'issues', 'enums' ]
 for s in scripts:

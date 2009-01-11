@@ -31,11 +31,19 @@ class ctypes_base_tester_t(unittest.TestCase):
 
     @property
     def symbols_file( self ):
-        return os.path.join( self.project_dir, 'binaries', self.base_name + '.map' )
+        ext = '.so'
+        prefix = 'lib'
+        if 'win32' in sys.platform:
+            prefix = ''
+            ext = '.map'
+        return os.path.join( self.project_dir, 'binaries', prefix + self.base_name + ext )
 
     @property
     def library_file( self ):
-        return os.path.join( self.project_dir, 'binaries', self.base_name + '.dll' )
+        if 'win32' in sys.platform:
+            return os.path.join( self.project_dir, 'binaries', self.base_name + '.dll' )
+        else:
+            return self.symbols_file
 
     def customize(self, mb ):
         pass
@@ -116,14 +124,18 @@ class enums_tester_t( ctypes_base_tester_t ):
         mb.enums().include()
 
     def test(self):
-        pass
+        self.failUnless( self.module_ref.Chisla.nol == 0 )
+        self.failUnless( self.module_ref.Chisla.odin == 1 )
+        self.failUnless( self.module_ref.Chisla.dva == 2 )
+        self.failUnless( self.module_ref.Chisla.tri == 3 )
+
 
 def create_suite():
     suite = unittest.TestSuite()
     if 'win' in sys.platform:
         suite.addTest( unittest.makeSuite(pof_tester_t))
         suite.addTest( unittest.makeSuite(issues_tester_t))
-        suite.addTest( unittest.makeSuite(enums_tester_t))
+    suite.addTest( unittest.makeSuite(enums_tester_t))
     return suite
 
 def run_suite():
