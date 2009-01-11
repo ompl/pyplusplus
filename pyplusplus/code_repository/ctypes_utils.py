@@ -137,6 +137,5 @@ class mem_fun_factory( object ):
 
 
 #take a look on http://code.activestate.com/recipes/413486/
-class Enumeration( object ):
-    pass
+Enumeration = ctypes.c_int
 """

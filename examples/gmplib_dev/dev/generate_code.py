@@ -24,7 +24,11 @@ mb.classes( '' ).exclude()
 #introduces define, which aliass __gmpy to gmpy
 for f in mb.calldefs( lambda x: x.name.startswith('__gmp') ):
     f.alias = f.name[2:]
-#enums
+
+#there is a bug in "include" algorithm - I need to wrote DFS
+mb.class_( '_IO_marker' ).include()
+
+#include should work as expected - include only exported function
 
 #~ mb.print_declarations()
 mb.build_code_creator( project_env.gmp.shared_library_file )

@@ -29,6 +29,7 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
         self.__library_path = library_path
         self.__exported_symbols = exported_symbols
+        self.__exported_decls = set( exported_symbols.itervalues() )
         self.module = code_creators.ctypes_module_t( global_ns )
         self.__dependencies_manager = dependencies_manager.manager_t(self.decl_logger)
 
@@ -68,6 +69,8 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
     def __should_generate_code( self, decl ):
         if decl.ignore or decl.already_exposed:
             return False
+        if isinstance( decl, declarations.calldef_t ):
+            return decl in self.__exported_decls
         return True
 
 

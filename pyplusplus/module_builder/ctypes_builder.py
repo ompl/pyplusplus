@@ -79,33 +79,38 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         return decls_package.matcher.get_single( decls_package.namespace_matcher_t( name='::' )
                                                  , decls )
 
+    def __include_dependencies( self, decl):
+        i_depend_on_them = decls_package.dependency_info_t.i_depend_on_them
+        decls_traits = ( decls_package.class_traits, decls_package.class_declaration_traits, decls_package.enum_traits )
+        for dependency in i_depend_on_them( decl ):
+            self.logger.debug( 'discovered dependency %s' % str(dependency) )
+            for traits in decls_traits:
+                if not traits.is_my_case( dependency ):
+                    continue
+                self.logger.debug( 'discovered dependency %s - included' % str(dependency) )
+                dd = traits.get_declaration( dependency )
+                dd.ignore = False
+
+    def __include_parent_classes( self, decl ):
+        self.logger.debug( 'including decl %s' % str(decl) )
+        parent = decl.parent
+        while True:
+            if isinstance( parent, decls_package.namespace_t ):
+                break
+            else:
+                self.logger.debug( 'including parent class %s' % str(parent) )
+                parent.ignore = False
+                parent = parent.parent
+        
     def __include_declarations( self ):
         self.global_ns.exclude()
         #include exported declarations
         included_decls = set( self.__blob2decl.itervalues() )
-
-        they_depend_on_me = decls_package.dependency_info_t.they_depend_on_me
+        #include dependencies
         for d in included_decls:
             d.include()
-            self.logger.debug( 'including decl %s' % str(d) )
-            parent = d.parent
-            while True:
-                if isinstance( parent, decls_package.namespace_t ):
-                    break
-                else:
-                    self.logger.debug( 'including parent class %s' % str(parent) )
-                    parent.ignore = False
-                    parent = parent.parent
-            for dependency in they_depend_on_me( d ):
-                self.logger.debug( 'discovered dependency %s' % str(dependency) )
-                #include declarations, on which exported declarations depend
-                #I need this for classes, referenced by function arguments
-                decls_traits = ( decls_package.class_traits, decls_package.class_declaration_traits, decls_package.enum_traits )
-                for traits in decls_traits:
-                    if traits.is_my_case( dependency ):
-                        self.logger.debug( 'discovered dependency %s - included' % str(dependency) )
-                        traits.get_declaration( dependency ).ignore = False
-
+            self.__include_parent_classes( d )
+            self.__include_dependencies( d )
             self.logger.debug( 'including decl %s - done' % str(d) )
 
     def build_code_creator( self, library_path, doc_extractor=None ):

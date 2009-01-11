@@ -617,8 +617,15 @@ libgmp_dot_so_dot_3_dot_4lib.undecorated_names = {#mapping between decorated and
     "__gmpf_init_set_str" : "extern int __gmpf_init_set_str(mpf_ptr arg0, char const * arg1, int arg2) [free function]", 
 }
 
+class gmp_randalg_t( ctypes_utils.Enumeration ):
+    GMP_RAND_ALG_DEFAULT = 0
+    GMP_RAND_ALG_LC = 0
+
 class _IO_FILE(ctypes.Structure):
     """class _IO_FILE"""
+
+class _IO_marker(ctypes.Structure):
+    """class _IO_marker"""
 
 class __gmp_randstate_struct(ctypes.Structure):
     """class __gmp_randstate_struct"""
@@ -682,10 +689,16 @@ __mpq_struct._fields_ = [ #class __mpq_struct
     ("_mp_den", __mpz_struct),
 ]
 
+_IO_marker._fields_ = [ #class _IO_marker
+    ("_next", ctypes.POINTER( _IO_marker )),
+    ("_sbuf", ctypes.POINTER( _IO_FILE )),
+    ("_pos", ctypes.c_int),
+]
+
 __gmp_randstate_struct._fields_ = [ #class __gmp_randstate_struct
     ("_mp_seed", ( __mpz_struct * 1 )),
     ("_mp_alg", gmp_randalg_t),
-    ("_mp_algdata", __gmp_randstate_struct.),
+    ("_mp_algdata", ctypes.c_int),
 ]
 
 gmpq_add_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
