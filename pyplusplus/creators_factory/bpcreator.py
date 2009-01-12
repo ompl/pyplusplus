@@ -126,6 +126,10 @@ class bpcreator_t( declarations.decl_visitor_t ):
 
             if isinstance( decl, declarations.namespace_t ):
                 continue
+            
+            if isinstance( decl, declarations.class_types ):
+                if decl.opaque:
+                    continue
 
             if not decl.exportable:
                 #leave only decls that user wants to export and that could be exported

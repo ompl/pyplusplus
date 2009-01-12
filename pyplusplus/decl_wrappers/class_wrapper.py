@@ -137,15 +137,14 @@ class class_common_details_t( object ):
 
     def _get_opaque( self ):
         return self._opaque
-
     def _set_opaque( self, value ):
         self._opaque = value
-        self.ignore = value #don't expose opaque type
-
     opaque = property( _get_opaque, _set_opaque
-                      , doc="If True, Py++ will treat return types and arguments T* as opaque types." \
-                            +"Thus it will be able to generate code, that uses " \
-                            +" BOOST_PYTHON_OPAQUE_SPECIALIZED_TYPE_ID macro in a right places." )
+                      , doc="If True, Py++ will treat return types and arguments T* as opaque types. "
+                           +"nFor Boost.Python code generator it means that macro BOOST_PYTHON_OPAQUE_SPECIALIZED_TYPE_ID everywhere it needed. "
+                           +"For ctypes code generator it means that the class will be introduced, but without fields. "
+                           +"For both code generators it means: you will only be able to get and pass pointers around. "
+                           +"Other functionality will not be available." )
 
     @property
     def class_var_name(self):
