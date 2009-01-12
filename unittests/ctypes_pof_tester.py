@@ -129,13 +129,28 @@ class enums_tester_t( ctypes_base_tester_t ):
         self.failUnless( self.module_ref.Chisla.dva == 2 )
         self.failUnless( self.module_ref.Chisla.tri == 3 )
 
+class opaque_tester_t( ctypes_base_tester_t ):
+    def __init__( self, *args, **keywd ):
+        ctypes_base_tester_t.__init__( self, 'opaque', *args, **keywd )
+
+    def customize( self, mb ):
+        mb.class_( 'user_data_t' ).opaque = True
+
+    def test(self):
+        self.failUnlessRaises( RuntimeError, self.module_ref.user_data_t )
+        udt = self.module_ref.create()
+        self.failUnless( 1977 == self.module_ref.read_user_data(udt) )
+        self.module_ref.destroy( udt )
+        
+        
 
 def create_suite():
     suite = unittest.TestSuite()
     if 'win' in sys.platform:
         suite.addTest( unittest.makeSuite(pof_tester_t))
         suite.addTest( unittest.makeSuite(issues_tester_t))
-    suite.addTest( unittest.makeSuite(enums_tester_t))
+    #suite.addTest( unittest.makeSuite(enums_tester_t))
+    suite.addTest( unittest.makeSuite(opaque_tester_t))
     return suite
 
 def run_suite():

@@ -73,7 +73,6 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
             return decl in self.__exported_decls
         return True
 
-
     #~ def __prepare_decls( self, global_ns, doc_extractor ):
         #~ to_be_exposed = []
         #~ for decl in declarations.make_flatten( global_ns ):
@@ -235,19 +234,23 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
     def visit_class(self):
         self.__dependencies_manager.add_exported( self.curr_decl )
-        #fields definition should be recursive using the visitor
-        self.__class_defs_ccs.adopt_creator( code_creators.fields_definition_t( self.curr_decl ) )
-        if self.curr_decl.calldefs( self.__should_generate_code, recursive=False, allow_empty=True ):
-            md_cc = code_creators.methods_definition_t( self.curr_decl )
-            self.__class2methods_def[ self.curr_decl ] = md_cc
-            self.__class_defs_ccs.adopt_creator( md_cc )
-        class_ = self.curr_decl
-        for decl in self.curr_decl.decls( recursive=False, allow_empty=True ):
-            if self.__should_generate_code( decl ):
-                self.curr_decl = decl
-                declarations.apply_visitor( self, decl )
-        self.curr_decl = class_
-
+        if not self.curr_decl.opaque:
+            #fields definition should be recursive using the visitor
+            self.__class_defs_ccs.adopt_creator( code_creators.fields_definition_t( self.curr_decl ) )
+            if self.curr_decl.calldefs( self.__should_generate_code, recursive=False, allow_empty=True ):
+                md_cc = code_creators.methods_definition_t( self.curr_decl )
+                self.__class2methods_def[ self.curr_decl ] = md_cc
+                self.__class_defs_ccs.adopt_creator( md_cc )
+            class_ = self.curr_decl
+            for decl in self.curr_decl.decls( recursive=False, allow_empty=True ):
+                if self.__should_generate_code( decl ):
+                    self.curr_decl = decl
+                    declarations.apply_visitor( self, decl )
+            self.curr_decl = class_
+        else:
+            cls_intro_cc = self.__class2introduction[ self.curr_decl ]
+            cls_intro_cc.adopt_creator( code_creators.opaque_init_introduction_t( self.curr_decl ) )
+            
     def visit_enumeration(self):
         self.__dependencies_manager.add_exported( self.curr_decl )
         paretn_cc = None

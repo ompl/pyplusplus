@@ -88,10 +88,13 @@ class decl_wrapper_t(object):
     def _set_alias(self, alias):
         self._alias = alias
     alias = property( _get_alias, _set_alias
-                      , doc="the name under which, Python will know the declaration" )
+                      , doc="The name under which, Python will know the declaration. Code generators: ctypes, Boost.Python")
 
     def rename( self, new_name ):
-        """give new name to the declaration, under which Python will know the declaration"""
+        """give new name to the declaration, under which Python will know the declaration
+        
+        Code generators: ctypes, Boost.Python
+        """
         self.alias = new_name
 
     def _get_ignore( self ):
@@ -99,7 +102,7 @@ class decl_wrapper_t(object):
     def _set_ignore( self, value ):
         self._ignore = value
     ignore = property( _get_ignore, _set_ignore
-                       , doc="boolean flag, which says whether to export declaration to Python or not" )
+                       , doc="Boolean flag, which says whether to export declaration to Python or not. Code generators: ctypes, Boost.Python" )
 
     def get_already_exposed( self ):
         return self._already_exposed
@@ -113,11 +116,16 @@ class decl_wrapper_t(object):
         
         If compile_time_errors is True, than only declarations, which will cause
         compilation error will be excluded
+        
+        Code generators: ctypes, Boost.Python
         """
         self.ignore = True
 
     def include( self, already_exposed=False ):
-        """include "self" and child declarations to be exposed."""
+        """include "self" and child declarations to be exposed.
+        
+        Code generators: ctypes, Boost.Python.
+        """
         self.ignore = False
         self.already_exposed = already_exposed
     
@@ -188,8 +196,8 @@ class decl_wrapper_t(object):
     def disabled_messages( self ):
         """list of messages to ignore"""
         return self.__msgs_to_ignore
-	disabled_messaged = disabled_messages
-	
+    disabled_messaged = disabled_messages
+    
     def disable_messages( self, *args ):
         """set messages, which should not be reported to you
         

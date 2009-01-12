@@ -154,7 +154,9 @@ from class_introduction import class_declaration_introduction_t
 from mem_fun_introduction import mem_fun_introduction_t
 from mem_fun_introduction import vmem_fun_introduction_t
 from mem_fun_introduction import init_introduction_t
+from mem_fun_introduction import opaque_init_introduction_t
 from mem_fun_introduction import del_introduction_t
+
 from fields_definition import fields_definition_t
 from embedded_code_repository import embedded_code_repository_t
 from methods_definition import methods_definition_t

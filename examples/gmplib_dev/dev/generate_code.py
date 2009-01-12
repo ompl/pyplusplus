@@ -26,7 +26,7 @@ for f in mb.calldefs( lambda x: x.name.startswith('__gmp') ):
     f.alias = f.name[2:]
 
 #there is a bug in "include" algorithm - I need to wrote DFS
-mb.class_( '_IO_marker' ).include()
+mb.class_( '_IO_FILE' ).opaque = True
 
 #include should work as expected - include only exported function
 

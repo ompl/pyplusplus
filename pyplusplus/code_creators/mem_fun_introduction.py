@@ -55,6 +55,19 @@ class init_introduction_t(code_creator.code_creator_t, declaration_based.declara
     def _get_system_headers_impl( self ):
         return []
 
+class opaque_init_introduction_t(code_creator.code_creator_t, declaration_based.declaration_based_t):
+    def __init__( self, class_ ):
+        code_creator.code_creator_t.__init__(self)
+        declaration_based.declaration_based_t.__init__( self, class_ )
+
+    def _create_impl(self):
+        tmpl = ['def __init__( self, *args, **keywd ):']
+        tmpl.append( self.indent('raise RuntimeError( "Unable to create instance of opaque type." )') )
+        return os.linesep.join( tmpl ) 
+
+    def _get_system_headers_impl( self ):
+        return []
+
 class del_introduction_t(code_creator.code_creator_t, declaration_based.declaration_based_t):
     def __init__( self, constructor ):
         code_creator.code_creator_t.__init__(self)

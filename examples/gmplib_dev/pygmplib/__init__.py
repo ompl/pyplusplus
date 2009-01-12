@@ -617,18 +617,216 @@ libgmp_dot_so_dot_3_dot_4lib.undecorated_names = {#mapping between decorated and
     "__gmpf_init_set_str" : "extern int __gmpf_init_set_str(mpf_ptr arg0, char const * arg1, int arg2) [free function]", 
 }
 
+class std:
+    """namespace std"""
+
+class __gnu_cxx:
+    """namespace __gnu_cxx"""
+
+class __cxxabiv1:
+    """namespace __cxxabiv1"""
+
 class gmp_randalg_t( ctypes_utils.Enumeration ):
     GMP_RAND_ALG_DEFAULT = 0
     GMP_RAND_ALG_LC = 0
 
+class (ctypes.Structure):
+    """class """
+    
+    class (ctypes.Structure):
+        """class """
+
+class _G_fpos64_t(ctypes.Structure):
+    """class _G_fpos64_t"""
+
+class _G_fpos_t(ctypes.Structure):
+    """class _G_fpos_t"""
+
 class _IO_FILE(ctypes.Structure):
     """class _IO_FILE"""
+    
+    def __init__( self, *args, **keywd ):
+        raise RuntimeError( "Unable to create instance of opaque type." )
+
+class _IO_cookie_io_functions_t(ctypes.Structure):
+    """class _IO_cookie_io_functions_t"""
 
 class _IO_marker(ctypes.Structure):
     """class _IO_marker"""
 
+class __base_class_type_info_pseudo(ctypes.Structure):
+    """class __base_class_type_info_pseudo"""
+
+class __class_type_info_pseudo(ctypes.Structure):
+    """class __class_type_info_pseudo"""
+
+class __forced_unwind(ctypes.Structure):
+    """class __cxxabiv1::__forced_unwind"""
+
+
+__cxxabiv1.__forced_unwind = __forced_unwind
+
+class __fsid_t(ctypes.Structure):
+    """class __fsid_t"""
+
 class __gmp_randstate_struct(ctypes.Structure):
     """class __gmp_randstate_struct"""
+    
+    class (ctypes.Structure):
+        """class __gmp_randstate_struct"""
+
+class __add_unsigned_less__char__greater_(ctypes.Structure):
+    """class __gnu_cxx::__add_unsigned< char >"""
+
+
+__gnu_cxx.__add_unsigned_less__char__greater_ = __add_unsigned_less__char__greater_
+
+class __add_unsigned_less__int__greater_(ctypes.Structure):
+    """class __gnu_cxx::__add_unsigned< int >"""
+
+
+__gnu_cxx.__add_unsigned_less__int__greater_ = __add_unsigned_less__int__greater_
+
+class __add_unsigned_less__long_long__greater_(ctypes.Structure):
+    """class __gnu_cxx::__add_unsigned< long long >"""
+
+
+__gnu_cxx.__add_unsigned_less__long_long__greater_ = __add_unsigned_less__long_long__greater_
+
+class __add_unsigned_less__long__greater_(ctypes.Structure):
+    """class __gnu_cxx::__add_unsigned< long >"""
+
+
+__gnu_cxx.__add_unsigned_less__long__greater_ = __add_unsigned_less__long__greater_
+
+class __add_unsigned_less__short__greater_(ctypes.Structure):
+    """class __gnu_cxx::__add_unsigned< short >"""
+
+
+__gnu_cxx.__add_unsigned_less__short__greater_ = __add_unsigned_less__short__greater_
+
+class __add_unsigned_less__signed_char__greater_(ctypes.Structure):
+    """class __gnu_cxx::__add_unsigned< signed char >"""
+
+
+__gnu_cxx.__add_unsigned_less__signed_char__greater_ = __add_unsigned_less__signed_char__greater_
+
+class __conditional_type_less__true_comma____gnu_cxx_scope___numeric_traits_integer_less__int__greater__comma____gnu_cxx_scope___numeric_traits_floating_less__int__greater___greater_(ctypes.Structure):
+    """class __gnu_cxx::__conditional_type< true, __gnu_cxx::__numeric_traits_integer< int >, __gnu_cxx::__numeric_traits_floating< int > >"""
+
+
+__gnu_cxx.__conditional_type_less__true_comma____gnu_cxx_scope___numeric_traits_integer_less__int__greater__comma____gnu_cxx_scope___numeric_traits_floating_less__int__greater___greater_ = __conditional_type_less__true_comma____gnu_cxx_scope___numeric_traits_integer_less__int__greater__comma____gnu_cxx_scope___numeric_traits_floating_less__int__greater___greater_
+
+class __conditional_type_less__true_comma____gnu_cxx_scope___numeric_traits_integer_less__short__greater__comma____gnu_cxx_scope___numeric_traits_floating_less__short__greater___greater_(ctypes.Structure):
+    """class __gnu_cxx::__conditional_type< true, __gnu_cxx::__numeric_traits_integer< short >, __gnu_cxx::__numeric_traits_floating< short > >"""
+
+
+__gnu_cxx.__conditional_type_less__true_comma____gnu_cxx_scope___numeric_traits_integer_less__short__greater__comma____gnu_cxx_scope___numeric_traits_floating_less__short__greater___greater_ = __conditional_type_less__true_comma____gnu_cxx_scope___numeric_traits_integer_less__short__greater__comma____gnu_cxx_scope___numeric_traits_floating_less__short__greater___greater_
+
+class __conditional_type_less__true_comma____gnu_cxx_scope___numeric_traits_integer_less__unsigned_long__greater__comma____gnu_cxx_scope___numeric_traits_floating_less__unsigned_long__greater___greater_(ctypes.Structure):
+    """class __gnu_cxx::__conditional_type< true, __gnu_cxx::__numeric_traits_integer< unsigned long >, __gnu_cxx::__numeric_traits_floating< unsigned long > >"""
+
+
+__gnu_cxx.__conditional_type_less__true_comma____gnu_cxx_scope___numeric_traits_integer_less__unsigned_long__greater__comma____gnu_cxx_scope___numeric_traits_floating_less__unsigned_long__greater___greater_ = __conditional_type_less__true_comma____gnu_cxx_scope___numeric_traits_integer_less__unsigned_long__greater__comma____gnu_cxx_scope___numeric_traits_floating_less__unsigned_long__greater___greater_
+
+class __conditional_type_less__true_comma__unsigned_long_comma__unsigned_long_long__greater_(ctypes.Structure):
+    """class __gnu_cxx::__conditional_type< true, unsigned long, unsigned long long >"""
+
+
+__gnu_cxx.__conditional_type_less__true_comma__unsigned_long_comma__unsigned_long_long__greater_ = __conditional_type_less__true_comma__unsigned_long_comma__unsigned_long_long__greater_
+
+class __type(ctypes.Structure):
+    """class __gnu_cxx::__numeric_traits_integer< int >"""
+
+
+__gnu_cxx.__type = __type
+
+class __numeric_traits_less__int__greater_(ctypes.Structure):
+    """class __gnu_cxx::__numeric_traits< int >"""
+
+
+__gnu_cxx.__numeric_traits_less__int__greater_ = __numeric_traits_less__int__greater_
+
+class __type(ctypes.Structure):
+    """class __gnu_cxx::__numeric_traits_integer< short >"""
+
+
+__gnu_cxx.__type = __type
+
+class __numeric_traits_less__short__greater_(ctypes.Structure):
+    """class __gnu_cxx::__numeric_traits< short >"""
+
+
+__gnu_cxx.__numeric_traits_less__short__greater_ = __numeric_traits_less__short__greater_
+
+class __type(ctypes.Structure):
+    """class __gnu_cxx::__numeric_traits_integer< unsigned long >"""
+
+
+__gnu_cxx.__type = __type
+
+class __numeric_traits_less__unsigned_long__greater_(ctypes.Structure):
+    """class __gnu_cxx::__numeric_traits< unsigned long >"""
+
+
+__gnu_cxx.__numeric_traits_less__unsigned_long__greater_ = __numeric_traits_less__unsigned_long__greater_
+
+class __remove_unsigned_less__char__greater_(ctypes.Structure):
+    """class __gnu_cxx::__remove_unsigned< char >"""
+
+
+__gnu_cxx.__remove_unsigned_less__char__greater_ = __remove_unsigned_less__char__greater_
+
+class __remove_unsigned_less__unsigned_char__greater_(ctypes.Structure):
+    """class __gnu_cxx::__remove_unsigned< unsigned char >"""
+
+
+__gnu_cxx.__remove_unsigned_less__unsigned_char__greater_ = __remove_unsigned_less__unsigned_char__greater_
+
+class __remove_unsigned_less__unsigned_int__greater_(ctypes.Structure):
+    """class __gnu_cxx::__remove_unsigned< unsigned int >"""
+
+
+__gnu_cxx.__remove_unsigned_less__unsigned_int__greater_ = __remove_unsigned_less__unsigned_int__greater_
+
+class __remove_unsigned_less__unsigned_long_long__greater_(ctypes.Structure):
+    """class __gnu_cxx::__remove_unsigned< unsigned long long >"""
+
+
+__gnu_cxx.__remove_unsigned_less__unsigned_long_long__greater_ = __remove_unsigned_less__unsigned_long_long__greater_
+
+class __remove_unsigned_less__unsigned_long__greater_(ctypes.Structure):
+    """class __gnu_cxx::__remove_unsigned< unsigned long >"""
+
+
+__gnu_cxx.__remove_unsigned_less__unsigned_long__greater_ = __remove_unsigned_less__unsigned_long__greater_
+
+class __remove_unsigned_less__unsigned_short__greater_(ctypes.Structure):
+    """class __gnu_cxx::__remove_unsigned< unsigned short >"""
+
+
+__gnu_cxx.__remove_unsigned_less__unsigned_short__greater_ = __remove_unsigned_less__unsigned_short__greater_
+
+class new_allocator_less__char__greater_(ctypes.Structure):
+    """class __gnu_cxx::new_allocator< char >"""
+
+
+__gnu_cxx.new_allocator_less__char__greater_ = new_allocator_less__char__greater_
+
+class new_allocator_less__wchar_t__greater_(ctypes.Structure):
+    """class __gnu_cxx::new_allocator< wchar_t >"""
+
+
+__gnu_cxx.new_allocator_less__wchar_t__greater_ = new_allocator_less__wchar_t__greater_
+
+class __locale_struct(ctypes.Structure):
+    """class __locale_struct"""
+
+class __mbstate_t(ctypes.Structure):
+    """class __mbstate_t"""
+    
+    class (ctypes.Structure):
+        """class __mbstate_t"""
 
 class __mpf_struct(ctypes.Structure):
     """class __mpf_struct"""
@@ -639,36 +837,1492 @@ class __mpq_struct(ctypes.Structure):
 class __mpz_struct(ctypes.Structure):
     """class __mpz_struct"""
 
-_IO_FILE._fields_ = [ #class _IO_FILE
-    ("_flags", ctypes.c_int),
-    ("_IO_read_ptr", ctypes.c_char_p),
-    ("_IO_read_end", ctypes.c_char_p),
-    ("_IO_read_base", ctypes.c_char_p),
-    ("_IO_write_base", ctypes.c_char_p),
-    ("_IO_write_ptr", ctypes.c_char_p),
-    ("_IO_write_end", ctypes.c_char_p),
-    ("_IO_buf_base", ctypes.c_char_p),
-    ("_IO_buf_end", ctypes.c_char_p),
-    ("_IO_save_base", ctypes.c_char_p),
-    ("_IO_backup_base", ctypes.c_char_p),
-    ("_IO_save_end", ctypes.c_char_p),
-    ("_markers", ctypes.POINTER( _IO_marker )),
-    ("_chain", ctypes.POINTER( _IO_FILE )),
-    ("_fileno", ctypes.c_int),
-    ("_flags2", ctypes.c_int),
-    ("_old_offset", ctypes.c_long),
-    ("_cur_column", ctypes.c_ushort),
-    ("_vtable_offset", ctypes.c_byte),
-    ("_shortbuf", ( ctypes.c_char * 1 )),
-    ("_lock", ctypes.c_void_p),
-    ("_offset", ctypes.c_longlong),
-    ("__pad1", ctypes.c_void_p),
-    ("__pad2", ctypes.c_void_p),
-    ("__pad3", ctypes.c_void_p),
-    ("__pad4", ctypes.c_void_p),
-    ("__pad5", ctypes.c_uint),
-    ("_mode", ctypes.c_int),
-    ("_unused2", ( ctypes.c_char * 40 )),
+class __pthread_cleanup_class(ctypes.Structure):
+    """class __pthread_cleanup_class"""
+
+class __pthread_cleanup_frame(ctypes.Structure):
+    """class __pthread_cleanup_frame"""
+
+class __pthread_internal_slist(ctypes.Structure):
+    """class __pthread_internal_slist"""
+
+class __sched_param(ctypes.Structure):
+    """class __sched_param"""
+
+class __si_class_type_info_pseudo(ctypes.Structure):
+    """class __si_class_type_info_pseudo"""
+
+class __sigset_t(ctypes.Structure):
+    """class __sigset_t"""
+
+class __type_info_pseudo(ctypes.Structure):
+    """class __type_info_pseudo"""
+
+class __vmi_class_type_info_pseudo1(ctypes.Structure):
+    """class __vmi_class_type_info_pseudo1"""
+
+class __vmi_class_type_info_pseudo2(ctypes.Structure):
+    """class __vmi_class_type_info_pseudo2"""
+
+class _pthread_cleanup_buffer(ctypes.Structure):
+    """class _pthread_cleanup_buffer"""
+
+class cpu_set_t(ctypes.Structure):
+    """class cpu_set_t"""
+
+class itimerspec(ctypes.Structure):
+    """class itimerspec"""
+
+class lconv(ctypes.Structure):
+    """class lconv"""
+
+class pthread_attr_t(ctypes.Structure):
+    """class pthread_attr_t"""
+
+class pthread_barrier_t(ctypes.Structure):
+    """class pthread_barrier_t"""
+
+class pthread_barrierattr_t(ctypes.Structure):
+    """class pthread_barrierattr_t"""
+
+class pthread_cond_t(ctypes.Structure):
+    """class pthread_cond_t"""
+    
+    class (ctypes.Structure):
+        """class pthread_cond_t"""
+
+class pthread_condattr_t(ctypes.Structure):
+    """class pthread_condattr_t"""
+
+class pthread_mutex_t(ctypes.Structure):
+    """class pthread_mutex_t"""
+    
+    class __pthread_mutex_s(ctypes.Structure):
+        """class pthread_mutex_t::__pthread_mutex_s"""
+        
+        class (ctypes.Structure):
+            """class pthread_mutex_t::__pthread_mutex_s"""
+
+class pthread_mutexattr_t(ctypes.Structure):
+    """class pthread_mutexattr_t"""
+
+class pthread_rwlock_t(ctypes.Structure):
+    """class pthread_rwlock_t"""
+    
+    class (ctypes.Structure):
+        """class pthread_rwlock_t"""
+
+class pthread_rwlockattr_t(ctypes.Structure):
+    """class pthread_rwlockattr_t"""
+
+class sched_param(ctypes.Structure):
+    """class sched_param"""
+
+class __copy_move_less__false_comma__false_comma__std_scope_random_access_iterator_tag__greater_(ctypes.Structure):
+    """class std::__copy_move< false, false, std::random_access_iterator_tag >"""
+
+
+std.__copy_move_less__false_comma__false_comma__std_scope_random_access_iterator_tag__greater_ = __copy_move_less__false_comma__false_comma__std_scope_random_access_iterator_tag__greater_
+
+class __copy_move_backward_less__false_comma__false_comma__std_scope_random_access_iterator_tag__greater_(ctypes.Structure):
+    """class std::__copy_move_backward< false, false, std::random_access_iterator_tag >"""
+
+
+std.__copy_move_backward_less__false_comma__false_comma__std_scope_random_access_iterator_tag__greater_ = __copy_move_backward_less__false_comma__false_comma__std_scope_random_access_iterator_tag__greater_
+
+class ctype_base(ctypes.Structure):
+    """class std::ctype_base"""
+
+
+std.ctype_base = ctype_base
+
+class __ctype_abstract_base_less__wchar_t__greater_(ctypes.Structure):
+    """class std::__ctype_abstract_base< wchar_t >"""
+
+
+std.__ctype_abstract_base_less__wchar_t__greater_ = __ctype_abstract_base_less__wchar_t__greater_
+
+class __equal_less__true__greater_(ctypes.Structure):
+    """class std::__equal< true >"""
+
+
+std.__equal_less__true__greater_ = __equal_less__true__greater_
+
+class __false_type(ctypes.Structure):
+    """class std::__false_type"""
+
+
+std.__false_type = __false_type
+
+class __is_byte_less__char__greater_(ctypes.Structure):
+    """class std::__is_byte< char >"""
+
+
+std.__is_byte_less__char__greater_ = __is_byte_less__char__greater_
+
+class __is_byte_less__signed_char__greater_(ctypes.Structure):
+    """class std::__is_byte< signed char >"""
+
+
+std.__is_byte_less__signed_char__greater_ = __is_byte_less__signed_char__greater_
+
+class __is_byte_less__unsigned_char__greater_(ctypes.Structure):
+    """class std::__is_byte< unsigned char >"""
+
+
+std.__is_byte_less__unsigned_char__greater_ = __is_byte_less__unsigned_char__greater_
+
+class __is_char_less__char__greater_(ctypes.Structure):
+    """class std::__is_char< char >"""
+
+
+std.__is_char_less__char__greater_ = __is_char_less__char__greater_
+
+class __is_char_less__wchar_t__greater_(ctypes.Structure):
+    """class std::__is_char< wchar_t >"""
+
+
+std.__is_char_less__wchar_t__greater_ = __is_char_less__wchar_t__greater_
+
+class __is_floating_less__double__greater_(ctypes.Structure):
+    """class std::__is_floating< double >"""
+
+
+std.__is_floating_less__double__greater_ = __is_floating_less__double__greater_
+
+class __is_floating_less__float__greater_(ctypes.Structure):
+    """class std::__is_floating< float >"""
+
+
+std.__is_floating_less__float__greater_ = __is_floating_less__float__greater_
+
+class __is_floating_less__long_double__greater_(ctypes.Structure):
+    """class std::__is_floating< long double >"""
+
+
+std.__is_floating_less__long_double__greater_ = __is_floating_less__long_double__greater_
+
+class __is_integer_less__bool__greater_(ctypes.Structure):
+    """class std::__is_integer< bool >"""
+
+
+std.__is_integer_less__bool__greater_ = __is_integer_less__bool__greater_
+
+class __is_integer_less__char__greater_(ctypes.Structure):
+    """class std::__is_integer< char >"""
+
+
+std.__is_integer_less__char__greater_ = __is_integer_less__char__greater_
+
+class __is_integer_less__int__greater_(ctypes.Structure):
+    """class std::__is_integer< int >"""
+
+
+std.__is_integer_less__int__greater_ = __is_integer_less__int__greater_
+
+class __is_integer_less__long_long__greater_(ctypes.Structure):
+    """class std::__is_integer< long long >"""
+
+
+std.__is_integer_less__long_long__greater_ = __is_integer_less__long_long__greater_
+
+class __is_integer_less__long__greater_(ctypes.Structure):
+    """class std::__is_integer< long >"""
+
+
+std.__is_integer_less__long__greater_ = __is_integer_less__long__greater_
+
+class __is_integer_less__short__greater_(ctypes.Structure):
+    """class std::__is_integer< short >"""
+
+
+std.__is_integer_less__short__greater_ = __is_integer_less__short__greater_
+
+class __is_integer_less__signed_char__greater_(ctypes.Structure):
+    """class std::__is_integer< signed char >"""
+
+
+std.__is_integer_less__signed_char__greater_ = __is_integer_less__signed_char__greater_
+
+class __is_integer_less__unsigned_char__greater_(ctypes.Structure):
+    """class std::__is_integer< unsigned char >"""
+
+
+std.__is_integer_less__unsigned_char__greater_ = __is_integer_less__unsigned_char__greater_
+
+class __is_integer_less__unsigned_int__greater_(ctypes.Structure):
+    """class std::__is_integer< unsigned int >"""
+
+
+std.__is_integer_less__unsigned_int__greater_ = __is_integer_less__unsigned_int__greater_
+
+class __is_integer_less__unsigned_long_long__greater_(ctypes.Structure):
+    """class std::__is_integer< unsigned long long >"""
+
+
+std.__is_integer_less__unsigned_long_long__greater_ = __is_integer_less__unsigned_long_long__greater_
+
+class __is_integer_less__unsigned_long__greater_(ctypes.Structure):
+    """class std::__is_integer< unsigned long >"""
+
+
+std.__is_integer_less__unsigned_long__greater_ = __is_integer_less__unsigned_long__greater_
+
+class __is_integer_less__unsigned_short__greater_(ctypes.Structure):
+    """class std::__is_integer< unsigned short >"""
+
+
+std.__is_integer_less__unsigned_short__greater_ = __is_integer_less__unsigned_short__greater_
+
+class __is_integer_less__wchar_t__greater_(ctypes.Structure):
+    """class std::__is_integer< wchar_t >"""
+
+
+std.__is_integer_less__wchar_t__greater_ = __is_integer_less__wchar_t__greater_
+
+class __is_void_less__void__greater_(ctypes.Structure):
+    """class std::__is_void< void >"""
+
+
+std.__is_void_less__void__greater_ = __is_void_less__void__greater_
+
+class __iter_swap_less__true__greater_(ctypes.Structure):
+    """class std::__iter_swap< true >"""
+
+
+std.__iter_swap_less__true__greater_ = __iter_swap_less__true__greater_
+
+class __lc_rai_less__std_scope_random_access_iterator_tag_comma__std_scope_random_access_iterator_tag__greater_(ctypes.Structure):
+    """class std::__lc_rai< std::random_access_iterator_tag, std::random_access_iterator_tag >"""
+
+
+std.__lc_rai_less__std_scope_random_access_iterator_tag_comma__std_scope_random_access_iterator_tag__greater_ = __lc_rai_less__std_scope_random_access_iterator_tag_comma__std_scope_random_access_iterator_tag__greater_
+
+class __lexicographical_compare_less__true__greater_(ctypes.Structure):
+    """class std::__lexicographical_compare< true >"""
+
+
+std.__lexicographical_compare_less__true__greater_ = __lexicographical_compare_less__true__greater_
+
+class __num_base(ctypes.Structure):
+    """class std::__num_base"""
+
+
+std.__num_base = __num_base
+
+class __true_type(ctypes.Structure):
+    """class std::__true_type"""
+
+
+std.__true_type = __true_type
+
+class __truth_type_less__true__greater_(ctypes.Structure):
+    """class std::__truth_type< true >"""
+
+
+std.__truth_type_less__true__greater_ = __truth_type_less__true__greater_
+
+class allocator_less__char__greater_(ctypes.Structure):
+    """class std::allocator< char >"""
+    
+    class rebind_less__char__greater_(ctypes.Structure):
+        """class std::allocator< char >::rebind< char >"""
+
+std.allocator_less__char__greater_ = allocator_less__char__greater_
+
+class allocator_less__void__greater_(ctypes.Structure):
+    """class std::allocator< void >"""
+
+
+std.allocator_less__void__greater_ = allocator_less__void__greater_
+
+class allocator_less__wchar_t__greater_(ctypes.Structure):
+    """class std::allocator< wchar_t >"""
+    
+    class rebind_less__char__greater_(ctypes.Structure):
+        """class std::allocator< wchar_t >::rebind< char >"""
+
+    class rebind_less__wchar_t__greater_(ctypes.Structure):
+        """class std::allocator< wchar_t >::rebind< wchar_t >"""
+
+std.allocator_less__wchar_t__greater_ = allocator_less__wchar_t__greater_
+
+class exception(ctypes.Structure):
+    """class std::exception"""
+
+
+std.exception = exception
+
+class bad_alloc(ctypes.Structure):
+    """class std::bad_alloc"""
+
+
+std.bad_alloc = bad_alloc
+
+class bad_exception(ctypes.Structure):
+    """class std::bad_exception"""
+
+
+std.bad_exception = bad_exception
+
+class ios_base(ctypes.Structure):
+    """class std::ios_base"""
+    
+    class Init(ctypes.Structure):
+        """class std::ios_base::Init"""
+
+    class _Callback_list(ctypes.Structure):
+        """class std::ios_base::_Callback_list"""
+
+    class _Words(ctypes.Structure):
+        """class std::ios_base::_Words"""
+
+    class failure(ctypes.Structure):
+        """class std::ios_base::failure"""
+
+std.ios_base = ios_base
+
+class basic_ios_less__char_comma__std_scope_char_traits_less__char__greater___greater_(ctypes.Structure):
+    """class std::basic_ios< char, std::char_traits< char > >"""
+
+
+std.basic_ios_less__char_comma__std_scope_char_traits_less__char__greater___greater_ = basic_ios_less__char_comma__std_scope_char_traits_less__char__greater___greater_
+
+class basic_ios_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_(ctypes.Structure):
+    """class std::basic_ios< wchar_t, std::char_traits< wchar_t > >"""
+
+
+std.basic_ios_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_ = basic_ios_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_
+
+class basic_istream_less__char_comma__std_scope_char_traits_less__char__greater___greater_(ctypes.Structure):
+    """class std::basic_istream< char, std::char_traits< char > >"""
+    
+    class sentry(ctypes.Structure):
+        """class std::basic_istream< char, std::char_traits< char > >::sentry"""
+
+std.basic_istream_less__char_comma__std_scope_char_traits_less__char__greater___greater_ = basic_istream_less__char_comma__std_scope_char_traits_less__char__greater___greater_
+
+class basic_ostream_less__char_comma__std_scope_char_traits_less__char__greater___greater_(ctypes.Structure):
+    """class std::basic_ostream< char, std::char_traits< char > >"""
+    
+    class sentry(ctypes.Structure):
+        """class std::basic_ostream< char, std::char_traits< char > >::sentry"""
+
+std.basic_ostream_less__char_comma__std_scope_char_traits_less__char__greater___greater_ = basic_ostream_less__char_comma__std_scope_char_traits_less__char__greater___greater_
+
+class iostream(ctypes.Structure):
+    """class std::basic_iostream< char, std::char_traits< char > >"""
+
+
+std.iostream = iostream
+
+class basic_istream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_(ctypes.Structure):
+    """class std::basic_istream< wchar_t, std::char_traits< wchar_t > >"""
+    
+    class sentry(ctypes.Structure):
+        """class std::basic_istream< wchar_t, std::char_traits< wchar_t > >::sentry"""
+
+std.basic_istream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_ = basic_istream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_
+
+class basic_ostream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_(ctypes.Structure):
+    """class std::basic_ostream< wchar_t, std::char_traits< wchar_t > >"""
+    
+    class sentry(ctypes.Structure):
+        """class std::basic_ostream< wchar_t, std::char_traits< wchar_t > >::sentry"""
+
+std.basic_ostream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_ = basic_ostream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_
+
+class wiostream(ctypes.Structure):
+    """class std::basic_iostream< wchar_t, std::char_traits< wchar_t > >"""
+
+
+std.wiostream = wiostream
+
+class basic_streambuf_less__char_comma__std_scope_char_traits_less__char__greater___greater_(ctypes.Structure):
+    """class std::basic_streambuf< char, std::char_traits< char > >"""
+
+
+std.basic_streambuf_less__char_comma__std_scope_char_traits_less__char__greater___greater_ = basic_streambuf_less__char_comma__std_scope_char_traits_less__char__greater___greater_
+
+class basic_streambuf_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_(ctypes.Structure):
+    """class std::basic_streambuf< wchar_t, std::char_traits< wchar_t > >"""
+
+
+std.basic_streambuf_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_ = basic_streambuf_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_
+
+class string(ctypes.Structure):
+    """class std::string"""
+    
+    class _Alloc_hider(ctypes.Structure):
+        """class std::string::_Alloc_hider"""
+
+    class _Rep_base(ctypes.Structure):
+        """class std::string::_Rep_base"""
+
+    class _Rep(ctypes.Structure):
+        """class std::string::_Rep"""
+
+std.string = string
+
+class wstring(ctypes.Structure):
+    """class std::wstring"""
+    
+    class _Alloc_hider(ctypes.Structure):
+        """class std::wstring::_Alloc_hider"""
+
+    class _Rep_base(ctypes.Structure):
+        """class std::wstring::_Rep_base"""
+
+    class _Rep(ctypes.Structure):
+        """class std::wstring::_Rep"""
+
+std.wstring = wstring
+
+class input_iterator_tag(ctypes.Structure):
+    """class std::input_iterator_tag"""
+
+
+std.input_iterator_tag = input_iterator_tag
+
+class forward_iterator_tag(ctypes.Structure):
+    """class std::forward_iterator_tag"""
+
+
+std.forward_iterator_tag = forward_iterator_tag
+
+class bidirectional_iterator_tag(ctypes.Structure):
+    """class std::bidirectional_iterator_tag"""
+
+
+std.bidirectional_iterator_tag = bidirectional_iterator_tag
+
+class traits_type(ctypes.Structure):
+    """class std::char_traits< char >"""
+
+
+std.traits_type = traits_type
+
+class traits_type(ctypes.Structure):
+    """class std::char_traits< wchar_t >"""
+
+
+std.traits_type = traits_type
+
+class collate_less__char__greater_(ctypes.Structure):
+    """class std::collate< char >"""
+
+
+std.collate_less__char__greater_ = collate_less__char__greater_
+
+class collate_less__wchar_t__greater_(ctypes.Structure):
+    """class std::collate< wchar_t >"""
+
+
+std.collate_less__wchar_t__greater_ = collate_less__wchar_t__greater_
+
+class collate_byname_less__char__greater_(ctypes.Structure):
+    """class std::collate_byname< char >"""
+
+
+std.collate_byname_less__char__greater_ = collate_byname_less__char__greater_
+
+class collate_byname_less__wchar_t__greater_(ctypes.Structure):
+    """class std::collate_byname< wchar_t >"""
+
+
+std.collate_byname_less__wchar_t__greater_ = collate_byname_less__wchar_t__greater_
+
+class __ctype_type(ctypes.Structure):
+    """class std::ctype< char >"""
+
+
+std.__ctype_type = __ctype_type
+
+class __ctype_type(ctypes.Structure):
+    """class std::ctype< wchar_t >"""
+
+
+std.__ctype_type = __ctype_type
+
+class ctype_byname_less__char__greater_(ctypes.Structure):
+    """class std::ctype_byname< char >"""
+
+
+std.ctype_byname_less__char__greater_ = ctype_byname_less__char__greater_
+
+class ctype_byname_less__wchar_t__greater_(ctypes.Structure):
+    """class std::ctype_byname< wchar_t >"""
+
+
+std.ctype_byname_less__wchar_t__greater_ = ctype_byname_less__wchar_t__greater_
+
+class iterator_less__std_scope_output_iterator_tag_comma__void_comma__void_comma__void_comma__void__greater_(ctypes.Structure):
+    """class std::iterator< std::output_iterator_tag, void, void, void, void >"""
+
+
+std.iterator_less__std_scope_output_iterator_tag_comma__void_comma__void_comma__void_comma__void__greater_ = iterator_less__std_scope_output_iterator_tag_comma__void_comma__void_comma__void_comma__void__greater_
+
+class locale(ctypes.Structure):
+    """class std::locale"""
+    
+    class _Impl(ctypes.Structure):
+        """class std::locale::_Impl"""
+
+    class facet(ctypes.Structure):
+        """class std::locale::facet"""
+
+    class id(ctypes.Structure):
+        """class std::locale::id"""
+
+std.locale = locale
+
+class nothrow_t(ctypes.Structure):
+    """class std::nothrow_t"""
+
+
+std.nothrow_t = nothrow_t
+
+class __num_get_type(ctypes.Structure):
+    """class std::num_get< char, std::istreambuf_iterator< char, std::char_traits< char > > >"""
+
+
+std.__num_get_type = __num_get_type
+
+class __num_get_type(ctypes.Structure):
+    """class std::num_get< wchar_t, std::istreambuf_iterator< wchar_t, std::char_traits< wchar_t > > >"""
+
+
+std.__num_get_type = __num_get_type
+
+class __num_put_type(ctypes.Structure):
+    """class std::num_put< char, std::ostreambuf_iterator< char, std::char_traits< char > > >"""
+
+
+std.__num_put_type = __num_put_type
+
+class __num_put_type(ctypes.Structure):
+    """class std::num_put< wchar_t, std::ostreambuf_iterator< wchar_t, std::char_traits< wchar_t > > >"""
+
+
+std.__num_put_type = __num_put_type
+
+class numpunct_less__char__greater_(ctypes.Structure):
+    """class std::numpunct< char >"""
+
+
+std.numpunct_less__char__greater_ = numpunct_less__char__greater_
+
+class numpunct_less__wchar_t__greater_(ctypes.Structure):
+    """class std::numpunct< wchar_t >"""
+
+
+std.numpunct_less__wchar_t__greater_ = numpunct_less__wchar_t__greater_
+
+class numpunct_byname_less__char__greater_(ctypes.Structure):
+    """class std::numpunct_byname< char >"""
+
+
+std.numpunct_byname_less__char__greater_ = numpunct_byname_less__char__greater_
+
+class numpunct_byname_less__wchar_t__greater_(ctypes.Structure):
+    """class std::numpunct_byname< wchar_t >"""
+
+
+std.numpunct_byname_less__wchar_t__greater_ = numpunct_byname_less__wchar_t__greater_
+
+class output_iterator_tag(ctypes.Structure):
+    """class std::output_iterator_tag"""
+
+
+std.output_iterator_tag = output_iterator_tag
+
+class random_access_iterator_tag(ctypes.Structure):
+    """class std::random_access_iterator_tag"""
+
+
+std.random_access_iterator_tag = random_access_iterator_tag
+
+class timespec(ctypes.Structure):
+    """class timespec"""
+
+class tm(ctypes.Structure):
+    """class tm"""
+
+class basic_istringstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater_(ctypes.Structure):
+    """class declaration std::basic_istringstream< wchar_t, std::char_traits< wchar_t >, std::allocator< wchar_t > >"""
+    _fields_  = []
+std.basic_istringstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater_ = basic_istringstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater_
+
+class basic_ifstream_less__char_comma__std_scope_char_traits_less__char__greater___greater_(ctypes.Structure):
+    """class declaration std::basic_ifstream< char, std::char_traits< char > >"""
+    _fields_  = []
+std.basic_ifstream_less__char_comma__std_scope_char_traits_less__char__greater___greater_ = basic_ifstream_less__char_comma__std_scope_char_traits_less__char__greater___greater_
+
+class money_base(ctypes.Structure):
+    """class declaration std::money_base"""
+    _fields_  = []
+std.money_base = money_base
+
+class time_base(ctypes.Structure):
+    """class declaration std::time_base"""
+    _fields_  = []
+std.time_base = time_base
+
+class basic_istringstream_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater_(ctypes.Structure):
+    """class declaration std::basic_istringstream< char, std::char_traits< char >, std::allocator< char > >"""
+    _fields_  = []
+std.basic_istringstream_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater_ = basic_istringstream_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater_
+
+class basic_stringbuf_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater_(ctypes.Structure):
+    """class declaration std::basic_stringbuf< char, std::char_traits< char >, std::allocator< char > >"""
+    _fields_  = []
+std.basic_stringbuf_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater_ = basic_stringbuf_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater_
+
+class basic_ostringstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater_(ctypes.Structure):
+    """class declaration std::basic_ostringstream< wchar_t, std::char_traits< wchar_t >, std::allocator< wchar_t > >"""
+    _fields_  = []
+std.basic_ostringstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater_ = basic_ostringstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater_
+
+class messages_base(ctypes.Structure):
+    """class declaration std::messages_base"""
+    _fields_  = []
+std.messages_base = messages_base
+
+class basic_stringstream_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater_(ctypes.Structure):
+    """class declaration std::basic_stringstream< char, std::char_traits< char >, std::allocator< char > >"""
+    _fields_  = []
+std.basic_stringstream_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater_ = basic_stringstream_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater_
+
+class __numpunct_cache_less__wchar_t__greater_(ctypes.Structure):
+    """class declaration std::__numpunct_cache< wchar_t >"""
+    _fields_  = []
+std.__numpunct_cache_less__wchar_t__greater_ = __numpunct_cache_less__wchar_t__greater_
+
+class __numpunct_cache_less__char__greater_(ctypes.Structure):
+    """class declaration std::__numpunct_cache< char >"""
+    _fields_  = []
+std.__numpunct_cache_less__char__greater_ = __numpunct_cache_less__char__greater_
+
+class basic_stringbuf_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater_(ctypes.Structure):
+    """class declaration std::basic_stringbuf< wchar_t, std::char_traits< wchar_t >, std::allocator< wchar_t > >"""
+    _fields_  = []
+std.basic_stringbuf_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater_ = basic_stringbuf_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater_
+
+class basic_ofstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_(ctypes.Structure):
+    """class declaration std::basic_ofstream< wchar_t, std::char_traits< wchar_t > >"""
+    _fields_  = []
+std.basic_ofstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_ = basic_ofstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_
+
+class basic_ofstream_less__char_comma__std_scope_char_traits_less__char__greater___greater_(ctypes.Structure):
+    """class declaration std::basic_ofstream< char, std::char_traits< char > >"""
+    _fields_  = []
+std.basic_ofstream_less__char_comma__std_scope_char_traits_less__char__greater___greater_ = basic_ofstream_less__char_comma__std_scope_char_traits_less__char__greater___greater_
+
+class basic_stringstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater_(ctypes.Structure):
+    """class declaration std::basic_stringstream< wchar_t, std::char_traits< wchar_t >, std::allocator< wchar_t > >"""
+    _fields_  = []
+std.basic_stringstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater_ = basic_stringstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater_
+
+class basic_ostringstream_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater_(ctypes.Structure):
+    """class declaration std::basic_ostringstream< char, std::char_traits< char >, std::allocator< char > >"""
+    _fields_  = []
+std.basic_ostringstream_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater_ = basic_ostringstream_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater_
+
+class basic_fstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_(ctypes.Structure):
+    """class declaration std::basic_fstream< wchar_t, std::char_traits< wchar_t > >"""
+    _fields_  = []
+std.basic_fstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_ = basic_fstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_
+
+class basic_fstream_less__char_comma__std_scope_char_traits_less__char__greater___greater_(ctypes.Structure):
+    """class declaration std::basic_fstream< char, std::char_traits< char > >"""
+    _fields_  = []
+std.basic_fstream_less__char_comma__std_scope_char_traits_less__char__greater___greater_ = basic_fstream_less__char_comma__std_scope_char_traits_less__char__greater___greater_
+
+class istreambuf_iterator_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_(ctypes.Structure):
+    """class declaration std::istreambuf_iterator< wchar_t, std::char_traits< wchar_t > >"""
+    _fields_  = []
+std.istreambuf_iterator_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_ = istreambuf_iterator_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_
+
+class istreambuf_iterator_less__char_comma__std_scope_char_traits_less__char__greater___greater_(ctypes.Structure):
+    """class declaration std::istreambuf_iterator< char, std::char_traits< char > >"""
+    _fields_  = []
+std.istreambuf_iterator_less__char_comma__std_scope_char_traits_less__char__greater___greater_ = istreambuf_iterator_less__char_comma__std_scope_char_traits_less__char__greater___greater_
+
+class basic_ifstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_(ctypes.Structure):
+    """class declaration std::basic_ifstream< wchar_t, std::char_traits< wchar_t > >"""
+    _fields_  = []
+std.basic_ifstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_ = basic_ifstream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_
+
+class basic_filebuf_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_(ctypes.Structure):
+    """class declaration std::basic_filebuf< wchar_t, std::char_traits< wchar_t > >"""
+    _fields_  = []
+std.basic_filebuf_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_ = basic_filebuf_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_
+
+class basic_filebuf_less__char_comma__std_scope_char_traits_less__char__greater___greater_(ctypes.Structure):
+    """class declaration std::basic_filebuf< char, std::char_traits< char > >"""
+    _fields_  = []
+std.basic_filebuf_less__char_comma__std_scope_char_traits_less__char__greater___greater_ = basic_filebuf_less__char_comma__std_scope_char_traits_less__char__greater___greater_
+
+class reverse_iterator_less____gnu_cxx_scope___normal_iterator_less__const_wchar_t_ptr__comma__std_scope_basic_string_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater___greater___greater_(ctypes.Structure):
+    """class declaration std::reverse_iterator< __gnu_cxx::__normal_iterator< const wchar_t*, std::basic_string< wchar_t, std::char_traits< wchar_t >, std::allocator< wchar_t > > > >"""
+    _fields_  = []
+std.reverse_iterator_less____gnu_cxx_scope___normal_iterator_less__const_wchar_t_ptr__comma__std_scope_basic_string_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater___greater___greater_ = reverse_iterator_less____gnu_cxx_scope___normal_iterator_less__const_wchar_t_ptr__comma__std_scope_basic_string_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater___greater___greater_
+
+class reverse_iterator_less____gnu_cxx_scope___normal_iterator_less__wchar_t_ptr__comma__std_scope_basic_string_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater___greater___greater_(ctypes.Structure):
+    """class declaration std::reverse_iterator< __gnu_cxx::__normal_iterator< wchar_t*, std::basic_string< wchar_t, std::char_traits< wchar_t >, std::allocator< wchar_t > > > >"""
+    _fields_  = []
+std.reverse_iterator_less____gnu_cxx_scope___normal_iterator_less__wchar_t_ptr__comma__std_scope_basic_string_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater___greater___greater_ = reverse_iterator_less____gnu_cxx_scope___normal_iterator_less__wchar_t_ptr__comma__std_scope_basic_string_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater___greater___greater_
+
+class reverse_iterator_less____gnu_cxx_scope___normal_iterator_less__const_char_ptr__comma__std_scope_basic_string_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater___greater___greater_(ctypes.Structure):
+    """class declaration std::reverse_iterator< __gnu_cxx::__normal_iterator< const char*, std::basic_string< char, std::char_traits< char >, std::allocator< char > > > >"""
+    _fields_  = []
+std.reverse_iterator_less____gnu_cxx_scope___normal_iterator_less__const_char_ptr__comma__std_scope_basic_string_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater___greater___greater_ = reverse_iterator_less____gnu_cxx_scope___normal_iterator_less__const_char_ptr__comma__std_scope_basic_string_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater___greater___greater_
+
+class reverse_iterator_less____gnu_cxx_scope___normal_iterator_less__char_ptr__comma__std_scope_basic_string_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater___greater___greater_(ctypes.Structure):
+    """class declaration std::reverse_iterator< __gnu_cxx::__normal_iterator< char*, std::basic_string< char, std::char_traits< char >, std::allocator< char > > > >"""
+    _fields_  = []
+std.reverse_iterator_less____gnu_cxx_scope___normal_iterator_less__char_ptr__comma__std_scope_basic_string_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater___greater___greater_ = reverse_iterator_less____gnu_cxx_scope___normal_iterator_less__char_ptr__comma__std_scope_basic_string_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater___greater___greater_
+
+class fpos_less____mbstate_t__greater_(ctypes.Structure):
+    """class declaration std::fpos< __mbstate_t >"""
+    _fields_  = []
+std.fpos_less____mbstate_t__greater_ = fpos_less____mbstate_t__greater_
+
+class codecvt_base(ctypes.Structure):
+    """class declaration std::codecvt_base"""
+    _fields_  = []
+std.codecvt_base = codecvt_base
+
+class codecvt_less__wchar_t_comma__char_comma____mbstate_t__greater_(ctypes.Structure):
+    """class declaration std::codecvt< wchar_t, char, __mbstate_t >"""
+    _fields_  = []
+std.codecvt_less__wchar_t_comma__char_comma____mbstate_t__greater_ = codecvt_less__wchar_t_comma__char_comma____mbstate_t__greater_
+
+class codecvt_less__char_comma__char_comma____mbstate_t__greater_(ctypes.Structure):
+    """class declaration std::codecvt< char, char, __mbstate_t >"""
+    _fields_  = []
+std.codecvt_less__char_comma__char_comma____mbstate_t__greater_ = codecvt_less__char_comma__char_comma____mbstate_t__greater_
+
+class __iter_swap_less___obrace__obrace_std_scope___are_same_less_typename_std_scope_iterator_traits_less__Iter_greater__scope_value_type_comma_typename_std_scope_iterator_traits_less__ForwardIterator2_greater__scope_value_type_greater__scope___value__ref__ref__std_scope___are_same_less_typename_std_scope_iterator_traits_less__Iter_greater__scope_value_type_ref__comma_typename_std_scope_iterator_traits_less__Iter_greater__scope_reference_greater__scope___value_cbrace___ref__ref__std_scope___are_same_less_typename_std_scope_iterator_traits_less__ForwardIterator2_greater__scope_value_type_ref__comma_typename_std_scope_iterator_traits_less__ForwardIterator2_greater__scope_reference_greater__scope___value_cbrace___greater_(ctypes.Structure):
+    """class declaration std::__iter_swap< ((std::__are_same<typename std::iterator_traits<_Iter>::value_type,typename std::iterator_traits<_ForwardIterator2>::value_type>::__value && std::__are_same<typename std::iterator_traits<_Iter>::value_type&,typename std::iterator_traits<_Iter>::reference>::__value) && std::__are_same<typename std::iterator_traits<_ForwardIterator2>::value_type&,typename std::iterator_traits<_ForwardIterator2>::reference>::__value) >"""
+    _fields_  = []
+std.__iter_swap_less___obrace__obrace_std_scope___are_same_less_typename_std_scope_iterator_traits_less__Iter_greater__scope_value_type_comma_typename_std_scope_iterator_traits_less__ForwardIterator2_greater__scope_value_type_greater__scope___value__ref__ref__std_scope___are_same_less_typename_std_scope_iterator_traits_less__Iter_greater__scope_value_type_ref__comma_typename_std_scope_iterator_traits_less__Iter_greater__scope_reference_greater__scope___value_cbrace___ref__ref__std_scope___are_same_less_typename_std_scope_iterator_traits_less__ForwardIterator2_greater__scope_value_type_ref__comma_typename_std_scope_iterator_traits_less__ForwardIterator2_greater__scope_reference_greater__scope___value_cbrace___greater_ = __iter_swap_less___obrace__obrace_std_scope___are_same_less_typename_std_scope_iterator_traits_less__Iter_greater__scope_value_type_comma_typename_std_scope_iterator_traits_less__ForwardIterator2_greater__scope_value_type_greater__scope___value__ref__ref__std_scope___are_same_less_typename_std_scope_iterator_traits_less__Iter_greater__scope_value_type_ref__comma_typename_std_scope_iterator_traits_less__Iter_greater__scope_reference_greater__scope___value_cbrace___ref__ref__std_scope___are_same_less_typename_std_scope_iterator_traits_less__ForwardIterator2_greater__scope_value_type_ref__comma_typename_std_scope_iterator_traits_less__ForwardIterator2_greater__scope_reference_greater__scope___value_cbrace___greater_
+
+class ostreambuf_iterator_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_(ctypes.Structure):
+    """class declaration std::ostreambuf_iterator< wchar_t, std::char_traits< wchar_t > >"""
+    _fields_  = []
+std.ostreambuf_iterator_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_ = ostreambuf_iterator_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_
+
+class ostreambuf_iterator_less__char_comma__std_scope_char_traits_less__char__greater___greater_(ctypes.Structure):
+    """class declaration std::ostreambuf_iterator< char, std::char_traits< char > >"""
+    _fields_  = []
+std.ostreambuf_iterator_less__char_comma__std_scope_char_traits_less__char__greater___greater_ = ostreambuf_iterator_less__char_comma__std_scope_char_traits_less__char__greater___greater_
+
+class obstack(ctypes.Structure):
+    """class declaration obstack"""
+    _fields_  = []
+
+class sigevent(ctypes.Structure):
+    """class declaration sigevent"""
+    _fields_  = []
+
+class __numeric_traits_floating_less__short_int__greater_(ctypes.Structure):
+    """class declaration __gnu_cxx::__numeric_traits_floating< short int >"""
+    _fields_  = []
+__gnu_cxx.__numeric_traits_floating_less__short_int__greater_ = __numeric_traits_floating_less__short_int__greater_
+
+class __numeric_traits_floating_less__long_unsigned_int__greater_(ctypes.Structure):
+    """class declaration __gnu_cxx::__numeric_traits_floating< long unsigned int >"""
+    _fields_  = []
+__gnu_cxx.__numeric_traits_floating_less__long_unsigned_int__greater_ = __numeric_traits_floating_less__long_unsigned_int__greater_
+
+class __numeric_traits_floating_less__int__greater_(ctypes.Structure):
+    """class declaration __gnu_cxx::__numeric_traits_floating< int >"""
+    _fields_  = []
+__gnu_cxx.__numeric_traits_floating_less__int__greater_ = __numeric_traits_floating_less__int__greater_
+
+class __add_unsigned_less__wchar_t__greater_(ctypes.Structure):
+    """class declaration __gnu_cxx::__add_unsigned< wchar_t >"""
+    _fields_  = []
+__gnu_cxx.__add_unsigned_less__wchar_t__greater_ = __add_unsigned_less__wchar_t__greater_
+
+class __add_unsigned_less__bool__greater_(ctypes.Structure):
+    """class declaration __gnu_cxx::__add_unsigned< bool >"""
+    _fields_  = []
+__gnu_cxx.__add_unsigned_less__bool__greater_ = __add_unsigned_less__bool__greater_
+
+class __enable_if_less__!_std_scope___is_char_less__CharT2_greater__scope___value_comma__int__greater_(ctypes.Structure):
+    """class declaration __gnu_cxx::__enable_if< ! std::__is_char<_CharT2>::__value, int >"""
+    _fields_  = []
+__gnu_cxx.__enable_if_less__!_std_scope___is_char_less__CharT2_greater__scope___value_comma__int__greater_ = __enable_if_less__!_std_scope___is_char_less__CharT2_greater__scope___value_comma__int__greater_
+
+class __enable_if_less__!_std_scope___is_scalar_less__Tp_greater__scope___value_comma__void__greater_(ctypes.Structure):
+    """class declaration __gnu_cxx::__enable_if< ! std::__is_scalar<_Tp>::__value, void >"""
+    _fields_  = []
+__gnu_cxx.__enable_if_less__!_std_scope___is_scalar_less__Tp_greater__scope___value_comma__void__greater_ = __enable_if_less__!_std_scope___is_scalar_less__Tp_greater__scope___value_comma__void__greater_
+
+class __remove_unsigned_less__wchar_t__greater_(ctypes.Structure):
+    """class declaration __gnu_cxx::__remove_unsigned< wchar_t >"""
+    _fields_  = []
+__gnu_cxx.__remove_unsigned_less__wchar_t__greater_ = __remove_unsigned_less__wchar_t__greater_
+
+class __remove_unsigned_less__bool__greater_(ctypes.Structure):
+    """class declaration __gnu_cxx::__remove_unsigned< bool >"""
+    _fields_  = []
+__gnu_cxx.__remove_unsigned_less__bool__greater_ = __remove_unsigned_less__bool__greater_
+
+class __normal_iterator_less__wchar_t_ptr__comma__std_scope_basic_string_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater___greater_(ctypes.Structure):
+    """class declaration __gnu_cxx::__normal_iterator< wchar_t*, std::basic_string< wchar_t, std::char_traits< wchar_t >, std::allocator< wchar_t > > >"""
+    _fields_  = []
+__gnu_cxx.__normal_iterator_less__wchar_t_ptr__comma__std_scope_basic_string_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater___greater_ = __normal_iterator_less__wchar_t_ptr__comma__std_scope_basic_string_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater___greater_
+
+class __normal_iterator_less__const_wchar_t_ptr__comma__std_scope_basic_string_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater___greater_(ctypes.Structure):
+    """class declaration __gnu_cxx::__normal_iterator< const wchar_t*, std::basic_string< wchar_t, std::char_traits< wchar_t >, std::allocator< wchar_t > > >"""
+    _fields_  = []
+__gnu_cxx.__normal_iterator_less__const_wchar_t_ptr__comma__std_scope_basic_string_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater___greater_ = __normal_iterator_less__const_wchar_t_ptr__comma__std_scope_basic_string_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater__comma__std_scope_allocator_less__wchar_t__greater___greater___greater_
+
+class __normal_iterator_less__char_ptr__comma__std_scope_basic_string_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater___greater_(ctypes.Structure):
+    """class declaration __gnu_cxx::__normal_iterator< char*, std::basic_string< char, std::char_traits< char >, std::allocator< char > > >"""
+    _fields_  = []
+__gnu_cxx.__normal_iterator_less__char_ptr__comma__std_scope_basic_string_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater___greater_ = __normal_iterator_less__char_ptr__comma__std_scope_basic_string_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater___greater_
+
+class __normal_iterator_less__const_char_ptr__comma__std_scope_basic_string_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater___greater_(ctypes.Structure):
+    """class declaration __gnu_cxx::__normal_iterator< const char*, std::basic_string< char, std::char_traits< char >, std::allocator< char > > >"""
+    _fields_  = []
+__gnu_cxx.__normal_iterator_less__const_char_ptr__comma__std_scope_basic_string_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater___greater_ = __normal_iterator_less__const_char_ptr__comma__std_scope_basic_string_less__char_comma__std_scope_char_traits_less__char__greater__comma__std_scope_allocator_less__char__greater___greater___greater_
+
+class _IO_jump_t(ctypes.Structure):
+    """class declaration _IO_jump_t"""
+    _fields_  = []
+
+class __jmp_buf_tag(ctypes.Structure):
+    """class declaration __jmp_buf_tag"""
+    _fields_  = []
+
+class locale_data(ctypes.Structure):
+    """class declaration locale_data"""
+    _fields_  = []
+
+class _IO_cookie_file(ctypes.Structure):
+    """class declaration _IO_cookie_file"""
+    _fields_  = []
+
+class _IO_FILE_plus(ctypes.Structure):
+    """class declaration _IO_FILE_plus"""
+    _fields_  = []
+
+std.collate_byname_less__wchar_t__greater_._fields_ = [ #class std::collate_byname< wchar_t >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.collate_byname_less__char__greater_._fields_ = [ #class std::collate_byname< char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.bad_exception._fields_ = [ #class std::bad_exception
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.wstring._fields_ = [ #class std::wstring
+    ("npos", ctypes.c_uint),
+    ("_M_dataplus", std.wstring._Alloc_hider),
+]
+
+std.wstring._Rep_base._fields_ = [ #class std::wstring::_Rep_base
+    ("_M_length", ctypes.c_uint),
+    ("_M_capacity", ctypes.c_uint),
+    ("_M_refcount", ctypes.c_int),
+]
+
+std.wstring._Rep._fields_ = [ #class std::wstring::_Rep
+    ("_S_max_size", ctypes.c_uint),
+    ("_S_terminal", ctypes.c_wchar),
+    ("_S_empty_rep_storage", ( ctypes.c_uint * 4 )),
+]
+
+std.wstring._Alloc_hider._fields_ = [ #class std::wstring::_Alloc_hider
+    ("_M_p", ctypes.c_wchar_p),
+]
+
+std.basic_istream_less__char_comma__std_scope_char_traits_less__char__greater___greater_._fields_ = [ #class std::basic_istream< char, std::char_traits< char > >
+    ("_M_gcount", ctypes.c_int),
+]
+
+std.basic_istream_less__char_comma__std_scope_char_traits_less__char__greater___greater_.sentry._fields_ = [ #class std::basic_istream< char, std::char_traits< char > >::sentry
+    ("_M_ok", ctypes.c_bool),
+]
+
+std.basic_streambuf_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_._fields_ = [ #class std::basic_streambuf< wchar_t, std::char_traits< wchar_t > >
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("_M_in_beg", ctypes.c_wchar_p),
+    ("_M_in_cur", ctypes.c_wchar_p),
+    ("_M_in_end", ctypes.c_wchar_p),
+    ("_M_out_beg", ctypes.c_wchar_p),
+    ("_M_out_cur", ctypes.c_wchar_p),
+    ("_M_out_end", ctypes.c_wchar_p),
+    ("_M_buf_locale", std.locale),
+]
+
+std.basic_streambuf_less__char_comma__std_scope_char_traits_less__char__greater___greater_._fields_ = [ #class std::basic_streambuf< char, std::char_traits< char > >
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("_M_in_beg", ctypes.c_char_p),
+    ("_M_in_cur", ctypes.c_char_p),
+    ("_M_in_end", ctypes.c_char_p),
+    ("_M_out_beg", ctypes.c_char_p),
+    ("_M_out_cur", ctypes.c_char_p),
+    ("_M_out_end", ctypes.c_char_p),
+    ("_M_buf_locale", std.locale),
+]
+
+std.input_iterator_tag._fields_ = [ #class std::input_iterator_tag
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__copy_move_less__false_comma__false_comma__std_scope_random_access_iterator_tag__greater_._fields_ = [ #class std::__copy_move< false, false, std::random_access_iterator_tag >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__false_type._fields_ = [ #class std::__false_type
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.collate_less__wchar_t__greater_._fields_ = [ #class std::collate< wchar_t >
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("_M_c_locale_collate", ctypes.POINTER( __locale_struct )),
+    ("id", std.locale.id),
+]
+
+std.collate_less__char__greater_._fields_ = [ #class std::collate< char >
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("_M_c_locale_collate", ctypes.POINTER( __locale_struct )),
+    ("id", std.locale.id),
+]
+
+std.__lexicographical_compare_less__true__greater_._fields_ = [ #class std::__lexicographical_compare< true >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.basic_ostream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_._fields_ = [ #class std::basic_ostream< wchar_t, std::char_traits< wchar_t > >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.basic_ostream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_.sentry._fields_ = [ #class std::basic_ostream< wchar_t, std::char_traits< wchar_t > >::sentry
+    ("_M_ok", ctypes.c_bool),
+    ("_M_os", ctypes.POINTER( std.basic_ostream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_ )),
+]
+
+std.string._fields_ = [ #class std::string
+    ("npos", ctypes.c_uint),
+    ("_M_dataplus", std.string._Alloc_hider),
+]
+
+std.string._Rep_base._fields_ = [ #class std::string::_Rep_base
+    ("_M_length", ctypes.c_uint),
+    ("_M_capacity", ctypes.c_uint),
+    ("_M_refcount", ctypes.c_int),
+]
+
+std.string._Rep._fields_ = [ #class std::string::_Rep
+    ("_S_max_size", ctypes.c_uint),
+    ("_S_terminal", ctypes.c_char),
+    ("_S_empty_rep_storage", ( ctypes.c_uint * 4 )),
+]
+
+std.string._Alloc_hider._fields_ = [ #class std::string::_Alloc_hider
+    ("_M_p", ctypes.c_char_p),
+]
+
+std.locale._fields_ = [ #class std::locale
+    ("none", ctypes.c_int),
+    ("ctype", ctypes.c_int),
+    ("numeric", ctypes.c_int),
+    ("collate", ctypes.c_int),
+    ("time", ctypes.c_int),
+    ("monetary", ctypes.c_int),
+    ("messages", ctypes.c_int),
+    ("all", ctypes.c_int),
+    ("_M_impl", ctypes.POINTER( std.locale._Impl )),
+    ("_S_classic", ctypes.POINTER( std.locale._Impl )),
+    ("_S_global", ctypes.POINTER( std.locale._Impl )),
+    ("_S_categories", ctypes.POINTER( ctypes.c_char_p )),
+    ("_S_once", ctypes.c_int),
+]
+
+std.locale.facet._fields_ = [ #class std::locale::facet
+    ("_M_refcount", ctypes.c_int),
+    ("_S_c_locale", ctypes.POINTER( __locale_struct )),
+    ("_S_c_name", ( ctypes.c_char * 2 )),
+    ("_S_once", ctypes.c_int),
+]
+
+std.locale.id._fields_ = [ #class std::locale::id
+    ("_M_index", ctypes.c_uint),
+    ("_S_refcount", ctypes.c_int),
+]
+
+std.locale._Impl._fields_ = [ #class std::locale::_Impl
+    ("_M_refcount", ctypes.c_int),
+    ("_M_facets", ctypes.POINTER( ctypes.POINTER( std.locale.facet ) )),
+    ("_M_facets_size", ctypes.c_uint),
+    ("_M_caches", ctypes.POINTER( ctypes.POINTER( std.locale.facet ) )),
+    ("_M_names", ctypes.POINTER( ctypes.c_char_p )),
+    ("_S_id_ctype", ( ctypes.POINTER( std.locale.id ) * 0 )),
+    ("_S_id_numeric", ( ctypes.POINTER( std.locale.id ) * 0 )),
+    ("_S_id_collate", ( ctypes.POINTER( std.locale.id ) * 0 )),
+    ("_S_id_time", ( ctypes.POINTER( std.locale.id ) * 0 )),
+    ("_S_id_monetary", ( ctypes.POINTER( std.locale.id ) * 0 )),
+    ("_S_id_messages", ( ctypes.POINTER( std.locale.id ) * 0 )),
+    ("_S_facet_categories", ( ctypes.POINTER( ctypes.POINTER( std.locale.id ) ) * 0 )),
+]
+
+std.ios_base._fields_ = [ #class std::ios_base
+    ("boolalpha", std._Ios_Fmtflags),
+    ("dec", std._Ios_Fmtflags),
+    ("fixed", std._Ios_Fmtflags),
+    ("hex", std._Ios_Fmtflags),
+    ("internal", std._Ios_Fmtflags),
+    ("left", std._Ios_Fmtflags),
+    ("oct", std._Ios_Fmtflags),
+    ("right", std._Ios_Fmtflags),
+    ("scientific", std._Ios_Fmtflags),
+    ("showbase", std._Ios_Fmtflags),
+    ("showpoint", std._Ios_Fmtflags),
+    ("showpos", std._Ios_Fmtflags),
+    ("skipws", std._Ios_Fmtflags),
+    ("unitbuf", std._Ios_Fmtflags),
+    ("uppercase", std._Ios_Fmtflags),
+    ("adjustfield", std._Ios_Fmtflags),
+    ("basefield", std._Ios_Fmtflags),
+    ("floatfield", std._Ios_Fmtflags),
+    ("badbit", std._Ios_Iostate),
+    ("eofbit", std._Ios_Iostate),
+    ("failbit", std._Ios_Iostate),
+    ("goodbit", std._Ios_Iostate),
+    ("app", std._Ios_Openmode),
+    ("ate", std._Ios_Openmode),
+    ("binary", std._Ios_Openmode),
+    ("in", std._Ios_Openmode),
+    ("out", std._Ios_Openmode),
+    ("trunc", std._Ios_Openmode),
+    ("beg", std._Ios_Seekdir),
+    ("cur", std._Ios_Seekdir),
+    ("end", std._Ios_Seekdir),
+    ("_M_precision", ctypes.c_int),
+    ("_M_width", ctypes.c_int),
+    ("_M_flags", std._Ios_Fmtflags),
+    ("_M_exception", std._Ios_Iostate),
+    ("_M_streambuf_state", std._Ios_Iostate),
+    ("_M_callbacks", ctypes.POINTER( std.ios_base._Callback_list )),
+    ("_M_word_zero", std.ios_base._Words),
+    ("_M_local_word", ( std.ios_base._Words * 8 )),
+    ("_M_word_size", ctypes.c_int),
+    ("_M_word", ctypes.POINTER( std.ios_base._Words )),
+    ("_M_ios_locale", std.locale),
+]
+
+std.ios_base.Init._fields_ = [ #class std::ios_base::Init
+    ("_S_refcount", ctypes.c_int),
+    ("_S_synced_with_stdio", ctypes.c_bool),
+]
+
+std.ios_base.failure._fields_ = [ #class std::ios_base::failure
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("_M_msg", std.string),
+]
+
+std.ios_base._Callback_list._fields_ = [ #class std::ios_base::_Callback_list
+    ("_M_next", ctypes.POINTER( std.ios_base._Callback_list )),
+    ("_M_fn", ctypes.POINTER( ctypes.CFUNCTYPE( None, std.ios_base.event, ctypes.POINTER( std.ios_base ), ctypes.c_int ) )),
+    ("_M_index", ctypes.c_int),
+    ("_M_refcount", ctypes.c_int),
+]
+
+std.ios_base._Words._fields_ = [ #class std::ios_base::_Words
+    ("_M_pword", ctypes.c_void_p),
+    ("_M_iword", ctypes.c_long),
+]
+
+std.__ctype_type._fields_ = [ #class std::ctype< wchar_t >
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("_M_c_locale_ctype", ctypes.POINTER( __locale_struct )),
+    ("_M_narrow_ok", ctypes.c_bool),
+    ("_M_narrow", ( ctypes.c_char * 128 )),
+    ("_M_widen", ( ctypes.c_uint * 256 )),
+    ("_M_bit", ( ctypes.c_ushort * 16 )),
+    ("_M_wmask", ( ctypes.c_ulong * 16 )),
+    ("id", std.locale.id),
+]
+
+std.__ctype_type._fields_ = [ #class std::ctype< char >
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("_M_c_locale_ctype", ctypes.POINTER( __locale_struct )),
+    ("_M_del", ctypes.c_bool),
+    ("_M_toupper", ctypes.POINTER( ctypes.c_int )),
+    ("_M_tolower", ctypes.POINTER( ctypes.c_int )),
+    ("_M_table", ctypes.POINTER( ctypes.c_ushort )),
+    ("_M_widen_ok", ctypes.c_char),
+    ("_M_widen", ( ctypes.c_char * 256 )),
+    ("_M_narrow", ( ctypes.c_char * 256 )),
+    ("_M_narrow_ok", ctypes.c_char),
+    ("id", std.locale.id),
+    ("table_size", ctypes.c_uint),
+]
+
+std.__is_integer_less__short__greater_._fields_ = [ #class std::__is_integer< short >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_integer_less__unsigned_long__greater_._fields_ = [ #class std::__is_integer< unsigned long >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_integer_less__int__greater_._fields_ = [ #class std::__is_integer< int >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_integer_less__unsigned_long_long__greater_._fields_ = [ #class std::__is_integer< unsigned long long >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_integer_less__long_long__greater_._fields_ = [ #class std::__is_integer< long long >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_integer_less__long__greater_._fields_ = [ #class std::__is_integer< long >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_integer_less__unsigned_int__greater_._fields_ = [ #class std::__is_integer< unsigned int >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_integer_less__unsigned_short__greater_._fields_ = [ #class std::__is_integer< unsigned short >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_integer_less__wchar_t__greater_._fields_ = [ #class std::__is_integer< wchar_t >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_integer_less__unsigned_char__greater_._fields_ = [ #class std::__is_integer< unsigned char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_integer_less__signed_char__greater_._fields_ = [ #class std::__is_integer< signed char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_integer_less__char__greater_._fields_ = [ #class std::__is_integer< char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_integer_less__bool__greater_._fields_ = [ #class std::__is_integer< bool >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_byte_less__unsigned_char__greater_._fields_ = [ #class std::__is_byte< unsigned char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_byte_less__signed_char__greater_._fields_ = [ #class std::__is_byte< signed char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_byte_less__char__greater_._fields_ = [ #class std::__is_byte< char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.forward_iterator_tag._fields_ = [ #class std::forward_iterator_tag
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__equal_less__true__greater_._fields_ = [ #class std::__equal< true >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.basic_ios_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_._fields_ = [ #class std::basic_ios< wchar_t, std::char_traits< wchar_t > >
+    ("_M_tie", ctypes.POINTER( std.basic_ostream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_ )),
+    ("_M_fill", ctypes.c_wchar),
+    ("_M_fill_init", ctypes.c_bool),
+    ("_M_streambuf", ctypes.POINTER( std.basic_streambuf_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_ )),
+    ("_M_ctype", ctypes.POINTER( std.__ctype_type )),
+    ("_M_num_put", ctypes.POINTER( std.__num_put_type )),
+    ("_M_num_get", ctypes.POINTER( std.__num_get_type )),
+]
+
+std.basic_ios_less__char_comma__std_scope_char_traits_less__char__greater___greater_._fields_ = [ #class std::basic_ios< char, std::char_traits< char > >
+    ("_M_tie", ctypes.POINTER( std.basic_ostream_less__char_comma__std_scope_char_traits_less__char__greater___greater_ )),
+    ("_M_fill", ctypes.c_char),
+    ("_M_fill_init", ctypes.c_bool),
+    ("_M_streambuf", ctypes.POINTER( std.basic_streambuf_less__char_comma__std_scope_char_traits_less__char__greater___greater_ )),
+    ("_M_ctype", ctypes.POINTER( std.__ctype_type )),
+    ("_M_num_put", ctypes.POINTER( std.__num_put_type )),
+    ("_M_num_get", ctypes.POINTER( std.__num_get_type )),
+]
+
+std.numpunct_byname_less__wchar_t__greater_._fields_ = [ #class std::numpunct_byname< wchar_t >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.numpunct_byname_less__char__greater_._fields_ = [ #class std::numpunct_byname< char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.iostream._fields_ = [ #class std::basic_iostream< char, std::char_traits< char > >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.random_access_iterator_tag._fields_ = [ #class std::random_access_iterator_tag
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.allocator_less__char__greater_._fields_ = [ #class std::allocator< char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.allocator_less__char__greater_.rebind_less__char__greater_._fields_ = [ #class std::allocator< char >::rebind< char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.allocator_less__wchar_t__greater_._fields_ = [ #class std::allocator< wchar_t >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.allocator_less__wchar_t__greater_.rebind_less__wchar_t__greater_._fields_ = [ #class std::allocator< wchar_t >::rebind< wchar_t >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.allocator_less__wchar_t__greater_.rebind_less__char__greater_._fields_ = [ #class std::allocator< wchar_t >::rebind< char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.allocator_less__void__greater_._fields_ = [ #class std::allocator< void >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_void_less__void__greater_._fields_ = [ #class std::__is_void< void >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_floating_less__long_double__greater_._fields_ = [ #class std::__is_floating< long double >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_floating_less__double__greater_._fields_ = [ #class std::__is_floating< double >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_floating_less__float__greater_._fields_ = [ #class std::__is_floating< float >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.output_iterator_tag._fields_ = [ #class std::output_iterator_tag
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.nothrow_t._fields_ = [ #class std::nothrow_t
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__num_put_type._fields_ = [ #class std::num_put< wchar_t, std::ostreambuf_iterator< wchar_t, std::char_traits< wchar_t > > >
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("id", std.locale.id),
+]
+
+std.__num_put_type._fields_ = [ #class std::num_put< char, std::ostreambuf_iterator< char, std::char_traits< char > > >
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("id", std.locale.id),
+]
+
+std.traits_type._fields_ = [ #class std::char_traits< wchar_t >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.traits_type._fields_ = [ #class std::char_traits< char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__ctype_abstract_base_less__wchar_t__greater_._fields_ = [ #class std::__ctype_abstract_base< wchar_t >
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.ctype_byname_less__wchar_t__greater_._fields_ = [ #class std::ctype_byname< wchar_t >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.ctype_byname_less__char__greater_._fields_ = [ #class std::ctype_byname< char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.ctype_base._fields_ = [ #class std::ctype_base
+    ("upper", ctypes.c_ushort),
+    ("lower", ctypes.c_ushort),
+    ("alpha", ctypes.c_ushort),
+    ("digit", ctypes.c_ushort),
+    ("xdigit", ctypes.c_ushort),
+    ("space", ctypes.c_ushort),
+    ("print", ctypes.c_ushort),
+    ("graph", ctypes.c_ushort),
+    ("cntrl", ctypes.c_ushort),
+    ("punct", ctypes.c_ushort),
+    ("alnum", ctypes.c_ushort),
+]
+
+std.bad_alloc._fields_ = [ #class std::bad_alloc
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.basic_ostream_less__char_comma__std_scope_char_traits_less__char__greater___greater_._fields_ = [ #class std::basic_ostream< char, std::char_traits< char > >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.basic_ostream_less__char_comma__std_scope_char_traits_less__char__greater___greater_.sentry._fields_ = [ #class std::basic_ostream< char, std::char_traits< char > >::sentry
+    ("_M_ok", ctypes.c_bool),
+    ("_M_os", ctypes.POINTER( std.basic_ostream_less__char_comma__std_scope_char_traits_less__char__greater___greater_ )),
+]
+
+std.exception._fields_ = [ #class std::exception
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.numpunct_less__wchar_t__greater_._fields_ = [ #class std::numpunct< wchar_t >
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("_M_data", ctypes.POINTER( std.__numpunct_cache_less__wchar_t__greater_ )),
+    ("id", std.locale.id),
+]
+
+std.numpunct_less__char__greater_._fields_ = [ #class std::numpunct< char >
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("_M_data", ctypes.POINTER( std.__numpunct_cache_less__char__greater_ )),
+    ("id", std.locale.id),
+]
+
+std.basic_istream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_._fields_ = [ #class std::basic_istream< wchar_t, std::char_traits< wchar_t > >
+    ("_M_gcount", ctypes.c_int),
+]
+
+std.basic_istream_less__wchar_t_comma__std_scope_char_traits_less__wchar_t__greater___greater_.sentry._fields_ = [ #class std::basic_istream< wchar_t, std::char_traits< wchar_t > >::sentry
+    ("_M_ok", ctypes.c_bool),
+]
+
+std.__lc_rai_less__std_scope_random_access_iterator_tag_comma__std_scope_random_access_iterator_tag__greater_._fields_ = [ #class std::__lc_rai< std::random_access_iterator_tag, std::random_access_iterator_tag >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.iterator_less__std_scope_output_iterator_tag_comma__void_comma__void_comma__void_comma__void__greater_._fields_ = [ #class std::iterator< std::output_iterator_tag, void, void, void, void >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__num_base._fields_ = [ #class std::__num_base
+    ("_S_atoms_out", ctypes.c_char_p),
+    ("_S_atoms_in", ctypes.c_char_p),
+]
+
+std.__iter_swap_less__true__greater_._fields_ = [ #class std::__iter_swap< true >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__copy_move_backward_less__false_comma__false_comma__std_scope_random_access_iterator_tag__greater_._fields_ = [ #class std::__copy_move_backward< false, false, std::random_access_iterator_tag >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.bidirectional_iterator_tag._fields_ = [ #class std::bidirectional_iterator_tag
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__num_get_type._fields_ = [ #class std::num_get< wchar_t, std::istreambuf_iterator< wchar_t, std::char_traits< wchar_t > > >
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("id", std.locale.id),
+]
+
+std.__num_get_type._fields_ = [ #class std::num_get< char, std::istreambuf_iterator< char, std::char_traits< char > > >
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("id", std.locale.id),
+]
+
+std.wiostream._fields_ = [ #class std::basic_iostream< wchar_t, std::char_traits< wchar_t > >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__true_type._fields_ = [ #class std::__true_type
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__truth_type_less__true__greater_._fields_ = [ #class std::__truth_type< true >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_char_less__wchar_t__greater_._fields_ = [ #class std::__is_char< wchar_t >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+std.__is_char_less__char__greater_._fields_ = [ #class std::__is_char< char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+itimerspec._fields_ = [ #class itimerspec
+    ("it_interval", timespec),
+    ("it_value", timespec),
+]
+
+tm._fields_ = [ #class tm
+    ("tm_sec", ctypes.c_int),
+    ("tm_min", ctypes.c_int),
+    ("tm_hour", ctypes.c_int),
+    ("tm_mday", ctypes.c_int),
+    ("tm_mon", ctypes.c_int),
+    ("tm_year", ctypes.c_int),
+    ("tm_wday", ctypes.c_int),
+    ("tm_yday", ctypes.c_int),
+    ("tm_isdst", ctypes.c_int),
+    ("tm_gmtoff", ctypes.c_long),
+    ("tm_zone", ctypes.c_char_p),
+]
+
+pthread_condattr_t._fields_ = [ #class pthread_condattr_t
+    ("__size", ( ctypes.c_char * 4 )),
+    ("__align", ctypes.c_int),
+]
+
+_IO_cookie_io_functions_t._fields_ = [ #class _IO_cookie_io_functions_t
+    ("read", ctypes.POINTER( ctypes.CFUNCTYPE( ctypes.c_int, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_uint ) )),
+    ("write", ctypes.POINTER( ctypes.CFUNCTYPE( ctypes.c_int, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_uint ) )),
+    ("seek", ctypes.POINTER( ctypes.CFUNCTYPE( ctypes.c_int, ctypes.c_void_p, ctypes.POINTER( ctypes.c_longlong ), ctypes.c_int ) )),
+    ("close", ctypes.POINTER( ctypes.CFUNCTYPE( ctypes.c_int, ctypes.c_void_p ) )),
+]
+
+__sigset_t._fields_ = [ #class __sigset_t
+    ("__val", ( ctypes.c_ulong * 32 )),
+]
+
+__pthread_internal_slist._fields_ = [ #class __pthread_internal_slist
+    ("__next", ctypes.POINTER( __pthread_internal_slist )),
+]
+
+pthread_attr_t._fields_ = [ #class pthread_attr_t
+    ("__size", ( ctypes.c_char * 36 )),
+    ("__align", ctypes.c_long),
+]
+
+pthread_cond_t._fields_ = [ #class pthread_cond_t
+    ("__data", pthread_cond_t.),
+    ("__size", ( ctypes.c_char * 48 )),
+    ("__align", ctypes.c_longlong),
+]
+
+pthread_cond_t.._fields_ = [ #class pthread_cond_t
+    ("__lock", ctypes.c_int),
+    ("__futex", ctypes.c_uint),
+    ("__total_seq", ctypes.c_ulonglong),
+    ("__wakeup_seq", ctypes.c_ulonglong),
+    ("__woken_seq", ctypes.c_ulonglong),
+    ("__mutex", ctypes.c_void_p),
+    ("__nwaiters", ctypes.c_uint),
+    ("__broadcast_seq", ctypes.c_uint),
 ]
 
 __mpf_struct._fields_ = [ #class __mpf_struct
@@ -676,6 +2330,194 @@ __mpf_struct._fields_ = [ #class __mpf_struct
     ("_mp_size", ctypes.c_int),
     ("_mp_exp", ctypes.c_long),
     ("_mp_d", ctypes.POINTER( ctypes.c_ulong )),
+]
+
+pthread_mutexattr_t._fields_ = [ #class pthread_mutexattr_t
+    ("__size", ( ctypes.c_char * 4 )),
+    ("__align", ctypes.c_int),
+]
+
+__gnu_cxx.__type._fields_ = [ #class __gnu_cxx::__numeric_traits_integer< short >
+    ("__min", ctypes.c_short),
+    ("__max", ctypes.c_short),
+    ("__is_signed", ctypes.c_bool),
+    ("__digits", ctypes.c_int),
+]
+
+__gnu_cxx.__type._fields_ = [ #class __gnu_cxx::__numeric_traits_integer< unsigned long >
+    ("__min", ctypes.c_ulong),
+    ("__max", ctypes.c_ulong),
+    ("__is_signed", ctypes.c_bool),
+    ("__digits", ctypes.c_int),
+]
+
+__gnu_cxx.__type._fields_ = [ #class __gnu_cxx::__numeric_traits_integer< int >
+    ("__min", ctypes.c_int),
+    ("__max", ctypes.c_int),
+    ("__is_signed", ctypes.c_bool),
+    ("__digits", ctypes.c_int),
+]
+
+__gnu_cxx.__conditional_type_less__true_comma____gnu_cxx_scope___numeric_traits_integer_less__short__greater__comma____gnu_cxx_scope___numeric_traits_floating_less__short__greater___greater_._fields_ = [ #class __gnu_cxx::__conditional_type< true, __gnu_cxx::__numeric_traits_integer< short >, __gnu_cxx::__numeric_traits_floating< short > >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__conditional_type_less__true_comma__unsigned_long_comma__unsigned_long_long__greater_._fields_ = [ #class __gnu_cxx::__conditional_type< true, unsigned long, unsigned long long >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__conditional_type_less__true_comma____gnu_cxx_scope___numeric_traits_integer_less__unsigned_long__greater__comma____gnu_cxx_scope___numeric_traits_floating_less__unsigned_long__greater___greater_._fields_ = [ #class __gnu_cxx::__conditional_type< true, __gnu_cxx::__numeric_traits_integer< unsigned long >, __gnu_cxx::__numeric_traits_floating< unsigned long > >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__conditional_type_less__true_comma____gnu_cxx_scope___numeric_traits_integer_less__int__greater__comma____gnu_cxx_scope___numeric_traits_floating_less__int__greater___greater_._fields_ = [ #class __gnu_cxx::__conditional_type< true, __gnu_cxx::__numeric_traits_integer< int >, __gnu_cxx::__numeric_traits_floating< int > >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.new_allocator_less__wchar_t__greater_._fields_ = [ #class __gnu_cxx::new_allocator< wchar_t >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.new_allocator_less__char__greater_._fields_ = [ #class __gnu_cxx::new_allocator< char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__numeric_traits_less__int__greater_._fields_ = [ #class __gnu_cxx::__numeric_traits< int >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__numeric_traits_less__short__greater_._fields_ = [ #class __gnu_cxx::__numeric_traits< short >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__numeric_traits_less__unsigned_long__greater_._fields_ = [ #class __gnu_cxx::__numeric_traits< unsigned long >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__add_unsigned_less__long_long__greater_._fields_ = [ #class __gnu_cxx::__add_unsigned< long long >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__add_unsigned_less__long__greater_._fields_ = [ #class __gnu_cxx::__add_unsigned< long >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__add_unsigned_less__int__greater_._fields_ = [ #class __gnu_cxx::__add_unsigned< int >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__add_unsigned_less__short__greater_._fields_ = [ #class __gnu_cxx::__add_unsigned< short >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__add_unsigned_less__signed_char__greater_._fields_ = [ #class __gnu_cxx::__add_unsigned< signed char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__add_unsigned_less__char__greater_._fields_ = [ #class __gnu_cxx::__add_unsigned< char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__remove_unsigned_less__unsigned_long_long__greater_._fields_ = [ #class __gnu_cxx::__remove_unsigned< unsigned long long >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__remove_unsigned_less__unsigned_long__greater_._fields_ = [ #class __gnu_cxx::__remove_unsigned< unsigned long >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__remove_unsigned_less__unsigned_int__greater_._fields_ = [ #class __gnu_cxx::__remove_unsigned< unsigned int >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__remove_unsigned_less__unsigned_short__greater_._fields_ = [ #class __gnu_cxx::__remove_unsigned< unsigned short >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__remove_unsigned_less__unsigned_char__greater_._fields_ = [ #class __gnu_cxx::__remove_unsigned< unsigned char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__gnu_cxx.__remove_unsigned_less__char__greater_._fields_ = [ #class __gnu_cxx::__remove_unsigned< char >
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__locale_struct._fields_ = [ #class __locale_struct
+    ("__locales", ( ctypes.POINTER( locale_data ) * 13 )),
+    ("__ctype_b", ctypes.POINTER( ctypes.c_ushort )),
+    ("__ctype_tolower", ctypes.POINTER( ctypes.c_int )),
+    ("__ctype_toupper", ctypes.POINTER( ctypes.c_int )),
+    ("__names", ( ctypes.c_char_p * 13 )),
+]
+
+_G_fpos_t._fields_ = [ #class _G_fpos_t
+    ("__pos", ctypes.c_long),
+    ("__state", __mbstate_t),
+]
+
+__pthread_cleanup_frame._fields_ = [ #class __pthread_cleanup_frame
+    ("__cancel_routine", ctypes.POINTER( ctypes.CFUNCTYPE( None, ctypes.c_void_p ) )),
+    ("__cancel_arg", ctypes.c_void_p),
+    ("__do_it", ctypes.c_int),
+    ("__cancel_type", ctypes.c_int),
+]
+
+pthread_barrier_t._fields_ = [ #class pthread_barrier_t
+    ("__size", ( ctypes.c_char * 20 )),
+    ("__align", ctypes.c_long),
+]
+
+cpu_set_t._fields_ = [ #class cpu_set_t
+    ("__bits", ( ctypes.c_ulong * 32 )),
+]
+
+_G_fpos64_t._fields_ = [ #class _G_fpos64_t
+    ("__pos", ctypes.c_longlong),
+    ("__state", __mbstate_t),
+]
+
+sched_param._fields_ = [ #class sched_param
+    ("__sched_priority", ctypes.c_int),
+]
+
+__cxxabiv1.__forced_unwind._fields_ = [ #class __cxxabiv1::__forced_unwind
+    ("_vtable_", ctypes.POINTER(ctypes.c_void_p)),
+    ("__empty__", ctypes.c_char * 4)
+]
+
+timespec._fields_ = [ #class timespec
+    ("tv_sec", ctypes.c_long),
+    ("tv_nsec", ctypes.c_long),
+]
+
+__mbstate_t._fields_ = [ #class __mbstate_t
+    ("__count", ctypes.c_int),
+    ("__value", __mbstate_t.),
+]
+
+__mbstate_t.._fields_ = [ #class __mbstate_t
+    ("__wch", ctypes.c_uint),
+    ("__wchb", ( ctypes.c_char * 4 )),
+]
+
+._fields_ = [ #class 
+    ("__cancel_jmp_buf", ( . * 1 )),
+    ("__pad", ( ctypes.c_void_p * 4 )),
+]
+
+.._fields_ = [ #class 
+    ("__cancel_jmp_buf", ( ctypes.c_int * 6 )),
+    ("__mask_was_saved", ctypes.c_int),
+]
+
+pthread_barrierattr_t._fields_ = [ #class pthread_barrierattr_t
+    ("__size", ( ctypes.c_char * 4 )),
+    ("__align", ctypes.c_int),
+]
+
+pthread_rwlockattr_t._fields_ = [ #class pthread_rwlockattr_t
+    ("__size", ( ctypes.c_char * 8 )),
+    ("__align", ctypes.c_long),
 ]
 
 __mpz_struct._fields_ = [ #class __mpz_struct
@@ -689,16 +2531,139 @@ __mpq_struct._fields_ = [ #class __mpq_struct
     ("_mp_den", __mpz_struct),
 ]
 
+pthread_mutex_t._fields_ = [ #class pthread_mutex_t
+    ("__data", pthread_mutex_t.__pthread_mutex_s),
+    ("__size", ( ctypes.c_char * 24 )),
+    ("__align", ctypes.c_long),
+]
+
+pthread_mutex_t.__pthread_mutex_s._fields_ = [ #class pthread_mutex_t::__pthread_mutex_s
+    ("__lock", ctypes.c_int),
+    ("__count", ctypes.c_uint),
+    ("__owner", ctypes.c_int),
+    ("__kind", ctypes.c_int),
+    ("__nusers", ctypes.c_uint),
+    ("", pthread_mutex_t.__pthread_mutex_s.),
+]
+
+pthread_mutex_t.__pthread_mutex_s.._fields_ = [ #class pthread_mutex_t::__pthread_mutex_s
+    ("__spins", ctypes.c_int),
+    ("__list", __pthread_internal_slist),
+]
+
 _IO_marker._fields_ = [ #class _IO_marker
     ("_next", ctypes.POINTER( _IO_marker )),
     ("_sbuf", ctypes.POINTER( _IO_FILE )),
     ("_pos", ctypes.c_int),
 ]
 
+__pthread_cleanup_class._fields_ = [ #class __pthread_cleanup_class
+    ("__cancel_routine", ctypes.POINTER( ctypes.CFUNCTYPE( None, ctypes.c_void_p ) )),
+    ("__cancel_arg", ctypes.c_void_p),
+    ("__do_it", ctypes.c_int),
+    ("__cancel_type", ctypes.c_int),
+]
+
 __gmp_randstate_struct._fields_ = [ #class __gmp_randstate_struct
     ("_mp_seed", ( __mpz_struct * 1 )),
     ("_mp_alg", gmp_randalg_t),
-    ("_mp_algdata", ctypes.c_int),
+    ("_mp_algdata", __gmp_randstate_struct.),
+]
+
+__gmp_randstate_struct.._fields_ = [ #class __gmp_randstate_struct
+    ("_mp_lc", ctypes.c_void_p),
+]
+
+__fsid_t._fields_ = [ #class __fsid_t
+    ("__val", ( ctypes.c_int * 2 )),
+]
+
+lconv._fields_ = [ #class lconv
+    ("decimal_point", ctypes.c_char_p),
+    ("thousands_sep", ctypes.c_char_p),
+    ("grouping", ctypes.c_char_p),
+    ("int_curr_symbol", ctypes.c_char_p),
+    ("currency_symbol", ctypes.c_char_p),
+    ("mon_decimal_point", ctypes.c_char_p),
+    ("mon_thousands_sep", ctypes.c_char_p),
+    ("mon_grouping", ctypes.c_char_p),
+    ("positive_sign", ctypes.c_char_p),
+    ("negative_sign", ctypes.c_char_p),
+    ("int_frac_digits", ctypes.c_char),
+    ("frac_digits", ctypes.c_char),
+    ("p_cs_precedes", ctypes.c_char),
+    ("p_sep_by_space", ctypes.c_char),
+    ("n_cs_precedes", ctypes.c_char),
+    ("n_sep_by_space", ctypes.c_char),
+    ("p_sign_posn", ctypes.c_char),
+    ("n_sign_posn", ctypes.c_char),
+    ("int_p_cs_precedes", ctypes.c_char),
+    ("int_p_sep_by_space", ctypes.c_char),
+    ("int_n_cs_precedes", ctypes.c_char),
+    ("int_n_sep_by_space", ctypes.c_char),
+    ("int_p_sign_posn", ctypes.c_char),
+    ("int_n_sign_posn", ctypes.c_char),
+]
+
+_pthread_cleanup_buffer._fields_ = [ #class _pthread_cleanup_buffer
+    ("__routine", ctypes.POINTER( ctypes.CFUNCTYPE( None, ctypes.c_void_p ) )),
+    ("__arg", ctypes.c_void_p),
+    ("__canceltype", ctypes.c_int),
+    ("__prev", ctypes.POINTER( _pthread_cleanup_buffer )),
+]
+
+__sched_param._fields_ = [ #class __sched_param
+    ("__sched_priority", ctypes.c_int),
+]
+
+pthread_rwlock_t._fields_ = [ #class pthread_rwlock_t
+    ("__data", pthread_rwlock_t.),
+    ("__size", ( ctypes.c_char * 32 )),
+    ("__align", ctypes.c_long),
+]
+
+pthread_rwlock_t.._fields_ = [ #class pthread_rwlock_t
+    ("__lock", ctypes.c_int),
+    ("__nr_readers", ctypes.c_uint),
+    ("__readers_wakeup", ctypes.c_uint),
+    ("__writer_wakeup", ctypes.c_uint),
+    ("__nr_readers_queued", ctypes.c_uint),
+    ("__nr_writers_queued", ctypes.c_uint),
+    ("__flags", ctypes.c_ubyte),
+    ("__shared", ctypes.c_ubyte),
+    ("__pad1", ctypes.c_ubyte),
+    ("__pad2", ctypes.c_ubyte),
+    ("__writer", ctypes.c_int),
+]
+
+__si_class_type_info_pseudo._fields_ = [ #class __si_class_type_info_pseudo
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__class_type_info_pseudo._fields_ = [ #class __class_type_info_pseudo
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__vmi_class_type_info_pseudo1._fields_ = [ #class __vmi_class_type_info_pseudo1
+    ("", __type_info_pseudo),
+    ("", ctypes.c_int),
+    ("", ctypes.c_int),
+    ("", ( __base_class_type_info_pseudo * 1 )),
+]
+
+__vmi_class_type_info_pseudo2._fields_ = [ #class __vmi_class_type_info_pseudo2
+    ("", __type_info_pseudo),
+    ("", ctypes.c_int),
+    ("", ctypes.c_int),
+    ("", ( __base_class_type_info_pseudo * 2 )),
+]
+
+__type_info_pseudo._fields_ = [ #class __type_info_pseudo
+    ("__empty__", ctypes.c_char * 4)
+]
+
+__base_class_type_info_pseudo._fields_ = [ #class __base_class_type_info_pseudo
+    ("__empty__", ctypes.c_char * 4)
 ]
 
 gmpq_add_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
