@@ -141,15 +141,15 @@ class opaque_tester_t( ctypes_base_tester_t ):
         udt = self.module_ref.create()
         self.failUnless( 1977 == self.module_ref.read_user_data(udt) )
         self.module_ref.destroy( udt )
-        
-        
+
+
 
 def create_suite():
     suite = unittest.TestSuite()
     if 'win' in sys.platform:
         suite.addTest( unittest.makeSuite(pof_tester_t))
         suite.addTest( unittest.makeSuite(issues_tester_t))
-    #suite.addTest( unittest.makeSuite(enums_tester_t))
+    suite.addTest( unittest.makeSuite(enums_tester_t))
     suite.addTest( unittest.makeSuite(opaque_tester_t))
     return suite
 
