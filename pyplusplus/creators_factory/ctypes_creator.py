@@ -235,8 +235,6 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
     def visit_class(self):
         self.__dependencies_manager.add_exported( self.curr_decl )
         if not self.curr_decl.opaque:
-            #fields definition should be recursive using the visitor
-            self.__class_defs_ccs.adopt_creator( code_creators.fields_definition_t( self.curr_decl ) )
             if self.curr_decl.calldefs( self.__should_generate_code, recursive=False, allow_empty=True ):
                 md_cc = code_creators.methods_definition_t( self.curr_decl )
                 self.__class2methods_def[ self.curr_decl ] = md_cc
@@ -247,6 +245,9 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
                     self.curr_decl = decl
                     declarations.apply_visitor( self, decl )
             self.curr_decl = class_
+            #fields definition should be recursive using the visitor
+            #internal classes fields should be defined first
+            self.__class_defs_ccs.adopt_creator( code_creators.fields_definition_t( self.curr_decl ) )            
         else:
             cls_intro_cc = self.__class2introduction[ self.curr_decl ]
             cls_intro_cc.adopt_creator( code_creators.opaque_init_introduction_t( self.curr_decl ) )

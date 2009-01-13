@@ -58,7 +58,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         self.global_ns = self.__parse_declarations( files, gccxml_config )
         self.__blob2decl = binary_parsers.merge_information( self.global_ns, exported_symbols_file )
 
-        self.__include_declarations()
+        self.__apply_defaults()
 
         self.__code_creator = None
         if optimize_queries:
@@ -89,7 +89,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
                     continue
                 self.logger.debug( 'discovered dependency %s - included' % str(dependency) )
                 dd = traits.get_declaration( dependency )
-                dd.ignore = False
+                dd.include()
 
     def __include_parent_classes( self, decl ):
         self.logger.debug( 'including decl %s' % str(decl) )
@@ -99,7 +99,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
                 break
             else:
                 self.logger.debug( 'including parent class %s' % str(parent) )
-                parent.ignore = False
+                parent.include()
                 parent = parent.parent
         
     def __include_declarations( self ):
@@ -112,6 +112,15 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
             self.__include_parent_classes( d )
             self.__include_dependencies( d )
             self.logger.debug( 'including decl %s - done' % str(d) )
+
+    def __apply_defaults( self ):
+        self.__include_declarations()                    
+        anonymous_classes = self.global_ns.classes( '', recursive=True, allow_empty=True )
+        anonymous_classes.alias = '_'
+        #TODO: check whether the anonymous class unique or not
+        #if 1 == len( anonymous.parent.classes( '', recursive=False ) ): 
+        anonymous_vars = self.global_ns.vars( '', recursive=True, allow_empty=True )
+        anonymous_vars.alias = '_'
 
     def build_code_creator( self, library_path, doc_extractor=None ):
         creator = creators_factory.ctypes_creator_t( self.global_ns

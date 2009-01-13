@@ -6,9 +6,11 @@
 #ifndef __unnamed_enums_to_be_exported_hpp__
 #define __unnamed_enums_to_be_exported_hpp__
 
+#include "libconfig.h"
+
 namespace unnamed_enums{
 
-struct color{
+struct EXPORT_SYMBOL color{
     union{
         struct {
             float r,g,b,a;
@@ -17,9 +19,11 @@ struct color{
     };
 };
 
-struct{
+struct {
     int x;
 } unnamed_struct_with_mem_var_x;
+
+void EXPORT_SYMBOL do_smth( color ){}
 
 }
 

@@ -9,14 +9,26 @@ import code_creator
 import declaration_based
 from pygccxml import declarations
 
+ctypes_base_classes = {
+    declarations.CLASS_TYPES.CLASS : 'Structure'
+    , declarations.CLASS_TYPES.UNION : 'Union'
+    , declarations.CLASS_TYPES.STRUCT : 'Structure'
+}
+
 class class_introduction_t(compound.compound_t, declaration_based.declaration_based_t):
     def __init__( self, class_ ):
         compound.compound_t.__init__(self)
         declaration_based.declaration_based_t.__init__( self, class_ )
 
+    @property
+    def ctypes_base_class( self ):
+        global ctypes_base_classes
+        return ctypes_base_classes[ self.declaration.class_type ]
+
     def _create_impl(self):
         result = []
-        result.append( "class %s(ctypes.Structure):" % self.alias )
+        result.append( "class %(alias)s(ctypes.%(base)s):" 
+                       % dict( alias=self.alias, base=self.ctypes_base_class ) )
         result.append( self.indent( '"""class %s"""' % self.decl_identifier ) )
         if self.creators:
             result.append( self.indent( '' ) )

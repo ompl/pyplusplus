@@ -13,7 +13,9 @@ if 'win32' in sys.platform:
     env.AppendUnique( CCFLAGS=[ r"/MD",r"/EHsc",r"/GR",r"/Zc:wchar_t",r"/Zc:forScope" ] )
     env.AppendUnique( LINKFLAGS=[r"/MAP:${TARGET.base}.map", r"/MAPINFO:EXPORTS"] )
 
-scripts = [ 'pof', 'issues', 'enums', 'opaque' ]
+env.AppendUnique( CPPPATH=['#data'] )
+
+scripts = [ 'pof', 'issues', 'enums', 'opaque', 'include_algorithm', 'anonymous' ]
 for s in scripts:
     SConscript( 'data/ctypes/%s/sconscript' % s
                 , variant_dir='data/ctypes/%s/binaries' % s

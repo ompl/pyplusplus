@@ -1,10 +1,12 @@
 #pragma once
 
-struct user_data_t{
+#include "libconfig.h"
+
+struct EXPORT_SYMBOL user_data_t{
     int i;
 };
 
 
-user_data_t* create();
-int read_user_data(user_data_t*);
-void destroy(user_data_t*);
+user_data_t* EXPORT_SYMBOL create();
+int EXPORT_SYMBOL read_user_data(user_data_t*);
+void EXPORT_SYMBOL destroy(user_data_t*);

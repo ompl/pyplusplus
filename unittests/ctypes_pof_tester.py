@@ -141,8 +141,28 @@ class opaque_tester_t( ctypes_base_tester_t ):
         udt = self.module_ref.create()
         self.failUnless( 1977 == self.module_ref.read_user_data(udt) )
         self.module_ref.destroy( udt )
+        
+class include_algorithm_tester_t( ctypes_base_tester_t ):
+    def __init__( self, *args, **keywd ):
+        ctypes_base_tester_t.__init__( self, 'include_algorithm', *args, **keywd )
 
+    def customize( self, mb ):
+        self.failUnless( mb.global_ns.class_( 'io_marker_t' ).ignore == False )
 
+    def test(self):
+        self.failUnless( mb.module_ref.io_marker_t )
+
+class anonymous_tester_t( ctypes_base_tester_t ):
+    def __init__( self, *args, **keywd ):
+        ctypes_base_tester_t.__init__( self, 'anonymous', *args, **keywd )
+
+    def customize( self, mb ):
+        mb.class_( 'rgbai' ).include()
+
+    def test(self):
+        c = self.module_ref.color()
+        c.r
+        c.val
 
 def create_suite():
     suite = unittest.TestSuite()
@@ -151,6 +171,8 @@ def create_suite():
         suite.addTest( unittest.makeSuite(issues_tester_t))
     suite.addTest( unittest.makeSuite(enums_tester_t))
     suite.addTest( unittest.makeSuite(opaque_tester_t))
+    suite.addTest( unittest.makeSuite(include_algorithm_tester_t))
+    suite.addTest( unittest.makeSuite(anonymous_tester_t))
     return suite
 
 def run_suite():
