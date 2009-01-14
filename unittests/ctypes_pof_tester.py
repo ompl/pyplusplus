@@ -166,12 +166,12 @@ class anonymous_tester_t( ctypes_base_tester_t ):
 
 def create_suite():
     suite = unittest.TestSuite()
-    if 'win' in sys.platform:
-        suite.addTest( unittest.makeSuite(pof_tester_t))
-        suite.addTest( unittest.makeSuite(issues_tester_t))
-    suite.addTest( unittest.makeSuite(enums_tester_t))
-    suite.addTest( unittest.makeSuite(opaque_tester_t))
-    suite.addTest( unittest.makeSuite(include_algorithm_tester_t))
+    #~ if 'win' in sys.platform:
+        #~ suite.addTest( unittest.makeSuite(pof_tester_t))
+        #~ suite.addTest( unittest.makeSuite(issues_tester_t))
+    #~ suite.addTest( unittest.makeSuite(enums_tester_t))
+    #~ suite.addTest( unittest.makeSuite(opaque_tester_t))
+    #~ suite.addTest( unittest.makeSuite(include_algorithm_tester_t))
     suite.addTest( unittest.makeSuite(anonymous_tester_t))
     return suite
 

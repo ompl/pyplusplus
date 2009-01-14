@@ -25,12 +25,12 @@ mb.classes( '' ).exclude()
 for f in mb.calldefs( lambda x: x.name.startswith('__gmp') ):
     f.alias = f.name[2:]
 
-#there is a bug in "include" algorithm - I need to wrote DFS
+#there is a bug in "include" algorithm - I need to wrote BFS
 mb.class_( '_IO_FILE' ).opaque = True
+#another dependency bug - internal union is not included
+mb.class_( '__gmp_randstate_struct' ).include()
 
-#include should work as expected - include only exported function
 
-#~ mb.print_declarations()
 mb.build_code_creator( project_env.gmp.shared_library_file )
 mb.write_module( os.path.join( project_env.gmp.generated_code_dir, '__init__.py' ) )
 
