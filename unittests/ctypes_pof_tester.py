@@ -48,12 +48,17 @@ class ctypes_base_tester_t(unittest.TestCase):
     def customize(self, mb ):
         pass
 
+    def __build_scons_cmd( self ):
+        cmd = autoconfig.scons.cmd_build + ' ' + self.base_name
+        if autoconfig.cxx_parsers_cfg.gccxml.compiler == 'msvc71':
+            cmd  = cmd + ' use_msvc71=True'
+        return cmd
+
     def setUp( self ):
         if self.base_name in sys.modules:
             return sys.modules[ self.base_name ]
-        #~ import pdb
-        #~ pdb.set_trace()
-        autoconfig.scons_config.compile( autoconfig.scons.cmd_build + ' ' + self.base_name )
+
+        autoconfig.scons_config.compile( self.__build_scons_cmd() )
         mb = ctypes_module_builder_t( [self.header], self.symbols_file, autoconfig.cxx_parsers_cfg.gccxml )
         self.customize( mb )
         mb.build_code_creator( self.library_file )
@@ -150,7 +155,7 @@ class include_algorithm_tester_t( ctypes_base_tester_t ):
         self.failUnless( mb.global_ns.class_( 'io_marker_t' ).ignore == False )
 
     def test(self):
-        self.failUnless( mb.module_ref.io_marker_t )
+        self.failUnless( self.module_ref.io_marker_t )
 
 class anonymous_tester_t( ctypes_base_tester_t ):
     def __init__( self, *args, **keywd ):
@@ -166,12 +171,12 @@ class anonymous_tester_t( ctypes_base_tester_t ):
 
 def create_suite():
     suite = unittest.TestSuite()
-    #~ if 'win' in sys.platform:
-        #~ suite.addTest( unittest.makeSuite(pof_tester_t))
-        #~ suite.addTest( unittest.makeSuite(issues_tester_t))
-    #~ suite.addTest( unittest.makeSuite(enums_tester_t))
-    #~ suite.addTest( unittest.makeSuite(opaque_tester_t))
-    #~ suite.addTest( unittest.makeSuite(include_algorithm_tester_t))
+    if 'win' in sys.platform:
+        suite.addTest( unittest.makeSuite(pof_tester_t))
+        suite.addTest( unittest.makeSuite(issues_tester_t))
+    suite.addTest( unittest.makeSuite(enums_tester_t))
+    suite.addTest( unittest.makeSuite(opaque_tester_t))
+    suite.addTest( unittest.makeSuite(include_algorithm_tester_t))
     suite.addTest( unittest.makeSuite(anonymous_tester_t))
     return suite
 

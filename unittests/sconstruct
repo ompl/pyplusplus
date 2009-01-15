@@ -1,7 +1,11 @@
 import os
 import sys
 
-env = Environment()
+opts = Options( "options.txt", ARGUMENTS )
+
+opts.Add( BoolOption( 'use_msvc71', 'use msvc71 compiler', False ) )
+
+env = Environment(options=opts)
 
 if 'win32' in sys.platform:
     if os.path.exists( r'E:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib' ):
@@ -12,6 +16,12 @@ if 'win32' in sys.platform:
 
     env.AppendUnique( CCFLAGS=[ r"/MD",r"/EHsc",r"/GR",r"/Zc:wchar_t",r"/Zc:forScope" ] )
     env.AppendUnique( LINKFLAGS=[r"/MAP:${TARGET.base}.map", r"/MAPINFO:EXPORTS"] )
+
+    if env[ 'use_msvc71' ]:
+        env['MSVS'] = {'VERSION': '7.1'}
+        env['MSVS_VERSION'] = '7.1'
+        Tool('msvc')(env)
+
 
 env.AppendUnique( CPPPATH=['#data'] )
 
