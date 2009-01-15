@@ -58,7 +58,7 @@ class ctypes_base_tester_t(unittest.TestCase):
         if self.base_name in sys.modules:
             return sys.modules[ self.base_name ]
 
-        autoconfig.scons_config.compile( self.__build_scons_cmd() )
+        autoconfig.scons_config.compile( self.__build_scons_cmd(), cwd=autoconfig.this_module_dir_path )
         mb = ctypes_module_builder_t( [self.header], self.symbols_file, autoconfig.cxx_parsers_cfg.gccxml )
         self.customize( mb )
         mb.build_code_creator( self.library_file )
@@ -146,7 +146,7 @@ class opaque_tester_t( ctypes_base_tester_t ):
         udt = self.module_ref.create()
         self.failUnless( 1977 == self.module_ref.read_user_data(udt) )
         self.module_ref.destroy( udt )
-        
+
 class include_algorithm_tester_t( ctypes_base_tester_t ):
     def __init__( self, *args, **keywd ):
         ctypes_base_tester_t.__init__( self, 'include_algorithm', *args, **keywd )

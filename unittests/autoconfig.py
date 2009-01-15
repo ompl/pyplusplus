@@ -25,7 +25,7 @@ import pygccxml
 gccxml_version = '__GCCXML_09__'
 
 class cxx_parsers_cfg:
-    gccxml = pygccxml.parser.load_gccxml_configuration( 'gccxml.cfg'
+    gccxml = pygccxml.parser.load_gccxml_configuration( os.path.join( this_module_dir_path, 'gccxml.cfg' )
                                                         , gccxml_path=gccxml.executable
                                                         , working_directory=data_directory
                                                         , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
@@ -72,14 +72,14 @@ class scons_config:
         return os.linesep.join( code )
 
     @staticmethod
-    def compile( cmd ) :
+    def compile( cmd, cwd=build_directory ) :
         print '\n', cmd
         process = subprocess.Popen( args=cmd
                                     , shell=True
                                     , stdin=subprocess.PIPE
                                     , stdout=subprocess.PIPE
                                     , stderr=subprocess.STDOUT
-                                    , cwd=this_module_dir_path )
+                                    , cwd=cwd )
         process.stdin.close()
 
         while process.poll() is None:
