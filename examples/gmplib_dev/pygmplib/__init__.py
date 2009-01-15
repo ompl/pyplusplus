@@ -4,9 +4,9 @@ import ctypes
 
 import ctypes_utils
 
-libgmp_dot_so_dot_3_dot_4lib = ctypes.CDLL( r"/usr/lib/libgmp.so.3.4.2" )
+libgmp_lib = ctypes.CDLL( r"/usr/lib/libgmp.so.3.4.2" )
 
-libgmp_dot_so_dot_3_dot_4lib.undecorated_names = {#mapping between decorated and undecorated names
+libgmp_lib.undecorated_names = {#mapping between decorated and undecorated names
     "extern double __gmpf_get_d(mpf_srcptr arg0) [free function]" : "__gmpf_get_d", 
     "extern int __gmpf_cmp_ui(mpf_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpf_cmp_ui", 
     "extern void __gmpz_mul_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_mul_ui", 
@@ -627,6 +627,12 @@ class _IO_FILE(ctypes.Structure):
     def __init__( self, *args, **keywd ):
         raise RuntimeError( "Unable to create instance of opaque type." )
 
+class _IO_marker(ctypes.Structure):
+    """class _IO_marker"""
+    
+    def __init__( self, *args, **keywd ):
+        raise RuntimeError( "Unable to create instance of opaque type." )
+
 class __gmp_randstate_struct(ctypes.Structure):
     """class __gmp_randstate_struct"""
     
@@ -672,877 +678,877 @@ __gmp_randstate_struct._fields_ = [ #class __gmp_randstate_struct
 ]
 
 gmpq_add_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpq_add = gmpq_add_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_add(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_add = gmpq_add_type( ( libgmp_lib.undecorated_names["extern void __gmpq_add(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpq_canonicalize_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct )  )
-gmpq_canonicalize = gmpq_canonicalize_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_canonicalize(mpq_ptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_canonicalize = gmpq_canonicalize_type( ( libgmp_lib.undecorated_names["extern void __gmpq_canonicalize(mpq_ptr arg0) [free function]"], libgmp_lib ) )
 
 gmpq_sub_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpq_sub = gmpq_sub_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_sub(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_sub = gmpq_sub_type( ( libgmp_lib.undecorated_names["extern void __gmpq_sub(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpz_tdiv_q_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_tdiv_q_ui = gmpz_tdiv_q_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_tdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_tdiv_q_ui = gmpz_tdiv_q_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_tdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpn_scan0_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_ulong  )
-gmpn_scan0 = gmpn_scan0_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpn_scan0(mp_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_scan0 = gmpn_scan0_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpn_scan0(mp_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpf_fits_sshort_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpf_struct )  )
-gmpf_fits_sshort_p = gmpf_fits_sshort_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpf_fits_sshort_p(mpf_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_fits_sshort_p = gmpf_fits_sshort_p_type( ( libgmp_lib.undecorated_names["extern int __gmpf_fits_sshort_p(mpf_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpz_init_set_d_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_double  )
-gmpz_init_set_d = gmpz_init_set_d_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_init_set_d(mpz_ptr arg0, double arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_init_set_d = gmpz_init_set_d_type( ( libgmp_lib.undecorated_names["extern void __gmpz_init_set_d(mpz_ptr arg0, double arg1) [free function]"], libgmp_lib ) )
 
 gmpz_get_d_2exp_type = ctypes.CFUNCTYPE( ctypes.c_double, ctypes.POINTER( ctypes.c_long ), ctypes.POINTER( __mpz_struct )  )
-gmpz_get_d_2exp = gmpz_get_d_2exp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern double __gmpz_get_d_2exp(long int * arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_get_d_2exp = gmpz_get_d_2exp_type( ( libgmp_lib.undecorated_names["extern double __gmpz_get_d_2exp(long int * arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_powm_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong, ctypes.POINTER( __mpz_struct )  )
-gmpz_powm_ui = gmpz_powm_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_powm_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2, mpz_srcptr arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_powm_ui = gmpz_powm_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_powm_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2, mpz_srcptr arg3) [free function]"], libgmp_lib ) )
 
 gmpn_add_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_add = gmpn_add_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["mp_limb_t __gmpn_add(mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_add = gmpn_add_type( ( libgmp_lib.undecorated_names["mp_limb_t __gmpn_add(mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize) [free function]"], libgmp_lib ) )
 
 gmpn_scan1_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_ulong  )
-gmpn_scan1 = gmpn_scan1_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpn_scan1(mp_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_scan1 = gmpn_scan1_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpn_scan1(mp_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpn_divexact_by3c_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.c_ulong  )
-gmpn_divexact_by3c = gmpn_divexact_by3c_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_limb_t __gmpn_divexact_by3c(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_divexact_by3c = gmpn_divexact_by3c_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_divexact_by3c(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]"], libgmp_lib ) )
 
 gmpz_ui_pow_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong, ctypes.c_ulong  )
-gmpz_ui_pow_ui = gmpz_ui_pow_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_ui_pow_ui(mpz_ptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_ui_pow_ui = gmpz_ui_pow_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_ui_pow_ui(mpz_ptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_nextprime_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_nextprime = gmpz_nextprime_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_nextprime(mpz_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_nextprime = gmpz_nextprime_type( ( libgmp_lib.undecorated_names["extern void __gmpz_nextprime(mpz_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_size_type = ctypes.CFUNCTYPE( ctypes.c_uint, ctypes.POINTER( __mpz_struct )  )
-gmpz_size = gmpz_size_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["size_t __gmpz_size(mpz_srcptr __gmp_z) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_size = gmpz_size_type( ( libgmp_lib.undecorated_names["size_t __gmpz_size(mpz_srcptr __gmp_z) [free function]"], libgmp_lib ) )
 
 gmpf_sqrt_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpf_sqrt = gmpf_sqrt_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_sqrt(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_sqrt = gmpf_sqrt_type( ( libgmp_lib.undecorated_names["extern void __gmpf_sqrt(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_cdiv_q_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_cdiv_q_ui = gmpz_cdiv_q_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_cdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_cdiv_q_ui = gmpz_cdiv_q_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_cdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_tdiv_r_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_tdiv_r_ui = gmpz_tdiv_r_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_tdiv_r_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_tdiv_r_ui = gmpz_tdiv_r_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_tdiv_r_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_init_set_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_init_set_ui = gmpz_init_set_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_init_set_ui(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_init_set_ui = gmpz_init_set_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_init_set_ui(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_export_type = ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.c_void_p, ctypes.POINTER( ctypes.c_uint ), ctypes.c_int, ctypes.c_uint, ctypes.c_int, ctypes.c_uint, ctypes.POINTER( __mpz_struct )  )
-gmpz_export = gmpz_export_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void * __gmpz_export(void * arg0, size_t * arg1, int arg2, size_t arg3, int arg4, size_t arg5, mpz_srcptr arg6) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_export = gmpz_export_type( ( libgmp_lib.undecorated_names["extern void * __gmpz_export(void * arg0, size_t * arg1, int arg2, size_t arg3, int arg4, size_t arg5, mpz_srcptr arg6) [free function]"], libgmp_lib ) )
 
 gmpz_set_str_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_char_p, ctypes.c_int  )
-gmpz_set_str = gmpz_set_str_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_set_str(mpz_ptr arg0, char const * arg1, int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_set_str = gmpz_set_str_type( ( libgmp_lib.undecorated_names["extern int __gmpz_set_str(mpz_ptr arg0, char const * arg1, int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_set_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_set = gmpz_set_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_set(mpz_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_set = gmpz_set_type( ( libgmp_lib.undecorated_names["extern void __gmpz_set(mpz_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmp_randseed_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __gmp_randstate_struct ), ctypes.c_ulong  )
-gmp_randseed_ui = gmp_randseed_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmp_randseed_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmp_randseed_ui = gmp_randseed_ui_type( ( libgmp_lib.undecorated_names["extern void __gmp_randseed_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_random2_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_long  )
-gmpz_random2 = gmpz_random2_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_random2(mpz_ptr arg0, mp_size_t arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_random2 = gmpz_random2_type( ( libgmp_lib.undecorated_names["extern void __gmpz_random2(mpz_ptr arg0, mp_size_t arg1) [free function]"], libgmp_lib ) )
 
 gmpf_mul_2exp_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct ), ctypes.c_ulong  )
-gmpf_mul_2exp = gmpf_mul_2exp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_mul_2exp(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_mul_2exp = gmpf_mul_2exp_type( ( libgmp_lib.undecorated_names["extern void __gmpf_mul_2exp(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpf_cmp_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpf_cmp = gmpf_cmp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpf_cmp(mpf_srcptr arg0, mpf_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_cmp = gmpf_cmp_type( ( libgmp_lib.undecorated_names["extern int __gmpf_cmp(mpf_srcptr arg0, mpf_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpn_sub_1_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.c_ulong  )
-gmpn_sub_1 = gmpn_sub_1_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["mp_limb_t __gmpn_sub_1(mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_sub_1 = gmpn_sub_1_type( ( libgmp_lib.undecorated_names["mp_limb_t __gmpn_sub_1(mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n) [free function]"], libgmp_lib ) )
 
 gmpq_cmp_ui_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpq_struct ), ctypes.c_ulong, ctypes.c_ulong  )
-gmpq_cmp_ui = gmpq_cmp_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpq_cmp_ui(mpq_srcptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_cmp_ui = gmpq_cmp_ui_type( ( libgmp_lib.undecorated_names["extern int __gmpq_cmp_ui(mpq_srcptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpq_out_str_type = ctypes.CFUNCTYPE( ctypes.c_uint, ctypes.POINTER( _IO_FILE ), ctypes.c_int, ctypes.POINTER( __mpq_struct )  )
-gmpq_out_str = gmpq_out_str_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern size_t __gmpq_out_str(FILE * arg0, int arg1, mpq_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_out_str = gmpq_out_str_type( ( libgmp_lib.undecorated_names["extern size_t __gmpq_out_str(FILE * arg0, int arg1, mpq_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpz_mul_2exp_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_mul_2exp = gmpz_mul_2exp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_mul_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_mul_2exp = gmpz_mul_2exp_type( ( libgmp_lib.undecorated_names["extern void __gmpz_mul_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpn_hamdist_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_hamdist = gmpn_hamdist_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpn_hamdist(mp_srcptr arg0, mp_srcptr arg1, mp_size_t arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_hamdist = gmpn_hamdist_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpn_hamdist(mp_srcptr arg0, mp_srcptr arg1, mp_size_t arg2) [free function]"], libgmp_lib ) )
 
 gmpz_submul_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_submul = gmpz_submul_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_submul(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_submul = gmpz_submul_type( ( libgmp_lib.undecorated_names["extern void __gmpz_submul(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmp_randseed_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __gmp_randstate_struct ), ctypes.POINTER( __mpz_struct )  )
-gmp_randseed = gmp_randseed_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmp_randseed(__gmp_randstate_struct * arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmp_randseed = gmp_randseed_type( ( libgmp_lib.undecorated_names["extern void __gmp_randseed(__gmp_randstate_struct * arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_divisible_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_divisible_p = gmpz_divisible_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_divisible_p(mpz_srcptr arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_divisible_p = gmpz_divisible_p_type( ( libgmp_lib.undecorated_names["extern int __gmpz_divisible_p(mpz_srcptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_getlimbn_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.c_long  )
-gmpz_getlimbn = gmpz_getlimbn_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["mp_limb_t __gmpz_getlimbn(mpz_srcptr __gmp_z, mp_size_t __gmp_n) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_getlimbn = gmpz_getlimbn_type( ( libgmp_lib.undecorated_names["mp_limb_t __gmpz_getlimbn(mpz_srcptr __gmp_z, mp_size_t __gmp_n) [free function]"], libgmp_lib ) )
 
 gmp_randinit_lc_2exp_size_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __gmp_randstate_struct ), ctypes.c_ulong  )
-gmp_randinit_lc_2exp_size = gmp_randinit_lc_2exp_size_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmp_randinit_lc_2exp_size(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmp_randinit_lc_2exp_size = gmp_randinit_lc_2exp_size_type( ( libgmp_lib.undecorated_names["extern int __gmp_randinit_lc_2exp_size(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_add_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_add_ui = gmpz_add_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_add_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_add_ui = gmpz_add_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_add_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_inp_raw_type = ctypes.CFUNCTYPE( ctypes.c_uint, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( _IO_FILE )  )
-gmpz_inp_raw = gmpz_inp_raw_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern size_t __gmpz_inp_raw(mpz_ptr arg0, FILE * arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_inp_raw = gmpz_inp_raw_type( ( libgmp_lib.undecorated_names["extern size_t __gmpz_inp_raw(mpz_ptr arg0, FILE * arg1) [free function]"], libgmp_lib ) )
 
 gmpz_tdiv_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_tdiv_ui = gmpz_tdiv_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_tdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_tdiv_ui = gmpz_tdiv_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_tdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_tdiv_qr_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_tdiv_qr_ui = gmpz_tdiv_qr_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_tdiv_qr_ui(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_tdiv_qr_ui = gmpz_tdiv_qr_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_tdiv_qr_ui(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]"], libgmp_lib ) )
 
 gmpf_neg_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpf_neg = gmpf_neg_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_neg(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_neg = gmpf_neg_type( ( libgmp_lib.undecorated_names["extern void __gmpf_neg(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpq_set_num_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpq_set_num = gmpq_set_num_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_set_num(mpq_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_set_num = gmpq_set_num_type( ( libgmp_lib.undecorated_names["extern void __gmpq_set_num(mpq_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpf_mul_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpf_mul = gmpf_mul_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_mul(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_mul = gmpf_mul_type( ( libgmp_lib.undecorated_names["extern void __gmpf_mul(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpz_submul_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_submul_ui = gmpz_submul_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_submul_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_submul_ui = gmpz_submul_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_submul_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpf_div_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct ), ctypes.c_ulong  )
-gmpf_div_ui = gmpf_div_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_div_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_div_ui = gmpf_div_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpf_div_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_random_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_long  )
-gmpz_random = gmpz_random_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_random(mpz_ptr arg0, mp_size_t arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_random = gmpz_random_type( ( libgmp_lib.undecorated_names["extern void __gmpz_random(mpz_ptr arg0, mp_size_t arg1) [free function]"], libgmp_lib ) )
 
 gmpn_pow_1_type = ctypes.CFUNCTYPE( ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong )  )
-gmpn_pow_1 = gmpn_pow_1_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_size_t __gmpn_pow_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3, mp_ptr arg4) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_pow_1 = gmpn_pow_1_type( ( libgmp_lib.undecorated_names["extern mp_size_t __gmpn_pow_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3, mp_ptr arg4) [free function]"], libgmp_lib ) )
 
 gmpz_addmul_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_addmul = gmpz_addmul_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_addmul(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_addmul = gmpz_addmul_type( ( libgmp_lib.undecorated_names["extern void __gmpz_addmul(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpz_ui_sub_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong, ctypes.POINTER( __mpz_struct )  )
-gmpz_ui_sub = gmpz_ui_sub_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_ui_sub(mpz_ptr arg0, long unsigned int arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_ui_sub = gmpz_ui_sub_type( ( libgmp_lib.undecorated_names["extern void __gmpz_ui_sub(mpz_ptr arg0, long unsigned int arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmp_set_memory_functions_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.c_uint ) ), ctypes.POINTER( ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint ) ), ctypes.POINTER( ctypes.CFUNCTYPE( None, ctypes.c_void_p, ctypes.c_uint ) )  )
-gmp_set_memory_functions = gmp_set_memory_functions_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmp_set_memory_functions(void * (*)( ::size_t ) * arg0, void * (*)( void *,::size_t,::size_t ) * arg1, void (*)( void *,::size_t ) * arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmp_set_memory_functions = gmp_set_memory_functions_type( ( libgmp_lib.undecorated_names["extern void __gmp_set_memory_functions(void * (*)( ::size_t ) * arg0, void * (*)( void *,::size_t,::size_t ) * arg1, void (*)( void *,::size_t ) * arg2) [free function]"], libgmp_lib ) )
 
 gmpz_tdiv_q_2exp_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_tdiv_q_2exp = gmpz_tdiv_q_2exp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_tdiv_q_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_tdiv_q_2exp = gmpz_tdiv_q_2exp_type( ( libgmp_lib.undecorated_names["extern void __gmpz_tdiv_q_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_sqrt_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_sqrt = gmpz_sqrt_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_sqrt(mpz_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_sqrt = gmpz_sqrt_type( ( libgmp_lib.undecorated_names["extern void __gmpz_sqrt(mpz_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpn_divrem_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_divrem = gmpn_divrem_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_limb_t __gmpn_divrem(mp_ptr arg0, mp_size_t arg1, mp_ptr arg2, mp_size_t arg3, mp_srcptr arg4, mp_size_t arg5) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_divrem = gmpn_divrem_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_divrem(mp_ptr arg0, mp_size_t arg1, mp_ptr arg2, mp_size_t arg3, mp_srcptr arg4, mp_size_t arg5) [free function]"], libgmp_lib ) )
 
 gmpf_sqrt_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_ulong  )
-gmpf_sqrt_ui = gmpf_sqrt_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_sqrt_ui(mpf_ptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_sqrt_ui = gmpf_sqrt_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpf_sqrt_ui(mpf_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpn_sub_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_sub = gmpn_sub_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["mp_limb_t __gmpn_sub(mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_sub = gmpn_sub_type( ( libgmp_lib.undecorated_names["mp_limb_t __gmpn_sub(mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize) [free function]"], libgmp_lib ) )
 
 gmpq_set_f_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpq_set_f = gmpq_set_f_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_set_f(mpq_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_set_f = gmpq_set_f_type( ( libgmp_lib.undecorated_names["extern void __gmpq_set_f(mpq_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpq_get_d_type = ctypes.CFUNCTYPE( ctypes.c_double, ctypes.POINTER( __mpq_struct )  )
-gmpq_get_d = gmpq_get_d_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern double __gmpq_get_d(mpq_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_get_d = gmpq_get_d_type( ( libgmp_lib.undecorated_names["extern double __gmpq_get_d(mpq_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpf_size_type = ctypes.CFUNCTYPE( ctypes.c_uint, ctypes.POINTER( __mpf_struct )  )
-gmpf_size = gmpf_size_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern size_t __gmpf_size(mpf_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_size = gmpf_size_type( ( libgmp_lib.undecorated_names["extern size_t __gmpf_size(mpf_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpz_add_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_add = gmpz_add_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_add(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_add = gmpz_add_type( ( libgmp_lib.undecorated_names["extern void __gmpz_add(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpq_inv_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpq_inv = gmpq_inv_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_inv(mpq_ptr arg0, mpq_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_inv = gmpq_inv_type( ( libgmp_lib.undecorated_names["extern void __gmpq_inv(mpq_ptr arg0, mpq_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_rootrem_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_rootrem = gmpz_rootrem_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_rootrem(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_rootrem = gmpz_rootrem_type( ( libgmp_lib.undecorated_names["extern void __gmpz_rootrem(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]"], libgmp_lib ) )
 
 gmpf_ceil_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpf_ceil = gmpf_ceil_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_ceil(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_ceil = gmpf_ceil_type( ( libgmp_lib.undecorated_names["extern void __gmpf_ceil(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_fits_ushort_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct )  )
-gmpz_fits_ushort_p = gmpz_fits_ushort_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["int __gmpz_fits_ushort_p(mpz_srcptr __gmp_z) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fits_ushort_p = gmpz_fits_ushort_p_type( ( libgmp_lib.undecorated_names["int __gmpz_fits_ushort_p(mpz_srcptr __gmp_z) [free function]"], libgmp_lib ) )
 
 gmpz_cdiv_r_2exp_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_cdiv_r_2exp = gmpz_cdiv_r_2exp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_cdiv_r_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_cdiv_r_2exp = gmpz_cdiv_r_2exp_type( ( libgmp_lib.undecorated_names["extern void __gmpz_cdiv_r_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_fdiv_qr_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_fdiv_qr = gmpz_fdiv_qr_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_fdiv_qr(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fdiv_qr = gmpz_fdiv_qr_type( ( libgmp_lib.undecorated_names["extern void __gmpz_fdiv_qr(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]"], libgmp_lib ) )
 
 gmpz_get_si_type = ctypes.CFUNCTYPE( ctypes.c_long, ctypes.POINTER( __mpz_struct )  )
-gmpz_get_si = gmpz_get_si_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long int __gmpz_get_si(mpz_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_get_si = gmpz_get_si_type( ( libgmp_lib.undecorated_names["extern long int __gmpz_get_si(mpz_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpf_integer_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpf_struct )  )
-gmpf_integer_p = gmpf_integer_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpf_integer_p(mpf_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_integer_p = gmpf_integer_p_type( ( libgmp_lib.undecorated_names["extern int __gmpf_integer_p(mpf_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpz_congruent_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_congruent_p = gmpz_congruent_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_congruent_p(mpz_srcptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_congruent_p = gmpz_congruent_p_type( ( libgmp_lib.undecorated_names["extern int __gmpz_congruent_p(mpz_srcptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpf_ui_div_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_ulong, ctypes.POINTER( __mpf_struct )  )
-gmpf_ui_div = gmpf_ui_div_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_ui_div(mpf_ptr arg0, long unsigned int arg1, mpf_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_ui_div = gmpf_ui_div_type( ( libgmp_lib.undecorated_names["extern void __gmpf_ui_div(mpf_ptr arg0, long unsigned int arg1, mpf_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpz_mul_si_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_long  )
-gmpz_mul_si = gmpz_mul_si_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_mul_si(mpz_ptr arg0, mpz_srcptr arg1, long int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_mul_si = gmpz_mul_si_type( ( libgmp_lib.undecorated_names["extern void __gmpz_mul_si(mpz_ptr arg0, mpz_srcptr arg1, long int arg2) [free function]"], libgmp_lib ) )
 
 gmpq_div_2exp_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct ), ctypes.c_ulong  )
-gmpq_div_2exp = gmpq_div_2exp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_div_2exp(mpq_ptr arg0, mpq_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_div_2exp = gmpq_div_2exp_type( ( libgmp_lib.undecorated_names["extern void __gmpq_div_2exp(mpq_ptr arg0, mpq_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpq_mul_2exp_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct ), ctypes.c_ulong  )
-gmpq_mul_2exp = gmpq_mul_2exp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_mul_2exp(mpq_ptr arg0, mpq_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_mul_2exp = gmpq_mul_2exp_type( ( libgmp_lib.undecorated_names["extern void __gmpq_mul_2exp(mpq_ptr arg0, mpq_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpf_urandomb_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __gmp_randstate_struct ), ctypes.c_ulong  )
-gmpf_urandomb = gmpf_urandomb_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_urandomb(__mpf_struct * arg0, __gmp_randstate_struct * arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_urandomb = gmpf_urandomb_type( ( libgmp_lib.undecorated_names["extern void __gmpf_urandomb(__mpf_struct * arg0, __gmp_randstate_struct * arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpq_neg_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpq_neg = gmpq_neg_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["void __gmpq_neg(mpq_ptr __gmp_w, mpq_srcptr __gmp_u) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_neg = gmpq_neg_type( ( libgmp_lib.undecorated_names["void __gmpq_neg(mpq_ptr __gmp_w, mpq_srcptr __gmp_u) [free function]"], libgmp_lib ) )
 
 gmpz_import_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_uint, ctypes.c_int, ctypes.c_uint, ctypes.c_int, ctypes.c_uint, ctypes.c_void_p  )
-gmpz_import = gmpz_import_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_import(mpz_ptr arg0, size_t arg1, int arg2, size_t arg3, int arg4, size_t arg5, void const * arg6) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_import = gmpz_import_type( ( libgmp_lib.undecorated_names["extern void __gmpz_import(mpz_ptr arg0, size_t arg1, int arg2, size_t arg3, int arg4, size_t arg5, void const * arg6) [free function]"], libgmp_lib ) )
 
 gmpz_mul_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_mul_ui = gmpz_mul_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_mul_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_mul_ui = gmpz_mul_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_mul_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_tstbit_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_tstbit = gmpz_tstbit_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_tstbit(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_tstbit = gmpz_tstbit_type( ( libgmp_lib.undecorated_names["extern int __gmpz_tstbit(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpq_get_num_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpq_get_num = gmpq_get_num_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_get_num(mpz_ptr arg0, mpq_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_get_num = gmpq_get_num_type( ( libgmp_lib.undecorated_names["extern void __gmpq_get_num(mpz_ptr arg0, mpq_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_sub_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_sub_ui = gmpz_sub_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_sub_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_sub_ui = gmpz_sub_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_sub_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_rrandomb_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __gmp_randstate_struct ), ctypes.c_ulong  )
-gmpz_rrandomb = gmpz_rrandomb_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_rrandomb(mpz_ptr arg0, __gmp_randstate_struct * arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_rrandomb = gmpz_rrandomb_type( ( libgmp_lib.undecorated_names["extern void __gmpz_rrandomb(mpz_ptr arg0, __gmp_randstate_struct * arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpn_set_str_type = ctypes.CFUNCTYPE( ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ubyte ), ctypes.c_uint, ctypes.c_int  )
-gmpn_set_str = gmpn_set_str_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_size_t __gmpn_set_str(mp_ptr arg0, unsigned char const * arg1, size_t arg2, int arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_set_str = gmpn_set_str_type( ( libgmp_lib.undecorated_names["extern mp_size_t __gmpn_set_str(mp_ptr arg0, unsigned char const * arg1, size_t arg2, int arg3) [free function]"], libgmp_lib ) )
 
 gmpz_root_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_root = gmpz_root_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_root(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_root = gmpz_root_type( ( libgmp_lib.undecorated_names["extern int __gmpz_root(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_fdiv_q_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_fdiv_q_ui = gmpz_fdiv_q_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_fdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fdiv_q_ui = gmpz_fdiv_q_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_fdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_cmpabs_ui_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_cmpabs_ui = gmpz_cmpabs_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_cmpabs_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_cmpabs_ui = gmpz_cmpabs_ui_type( ( libgmp_lib.undecorated_names["extern int __gmpz_cmpabs_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_divexact_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_divexact = gmpz_divexact_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_divexact(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_divexact = gmpz_divexact_type( ( libgmp_lib.undecorated_names["extern void __gmpz_divexact(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpz_cmpabs_d_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_double  )
-gmpz_cmpabs_d = gmpz_cmpabs_d_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_cmpabs_d(mpz_srcptr arg0, double arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_cmpabs_d = gmpz_cmpabs_d_type( ( libgmp_lib.undecorated_names["extern int __gmpz_cmpabs_d(mpz_srcptr arg0, double arg1) [free function]"], libgmp_lib ) )
 
 gmpz_mod_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_mod = gmpz_mod_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_mod(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_mod = gmpz_mod_type( ( libgmp_lib.undecorated_names["extern void __gmpz_mod(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpz_fits_ulong_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct )  )
-gmpz_fits_ulong_p = gmpz_fits_ulong_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["int __gmpz_fits_ulong_p(mpz_srcptr __gmp_z) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fits_ulong_p = gmpz_fits_ulong_p_type( ( libgmp_lib.undecorated_names["int __gmpz_fits_ulong_p(mpz_srcptr __gmp_z) [free function]"], libgmp_lib ) )
 
 gmpz_cdiv_qr_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_cdiv_qr_ui = gmpz_cdiv_qr_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_cdiv_qr_ui(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_cdiv_qr_ui = gmpz_cdiv_qr_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_cdiv_qr_ui(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]"], libgmp_lib ) )
 
 gmpz_cmp_ui_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_cmp_ui = gmpz_cmp_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_cmp_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_cmp_ui = gmpz_cmp_ui_type( ( libgmp_lib.undecorated_names["extern int __gmpz_cmp_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_clear_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct )  )
-gmpz_clear = gmpz_clear_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_clear(mpz_ptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_clear = gmpz_clear_type( ( libgmp_lib.undecorated_names["extern void __gmpz_clear(mpz_ptr arg0) [free function]"], libgmp_lib ) )
 
 gmp_randinit_mt_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __gmp_randstate_struct )  )
-gmp_randinit_mt = gmp_randinit_mt_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmp_randinit_mt(__gmp_randstate_struct * arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmp_randinit_mt = gmp_randinit_mt_type( ( libgmp_lib.undecorated_names["extern void __gmp_randinit_mt(__gmp_randstate_struct * arg0) [free function]"], libgmp_lib ) )
 
 gmpq_set_z_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpq_set_z = gmpq_set_z_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_set_z(mpq_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_set_z = gmpq_set_z_type( ( libgmp_lib.undecorated_names["extern void __gmpq_set_z(mpq_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_abs_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_abs = gmpz_abs_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["void __gmpz_abs(mpz_ptr __gmp_w, mpz_srcptr __gmp_u) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_abs = gmpz_abs_type( ( libgmp_lib.undecorated_names["void __gmpz_abs(mpz_ptr __gmp_w, mpz_srcptr __gmp_u) [free function]"], libgmp_lib ) )
 
 gmpz_probab_prime_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_int  )
-gmpz_probab_prime_p = gmpz_probab_prime_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_probab_prime_p(mpz_srcptr arg0, int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_probab_prime_p = gmpz_probab_prime_p_type( ( libgmp_lib.undecorated_names["extern int __gmpz_probab_prime_p(mpz_srcptr arg0, int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_tdiv_q_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_tdiv_q = gmpz_tdiv_q_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_tdiv_q(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_tdiv_q = gmpz_tdiv_q_type( ( libgmp_lib.undecorated_names["extern void __gmpz_tdiv_q(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpz_tdiv_r_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_tdiv_r = gmpz_tdiv_r_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_tdiv_r(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_tdiv_r = gmpz_tdiv_r_type( ( libgmp_lib.undecorated_names["extern void __gmpz_tdiv_r(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpf_set_str_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpf_struct ), ctypes.c_char_p, ctypes.c_int  )
-gmpf_set_str = gmpf_set_str_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpf_set_str(mpf_ptr arg0, char const * arg1, int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_set_str = gmpf_set_str_type( ( libgmp_lib.undecorated_names["extern int __gmpf_set_str(mpf_ptr arg0, char const * arg1, int arg2) [free function]"], libgmp_lib ) )
 
 gmpf_set_q_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpf_set_q = gmpf_set_q_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_set_q(mpf_ptr arg0, mpq_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_set_q = gmpf_set_q_type( ( libgmp_lib.undecorated_names["extern void __gmpf_set_q(mpf_ptr arg0, mpq_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpq_set_d_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.c_double  )
-gmpq_set_d = gmpq_set_d_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_set_d(mpq_ptr arg0, double arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_set_d = gmpq_set_d_type( ( libgmp_lib.undecorated_names["extern void __gmpq_set_d(mpq_ptr arg0, double arg1) [free function]"], libgmp_lib ) )
 
 gmpz_lcm_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_lcm = gmpz_lcm_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_lcm(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_lcm = gmpz_lcm_type( ( libgmp_lib.undecorated_names["extern void __gmpz_lcm(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpn_rshift_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.c_uint  )
-gmpn_rshift = gmpn_rshift_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_limb_t __gmpn_rshift(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, unsigned int arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_rshift = gmpn_rshift_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_rshift(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, unsigned int arg3) [free function]"], libgmp_lib ) )
 
 gmpf_set_z_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpf_set_z = gmpf_set_z_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_set_z(mpf_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_set_z = gmpf_set_z_type( ( libgmp_lib.undecorated_names["extern void __gmpf_set_z(mpf_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpq_set_den_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpq_set_den = gmpq_set_den_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_set_den(mpq_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_set_den = gmpq_set_den_type( ( libgmp_lib.undecorated_names["extern void __gmpq_set_den(mpq_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_get_str_type = ctypes.CFUNCTYPE( ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int, ctypes.POINTER( __mpz_struct )  )
-gmpz_get_str = gmpz_get_str_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern char * __gmpz_get_str(char * arg0, int arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_get_str = gmpz_get_str_type( ( libgmp_lib.undecorated_names["extern char * __gmpz_get_str(char * arg0, int arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpf_init_set_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpf_init_set = gmpf_init_set_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_init_set(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_init_set = gmpf_init_set_type( ( libgmp_lib.undecorated_names["extern void __gmpf_init_set(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_get_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct )  )
-gmpz_get_ui = gmpz_get_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["long unsigned int __gmpz_get_ui(mpz_srcptr __gmp_z) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_get_ui = gmpz_get_ui_type( ( libgmp_lib.undecorated_names["long unsigned int __gmpz_get_ui(mpz_srcptr __gmp_z) [free function]"], libgmp_lib ) )
 
 gmpf_get_si_type = ctypes.CFUNCTYPE( ctypes.c_long, ctypes.POINTER( __mpf_struct )  )
-gmpf_get_si = gmpf_get_si_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long int __gmpf_get_si(mpf_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_get_si = gmpf_get_si_type( ( libgmp_lib.undecorated_names["extern long int __gmpf_get_si(mpf_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmp_randinit_lc_2exp_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __gmp_randstate_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong, ctypes.c_ulong  )
-gmp_randinit_lc_2exp = gmp_randinit_lc_2exp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmp_randinit_lc_2exp(__gmp_randstate_struct * arg0, mpz_srcptr arg1, long unsigned int arg2, long unsigned int arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmp_randinit_lc_2exp = gmp_randinit_lc_2exp_type( ( libgmp_lib.undecorated_names["extern void __gmp_randinit_lc_2exp(__gmp_randstate_struct * arg0, mpz_srcptr arg1, long unsigned int arg2, long unsigned int arg3) [free function]"], libgmp_lib ) )
 
 gmpf_sub_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpf_sub = gmpf_sub_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_sub(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_sub = gmpf_sub_type( ( libgmp_lib.undecorated_names["extern void __gmpf_sub(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpq_cmp_si_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpq_struct ), ctypes.c_long, ctypes.c_ulong  )
-gmpq_cmp_si = gmpq_cmp_si_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpq_cmp_si(mpq_srcptr arg0, long int arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_cmp_si = gmpq_cmp_si_type( ( libgmp_lib.undecorated_names["extern int __gmpq_cmp_si(mpq_srcptr arg0, long int arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpn_get_str_type = ctypes.CFUNCTYPE( ctypes.c_uint, ctypes.POINTER( ctypes.c_ubyte ), ctypes.c_int, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_get_str = gmpn_get_str_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern size_t __gmpn_get_str(unsigned char * arg0, int arg1, mp_ptr arg2, mp_size_t arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_get_str = gmpn_get_str_type( ( libgmp_lib.undecorated_names["extern size_t __gmpn_get_str(unsigned char * arg0, int arg1, mp_ptr arg2, mp_size_t arg3) [free function]"], libgmp_lib ) )
 
 gmpf_get_d_2exp_type = ctypes.CFUNCTYPE( ctypes.c_double, ctypes.POINTER( ctypes.c_long ), ctypes.POINTER( __mpf_struct )  )
-gmpf_get_d_2exp = gmpf_get_d_2exp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern double __gmpf_get_d_2exp(long int * arg0, mpf_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_get_d_2exp = gmpf_get_d_2exp_type( ( libgmp_lib.undecorated_names["extern double __gmpf_get_d_2exp(long int * arg0, mpf_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_cdiv_r_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_cdiv_r_ui = gmpz_cdiv_r_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_cdiv_r_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_cdiv_r_ui = gmpz_cdiv_r_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_cdiv_r_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_urandomm_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __gmp_randstate_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_urandomm = gmpz_urandomm_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_urandomm(mpz_ptr arg0, __gmp_randstate_struct * arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_urandomm = gmpz_urandomm_type( ( libgmp_lib.undecorated_names["extern void __gmpz_urandomm(mpz_ptr arg0, __gmp_randstate_struct * arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpf_ui_sub_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_ulong, ctypes.POINTER( __mpf_struct )  )
-gmpf_ui_sub = gmpf_ui_sub_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_ui_sub(mpf_ptr arg0, long unsigned int arg1, mpf_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_ui_sub = gmpf_ui_sub_type( ( libgmp_lib.undecorated_names["extern void __gmpf_ui_sub(mpf_ptr arg0, long unsigned int arg1, mpf_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpf_get_d_type = ctypes.CFUNCTYPE( ctypes.c_double, ctypes.POINTER( __mpf_struct )  )
-gmpf_get_d = gmpf_get_d_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern double __gmpf_get_d(mpf_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_get_d = gmpf_get_d_type( ( libgmp_lib.undecorated_names["extern double __gmpf_get_d(mpf_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpn_add_1_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.c_ulong  )
-gmpn_add_1 = gmpn_add_1_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["mp_limb_t __gmpn_add_1(mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_add_1 = gmpn_add_1_type( ( libgmp_lib.undecorated_names["mp_limb_t __gmpn_add_1(mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n) [free function]"], libgmp_lib ) )
 
 gmp_randinit_set_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __gmp_randstate_struct ), ctypes.POINTER( __gmp_randstate_struct )  )
-gmp_randinit_set = gmp_randinit_set_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmp_randinit_set(__gmp_randstate_struct * arg0, __gmp_randstate_struct const * arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmp_randinit_set = gmp_randinit_set_type( ( libgmp_lib.undecorated_names["extern void __gmp_randinit_set(__gmp_randstate_struct * arg0, __gmp_randstate_struct const * arg1) [free function]"], libgmp_lib ) )
 
 gmpn_add_n_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_add_n = gmpn_add_n_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_limb_t __gmpn_add_n(mp_ptr arg0, mp_srcptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_add_n = gmpn_add_n_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_add_n(mp_ptr arg0, mp_srcptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]"], libgmp_lib ) )
 
 gmpz_popcount_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct )  )
-gmpz_popcount = gmpz_popcount_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["long unsigned int __gmpz_popcount(mpz_srcptr __gmp_u) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_popcount = gmpz_popcount_type( ( libgmp_lib.undecorated_names["long unsigned int __gmpz_popcount(mpz_srcptr __gmp_u) [free function]"], libgmp_lib ) )
 
 gmpf_get_str_type = ctypes.CFUNCTYPE( ctypes.c_char_p, ctypes.c_char_p, ctypes.POINTER( ctypes.c_long ), ctypes.c_int, ctypes.c_uint, ctypes.POINTER( __mpf_struct )  )
-gmpf_get_str = gmpf_get_str_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern char * __gmpf_get_str(char * arg0, mp_exp_t * arg1, int arg2, size_t arg3, mpf_srcptr arg4) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_get_str = gmpf_get_str_type( ( libgmp_lib.undecorated_names["extern char * __gmpf_get_str(char * arg0, mp_exp_t * arg1, int arg2, size_t arg3, mpf_srcptr arg4) [free function]"], libgmp_lib ) )
 
 gmp_get_memory_functions_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( ctypes.POINTER( ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.c_uint ) ) ), ctypes.POINTER( ctypes.POINTER( ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint ) ) ), ctypes.POINTER( ctypes.POINTER( ctypes.CFUNCTYPE( None, ctypes.c_void_p, ctypes.c_uint ) ) )  )
-gmp_get_memory_functions = gmp_get_memory_functions_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmp_get_memory_functions(void * (*)( ::size_t ) * * arg0, void * (*)( void *,::size_t,::size_t ) * * arg1, void (*)( void *,::size_t ) * * arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmp_get_memory_functions = gmp_get_memory_functions_type( ( libgmp_lib.undecorated_names["extern void __gmp_get_memory_functions(void * (*)( ::size_t ) * * arg0, void * (*)( void *,::size_t,::size_t ) * * arg1, void (*)( void *,::size_t ) * * arg2) [free function]"], libgmp_lib ) )
 
 gmpz_out_raw_type = ctypes.CFUNCTYPE( ctypes.c_uint, ctypes.POINTER( _IO_FILE ), ctypes.POINTER( __mpz_struct )  )
-gmpz_out_raw = gmpz_out_raw_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern size_t __gmpz_out_raw(FILE * arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_out_raw = gmpz_out_raw_type( ( libgmp_lib.undecorated_names["extern size_t __gmpz_out_raw(FILE * arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_congruent_ui_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong, ctypes.c_ulong  )
-gmpz_congruent_ui_p = gmpz_congruent_ui_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_congruent_ui_p(mpz_srcptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_congruent_ui_p = gmpz_congruent_ui_p_type( ( libgmp_lib.undecorated_names["extern int __gmpz_congruent_ui_p(mpz_srcptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_congruent_2exp_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_congruent_2exp_p = gmpz_congruent_2exp_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_congruent_2exp_p(mpz_srcptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_congruent_2exp_p = gmpz_congruent_2exp_p_type( ( libgmp_lib.undecorated_names["extern int __gmpz_congruent_2exp_p(mpz_srcptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpq_get_den_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpq_get_den = gmpq_get_den_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_get_den(mpz_ptr arg0, mpq_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_get_den = gmpq_get_den_type( ( libgmp_lib.undecorated_names["extern void __gmpq_get_den(mpz_ptr arg0, mpq_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpn_random_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_random = gmpn_random_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpn_random(mp_ptr arg0, mp_size_t arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_random = gmpn_random_type( ( libgmp_lib.undecorated_names["extern void __gmpn_random(mp_ptr arg0, mp_size_t arg1) [free function]"], libgmp_lib ) )
 
 gmp_randclear_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __gmp_randstate_struct )  )
-gmp_randclear = gmp_randclear_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmp_randclear(__gmp_randstate_struct * arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmp_randclear = gmp_randclear_type( ( libgmp_lib.undecorated_names["extern void __gmp_randclear(__gmp_randstate_struct * arg0) [free function]"], libgmp_lib ) )
 
 gmpz_inp_str_type = ctypes.CFUNCTYPE( ctypes.c_uint, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( _IO_FILE ), ctypes.c_int  )
-gmpz_inp_str = gmpz_inp_str_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern size_t __gmpz_inp_str(mpz_ptr arg0, FILE * arg1, int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_inp_str = gmpz_inp_str_type( ( libgmp_lib.undecorated_names["extern size_t __gmpz_inp_str(mpz_ptr arg0, FILE * arg1, int arg2) [free function]"], libgmp_lib ) )
 
 gmpf_get_default_prec_type = ctypes.CFUNCTYPE( ctypes.c_ulong )
-gmpf_get_default_prec = gmpf_get_default_prec_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpf_get_default_prec() [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_get_default_prec = gmpf_get_default_prec_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpf_get_default_prec() [free function]"], libgmp_lib ) )
 
 gmpn_mod_1_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.c_ulong  )
-gmpn_mod_1 = gmpn_mod_1_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_limb_t __gmpn_mod_1(mp_srcptr arg0, mp_size_t arg1, mp_limb_t arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_mod_1 = gmpn_mod_1_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_mod_1(mp_srcptr arg0, mp_size_t arg1, mp_limb_t arg2) [free function]"], libgmp_lib ) )
 
 gmpz_perfect_square_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct )  )
-gmpz_perfect_square_p = gmpz_perfect_square_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["int __gmpz_perfect_square_p(mpz_srcptr __gmp_a) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_perfect_square_p = gmpz_perfect_square_p_type( ( libgmp_lib.undecorated_names["int __gmpz_perfect_square_p(mpz_srcptr __gmp_a) [free function]"], libgmp_lib ) )
 
 gmpz_fib2_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_fib2_ui = gmpz_fib2_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_fib2_ui(mpz_ptr arg0, mpz_ptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fib2_ui = gmpz_fib2_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_fib2_ui(mpz_ptr arg0, mpz_ptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpf_set_prec_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_ulong  )
-gmpf_set_prec = gmpf_set_prec_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_set_prec(mpf_ptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_set_prec = gmpf_set_prec_type( ( libgmp_lib.undecorated_names["extern void __gmpf_set_prec(mpf_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpq_swap_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpq_swap = gmpq_swap_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_swap(mpq_ptr arg0, mpq_ptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_swap = gmpq_swap_type( ( libgmp_lib.undecorated_names["extern void __gmpq_swap(mpq_ptr arg0, mpq_ptr arg1) [free function]"], libgmp_lib ) )
 
 gmpq_set_si_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.c_long, ctypes.c_ulong  )
-gmpq_set_si = gmpq_set_si_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_set_si(mpq_ptr arg0, long int arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_set_si = gmpq_set_si_type( ( libgmp_lib.undecorated_names["extern void __gmpq_set_si(mpq_ptr arg0, long int arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpq_mul_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpq_mul = gmpq_mul_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_mul(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_mul = gmpq_mul_type( ( libgmp_lib.undecorated_names["extern void __gmpq_mul(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpf_clear_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct )  )
-gmpf_clear = gmpf_clear_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_clear(mpf_ptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_clear = gmpf_clear_type( ( libgmp_lib.undecorated_names["extern void __gmpf_clear(mpf_ptr arg0) [free function]"], libgmp_lib ) )
 
 gmpq_set_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.c_ulong, ctypes.c_ulong  )
-gmpq_set_ui = gmpq_set_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_set_ui(mpq_ptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_set_ui = gmpq_set_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpq_set_ui(mpq_ptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_jacobi_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_jacobi = gmpz_jacobi_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_jacobi(mpz_srcptr arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_jacobi = gmpz_jacobi_type( ( libgmp_lib.undecorated_names["extern int __gmpz_jacobi(mpz_srcptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpf_set_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_ulong  )
-gmpf_set_ui = gmpf_set_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_set_ui(mpf_ptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_set_ui = gmpf_set_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpf_set_ui(mpf_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_and_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_and = gmpz_and_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_and(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_and = gmpz_and_type( ( libgmp_lib.undecorated_names["extern void __gmpz_and(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpf_init_set_si_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_long  )
-gmpf_init_set_si = gmpf_init_set_si_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_init_set_si(mpf_ptr arg0, long int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_init_set_si = gmpf_init_set_si_type( ( libgmp_lib.undecorated_names["extern void __gmpf_init_set_si(mpf_ptr arg0, long int arg1) [free function]"], libgmp_lib ) )
 
 gmpf_random2_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_long, ctypes.c_long  )
-gmpf_random2 = gmpf_random2_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_random2(mpf_ptr arg0, mp_size_t arg1, mp_exp_t arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_random2 = gmpf_random2_type( ( libgmp_lib.undecorated_names["extern void __gmpf_random2(mpf_ptr arg0, mp_size_t arg1, mp_exp_t arg2) [free function]"], libgmp_lib ) )
 
 gmpz_fdiv_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_fdiv_ui = gmpz_fdiv_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_fdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fdiv_ui = gmpz_fdiv_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_fdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpf_fits_sint_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpf_struct )  )
-gmpf_fits_sint_p = gmpf_fits_sint_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpf_fits_sint_p(mpf_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_fits_sint_p = gmpf_fits_sint_p_type( ( libgmp_lib.undecorated_names["extern int __gmpf_fits_sint_p(mpf_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpf_init_set_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_ulong  )
-gmpf_init_set_ui = gmpf_init_set_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_init_set_ui(mpf_ptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_init_set_ui = gmpf_init_set_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpf_init_set_ui(mpf_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpq_clear_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct )  )
-gmpq_clear = gmpq_clear_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_clear(mpq_ptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_clear = gmpq_clear_type( ( libgmp_lib.undecorated_names["extern void __gmpq_clear(mpq_ptr arg0) [free function]"], libgmp_lib ) )
 
 gmpn_mul_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_mul = gmpn_mul_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_limb_t __gmpn_mul(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_srcptr arg3, mp_size_t arg4) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_mul = gmpn_mul_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_mul(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_srcptr arg3, mp_size_t arg4) [free function]"], libgmp_lib ) )
 
 gmpz_ior_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_ior = gmpz_ior_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_ior(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_ior = gmpz_ior_type( ( libgmp_lib.undecorated_names["extern void __gmpz_ior(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpz_bin_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_bin_ui = gmpz_bin_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_bin_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_bin_ui = gmpz_bin_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_bin_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpq_cmp_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpq_cmp = gmpq_cmp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpq_cmp(mpq_srcptr arg0, mpq_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_cmp = gmpq_cmp_type( ( libgmp_lib.undecorated_names["extern int __gmpq_cmp(mpq_srcptr arg0, mpq_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_cdiv_r_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_cdiv_r = gmpz_cdiv_r_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_cdiv_r(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_cdiv_r = gmpz_cdiv_r_type( ( libgmp_lib.undecorated_names["extern void __gmpz_cdiv_r(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpf_get_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpf_struct )  )
-gmpf_get_ui = gmpf_get_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpf_get_ui(mpf_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_get_ui = gmpf_get_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpf_get_ui(mpf_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpz_addmul_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_addmul_ui = gmpz_addmul_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_addmul_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_addmul_ui = gmpz_addmul_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_addmul_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpn_divrem_1_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.c_ulong  )
-gmpn_divrem_1 = gmpn_divrem_1_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_limb_t __gmpn_divrem_1(mp_ptr arg0, mp_size_t arg1, mp_srcptr arg2, mp_size_t arg3, mp_limb_t arg4) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_divrem_1 = gmpn_divrem_1_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_divrem_1(mp_ptr arg0, mp_size_t arg1, mp_srcptr arg2, mp_size_t arg3, mp_limb_t arg4) [free function]"], libgmp_lib ) )
 
 gmpf_pow_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct ), ctypes.c_ulong  )
-gmpf_pow_ui = gmpf_pow_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_pow_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_pow_ui = gmpf_pow_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpf_pow_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpq_set_str_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpq_struct ), ctypes.c_char_p, ctypes.c_int  )
-gmpq_set_str = gmpq_set_str_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpq_set_str(mpq_ptr arg0, char const * arg1, int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_set_str = gmpq_set_str_type( ( libgmp_lib.undecorated_names["extern int __gmpq_set_str(mpq_ptr arg0, char const * arg1, int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_sizeinbase_type = ctypes.CFUNCTYPE( ctypes.c_uint, ctypes.POINTER( __mpz_struct ), ctypes.c_int  )
-gmpz_sizeinbase = gmpz_sizeinbase_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern size_t __gmpz_sizeinbase(mpz_srcptr arg0, int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_sizeinbase = gmpz_sizeinbase_type( ( libgmp_lib.undecorated_names["extern size_t __gmpz_sizeinbase(mpz_srcptr arg0, int arg1) [free function]"], libgmp_lib ) )
 
 gmpn_submul_1_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.c_ulong  )
-gmpn_submul_1 = gmpn_submul_1_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_limb_t __gmpn_submul_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_submul_1 = gmpn_submul_1_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_submul_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]"], libgmp_lib ) )
 
 gmpz_init_set_si_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_long  )
-gmpz_init_set_si = gmpz_init_set_si_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_init_set_si(mpz_ptr arg0, long int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_init_set_si = gmpz_init_set_si_type( ( libgmp_lib.undecorated_names["extern void __gmpz_init_set_si(mpz_ptr arg0, long int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_invert_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_invert = gmpz_invert_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_invert(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_invert = gmpz_invert_type( ( libgmp_lib.undecorated_names["extern int __gmpz_invert(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpf_inp_str_type = ctypes.CFUNCTYPE( ctypes.c_uint, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( _IO_FILE ), ctypes.c_int  )
-gmpf_inp_str = gmpf_inp_str_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern size_t __gmpf_inp_str(mpf_ptr arg0, FILE * arg1, int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_inp_str = gmpf_inp_str_type( ( libgmp_lib.undecorated_names["extern size_t __gmpf_inp_str(mpf_ptr arg0, FILE * arg1, int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_cmp_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_cmp = gmpz_cmp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_cmp(mpz_srcptr arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_cmp = gmpz_cmp_type( ( libgmp_lib.undecorated_names["extern int __gmpz_cmp(mpz_srcptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_powm_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_powm = gmpz_powm_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_powm(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_powm = gmpz_powm_type( ( libgmp_lib.undecorated_names["extern void __gmpz_powm(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]"], libgmp_lib ) )
 
 gmpf_cmp_si_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpf_struct ), ctypes.c_long  )
-gmpf_cmp_si = gmpf_cmp_si_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpf_cmp_si(mpf_srcptr arg0, long int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_cmp_si = gmpf_cmp_si_type( ( libgmp_lib.undecorated_names["extern int __gmpf_cmp_si(mpf_srcptr arg0, long int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_get_d_type = ctypes.CFUNCTYPE( ctypes.c_double, ctypes.POINTER( __mpz_struct )  )
-gmpz_get_d = gmpz_get_d_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern double __gmpz_get_d(mpz_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_get_d = gmpz_get_d_type( ( libgmp_lib.undecorated_names["extern double __gmpz_get_d(mpz_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpz_cdiv_q_2exp_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_cdiv_q_2exp = gmpz_cdiv_q_2exp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_cdiv_q_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_cdiv_q_2exp = gmpz_cdiv_q_2exp_type( ( libgmp_lib.undecorated_names["extern void __gmpz_cdiv_q_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpf_div_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpf_div = gmpf_div_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_div(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_div = gmpf_div_type( ( libgmp_lib.undecorated_names["extern void __gmpf_div(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmp_urandomm_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __gmp_randstate_struct ), ctypes.c_ulong  )
-gmp_urandomm_ui = gmp_urandomm_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmp_urandomm_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmp_urandomm_ui = gmp_urandomm_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmp_urandomm_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpn_sub_n_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_sub_n = gmpn_sub_n_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_limb_t __gmpn_sub_n(mp_ptr arg0, mp_srcptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_sub_n = gmpn_sub_n_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_sub_n(mp_ptr arg0, mp_srcptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]"], libgmp_lib ) )
 
 gmpz_setbit_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_setbit = gmpz_setbit_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_setbit(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_setbit = gmpz_setbit_type( ( libgmp_lib.undecorated_names["extern void __gmpz_setbit(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_sqrtrem_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_sqrtrem = gmpz_sqrtrem_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_sqrtrem(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_sqrtrem = gmpz_sqrtrem_type( ( libgmp_lib.undecorated_names["extern void __gmpz_sqrtrem(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpf_set_prec_raw_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_ulong  )
-gmpf_set_prec_raw = gmpf_set_prec_raw_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_set_prec_raw(mpf_ptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_set_prec_raw = gmpf_set_prec_raw_type( ( libgmp_lib.undecorated_names["extern void __gmpf_set_prec_raw(mpf_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_lucnum2_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_lucnum2_ui = gmpz_lucnum2_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_lucnum2_ui(mpz_ptr arg0, mpz_ptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_lucnum2_ui = gmpz_lucnum2_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_lucnum2_ui(mpz_ptr arg0, mpz_ptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_cdiv_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_cdiv_ui = gmpz_cdiv_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_cdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_cdiv_ui = gmpz_cdiv_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_cdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_gcdext_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_gcdext = gmpz_gcdext_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_gcdext(mpz_ptr arg0, mpz_ptr arg1, mpz_ptr arg2, mpz_srcptr arg3, mpz_srcptr arg4) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_gcdext = gmpz_gcdext_type( ( libgmp_lib.undecorated_names["extern void __gmpz_gcdext(mpz_ptr arg0, mpz_ptr arg1, mpz_ptr arg2, mpz_srcptr arg3, mpz_srcptr arg4) [free function]"], libgmp_lib ) )
 
 gmpz_hamdist_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_hamdist = gmpz_hamdist_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_hamdist(mpz_srcptr arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_hamdist = gmpz_hamdist_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_hamdist(mpz_srcptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_set_q_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpz_set_q = gmpz_set_q_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["void __gmpz_set_q(mpz_ptr __gmp_w, mpq_srcptr __gmp_u) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_set_q = gmpz_set_q_type( ( libgmp_lib.undecorated_names["void __gmpz_set_q(mpz_ptr __gmp_w, mpq_srcptr __gmp_u) [free function]"], libgmp_lib ) )
 
 gmpz_gcd_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_gcd_ui = gmpz_gcd_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_gcd_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_gcd_ui = gmpz_gcd_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_gcd_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpn_popcount_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_popcount = gmpn_popcount_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpn_popcount(mp_srcptr arg0, mp_size_t arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_popcount = gmpn_popcount_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpn_popcount(mp_srcptr arg0, mp_size_t arg1) [free function]"], libgmp_lib ) )
 
 gmpz_init_set_str_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_char_p, ctypes.c_int  )
-gmpz_init_set_str = gmpz_init_set_str_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_init_set_str(mpz_ptr arg0, char const * arg1, int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_init_set_str = gmpz_init_set_str_type( ( libgmp_lib.undecorated_names["extern int __gmpz_init_set_str(mpz_ptr arg0, char const * arg1, int arg2) [free function]"], libgmp_lib ) )
 
 gmpn_random2_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_random2 = gmpn_random2_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpn_random2(mp_ptr arg0, mp_size_t arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_random2 = gmpn_random2_type( ( libgmp_lib.undecorated_names["extern void __gmpn_random2(mp_ptr arg0, mp_size_t arg1) [free function]"], libgmp_lib ) )
 
 gmpz_cmp_d_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_double  )
-gmpz_cmp_d = gmpz_cmp_d_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_cmp_d(mpz_srcptr arg0, double arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_cmp_d = gmpz_cmp_d_type( ( libgmp_lib.undecorated_names["extern int __gmpz_cmp_d(mpz_srcptr arg0, double arg1) [free function]"], libgmp_lib ) )
 
 gmpz_xor_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_xor = gmpz_xor_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_xor(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_xor = gmpz_xor_type( ( libgmp_lib.undecorated_names["extern void __gmpz_xor(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpz_cdiv_q_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_cdiv_q = gmpz_cdiv_q_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_cdiv_q(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_cdiv_q = gmpz_cdiv_q_type( ( libgmp_lib.undecorated_names["extern void __gmpz_cdiv_q(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpz_mul_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_mul = gmpz_mul_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_mul(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_mul = gmpz_mul_type( ( libgmp_lib.undecorated_names["extern void __gmpz_mul(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpn_tdiv_qr_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_tdiv_qr = gmpn_tdiv_qr_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpn_tdiv_qr(mp_ptr arg0, mp_ptr arg1, mp_size_t arg2, mp_srcptr arg3, mp_size_t arg4, mp_srcptr arg5, mp_size_t arg6) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_tdiv_qr = gmpn_tdiv_qr_type( ( libgmp_lib.undecorated_names["extern void __gmpn_tdiv_qr(mp_ptr arg0, mp_ptr arg1, mp_size_t arg2, mp_srcptr arg3, mp_size_t arg4, mp_srcptr arg5, mp_size_t arg6) [free function]"], libgmp_lib ) )
 
 gmpz_tdiv_qr_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_tdiv_qr = gmpz_tdiv_qr_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_tdiv_qr(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_tdiv_qr = gmpz_tdiv_qr_type( ( libgmp_lib.undecorated_names["extern void __gmpz_tdiv_qr(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]"], libgmp_lib ) )
 
 gmpn_perfect_square_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_perfect_square_p = gmpn_perfect_square_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpn_perfect_square_p(mp_srcptr arg0, mp_size_t arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_perfect_square_p = gmpn_perfect_square_p_type( ( libgmp_lib.undecorated_names["extern int __gmpn_perfect_square_p(mp_srcptr arg0, mp_size_t arg1) [free function]"], libgmp_lib ) )
 
 gmpf_get_prec_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpf_struct )  )
-gmpf_get_prec = gmpf_get_prec_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpf_get_prec(mpf_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_get_prec = gmpf_get_prec_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpf_get_prec(mpf_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpf_set_default_prec_type = ctypes.CFUNCTYPE( None, ctypes.c_ulong  )
-gmpf_set_default_prec = gmpf_set_default_prec_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_set_default_prec(long unsigned int arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_set_default_prec = gmpf_set_default_prec_type( ( libgmp_lib.undecorated_names["extern void __gmpf_set_default_prec(long unsigned int arg0) [free function]"], libgmp_lib ) )
 
 gmp_urandomb_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __gmp_randstate_struct ), ctypes.c_ulong  )
-gmp_urandomb_ui = gmp_urandomb_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmp_urandomb_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmp_urandomb_ui = gmp_urandomb_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmp_urandomb_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpf_init_set_str_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpf_struct ), ctypes.c_char_p, ctypes.c_int  )
-gmpf_init_set_str = gmpf_init_set_str_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpf_init_set_str(mpf_ptr arg0, char const * arg1, int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_init_set_str = gmpf_init_set_str_type( ( libgmp_lib.undecorated_names["extern int __gmpf_init_set_str(mpf_ptr arg0, char const * arg1, int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_fits_sint_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct )  )
-gmpz_fits_sint_p = gmpz_fits_sint_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_fits_sint_p(mpz_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fits_sint_p = gmpz_fits_sint_p_type( ( libgmp_lib.undecorated_names["extern int __gmpz_fits_sint_p(mpz_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpz_urandomb_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __gmp_randstate_struct ), ctypes.c_ulong  )
-gmpz_urandomb = gmpz_urandomb_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_urandomb(mpz_ptr arg0, __gmp_randstate_struct * arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_urandomb = gmpz_urandomb_type( ( libgmp_lib.undecorated_names["extern void __gmpz_urandomb(mpz_ptr arg0, __gmp_randstate_struct * arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpf_set_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpf_set = gmpf_set_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_set(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_set = gmpf_set_type( ( libgmp_lib.undecorated_names["extern void __gmpf_set(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpf_reldiff_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpf_reldiff = gmpf_reldiff_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_reldiff(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_reldiff = gmpf_reldiff_type( ( libgmp_lib.undecorated_names["extern void __gmpf_reldiff(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpn_gcdext_type = ctypes.CFUNCTYPE( ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_long ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_gcdext = gmpn_gcdext_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_size_t __gmpn_gcdext(mp_ptr arg0, mp_ptr arg1, mp_size_t * arg2, mp_ptr arg3, mp_size_t arg4, mp_ptr arg5, mp_size_t arg6) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_gcdext = gmpn_gcdext_type( ( libgmp_lib.undecorated_names["extern mp_size_t __gmpn_gcdext(mp_ptr arg0, mp_ptr arg1, mp_size_t * arg2, mp_ptr arg3, mp_size_t arg4, mp_ptr arg5, mp_size_t arg6) [free function]"], libgmp_lib ) )
 
 gmpz_gcd_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_gcd = gmpz_gcd_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_gcd(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_gcd = gmpz_gcd_type( ( libgmp_lib.undecorated_names["extern void __gmpz_gcd(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpf_floor_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpf_floor = gmpf_floor_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_floor(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_floor = gmpf_floor_type( ( libgmp_lib.undecorated_names["extern void __gmpf_floor(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_bin_uiui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong, ctypes.c_ulong  )
-gmpz_bin_uiui = gmpz_bin_uiui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_bin_uiui(mpz_ptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_bin_uiui = gmpz_bin_uiui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_bin_uiui(mpz_ptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_set_d_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_double  )
-gmpz_set_d = gmpz_set_d_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_set_d(mpz_ptr arg0, double arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_set_d = gmpz_set_d_type( ( libgmp_lib.undecorated_names["extern void __gmpz_set_d(mpz_ptr arg0, double arg1) [free function]"], libgmp_lib ) )
 
 gmpz_set_f_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpz_set_f = gmpz_set_f_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_set_f(mpz_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_set_f = gmpz_set_f_type( ( libgmp_lib.undecorated_names["extern void __gmpz_set_f(mpz_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpn_addmul_1_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.c_ulong  )
-gmpn_addmul_1 = gmpn_addmul_1_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_limb_t __gmpn_addmul_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_addmul_1 = gmpn_addmul_1_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_addmul_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]"], libgmp_lib ) )
 
 gmpz_divisible_ui_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_divisible_ui_p = gmpz_divisible_ui_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_divisible_ui_p(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_divisible_ui_p = gmpz_divisible_ui_p_type( ( libgmp_lib.undecorated_names["extern int __gmpz_divisible_ui_p(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_cmp_si_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_long  )
-gmpz_cmp_si = gmpz_cmp_si_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_cmp_si(mpz_srcptr arg0, long int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_cmp_si = gmpz_cmp_si_type( ( libgmp_lib.undecorated_names["extern int __gmpz_cmp_si(mpz_srcptr arg0, long int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_millerrabin_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_int  )
-gmpz_millerrabin = gmpz_millerrabin_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_millerrabin(mpz_srcptr arg0, int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_millerrabin = gmpz_millerrabin_type( ( libgmp_lib.undecorated_names["extern int __gmpz_millerrabin(mpz_srcptr arg0, int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_init2_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_init2 = gmpz_init2_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_init2(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_init2 = gmpz_init2_type( ( libgmp_lib.undecorated_names["extern void __gmpz_init2(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpf_eq_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct ), ctypes.c_ulong  )
-gmpf_eq = gmpf_eq_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpf_eq(mpf_srcptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_eq = gmpf_eq_type( ( libgmp_lib.undecorated_names["extern int __gmpf_eq(mpf_srcptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpn_lshift_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.c_uint  )
-gmpn_lshift = gmpn_lshift_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_limb_t __gmpn_lshift(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, unsigned int arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_lshift = gmpn_lshift_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_lshift(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, unsigned int arg3) [free function]"], libgmp_lib ) )
 
 gmpn_divrem_2_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.POINTER( ctypes.c_ulong )  )
-gmpn_divrem_2 = gmpn_divrem_2_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_limb_t __gmpn_divrem_2(mp_ptr arg0, mp_size_t arg1, mp_ptr arg2, mp_size_t arg3, mp_srcptr arg4) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_divrem_2 = gmpn_divrem_2_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_divrem_2(mp_ptr arg0, mp_size_t arg1, mp_ptr arg2, mp_size_t arg3, mp_srcptr arg4) [free function]"], libgmp_lib ) )
 
 gmpf_fits_ushort_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpf_struct )  )
-gmpf_fits_ushort_p = gmpf_fits_ushort_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpf_fits_ushort_p(mpf_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_fits_ushort_p = gmpf_fits_ushort_p_type( ( libgmp_lib.undecorated_names["extern int __gmpf_fits_ushort_p(mpf_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpz_init_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct )  )
-gmpz_init = gmpz_init_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_init(mpz_ptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_init = gmpz_init_type( ( libgmp_lib.undecorated_names["extern void __gmpz_init(mpz_ptr arg0) [free function]"], libgmp_lib ) )
 
 gmpf_init_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct )  )
-gmpf_init = gmpf_init_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_init(mpf_ptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_init = gmpf_init_type( ( libgmp_lib.undecorated_names["extern void __gmpf_init(mpf_ptr arg0) [free function]"], libgmp_lib ) )
 
 gmpz_out_str_type = ctypes.CFUNCTYPE( ctypes.c_uint, ctypes.POINTER( _IO_FILE ), ctypes.c_int, ctypes.POINTER( __mpz_struct )  )
-gmpz_out_str = gmpz_out_str_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern size_t __gmpz_out_str(FILE * arg0, int arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_out_str = gmpz_out_str_type( ( libgmp_lib.undecorated_names["extern size_t __gmpz_out_str(FILE * arg0, int arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpz_swap_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_swap = gmpz_swap_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_swap(mpz_ptr arg0, mpz_ptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_swap = gmpz_swap_type( ( libgmp_lib.undecorated_names["extern void __gmpz_swap(mpz_ptr arg0, mpz_ptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_cmpabs_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_cmpabs = gmpz_cmpabs_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_cmpabs(mpz_srcptr arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_cmpabs = gmpz_cmpabs_type( ( libgmp_lib.undecorated_names["extern int __gmpz_cmpabs(mpz_srcptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpq_inp_str_type = ctypes.CFUNCTYPE( ctypes.c_uint, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( _IO_FILE ), ctypes.c_int  )
-gmpq_inp_str = gmpq_inp_str_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern size_t __gmpq_inp_str(mpq_ptr arg0, FILE * arg1, int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_inp_str = gmpq_inp_str_type( ( libgmp_lib.undecorated_names["extern size_t __gmpq_inp_str(mpq_ptr arg0, FILE * arg1, int arg2) [free function]"], libgmp_lib ) )
 
 gmpf_abs_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpf_abs = gmpf_abs_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_abs(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_abs = gmpf_abs_type( ( libgmp_lib.undecorated_names["extern void __gmpf_abs(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_fdiv_q_2exp_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_fdiv_q_2exp = gmpz_fdiv_q_2exp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_fdiv_q_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fdiv_q_2exp = gmpz_fdiv_q_2exp_type( ( libgmp_lib.undecorated_names["extern void __gmpz_fdiv_q_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpn_preinv_mod_1_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.c_ulong, ctypes.c_ulong  )
-gmpn_preinv_mod_1 = gmpn_preinv_mod_1_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_limb_t __gmpn_preinv_mod_1(mp_srcptr arg0, mp_size_t arg1, mp_limb_t arg2, mp_limb_t arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_preinv_mod_1 = gmpn_preinv_mod_1_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_preinv_mod_1(mp_srcptr arg0, mp_size_t arg1, mp_limb_t arg2, mp_limb_t arg3) [free function]"], libgmp_lib ) )
 
 gmpf_add_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpf_add = gmpf_add_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_add(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_add = gmpf_add_type( ( libgmp_lib.undecorated_names["extern void __gmpf_add(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpn_cmp_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_cmp = gmpn_cmp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["int __gmpn_cmp(mp_srcptr __gmp_xp, mp_srcptr __gmp_yp, mp_size_t __gmp_size) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_cmp = gmpn_cmp_type( ( libgmp_lib.undecorated_names["int __gmpn_cmp(mp_srcptr __gmp_xp, mp_srcptr __gmp_yp, mp_size_t __gmp_size) [free function]"], libgmp_lib ) )
 
 gmp_randinit_default_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __gmp_randstate_struct )  )
-gmp_randinit_default = gmp_randinit_default_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmp_randinit_default(__gmp_randstate_struct * arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmp_randinit_default = gmp_randinit_default_type( ( libgmp_lib.undecorated_names["extern void __gmp_randinit_default(__gmp_randstate_struct * arg0) [free function]"], libgmp_lib ) )
 
 gmpf_out_str_type = ctypes.CFUNCTYPE( ctypes.c_uint, ctypes.POINTER( _IO_FILE ), ctypes.c_int, ctypes.c_uint, ctypes.POINTER( __mpf_struct )  )
-gmpf_out_str = gmpf_out_str_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern size_t __gmpf_out_str(FILE * arg0, int arg1, size_t arg2, mpf_srcptr arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_out_str = gmpf_out_str_type( ( libgmp_lib.undecorated_names["extern size_t __gmpf_out_str(FILE * arg0, int arg1, size_t arg2, mpf_srcptr arg3) [free function]"], libgmp_lib ) )
 
 gmpf_init_set_d_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_double  )
-gmpf_init_set_d = gmpf_init_set_d_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_init_set_d(mpf_ptr arg0, double arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_init_set_d = gmpf_init_set_d_type( ( libgmp_lib.undecorated_names["extern void __gmpf_init_set_d(mpf_ptr arg0, double arg1) [free function]"], libgmp_lib ) )
 
 gmpz_realloc_type = ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.POINTER( __mpz_struct ), ctypes.c_long  )
-gmpz_realloc = gmpz_realloc_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void * __gmpz_realloc(mpz_ptr arg0, mp_size_t arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_realloc = gmpz_realloc_type( ( libgmp_lib.undecorated_names["extern void * __gmpz_realloc(mpz_ptr arg0, mp_size_t arg1) [free function]"], libgmp_lib ) )
 
 gmpn_mul_1_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.c_ulong  )
-gmpn_mul_1 = gmpn_mul_1_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_limb_t __gmpn_mul_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_mul_1 = gmpn_mul_1_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_mul_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]"], libgmp_lib ) )
 
 gmpz_fdiv_qr_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_fdiv_qr_ui = gmpz_fdiv_qr_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_fdiv_qr_ui(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fdiv_qr_ui = gmpz_fdiv_qr_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_fdiv_qr_ui(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]"], libgmp_lib ) )
 
 gmpq_div_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpq_div = gmpq_div_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_div(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_div = gmpq_div_type( ( libgmp_lib.undecorated_names["extern void __gmpq_div(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpn_mul_n_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_mul_n = gmpn_mul_n_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpn_mul_n(mp_ptr arg0, mp_srcptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_mul_n = gmpn_mul_n_type( ( libgmp_lib.undecorated_names["extern void __gmpn_mul_n(mp_ptr arg0, mp_srcptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]"], libgmp_lib ) )
 
 gmpz_cdiv_qr_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_cdiv_qr = gmpz_cdiv_qr_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_cdiv_qr(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_cdiv_qr = gmpz_cdiv_qr_type( ( libgmp_lib.undecorated_names["extern void __gmpz_cdiv_qr(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]"], libgmp_lib ) )
 
 gmpz_fits_uint_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct )  )
-gmpz_fits_uint_p = gmpz_fits_uint_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["int __gmpz_fits_uint_p(mpz_srcptr __gmp_z) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fits_uint_p = gmpz_fits_uint_p_type( ( libgmp_lib.undecorated_names["int __gmpz_fits_uint_p(mpz_srcptr __gmp_z) [free function]"], libgmp_lib ) )
 
 gmpz_fac_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_fac_ui = gmpz_fac_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_fac_ui(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fac_ui = gmpz_fac_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_fac_ui(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpf_swap_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpf_swap = gmpf_swap_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_swap(mpf_ptr arg0, mpf_ptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_swap = gmpf_swap_type( ( libgmp_lib.undecorated_names["extern void __gmpf_swap(mpf_ptr arg0, mpf_ptr arg1) [free function]"], libgmp_lib ) )
 
 gmpn_gcd_1_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.c_ulong  )
-gmpn_gcd_1 = gmpn_gcd_1_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_limb_t __gmpn_gcd_1(mp_srcptr arg0, mp_size_t arg1, mp_limb_t arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_gcd_1 = gmpn_gcd_1_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_gcd_1(mp_srcptr arg0, mp_size_t arg1, mp_limb_t arg2) [free function]"], libgmp_lib ) )
 
 gmpz_init_set_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_init_set = gmpz_init_set_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_init_set(mpz_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_init_set = gmpz_init_set_type( ( libgmp_lib.undecorated_names["extern void __gmpz_init_set(mpz_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_lcm_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_lcm_ui = gmpz_lcm_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_lcm_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_lcm_ui = gmpz_lcm_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_lcm_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpn_gcd_type = ctypes.CFUNCTYPE( ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_gcd = gmpn_gcd_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_size_t __gmpn_gcd(mp_ptr arg0, mp_ptr arg1, mp_size_t arg2, mp_ptr arg3, mp_size_t arg4) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_gcd = gmpn_gcd_type( ( libgmp_lib.undecorated_names["extern mp_size_t __gmpn_gcd(mp_ptr arg0, mp_ptr arg1, mp_size_t arg2, mp_ptr arg3, mp_size_t arg4) [free function]"], libgmp_lib ) )
 
 gmpf_trunc_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
-gmpf_trunc = gmpf_trunc_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_trunc(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_trunc = gmpf_trunc_type( ( libgmp_lib.undecorated_names["extern void __gmpf_trunc(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_fits_slong_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct )  )
-gmpz_fits_slong_p = gmpz_fits_slong_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_fits_slong_p(mpz_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fits_slong_p = gmpz_fits_slong_p_type( ( libgmp_lib.undecorated_names["extern int __gmpz_fits_slong_p(mpz_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpz_ui_kronecker_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.c_ulong, ctypes.POINTER( __mpz_struct )  )
-gmpz_ui_kronecker = gmpz_ui_kronecker_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_ui_kronecker(long unsigned int arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_ui_kronecker = gmpz_ui_kronecker_type( ( libgmp_lib.undecorated_names["extern int __gmpz_ui_kronecker(long unsigned int arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_combit_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_combit = gmpz_combit_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_combit(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_combit = gmpz_combit_type( ( libgmp_lib.undecorated_names["extern void __gmpz_combit(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpq_abs_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpq_abs = gmpq_abs_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["void __gmpq_abs(mpq_ptr __gmp_w, mpq_srcptr __gmp_u) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_abs = gmpq_abs_type( ( libgmp_lib.undecorated_names["void __gmpq_abs(mpq_ptr __gmp_w, mpq_srcptr __gmp_u) [free function]"], libgmp_lib ) )
 
 gmpz_clrbit_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_clrbit = gmpz_clrbit_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_clrbit(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_clrbit = gmpz_clrbit_type( ( libgmp_lib.undecorated_names["extern void __gmpz_clrbit(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpf_fits_ulong_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpf_struct )  )
-gmpf_fits_ulong_p = gmpf_fits_ulong_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpf_fits_ulong_p(mpf_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_fits_ulong_p = gmpf_fits_ulong_p_type( ( libgmp_lib.undecorated_names["extern int __gmpf_fits_ulong_p(mpf_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpf_fits_uint_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpf_struct )  )
-gmpf_fits_uint_p = gmpf_fits_uint_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpf_fits_uint_p(mpf_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_fits_uint_p = gmpf_fits_uint_p_type( ( libgmp_lib.undecorated_names["extern int __gmpf_fits_uint_p(mpf_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpz_set_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_set_ui = gmpz_set_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_set_ui(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_set_ui = gmpz_set_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_set_ui(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpf_cmp_d_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpf_struct ), ctypes.c_double  )
-gmpf_cmp_d = gmpf_cmp_d_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpf_cmp_d(mpf_srcptr arg0, double arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_cmp_d = gmpf_cmp_d_type( ( libgmp_lib.undecorated_names["extern int __gmpf_cmp_d(mpf_srcptr arg0, double arg1) [free function]"], libgmp_lib ) )
 
 gmpz_scan0_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_scan0 = gmpz_scan0_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_scan0(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_scan0 = gmpz_scan0_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_scan0(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_scan1_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_scan1 = gmpz_scan1_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_scan1(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_scan1 = gmpz_scan1_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_scan1(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_com_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_com = gmpz_com_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_com(mpz_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_com = gmpz_com_type( ( libgmp_lib.undecorated_names["extern void __gmpz_com(mpz_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_fdiv_r_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_fdiv_r_ui = gmpz_fdiv_r_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_fdiv_r_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fdiv_r_ui = gmpz_fdiv_r_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_fdiv_r_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_divexact_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_divexact_ui = gmpz_divexact_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_divexact_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_divexact_ui = gmpz_divexact_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_divexact_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_fdiv_r_2exp_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_fdiv_r_2exp = gmpz_fdiv_r_2exp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_fdiv_r_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fdiv_r_2exp = gmpz_fdiv_r_2exp_type( ( libgmp_lib.undecorated_names["extern void __gmpz_fdiv_r_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_lucnum_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_lucnum_ui = gmpz_lucnum_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_lucnum_ui(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_lucnum_ui = gmpz_lucnum_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_lucnum_ui(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpf_fits_slong_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpf_struct )  )
-gmpf_fits_slong_p = gmpf_fits_slong_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpf_fits_slong_p(mpf_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_fits_slong_p = gmpf_fits_slong_p_type( ( libgmp_lib.undecorated_names["extern int __gmpf_fits_slong_p(mpf_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpz_fib_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_fib_ui = gmpz_fib_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_fib_ui(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fib_ui = gmpz_fib_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_fib_ui(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_neg_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_neg = gmpz_neg_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["void __gmpz_neg(mpz_ptr __gmp_w, mpz_srcptr __gmp_u) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_neg = gmpz_neg_type( ( libgmp_lib.undecorated_names["void __gmpz_neg(mpz_ptr __gmp_w, mpz_srcptr __gmp_u) [free function]"], libgmp_lib ) )
 
 gmpz_remove_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_remove = gmpz_remove_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern long unsigned int __gmpz_remove(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_remove = gmpz_remove_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_remove(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpq_init_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct )  )
-gmpq_init = gmpq_init_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_init(mpq_ptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_init = gmpq_init_type( ( libgmp_lib.undecorated_names["extern void __gmpq_init(mpq_ptr arg0) [free function]"], libgmp_lib ) )
 
 gmpn_sqrtrem_type = ctypes.CFUNCTYPE( ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
-gmpn_sqrtrem = gmpn_sqrtrem_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_size_t __gmpn_sqrtrem(mp_ptr arg0, mp_ptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_sqrtrem = gmpn_sqrtrem_type( ( libgmp_lib.undecorated_names["extern mp_size_t __gmpn_sqrtrem(mp_ptr arg0, mp_ptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]"], libgmp_lib ) )
 
 gmpz_divisible_2exp_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_divisible_2exp_p = gmpz_divisible_2exp_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_divisible_2exp_p(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_divisible_2exp_p = gmpz_divisible_2exp_p_type( ( libgmp_lib.undecorated_names["extern int __gmpz_divisible_2exp_p(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_perfect_power_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct )  )
-gmpz_perfect_power_p = gmpz_perfect_power_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_perfect_power_p(mpz_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_perfect_power_p = gmpz_perfect_power_p_type( ( libgmp_lib.undecorated_names["extern int __gmpz_perfect_power_p(mpz_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpz_dump_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct )  )
-gmpz_dump = gmpz_dump_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_dump(mpz_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_dump = gmpz_dump_type( ( libgmp_lib.undecorated_names["extern void __gmpz_dump(mpz_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpf_mul_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct ), ctypes.c_ulong  )
-gmpf_mul_ui = gmpf_mul_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_mul_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_mul_ui = gmpf_mul_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpf_mul_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpq_set_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpq_set = gmpq_set_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpq_set(mpq_ptr arg0, mpq_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_set = gmpq_set_type( ( libgmp_lib.undecorated_names["extern void __gmpq_set(mpq_ptr arg0, mpq_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpq_equal_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpq_equal = gmpq_equal_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpq_equal(mpq_srcptr arg0, mpq_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_equal = gmpq_equal_type( ( libgmp_lib.undecorated_names["extern int __gmpq_equal(mpq_srcptr arg0, mpq_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_pow_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_pow_ui = gmpz_pow_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_pow_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_pow_ui = gmpz_pow_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_pow_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_set_si_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_long  )
-gmpz_set_si = gmpz_set_si_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_set_si(mpz_ptr arg0, long int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_set_si = gmpz_set_si_type( ( libgmp_lib.undecorated_names["extern void __gmpz_set_si(mpz_ptr arg0, long int arg1) [free function]"], libgmp_lib ) )
 
 gmpq_get_str_type = ctypes.CFUNCTYPE( ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int, ctypes.POINTER( __mpq_struct )  )
-gmpq_get_str = gmpq_get_str_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern char * __gmpq_get_str(char * arg0, int arg1, mpq_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpq_get_str = gmpq_get_str_type( ( libgmp_lib.undecorated_names["extern char * __gmpq_get_str(char * arg0, int arg1, mpq_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpf_sub_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct ), ctypes.c_ulong  )
-gmpf_sub_ui = gmpf_sub_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_sub_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_sub_ui = gmpf_sub_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpf_sub_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_realloc2_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_realloc2 = gmpz_realloc2_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_realloc2(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_realloc2 = gmpz_realloc2_type( ( libgmp_lib.undecorated_names["extern void __gmpz_realloc2(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpf_div_2exp_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct ), ctypes.c_ulong  )
-gmpf_div_2exp = gmpf_div_2exp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_div_2exp(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_div_2exp = gmpf_div_2exp_type( ( libgmp_lib.undecorated_names["extern void __gmpf_div_2exp(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpf_set_d_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_double  )
-gmpf_set_d = gmpf_set_d_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_set_d(mpf_ptr arg0, double arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_set_d = gmpf_set_d_type( ( libgmp_lib.undecorated_names["extern void __gmpf_set_d(mpf_ptr arg0, double arg1) [free function]"], libgmp_lib ) )
 
 gmpz_si_kronecker_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.c_long, ctypes.POINTER( __mpz_struct )  )
-gmpz_si_kronecker = gmpz_si_kronecker_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_si_kronecker(long int arg0, mpz_srcptr arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_si_kronecker = gmpz_si_kronecker_type( ( libgmp_lib.undecorated_names["extern int __gmpz_si_kronecker(long int arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_array_init_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_long, ctypes.c_long  )
-gmpz_array_init = gmpz_array_init_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_array_init(mpz_ptr arg0, mp_size_t arg1, mp_size_t arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_array_init = gmpz_array_init_type( ( libgmp_lib.undecorated_names["extern void __gmpz_array_init(mpz_ptr arg0, mp_size_t arg1, mp_size_t arg2) [free function]"], libgmp_lib ) )
 
 gmpz_fits_sshort_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct )  )
-gmpz_fits_sshort_p = gmpz_fits_sshort_p_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_fits_sshort_p(mpz_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fits_sshort_p = gmpz_fits_sshort_p_type( ( libgmp_lib.undecorated_names["extern int __gmpz_fits_sshort_p(mpz_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpz_kronecker_si_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_long  )
-gmpz_kronecker_si = gmpz_kronecker_si_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_kronecker_si(mpz_srcptr arg0, long int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_kronecker_si = gmpz_kronecker_si_type( ( libgmp_lib.undecorated_names["extern int __gmpz_kronecker_si(mpz_srcptr arg0, long int arg1) [free function]"], libgmp_lib ) )
 
 gmpf_init2_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_ulong  )
-gmpf_init2 = gmpf_init2_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_init2(mpf_ptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_init2 = gmpf_init2_type( ( libgmp_lib.undecorated_names["extern void __gmpf_init2(mpf_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_kronecker_ui_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_kronecker_ui = gmpz_kronecker_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpz_kronecker_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_kronecker_ui = gmpz_kronecker_ui_type( ( libgmp_lib.undecorated_names["extern int __gmpz_kronecker_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpz_sub_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_sub = gmpz_sub_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_sub(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_sub = gmpz_sub_type( ( libgmp_lib.undecorated_names["extern void __gmpz_sub(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpf_cmp_ui_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpf_struct ), ctypes.c_ulong  )
-gmpf_cmp_ui = gmpf_cmp_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern int __gmpf_cmp_ui(mpf_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_cmp_ui = gmpf_cmp_ui_type( ( libgmp_lib.undecorated_names["extern int __gmpf_cmp_ui(mpf_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpf_add_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct ), ctypes.c_ulong  )
-gmpf_add_ui = gmpf_add_ui_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_add_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_add_ui = gmpf_add_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpf_add_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
 gmpz_fdiv_q_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_fdiv_q = gmpz_fdiv_q_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_fdiv_q(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fdiv_q = gmpz_fdiv_q_type( ( libgmp_lib.undecorated_names["extern void __gmpz_fdiv_q(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpz_fdiv_r_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_fdiv_r = gmpz_fdiv_r_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_fdiv_r(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_fdiv_r = gmpz_fdiv_r_type( ( libgmp_lib.undecorated_names["extern void __gmpz_fdiv_r(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
 gmpn_bdivmod_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long, ctypes.c_ulong  )
-gmpn_bdivmod = gmpn_bdivmod_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern mp_limb_t __gmpn_bdivmod(mp_ptr arg0, mp_ptr arg1, mp_size_t arg2, mp_srcptr arg3, mp_size_t arg4, long unsigned int arg5) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpn_bdivmod = gmpn_bdivmod_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_bdivmod(mp_ptr arg0, mp_ptr arg1, mp_size_t arg2, mp_srcptr arg3, mp_size_t arg4, long unsigned int arg5) [free function]"], libgmp_lib ) )
 
 gmpf_set_si_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_long  )
-gmpf_set_si = gmpf_set_si_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_set_si(mpf_ptr arg0, long int arg1) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_set_si = gmpf_set_si_type( ( libgmp_lib.undecorated_names["extern void __gmpf_set_si(mpf_ptr arg0, long int arg1) [free function]"], libgmp_lib ) )
 
 gmpf_dump_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct )  )
-gmpf_dump = gmpf_dump_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpf_dump(mpf_srcptr arg0) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpf_dump = gmpf_dump_type( ( libgmp_lib.undecorated_names["extern void __gmpf_dump(mpf_srcptr arg0) [free function]"], libgmp_lib ) )
 
 gmpz_tdiv_r_2exp_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_tdiv_r_2exp = gmpz_tdiv_r_2exp_type( ( libgmp_dot_so_dot_3_dot_4lib.undecorated_names["extern void __gmpz_tdiv_r_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_dot_so_dot_3_dot_4lib ) )
+gmpz_tdiv_r_2exp = gmpz_tdiv_r_2exp_type( ( libgmp_lib.undecorated_names["extern void __gmpz_tdiv_r_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )

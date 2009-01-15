@@ -18,17 +18,15 @@ has_varargs = lambda f: f.arguments \
                         and isinstance( f.arguments[-1].type, declarations.ellipsis_t )
 
 mb.calldefs( has_varargs ).exclude()
-mb.classes( '' ).exclude()
 
 #gmp uses strange convention: every function name starts with __gmp and than, it
 #introduces define, which aliass __gmpy to gmpy
 for f in mb.calldefs( lambda x: x.name.startswith('__gmp') ):
     f.alias = f.name[2:]
 
-#there is a bug in "include" algorithm - I need to wrote BFS
+#those structs are private implementation of FILE
 mb.class_( '_IO_FILE' ).opaque = True
-#another dependency bug - internal union is not included
-mb.class_( '__gmp_randstate_struct' ).include()
+mb.class_( '_IO_marker' ).opaque = True
 
 
 mb.build_code_creator( project_env.gmp.shared_library_file )
