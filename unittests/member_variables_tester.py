@@ -8,7 +8,6 @@ import sys
 import ctypes
 import unittest
 import fundamental_tester_base
-import pdb
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'member_variables'
@@ -92,7 +91,6 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
         image = module.image_t()
 
-        #pdb.set_trace()
         data_type = ctypes.POINTER( ctypes.c_int )
         data = data_type.from_address( image.data )
         for j in range(5):

@@ -30,10 +30,7 @@ class fields_definition_t(code_creator.code_creator_t, declaration_based.declara
             return False
 
     def _create_impl(self):
-        result = []
-        #~ import pdb
-        #~ pdb.set_trace()
-        
+        result = []        
         anonymous_vars = self.declaration.vars( self.has_unnamed_type, recursive=False, allow_empty=True )
         if anonymous_vars:
             formated_vars = []

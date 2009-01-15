@@ -5,7 +5,6 @@
 
 import os
 import sys
-import pdb
 import ctypes
 import unittest
 import fundamental_tester_base
