@@ -5,6 +5,7 @@
 
 """Contains definition of call policies classes"""
 
+import types
 import algorithm
 import python_traits
 from pygccxml import declarations
@@ -214,11 +215,18 @@ class return_value_policy_t( compound_policy_t ):
     """implements code generation for boost::python::return_value_policy call policies"""
     def __init__( self, result_converter_generator, base=None):
         compound_policy_t.__init__( self, base )
+        if not isinstance( result_converter_generator, types.StringTypes ):
+            raise RuntimeError( "New value of return_value_policy_t.result_converter_generator type should be string, got( %s )."
+                                % str( result_converter_generator ) )
+
         self._result_converter_generator = result_converter_generator
 
     def _get_result_converter_generator( self ):
         return self._result_converter_generator
     def _set_result_converter_generator( self, new_result_converter_generator):
+        if not isinstance( new_result_converter_generator, types.StringTypes ):
+            raise RuntimeError( "New value of return_value_policy_t.result_converter_generator type should be string, got( %s )."
+                                % str( new_result_converter_generator ) )
         self._result_converter_generator = new_result_converter_generator
     result_converter_generator = property( _get_result_converter_generator
                                            , _set_result_converter_generator )
