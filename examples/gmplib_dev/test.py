@@ -1,6 +1,8 @@
 import ctypes
 import pygmplib as gmp
 
+print 'gmp version: ', gmp.gmp_version.value
+
 integ1 = ctypes.pointer( gmp.__mpz_struct() )
 integ2 = ctypes.pointer( gmp.__mpz_struct() )
 

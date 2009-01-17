@@ -725,6 +725,8 @@ gmpz_size = gmpz_size_type( ( libgmp_lib.undecorated_names["size_t __gmpz_size(m
 gmpf_sqrt_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
 gmpf_sqrt = gmpf_sqrt_type( ( libgmp_lib.undecorated_names["extern void __gmpf_sqrt(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_lib ) )
 
+gmp_errno = ctypes.c_int.in_dll( libgmp_lib, "__gmp_errno" )
+
 gmpz_cdiv_q_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
 gmpz_cdiv_q_ui = gmpz_cdiv_q_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_cdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
@@ -790,6 +792,8 @@ gmpz_add_ui = gmpz_add_ui_type( ( libgmp_lib.undecorated_names["extern void __gm
 
 gmpz_inp_raw_type = ctypes.CFUNCTYPE( ctypes.c_uint, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( _IO_FILE )  )
 gmpz_inp_raw = gmpz_inp_raw_type( ( libgmp_lib.undecorated_names["extern size_t __gmpz_inp_raw(mpz_ptr arg0, FILE * arg1) [free function]"], libgmp_lib ) )
+
+gmp_version = ctypes.c_char_p.in_dll( libgmp_lib, "__gmp_version" )
 
 gmpz_tdiv_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
 gmpz_tdiv_ui = gmpz_tdiv_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpz_tdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
@@ -913,6 +917,8 @@ gmpq_get_num = gmpq_get_num_type( ( libgmp_lib.undecorated_names["extern void __
 
 gmpz_sub_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
 gmpz_sub_ui = gmpz_sub_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_sub_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
+
+gmp_bits_per_limb = ctypes.c_int.in_dll( libgmp_lib, "__gmp_bits_per_limb" )
 
 gmpz_rrandomb_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __gmp_randstate_struct ), ctypes.c_ulong  )
 gmpz_rrandomb = gmpz_rrandomb_type( ( libgmp_lib.undecorated_names["extern void __gmpz_rrandomb(mpz_ptr arg0, __gmp_randstate_struct * arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )

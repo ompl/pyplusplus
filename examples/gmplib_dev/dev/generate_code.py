@@ -24,6 +24,9 @@ mb.calldefs( has_varargs ).exclude()
 for f in mb.calldefs( lambda x: x.name.startswith('__gmp') ):
     f.alias = f.name[2:]
 
+for v in mb.vars( lambda x: x.name.startswith( '__gmp' ) ):
+    v.alias = v.name[2:]
+
 #those structs are private implementation of FILE
 mb.class_( '_IO_FILE' ).opaque = True
 mb.class_( '_IO_marker' ).opaque = True
