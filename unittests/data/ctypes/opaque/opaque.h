@@ -7,6 +7,6 @@ struct EXPORT_SYMBOL user_data_t{
 };
 
 
-user_data_t* EXPORT_SYMBOL create();
+EXPORT_SYMBOL user_data_t* create();
 int EXPORT_SYMBOL read_user_data(user_data_t*);
 void EXPORT_SYMBOL destroy(user_data_t*);
