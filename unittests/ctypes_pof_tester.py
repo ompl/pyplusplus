@@ -169,6 +169,28 @@ class anonymous_tester_t( ctypes_base_tester_t ):
         c.r
         c.val
 
+class variables_tester_t( ctypes_base_tester_t ):
+    def __init__( self, *args, **keywd ):
+        ctypes_base_tester_t.__init__( self, 'variables', *args, **keywd )
+
+    def customize( self, mb ):
+        pass
+
+    def test(self):
+        self.module_ref.init()
+        self.failUnless( self.module_ref.j.value == 87 )
+        self.failUnless( self.module_ref.data.i == 1900 )
+        self.failUnless( self.module_ref.data_ptr.contents.i == 11 )
+
+        self.module_ref.j.value = 78
+        self.failUnless( self.module_ref.get_value_j() == 78 )
+        
+        self.module_ref.data.i = 987
+        self.failUnless( self.module_ref.get_value_data() == 987 )
+        
+        self.module_ref.data_ptr.contents.i = 34
+        self.failUnless( self.module_ref.get_value_data_p() == 34 )
+
 def create_suite():
     suite = unittest.TestSuite()
     if 'win' in sys.platform:
@@ -178,6 +200,7 @@ def create_suite():
     suite.addTest( unittest.makeSuite(opaque_tester_t))
     suite.addTest( unittest.makeSuite(include_algorithm_tester_t))
     suite.addTest( unittest.makeSuite(anonymous_tester_t))
+    suite.addTest( unittest.makeSuite(variables_tester_t))
     return suite
 
 def run_suite():

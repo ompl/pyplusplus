@@ -25,7 +25,14 @@ if 'win32' in sys.platform:
 
 env.AppendUnique( CPPPATH=['#data'] )
 
-scripts = [ 'pof', 'issues', 'enums', 'opaque', 'include_algorithm', 'anonymous' ]
+scripts = [ 'pof'
+            , 'issues'
+            , 'enums'
+            , 'opaque'
+            , 'include_algorithm'
+            , 'anonymous'
+            , 'variables' ]
+
 for s in scripts:
     SConscript( 'data/ctypes/%s/sconscript' % s
                 , variant_dir='data/ctypes/%s/binaries' % s

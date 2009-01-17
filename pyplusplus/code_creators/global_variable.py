@@ -7,6 +7,7 @@ import os
 import pygccxml
 import algorithm
 import code_creator
+import ctypes_formatter
 import declaration_based
 import registration_based
 from pygccxml import declarations
@@ -182,3 +183,18 @@ class global_variable_addressof_t( global_variable_base_t ):
 
     def _get_system_headers_impl( self ):
         return [code_repository.ctypes_integration.file_name]
+
+class global_variable_reference_t( code_creator.code_creator_t, declaration_based.declaration_based_t ):
+    def __init__( self, var ):
+        code_creator.code_creator_t.__init__( self )
+        declaration_based.declaration_based_t.__init__( self, var )
+    
+    def _create_impl( self ):
+        return '%(alias)s = %(type)s.in_dll( %(library_var_name)s, "%(name)s" )' \
+               % dict( alias=self.alias
+                       , type=ctypes_formatter.as_ctype( self.declaration.type )
+                       , library_var_name=self.top_parent.library_var_name
+                       , name=self.declaration.name )
+    
+    def _get_system_headers_impl( self ):
+        return []

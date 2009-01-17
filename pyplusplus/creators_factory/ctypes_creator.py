@@ -39,8 +39,6 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         self.__class_defs_ccs = code_creators.bookmark_t()
         #bookmark for typedef definitions
         self.__typedefs_ccs =  code_creators.bookmark_t()
-        #~ prepared_decls = self.__prepare_decls( global_ns, doc_extractor )
-        #~ self.__decls = sort_algorithms.sort( prepared_decls )
         self.curr_decl = global_ns
         self.curr_code_creator = self.module
         #mapping between class declaration and class introduction code creator
@@ -49,9 +47,6 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         self.__class2methods_def = {}
         #mapping between namespace and its code creator
         self.__namespace2pyclass = {}
-        #set of all included namespaces
-        #~ self.__included_nss = set()
-        #~ for decl in self.global_ns
 
     def __print_readme( self, decl ):
         readme = decl.readme()
@@ -71,6 +66,9 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
             return False
         if isinstance( decl, declarations.calldef_t ):
             return decl in self.__exported_decls
+        if isinstance( decl, declarations.variable_t ):
+            if isinstance( decl.parent, declarations.namespace_t ):
+                return decl in self.__exported_decls
         return True
 
     #~ def __prepare_decls( self, global_ns, doc_extractor ):
@@ -241,6 +239,8 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
                 self.__class_defs_ccs.adopt_creator( md_cc )
             class_ = self.curr_decl
             for decl in self.curr_decl.decls( recursive=False, allow_empty=True ):
+                if isinstance( decl, declarations.variable_t ):
+                    continue #fields_definition_t class treats them 
                 if self.__should_generate_code( decl ):
                     self.curr_decl = decl
                     declarations.apply_visitor( self, decl )
@@ -267,7 +267,8 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
     def visit_variable(self):
         self.__dependencies_manager.add_exported( self.curr_decl )
-
+        self.curr_code_creator.adopt_creator( code_creators.global_variable_reference_t( self.curr_decl ) )
+        
     def visit_namespace(self ):
         if not self.__contains_exported( self.curr_decl ):
             return

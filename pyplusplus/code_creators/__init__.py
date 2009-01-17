@@ -167,3 +167,4 @@ from function_definition import del_definition_t
 from function_definition import mem_fun_definition_t
 from typedef_as_pyvar import typedef_as_pyvar_t
 from enum import pyenum_t
+from global_variable import global_variable_reference_t
