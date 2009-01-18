@@ -184,23 +184,35 @@ class variables_tester_t( ctypes_base_tester_t ):
 
         self.module_ref.j.value = 78
         self.failUnless( self.module_ref.get_value_j() == 78 )
-        
+
         self.module_ref.data.i = 987
         self.failUnless( self.module_ref.get_value_data() == 987 )
-        
+
         self.module_ref.data_ptr.contents.i = 34
         self.failUnless( self.module_ref.get_value_data_p() == 34 )
 
+
+class varargs_tester_t( ctypes_base_tester_t ):
+    def __init__( self, *args, **keywd ):
+        ctypes_base_tester_t.__init__( self, 'varargs', *args, **keywd )
+
+    def customize( self, mb ):
+        pass
+
+    def test(self):
+        self.failUnless( 21 == self.module_ref.sum_ints( 3, 5,7,9) )
+
 def create_suite():
     suite = unittest.TestSuite()
-    if 'win' in sys.platform:
-        suite.addTest( unittest.makeSuite(pof_tester_t))
-        suite.addTest( unittest.makeSuite(issues_tester_t))
+    #~ if 'win' in sys.platform:
+        #~ suite.addTest( unittest.makeSuite(pof_tester_t))
+        #~ suite.addTest( unittest.makeSuite(issues_tester_t))
     suite.addTest( unittest.makeSuite(enums_tester_t))
     suite.addTest( unittest.makeSuite(opaque_tester_t))
     suite.addTest( unittest.makeSuite(include_algorithm_tester_t))
     suite.addTest( unittest.makeSuite(anonymous_tester_t))
     suite.addTest( unittest.makeSuite(variables_tester_t))
+    suite.addTest( unittest.makeSuite(varargs_tester_t))
     return suite
 
 def run_suite():

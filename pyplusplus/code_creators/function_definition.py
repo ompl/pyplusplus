@@ -61,6 +61,8 @@ class callable_definition_t(code_creator.code_creator_t, declaration_based.decla
             args_str = ' ' + args[0] + ' '
         else:
             args_str = ' ' + arg_separator.join( args ) + ' '
+        if args_str.endswith( '  ' ):
+            args_str = args_str[:-1]
         if group_in_list:
             return '[%s]' % args_str
         else:

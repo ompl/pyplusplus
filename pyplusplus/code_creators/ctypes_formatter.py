@@ -144,6 +144,9 @@ class type_converter_t(declarations.type_visitor_t):
         base_visitor = type_converter_t( self.user_type.base, self.decl_formatter )
         return declarations.apply_visitor( base_visitor, base_visitor.user_type )
 
+    def visit_ellipsis( self ):
+        return ''
+
 def as_ctype( type_, decl_formatter=algorithm.complete_py_name ):
     v = type_converter_t( type_, decl_formatter )
     return declarations.apply_visitor( v, type_ )

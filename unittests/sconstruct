@@ -31,7 +31,8 @@ scripts = [ 'pof'
             , 'opaque'
             , 'include_algorithm'
             , 'anonymous'
-            , 'variables' ]
+            , 'variables'
+            , 'varargs']
 
 for s in scripts:
     SConscript( 'data/ctypes/%s/sconscript' % s
