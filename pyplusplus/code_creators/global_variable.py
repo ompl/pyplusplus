@@ -188,13 +188,13 @@ class global_variable_reference_t( code_creator.code_creator_t, declaration_base
     def __init__( self, var ):
         code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, var )
-    
+
     def _create_impl( self ):
-        return '%(alias)s = %(type)s.in_dll( %(library_var_name)s, "%(name)s" )' \
+        return '%(alias)s = %(type)s.in_dll( %(library_var_name)s, %(library_var_name)s.undecorated_names["%(undecorated_decl_name)s"] )' \
                % dict( alias=self.alias
                        , type=ctypes_formatter.as_ctype( self.declaration.type )
                        , library_var_name=self.top_parent.library_var_name
-                       , name=self.declaration.name )
-    
+                       , undecorated_decl_name=self.undecorated_decl_name )
+
     def _get_system_headers_impl( self ):
         return []
