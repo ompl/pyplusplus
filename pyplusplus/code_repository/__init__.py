@@ -18,8 +18,9 @@ import gil_guard
 import named_tuple
 import convenience
 import return_range
-import call_policies
 import ctypes_utils
+import call_policies
+import indexing_suite
 import ctypes_integration
 
 all = [ array_1
@@ -31,5 +32,15 @@ all = [ array_1
         , ctypes_utils
         , ctypes_integration ]
 
+all.extend( indexing_suite.all )
+
 headers = map( lambda f: f.file_name, all )
 
+def i_depend_on_them( fname ):
+    """returns list of files, the file fname depends on"""
+    if fname in indexing_suite.headers:
+        result = indexing_suite.all[:]
+        del result[ indexing_suite.headers.index( fname ) ]
+        return result
+    else:
+        return []

@@ -66,11 +66,22 @@ class writer_t(object):
 
     def write_code_repository(self, dir):
         """creates files defined in L{code_repository} package"""
+        visited = set()
         system_files = self.extmodule.get_system_files( recursive=True )
         for cr in code_repository.all:
-            if cr.file_name in system_files:
+            if cr.file_name not in system_files:
                 #check whether file from code repository is used
-                self.write_file( os.path.join( dir, cr.file_name ), cr.code )
+                continue
+            if cr.file_name in visited:
+                continue
+
+            self.write_file( os.path.join( dir, cr.file_name ), cr.code )
+            visited.add( cr.file_name )
+
+            for fdepend in code_repository.i_depend_on_them( cr.file_name ):
+                if fdepend.file_name not in visited:
+                    self.write_file( os.path.join( dir, fdepend.file_name ), fdepend.code )
+                    visited.add( fdepend.file_name )
 
     @staticmethod
     def write_file( fpath, content, files_sum_repository=None, encoding='ascii' ):
