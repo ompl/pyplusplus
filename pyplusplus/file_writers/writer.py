@@ -36,6 +36,11 @@ class writer_t(object):
             self.__exposed_decls_db.register_decls( extmodule.global_ns
                                                     , extmodule.specially_exposed_decls )
 
+    def makedirs_for_file( self, file_path ):
+        destination_dir = os.path.dirname( file_path )
+        if not os.path.exists( destination_dir ):
+            os.makedirs( destination_dir )
+
     @property
     def encoding( self ):
         """encoding name used to write generated code to files"""
@@ -75,12 +80,16 @@ class writer_t(object):
             if cr.file_name in visited:
                 continue
 
-            self.write_file( os.path.join( dir, cr.file_name ), cr.code )
+            destination_path = os.path.normpath( os.path.join( dir, cr.file_name ) )
+            self.makedirs_for_file( destination_path )
+            self.write_file( destination_path, cr.code )
             visited.add( cr.file_name )
 
             for fdepend in code_repository.i_depend_on_them( cr.file_name ):
                 if fdepend.file_name not in visited:
-                    self.write_file( os.path.join( dir, fdepend.file_name ), fdepend.code )
+                    destination_path = os.path.normpath( os.path.join( dir, fdepend.file_name ) )
+                    self.makedirs_for_file( destination_path )
+                    self.write_file( destination_path, fdepend.code )
                     visited.add( fdepend.file_name )
 
     @staticmethod

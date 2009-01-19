@@ -41,7 +41,7 @@ print 'GCCXML configured to simulate compiler ', cxx_parsers_cfg.gccxml.compiler
 class scons_config:
     libs = []
     libpath = [ python.libs ] + boost.libs
-    cpppath = [ boost.include, python.include, indexing_suite.include ]
+    cpppath = [ boost.include, python.include, build_directory ] #indexing_suite.include ]
     include_dirs = cpppath + [data_directory]
 
     @staticmethod
