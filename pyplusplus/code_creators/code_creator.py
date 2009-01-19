@@ -138,7 +138,8 @@ class code_creator_t(object):
         if language == 'python':
             selector = lambda f: os.path.splitext( f )[1] in ( '.py' )
         elif language == 'c++':
-            selector = lambda f: os.path.splitext( f )[1] in ( '.h', '.hpp', '.cpp' )
+            selector = lambda f: ( f.startswith( '<' ) and f.endswith('>') ) \
+                                 or os.path.splitext( f )[1] in ( '.h', '.hpp', '.cpp' )
         else:
             selector = None
 
