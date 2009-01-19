@@ -57,6 +57,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         module_builder.module_builder_t.__init__( self, global_ns=None, encoding=encoding )
 
         self.global_ns = self.__parse_declarations( files, gccxml_config )
+        self.global_ns.decls(recursive=True, allow_empty=True)._code_generator = decl_wrappers.CODE_GENERATOR_TYPES.CTYPES
         self.__blob2decl = binary_parsers.merge_information( self.global_ns, exported_symbols_file )
 
         self.__apply_defaults()
@@ -79,7 +80,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
 
         return decls_package.matcher.get_single( decls_package.namespace_matcher_t( name='::' )
                                                  , decls )
-                                                 
+
     def __include_declarations( self ):
         self.global_ns.exclude()
         #include exported declarations
@@ -87,13 +88,13 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         to_be_included = ctypes_decls_dependencies.find_out_dependencies( included_decls )
         to_be_included.update( included_decls )
         map( lambda d: d.include(), to_be_included )
-            
+
     def __apply_defaults( self ):
-        self.__include_declarations()                    
+        self.__include_declarations()
         anonymous_classes = self.global_ns.classes( '', recursive=True, allow_empty=True )
         anonymous_classes.alias = '_'
         #TODO: check whether the anonymous class unique or not
-        #if 1 == len( anonymous.parent.classes( '', recursive=False ) ): 
+        #if 1 == len( anonymous.parent.classes( '', recursive=False ) ):
         anonymous_vars = self.global_ns.vars( '', recursive=True, allow_empty=True )
         anonymous_vars.alias = '_'
 

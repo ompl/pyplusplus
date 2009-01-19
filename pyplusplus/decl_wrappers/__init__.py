@@ -12,6 +12,7 @@ The classes in this package allow you to configure the code generator.
 
 import algorithm
 
+from decl_wrapper import CODE_GENERATOR_TYPES
 from decl_wrapper import decl_wrapper_t
 
 from calldef_wrapper import calldef_t

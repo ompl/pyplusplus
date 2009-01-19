@@ -10,12 +10,17 @@ from pyplusplus import _logging_
 from pygccxml import declarations
 from pyplusplus import messages
 
+class CODE_GENERATOR_TYPES:
+    BOOST_PYTHON = 'Boost.Python'
+    CTYPES = 'ctypes'
+    all = [ BOOST_PYTHON, CTYPES ]
+
 class decl_wrapper_t(object):
     """code generator declaration configuration base class
 
     This class contains configuration that could be applied to all declarations.
     """
-    
+
     SPECIAL_TYPEDEF_PICK_ANY = True
 
     def __init__(self):
@@ -28,6 +33,12 @@ class decl_wrapper_t(object):
         self._documentation = None
         self.__msgs_to_ignore = set()
         self._include_files = []
+        self._code_generator = None
+
+    @property
+    def code_generator( self ):
+        """code generator type, could be Boost.Python or ctypes"""
+        return self._code_generator
 
     @property
     def logger( self ):
@@ -46,7 +57,7 @@ class decl_wrapper_t(object):
             name = self.name
         return algorithm.create_valid_name( name )
 
-    def __select_alias_directives( self, be_smart ):        
+    def __select_alias_directives( self, be_smart ):
         if not isinstance( self, declarations.class_types ):
             return []
         typedefs = list( set( filter( lambda typedef: typedef.is_directive, self.aliases ) ) )
@@ -92,7 +103,7 @@ class decl_wrapper_t(object):
 
     def rename( self, new_name ):
         """give new name to the declaration, under which Python will know the declaration
-        
+
         Code generators: ctypes, Boost.Python
         """
         self.alias = new_name
@@ -113,25 +124,25 @@ class decl_wrapper_t(object):
 
     def exclude( self, compilation_errors=False ):
         """exclude "self" and child declarations from being exposed.
-        
+
         If compile_time_errors is True, than only declarations, which will cause
         compilation error will be excluded
-        
+
         Code generators: ctypes, Boost.Python
         """
         self.ignore = True
 
     def include( self, already_exposed=False ):
         """include "self" and child declarations to be exposed.
-        
+
         Code generators: ctypes, Boost.Python.
         """
         self.ignore = False
         self.already_exposed = already_exposed
-    
+
     def why_not_exportable( self ):
         """return the reason( string ) that explains why this declaration could not be exported
-        
+
         If declaration could be exported, than method will return None
         """
         if None is self._exportable_reason:
@@ -157,8 +168,8 @@ class decl_wrapper_t(object):
         return self._exportable
     def set_exportable( self, exportable ):
         """change "exportable" status
-        
-        This function should be use in case Py++ made a mistake and signed the 
+
+        This function should be use in case Py++ made a mistake and signed the
         declaration as unexportable."""
         self._exportable = exportable
 
@@ -178,18 +189,18 @@ class decl_wrapper_t(object):
         msgs = []
         if not self.exportable:
             msgs.append( self.why_not_exportable() )
-            
+
         if declarations.templates.is_instantiation( self.name ) \
            and self.alias == self._generate_valid_name():
             msgs.append( messages.W1043 % self.alias )
-        
+
         directives = self.__select_alias_directives(be_smart=False)
-        if 1 < len( directives ):                  
-            msgs.append( messages.W1048 
+        if 1 < len( directives ):
+            msgs.append( messages.W1048
                          % ( self.alias, ', '.join( map( lambda typedef: typedef.name, directives ) ) ) )
 
-        msgs.extend( self._readme_impl() )        
-        
+        msgs.extend( self._readme_impl() )
+
         return messages.filter_disabled_msgs( msgs, self.__msgs_to_ignore )
 
     @property
@@ -197,10 +208,10 @@ class decl_wrapper_t(object):
         """list of messages to ignore"""
         return self.__msgs_to_ignore
     disabled_messaged = disabled_messages
-    
+
     def disable_messages( self, *args ):
         """set messages, which should not be reported to you
-        
+
         Usage example: decl.disable_messages( messages.W1001, messages.W1040 )
         """
         for msg in args:
