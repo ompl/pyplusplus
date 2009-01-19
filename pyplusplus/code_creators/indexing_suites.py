@@ -49,7 +49,7 @@ class indexing_suite1_t( registration_based.registration_based_t
     def _create_impl(self):
         return "def( %s() )" %  self._create_suite_declaration()
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return self.configuration.include_files
 
 class indexing_suite2_t( registration_based.registration_based_t
@@ -118,7 +118,7 @@ class indexing_suite2_t( registration_based.registration_based_t
             answer.append( ';' )
         return ''.join( answer )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return self.declaration.indexing_suite.include_files
 
 class value_traits_t( code_creator.code_creator_t
@@ -176,5 +176,5 @@ class value_traits_t( code_creator.code_creator_t
         #the value_type
         return self.generate_value_traits()
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return ['indexing_suite/value_traits.hpp']

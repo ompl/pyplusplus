@@ -17,7 +17,7 @@ class custom_t(code_creator.code_creator_t):
     def _create_impl(self):
         raise NotImplementedError()
     
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class custom_text_t(custom_t):
@@ -34,5 +34,5 @@ class custom_text_t(custom_t):
     def _create_impl(self):
         return self.text
     
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []

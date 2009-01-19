@@ -145,7 +145,7 @@ class property_t( registration_based.registration_based_t ):
         result.append( '}' )
         return os.linesep.join( result )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 

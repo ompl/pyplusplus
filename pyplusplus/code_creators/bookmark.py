@@ -14,5 +14,5 @@ class bookmark_t(compound.compound_t):
     def _create_impl(self):
         return compound.compound_t.create_internal_code( self.creators, indent_code=False )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []

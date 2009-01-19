@@ -136,7 +136,7 @@ class calldef_t( registration_based.registration_based_t
 
         return ''.join( result )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         files = []
         if self.declaration.call_policies:
             files.append( self.declaration.call_policies.header_file )
@@ -176,7 +176,7 @@ class calldef_wrapper_t( code_creator.code_creator_t
         else:
             return ' throw()'
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         files = []
         if self.declaration.transformations:
             ft = self.declaration.transformations[0]
@@ -950,7 +950,7 @@ class static_method_t( declaration_based.declaration_based_t
     def _create_impl( self ):
         return 'staticmethod( "%s" )' % self.function_code_creator.alias
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class constructor_wrapper_t( calldef_wrapper_t ):
@@ -1047,7 +1047,7 @@ class copy_constructor_wrapper_t( code_creator.code_creator_t
         answer.append( '}' )
         return os.linesep.join( answer )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class null_constructor_wrapper_t( code_creator.code_creator_t
@@ -1079,7 +1079,7 @@ class null_constructor_wrapper_t( code_creator.code_creator_t
         answer.append( '}' )
         return os.linesep.join( answer )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 #in python all operators are members of class, while in C++
@@ -1163,7 +1163,7 @@ class operator_t( registration_based.registration_based_t
             code = self._create_unary_operator()
         return 'def( %s )' % code
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class casting_operator_t( registration_based.registration_based_t
@@ -1188,7 +1188,7 @@ class casting_operator_t( registration_based.registration_based_t
                                            , [ from_arg , to_arg ] )  \
                + '();'
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class casting_member_operator_t( registration_based.registration_based_t
@@ -1225,7 +1225,7 @@ class casting_member_operator_t( registration_based.registration_based_t
                             , 'doc' : doc
                }
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class casting_constructor_t( registration_based.registration_based_t
@@ -1250,7 +1250,7 @@ class casting_constructor_t( registration_based.registration_based_t
         return declarations.templates.join(implicitly_convertible, [from_arg, to_arg ]) \
                + '();'
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class destructor_wrapper_t( code_creator.code_creator_t
@@ -1268,7 +1268,7 @@ class destructor_wrapper_t( code_creator.code_creator_t
         answer.append( '}' )
         return os.linesep.join( answer )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 
@@ -1342,7 +1342,7 @@ class mem_fun_overloads_class_t( calldef_overloads_class_t ):
                    , 'max' : max_
                }
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class free_fun_overloads_class_t( calldef_overloads_class_t ):
@@ -1363,7 +1363,7 @@ class free_fun_overloads_class_t( calldef_overloads_class_t ):
                    , 'max' : max_
                }
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class calldef_overloads_t( registration_based.registration_based_t ):
@@ -1450,7 +1450,7 @@ class calldef_overloads_t( registration_based.registration_based_t ):
 
         return ''.join( result )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class mem_fun_overloads_t( calldef_overloads_t ):

@@ -31,7 +31,7 @@ class global_variable_base_t( registration_based.registration_based_t
         self._wrapper = new_wrapper
     wrapper = property( _get_wrapper, _set_wrapper )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class global_variable_t( global_variable_base_t ):
@@ -69,7 +69,7 @@ class array_gv_t( global_variable_base_t ):
     def __init__(self, variable, wrapper ):
         global_variable_base_t.__init__( self, variable=variable, wrapper=wrapper )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
     def _create_impl( self ):
@@ -156,7 +156,7 @@ class array_gv_wrapper_t( code_creator.code_creator_t
         answer.append( '}' * len( self._create_namespaces() ) )
         return os.linesep.join( answer )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return [code_repository.array_1.file_name]
 
 class global_variable_addressof_t( global_variable_base_t ):
@@ -181,7 +181,7 @@ class global_variable_addressof_t( global_variable_base_t ):
         result.append( ' = size_t( boost::addressof( %s ) );' % self.decl_identifier )
         return ''.join( result )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return [code_repository.ctypes_integration.file_name]
 
 class global_variable_reference_t( code_creator.code_creator_t, declaration_based.declaration_based_t ):
@@ -196,5 +196,5 @@ class global_variable_reference_t( code_creator.code_creator_t, declaration_base
                        , library_var_name=self.top_parent.library_var_name
                        , undecorated_decl_name=self.undecorated_decl_name )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []

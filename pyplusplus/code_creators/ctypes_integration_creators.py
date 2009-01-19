@@ -35,7 +35,7 @@ class  expose_this_t( registration_based.registration_based_t
 
         return ''.join( answer )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return [code_repository.ctypes_integration.file_name]
 
 class  expose_sizeof_t( registration_based.registration_based_t
@@ -51,5 +51,5 @@ class  expose_sizeof_t( registration_based.registration_based_t
     def _create_impl(self):
         return 'def( pyplus_conv::register_sizeof( boost::type< %s >() ) )' % self.decl_identifier
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return [code_repository.ctypes_integration.file_name]

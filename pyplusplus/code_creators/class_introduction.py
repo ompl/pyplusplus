@@ -41,7 +41,7 @@ class class_introduction_t(compound.compound_t, declaration_based.declaration_ba
                            % dict( ns_full_name=self.complete_py_name, name=self.alias ))
         return os.linesep.join( result )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 
@@ -62,5 +62,5 @@ class class_declaration_introduction_t(code_creator.code_creator_t, declaration_
                            % dict( ns_full_name=self.complete_py_name, name=self.alias ))
         return os.linesep.join( result )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []

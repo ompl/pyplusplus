@@ -58,5 +58,5 @@ class include_t(code_creator.code_creator_t):
             self.__created_code = self._create_include_directive_code()
         return self.__created_code
             
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []

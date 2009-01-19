@@ -31,7 +31,7 @@ class namespace_alias_t(code_creator.code_creator_t):
             self.__created_code = 'namespace %s = %s;' % ( self.alias, self.full_namespace_name )
             return self.__created_code
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class namespace_using_t(code_creator.code_creator_t):
@@ -53,5 +53,5 @@ class namespace_using_t(code_creator.code_creator_t):
             self.__created_code = 'using namespace %s;' % self.namespace_name
             return self.__created_code
     
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []

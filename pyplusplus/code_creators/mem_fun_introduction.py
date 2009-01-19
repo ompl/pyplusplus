@@ -20,7 +20,7 @@ class mem_fun_introduction_t(code_creator.code_creator_t, declaration_based.decl
         return os.linesep.join( tmpl ) \
                % dict( alias=self.declaration.alias, name=self.undecorated_decl_name )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class vmem_fun_introduction_t(code_creator.code_creator_t, declaration_based.declaration_based_t):
@@ -37,7 +37,7 @@ class vmem_fun_introduction_t(code_creator.code_creator_t, declaration_based.dec
                        , name=self.undecorated_decl_name
                        , ordinal=0)
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class init_introduction_t(code_creator.code_creator_t, declaration_based.declaration_based_t):
@@ -52,7 +52,7 @@ class init_introduction_t(code_creator.code_creator_t, declaration_based.declara
         return os.linesep.join( tmpl ) \
                % dict( alias=self.declaration.alias, name=self.undecorated_decl_name )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class opaque_init_introduction_t(code_creator.code_creator_t, declaration_based.declaration_based_t):
@@ -65,7 +65,7 @@ class opaque_init_introduction_t(code_creator.code_creator_t, declaration_based.
         tmpl.append( self.indent('raise RuntimeError( "Unable to create instance of opaque type." )') )
         return os.linesep.join( tmpl ) 
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class del_introduction_t(code_creator.code_creator_t, declaration_based.declaration_based_t):
@@ -80,5 +80,5 @@ class del_introduction_t(code_creator.code_creator_t, declaration_based.declarat
         return os.linesep.join( tmpl ) \
                % dict( name=self.undecorated_decl_name )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []

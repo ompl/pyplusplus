@@ -417,8 +417,8 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
     def _create_impl(self):
         return os.linesep.join([ self.create_override(), '', self.create_default() ])
 
-    def _get_system_headers_impl( self ):
-        files = super( mem_fun_v_transformed_wrapper_t, self )._get_system_headers_impl()
+    def _get_system_files_impl( self ):
+        files = super( mem_fun_v_transformed_wrapper_t, self )._get_system_files_impl()
         files.append( code_repository.convenience.file_name )
         return files
 

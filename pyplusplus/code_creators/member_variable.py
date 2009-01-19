@@ -31,7 +31,7 @@ class member_variable_base_t( registration_based.registration_based_t
         self._wrapper = new_wrapper
     wrapper = property( _get_wrapper, _set_wrapper )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         files = []
         if self.declaration.getter_call_policies:
             files.append( self.declaration.getter_call_policies.header_file )
@@ -269,7 +269,7 @@ class member_variable_wrapper_t( code_creator.code_creator_t
                 , 'cls_type' : self.inst_arg_type( has_const=False ) })
         return os.linesep.join( answer )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class bit_field_t( member_variable_base_t ):
@@ -376,7 +376,7 @@ class bit_field_wrapper_t( code_creator.code_creator_t
             answer.append( self.BF_SET_TEMPLATE % substitutions )
         return os.linesep.join( answer )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class array_mv_t( member_variable_base_t ):
@@ -426,7 +426,7 @@ class array_mv_t( member_variable_base_t ):
         answer.append( '}' )
         return ''.join( answer )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 
@@ -492,7 +492,7 @@ class array_mv_wrapper_t( code_creator.code_creator_t
               , 'mem_var_ref' : self.declaration.name
             }
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return [code_repository.array_1.file_name]
 
 
@@ -642,7 +642,7 @@ class mem_var_ref_wrapper_t( code_creator.code_creator_t
             answer.append( self.SET_TEMPLATE % substitutions )
         return os.linesep.join( answer )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 class member_variable_addressof_t( member_variable_base_t ):
@@ -692,5 +692,5 @@ class member_variable_addressof_t( member_variable_base_t ):
             return self._create_s_var()
         else:
             return self._create_m_var()
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return [code_repository.ctypes_integration.file_name]

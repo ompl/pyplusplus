@@ -179,7 +179,7 @@ class multiple_files_t(writer.writer_t):
 
         dependend_on_headers = []
         for creator in creators:
-            dependend_on_headers.extend( creator.get_system_headers( recursive=True ) )
+            dependend_on_headers.extend( creator.get_system_files( recursive=True, language='C++' ) )
 
         dependend_on_headers = unique_headers( map( normalize, dependend_on_headers ) )
 

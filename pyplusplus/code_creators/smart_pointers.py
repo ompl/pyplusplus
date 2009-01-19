@@ -74,7 +74,7 @@ class smart_pointer_registrator_t( registration_based.registration_based_t
         held_type = held_type_t(self.smart_ptr).create( self )
         return templates.join( rptp, [ held_type ] ) + '();'
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
     
 class smart_pointers_converter_t( registration_based.registration_based_t
@@ -115,6 +115,6 @@ class smart_pointers_converter_t( registration_based.registration_based_t
         to_arg = self._instantiate_smart_ptr( self.target )
         return templates.join(implicitly_convertible, [ from_arg, to_arg ] ) + '();' 
         
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
  

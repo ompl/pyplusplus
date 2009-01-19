@@ -65,7 +65,7 @@ class enum_t( registration_based.registration_based_t
         values = self.indent( os.linesep.join( values ) )
         return bpl_enum + os.linesep + values
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 
@@ -80,5 +80,5 @@ class pyenum_t( code_creator.code_creator_t, declaration_based.declaration_based
             result.append( self.indent( '%(name)s = %(value)s' % dict( name=name, value=value ) ) )
         return os.linesep.join( result )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []

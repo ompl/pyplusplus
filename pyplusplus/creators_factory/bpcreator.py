@@ -126,7 +126,7 @@ class bpcreator_t( declarations.decl_visitor_t ):
 
             if isinstance( decl, declarations.namespace_t ):
                 continue
-            
+
             if isinstance( decl, declarations.class_types ):
                 if decl.opaque:
                     continue
@@ -342,7 +342,7 @@ class bpcreator_t( declarations.decl_visitor_t ):
 
         add_include = self.__extmodule.add_include
         #add system headers
-        system_headers = self.__extmodule.get_system_headers( recursive=True, unique=True )
+        system_headers = self.__extmodule.get_system_files( recursive=True, unique=True, language='c++' )
         map( lambda header: add_include( header, user_defined=False, system=True )
              , system_headers )
         #add user defined header files
@@ -352,6 +352,9 @@ class bpcreator_t( declarations.decl_visitor_t ):
              , decl_headers )
 
         self.__dependencies_manager.inform_user()
+
+        for cc in code_creators.make_flatten( self.__extmodule ):
+            cc._code_generator = decl_wrappers.CODE_GENERATOR_TYPES.BOOST_PYTHON
 
         return self.__extmodule
 

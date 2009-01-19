@@ -59,5 +59,5 @@ class fields_definition_t(code_creator.code_creator_t, declaration_based.declara
         result.append( ']' )
         return os.linesep.join( result )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []

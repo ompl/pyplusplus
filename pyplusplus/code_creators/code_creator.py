@@ -5,6 +5,8 @@
 
 import os
 import types
+from pyplusplus import decl_wrappers
+from pyplusplus import code_repository
 
 class code_creator_t(object):
     """
@@ -23,6 +25,8 @@ class code_creator_t(object):
     __INDENTATION = '    '
     LINE_LENGTH = 80
     PARAM_SEPARATOR = ', '
+    CODE_GENERATOR_TYPES = decl_wrappers.CODE_GENERATOR_TYPES
+
     def __init__(self):
         """Constructor.
 
@@ -33,7 +37,11 @@ class code_creator_t(object):
         self._parent = None
         self._target_configuration = None
         self._works_on_instance = True
+        self._code_generator = None
 
+    @property
+    def code_generator( self ):
+        return self._code_generator
 
     def _get_works_on_instance(self):
         return self._works_on_instance
@@ -110,17 +118,31 @@ class code_creator_t(object):
                 uheaders.append( h )
         return uheaders
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         """Return list of system header files the generated code depends on"""
         raise NotImplementedError(self.__class__.__name__)
 
-    def get_system_headers( self, recursive=False, unique=False ):
-        files = [ "boost/python.hpp" ]
-        files.extend( self._get_system_headers_impl() )
+    def get_system_files( self, recursive=False, unique=False, language='any' ):
+        files = []
+        if self.code_generator == self.CODE_GENERATOR_TYPES.BOOST_PYTHON:
+            files.append( "boost/python.hpp" )
+            files.append( code_repository.named_tuple.file_name )
+        else:
+            files.append( 'ctypes_utils.py' )
+        files.extend( self._get_system_files_impl() )
         files = filter( None, files)
         if unique:
             files = self.unique_headers( files )
-        return files
+
+        language = language.lower()
+        if language == 'python':
+            selector = lambda f: os.path.splitext( f )[1] in ( '.py' )
+        elif language == 'c++':
+            selector = lambda f: os.path.splitext( f )[1] in ( '.h', '.hpp', '.cpp' )
+        else:
+            selector = None
+
+        return filter( selector, files )
 
     def beautify( self, code ):
         """
@@ -205,5 +227,5 @@ class separator_t(code_creator_t):
     def _create_impl(self):
         return self.__code
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []

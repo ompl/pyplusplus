@@ -41,5 +41,5 @@ class module_t(compound.compound_t):
                         The license text will always be the first children node.
                         @type: str or L{license_t}""")
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []

@@ -21,5 +21,5 @@ class namespace_as_pyclass_t(compound.compound_t, declaration_based.declaration_
         result.append( compound.compound_t.create_internal_code( self.creators ) )
         return os.linesep.join( result )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []

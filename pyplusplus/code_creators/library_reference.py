@@ -46,7 +46,7 @@ class library_reference_t(code_creator.code_creator_t):
                        , loader='CDLL'
                        , path=self._library_path )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 if __name__ == '__main__':

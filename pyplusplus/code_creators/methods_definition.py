@@ -54,5 +54,5 @@ class methods_definition_t(compound.compound_t, declaration_based.declaration_ba
         result.append( 'del %s' % self.mem_fun_factory_var_name )
         return os.linesep.join( result )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []

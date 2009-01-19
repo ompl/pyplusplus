@@ -18,5 +18,5 @@ class typedef_as_pyvar_t(code_creator.code_creator_t, declaration_based.declarat
                 % dict( complete_py_name=self.complete_py_name
                         , type=ctypes_formatter.as_ctype( self.declaration.type ) )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []

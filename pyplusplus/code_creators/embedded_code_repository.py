@@ -14,5 +14,5 @@ class embedded_code_repository_t(code_creator.code_creator_t):
     def _create_impl(self):
         return self.__code
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []

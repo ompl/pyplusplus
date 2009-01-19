@@ -17,5 +17,5 @@ class import_t(code_creator.code_creator_t):
     def _create_impl(self):
         return 'import %(module)s' % dict( module=os.path.splitext(self._module_name)[0] )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []

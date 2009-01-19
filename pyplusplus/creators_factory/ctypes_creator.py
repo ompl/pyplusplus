@@ -152,6 +152,9 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
         self.__dependencies_manager.inform_user()
 
+        for cc in code_creators.make_flatten( self.module ):
+            cc._code_generator = decl_wrappers.CODE_GENERATOR_TYPES.CTYPES
+
         return self.module
 
     def visit_member_function( self ):
@@ -240,18 +243,18 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
             class_ = self.curr_decl
             for decl in self.curr_decl.decls( recursive=False, allow_empty=True ):
                 if isinstance( decl, declarations.variable_t ):
-                    continue #fields_definition_t class treats them 
+                    continue #fields_definition_t class treats them
                 if self.__should_generate_code( decl ):
                     self.curr_decl = decl
                     declarations.apply_visitor( self, decl )
             self.curr_decl = class_
             #fields definition should be recursive using the visitor
             #internal classes fields should be defined first
-            self.__class_defs_ccs.adopt_creator( code_creators.fields_definition_t( self.curr_decl ) )            
+            self.__class_defs_ccs.adopt_creator( code_creators.fields_definition_t( self.curr_decl ) )
         else:
             cls_intro_cc = self.__class2introduction[ self.curr_decl ]
             cls_intro_cc.adopt_creator( code_creators.opaque_init_introduction_t( self.curr_decl ) )
-            
+
     def visit_enumeration(self):
         self.__dependencies_manager.add_exported( self.curr_decl )
         paretn_cc = None
@@ -268,7 +271,7 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
     def visit_variable(self):
         self.__dependencies_manager.add_exported( self.curr_decl )
         self.curr_code_creator.adopt_creator( code_creators.global_variable_reference_t( self.curr_decl ) )
-        
+
     def visit_namespace(self ):
         if not self.__contains_exported( self.curr_decl ):
             return

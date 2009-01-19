@@ -86,6 +86,8 @@ class builder_t(module_builder.module_builder_t):
                                                     , compilation_mode
                                                     , cache
                                                     , indexing_suite_version)
+        self.global_ns.decls(recursive=True, allow_empty=True)._code_generator = decl_wrappers.CODE_GENERATOR_TYPES.CTYPES
+
         self.__code_creator = None
         if optimize_queries:
             self.run_query_optimizer()

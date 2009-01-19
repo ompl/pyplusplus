@@ -84,7 +84,7 @@ class callable_definition_t(code_creator.code_creator_t, declaration_based.decla
         args = map( ctypes_formatter.as_ctype, self.ftype.arguments_types )
         return self.join_arguments( args, group_in_list )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 
@@ -217,7 +217,7 @@ class multi_method_definition_t( compound.compound_t ):
         result.append( self.indent( '.finalize(),', 4 ) )
         return os.linesep.join( result )
 
-    def _get_system_headers_impl( self ):
+    def _get_system_files_impl( self ):
         return []
 
 
