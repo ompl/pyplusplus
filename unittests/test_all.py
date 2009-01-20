@@ -111,7 +111,7 @@ import unions_tester
 import cp_return_addressof_tester
 import make_constructor_tester
 import return_auto_ptr_tester
-import ctypes_pof_tester
+import ctypes_tester
 import refee_refer_tester
 #import ogre_generate_tester
 
@@ -211,7 +211,7 @@ testers = [
     , make_constructor_tester
     , return_auto_ptr_tester
     , protected_bug_tester
-    , ctypes_pof_tester
+    , ctypes_tester
     , refee_refer_tester
 #    , ogre_generate_tester too much time
 ]
