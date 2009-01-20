@@ -16,6 +16,9 @@ data_directory = os.path.join( this_module_dir_path, 'data' )
 build_directory = os.path.join( this_module_dir_path, 'temp' )
 build_dir = build_directory
 
+if not os.path.exists( build_dir ):
+    os.mkdir( build_dir )
+
 sys.path.append( os.path.dirname( this_module_dir_path ) )
 
 from environment import scons, boost, python, gccxml, indexing_suite
