@@ -7,6 +7,7 @@ import os
 import re
 import sys
 import time
+import shutil
 
 import autoconfig
 
@@ -311,7 +312,8 @@ class process_tester_runner_t( object ):
         for index, tester in enumerate( self.__m_runners ):
             print '\n\n{[<@>]}running tests complition: %d%%' % int( index * 100.0 // len(self.__m_runners) )
             print     '--------------------------------^^^^^\n\n'
-            ( index, len(self.__m_runners) )
+            if os.path.exists( os.path.join( autoconfig.build_directory, 'indexing_suite' ) ):
+                shutil.rmtree( os.path.join( autoconfig.build_directory, 'indexing_suite' ) )
             tester()
         self.__total_time = time.time() - start_time
         self.__dump_statistics()
