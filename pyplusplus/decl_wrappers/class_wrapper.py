@@ -207,7 +207,7 @@ class class_t( class_common_details_t
         class constructor.
         """
         if isinstance( f, declarations.calldef_t ):
-            self._fake_constructors.add( f )
+            self._fake_constructors.append( f )
         else:
             self._fake_constructors.extend( f )
 
@@ -299,7 +299,7 @@ class class_t( class_common_details_t
         if c:
             return c.body
         else:
-            return ''        
+            return ''
     def _set_null_constructor_body(self, body):
         c = self.find_trivial_constructor()
         if c:
@@ -312,7 +312,7 @@ class class_t( class_common_details_t
         if c:
             return c.body
         else:
-            return ''        
+            return ''
 
     def _set_copy_constructor_body(self, body):
         c = self.find_copy_constructor()
@@ -702,16 +702,16 @@ class class_t( class_common_details_t
             #select all public constructors and exclude copy constructor
             cs = self.constructors( lambda c: not c.is_copy_constructor and c.access_type == 'public'
                                     , recursive=False, allow_empty=True )
-            
+
             has_suitable_constructor = bool( cs )
             if cs and len(cs) == 1 and cs[0].is_trivial_constructor and self.find_noncopyable_vars():
                 has_suitable_constructor = False
-    
+
             has_nonpublic_destructor = declarations.has_destructor( self ) \
                                        and not declarations.has_public_destructor( self )
-    
+
             trivial_constructor = self.find_trivial_constructor()
-    
+
             if has_nonpublic_destructor \
                or ( self.is_abstract and not self.is_wrapper_needed() ) \
                or not has_suitable_constructor:
@@ -728,6 +728,6 @@ class class_t( class_common_details_t
         return self._no_init
     def _set_no_init( self, value ):
         self._no_init = value
-        
+
     no_init = property( _get_no_init, _set_no_init
                         , doc="If True, class will be registered with 'boost::python::no_init'" )
