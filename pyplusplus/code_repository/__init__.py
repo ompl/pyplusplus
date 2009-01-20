@@ -42,5 +42,7 @@ def i_depend_on_them( fname ):
         result = indexing_suite.all[:]
         del result[ indexing_suite.headers.index( fname ) ]
         return result
+    elif fname == return_range.file_name:
+        return indexing_suite.all[:]
     else:
         return []
