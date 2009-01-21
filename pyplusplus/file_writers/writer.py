@@ -32,9 +32,8 @@ class writer_t(object):
         if None is files_sum_repository:
             self.__files_sum_repository = md5sum_repository.dummy_repository_t()
         self.__exposed_decls_db = utils.exposed_decls_db_t()
-        if isinstance( self.__extmodule, code_creators.bpmodule_t ):
-            self.__exposed_decls_db.register_decls( extmodule.global_ns
-                                                    , extmodule.specially_exposed_decls )
+        self.__exposed_decls_db.register_decls( extmodule.global_ns
+                                                , extmodule.specially_exposed_decls )
 
     def makedirs_for_file( self, file_path ):
         destination_dir = os.path.dirname( file_path )

@@ -152,9 +152,6 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
         self.__dependencies_manager.inform_user()
 
-        for cc in code_creators.make_flatten( self.module ):
-            cc._code_generator = decl_wrappers.CODE_GENERATOR_TYPES.CTYPES
-
         return self.module
 
     def visit_member_function( self ):

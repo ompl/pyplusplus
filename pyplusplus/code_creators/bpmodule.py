@@ -11,9 +11,7 @@ import namespace
 import compound
 import algorithm
 import module_body
-import declaration_based
 import include_directories
-from pygccxml import utils
 
 class bpmodule_t(module.module_t):
     """This class represents the source code for the entire extension module.
@@ -23,7 +21,7 @@ class bpmodule_t(module.module_t):
     def __init__(self, global_ns):
         """Constructor.
         """
-        module.module_t.__init__(self, global_ns)
+        module.module_t.__init__(self, global_ns, bpmodule_t.CODE_GENERATOR_TYPES.BOOST_PYTHON)
         self.__body = None
 
     def _get_include_dirs(self):
@@ -157,19 +155,3 @@ class bpmodule_t(module.module_t):
 
     def add_declaration_code( self, code, position ):
         self.adopt_declaration_creator( custom.custom_text_t( code ) )
-
-    @utils.cached
-    def specially_exposed_decls(self):
-        """list of exposed declarations, which were not ``included``, but still
-        were exposed. For example, std containers.
-        """
-        decls = set()
-        #select all declaration based code creators
-        ccs = filter( lambda cc: isinstance( cc, declaration_based.declaration_based_t )
-                      , algorithm.make_flatten_list( self ) )
-        #leave only "ignored"
-        ccs = filter( lambda cc: cc.declaration.ignore == True, ccs )
-
-        decls = map( lambda cc: cc.declaration, ccs )
-
-        return set( decls )

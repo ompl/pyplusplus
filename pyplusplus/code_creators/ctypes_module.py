@@ -17,7 +17,7 @@ class ctypes_module_t(module.module_t):
     def __init__(self, global_ns):
         """Constructor.
         """
-        module.module_t.__init__(self, global_ns)
+        module.module_t.__init__(self, global_ns, ctypes_module_t.CODE_GENERATOR_TYPES.CTYPES)
 
     def _create_impl(self):
         return self.create_internal_code( self.creators, indent_code=False )

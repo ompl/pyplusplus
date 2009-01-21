@@ -81,6 +81,7 @@ class bpcreator_t( declarations.decl_visitor_t ):
             self.__types_db = types_database.types_database_t()
 
         global_ns = declarations.get_global_namespace(decls)
+
         self.__extmodule = code_creators.bpmodule_t( global_ns )
         if boost_python_ns_name:
             bp_ns_alias = code_creators.namespace_alias_t( alias=boost_python_ns_name
@@ -352,9 +353,6 @@ class bpcreator_t( declarations.decl_visitor_t ):
              , decl_headers )
 
         self.__dependencies_manager.inform_user()
-
-        for cc in code_creators.make_flatten( self.__extmodule ):
-            cc._code_generator = decl_wrappers.CODE_GENERATOR_TYPES.BOOST_PYTHON
 
         return self.__extmodule
 

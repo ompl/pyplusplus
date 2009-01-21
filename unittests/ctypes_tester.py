@@ -6,6 +6,7 @@
 import os
 import sys
 import ctypes
+import shutil
 import unittest
 import autoconfig
 from pyplusplus.module_builder import ctypes_module_builder_t
@@ -57,6 +58,11 @@ class ctypes_base_tester_t(unittest.TestCase):
     def setUp( self ):
         if self.base_name in sys.modules:
             return sys.modules[ self.base_name ]
+
+        binaries_dir = os.path.dirname( self.symbols_file )
+        if os.path.exists( binaries_dir ):
+            print '\nrmdir ', binaries_dir 
+            shutil.rmtree( binaries_dir )
 
         autoconfig.scons_config.compile( self.__build_scons_cmd(), cwd=autoconfig.this_module_dir_path )
         mb = ctypes_module_builder_t( [self.header], self.symbols_file, autoconfig.cxx_parsers_cfg.gccxml )

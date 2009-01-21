@@ -41,6 +41,8 @@ class code_creator_t(object):
 
     @property
     def code_generator( self ):
+        if self._code_generator is None:
+            self._code_generator = self.top_parent.code_generator
         return self._code_generator
 
     def _get_works_on_instance(self):

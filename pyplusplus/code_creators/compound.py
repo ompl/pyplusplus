@@ -78,8 +78,7 @@ class compound_t(code_creator.code_creator_t):
         return os.linesep.join( internals )
 
     def get_system_files( self, recursive=False, unique=False, language='any' ):
-        files = [ "boost/python.hpp" ]
-        files.extend( self._get_system_files_impl() )
+        files = super( compound_t, self ).get_system_files(recursive, unique=False, language=language)
         if recursive:
             for creator in self._creators:
                 files.extend( creator.get_system_files(recursive, unique=False, language=language) )
