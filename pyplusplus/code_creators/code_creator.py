@@ -128,7 +128,7 @@ class code_creator_t(object):
             files.append( "boost/python.hpp" )
             files.append( code_repository.named_tuple.file_name )
         else:
-            files.append( 'ctypes_utils.py' )
+            files.append( code_repository.ctypes_utils.file_name )
         files.extend( self._get_system_files_impl() )
         files = filter( None, files)
         if unique:
