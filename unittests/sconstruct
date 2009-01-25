@@ -33,7 +33,8 @@ scripts = [ 'pof'
             , 'anonymous'
             , 'variables'
             , 'varargs'
-            , 'templates' ]
+            , 'templates'
+            , 'circular_references' ]
 
 for s in scripts:
     SConscript( 'data/ctypes/%s/sconscript' % s
