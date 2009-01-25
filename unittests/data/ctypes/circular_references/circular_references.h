@@ -15,3 +15,5 @@ struct EXPORT_SYMBOL bar_t{
     int a, b;
     struct foo_t foo;
 };
+
+void EXPORT_SYMBOL use_bar( bar_t* );
