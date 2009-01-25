@@ -61,7 +61,7 @@ class ctypes_base_tester_t(unittest.TestCase):
 
         binaries_dir = os.path.dirname( self.symbols_file )
         if os.path.exists( binaries_dir ):
-            print '\nrmdir ', binaries_dir 
+            print '\nrmdir ', binaries_dir
             shutil.rmtree( binaries_dir )
 
         autoconfig.scons_config.compile( self.__build_scons_cmd(), cwd=autoconfig.this_module_dir_path )
@@ -208,6 +208,21 @@ class varargs_tester_t( ctypes_base_tester_t ):
     def test(self):
         self.failUnless( 21 == self.module_ref.sum_ints( 3, 5,7,9) )
 
+class templates_tester_t( ctypes_base_tester_t ):
+    def __init__( self, *args, **keywd ):
+        ctypes_base_tester_t.__init__( self, 'templates', *args, **keywd )
+
+    def customize( self, mb ):
+        mb.class_( 'value_t<int>' ).alias = 'int_value_t'
+
+    def test(self):
+        v = self.module_ref.int_value_t()
+        self.module_ref.init( v )
+        self.failUnless( v.value == 2009 )
+        self.failUnless( v.get_value() != 2009, "thiscall is not working yet" )
+
+
+
 def create_suite():
     suite = unittest.TestSuite()
     #~ if 'win' in sys.platform:
@@ -219,6 +234,7 @@ def create_suite():
     suite.addTest( unittest.makeSuite(anonymous_tester_t))
     suite.addTest( unittest.makeSuite(variables_tester_t))
     suite.addTest( unittest.makeSuite(varargs_tester_t))
+    suite.addTest( unittest.makeSuite(templates_tester_t))
     return suite
 
 def run_suite():
