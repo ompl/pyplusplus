@@ -5,7 +5,6 @@
 
 import os
 import custom
-import import_
 import license
 import include
 import compound

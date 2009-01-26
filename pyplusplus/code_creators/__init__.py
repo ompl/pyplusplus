@@ -14,6 +14,7 @@ creator represents a single block of source code.
 The base class for all code creators is L{code_creator_t}.
 """
 
+
 from code_creator import code_creator_t
 from code_creator import separator_t
 from compound import compound_t
@@ -35,11 +36,13 @@ from scoped import scoped_t
 from module_body import module_body_t
 
 from include import include_t
+from include import import_t
 
 from unnamed_enum import unnamed_enum_t
 
 from namespace import namespace_alias_t
 from namespace import namespace_using_t
+from namespace import namespace_as_pyclass_t
 
 from enum import enum_t
 
@@ -118,6 +121,7 @@ from include_directories import include_directories_t
 from license import license_t
 
 from module import bpmodule_t
+from module import ctypes_module_t
 
 from smart_pointers import held_type_t
 from smart_pointers import smart_pointers_converter_t
@@ -144,11 +148,8 @@ from ctypes_integration_creators import expose_sizeof_t
 from bookmark import bookmark_t
 
 #pure ctypes
-from module import ctypes_module_t
-from import_ import import_t
 from library_reference import library_reference_t
 from name_mappings import name_mappings_t
-from namespace_as_pyclass import namespace_as_pyclass_t
 from class_introduction import class_introduction_t
 from class_introduction import class_declaration_introduction_t
 from mem_fun_introduction import mem_fun_introduction_t
