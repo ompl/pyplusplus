@@ -24,7 +24,7 @@ New in version greater than 0.8.5.
 Example
 -------
 
-.. code-block:: cpp
+.. code-block:: c++
 
   struct resource_t{...};
 
@@ -36,7 +36,7 @@ Lets say that you need to expose "do_smth" function. According to the FAQ, you
 have to create small wrapper, which will take ``std::auto_ptr`` as an argument.
 The following `Py++`_ code does it for you:
 
-  .. code-block:: Python
+  .. code-block:: python
 
      from pygccxml import declarations
      from pyplusplus import module_builder
@@ -51,7 +51,7 @@ The following `Py++`_ code does it for you:
 
 What you see below is the relevant pieces of generated code:
 
-  .. code-block:: cpp
+  .. code-block:: c++
 
      namespace bp = boost::python;
 

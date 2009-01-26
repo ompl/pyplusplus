@@ -15,7 +15,7 @@ make that function usable from `Python`_.
 An often mentioned example that demonstrates the problem is the ``get_size()`` 
 member function of a fictitious image class:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   void get_size(int& width, int& height);
 
@@ -25,13 +25,13 @@ An instance of immutable type could not be changed after construction. The only
 way to expose this function to `Python`_ is to create small wrapper, which will 
 return a tuple. In `Python`_, the above function would instead be invoked like this:
 
-.. code-block:: Python
+.. code-block:: python
 
   width, height = img.get_size()
 
 and the wrapper could look like this:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   boost::python::tuple get_size( const image_t& img ){
       int width;
@@ -57,7 +57,7 @@ Instead of forcing you to write the entire wrapper function, `Py++`_ allows you
 to provide the semantics of an argument(s) and then it will take care of 
 producing the correct code:
 
-.. code-block:: Python
+.. code-block:: python
 
    from pyplusplus import module_builder
    from pyplusplus import function_transformers as FT

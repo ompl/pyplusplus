@@ -18,7 +18,7 @@ Insert code to module
 
 Almost every ``Boost.Python`` module has the following structure:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   //declarations code
   ...
@@ -45,7 +45,7 @@ sections. More over you can add the code to head or tail of the section.
 Example
 -------
 
-.. code-block:: Python
+.. code-block:: python
 
   mb = module_builder_t( ... )
   mb.build_code_creator( ... )
@@ -60,7 +60,7 @@ Insert code to class
 ``class_t`` declaration defines few methods, which add user code to the generated one.
 Lets take a look on the following use case:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   struct window_t{
       ...
@@ -74,7 +74,7 @@ function as is. You need to create a wrapper and expose it.
 In the near future `Py++`_ will eliminate the need of creating hand
 written wrapper for this use case.
 
-.. code-block:: cpp
+.. code-block:: c++
 
   boost::python::tuple get_window_size( const window_t& win ){
       int h(0), w(0);
@@ -84,7 +84,7 @@ written wrapper for this use case.
 
 Now you have to register it:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   using boost::python;
   class_< window_t >( ... )
@@ -113,7 +113,7 @@ functions:
   What is ``works_on_instance`` argument for? In our case, we added new method
   to the class. The first argument of the call will be ``self``.
 
-  .. code-block:: Python
+  .. code-block:: python
 
     #From Python user can call this method like this:
     win = window_t( )
@@ -121,7 +121,7 @@ functions:
 
   If you will pass ``works_on_instance=False`` the following code will be generated:
 
-  .. code-block:: cpp
+  .. code-block:: c++
 
     {
         class_< window_t > window_exporter( "window_t" );
@@ -132,7 +132,7 @@ functions:
 
   And in this case, user will be forced to pass reference to ``window_t`` object:
 
-  .. code-block:: cpp
+  .. code-block:: c++
 
     win = window_t()
     height, width = window_t.get_size( win )
@@ -140,7 +140,7 @@ functions:
 Example
 -------
 
-.. code-block:: Python
+.. code-block:: python
 
   mb = module_builder_t( ... )
   window = mb.class_( 'window_t' )
@@ -177,7 +177,7 @@ this solution he needed:
 Solution
 --------
 
-.. code-block:: Python
+.. code-block:: python
 
   def inject_code( cls ):
       constructors = cls.constructors()
@@ -195,7 +195,7 @@ Solution
 	  #If you need to add new class variables:		   
       cls.add_wrapper_code( <<<variable declaration>>> )
 
-.. code-block:: Python
+.. code-block:: python
 
   mb = module_builder_t( ... )
   for cls in mb.classes( <<<relevant classes only>>> ):
@@ -212,7 +212,7 @@ are few ways to do this.
 1. The easiest and the most effective one - tell to `Py++`_ that generated code
    for the declaration should include additional files:
 
-   .. code-block:: Python
+   .. code-block:: python
 
      mb = module_builder_t( ... )
      my_class = mb.class_( ... )
@@ -224,7 +224,7 @@ are few ways to do this.
 2. Other approach is a little bit low level, but it allows you to add your header
    files to every generated file:
 
-   .. code-block:: Python
+   .. code-block:: python
 
      mb = module_builder_t( ... )
      ...
@@ -233,7 +233,7 @@ are few ways to do this.
 
    You can also replace all (to be) generated header files with your own set:
 
-   .. code-block:: Python
+   .. code-block:: python
 
      mb.code_creator.replace_included_headers( ["stdafx.h"] )
 

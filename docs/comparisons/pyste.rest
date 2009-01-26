@@ -186,15 +186,15 @@ things:
 
       * code creator that generates body of "overridden" virtual functions:
 
-        .. code-block:: cpp
+        .. code-block:: c++
 
           struct expensive_to_copy{...};
 
-        .. code-block:: cpp
+        .. code-block:: c++
 
           void do_smth( expensive_to_copy* x, const expensive_to_copy& y ){...}
 
-        .. code-block:: cpp
+        .. code-block:: c++
 
           void
           do_smth(expensive_to_copy* x, const expensive_to_copy& y){
@@ -332,7 +332,7 @@ generated code:
 
     * To define namespace alias.
 
-      .. code-block:: cpp
+      .. code-block:: c++
 
         namespace dt = boost::date_time;
 
@@ -341,7 +341,7 @@ generated code:
 
     * Classes and functions support 2 modes of code generation. Example:
 
-      .. code-block:: cpp
+      .. code-block:: c++
 
         struct world{
             void set(std::string msg) { this->msg = msg; }
@@ -351,7 +351,7 @@ generated code:
 
       First mode:
 
-      .. code-block:: cpp
+      .. code-block:: c++
 
         class_<world>("world")
            .def("greet", &world::greet)
@@ -361,7 +361,7 @@ generated code:
 
       Second mode:
 
-      .. code-block:: cpp
+      .. code-block:: c++
 
         if( true ){
             typedef class_<world> world_exposer_t;

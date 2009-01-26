@@ -80,7 +80,7 @@ By default, `Py++`_ works with built-in indexing suite. If you want to use
 indexing suite version 2, you should tell this to the ``module_builder_t.__init__``
 method:
 
-.. code-block:: Python
+.. code-block:: python
 
   mb = module_builder_t( ..., indexing_suite_version=2 )
 
@@ -125,7 +125,7 @@ Indexing suite version 2 API
 In this case there is no single place, where you can configure exported container
 functionality. Please take a look on the following C++ code:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   struct item{
       ...

@@ -18,14 +18,14 @@ Consider the following layout:
 `Py++`_ does not handle relative paths, as input, well. It tries, but there are uses
 cases it fails. In these cases it generates empty module - nothing is exposed:
 
-.. code-block:: Python
+.. code-block:: python
 
    mb = module_builder( [ 'date_time/date_time.hpp' ], ... )
    mb.split_module( ... )
 
 I recommend you to use absolute paths instead of relative ones:
 
-.. code-block:: Python
+.. code-block:: python
 
    import os
    mb = module_builder( [ os.path.abspath('date_time/date_time.hpp') ], ... )

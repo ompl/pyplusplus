@@ -124,7 +124,7 @@ code before it has been written to disk. For example one common requirement for
 open source projects it to have license text within every source file. You can
 do it with one line of code only:
 
-.. code-block:: Python
+.. code-block:: python
 
   mb.code_creator.license = <<<your license text>>>
 

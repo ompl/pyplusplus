@@ -85,7 +85,7 @@ of all those services is pretty simple and well polished.
 Before I explain how these services are integrated, take a look on the following source
 code:
 
-.. code-block:: Python
+.. code-block:: python
 
   mb = module_builder_t( ... )
   
@@ -225,7 +225,7 @@ the code it creates. For example:
 
   Here is "cut & paste" of the relevant code from the source file:
 
-  .. code-block:: Python
+  .. code-block:: python
 
     def _create_impl(self):
         result = []

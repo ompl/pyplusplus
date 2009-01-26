@@ -22,7 +22,7 @@ registration order problem.
 Example
 -------
 
-.. code-block:: cpp
+.. code-block:: c++
 
   struct tester_t{
       tester_t() {}
@@ -43,7 +43,7 @@ Example
 `Py++`_ generates code, that register functions in the order they appear in the
 source code:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   namespace bp = boost::python;
 
@@ -66,7 +66,7 @@ Registration order pitfalls
 
 Do you want to guess what is the output of the following program:
 
-.. code-block:: Python
+.. code-block:: python
 
   import my_module
   tester = my_module.tester_t()
@@ -97,7 +97,7 @@ a correct functionality:
 1. You can change alias of the function, by mangling the type of the argument
    into it:
 
-  .. code-block:: Python
+  .. code-block:: python
 
     mb = module_builder_t( ... )
     for f in mb.class_( 'tester_t' ).member_functions():
@@ -108,7 +108,7 @@ a correct functionality:
 3. You can ask `Py++`_ to generate code, which takes into account the order of
    declarations:
 
-   .. code-block:: Python
+   .. code-block:: python
 
      from pyplusplus.creators_factory import sort_algorithms
 
@@ -120,7 +120,7 @@ a correct functionality:
    this you can change the aliases of the functions. The third step is to create
    small "dispatch" function in Python:
 
-   .. code-block:: Python
+   .. code-block:: python
 
      import my_module
 

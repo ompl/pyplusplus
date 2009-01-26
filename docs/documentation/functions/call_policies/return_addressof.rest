@@ -21,7 +21,7 @@ Pay attention: you have to manage the memory by your own.
 Example
 -------
 
-.. code-block:: cpp
+.. code-block:: c++
 
   int* get_value(){
       static int buffer[] = { 0,1,2,3,4 };
@@ -36,7 +36,7 @@ Example
 
 The `Py++`_ code is not that different from what you already know:
 
-.. code-block:: Python
+.. code-block:: python
 
   from pyplusplus import module_builder
   from pyplusplus.module_builder import call_policies
@@ -47,7 +47,7 @@ The `Py++`_ code is not that different from what you already know:
 
 Python code:
 
-.. code-block:: Python
+.. code-block:: python
 
   import ctypes
   import my_module

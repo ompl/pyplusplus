@@ -15,7 +15,7 @@ the call policies, you defined, with `Py++`_
 Example
 -------
 
-.. code-block:: Python
+.. code-block:: python
 
   from pyplusplus import module_builder
   from pyplusplus.module_builder import call_policies
@@ -26,7 +26,7 @@ Example
 
   Optionally you can specify name of the header file, which should be included:
 
-.. code-block:: Python
+.. code-block:: python
 
    mb.free_function( ... ).call_policies \
       = call_policies.custom_call_policies( <<<your call policies code>>>, "xyz.hpp" )

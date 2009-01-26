@@ -12,7 +12,7 @@ Class ``return_pointee_value`` is a model of `ResultConverterGenerator`_ which
 can be used to wrap C++ functions, that return a pointer to a C++ object. The 
 policy implements the following logic:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   if( <<<return value is NULL pointer>>> ){
       return None;
@@ -46,7 +46,7 @@ Unknown type
 
 This technique and example was contributed by Maximilian Matthe.
 
-.. code-block:: cpp
+.. code-block:: c++
 
   struct int_wrapper{
        int_wrapper(int v) 
@@ -83,7 +83,7 @@ This technique and example was contributed by Maximilian Matthe.
 
 Python code:
 
-.. code-block:: Python
+.. code-block:: python
 
   import my_module
   
@@ -93,7 +93,7 @@ Python code:
 Return pointee value
 --------------------
 
-.. code-block:: cpp
+.. code-block:: c++
 
   float* get_value(){
       static float value = 0.5;
@@ -115,7 +115,7 @@ Return pointee value
 
 The `Py++`_ code is not that different from what you already know:
 
-.. code-block:: Python
+.. code-block:: python
 
   from pyplusplus import module_builder
   from pyplusplus.module_builder import call_policies
@@ -126,7 +126,7 @@ The `Py++`_ code is not that different from what you already know:
 
 Python code:
 
-.. code-block:: Python
+.. code-block:: python
 
   import my_module
 

@@ -13,7 +13,7 @@ template, than `Py++`_ will use it as a `Python`_ class name.
 
 For example:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   #include <vector>
   typedef std::vector< int > numbers;
@@ -23,7 +23,7 @@ For example:
 
 `Py++`_ will use "numbers" as Python class name:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   using boost::python;
   class_< std::vector< int > >( "numbers" )
@@ -38,7 +38,7 @@ For example:
 The previous approach is "implicit" - `Py++`_ does something behind the scene. 
 Recently (version 0.8.6 ), another approach was introduced:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   #include <vector>
   

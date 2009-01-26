@@ -10,7 +10,7 @@ Introduction
 
 I would like to introduce the following piece of code. I am going to use it for most exlanations.
 
-.. code-block:: cpp
+.. code-block:: c++
 
    // file point.h
    template< class T>
@@ -39,14 +39,14 @@ only its instantiations.
 
 You can instantiate template class using operator ``sizeof``:
 
-.. code-block:: cpp
+.. code-block:: c++
 
    sizeof( point_t<int> );
 
 
 In order to instantiate a function you have to call it:
 
-.. code-block:: cpp
+.. code-block:: c++
 
    void instantiate(){
        double x = distance( point_t<t>() );
@@ -64,7 +64,7 @@ If you have a template class, which should be instantiated with many types, you
 can create a small code generator, which will "instantiate the class". It is
 pretty easy to blend together the generated code and the existing one:
 
-.. code-block:: Python
+.. code-block:: python
 
    from module_builder import module_builder_t, create_text_fc
 
@@ -83,7 +83,7 @@ which contains valid C++ code. It creates temporal header file and compiles it.
 Functions templated on return type
 ----------------------------------
 
-.. code-block:: cpp
+.. code-block:: c++
 
    environment_t env;
    std::string path = env.get_value< std::string >( "PATH" );
@@ -105,7 +105,7 @@ Otherwise, you will discover the errors while testing the bindings.
 
 Generated code:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   bp::class_< environment_t >( "environment_t" )
       ...
@@ -116,7 +116,7 @@ Generated code:
 
 The correct code:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   bp::class_< environment_t >( "environment_t" )
       .def( "get_value"
@@ -128,7 +128,7 @@ The correct code:
 
 The perfect one:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   bp::class_< environment_t >( "environment_t" )
       ...
@@ -141,7 +141,7 @@ Work-around
 
 `Py++`_ contains a work-around to the problem:
 
-.. code-block:: Python
+.. code-block:: python
 
    mb = module_builder_t( ..., optimize_queries=False, ... )
    environment = mb.class_( "environment_t" )

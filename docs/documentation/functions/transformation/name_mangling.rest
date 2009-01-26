@@ -20,7 +20,7 @@ I am sure you want to ask why and where `Py++`_ uses name mangling? `Py++`_ uses
 name mangling to create function-wrappers for overloaded and\\or free functions.
 Consider the following use case:
 
-  .. code-block:: cpp
+  .. code-block:: c++
 
      void get_distance( long& );
      void get_distance( double& );
@@ -28,7 +28,7 @@ Consider the following use case:
 In order to expose ``get_distance`` functions you have to create 2 function
 wrappers:
 
-  .. code-block:: cpp
+  .. code-block:: c++
 
      long get_distance_as_long(){...}
      double get_distance_as_double(){...}
@@ -37,7 +37,7 @@ You have to give them distinguish names - C++ does not allow overloading, base
 on return type only. You also have to exposes them under different aliases,
 otherwise they will not be callable from `Python`_:
 
-  .. code-block:: cpp
+  .. code-block:: c++
 
      namespace bp = boost::python;
      BOOST_PYTHON_MODULE(...){
@@ -64,7 +64,7 @@ generator.
 If you are exposing an overloaded function, in that case `Py++`_ uses the ugly
 function-wrapper name as an alias. It is up to you to change the alias:
 
-  .. code-block:: Python
+  .. code-block:: python
 
      from pyplusplus import module_builder
      from pyplusplus import function_transformers as FT

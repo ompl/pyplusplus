@@ -25,7 +25,7 @@ Solution
 what should be done. I will use that example, to show how it could be done with
 `Py++`_:
 
-.. code-block:: Python
+.. code-block:: python
 
    from pyplusplus import module_builder_t
 
@@ -42,7 +42,7 @@ I think this is a most popular use case - translate a C++ exception to a string
 and than to create an instance of Python built-in exception. That is exactly why
 `Py++`_ provides additional API:
 
-.. code-block:: Python
+.. code-block:: python
 
    mb = module_builder_t( ... )
    my_exception = mb.class_( 'my_exception' )

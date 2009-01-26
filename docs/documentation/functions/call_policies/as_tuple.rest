@@ -16,7 +16,7 @@ The policy will construct a Python tuple from the array and handle the array mem
 Example
 -------
 
-.. code-block:: cpp
+.. code-block:: c++
 
    struct vector3{
        ...
@@ -65,7 +65,7 @@ Example
 
 The `Py++`_ code is slightly different from the C++ one, but it is definitely shorter:
 
-.. code-block:: Python
+.. code-block:: python
 
   from pyplusplus import module_builder
   from pyplusplus.module_builder import call_policies

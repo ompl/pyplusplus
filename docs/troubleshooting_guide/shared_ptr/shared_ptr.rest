@@ -20,7 +20,7 @@ to the library ( 8-December-2006 ) and some day it will be committed to the CVS.
 
 It is also possible to solve the problem, without changing Boost.Python library:
 
-  .. code-block:: cpp
+  .. code-block:: c++
 
      namespace boost{ 
          

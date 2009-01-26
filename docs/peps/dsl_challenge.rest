@@ -16,7 +16,7 @@ Py++ user interface
 
 I will use the following C++ code as an example:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   namespace geometry{
       struct Point{
@@ -41,7 +41,7 @@ In order to export this class, we need:
 
 Today, in order to configure this class, the user has to write the following code:
 
-.. code-block:: Python
+.. code-block:: python
 
   mb = module_builder_t( ... )
   Point = mb.class_( 'Point' )
@@ -56,7 +56,7 @@ Today, in order to configure this class, the user has to write the following cod
 If class ``Point`` is not unique, than user will have to write a little bit
 different code:
 
-.. code-block:: Python
+.. code-block:: python
 
   Point = mb.global_ns.namespace('geometry').class( 'Point' )
 
@@ -71,7 +71,7 @@ are:
 Better API (B-API)
 ------------------
 
-.. code-block:: Python
+.. code-block:: python
 
   mb = module_builder_t( ... )
   Point = mb.module.geometry.Point
@@ -105,28 +105,28 @@ Special syntax should be introduce to support
   B-API does not work for template instantiated classes and functions. If we change
   class ``Point`` to be template, the special syntax should be introduced:
 
-    .. code-block:: cpp
+    .. code-block:: c++
 
      template < class Numeric >
      struct Point{
          ...
      };
 
-    .. code-block:: Python
+    .. code-block:: python
 
        PointTmpl = mb.module.template('Point')
        Point = PointTmpl( 'int' )
 
   This is a trivial example, which is why it looks great. Consider the following class:
 
-    .. code-block:: cpp
+    .. code-block:: c++
 
        template< class String, class Allocator >
        class regex{ ... }
 
   The code the user will need to write is:
 
-    .. code-block:: Python
+    .. code-block:: python
 
        regex_tmpl = mb.module.geometry.template( 'regex' )
        #white spaces and scope resolution( :: ) are important
@@ -137,7 +137,7 @@ Special syntax should be introduce to support
   Using current `Py++`_ interface the user can get reference to the class
   instantiation in one line of code:
 
-    .. code-block:: Python
+    .. code-block:: python
 
        regex_std_string = mb.class_(
           lambda decl: decl.name.startswith( 'regex' ) and 'wchar_t' not in decl.name )
@@ -165,7 +165,7 @@ Full name
 Using B-API the user is forced to write full declaration name, otherwise he faces
 the following problem:
 
-  .. code-block:: Python
+  .. code-block:: python
 
      Point = mb.module.Point
 
@@ -180,7 +180,7 @@ Lets analyze what the ``Point`` value:
 
    There are a lot of use cases, when the user has to add some code to the class:
 
-   .. code-block:: Python
+   .. code-block:: python
 
       Point.add_registration_code( ... )
 

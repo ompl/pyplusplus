@@ -15,7 +15,7 @@ I created this functionality without special purpose in mind.
 Example
 -------
 
-  .. code-block:: Python
+  .. code-block:: python
 
     mb = module_builder_t( ... )
     cls = mb.class_( <<<your class>>> )
@@ -25,7 +25,7 @@ Example
 The `Python`_ class will contain two properties ``this`` and ``sizeof``. The usage
 is pretty simple:
 
-  .. code-block:: Python
+  .. code-block:: python
 
     import ctypes
     from <<<your module>>> import <<<your class>>> as data_t

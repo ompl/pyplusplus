@@ -18,7 +18,7 @@ will be added pretty soon.
 Example
 -------
 
-.. code-block:: cpp
+.. code-block:: c++
 
   #include <string>
 
@@ -30,7 +30,7 @@ Lets say that you need to expose ``hello_world`` function. As you know
 ``std::string`` is mapped to `Python`_ string, which is immutable type, so you
 have to create small wrapper for the function. The following `Py++`_ code does it for you:
 
-  .. code-block:: Python
+  .. code-block:: python
 
      from pyplusplus import module_builder
      from pyplusplus import function_transformers as FT
@@ -41,7 +41,7 @@ have to create small wrapper for the function. The following `Py++`_ code does i
 
 What you see below is the relevant pieces of generated code:
 
-  .. code-block:: cpp
+  .. code-block:: c++
 
      namespace bp = boost::python;
 

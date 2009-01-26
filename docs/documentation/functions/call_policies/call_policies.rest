@@ -21,13 +21,13 @@ Syntax
 The call policies in `Py++`_ are named exactly as in `Boost.Python`_, only the
 syntax is slightly different. For instance, this call policy:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   return_internal_reference< 1, with_custodian_and_ward<1, 2> >()
 
 becomes in `Py++`_
 
-.. code-block:: Python
+.. code-block:: python
 
   return_internal_reference( 1, with_custodian_and_ward(1, 2) )
 
@@ -41,7 +41,7 @@ Every "callable" object in `Py++`_ has ``call_policies`` property.
 
 C++ code:
 
-  .. code-block:: cpp
+  .. code-block:: c++
 
     struct data{...};
     const data& do_smth( const data& d, int x );
@@ -53,7 +53,7 @@ C++ code:
 
 Python code:
 
-  .. code-block:: Python
+  .. code-block:: python
 
     from pyplusplus import module_builder
     from pyplusplus.module_builder import call_policies
@@ -130,7 +130,7 @@ happen:
 
 * `Py++`_ generates code with
 
-  .. code-block:: cpp
+  .. code-block:: c++
 
     /* undefined call policies */
 
@@ -157,7 +157,7 @@ you need is to mark a declaration as opaque.
 
 Example:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   struct identity_impl_t{};
   typedef identity_impl_t* identity;
@@ -173,7 +173,7 @@ Example:
 
 `Py++`_ code:
 
-.. code-block:: Python
+.. code-block:: python
 
   mb = module_builder_t(...)
   mb.class_( 'identity_impl_t' ).opaque = True

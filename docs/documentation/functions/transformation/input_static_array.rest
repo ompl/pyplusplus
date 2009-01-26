@@ -20,7 +20,7 @@ The second argument should an integer value, which represents array size.
 Example
 -------
 
-.. code-block:: cpp
+.. code-block:: c++
 
    struct vector3{
 
@@ -36,7 +36,7 @@ Example
 In order to expose ``init`` member function we need to create small wrapper:
 The following `Py++`_ code does it for you:
 
-  .. code-block:: Python
+  .. code-block:: python
 
      from pyplusplus import module_builder
      from pyplusplus import function_transformers as FT
@@ -47,7 +47,7 @@ The following `Py++`_ code does it for you:
 
 What you see below is the relevant pieces of generated code:
 
-  .. code-block:: cpp
+  .. code-block:: c++
 
      #include "__convenience.pypp.hpp" //Py++ header file, which contains few convenience function
 

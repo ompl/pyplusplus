@@ -19,7 +19,7 @@ Usage example
 -------------
 I am going to use the following code to demonstrate the functionality:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   #include <memory>
 
@@ -41,7 +41,7 @@ new class ``number_t`` instances.
 
 `Py++`_ configuration is pretty simple:
 
-.. code-block:: Python
+.. code-block:: python
 
   from pyplusplus import module_builder
 
@@ -62,7 +62,7 @@ is that the function will **not** be exposed as a standalone function.
 
 The usage code is even more boring:
 
-.. code-block:: Python
+.. code-block:: python
 
   from your_module import number_t
 

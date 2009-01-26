@@ -22,7 +22,7 @@ Example
 
 For this example I am going to use the following code:
 
-  .. code-block:: cpp
+  .. code-block:: c++
 
     struct data_t{
         union actual_data_t{
@@ -34,7 +34,7 @@ For this example I am going to use the following code:
 
 As in many other cases, `Py++`_ does the job automatically:
 
-  .. code-block:: Python
+  .. code-block:: python
 
     mb = module_builder_t( ... )
     mb.class_( 'data_t' ).include()
@@ -44,7 +44,7 @@ no special code, to achieve the desired result, was written.
 The generated code is boring, so I will skip it and will continue to the usage
 example:
 
-  .. code-block:: Python
+  .. code-block:: python
 
     import ctypes
     from <<<your module>>> import data_t

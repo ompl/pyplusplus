@@ -21,7 +21,7 @@ Show me the code
 
 Lets say you have the following C++ code:
 
-  .. code-block:: cpp
+  .. code-block:: c++
 
      struct bytes_t{
          bytes_t(){
@@ -41,7 +41,7 @@ Lets say you have the following C++ code:
 In order to get access to the ``bytes_t::data`` and ``bytes_t::x`` you
 have to turn on ``expose_address`` property to ``True``:
 
-  .. code-block:: Python
+  .. code-block:: python
 
     mb = module_builder_t( ... )
     bytes = mb.class_( 'bytes_t' )
@@ -51,7 +51,7 @@ have to turn on ``expose_address`` property to ``True``:
 
 and now it is a time to show some `ctypes`_ magic:
 
-  .. code-block:: Python
+  .. code-block:: python
 
     import ctypes
     import your_module as m

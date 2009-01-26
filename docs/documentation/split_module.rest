@@ -34,7 +34,7 @@ generated code, because of its size.
 Usage example
 -------------
 
-.. code-block:: Python
+.. code-block:: python
 
    from pyplusplus import module_builder
    
@@ -86,7 +86,7 @@ There are few problems with this mode:
 Usage example
 -------------
 
-.. code-block:: Python
+.. code-block:: python
 
    from pyplusplus import module_builder
    
@@ -127,7 +127,7 @@ and you have problems to compile generated code.
 Usage example
 -------------
 
-.. code-block:: Python
+.. code-block:: python
 
    from pyplusplus import module_builder
    
@@ -148,7 +148,7 @@ In this mode you define the number of generated source files for classes.
 Usage example
 -------------
 
-.. code-block:: Python
+.. code-block:: python
 
    from pyplusplus import module_builder
    
@@ -170,7 +170,7 @@ to the generated code. The main reason is that I don't have a good idea how to
 integrate/add this functionality to `Py++`_. Nevertheless, you can enjoy from 
 this time-saving feature:
 
-.. code-block:: Python
+.. code-block:: python
 
    from pyplusplus import module_builder
    from pyplusplus import code_creators
@@ -191,12 +191,12 @@ API summary
 Class ``module_builder_t`` contains 3 functions, related to file generation:
 
 * 
-  .. code-block:: Python
+  .. code-block:: python
 
      def write_module( file_name )
 
 *  
-  .. code-block:: Python
+  .. code-block:: python
 
      def split_module( self
                        , dir_name
@@ -227,7 +227,7 @@ Class ``module_builder_t`` contains 3 functions, related to file generation:
     forced to recompile the whole project.
 
 *  
-  .. code-block:: Python
+  .. code-block:: python
 
      def balanced_split_module( self
                                 , dir_name

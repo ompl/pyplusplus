@@ -15,7 +15,7 @@ files as `Python`_ `documentation string`_
 API description
 ---------------
 
-.. code-block:: Python
+.. code-block:: python
 
   mb = module_builder_t( ... )
   my_class = mb.class_( 'my_class' )
@@ -37,7 +37,7 @@ is ``doc_extractor``.
 
 ``doc_extractor`` is a callable object, which takes one argument - reference to declaration.
 
-.. code-block:: Python
+.. code-block:: python
 
   def doc_extractor( decl ):
     ...

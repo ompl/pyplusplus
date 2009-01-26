@@ -13,7 +13,7 @@ In general the solution is to explicitly say to compiler what function you
 want to export, by specifying its type. Before we proceed, please take a look
 on the following class:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   struct X
   {
@@ -46,7 +46,7 @@ Do nothing approach
 I am sure you will like "do nothing" approach. `Py++`_ recognize that you want to
 export an overloaded function and will generate the right code:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   namespace bp = boost::python;
 
@@ -82,7 +82,7 @@ I am sure you already know the following fact, but still I want to remind it:
 
 It is very important to understand it. Lets take a look on the following source code:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   struct Y{
 
@@ -99,7 +99,7 @@ will not report it. As a result, `Py++`_ will not be aware of the fact that
 code will not compile. You have to instruct `Py++`_ to generate code, which
 contains function type:
 
-.. code-block:: Python
+.. code-block:: python
 
   from pyplusplus import module_builder
 
@@ -126,7 +126,7 @@ and you will have to run code generator one more time.
 Consider to explicitly set ``create_with_signature`` to ``True``. It will save
 your and your users time in future.
 
-.. code-block:: Python
+.. code-block:: python
 
   mb = module_builder_t( ... )
   mb.calldefs().create_with_signature = True
@@ -149,7 +149,7 @@ functions:
 
 You can instruct `Py++`_ to generate code, which will use the macros:
 
-.. code-block:: Python
+.. code-block:: python
 
   import module_builder
 

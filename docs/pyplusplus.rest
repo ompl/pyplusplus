@@ -66,7 +66,7 @@ simple query interface. For example in one line of code you can select all free
 functions that have two arguments, where the first argument has type ``int &``
 and the type of the second argument is any:
 
-.. code-block:: Python
+.. code-block:: python
 
   mb = module_builder_t( ... ) #module_builder_t is the main class that
                                #will help you with code generation process
@@ -75,7 +75,7 @@ and the type of the second argument is any:
 Another example - the developer wants to exclude all protected functions from
 being exported:
 
-.. code-block:: Python
+.. code-block:: python
 
   mb = module_builder_t( ... )
   mb.calldefs( access_type_matcher_t( 'protected' ) ).exclude()
@@ -83,7 +83,7 @@ being exported:
 The developer can create custom criteria, for example exclude all declarations
 with 'impl' ( implementation ) string within the name.
 
-.. code-block:: Python
+.. code-block:: python
 
   mb = module_builder_t( ... )
   mb.decls( lambda decl: 'impl' in decl.name ).exclude()

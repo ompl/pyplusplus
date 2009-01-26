@@ -45,7 +45,7 @@ Version 1.0
 
    The change explanation.
 
-   .. code-block:: cpp
+   .. code-block:: c++
 
       struct A{
           virtual void foo() {}
@@ -58,7 +58,7 @@ Version 1.0
    though ``B`` inherits ``A``'s virtual function. Now if you have the following
    Python code:
 
-   .. code-block:: Python
+   .. code-block:: python
 
       class C(B):
         def __init__( self ):
@@ -75,7 +75,7 @@ Version 1.0
    If you use "function transformation" functionality, than it is possible the
    generated code will **NOT** work. Consider the following example:
 
-   .. code-block:: cpp
+   .. code-block:: c++
 
       struct A{
           virtual void foo(int& i) {/*do smth*/}
@@ -87,7 +87,7 @@ Version 1.0
 
    The `Py++`_ code:
 
-   .. code-block:: Python
+   .. code-block:: python
 
       from pyplusplus import module_builder
       from pyplusplus import function_transformers as FT
@@ -98,7 +98,7 @@ Version 1.0
 
    The generated code, for class ``B``, is:
 
-   .. code-block:: cpp
+   .. code-block:: c++
 
       namespace bp = boost::python;
 
@@ -128,7 +128,7 @@ Version 1.0
 
    * change the alias of the functions
 
-     .. code-block:: Python
+     .. code-block:: python
 
        from pyplusplus import module_builder
        from pyplusplus import function_transformers as FT
@@ -512,7 +512,7 @@ Py++, especially Matthias:
 
 8. `Py++`_ now generates correct code for hierarchy of abstract classes:
 
-   .. code-block:: cpp
+   .. code-block:: c++
 
      struct abstract1{
          virtual void do_smth() = 0;

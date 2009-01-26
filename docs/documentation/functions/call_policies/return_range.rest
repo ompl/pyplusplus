@@ -18,7 +18,7 @@ object, which provides a regular `Python`_ `sequence`_ interface.
 Example
 -------
 
-.. code-block:: cpp
+.. code-block:: c++
 
   struct image_t{
 
@@ -49,7 +49,7 @@ interface.
 ``return_range`` class
 ----------------------
 
-.. code-block:: cpp
+.. code-block:: c++
 
   template < typename TGetSize
              , typename TValueType
@@ -80,7 +80,7 @@ array.
 
 * call operator with the following signature:
 
-  .. code-block:: cpp
+  .. code-block:: c++
 
     ssize_t operator()( boost::python::tuple args );
 
@@ -91,7 +91,7 @@ array.
 
 For our case, the following class could be defined:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   struct image_data_size_t{
       ssize_t operator()( boost::python::tuple args ){
@@ -105,7 +105,7 @@ For our case, the following class could be defined:
 Passing all arguments, instead of single "self" argument gives you an ability
 to treat functions, where the user asked to get access to the part of the array.
 
-.. code-block:: cpp
+.. code-block:: c++
 
   struct image_t{
       ...
@@ -119,7 +119,7 @@ to treat functions, where the user asked to get access to the part of the array.
 
 The following "get size" class treats this situation:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   struct image_data_size_t{
       ssize_t operator()( boost::python::tuple args ){
@@ -151,7 +151,7 @@ element is returned to `Python`_. This is a call policy for "__getitem__" functi
 
 I think, now you are ready to see the whole solution:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   namespace bpl = boost::python;
   namespace ppc = pyplusplus::call_policies;
@@ -168,7 +168,7 @@ Py++ integration
 
 The `Py++`_ code is not that different from what you already know:
 
-.. code-block:: Python
+.. code-block:: python
 
   from pyplusplus import module_builder
   from pyplusplus.module_builder import call_policies
@@ -206,7 +206,7 @@ call_policies.return_range arguments:
 
 Python usage code:
 
-.. code-block:: Python
+.. code-block:: python
 
   from my_module import *
 

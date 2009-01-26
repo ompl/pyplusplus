@@ -85,7 +85,7 @@ random
 
 * Python code:
 
-  .. code-block:: Python
+  .. code-block:: python
 
     import time
     from pyboost import boost_random
@@ -103,7 +103,7 @@ date_time
 
 * Python code:
 
-  .. code-block:: Python
+  .. code-block:: python
 
     import os
     from pyboost import date_time
@@ -187,7 +187,7 @@ rational
 
 * Python code:
 
-  .. code-block:: Python
+  .. code-block:: python
 
     import unittest
     from pyboost import rational
@@ -214,7 +214,7 @@ crc
 
 * Python code:
 
-  .. code-block:: Python
+  .. code-block:: python
 
     import os
     import sys

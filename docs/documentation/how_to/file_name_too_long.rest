@@ -13,7 +13,7 @@ alias as a basis for the file name.
 
 Let me explain.
 
-.. code-block:: cpp
+.. code-block:: c++
 
   template < class T>
   struct holder{ ... };
@@ -27,7 +27,7 @@ legal one.
 
 It is pretty simple to change the alias of the class, or any other declaration:
 
-.. code-block:: Python
+.. code-block:: python
 
   from pyplusplus import module_builder
 

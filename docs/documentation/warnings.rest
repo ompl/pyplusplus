@@ -24,11 +24,11 @@ it exports, it can scan declarations for potential problems, report them and in
 some cases provide hints about how to resolve the problem. Few examples:
 
 *
-  .. code-block:: cpp
+  .. code-block:: c++
 
      struct Y{ ... };
 
-  .. code-block:: cpp
+  .. code-block:: c++
 
      struct X{
          ...
@@ -38,7 +38,7 @@ some cases provide hints about how to resolve the problem. Few examples:
   Member function ``do_smth`` cannot be overridden in Python because ... .
 
 *
-  .. code-block:: cpp
+  .. code-block:: c++
 
      struct window{
          ...
@@ -51,7 +51,7 @@ some cases provide hints about how to resolve the problem. Few examples:
   should define ``BOOST_PYTHON_MAX_ARITY`` macro.
 
 *
-  .. code-block:: cpp
+  .. code-block:: c++
 
      struct X{
          ...
@@ -111,7 +111,7 @@ How to disable warning(s)?
 
 Every warning has unique identifier. In the example I gave it was ``W1020``.
 
-.. code-block:: Python
+.. code-block:: python
 
    from pyplusplus import messages
    from pyplusplus import module_builder
@@ -125,7 +125,7 @@ package defines ``DISABLE_MESSAGES`` variable. This variable( ``list`` ) keeps
 all warnings, which should not be reported. Use ``messages.disable`` function to
 edit it:
 
-.. code-block:: Python
+.. code-block:: python
 
    messages.disable( messages.W1020 )
    
@@ -140,12 +140,12 @@ and want to change it, right?
 
 1. If you simply want to change the logging message level:
 
-   .. code-block:: Python
+   .. code-block:: python
 
      import logging
      from pyplusplus import module_builder
 
-   .. code-block:: Python
+   .. code-block:: python
 
      module_builder.set_logger_level( logging.DEBUG )
 
@@ -161,7 +161,7 @@ and want to change it, right?
    Both packages define a ``loggers`` class. Those classes keep references to
    different loggers. The ``loggers`` classes look very similar to the following class:
 
-   .. code-block:: Python
+   .. code-block:: python
 
       import logging #standard Python package
 

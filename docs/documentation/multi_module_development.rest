@@ -29,7 +29,7 @@ Lets say that you have to expose few libraries, which deal with image processing
 
 The code:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   namespace core{
       class image_i{
@@ -55,7 +55,7 @@ The desired goal is to expose every class in its own package.
 Every `Py++`_ declaration has ``already_exposed`` property. This property says
 to `Py++`_ that the declaration is already exposed in another module:
 
-.. code-block:: Python
+.. code-block:: python
 
   #generate_code.py script
 
@@ -72,7 +72,7 @@ to `Py++`_ that the declaration is already exposed in another module:
 
 `Py++`_ will generate code very similar to the the following one:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   //file core.cpp
   namespace bp = boost::python;
@@ -95,7 +95,7 @@ to `Py++`_ that the declaration is already exposed in another module:
           .def( "load", bp::pure_virtual( &::core::image_i::load ) );
   }
 
-.. code-block:: cpp
+.. code-block:: c++
 
   //file png.cpp
   struct png_image_t_wrapper : png::png_image_t, bp::wrapper< png::png_image_t > {
@@ -143,7 +143,7 @@ the current module depends on the previously generated one. `Py++`_ will load
 
 Usage example:
 
-.. code-block:: Python
+.. code-block:: python
 
    mb = module_builder_t( ... )   
    mb.register_module_dependency( <<<other module generated code directory>>> )
