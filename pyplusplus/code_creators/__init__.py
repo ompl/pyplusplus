@@ -45,6 +45,7 @@ from namespace import namespace_using_t
 from namespace import namespace_as_pyclass_t
 
 from enum import enum_t
+from enum import pyenum_t
 
 from calldef import free_function_t
 from calldef import mem_fun_t
@@ -98,6 +99,7 @@ from global_variable import global_variable_t
 from global_variable import array_gv_t
 from global_variable import array_gv_wrapper_t
 from global_variable import global_variable_addressof_t
+from global_variable import global_variable_reference_t
 
 from member_variable import member_variable_base_t
 from member_variable import member_variable_t
@@ -113,6 +115,8 @@ from member_variable import member_variable_addressof_t
 from class_declaration import class_t
 from class_declaration import class_wrapper_t
 from class_declaration import class_declaration_t
+from class_declaration import class_introduction_t
+from class_declaration import class_declaration_introduction_t
 
 from instruction import instruction_t
 
@@ -150,8 +154,6 @@ from bookmark import bookmark_t
 #pure ctypes
 from library_reference import library_reference_t
 from name_mappings import name_mappings_t
-from class_introduction import class_introduction_t
-from class_introduction import class_declaration_introduction_t
 from mem_fun_introduction import mem_fun_introduction_t
 from mem_fun_introduction import vmem_fun_introduction_t
 from mem_fun_introduction import init_introduction_t
@@ -159,7 +161,6 @@ from mem_fun_introduction import opaque_init_introduction_t
 from mem_fun_introduction import del_introduction_t
 
 from fields_definition import fields_definition_t
-from embedded_code_repository import embedded_code_repository_t
 from methods_definition import methods_definition_t
 from function_definition import function_definition_t
 from function_definition import init_definition_t
@@ -167,5 +168,6 @@ from function_definition import multi_method_definition_t
 from function_definition import del_definition_t
 from function_definition import mem_fun_definition_t
 from typedef_as_pyvar import typedef_as_pyvar_t
-from enum import pyenum_t
-from global_variable import global_variable_reference_t
+
+
+from embedded_code_repository import embedded_code_repository_t
