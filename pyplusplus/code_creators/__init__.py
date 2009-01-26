@@ -111,6 +111,7 @@ from member_variable import array_mv_wrapper_t
 from member_variable import mem_var_ref_t
 from member_variable import mem_var_ref_wrapper_t
 from member_variable import member_variable_addressof_t
+from member_variable import fields_definition_t
 
 from class_declaration import class_t
 from class_declaration import class_wrapper_t
@@ -160,7 +161,6 @@ from mem_fun_introduction import init_introduction_t
 from mem_fun_introduction import opaque_init_introduction_t
 from mem_fun_introduction import del_introduction_t
 
-from fields_definition import fields_definition_t
 from methods_definition import methods_definition_t
 from function_definition import function_definition_t
 from function_definition import init_definition_t
