@@ -93,6 +93,18 @@ from calldef_transformed import mem_fun_v_transformed_wrapper_t
 #~ from calldef_transformed import constructor_transformed_t
 #~ from calldef_transformed import constructor_transformed_wrapper_t
 
+from calldef_ctypes import del_definition_t
+from calldef_ctypes import del_introduction_t
+from calldef_ctypes import methods_definition_t
+from calldef_ctypes import mem_fun_definition_t
+from calldef_ctypes import mem_fun_introduction_t
+from calldef_ctypes import function_definition_t
+from calldef_ctypes import vmem_fun_introduction_t
+from calldef_ctypes import multi_method_definition_t
+from calldef_ctypes import init_definition_t
+from calldef_ctypes import init_introduction_t
+from calldef_ctypes import opaque_init_introduction_t
+
 
 from global_variable import global_variable_base_t
 from global_variable import global_variable_t
@@ -152,22 +164,8 @@ from ctypes_integration_creators import expose_sizeof_t
 
 from bookmark import bookmark_t
 
-#pure ctypes
 from library_reference import library_reference_t
 from name_mappings import name_mappings_t
-from mem_fun_introduction import mem_fun_introduction_t
-from mem_fun_introduction import vmem_fun_introduction_t
-from mem_fun_introduction import init_introduction_t
-from mem_fun_introduction import opaque_init_introduction_t
-from mem_fun_introduction import del_introduction_t
 
-from methods_definition import methods_definition_t
-from function_definition import function_definition_t
-from function_definition import init_definition_t
-from function_definition import multi_method_definition_t
-from function_definition import del_definition_t
-from function_definition import mem_fun_definition_t
 from typedef_as_pyvar import typedef_as_pyvar_t
-
-
 from embedded_code_repository import embedded_code_repository_t
