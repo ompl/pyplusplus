@@ -13,7 +13,7 @@ In general the solution is to explicitly say to compiler what function you
 want to export, by specifying its type. Before we proceed, please take a look
 on the following class:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   struct X
   {
@@ -46,7 +46,7 @@ Do nothing approach
 I am sure you will like "do nothing" approach. `Py++`_ recognize that you want to
 export an overloaded function and will generate the right code:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   namespace bp = boost::python;
 
@@ -82,7 +82,7 @@ I am sure you already know the following fact, but still I want to remind it:
 
 It is very important to understand it. Lets take a look on the following source code:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   struct Y{
 

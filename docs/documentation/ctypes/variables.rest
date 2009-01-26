@@ -21,7 +21,7 @@ Show me the code
 
 Lets say you have the following C++ code:
 
-  .. code-block:: C++
+  .. code-block:: cpp
 
      struct bytes_t{
          bytes_t(){

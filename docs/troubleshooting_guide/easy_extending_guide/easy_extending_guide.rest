@@ -38,7 +38,7 @@ Boost.Python doesn't handle ``C arrays``, the only exception are ``char*`` and
 
 Consider the following function:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   int write( int* data, size_t size );
 

@@ -10,7 +10,7 @@ Introduction
 
 I would like to introduce the following piece of code. I am going to use it for most exlanations.
 
-.. code-block:: C++
+.. code-block:: cpp
 
    // file point.h
    template< class T>
@@ -39,14 +39,14 @@ only its instantiations.
 
 You can instantiate template class using operator ``sizeof``:
 
-.. code-block:: C++
+.. code-block:: cpp
 
    sizeof( point_t<int> );
 
 
 In order to instantiate a function you have to call it:
 
-.. code-block:: C++
+.. code-block:: cpp
 
    void instantiate(){
        double x = distance( point_t<t>() );
@@ -83,7 +83,7 @@ which contains valid C++ code. It creates temporal header file and compiles it.
 Functions templated on return type
 ----------------------------------
 
-.. code-block:: C++
+.. code-block:: cpp
 
    environment_t env;
    std::string path = env.get_value< std::string >( "PATH" );
@@ -105,7 +105,7 @@ Otherwise, you will discover the errors while testing the bindings.
 
 Generated code:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   bp::class_< environment_t >( "environment_t" )
       ...
@@ -116,7 +116,7 @@ Generated code:
 
 The correct code:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   bp::class_< environment_t >( "environment_t" )
       .def( "get_value"
@@ -128,7 +128,7 @@ The correct code:
 
 The perfect one:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   bp::class_< environment_t >( "environment_t" )
       ...

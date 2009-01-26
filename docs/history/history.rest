@@ -45,7 +45,7 @@ Version 1.0
 
    The change explanation.
 
-   .. code-block:: C++
+   .. code-block:: cpp
 
       struct A{
           virtual void foo() {}
@@ -75,7 +75,7 @@ Version 1.0
    If you use "function transformation" functionality, than it is possible the
    generated code will **NOT** work. Consider the following example:
 
-   .. code-block:: C++
+   .. code-block:: cpp
 
       struct A{
           virtual void foo(int& i) {/*do smth*/}
@@ -98,7 +98,7 @@ Version 1.0
 
    The generated code, for class ``B``, is:
 
-   .. code-block:: C++
+   .. code-block:: cpp
 
       namespace bp = boost::python;
 
@@ -512,7 +512,7 @@ Py++, especially Matthias:
 
 8. `Py++`_ now generates correct code for hierarchy of abstract classes:
 
-   .. code-block:: C++
+   .. code-block:: cpp
 
      struct abstract1{
          virtual void do_smth() = 0;

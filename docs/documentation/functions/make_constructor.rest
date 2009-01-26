@@ -19,7 +19,7 @@ Usage example
 -------------
 I am going to use the following code to demonstrate the functionality:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   #include <memory>
 

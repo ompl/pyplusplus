@@ -29,7 +29,7 @@ Lets say that you have to expose few libraries, which deal with image processing
 
 The code:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   namespace core{
       class image_i{
@@ -72,7 +72,7 @@ to `Py++`_ that the declaration is already exposed in another module:
 
 `Py++`_ will generate code very similar to the the following one:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   //file core.cpp
   namespace bp = boost::python;
@@ -95,7 +95,7 @@ to `Py++`_ that the declaration is already exposed in another module:
           .def( "load", bp::pure_virtual( &::core::image_i::load ) );
   }
 
-.. code-block:: C++
+.. code-block:: cpp
 
   //file png.cpp
   struct png_image_t_wrapper : png::png_image_t, bp::wrapper< png::png_image_t > {

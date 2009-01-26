@@ -19,7 +19,7 @@ version 0.8.2 `Py++`_ provides a convenient API to specify class properties.
 Usage example
 -------------
 
-.. code-block:: C++
+.. code-block:: cpp
 
   struct number{
       ...
@@ -63,11 +63,11 @@ Call policies
 
 Consider the following use case:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   struct nested{ ... };
 
-.. code-block:: C++
+.. code-block:: cpp
 
   struct data{
       ...

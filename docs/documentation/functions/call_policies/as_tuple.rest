@@ -16,7 +16,7 @@ The policy will construct a Python tuple from the array and handle the array mem
 Example
 -------
 
-.. code-block:: C++
+.. code-block:: cpp
 
    struct vector3{
        ...

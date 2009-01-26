@@ -24,7 +24,7 @@ New in version greater than 0.8.5.
 Example
 -------
 
-.. code-block:: C++
+.. code-block:: cpp
 
   struct resource_t{...};
 
@@ -51,7 +51,7 @@ The following `Py++`_ code does it for you:
 
 What you see below is the relevant pieces of generated code:
 
-  .. code-block:: C++
+  .. code-block:: cpp
 
      namespace bp = boost::python;
 

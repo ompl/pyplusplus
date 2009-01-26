@@ -13,7 +13,7 @@ alias as a basis for the file name.
 
 Let me explain.
 
-.. code-block:: C++
+.. code-block:: cpp
 
   template < class T>
   struct holder{ ... };

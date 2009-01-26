@@ -28,7 +28,7 @@ If implicit conversion between new type and the old one does not exist
 Example
 -------
 
-.. code-block:: C++
+.. code-block:: cpp
 
   #include <string>
 
@@ -52,7 +52,7 @@ have to create small wrapper for the function. The following `Py++`_ code does i
 
 What you see below is the relevant pieces of generated code:
 
-  .. code-block:: C++
+  .. code-block:: cpp
 
      namespace bp = boost::python;
 

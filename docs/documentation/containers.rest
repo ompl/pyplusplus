@@ -125,7 +125,7 @@ Indexing suite version 2 API
 In this case there is no single place, where you can configure exported container
 functionality. Please take a look on the following C++ code:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   struct item{
       ...

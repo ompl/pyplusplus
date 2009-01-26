@@ -22,7 +22,7 @@ Example
 
 For this example I am going to use the following code:
 
-  .. code-block:: C++
+  .. code-block:: cpp
 
     struct data_t{
         union actual_data_t{

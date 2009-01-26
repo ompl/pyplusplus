@@ -18,7 +18,7 @@ Insert code to module
 
 Almost every ``Boost.Python`` module has the following structure:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   //declarations code
   ...
@@ -60,7 +60,7 @@ Insert code to class
 ``class_t`` declaration defines few methods, which add user code to the generated one.
 Lets take a look on the following use case:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   struct window_t{
       ...
@@ -74,7 +74,7 @@ function as is. You need to create a wrapper and expose it.
 In the near future `Py++`_ will eliminate the need of creating hand
 written wrapper for this use case.
 
-.. code-block:: C++
+.. code-block:: cpp
 
   boost::python::tuple get_window_size( const window_t& win ){
       int h(0), w(0);
@@ -84,7 +84,7 @@ written wrapper for this use case.
 
 Now you have to register it:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   using boost::python;
   class_< window_t >( ... )
@@ -121,7 +121,7 @@ functions:
 
   If you will pass ``works_on_instance=False`` the following code will be generated:
 
-  .. code-block:: C++
+  .. code-block:: cpp
 
     {
         class_< window_t > window_exporter( "window_t" );
@@ -132,7 +132,7 @@ functions:
 
   And in this case, user will be forced to pass reference to ``window_t`` object:
 
-  .. code-block:: C++
+  .. code-block:: cpp
 
     win = window_t()
     height, width = window_t.get_size( win )

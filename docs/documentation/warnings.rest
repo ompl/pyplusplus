@@ -24,11 +24,11 @@ it exports, it can scan declarations for potential problems, report them and in
 some cases provide hints about how to resolve the problem. Few examples:
 
 *
-  .. code-block:: C++
+  .. code-block:: cpp
 
      struct Y{ ... };
 
-  .. code-block:: C++
+  .. code-block:: cpp
 
      struct X{
          ...
@@ -38,7 +38,7 @@ some cases provide hints about how to resolve the problem. Few examples:
   Member function ``do_smth`` cannot be overridden in Python because ... .
 
 *
-  .. code-block:: C++
+  .. code-block:: cpp
 
      struct window{
          ...
@@ -51,7 +51,7 @@ some cases provide hints about how to resolve the problem. Few examples:
   should define ``BOOST_PYTHON_MAX_ARITY`` macro.
 
 *
-  .. code-block:: C++
+  .. code-block:: cpp
 
      struct X{
          ...

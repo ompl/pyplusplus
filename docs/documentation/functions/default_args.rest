@@ -11,7 +11,7 @@ Introduction
 There is more than one way to export function with default arguments. Before we
 proceed, please take a look on the following class:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   struct X
   {
@@ -27,7 +27,7 @@ Do nothing approach
 
 By default `Py++`_ exposes function with its default arguments.
 
-.. code-block:: C++
+.. code-block:: cpp
 
   namespace bp = boost::python;
 
@@ -71,7 +71,7 @@ Registration order problem
 There is different trades-off between these approaches. In general you should
 use the first one, until you have "registration order" problem:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   struct S1;
   struct S2;
@@ -122,7 +122,7 @@ Special case
 
 Class constructors are special case:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   struct S1;
   struct S2;

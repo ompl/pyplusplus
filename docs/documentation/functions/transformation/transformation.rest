@@ -15,7 +15,7 @@ make that function usable from `Python`_.
 An often mentioned example that demonstrates the problem is the ``get_size()`` 
 member function of a fictitious image class:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   void get_size(int& width, int& height);
 
@@ -31,7 +31,7 @@ return a tuple. In `Python`_, the above function would instead be invoked like t
 
 and the wrapper could look like this:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   boost::python::tuple get_size( const image_t& img ){
       int width;

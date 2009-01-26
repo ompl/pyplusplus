@@ -21,7 +21,7 @@ Pay attention: you have to manage the memory by your own.
 Example
 -------
 
-.. code-block:: C++
+.. code-block:: cpp
 
   int* get_value(){
       static int buffer[] = { 0,1,2,3,4 };

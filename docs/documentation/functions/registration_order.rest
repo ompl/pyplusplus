@@ -22,7 +22,7 @@ registration order problem.
 Example
 -------
 
-.. code-block:: C++
+.. code-block:: cpp
 
   struct tester_t{
       tester_t() {}
@@ -43,7 +43,7 @@ Example
 `Py++`_ generates code, that register functions in the order they appear in the
 source code:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   namespace bp = boost::python;
 

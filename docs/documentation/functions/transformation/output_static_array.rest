@@ -19,7 +19,7 @@ The second argument should an integer value, which represents array size.
 Example
 -------
 
-.. code-block:: C++
+.. code-block:: cpp
 
    struct vector3{
 
@@ -46,7 +46,7 @@ The following `Py++`_ code does it for you:
 
 What you see below is the relevant pieces of generated code:
 
-  .. code-block:: C++
+  .. code-block:: cpp
 
      #include "__convenience.pypp.hpp" //Py++ header file, which contains few convenience function
 
