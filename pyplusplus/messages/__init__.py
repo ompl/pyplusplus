@@ -8,16 +8,6 @@ reported to user.
 """
 from warnings_ import *
 
-#implementation using regular expression is deprecated, I will leave it here for 
-#some time to be sure that the new one does not cause any problems.
-#import re
-#__RE_GET_WARNING_ID = re.compile( r'warning\s(?P<id>W(\d){4})' )
-#match_obj = __RE_GET_WARNING_ID.search(msg)
-# if not match_obj:
-#     return None
-# else:
-#     return match_obj.group( 'id' )
-
 def find_out_message_id( msg ):
     return msg.identifier
 

@@ -11,6 +11,7 @@ import warnings
 import module_builder
 
 from pygccxml import parser
+from pygccxml import utils as pygccxml_utils
 from pygccxml import declarations as decls_package
 
 from pyplusplus import utils
@@ -76,7 +77,7 @@ class builder_t(module_builder.module_builder_t):
                                          , compiler=compiler)
 
         #may be in future I will add those directories to user_defined_directories to self.__code_creator.
-        self.__parsed_files = map( decls_package.filtering.normalize_path
+        self.__parsed_files = map( pygccxml_utils.normalize_path
                                    , parser.project_reader_t.get_os_file_names( files ) )
         tmp = map( lambda file_: os.path.split( file_ )[0], self.__parsed_files )
         self.__parsed_dirs = filter( None, tmp )
@@ -151,8 +152,8 @@ class builder_t(module_builder.module_builder_t):
         for decl in flatten_decls:
             if not decl.location:
                 continue
-            fpath = decls_package.filtering.normalize_path( decl.location.file_name )
-            if decls_package.filtering.contains_parent_dir( fpath, self.__parsed_dirs ):
+            fpath = pygccxml_utils.normalize_path( decl.location.file_name )
+            if pygccxml_utils.contains_parent_dir( fpath, self.__parsed_dirs ):
                 continue
             if fpath in self.__parsed_files:
                 continue
@@ -203,7 +204,6 @@ class builder_t(module_builder.module_builder_t):
     def build_code_creator( self
                        , module_name
                        , boost_python_ns_name='bp'
-                       , create_casting_constructor=True
                        , call_policies_resolver_=None
                        , types_db=None
                        , target_configuration=None
@@ -226,15 +226,6 @@ class builder_t(module_builder.module_builder_t):
             and returns documentation string
         @type doc_extractor: callable or None
         """
-        if not create_casting_constructor:
-            msg = os.linesep.join([
-                      "create_casting_constructor argument is deprecated."
-                    , "If want to disable boost::python::implicitly_convertible code generation, consider to use allow_implicit_conversion constructor property"
-                    , ">>> mb = module_builder_t(...)"
-                    , ">>> mb.constructors().allow_implicit_conversion = False"])
-            warnings.warn(msg, DeprecationWarning, stacklevel=2)
-
-            self.global_ns.constructors(allow_empty=True).allow_implicit_conversion = False
 
         creator = creators_factory.bpcreator_t( self.global_ns
                                                 , module_name
