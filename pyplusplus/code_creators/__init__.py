@@ -117,7 +117,7 @@ from include_directories import include_directories_t
 
 from license import license_t
 
-from bpmodule import bpmodule_t
+from module import bpmodule_t
 
 from smart_pointers import held_type_t
 from smart_pointers import smart_pointers_converter_t
@@ -144,7 +144,7 @@ from ctypes_integration_creators import expose_sizeof_t
 from bookmark import bookmark_t
 
 #pure ctypes
-from ctypes_module import ctypes_module_t
+from module import ctypes_module_t
 from import_ import import_t
 from library_reference import library_reference_t
 from name_mappings import name_mappings_t
