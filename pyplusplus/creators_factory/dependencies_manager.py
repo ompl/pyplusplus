@@ -30,10 +30,10 @@ class duplicated_names_reporter_t(object):
                 del result[ value ]
         return result
 
-    def __report_single( self, control_decl, duplicated, logger ):        
+    def __report_single( self, control_decl, duplicated, logger ):
         value = self.get_value( control_decl )
         if value not in duplicated:
-            return 
+            return
         buggy_decls = duplicated[value].copy()
         buggy_decls.remove( control_decl )
         warning = self.msg % ( value, os.linesep.join( map( str, buggy_decls ) ) )
@@ -99,7 +99,11 @@ class manager_t( object ):
         if sptr_traits.is_smart_pointer( depend_on_decl ):
             try:
                 value_type = sptr_traits.value_type( depend_on_decl )
-                return self.__has_unexposed_dependency( exported_ids, value_type, dependency )
+                if isinstance( value_type, declarations.type_t ):
+                    value_type = declarations.remove_cv( value_type )
+                    value_type = declarations.remove_declarated( value_type )
+                if isinstance( value_type, declarations.declaration_t ):
+                    return self.__has_unexposed_dependency( exported_ids, value_type, dependency )
             except RuntimeError:
                 pass
 
