@@ -43,7 +43,8 @@ class builder_t(module_builder.module_builder_t):
                   , indexing_suite_version=1
                   , cflags=""
                   , encoding='ascii'
-                  , compiler=None):
+                  , compiler=None
+                  , gccxml_config=None):
         """
         @param files: list of files, declarations from them you want to export
         @type files: list of strings or L{file_configuration_t} instances
@@ -63,18 +64,23 @@ class builder_t(module_builder.module_builder_t):
         @param undefine_symbols: list of strings
 
         @param cflags: Raw string to be added to gccxml command line.
+
+        @param gccxml_config: instance of pygccxml.parser.config_t class, holds
+        gccxml( compiler ) configuration. You can use this argument instead of
+        passing the compiler configuration separatly.
         """
         module_builder.module_builder_t.__init__( self, global_ns=None, encoding=encoding )
 
-        gccxml_config = parser.config_t( gccxml_path=gccxml_path
-                                         , working_directory=working_directory
-                                         , include_paths=include_paths
-                                         , define_symbols=define_symbols
-                                         , undefine_symbols=undefine_symbols
-                                         , start_with_declarations=start_with_declarations
-                                         , ignore_gccxml_output=ignore_gccxml_output
-                                         , cflags=cflags
-                                         , compiler=compiler)
+        if not gccxml_config:
+            gccxml_config = parser.config_t( gccxml_path=gccxml_path
+                                             , working_directory=working_directory
+                                             , include_paths=include_paths
+                                             , define_symbols=define_symbols
+                                             , undefine_symbols=undefine_symbols
+                                             , start_with_declarations=start_with_declarations
+                                             , ignore_gccxml_output=ignore_gccxml_output
+                                             , cflags=cflags
+                                             , compiler=compiler)
 
         #may be in future I will add those directories to user_defined_directories to self.__code_creator.
         self.__parsed_files = map( pygccxml_utils.normalize_path
