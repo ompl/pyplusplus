@@ -8,7 +8,7 @@ Py++ tutorials
 What is Py++?
 -------------
 
-.. include:: ./../../../definition.rest
+.. include:: ./../../../definition.irest
 
 --------
 Preamble

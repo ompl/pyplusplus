@@ -8,7 +8,7 @@ How to register ``shared_ptr<const T>`` conversion?
 Introduction
 ------------
 
-.. include:: ./definition.rest
+.. include:: ./definition.irest
 
 ---------
 Solutions

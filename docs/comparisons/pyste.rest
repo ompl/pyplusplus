@@ -8,7 +8,7 @@ Pyste & Py++  comparison
 What is `Py++`_?
 ----------------------
 
-.. include:: ../definition.rest
+.. include:: ../definition.irest
 
 -----------------
 What is `Pyste`_?
@@ -416,7 +416,7 @@ difference between `Pyste`_ and `Py++`_.
    `Pyste`_ is `Boost.Python`_ code generator.
 
  `Py++`_
-   .. include:: ../definition.rest
+   .. include:: ../definition.irest
 
 `Pyste`_ and `Py++`_ have been created to handle different tasks, hence
 the difference in design, user interface and complexity. Bruno da Silva de

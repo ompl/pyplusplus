@@ -16,25 +16,25 @@ On this page you will find my collection of the solutions to some of the problem
 
 `custom smart pointer class`_
 
-  .. include:: ./smart_ptrs/definition.rest
+  .. include:: ./smart_ptrs/definition.irest
 
 .. _`custom smart pointer class` : ./smart_ptrs/smart_ptrs.html
 
 `boost::shared_ptr< const T>`_
 
-  .. include:: ./shared_ptr/definition.rest
+  .. include:: ./shared_ptr/definition.irest
 
 .. _`boost::shared_ptr< const T>` : ./shared_ptr/shared_ptr.html
 
 `automatic conversion`_
 
-  .. include:: ./automatic_conversion/definition.rest
+  .. include:: ./automatic_conversion/definition.irest
 
 .. _`automatic conversion` : ./automatic_conversion/automatic_conversion.html
 
 `exceptions`_
 
-  .. include:: ./exceptions/definition.rest
+  .. include:: ./exceptions/definition.irest
 
 .. _`exceptions` : ./exceptions/exceptions.html
 

@@ -8,7 +8,7 @@ Py++ introduction
 What is Py++?
 -------------
 Definition:
-  .. include:: ./definition.rest
+  .. include:: ./definition.irest
 
 `Py++`_ uses few different programming paradigms to help you to expose C++
 declarations to Python. This code generator will not stand on your way. It will

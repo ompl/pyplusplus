@@ -8,7 +8,7 @@ Custom exceptions
 Introduction
 ------------
 
-.. include:: ./definition.rest
+.. include:: ./definition.irest
 
 -------------------
 What's the problem?

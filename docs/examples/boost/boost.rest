@@ -11,7 +11,7 @@ boost libraries
 What is the `Py++`_?
 --------------------------
 
-.. include:: ./../../definition.rest
+.. include:: ./../../definition.irest
 
 What is the Boost?
 ------------------

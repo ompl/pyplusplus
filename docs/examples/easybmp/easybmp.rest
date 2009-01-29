@@ -18,7 +18,7 @@ In this example I am referring to version 0.70.
 What is `Py++`_?
 ----------------------
 
-.. include:: ./../../definition.rest
+.. include:: ./../../definition.irest
 
 -----------
 Description

@@ -8,7 +8,7 @@ How to expose custom smart pointer?
 Introduction
 ------------
 
-.. include:: ./definition.rest
+.. include:: ./definition.irest
 
 Files
 -----
