@@ -1,3 +1,2 @@
-.. code-block::
-     :language: C++
-     :source-file: ./generated.cpp
+.. literalinclude:: ./generated.cpp
+     :language: c++

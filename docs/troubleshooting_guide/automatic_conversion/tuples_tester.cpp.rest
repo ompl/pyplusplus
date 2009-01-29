@@ -1,3 +1,2 @@
-.. code-block::
-     :language: C++
-     :source-file: ./tuples_tester.cpp
+.. literalinclude:: ./tuples_tester.cpp
+     :language: c++

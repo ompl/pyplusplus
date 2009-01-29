@@ -1,3 +1,2 @@
-.. code-block::
-     :language: C++
-     :source-file: ./tuples.hpp
+.. literalinclude:: ./tuples.hpp
+     :language: c++

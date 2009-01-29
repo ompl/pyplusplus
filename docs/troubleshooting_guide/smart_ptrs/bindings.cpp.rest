@@ -1,3 +1,2 @@
-.. code-block::
-     :language: C++
-     :source-file: ./bindings.cpp
+.. literalinclude:: ./bindings.cpp
+     :language: c++

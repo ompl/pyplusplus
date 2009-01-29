@@ -1,3 +1,2 @@
-.. code-block::
-     :language: C++
-     :source-file: ./custom_rvalue.cpp
+.. literalinclude:: ./custom_rvalue.cpp
+     :language: c++

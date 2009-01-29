@@ -1,3 +1,2 @@
-.. code-block::
-     :language: C++
-     :source-file: ./solution.cpp
+.. literalinclude:: ./solution.cpp
+     :language: c++

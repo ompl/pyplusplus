@@ -1,3 +1,2 @@
-.. code-block::
-     :language: Python
-     :source-file: ./sconstruct
+.. literalinclude:: ./sconstruct
+     :language: python
