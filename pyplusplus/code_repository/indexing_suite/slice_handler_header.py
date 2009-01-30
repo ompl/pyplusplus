@@ -23,7 +23,8 @@ code = """// -*- mode:c++ -*-
 // =======
 // 2003/ 9/ 9   rmg     File creation
 // 2008/12/08   Roman   Change indexing suite layout
-//
+// 2009/01/30   Roman   patch from Maik Beckmann was applied - fixes error:
+//                      // error: no class template named 'extract_return_type'
 // $Id: slice_handler.hpp,v 1.1.2.10 2003/11/24 16:35:52 raoulgough Exp $
 //
 
@@ -74,6 +75,9 @@ namespace boost { namespace python { namespace indexing {
 
       typedef boost::python::default_result_converter result_converter;
       typedef typename Policy::argument_package argument_package;
+
+      template<class Sig> struct extract_return_type : 
+      Policy::template extract_return_type<Sig> { };
 
       postcall_override (Policy const &p);
 
