@@ -2,8 +2,6 @@
 TODO
 ====
 
-.. contents:: Table of contents
-
 -----------
 Description
 -----------
@@ -23,6 +21,10 @@ Please read `DSL challenge`_ document and contribute your ideas, thoughts or jus
 comments.
 
 .. _`DSL challenge` : ./dsl_challenge.html
+
+.. toctree::
+
+   dsl_challenge.rest
 
 .. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html

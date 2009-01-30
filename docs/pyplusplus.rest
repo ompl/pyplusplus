@@ -2,8 +2,6 @@
 Py++ introduction
 =================
 
-.. contents:: Table of contents
-
 -------------
 What is Py++?
 -------------
@@ -168,6 +166,21 @@ License
 -------
 
 `Boost Software License`_.
+
+
+.. toctree::
+
+   tutorials.rest
+   download.rest  
+   links.rest  
+   quotes.rest  
+   comparisons/compare_to.rest
+   documentation/index.rest
+   examples/examples.rest
+   history/history.rest
+   peps/peps_index.rest
+   troubleshooting_guide/lessons_learned.rest
+
 
 .. _`Py++` : ./pyplusplus.html
 .. _`pygccxml` : ./../pygccxml/pygccxml.html

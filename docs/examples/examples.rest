@@ -1,9 +1,6 @@
 ========
 Examples
 ========
-
-.. contents:: Table of contents
-
 -------------------
 Graphical interface
 -------------------
@@ -43,6 +40,12 @@ the libraries ported to Python. For more information please read `pyboost`_
 package documentation.
 
 .. _`pyboost` : ./boost/boost.html
+
+
+.. toctree::
+
+   boost/boost.rest
+   easybmp/easybmp.rest
 
 .. _`boost.date_time` : http://boost.org/doc/html/date_time.html
 .. _`boost.crc` : http://boost.org/libs/crc/index.html

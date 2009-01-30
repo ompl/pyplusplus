@@ -2,8 +2,6 @@
 Compare Py++ to ...
 ===================
 
-.. contents:: Table of contents
-
 -----
 Pyste
 -----
@@ -62,6 +60,12 @@ Some other links, which compares Boost.Python, SWIG, SIP and other tools:
 * `Python Wrapper Tools: A Performance Study`_
 
   .. _`Python Wrapper Tools: A Performance Study` : http://people.web.psi.ch/geus/talks/europython2004_geus.pdf
+
+
+.. toctree::
+
+   pyste.rest
+
 
 .. _`Py++` : ./../pyplusplus.html
 .. _`Pyste`: http://www.boost.org/libs/python/doc/index.html

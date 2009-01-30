@@ -2,8 +2,6 @@
 Boost.Python - lessons learned
 ==============================
 
-.. contents:: Table of contents
-
 --------
 Preamble
 --------
