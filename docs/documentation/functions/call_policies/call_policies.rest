@@ -184,8 +184,17 @@ Py++ defined call policies
 --------------------------
 
 `Py++`_ defines few call policies. I hope you will find them useful. I don't mind
-to contribute them to `Boost.Python`_ library, but I don't have enough free time 
+to contribute them to `Boost.Python`_ library, but I don't have enough free time
 to "boostify" them.
+
+
+.. toctree::
+
+   as_tuple.rest
+   return_addressof.rest
+   return_pointee_value.rest
+   return_range.rest
+   custom_call_policies.rest
 
 .. _`new indexing suite` : ./../../containers.html
 .. _`this file` : http://pygccxml.svn.sourceforge.net/viewvc/pygccxml/pyplusplus_dev/pyplusplus/code_repository/call_policies.py?view=markup

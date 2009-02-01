@@ -2,6 +2,11 @@
 tutorials
 =========
 
+.. toctree::
+
+  module_builder/module_builder.rest
+  pyplusplus_gui.rest
+
 -------------
 What is Py++?
 -------------

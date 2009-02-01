@@ -149,13 +149,15 @@ code to file(s). You can do it with
   For big projects it is a must to minimize compilation time. So `Py++`_
   splits your module source code to different files within the directory.
 
-------
-Result
-------
+-----
+Files
+-----
 
-`View generated file`_
+.. toctree::
 
-.. _`View generated file` : ./generated.cpp.html
+   hello_world.hpp.rest
+   generate_code.py.rest
+   generated.cpp.rest
 
 That's all. I hope you enjoyed.
 

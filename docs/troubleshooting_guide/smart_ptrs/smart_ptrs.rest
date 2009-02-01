@@ -11,24 +11,15 @@ Introduction
 Files
 -----
 
-* `smart_ptr.h`_ file contains definition of custom smart pointer class.
+.. toctree::
 
-* `classes.hpp`_ file contains definition of few classes, which should be exposed
-   to Python.
-
-* `bindings.cpp`_ file contains source code that exposes the classes to Python.
-
-* `sconstruct`_ file contains build instructions for scons build tool.
-
-* `test.py`_ file contains complete unit tests for the exposed classes
+  smart_ptr.h.rest
+  classes.hpp.rest
+  bindings.cpp.rest
+  sconstruct.rest
+  test.py.rest
 
 All files contain comments, which describe what and why was done.
-
-.. _`smart_ptr.h` : ./smart_ptr.h.html
-.. _`classes.hpp` : ./classes.hpp.html
-.. _`bindings.cpp` : ./bindings.cpp.html
-.. _`sconstruct` : ./sconstruct.html
-.. _`test.py` : ./test.py.html
 
 --------
 Download

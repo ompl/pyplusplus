@@ -19,7 +19,6 @@ About ctypes
 compatible data types, and allows to call functions in dlls/shared
 libraries. It can be used to wrap these libraries in pure Python.
 
-
 --------
 The idea
 --------
@@ -69,6 +68,16 @@ Implemented functionality
 * expose variable, which has a union type
 
 * return address of return value as integer - `new call policy was created`_
+
+---------------------------
+ctypes integration contents
+---------------------------
+
+.. toctree::
+
+   variables.rest
+   this_and_sizeof.rest
+   unions.rest
 
 -----------------
 Future directions

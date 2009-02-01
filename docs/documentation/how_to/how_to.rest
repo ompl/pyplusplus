@@ -2,28 +2,12 @@
 How to ... ?
 ============
 
-`How to deal with templates?`_
+.. toctree::
 
-.. _`How to deal with templates?` : ./templates.html
-
-`How to register an exception translation?`_
-
-.. _`How to register an exception translation?` : exception_translation.html
-
-`Fatal error C1204:Compiler limit: internal structure overflow`_
-
-.. _`Fatal error C1204:Compiler limit: internal structure overflow` : ./fatal_error_c1204.html
-
-`Absolute\\relative paths`_
-
-.. _`Absolute\\relative paths` : ./absolute_relative_paths.html
-
-`Generated file name is too long`_
-
-.. _`Generated file name is too long` : ./file_name_too_long.html
-
-
-.. _`Py++` : ./../../pyplusplus.html
-.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
-.. _`Python`: http://www.python.org
-.. _`GCC-XML`: http://www.gccxml.org
+   templates.rest
+   exception_translation.rest
+   fatal_error_c1204.rest
+   absolute_relative_paths.rest
+   file_name_too_long.rest
+   best_practices.rest
+   hints.rest
