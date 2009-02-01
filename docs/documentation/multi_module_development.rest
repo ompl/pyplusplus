@@ -2,8 +2,6 @@
 Multi-module development
 ========================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

@@ -2,8 +2,6 @@
 Py++ warnings
 =============
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

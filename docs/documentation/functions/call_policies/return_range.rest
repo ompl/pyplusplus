@@ -2,8 +2,6 @@
 return_range
 =============
 
-.. contents:: Table of contents
-
 ----------
 Definition
 ----------

@@ -2,8 +2,6 @@
 What they say about Py++?
 =========================
 
-.. contents:: Table of contents
-
 -----------------
 What do they say?
 -----------------

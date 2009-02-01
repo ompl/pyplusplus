@@ -2,9 +2,6 @@
 C++ Python bindings
 ===================
 
-.. contents:: Table of contents
- 
-
 ------------------
 C++ Python binding
 ------------------

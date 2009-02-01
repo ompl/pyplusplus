@@ -2,8 +2,6 @@
 ``input_static_array`` transformer
 ==================================
 
-.. contents:: Table of contents
-
 ----------
 Definition
 ----------

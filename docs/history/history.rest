@@ -2,8 +2,6 @@
 Py++ development history
 ========================
 
-.. contents:: Table of contents
-
 ------------
 Contributors
 ------------

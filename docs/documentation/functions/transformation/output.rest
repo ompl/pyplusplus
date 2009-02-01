@@ -2,8 +2,6 @@
 ``output`` transformer
 ======================
 
-.. contents:: Table of contents
-
 ----------
 Definition
 ----------

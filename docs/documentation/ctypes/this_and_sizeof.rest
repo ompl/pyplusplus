@@ -2,8 +2,6 @@
 this & sizeof
 =============
 
-.. contents:: Table of contents
-
 -----------
 The purpose
 -----------

@@ -2,8 +2,6 @@
 ``input`` transformer
 ======================
 
-.. contents:: Table of contents
-
 ----------
 Definition
 ----------

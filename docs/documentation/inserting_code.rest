@@ -2,8 +2,6 @@
 Inserting code
 ==============
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

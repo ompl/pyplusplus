@@ -2,8 +2,6 @@
 Properties
 ==========
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

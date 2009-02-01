@@ -2,8 +2,6 @@
 C++ containers support
 ======================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

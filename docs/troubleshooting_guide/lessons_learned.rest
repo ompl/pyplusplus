@@ -13,13 +13,9 @@ On this page you will find my collection of the solutions to some of the problem
 
 .. toctree::
 
-   easy_extending_guide <easy_extending_guide/easy_extending_guide.rest>
-
-   custom smart pointer class <smart_ptrs/smart_ptrs.rest>
-
-   `boost::shared_ptr< const T>` <shared_ptr/shared_ptr.rest>
-
-   automatic conversion <automatic_conversion/automatic_conversion.rest>
-
-   exceptions <exceptions/exceptions.rest>
+   easy_extending_guide/easy_extending_guide.rest
+   smart_ptrs/smart_ptrs.rest
+   shared_ptr/shared_ptr.rest
+   automatic_conversion/automatic_conversion.rest
+   exceptions/exceptions.rest
 

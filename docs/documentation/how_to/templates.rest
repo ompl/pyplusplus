@@ -2,8 +2,6 @@
 How to deal with templates?
 ===========================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

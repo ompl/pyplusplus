@@ -2,8 +2,6 @@
 as_tuple
 ========
 
-.. contents:: Table of contents
-
 ----------
 Definition
 ----------

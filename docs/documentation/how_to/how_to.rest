@@ -2,8 +2,6 @@
 How to ... ?
 ============
 
-.. contents:: Table of contents
-
 `How to deal with templates?`_
 
 .. _`How to deal with templates?` : ./templates.html

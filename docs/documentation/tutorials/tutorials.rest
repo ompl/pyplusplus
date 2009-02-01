@@ -2,8 +2,6 @@
 tutorials
 =========
 
-.. contents:: Table of contents
-
 -------------
 What is Py++?
 -------------

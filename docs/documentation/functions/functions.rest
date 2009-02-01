@@ -2,8 +2,6 @@
 Functions & operators
 =====================
 
-.. contents:: Table of contents
-
 --------
 Preamble
 --------

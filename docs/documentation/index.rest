@@ -2,8 +2,6 @@
 Py++ documentation
 ==================
 
-.. contents:: Table of contents
-
 ------------
 Help needed!
 ------------

@@ -2,8 +2,6 @@
 Default arguments
 =================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

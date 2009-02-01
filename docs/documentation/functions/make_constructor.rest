@@ -2,8 +2,6 @@
 make_constructor
 ================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

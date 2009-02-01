@@ -2,8 +2,6 @@
 EasyBMP example
 ===============
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

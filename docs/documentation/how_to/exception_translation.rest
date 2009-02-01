@@ -2,8 +2,6 @@
 How to register an exception translation?
 =========================================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

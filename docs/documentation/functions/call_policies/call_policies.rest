@@ -2,8 +2,6 @@
 Call policies
 =============
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

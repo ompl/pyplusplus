@@ -2,8 +2,6 @@
 Documentation string
 ====================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

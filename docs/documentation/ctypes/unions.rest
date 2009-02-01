@@ -2,8 +2,6 @@
 C++ union
 =========
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

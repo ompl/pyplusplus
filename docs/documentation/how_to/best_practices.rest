@@ -2,8 +2,6 @@
 Best practices
 ==============
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

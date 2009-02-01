@@ -2,8 +2,6 @@
 ``modify_type`` transformer
 ===========================
 
-.. contents:: Table of contents
-
 ----------
 Definition
 ----------

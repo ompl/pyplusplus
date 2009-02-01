@@ -2,8 +2,6 @@
 return_addressof
 ================
 
-.. contents:: Table of contents
-
 ----------
 Definition
 ----------

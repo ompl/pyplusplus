@@ -2,8 +2,6 @@
 boost libraries
 ===============
 
-.. contents:: Table of contents
-
 --------------
  Introduction
 --------------

@@ -2,8 +2,6 @@
 Pyste & Py++  comparison
 ========================
 
-.. contents:: Table of contents
-
 ----------------------
 What is `Py++`_?
 ----------------------

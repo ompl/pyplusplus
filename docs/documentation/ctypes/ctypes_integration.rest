@@ -2,8 +2,6 @@
 ctypes integration
 ==================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

@@ -2,8 +2,6 @@
 Function transformation
 =======================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

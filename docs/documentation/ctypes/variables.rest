@@ -2,8 +2,6 @@
 Variables
 =========
 
-.. contents:: Table of contents
-
 --------------
 expose_address
 --------------

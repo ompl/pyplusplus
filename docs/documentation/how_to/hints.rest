@@ -2,8 +2,6 @@
 Hints 
 =====
 
-.. contents:: Table of contents
-
 ----------------------------------
 Class template instantiation alias
 ----------------------------------

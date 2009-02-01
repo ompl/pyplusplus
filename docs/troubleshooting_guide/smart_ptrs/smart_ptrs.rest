@@ -2,8 +2,6 @@
 How to expose custom smart pointer?
 ===================================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------
@@ -15,7 +13,7 @@ Files
 
 * `smart_ptr.h`_ file contains definition of custom smart pointer class.
 
-* `classes.hpp`_ file contains definition of few classes, which should be exposed 
+* `classes.hpp`_ file contains definition of few classes, which should be exposed
    to Python.
 
 * `bindings.cpp`_ file contains source code that exposes the classes to Python.
@@ -24,7 +22,7 @@ Files
 
 * `test.py`_ file contains complete unit tests for the exposed classes
 
-All files contain comments, which describe what and why was done. 
+All files contain comments, which describe what and why was done.
 
 .. _`smart_ptr.h` : ./smart_ptr.h.html
 .. _`classes.hpp` : ./classes.hpp.html

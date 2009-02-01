@@ -2,8 +2,6 @@
 return_pointee_value
 ====================
 
-.. contents:: Table of contents
-
 ----------
 Definition
 ----------

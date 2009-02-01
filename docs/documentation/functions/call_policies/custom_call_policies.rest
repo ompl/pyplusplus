@@ -2,8 +2,6 @@
 custom_call_policies
 ====================
 
-.. contents:: Table of contents
-
 ----------
 Definition
 ----------

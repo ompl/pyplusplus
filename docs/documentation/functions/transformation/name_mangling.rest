@@ -2,8 +2,6 @@
 Name mangling
 =============
 
-.. contents:: Table of contents
-
 ----------
 Definition
 ----------

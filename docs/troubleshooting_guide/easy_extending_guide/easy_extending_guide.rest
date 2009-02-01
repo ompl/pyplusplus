@@ -2,8 +2,6 @@
 Easy extending guide
 ====================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

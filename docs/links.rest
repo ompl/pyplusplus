@@ -2,8 +2,6 @@
 Links
 =====
 
-.. contents:: Table of contents
-
 ----
 Wiki
 ----

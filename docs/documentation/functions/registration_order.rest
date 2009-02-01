@@ -2,8 +2,6 @@
 Registration order
 ==================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

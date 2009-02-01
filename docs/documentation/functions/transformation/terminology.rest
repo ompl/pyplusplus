@@ -2,8 +2,6 @@
 Terminology
 ===========
 
-.. contents:: Table of contents
-
 **Function transformation**
 
   `Py++`_ sub-system\\framework, which allows you to create function wrappers

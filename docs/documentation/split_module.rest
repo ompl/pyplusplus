@@ -2,8 +2,6 @@
 Splitting generated code to files
 =================================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

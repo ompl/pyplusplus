@@ -2,8 +2,6 @@
 ``input_c_buffer`` transformer
 ==================================
 
-.. contents:: Table of contents
-
 ----------
 Definition
 ----------

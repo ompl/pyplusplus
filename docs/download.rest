@@ -2,8 +2,6 @@
 Py++ download
 =============
 
-.. contents:: Table of contents
-
 -------------------
 Py++ on SourceForge
 -------------------
