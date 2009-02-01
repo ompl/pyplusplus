@@ -2,13 +2,11 @@
 DSL challenge
 =============
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------
 
-.. include:: ./dsl_challenge_introduction.rest
+.. include:: ./dsl_challenge_introduction.irest
 
 -------------------
 Py++ user interface

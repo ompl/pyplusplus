@@ -167,13 +167,16 @@ License
 
 `Boost Software License`_.
 
+---------------------------
+Py++ documentation contents
+---------------------------
 
 .. toctree::
 
-   tutorials.rest
-   download.rest  
-   links.rest  
-   quotes.rest  
+   documentation/tutorials/tutorials.rest
+   download.rest
+   links.rest
+   quotes.rest
    comparisons/compare_to.rest
    documentation/index.rest
    examples/examples.rest

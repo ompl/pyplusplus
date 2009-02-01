@@ -2,8 +2,6 @@
 Custom exceptions
 =================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------
@@ -47,17 +45,13 @@ http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/52295 .
 Files
 -----
 
-* `exceptions.cpp`_ file contains source code for the guide
-
-* `sconstruct`_ file contains build instructions for scons build tool.
-
-* `test.py`_ file contains complete unit test suite
-
 All files contain comments, which describe what and why was done.
 
-.. _`exceptions.cpp` : ./exceptions.cpp.html
-.. _`sconstruct` : ./sconstruct.html
-.. _`test.py` : ./test.py.html
+.. toctree::
+
+   `exceptions.cpp` - C++ source code <exceptions.cpp.rest>
+   Build script (SCons) <sconstruct.rest>
+   Usage example/tester <test.py.rest>
 
 --------
 Download
@@ -66,9 +60,4 @@ Download
 `exceptions.zip`_
 
 .. _`exceptions.zip` : ./exceptions.zip
-
-
-.. _`Py++` : ./../pyplusplus.html
-.. _`pygccxml` : http://www.language-binding.net/pygccxml/pygccxml.html
-.. _`SourceForge`: http://sourceforge.net/index.php
 

@@ -6,37 +6,20 @@ Boost.Python - lessons learned
 Preamble
 --------
 
-Software development is an interactive process. During `Py++`_ development
+Software development is an interactive process. During `Py++` development
 I see many interesting problems and even more interesting solutions.
 
 On this page you will find my collection of the solutions to some of the problems.
 
+.. toctree::
 
-`custom smart pointer class`_
+   easy_extending_guide <easy_extending_guide/easy_extending_guide.rest>
 
-  .. include:: ./smart_ptrs/definition.irest
+   custom smart pointer class <smart_ptrs/smart_ptrs.rest>
 
-.. _`custom smart pointer class` : ./smart_ptrs/smart_ptrs.html
+   `boost::shared_ptr< const T>` <shared_ptr/shared_ptr.rest>
 
-`boost::shared_ptr< const T>`_
+   automatic conversion <automatic_conversion/automatic_conversion.rest>
 
-  .. include:: ./shared_ptr/definition.irest
-
-.. _`boost::shared_ptr< const T>` : ./shared_ptr/shared_ptr.html
-
-`automatic conversion`_
-
-  .. include:: ./automatic_conversion/definition.irest
-
-.. _`automatic conversion` : ./automatic_conversion/automatic_conversion.html
-
-`exceptions`_
-
-  .. include:: ./exceptions/definition.irest
-
-.. _`exceptions` : ./exceptions/exceptions.html
-
-.. _`Py++` : ./../pyplusplus.html
-.. _`pygccxml` : http://www.language-binding.net/pygccxml/pygccxml.html
-.. _`SourceForge`: http://sourceforge.net/index.php
+   exceptions <exceptions/exceptions.rest>
 

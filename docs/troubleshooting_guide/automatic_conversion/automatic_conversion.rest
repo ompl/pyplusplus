@@ -2,8 +2,6 @@
 Automatic conversion between C++ and Python types
 =================================================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------
@@ -28,26 +26,13 @@ and enjoy from automatic conversion.
 Files
 -----
 
-* `tuples.hpp`_ file contains Boost.Tuple to\\from Python tuple conversion
-  implementation
+.. toctree::
 
-* `tuples_tester.cpp`_ file contains few functions, which test the tuples
-  conversion functionality
-
-* `custom_rvalue.cpp`_ file contains example of registration custom r-value
-  converter
-
-* `sconstruct`_ file contains build instructions for scons build tool.
-
-* `test.py`_ file contains complete unit tests for both example
-
-All files contain comments, which describe what and why was done.
-
-.. _`tuples.hpp` : ./tuples.hpp.html
-.. _`tuples_tester.cpp` : ./tuples_tester.cpp.html
-.. _`custom_rvalue.cpp` : ./custom_rvalue.cpp.html
-.. _`sconstruct` : ./sconstruct.html
-.. _`test.py` : ./test.py.html
+   tuples.hpp.rest
+   tuples_tester.cpp.rest
+   custom_rvalue.cpp.rest
+   sconstruct.rest
+   test.py.rest
 
 --------
 Download
@@ -56,9 +41,3 @@ Download
 `automatic_conversion.zip`_
 
 .. _`automatic_conversion.zip` : ./automatic_conversion.zip
-
-
-.. _`Py++` : ./../pyplusplus.html
-.. _`pygccxml` : http://www.language-binding.net/pygccxml/pygccxml.html
-.. _`SourceForge`: http://sourceforge.net/index.php
-
