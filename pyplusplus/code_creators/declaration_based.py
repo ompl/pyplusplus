@@ -13,10 +13,10 @@ class declaration_based_t:
     def __init__(self, declaration ):
         """Constructor.
 
-        @param declaration: Declaration object
-        @type declaration: L{decl_wrapper_t<decl_wrappers.decl_wrapper_t>}
-        @param parent: Parent code creator.
-        @type parent: code_creator_t
+        :param declaration: Declaration object
+        :type declaration: L{decl_wrapper_t<decl_wrappers.decl_wrapper_t>}
+        :param parent: Parent code creator.
+        :type parent: code_creator_t
         """
         self._decl = declaration
 

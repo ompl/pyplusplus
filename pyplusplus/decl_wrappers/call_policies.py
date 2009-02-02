@@ -24,12 +24,12 @@ class call_policy_t(object):
 
     def create(self, function_creator, creation_policy=CREATION_POLICY.AS_INSTANCE):
         """Creates code from the call policies class instance.
-        @param function_creator: parent code creator
-        @type function_creator: L{code_creators.function_t} or L{code_creators.constructor_t}
+        :param function_creator: parent code creator
+        :type function_creator: L{code_creators.function_t} or L{code_creators.constructor_t}
 
-        @param creation_policy: indicates whether we this call policy used as template
+        :param creation_policy: indicates whether we this call policy used as template
                                 argument or as an instance
-        @type creation_policy: L{CREATION_POLICY}
+        :type creation_policy: L{CREATION_POLICY}
         """
         code = self._create_impl( function_creator )
         if code and creation_policy == CREATION_POLICY.AS_INSTANCE:

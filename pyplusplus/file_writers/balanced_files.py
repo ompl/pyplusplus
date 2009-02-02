@@ -33,14 +33,14 @@ class balanced_files_t(multiple_files.multiple_files_t):
                   , encoding='ascii'):
         """Constructor.
 
-        @param extmodule: The root of a code creator tree
-        @type extmodule: bpmodule_t
-        @param directory_path: The output directory where the source files are written
-        @type directory_path: str
+        :param extmodule: The root of a code creator tree
+        :type extmodule: bpmodule_t
+        :param directory_path: The output directory where the source files are written
+        :type directory_path: str
 
-        @param write_main:  if it is True, the class will write out a main file
+        :param write_main:  if it is True, the class will write out a main file
             that calls all the registration methods.
-        @type write_main: boolean
+        :type write_main: boolean
         """
         multiple_files.multiple_files_t.__init__( self, extmodule, directory_path, write_main, files_sum_repository, encoding)
         self.number_of_buckets = number_of_buckets

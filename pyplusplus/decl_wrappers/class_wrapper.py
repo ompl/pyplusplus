@@ -352,12 +352,12 @@ class class_t( class_common_details_t
     def translate_exception_to_string( self, python_exception_type, to_string ):
         """registers exception translation to string
 
-        @param python_exception_type: Python exception type, for example PyExc_RuntimeError
-        @type python_exception_type: str
+        :param python_exception_type: Python exception type, for example PyExc_RuntimeError
+        :type python_exception_type: str
 
-        @param to_string: C++ expression that extracts information from exception.
+        :param to_string: C++ expression that extracts information from exception.
                           The type of expression should be char*.
-        @type to_string: str
+        :type to_string: str
         """
         #NICE TO HAVE:
         #1. exception\assert\warning should be raised if python_exception_type
@@ -374,11 +374,11 @@ class class_t( class_common_details_t
     def add_registration_code( self, code, works_on_instance=True, tail=True ):
         """adds the code to the class registration section
 
-        @param works_on_instance: If true, the custom code can be applied directly to obj inst. Example: ObjInst.code
-        @type works_on_instance: bool
+        :param works_on_instance: If true, the custom code can be applied directly to obj inst. Example: ObjInst.code
+        :type works_on_instance: bool
 
-        @param tail: if True, the custom code is appended to the end of the class registration code.
-        @type tail: bool
+        :param tail: if True, the custom code is appended to the end of the class registration code.
+        :type tail: bool
         """
         if tail:
             self.registration_code_tail.append( user_text.class_user_text_t( code, works_on_instance ) )
@@ -462,12 +462,12 @@ class class_t( class_common_details_t
     def add_property( self, name, fget, fset=None, doc='' ):
         """adds new property to the class
 
-        @param name: name of the property
-        @type name: str
+        :param name: name of the property
+        :type name: str
 
-        @param fget: reference to the class member function
-        @param fset: reference to the class member function, could be None
-        @param doc: documentation string
+        :param fget: reference to the class member function
+        :param fset: reference to the class member function, could be None
+        :param doc: documentation string
         """
         self._properties.append( properties.property_t( name, fget, fset, doc ) )
 

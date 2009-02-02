@@ -19,12 +19,12 @@ class variable_t( object ):
     """defines C++ variable"""
     def __init__( self, type, name, initialize_expr='' ):
         """
-        @param type: type of the variable
-        @type type: instance of L{pygccxml.declarations.type_t}
+        :param type: type of the variable
+        :type type: instance of L{pygccxml.declarations.type_t}
         
-        @param name: name( str ) of the variable
+        :param name: name( str ) of the variable
         
-        @param initialize_expr: an expression that initialize the variable
+        :param initialize_expr: an expression that initialize the variable
         """
         self.__name = name
         self.__type = type
@@ -73,14 +73,14 @@ class variables_manager_t( object ):
     def declare_variable( self, type, name, initialize_expr='' ):
         """declare variable
         
-        @param type: type of the variable
-        @type type: instance of L{pygccxml.declarations.type_t}
+        :param type: type of the variable
+        :type type: instance of L{pygccxml.declarations.type_t}
         
-        @param name: name( str ) of the variable
+        :param name: name( str ) of the variable
         
-        @param initialize_expr: an expression that initialize the variable
+        :param initialize_expr: an expression that initialize the variable
         
-        @return: the unique variable name
+        :rtype: the unique variable name
         """
         unique_name = self.__create_unique_var_name( name )
         self.__variables.append( variable_t( type, unique_name, initialize_expr ) )

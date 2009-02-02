@@ -45,22 +45,22 @@ class bpcreator_t( declarations.decl_visitor_t ):
                   , doc_extractor=None ):
         """Constructor.
 
-        @param decls: Declarations that should be exposed in the final module.
-        @param module_name: The name of the final module.
-        @param boost_python_ns_name: The alias for the boost::python namespace.
-        @param call_policies_resolver_: Callable that takes one declaration (calldef_t) as input and returns a call policy object which should be used for this declaration.
-        @param types_db: ...todo...
-        @param target_configuration: A target configuration object can be used to customize the generated source code to a particular compiler or a particular version of Boost.Python.
-        @param doc_extractor: callable, that takes as argument declaration reference and returns documentation string
-        @param already_exposed_dbs: list of files/directories other modules, this module depends on, generated their code too
-        @type decls: list of declaration_t
-        @type module_name: str
-        @type boost_python_ns_name: str
-        @type call_policies_resolver_: callable
-        @type types_db: L{types_database_t<types_database.types_database_t>}
-        @type target_configuration: L{target_configuration_t<code_creators.target_configuration_t>}
-        @type doc_extractor: callable
-        @type already_exposed_dbs: list of strings
+        :param decls: Declarations that should be exposed in the final module.
+        :param module_name: The name of the final module.
+        :param boost_python_ns_name: The alias for the boost::python namespace.
+        :param call_policies_resolver_: Callable that takes one declaration (calldef_t) as input and returns a call policy object which should be used for this declaration.
+        :param types_db: ...todo...
+        :param target_configuration: A target configuration object can be used to customize the generated source code to a particular compiler or a particular version of Boost.Python.
+        :param doc_extractor: callable, that takes as argument declaration reference and returns documentation string
+        :param already_exposed_dbs: list of files/directories other modules, this module depends on, generated their code too
+        :type decls: list of declaration_t
+        :type module_name: str
+        :type boost_python_ns_name: str
+        :type call_policies_resolver_: callable
+        :type types_db: L{types_database_t<types_database.types_database_t>}
+        :type target_configuration: L{target_configuration_t<code_creators.target_configuration_t>}
+        :type doc_extractor: callable
+        :type already_exposed_dbs: list of strings
         """
         declarations.decl_visitor_t.__init__(self)
         self.logger = _logging_.loggers.module_builder
@@ -322,7 +322,7 @@ class bpcreator_t( declarations.decl_visitor_t ):
     def create(self, decl_headers=None):
         """Create and return the module for the extension.
 
-        @param decl_headers: If None the headers for the wrapped decls are automatically found.
+        :param decl_headers: If None the headers for the wrapped decls are automatically found.
         But you can pass a list of headers here to override that search.
         @returns: Returns the root of the code creators tree
         @rtype: L{module_t<code_creators.module_t>}

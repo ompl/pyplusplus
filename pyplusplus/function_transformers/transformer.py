@@ -18,7 +18,7 @@ class transformer_t(object):
     USE_1_BASED_INDEXING = False
         
     def __init__(self, function):
-        """@param function: reference to function declaration"""
+        """:param function: reference to function declaration"""
         object.__init__( self )
         self.__function = function
 
@@ -34,7 +34,7 @@ class transformer_t(object):
     def get_argument( self, reference ):
         """returns reference to the desired argument
         
-        @param reference: name( str ) or index( int ) of the argument
+        :param reference: name( str ) or index( int ) of the argument
         """
         if isinstance( reference, str ):
             found = filter( lambda arg: arg.name == reference, self.function.arguments )
@@ -50,7 +50,7 @@ class transformer_t(object):
     def get_type( self, reference ):
         """returns type of the desired argument or return type of the function
         
-        @param reference: name( str ) or index( int ) of the argument
+        :param reference: name( str ) or index( int ) of the argument
         """       
         global return_
         if isinstance( reference, int ) and reference == return_:
@@ -62,7 +62,7 @@ class transformer_t(object):
         """Transformers should overridde the method, in order to define custom 
         transformation for non-virtual member function.
         
-        @param controller: instance of L{mem_fun_controller_t} class
+        :param controller: instance of L{mem_fun_controller_t} class
         """
         raise NotImplementedError(self.__class__.__name__)
     
@@ -70,7 +70,7 @@ class transformer_t(object):
         """Transformers should overridde the method, in order to define custom 
         transformation for free function.
         
-        @param controller: instance of L{free_fun_controller_t} class
+        :param controller: instance of L{free_fun_controller_t} class
         """        
         raise NotImplementedError(self.__class__.__name__)
     
@@ -78,7 +78,7 @@ class transformer_t(object):
         """Transformers should overridde the method, in order to define custom 
         transformation for virtual member function.
         
-        @param controller: instance of L{virtual_mem_fun_controller_t} class
+        :param controller: instance of L{virtual_mem_fun_controller_t} class
         """        
         raise NotImplementedError(self.__class__.__name__)
 
@@ -87,7 +87,7 @@ class transformer_t(object):
         #~ """Transformers should overridde the method, in order to define custom 
         #~ transformation for constructor.
         
-        #~ @param controller: instance of L{constructor_controller_t} class
+        #~ :param controller: instance of L{constructor_controller_t} class
         #~ """        
         #~ raise NotImplementedError(self.__class__.__name__)
         

@@ -47,8 +47,8 @@ class module_builder_t(object):
         This function will print detailed description of all declarations or
         some specific one.
 
-        @param decl: optional, if passed, then only it will be printed
-        @type decl: instance of L{decl_wrappers.decl_wrapper_t} class
+        :param decl: optional, if passed, then only it will be printed
+        :type decl: instance of L{decl_wrappers.decl_wrapper_t} class
         """
         if None is decl:
             decl = self.global_ns

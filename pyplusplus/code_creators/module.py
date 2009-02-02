@@ -161,8 +161,8 @@ class bpmodule_t(module_t):
 
         The include creator is inserted right after the last include file.
 
-        @param include_creator: Include creator object
-        @type include_creator: L{include_t}
+        :param include_creator: Include creator object
+        :type include_creator: L{include_t}
         """
         lii = self.last_include_index()
         if lii == 0:

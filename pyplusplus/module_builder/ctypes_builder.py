@@ -35,24 +35,24 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
                   , optimize_queries=True
                   , encoding='ascii' ):
         """
-        @param files: list of files, declarations from them you want to export
-        @type files: list of strings or L{file_configuration_t} instances
+        :param files: list of files, declarations from them you want to export
+        :type files: list of strings or L{file_configuration_t} instances
 
-        @param gccxml_path: path to gccxml binary. If you don't pass this argument,
+        :param gccxml_path: path to gccxml binary. If you don't pass this argument,
         pygccxml parser will try to locate it using you environment PATH variable
-        @type gccxml_path: str
+        :type gccxml_path: str
 
-        @param include_paths: additional header files location. You don't have to
+        :param include_paths: additional header files location. You don't have to
         specify system and standard directories.
-        @type include_paths: list of strings
+        :type include_paths: list of strings
 
-        @param define_symbols: list of symbols to be defined for preprocessor.
-        @param define_symbols: list of strings
+        :param define_symbols: list of symbols to be defined for preprocessor.
+        :param define_symbols: list of strings
 
-        @param undefine_symbols: list of symbols to be undefined for preprocessor.
-        @param undefine_symbols: list of strings
+        :param undefine_symbols: list of symbols to be undefined for preprocessor.
+        :param undefine_symbols: list of strings
 
-        @param cflags: Raw string to be added to gccxml command line.
+        :param cflags: Raw string to be added to gccxml command line.
         """
         module_builder.module_builder_t.__init__( self, global_ns=None, encoding=encoding )
 
@@ -123,8 +123,8 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
     def write_module( self, file_name ):
         """
         Writes module to single file
-        @param file_name: file name
-        @type file_name: string
+        :param file_name: file name
+        :type file_name: string
         """
         file_writers.write_file( self.code_creator, file_name, encoding=self.encoding )
 

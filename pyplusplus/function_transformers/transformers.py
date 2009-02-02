@@ -56,8 +56,8 @@ class output_t( transformer.transformer_t ):
 
         The specified argument must be a reference or a pointer.
 
-        @param arg_ref: Index of the argument that is an output value (the first arg has index 1).
-        @type arg_ref: int
+        :param arg_ref: Index of the argument that is an output value (the first arg has index 1).
+        :type arg_ref: int
         """
         self.arg = self.get_argument( arg_ref )
         self.arg_index = self.function.arguments.index( self.arg )
@@ -163,8 +163,8 @@ class input_t(type_modifier_t):
 
         The specified argument must be a reference or a pointer.
 
-        @param idx: Index of the argument that is an output value (the first arg has index 1).
-        @type idx: int
+        :param idx: Index of the argument that is an output value (the first arg has index 1).
+        :type idx: int
         """
         type_modifier_t.__init__( self, function, arg_ref, remove_ref_or_ptr )
 
@@ -191,8 +191,8 @@ class from_address_t(type_modifier_t):
 
         The specified argument must be a reference or a pointer.
 
-        @param idx: Index of the argument that is an output value (the first arg has index 1).
-        @type idx: int
+        :param idx: Index of the argument that is an output value (the first arg has index 1).
+        :type idx: int
         """
         modifier = lambda type_: declarations.FUNDAMENTAL_TYPES[ 'unsigned int' ]
         type_modifier_t.__init__( self, function, arg_ref, modifier )
@@ -216,8 +216,8 @@ class inout_t(transformer.transformer_t):
 
         The specified argument must be a reference or a pointer.
 
-        @param idx: Index of the argument that is an in/out value (the first arg has index 1).
-        @type idx: int
+        :param idx: Index of the argument that is an in/out value (the first arg has index 1).
+        :type idx: int
         """
         transformer.transformer_t.__init__( self, function )
         self.arg = self.get_argument( arg_ref )
@@ -283,8 +283,8 @@ class input_static_array_t(transformer.transformer_t):
     def __init__(self, function, arg_ref, size):
         """Constructor.
 
-        @param size: The fixed size of the input array
-        @type size: int
+        :param size: The fixed size of the input array
+        :type size: int
         """
         transformer.transformer_t.__init__( self, function )
 
@@ -360,10 +360,10 @@ class output_static_array_t(transformer.transformer_t):
     def __init__(self, function, arg_ref, size):
         """Constructor.
 
-        @param idx: Index of the argument that is an output array (the first arg has index 1).
-        @type idx: int
-        @param size: The fixed size of the output array
-        @type size: int
+        :param idx: Index of the argument that is an output array (the first arg has index 1).
+        :type idx: int
+        :param size: The fixed size of the output array
+        :type size: int
         """
         transformer.transformer_t.__init__( self, function )
         self.arg = self.get_argument( arg_ref )
@@ -449,8 +449,8 @@ class input_c_buffer_t(transformer.transformer_t):
     def __init__(self, function, buffer_arg_ref, size_arg_ref):
         """Constructor.
 
-        @param buffer_arg_ref: "reference" to the buffer argument
-        @param buffer_arg_ref: "reference" to argument, which holds buffer size
+        :param buffer_arg_ref: "reference" to the buffer argument
+        :param buffer_arg_ref: "reference" to argument, which holds buffer size
         """
         transformer.transformer_t.__init__( self, function )
 

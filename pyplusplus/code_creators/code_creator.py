@@ -30,8 +30,8 @@ class code_creator_t(object):
     def __init__(self):
         """Constructor.
 
-        @param parent: Parent code creator.
-        @type parent: code_creator_t
+        :param parent: Parent code creator.
+        :type parent: code_creator_t
         """
         object.__init__(self)
         self._parent = None
@@ -151,8 +151,8 @@ class code_creator_t(object):
         """
         function that returns code without leading and trailing whitespaces.
 
-        @param code: A code block with C++ source code.
-        @type code: str
+        :param code: A code block with C++ source code.
+        :type code: str
         @rtype: str
         """
         assert isinstance( code, types.StringTypes )
@@ -163,10 +163,10 @@ class code_creator_t(object):
         """
         function that implements code indent algorithm.
 
-        @param code: C++/Python code block.
-        @type code: str
-        @param size: The number of indentation levels that the code is shifted
-        @type size: int
+        :param code: C++/Python code block.
+        :type code: str
+        :param size: The number of indentation levels that the code is shifted
+        :type size: int
         @returns: Returns indented source code
         @rtype: str
         """
@@ -180,8 +180,8 @@ class code_creator_t(object):
         """
         function that implements code unindent algorithm.
 
-        @param code: C++ code block.
-        @type code: str
+        :param code: C++ code block.
+        :type code: str
         @rtype: str
         """
         assert isinstance( code, types.StringTypes )
@@ -196,12 +196,12 @@ class code_creator_t(object):
         function that returns true if content of the line is comment, otherwise
         false.
 
-        @param line: C++ source code
-        @type line: str
+        :param line: C++ source code
+        :type line: str
         @rtype: bool
 
-        @param language: the programming language, the line was written in. Possible values: C++, Python
-        @type line: str
+        :param language: the programming language, the line was written in. Possible values: C++, Python
+        :type line: str
         """
         assert isinstance( line, types.StringTypes )
         l = line.lstrip()

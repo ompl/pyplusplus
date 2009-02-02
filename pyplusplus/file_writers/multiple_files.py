@@ -25,14 +25,14 @@ class multiple_files_t(writer.writer_t):
     def __init__(self, extmodule, directory_path, write_main=True, files_sum_repository=None, encoding='ascii'):
         """Constructor.
 
-        @param extmodule: The root of a code creator tree
-        @type extmodule: bpmodule_t
-        @param directory_path: The output directory where the source files are written
-        @type directory_path: str
+        :param extmodule: The root of a code creator tree
+        :type extmodule: bpmodule_t
+        :param directory_path: The output directory where the source files are written
+        :type directory_path: str
 
-        @param write_main:  if it is True, the class will write out a main file
+        :param write_main:  if it is True, the class will write out a main file
             that calls all the registration methods.
-        @type write_main: boolean
+        :type write_main: boolean
         """
         writer.writer_t.__init__( self, extmodule, files_sum_repository, encoding=encoding )
         self.__directory_path = directory_path
@@ -114,10 +114,10 @@ class multiple_files_t(writer.writer_t):
     def create_header( self, file_name, code ):
         """Return the content of a header file.
 
-        @param file_name: A string that uniquely identifies the file name
-        @type file_name: str
-        @param function_name: The name of the register_xyz() function
-        @type function_name: str
+        :param file_name: A string that uniquely identifies the file name
+        :type file_name: str
+        :param function_name: The name of the register_xyz() function
+        :type function_name: str
         @returns: The content for a header file
         @rtype: str
         """
@@ -218,12 +218,12 @@ class multiple_files_t(writer.writer_t):
     def create_source( self, file_name, function_name, registration_creators ):
         """Return the content of a cpp file.
 
-        @param file_name: The base name of the corresponding include file (without extension)
-        @type file_name: str
-        @param function_name: The name of the register_xyz() function
-        @type function_name: str
-        @param creators: The code creators that create the register_xyz() function
-        @type creators: list of code_creator_t
+        :param file_name: The base name of the corresponding include file (without extension)
+        :type file_name: str
+        :param function_name: The name of the register_xyz() function
+        :type function_name: str
+        :param creators: The code creators that create the register_xyz() function
+        :type creators: list of code_creator_t
         @returns: The content for a cpp file
         @rtype: str
         """
@@ -288,8 +288,8 @@ class multiple_files_t(writer.writer_t):
         Writes a .h/.cpp file for the given class. The files use the class name
         as base file name.
 
-        @param class_creator: The class creator for one particular class
-        @type class_creator: class_t
+        :param class_creator: The class creator for one particular class
+        :type class_creator: class_t
         """
         try:
             if class_creator.declaration.already_exposed:
@@ -333,14 +333,14 @@ class multiple_files_t(writer.writer_t):
     def split_creators( self, creators, pattern, function_name, registrator_pos ):
         """Write non-class creators into a particular .h/.cpp file.
 
-        @param creators: The code creators that should be written
-        @type creators: list of code_creator_t
-        @param pattern: Name pattern that is used for constructing the final output file name
-        @type pattern: str
-        @param function_name: The name of the register_xyz() function
-        @type function_name: str
-        @param registrator_pos: The position of the code creator that creates the code to invoke the register_xyz() function.
-        @type registrator_pos: int
+        :param creators: The code creators that should be written
+        :type creators: list of code_creator_t
+        :param pattern: Name pattern that is used for constructing the final output file name
+        :type pattern: str
+        :param function_name: The name of the register_xyz() function
+        :type function_name: str
+        :param registrator_pos: The position of the code creator that creates the code to invoke the register_xyz() function.
+        :type registrator_pos: int
         """
         if not creators:
             return

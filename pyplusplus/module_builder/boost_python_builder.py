@@ -46,26 +46,26 @@ class builder_t(module_builder.module_builder_t):
                   , compiler=None
                   , gccxml_config=None):
         """
-        @param files: list of files, declarations from them you want to export
-        @type files: list of strings or L{file_configuration_t} instances
+        :param files: list of files, declarations from them you want to export
+        :type files: list of strings or L{file_configuration_t} instances
 
-        @param gccxml_path: path to gccxml binary. If you don't pass this argument,
+        :param gccxml_path: path to gccxml binary. If you don't pass this argument,
         pygccxml parser will try to locate it using you environment PATH variable
-        @type gccxml_path: str
+        :type gccxml_path: str
 
-        @param include_paths: additional header files location. You don't have to
+        :param include_paths: additional header files location. You don't have to
         specify system and standard directories.
-        @type include_paths: list of strings
+        :type include_paths: list of strings
 
-        @param define_symbols: list of symbols to be defined for preprocessor.
-        @param define_symbols: list of strings
+        :param define_symbols: list of symbols to be defined for preprocessor.
+        :param define_symbols: list of strings
 
-        @param undefine_symbols: list of symbols to be undefined for preprocessor.
-        @param undefine_symbols: list of strings
+        :param undefine_symbols: list of symbols to be undefined for preprocessor.
+        :param undefine_symbols: list of strings
 
-        @param cflags: Raw string to be added to gccxml command line.
+        :param cflags: Raw string to be added to gccxml command line.
 
-        @param gccxml_config: instance of pygccxml.parser.config_t class, holds
+        :param gccxml_config: instance of pygccxml.parser.config_t class, holds
         gccxml( compiler ) configuration. You can use this argument instead of
         passing the compiler configuration separatly.
         """
@@ -218,19 +218,19 @@ class builder_t(module_builder.module_builder_t):
         """
         Creates L{bpmodule_t} code creator.
 
-        @param module_name: module name
-        @type module_name: string
+        :param module_name: module name
+        :type module_name: string
 
-        @param boost_python_ns_name: boost::python namespace alias, by default
+        :param boost_python_ns_name: boost::python namespace alias, by default
         it is 'bp'
-        @type boost_python_ns_name: string
+        :type boost_python_ns_name: string
 
-        @param call_policies_resolver_: callable, that will be invoked on every
+        :param call_policies_resolver_: callable, that will be invoked on every
         calldef object. It should return call policies.
-        @type call_policies_resolver_: callable
-        @param doc_extractor: callable, that takes as argument reference to declaration
+        :type call_policies_resolver_: callable
+        :param doc_extractor: callable, that takes as argument reference to declaration
             and returns documentation string
-        @type doc_extractor: callable or None
+        :type doc_extractor: callable or None
         """
 
         creator = creators_factory.bpcreator_t( self.global_ns
@@ -307,8 +307,8 @@ class builder_t(module_builder.module_builder_t):
     def write_module( self, file_name ):
         """
         Writes module to single file
-        @param file_name: file name
-        @type file_name: string
+        :param file_name: file name
+        :type file_name: string
         """
         self.__merge_user_code()
         file_writers.write_file( self.code_creator, file_name, encoding=self.encoding )
@@ -335,12 +335,12 @@ class builder_t(module_builder.module_builder_t):
         """
         Writes module to multiple files
 
-        @param dir_name: directory name
-        @type dir_name: string
+        :param dir_name: directory name
+        :type dir_name: string
 
-        @param huge_classes: list that contains reference to classes, that should be split
+        :param huge_classes: list that contains reference to classes, that should be split
 
-        @param on_unused_file_found: callable object that represents the action that should be taken on
+        :param on_unused_file_found: callable object that represents the action that should be taken on
                                      file, which is no more in use
 
         @use_files_sum_repository: Py++ can generate file, which will contain md5 sum of every generated file.
@@ -380,13 +380,13 @@ class builder_t(module_builder.module_builder_t):
         """
         Writes module to fixed number of multiple cpp files
 
-        @param number_of_files: the desired number of generated cpp files
-        @type number_of_files: int
+        :param number_of_files: the desired number of generated cpp files
+        :type number_of_files: int
 
-        @param dir_name: directory name
-        @type dir_name: string
+        :param dir_name: directory name
+        :type dir_name: string
 
-        @param on_unused_file_found: callable object that represents the action that should be taken on
+        :param on_unused_file_found: callable object that represents the action that should be taken on
                                      file, which is no more in use
 
         @use_files_sum_repository: Py++ can generate file, which will contain md5 sum of every generated file.

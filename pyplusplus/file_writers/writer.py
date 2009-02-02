@@ -99,10 +99,10 @@ class writer_t(object):
         An additional fixed header is written at the top of the file before
         content.
 
-        @param fpath: File name
-        @type fpath: str
-        @param content: The content of the file
-        @type content: str
+        :param fpath: File name
+        :type fpath: str
+        :param content: The content of the file
+        :type content: str
         """
         fname = os.path.split( fpath )[1]
         writer_t.logger.debug( 'write code to file "%s" - started' % fpath )

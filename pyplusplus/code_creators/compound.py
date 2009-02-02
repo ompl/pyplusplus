@@ -10,8 +10,8 @@ class compound_t(code_creator.code_creator_t):
     def __init__(self ):
         """Constructor.
 
-        @param parent: Parent code creator.
-        @type parent: L{code_creator_t}
+        :param parent: Parent code creator.
+        :type parent: L{code_creator_t}
         """
         code_creator.code_creator_t.__init__( self )
         self._creators = []
@@ -25,10 +25,10 @@ class compound_t(code_creator.code_creator_t):
     def adopt_creator( self, creator, index=None):
         """Add a creator to the list of children creators.
 
-        @param creator: Creator object
-        @type creator: L{code_creator_t}
-        @param index: Desired position of the creator or None to append it to the end of the list
-        @type index: int
+        :param creator: Creator object
+        :type creator: L{code_creator_t}
+        :param index: Desired position of the creator or None to append it to the end of the list
+        :type index: int
         """
         creator.parent = self
         if index or index == 0:
@@ -39,10 +39,10 @@ class compound_t(code_creator.code_creator_t):
     def adopt_creators( self, creators, index=None):
         """Add a creators to the list of children creators.
 
-        @param creators: list of creators object
-        @type creator: L{code_creator_t}
-        @param index: Desired position of the creator or None to append it to the end of the list
-        @type index: int
+        :param creators: list of creators object
+        :type creator: L{code_creator_t}
+        :param index: Desired position of the creator or None to append it to the end of the list
+        :type index: int
         """
         for pos, creator in enumerate( creators ):
             if index or index == 0:
@@ -54,8 +54,8 @@ class compound_t(code_creator.code_creator_t):
         """Remove a children code creator object.
 
         @precondition: creator must be a children of self
-        @param creator: The creator node to remove
-        @type creator: L{code_creator_t}
+        :param creator: The creator node to remove
+        :type creator: L{code_creator_t}
         """
         creator.parent = None
         del self._creators[ self._creators.index( creator ) ]
@@ -64,8 +64,8 @@ class compound_t(code_creator.code_creator_t):
     def create_internal_code( creators, indent_code=True ):
         """Concatenate the code from a list of code creators.
 
-        @param creators: A list with code creators
-        @type creators: list of L{code_creator_t}
+        :param creators: A list with code creators
+        :type creators: list of L{code_creator_t}
         @rtype: str
         """
         internals = map( lambda expr: expr.create(), creators )

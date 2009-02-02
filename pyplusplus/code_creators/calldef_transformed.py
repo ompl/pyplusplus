@@ -137,8 +137,8 @@ class free_fun_transformed_wrapper_t( sealed_fun_transformed_wrapper_t ):
     def __init__( self, function ):
         """Constructor.
 
-        @param function: Function declaration
-        @type function: calldef_t
+        :param function: Function declaration
+        :type function: calldef_t
         """
         sealed_fun_transformed_wrapper_t .__init__( self, function=function )
         
@@ -193,8 +193,8 @@ class mem_fun_transformed_wrapper_t( sealed_fun_transformed_wrapper_t ):
     def __init__( self, function ):
         """Constructor.
 
-        @param function: Function declaration
-        @type function: calldef_t
+        :param function: Function declaration
+        :type function: calldef_t
         """
         sealed_fun_transformed_wrapper_t.__init__( self, function=function )
 
