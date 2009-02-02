@@ -337,7 +337,7 @@ Version 0.8.2
 
 2. Performance improvements. In some cases you can get x10 performance boost.
    Many thanks to Allen Bierbaum! Saving and reusing results of different
-   `pygccxml`_ algorithms and type traits functions achieved this.
+   :doc:`pygccxml <../pygccxml>` algorithms and type traits functions achieved this.
 
 3. Convenience API for registering exception translator was introduced.
 
@@ -575,6 +575,5 @@ Version 0.5.1
 
 
 .. _`Py++` : ./../pyplusplus.html
-.. _`pygccxml` : http://www.language-binding.net/pygccxml/pygccxml.html
 .. _`SourceForge`: http://sourceforge.net/index.php
 

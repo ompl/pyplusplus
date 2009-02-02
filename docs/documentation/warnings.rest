@@ -149,10 +149,10 @@ and want to change it, right?
 
 
 2. But what if you want to disable some messages and leave others? This is also possible.
-   `Py++`_ and `pygccxml`_ do not use a single logger. Almost every internal
+   `Py++`_ and :doc:`pygccxml <../../pygccxml/pygccxml>` do not use a single logger. Almost every internal
    package has its own logger. So you can enable one logger and disable another one.
 
-   The `pygccxml`_ package defines all loggers in the ``pygccxml.utils`` package.
+   The :doc:`pygccxml <../../pygccxml/pygccxml>` package defines all loggers in the ``pygccxml.utils`` package.
 
    The `Py++`_ package defines all loggers in the ``pyplusplus._logging_`` package.
 
@@ -208,7 +208,6 @@ Every declaration class has the following methods:
 .. _`Formatter` : http://docs.python.org/lib/node422.html
 .. _`logging` : http://docs.python.org/lib/module-logging.html
 .. _`Py++` : ./../pyplusplus.html
-.. _`pygccxml` : ./../../pygccxml/pygccxml.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

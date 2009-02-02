@@ -55,9 +55,8 @@ Boost libraries.
 Dependencies
 ------------
 
-* `pygccxml`_
+* :doc:`pygccxml <../pygccxml/pygccxml>`
 
 
 .. _`Py++` : ./pyplusplus.html
-.. _`pygccxml` : ./../pygccxml/pygccxml.html
 

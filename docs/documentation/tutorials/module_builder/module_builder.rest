@@ -47,7 +47,7 @@ First of all, what is needed in order to create an instance of the class?
    to expose. This is the only required parameter.
 
 2. ``gccxml_path`` - path to `GCC-XML`_ binary. If you don't supply this argument
-   `pygccxml`_ will look for it using ``PATH`` environment variable.
+   :doc:`pygccxml <../../../../pygccxml/pygccxml>` will look for it using ``PATH`` environment variable.
 
 There are some other arguments:
 
@@ -162,7 +162,6 @@ Files
 That's all. I hope you enjoyed.
 
 .. _`Py++` : ./../../../pyplusplus.html
-.. _`pygccxml` : ./../../../../pygccxml/pygccxml.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`SourceForge`: http://sourceforge.net/index.php
 .. _`Python`: http://www.python.org

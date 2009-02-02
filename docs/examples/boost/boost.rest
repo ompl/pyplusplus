@@ -251,7 +251,6 @@ http://sourceforge.net/project/showfiles.php?group_id=118209.
 .. _`environment.py`: http://cvs.sourceforge.net/viewcvs.py/pygccxml/source/pyplusplus/examples/py_easybmp/environment.py?view=markup
 .. _`sconstruct`: http://cvs.sourceforge.net/viewcvs.py/pygccxml/source/pyplusplus/examples/py_easybmp/sconstruct?view=markup
 .. _`Python`: http://www.python.org
-.. _`pygccxml`: http://www.language-binding.net/pygccxml/pygccxml.html
 .. _`boost.date_time`: http://boost.org/doc/html/date_time.html
 .. _`date_time`: http://boost.org/doc/html/date_time.html
 .. _`boost`: http://www.boost.org

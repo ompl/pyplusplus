@@ -238,7 +238,6 @@ Class ``module_builder_t`` contains 3 functions, related to file generation:
   
 
 .. _`Py++` : ./../pyplusplus.html
-.. _`pygccxml` : ./../../pygccxml/pygccxml.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

@@ -23,7 +23,7 @@ declaration or a type.
 
 On the earlier stage of the development, I realized, that all this functionality
 does not belong to code generator and should be implemented out side of it.
-`pygccxml`_ project was born. `pygccxml`_ made the code generator to be smaller
+:doc:`pygccxml <../../pygccxml/pygccxml>` project was born. :doc:`pygccxml <../../pygccxml/pygccxml>` made the code generator to be smaller
 and C++ parser independent. It provides the following services:
 
 * definition of classes, that describe C++ declaration and types, and their
@@ -55,7 +55,7 @@ Integration details
 Parsing integration
 ~~~~~~~~~~~~~~~~~~~
 
-`Py++`_ provides it's own "API" to configure `pygccxml`_ parsing services. The
+`Py++`_ provides it's own "API" to configure :doc:`pygccxml <../../pygccxml/pygccxml>` parsing services. The
 "API" I am talking about, is arguments to ``module_builder.__init__`` method.
 We think, that exposing those services via `Py++`_ simplifies its usage.
 
@@ -131,7 +131,7 @@ value to the project:
 
   * provides user with additional information( warnings and hints )
 
-* as a bonus, `pygccxml`_ remained to be stand-alone project
+* as a bonus, :doc:`pygccxml <../../pygccxml/pygccxml>` remained to be stand-alone project
 
 ----------------------
 Code generation engine
@@ -323,7 +323,6 @@ It safe to use `Py++`_ for big and small projects!
 .. _`open-closed principle` : http://www.google.com/search?sourceid=gmail&q=open%20closed%20principle
 
 .. _`Py++` : ./../pyplusplus.html
-.. _`pygccxml` : ./../../pygccxml/pygccxml.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

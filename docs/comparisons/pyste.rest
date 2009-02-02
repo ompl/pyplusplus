@@ -51,7 +51,7 @@ problems with `Pyste`_:
     2. It is very difficult to customize generated code. I will provide few
        examples later.
 
-I tried to fix `Pyste`_. At first, I developed `pygccxml`_ and tried to replace
+I tried to fix `Pyste`_. At first, I developed :doc:`pygccxml <../../pygccxml/pygccxml>` and tried to replace
 relevant `Pyste`_ functionality. I did not like the result. After this, I dropped
 the idea to fix `Pyste`_ and decided to develop new code generator - `Py++`_.
 Later you will find few points, which explains, why I decided not to fix `Pyste`_.
@@ -156,7 +156,7 @@ Py++
 One of the biggest weaknesses of `Pyste`_ is a lack of good `GCC-XML`_ front-end
 and this fact cause `Pyste`_ to generate not optimal code. I will prove this
 later. In order to avoid such weakness, before I have created `Py++`_,
-I created `pygccxml`_. `pygccxml`_ is a stand-alone project, which provides few
+I created :doc:`pygccxml <../../pygccxml/pygccxml>`. :doc:`pygccxml <../../pygccxml/pygccxml>` is a stand-alone project, which provides few
 things:
 
     * hierarchy of C++ declarations
@@ -170,13 +170,13 @@ things:
       + every file will be parsed alone, after this, duplicated declarations
         and types will be removed
 
-`pygccxml`_ contributes in few ways to `Py++`_:
+:doc:`pygccxml <../../pygccxml/pygccxml>` contributes in few ways to `Py++`_:
 
     + `Py++`_ has nothing to do with code parsing. Theoretically
-      an other back-end could be added to `pygccxml`_ without changing even one
+      an other back-end could be added to :doc:`pygccxml <../../pygccxml/pygccxml>` without changing even one
       line of code within `Py++`_.
 
-    + `pygccxml`_ has type traits. A lot of type traits algorithms from
+    + :doc:`pygccxml <../../pygccxml/pygccxml>` has type traits. A lot of type traits algorithms from
       `boost.type_traits`_ library has been implemented. `Py++`_ makes
       an extensive use of them:
 
@@ -215,7 +215,7 @@ things:
       3. Maintenance. Every time you add new file\\class to your project you should
          modify\\create `Pyste`_ interface files.
 
-      They are solved by `pygccxml`_ package. Please take a look on `pygccxml`_
+      They are solved by :doc:`pygccxml <../../pygccxml/pygccxml>` package. Please take a look on :doc:`pygccxml <../../pygccxml/pygccxml>`
       `query interface`__ documentation.
 
 .. __ : ./../../pygccxml/query_interface.html
@@ -282,7 +282,7 @@ Dependencies
 ------------
 Both `Pyste`_ and `Py++`_ introduce one external dependency. In order to
 parse XML `Pyste`_ uses `elementtree`_. On the other side `Py++`_
-depends on `pygccxml`_ project.
+depends on :doc:`pygccxml <../../pygccxml/pygccxml>` project.
 
 -------------
 Features list
@@ -424,7 +424,6 @@ of time and motivation prevents him to work on `Pyste`_.
 
 .. _`screenshot` : ./../documentation/tutorials/pyplusplus_gui.html
 .. _`Py++` : ./../pyplusplus.html
-.. _`pygccxml` : ./../../pygccxml/pygccxml.html
 .. _`Pyste`: http://www.boost.org/libs/python/doc/index.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`SourceForge`: http://sourceforge.net/index.php

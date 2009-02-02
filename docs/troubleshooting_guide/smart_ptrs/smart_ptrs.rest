@@ -31,6 +31,5 @@ Download
 
 
 .. _`Py++` : ./../pyplusplus.html
-.. _`pygccxml` : http://www.language-binding.net/pygccxml/pygccxml.html
 .. _`SourceForge`: http://sourceforge.net/index.php
 

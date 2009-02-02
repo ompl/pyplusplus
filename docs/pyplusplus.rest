@@ -37,7 +37,7 @@ source files. To be more precise, the tool chain looks like this:
 3. `GCC-XML`_ generates an XML description of a C++ program from GCC's internal
    representation.
 
-4. Py++ uses `pygccxml`_ package to read `GCC-XML`_ generated file.
+4. Py++ uses :doc:`pygccxml <../../pygccxml/pygccxml>` package to read `GCC-XML`_ generated file.
 
 The bottom line - you can be sure, that all your declarations are read correctly.
 
@@ -186,7 +186,6 @@ Py++ documentation contents
 
 
 .. _`Py++` : ./pyplusplus.html
-.. _`pygccxml` : ./../pygccxml/pygccxml.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

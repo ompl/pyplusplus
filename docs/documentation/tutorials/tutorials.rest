@@ -58,7 +58,6 @@ to create your own code creator. To be more specific, it exposes ``get*`` and
 
 
 .. _`Py++` : ./../../pyplusplus.html
-.. _`pygccxml` : ./../....//pygccxml/pygccxml.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`SourceForge`: http://sourceforge.net/index.php
 .. _`Python`: http://www.python.org

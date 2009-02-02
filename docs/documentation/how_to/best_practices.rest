@@ -35,7 +35,7 @@ Tips
   `GCC-XML`_ processing time from multiple hours with gigabytes of caches to a
   couple minutes with a reasonable cache size.
 
-  You can read more about different caches supported by `pygccxml`_ `here`__.
+  You can read more about different caches supported by :doc:`pygccxml <../../../pygccxml/pygccxml>` `here`__.
   ``module_builder_t.__init__`` method takes reference to an instance of cache
   class or ``None``:
 
@@ -168,7 +168,6 @@ Tips
 
 
 .. _`Py++` : ./../../pyplusplus.html
-.. _`pygccxml` : ./../../../pygccxml/pygccxml.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
