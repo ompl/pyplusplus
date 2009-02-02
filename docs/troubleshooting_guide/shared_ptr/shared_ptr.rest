@@ -73,7 +73,5 @@ Files
 Download
 --------
 
-`shared_ptr.zip`_
-
-.. _`shared_ptr.zip` : ./shared_ptr.zip
+:download:`shared_ptr.zip`
 

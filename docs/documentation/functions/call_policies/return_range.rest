@@ -215,15 +215,10 @@ Python usage code:
 Dependencies
 ~~~~~~~~~~~~
 
-The new call policy depends on `new indexing suite`_ and :doc:`Py++ <../../../pyplusplus>` :-). But if you
-want you can extract the relevant piece of code from `this file`_.
-
-.. _`new indexing suite` : ./../../containers.html
-.. _`this file` : http://pygccxml.svn.sourceforge.net/viewvc/pygccxml/pyplusplus_dev/pyplusplus/code_repository/call_policies.py?view=markup
+The new call policy depends on :doc:`new indexing suite <../../containers>` and :doc:`Py++ <../../../pyplusplus>` :-). 
 
 .. _`ResultConverterGenerator` : http://boost.org/libs/python/doc/v2/ResultConverter.html#ResultConverterGenerator-concept
 .. _`CallPolicies` : http://www.boost.org/libs/python/doc/v2/CallPolicies.html#CallPolicies-concept
-
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

@@ -196,12 +196,9 @@ to "boostify" them.
    return_range.rest
    custom_call_policies.rest
 
-.. _`new indexing suite` : ./../../containers.html
-.. _`this file` : http://pygccxml.svn.sourceforge.net/viewvc/pygccxml/pyplusplus_dev/pyplusplus/code_repository/call_policies.py?view=markup
 
 .. _`ResultConverterGenerator` : http://boost.org/libs/python/doc/v2/ResultConverter.html#ResultConverterGenerator-concept
 .. _`CallPolicies` : http://www.boost.org/libs/python/doc/v2/CallPolicies.html#CallPolicies-concept
-
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

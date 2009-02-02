@@ -44,63 +44,6 @@ Overview
    functions/functions.rest
    how_to/how_to.rest
 
-* `STL containers`_ - describes various methods to expose STL containers to `Python`_
-
-.. _`STL containers` : ./containers.html
-
-* `architecture`_ - describes the architecture behind :doc:`Py++ <../pyplusplus>`
-
-.. _`architecture` : ./architecture.html
-
-* `documentation string`_ - explains how to automatically extract a documentation
-  from the source files and put it as Python documentation string
-
-.. _`documentation string` : ./doc_string.html
-
-* `functions & operators`_ - contains a complete guide to exposing functions and
-  operators, including "call policies" and description of different caveats
-
-.. _`functions & operators` : ./functions/functions.html
-
-* `how to ... ?`_ - contains answers for different FAQs and my suggestions about
-  better :doc:`Py++ <../pyplusplus>` usage.
-
-.. _`how to ... ?` : ./how_to/how_to.html
-
-* `inserting code`_ - a complete guide for insert your code into the generated one
-
-.. _`inserting code` : ./inserting_code.html
-
-* `multi-module development`_ - describes how expose hierarchy of classes, which
-  is spread few different libraries
-
-.. _`multi-module development`: ./multi_module_development.html
-
-* `properties`_ - describes how to create class properties using :doc:`Py++ <../pyplusplus>` and
-  built-in algorithm for automatic properties recognition
-
-.. _`properties`: ./properties.html
-
-* `splitting generated code to files`_ - :doc:`Py++ <../pyplusplus>` provides 4 different strategies
-   for splitting the generated code into files. Take a look on this document,
-   it will save you the time.
-
-.. _`splitting generated code to files` : ./split_module.html
-
-* `tutorials`_ - don't know where to start? Start here. Small and simple example
-  will help you to start with :doc:`Py++ <../pyplusplus>`. If you want to evaluate :doc:`Py++ <../pyplusplus>` you will
-  find here small and handy GUI program.
-
-.. _`tutorials` : ./tutorials/tutorials.html
-
-* `warnings`_ - :doc:`Py++ <../pyplusplus>` could be used as some kind of validator. It checks the
-  exposed declarations and reports the potential errors. Thus you are able to
-  create high quality Python bindings from the beginning. This document also
-  describes how to suppress the errors\\warnings.
-
-.. _`warnings` : ./warnings.html
-
-
 .. _`epydoc` : http://epydoc.sourceforge.net/
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org

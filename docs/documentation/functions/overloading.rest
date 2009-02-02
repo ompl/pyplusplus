@@ -160,10 +160,7 @@ Member and free functions declaration classes have ``use_overload_macro`` proper
 The default value of the property is ``False``.
 
 You don't really have to use the macros, unless you have "registration order"
-problem. The problem and work around described in `default arguments`_ document.
-
-.. _`default arguments` : ./default_args.html
-
+problem. The problem and work around described in :doc:`default arguments <default_args>` document.
 
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org

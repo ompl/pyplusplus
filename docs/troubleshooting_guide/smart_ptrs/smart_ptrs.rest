@@ -25,10 +25,7 @@ All files contain comments, which describe what and why was done.
 Download
 --------
 
-`smart_ptrs.zip`_
-
-.. _`smart_ptrs.zip` : ./smart_ptrs.zip
-
+:download:`smart_ptrs.zip`
 
 .. _`SourceForge`: http://sourceforge.net/index.php
 

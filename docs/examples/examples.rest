@@ -5,22 +5,16 @@ Examples
 Graphical interface
 -------------------
 
-
-:doc:`Py++ <../pyplusplus>` has nice, small and simple `graphical interface`_. Please, read
-`tutorials`_ for more information.
-
-.. _`graphical interface` : ./../documentation/tutorials/pyplusplus_gui.html
-.. _`tutorials` : ./../documentation/tutorials/tutorials.html
+:doc:`Py++ <../pyplusplus>` has nice, small and simple :doc:`graphical interface <../documentation/tutorials/pyplusplus_gui>`. 
+Consider to read :doc:`tutorials <../documentation/tutorials/tutorials>` for more information.
 
 ---------
 pyeasybmp
 ---------
 
-`EasyBMP`_ is a small cross-platform library that provide you functionality
+:doc:`EasyBMP <easybmp/easybmp>` is a small cross-platform library that provide you functionality
 needed to work with Windows bitmap (BMP) image files. I took me only few minutes
-to create Python bindings for the library. Read more `here`__.
-
-..  __ : ./easybmp/easybmp.html
+to create Python bindings for the library. Read more :doc:`here <easybmp/easybmp>`.
 
 ---------------
 boost libraries
@@ -51,8 +45,5 @@ package documentation.
 .. _`boost.crc` : http://boost.org/libs/crc/index.html
 .. _`boost.rational` : http://boost.org/libs/rational/index.html
 .. _`boost.random` : http://boost.org/libs/random/index.html
-
-.. _`GUI`: ./../tutorials/pyplusplus_demo.png
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
-.. _`EasyBMP`: http://easybmp.sourceforge.net/
 

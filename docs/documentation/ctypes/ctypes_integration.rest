@@ -67,7 +67,7 @@ Implemented functionality
 
 * expose variable, which has a union type
 
-* return address of return value as integer - `new call policy was created`_
+* return address of return value as integer - :doc:`new call policy was created <../../documentation/functions/call_policies/return_addressof>`
 
 ---------------------------
 ctypes integration contents
@@ -90,7 +90,6 @@ the following features:
 
 * to add ability to expose "C" functions without using `Boost.Python`_.
 
-.. _`new call policy was created` : ./../../documentation/functions/call_policies/return_addressof.html
 .. _`ctypes` : http://docs.python.org/lib/module-ctypes.html
 .. _`from_address` : http://docs.python.org/lib/ctypes-data-types.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html

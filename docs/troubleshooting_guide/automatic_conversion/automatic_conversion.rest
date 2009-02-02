@@ -38,6 +38,4 @@ Files
 Download
 --------
 
-`automatic_conversion.zip`_
-
-.. _`automatic_conversion.zip` : ./automatic_conversion.zip
+:download:`automatic_conversion.zip`

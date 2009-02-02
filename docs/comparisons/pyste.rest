@@ -103,7 +103,7 @@ Py++
 
     1. GUI - small and simple graphic user interface, which does not request from
        user any knowledge about `Boost.Python`_ or :doc:`Py++ <../pyplusplus>`. You can see
-       its `screenshot`_.
+       its :doc:`screenshot <../documentation/tutorials/pyplusplus_gui>`.
 
     2. API - object-oriented framework, that helps you to create code generator,
        that suites your needs. :doc:`Py++ <../pyplusplus>` framework consists 3 packages:
@@ -422,7 +422,6 @@ Oliveira, the `Pyste`_ author, understands the problems, I raised here. He
 thought about them, long before I created :doc:`Py++ <../pyplusplus>`. But unfortunately, lack
 of time and motivation prevents him to work on `Pyste`_.
 
-.. _`screenshot` : ./../documentation/tutorials/pyplusplus_gui.html
 .. _`Pyste`: http://www.boost.org/libs/python/doc/index.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`SourceForge`: http://sourceforge.net/index.php

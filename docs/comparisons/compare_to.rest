@@ -8,9 +8,7 @@ Pyste
 
 `Pyste`_ is the Boost.Python code generator, which is not under active development
 any more. Nevertheless, users request to compare :doc:`Py++ <../pyplusplus>` and `Pyste`_. You
-can read `here`_ the comparison.
-
-.. _`here` : ./pyste.html
+can read :doc:`here <pyste>` the comparison.
 
 ----------
 SWIG & SIP

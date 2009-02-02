@@ -57,7 +57,5 @@ All files contain comments, which describe what and why was done.
 Download
 --------
 
-`exceptions.zip`_
-
-.. _`exceptions.zip` : ./exceptions.zip
+:download:`exceptions.zip`
 

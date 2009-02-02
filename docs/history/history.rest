@@ -234,28 +234,20 @@ Version 0.9.0
 
 3. Added new call policies:
 
-   * `as_tuple`_
+   * :doc:`as_tuple <../documentation/functions/call_policies/as_tuple>`
 
-   * `custom_call_policies`_
+   * :doc:`custom_call_policies <../documentation/functions/call_policies/return_range>`
 
-   * `return_range`_
-
-.. _`as_tuple` : ../documentation/functions/call_policies/as_tuple.html
-.. _`return_range`: ../documentation/functions/call_policies/return_range.html
-.. _`custom_call_policies` : ../documentation/functions/call_policies/custom_call_policies.html
+   * :doc:`return_range <../documentation/functions/call_policies/return_range>`
 
 4. Added an initial support for multi-module development. Now you can mark your
    declarations as ``already_exposed`` and :doc:`Py++ <../pyplusplus>` will do the rest. For more
-   information read `multi-module development guide`_.
-
-.. _`multi-module development guide` : ../documentation/multi_module_development.html
+   information read :doc:`multi-module development guide <../documentation/multi_module_development>`.
 
 .. line-separator
 
-5. `input_c_buffer`_ - new functions transformation, which allows to pass a Python
-   sequence to function, instead of pair of arguments: pointer to buffer and size.
-
-.. _`input_c_buffer` : ../documentation/functions/transformation/input_c_buffer.html
+5. :doc:`input_c_buffer <../documentation/functions/transformation/input_c_buffer>` - new functions 
+   transformation, which allows to pass a Python sequence to function, instead of pair of arguments: pointer to buffer and size.
 
 6. Added ability to control generated "include" directives. Now you can ask :doc:`Py++ <../pyplusplus>`
    to include a header file, when it generates code for some declaration. For more
@@ -267,11 +259,7 @@ Version 0.9.0
    will be included from the generated files only in case the generated code
    depends on them.
 
-.. line-separator
-
 8. Performance improvements: Py++ runs 1.5 - 2 times faster, than the previous one.
-
-.. line-separator
 
 9. Added ability to add code before overridden and default function calls.
    For more information refer to `member function API documentation`_.
@@ -279,9 +267,7 @@ Version 0.9.0
 .. _`member function API documentation` : ../documentation/apidocs/pyplusplus.decl_wrappers.calldef_wrapper.member_function_t-class.html
 
 10. :doc:`Py++ <../pyplusplus>` will generate documentation for automatically constructed properties.
-    For more information refer to `properties guide`_
-
-.. _`properties guide`: ../documentation/properties.html#documentation
+    For more information refer to :doc:`properties guide <../documentation/properties>`.
 
 11. Added iteration functionality to Boost.Python Indexing Suite V2 ``std::map``
     and ``std::multimap`` containers.
@@ -290,23 +276,16 @@ Version 0.9.0
 Version 0.8.5
 -------------
 
-1. Added `Function Transformation`_ feature.
-
-.. _`Function transformation` : ../documentation/functions/transformation/transformation.html
+1. Added :doc:`Function Transformation <../documentation/functions/transformation/transformation>` feature.
 
 2. "Py++" introduces new functionality, which allows you to control messages and
-   warnings: `how to disable warnings?`_ .
-
-.. _`how to disable warnings?` : ../documentation/warnings.html
+   warnings: :doc:`how to disable warnings? <../documentation/warnings>`.
 
 3. Added new algorithm, which controls the registration order of the functions.
-   See `registration order document`_
+   See :doc:`registration order document <../documentation/functions/registration_order>`
 
-.. _`registration order document` : ../documentation/functions/registration_order.html
-
-4. New "Py++" defined `return_pointee_value`_ call policy was introduced.
-
-.. _`return_pointee_value` : ../documentation/functions/call_policies/return_pointee_value.html
+4. New "Py++" defined :doc:`return_pointee_value <../documentation/functions/call_policies/return_pointee_value>` 
+   call policy was introduced.
 
 5. Support for opaque types was added. Read more about this feature `here`__.
 
@@ -337,7 +316,7 @@ Version 0.8.2
 
 2. Performance improvements. In some cases you can get x10 performance boost.
    Many thanks to Allen Bierbaum! Saving and reusing results of different
-   :doc:`pygccxml <../pygccxml>` algorithms and type traits functions achieved this.
+   :doc:`pygccxml <../../pygccxml/pygccxml>` algorithms and type traits functions achieved this.
 
 3. Convenience API for registering exception translator was introduced.
 
