@@ -3,14 +3,14 @@ Pyste & Py++  comparison
 ========================
 
 ----------------------
-What is `Py++`_?
+What is Py++?
 ----------------------
 
 .. include:: ../definition.irest
 
------------------
-What is `Pyste`_?
------------------
+--------------
+What is Pyste?
+--------------
 
 `Pyste`_ is a `Boost.Python`_ code generator. The user specifies the classes and
 functions to be exported using a simple interface file, which following the
@@ -23,7 +23,7 @@ Preamble
 --------
 
 If you are reading this document, I can assume that you know what `Boost.Python`_,
-`Pyste`_ and `Py++`_ are. This document compares `Pyste`_ and `Py++`_.
+`Pyste`_ and :doc:`Py++ <../pyplusplus>` are. This document compares `Pyste`_ and :doc:`Py++ <../pyplusplus>`.
 I am going to compare:
 
     * user interface
@@ -53,7 +53,7 @@ problems with `Pyste`_:
 
 I tried to fix `Pyste`_. At first, I developed :doc:`pygccxml <../../pygccxml/pygccxml>` and tried to replace
 relevant `Pyste`_ functionality. I did not like the result. After this, I dropped
-the idea to fix `Pyste`_ and decided to develop new code generator - `Py++`_.
+the idea to fix `Pyste`_ and decided to develop new code generator - :doc:`Py++ <../pyplusplus>`.
 Later you will find few points, which explains, why I decided not to fix `Pyste`_.
 
 Have a nice reading.
@@ -99,14 +99,14 @@ I have more examples, but I think you've got the idea.
 Py++
 ----
 
-`Py++`_ has 2 user interfaces:
+:doc:`Py++ <../pyplusplus>` has 2 user interfaces:
 
     1. GUI - small and simple graphic user interface, which does not request from
-       user any knowledge about `Boost.Python`_ or `Py++`_. You can see
+       user any knowledge about `Boost.Python`_ or :doc:`Py++ <../pyplusplus>`. You can see
        its `screenshot`_.
 
     2. API - object-oriented framework, that helps you to create code generator,
-       that suites your needs. `Py++`_ framework consists 3 packages:
+       that suites your needs. :doc:`Py++ <../pyplusplus>` framework consists 3 packages:
 
         1. Code creators package. The only responsibility of classes in this
            package is to create code. Those classes do not care where code is
@@ -119,7 +119,7 @@ Py++
         3. File writers package. This package contains classes that write
            generated code to file(s).
 
-The good news: it is very easy to evaluate `Py++`_, using GUI. The bad
+The good news: it is very easy to evaluate :doc:`Py++ <../pyplusplus>`, using GUI. The bad
 news is that you should learn an other set of API's in order to complete your
 task. It is not as awful as it sounds, but still there is some learning curve.
 
@@ -155,7 +155,7 @@ Py++
 
 One of the biggest weaknesses of `Pyste`_ is a lack of good `GCC-XML`_ front-end
 and this fact cause `Pyste`_ to generate not optimal code. I will prove this
-later. In order to avoid such weakness, before I have created `Py++`_,
+later. In order to avoid such weakness, before I have created :doc:`Py++ <../pyplusplus>`,
 I created :doc:`pygccxml <../../pygccxml/pygccxml>`. :doc:`pygccxml <../../pygccxml/pygccxml>` is a stand-alone project, which provides few
 things:
 
@@ -170,14 +170,14 @@ things:
       + every file will be parsed alone, after this, duplicated declarations
         and types will be removed
 
-:doc:`pygccxml <../../pygccxml/pygccxml>` contributes in few ways to `Py++`_:
+:doc:`pygccxml <../../pygccxml/pygccxml>` contributes in few ways to :doc:`Py++ <../pyplusplus>`:
 
-    + `Py++`_ has nothing to do with code parsing. Theoretically
+    + :doc:`Py++ <../pyplusplus>` has nothing to do with code parsing. Theoretically
       an other back-end could be added to :doc:`pygccxml <../../pygccxml/pygccxml>` without changing even one
-      line of code within `Py++`_.
+      line of code within :doc:`Py++ <../pyplusplus>`.
 
     + :doc:`pygccxml <../../pygccxml/pygccxml>` has type traits. A lot of type traits algorithms from
-      `boost.type_traits`_ library has been implemented. `Py++`_ makes
+      `boost.type_traits`_ library has been implemented. :doc:`Py++ <../pyplusplus>` makes
       an extensive use of them:
 
       * identify "call policies" algorithm
@@ -235,7 +235,7 @@ What is wrong with this? In some places the logic of code generation is complex.
 what is going on, in "ClassExporter.py" file. Class *ClassExporter* knows
 everything about internal exporters, more over *ClassExporter* is responsible to
 export all its base classes before it exports itself. This is just wrong.
-`Py++`_ implements better solution. `Py++`_ has code creators class
+:doc:`Py++ <../pyplusplus>` implements better solution. :doc:`Py++ <../pyplusplus>` has code creators class
 hierarchy and factory, that creates those code creators based on given
 declarations. The questions like:
 
@@ -249,7 +249,7 @@ declarations. The questions like:
 
 solved by the factory. The only thing that left to code creators is to create code.
 By the way, it is not an easy task to fix this specific problem in `Pyste`_.
-Serious re-factoring should be done. `Py++`_ defines *compound_t* code
+Serious re-factoring should be done. :doc:`Py++ <../pyplusplus>` defines *compound_t* code
 creator. *module_t*, *module_body_t*, *class_t* - are typical examples of
 compound code creators. They do know few code creators, but that is all.
 
@@ -260,7 +260,7 @@ unnecessary. In order to add new *Exporter* you should understand the underlying
 protocol and may be to modify code unit. Try to add *Exporter* that exposes
 get\\set functions as property. It is not an easy task. An other problem, I see
 here, is that code unit is some kind of *Exporter*. Code unit also creates code.
-I did not fill good with this design. So I decided, that in `Py++`_ code
+I did not fill good with this design. So I decided, that in :doc:`Py++ <../pyplusplus>` code
 should be created only by code creators. This decision simplifies a lot of
 things:
 
@@ -280,29 +280,29 @@ things:
 ------------
 Dependencies
 ------------
-Both `Pyste`_ and `Py++`_ introduce one external dependency. In order to
-parse XML `Pyste`_ uses `elementtree`_. On the other side `Py++`_
+Both `Pyste`_ and :doc:`Py++ <../pyplusplus>` introduce one external dependency. In order to
+parse XML `Pyste`_ uses `elementtree`_. On the other side :doc:`Py++ <../pyplusplus>`
 depends on :doc:`pygccxml <../../pygccxml/pygccxml>` project.
 
 -------------
 Features list
 -------------
-`Py++`_ supports almost all features `Pyste`_ implements. `Py++`_,
+:doc:`Py++ <../pyplusplus>` supports almost all features `Pyste`_ implements. :doc:`Py++ <../pyplusplus>`,
 version 0.8.0, does not implements the following functionality, implemented by `Pyste`_:
 
     * *pow* operator
 
     * good documentation
 
-Here you can find the complete features list of `Py++`_.
+Here you can find the complete features list of :doc:`Py++ <../pyplusplus>`.
 
-Features unique to `Py++`_:
+Features unique to :doc:`Py++ <../pyplusplus>`:
 
-    * `Py++`_ exposes protected member functions
+    * :doc:`Py++ <../pyplusplus>` exposes protected member functions
 
-    * `Py++`_, in most cases, will automatically detect class held type
+    * :doc:`Py++ <../pyplusplus>`, in most cases, will automatically detect class held type
 
-    * `Py++`_ creates implicit conversion code for:
+    * :doc:`Py++ <../pyplusplus>` creates implicit conversion code for:
 
        + casting constructors
 
@@ -316,13 +316,13 @@ Features unique to `Py++`_:
 
     * operators defined in base class could be redefined/exposed in derived class
 
-    * `Py++`_ exposes bit fields member variables
+    * :doc:`Py++ <../pyplusplus>` exposes bit fields member variables
 
 Nice features list
 ------------------
 
-Both `Pyste`_ and `Py++`_ generate working code. As we already saw in some
-cases `Py++`_ do better job. `Py++`_ allows the following customization on
+Both `Pyste`_ and :doc:`Py++ <../pyplusplus>` generate working code. As we already saw in some
+cases :doc:`Py++ <../pyplusplus>` do better job. :doc:`Py++ <../pyplusplus>` allows the following customization on
 generated code:
 
     * To define std and user directories. *include_t* code creator will take
@@ -335,7 +335,7 @@ generated code:
         namespace dt = boost::date_time;
 
       All code, which is generated after this statement, will use ``dt`` instead of
-      ``boost::date_time``. This allows `Py++`_ to create user-friendly code.
+      ``boost::date_time``. This allows :doc:`Py++ <../pyplusplus>` to create user-friendly code.
 
     * Classes and functions support 2 modes of code generation. Example:
 
@@ -376,13 +376,13 @@ generated code:
         2. If in future a developer decides to create overload to some function,
            this code will continue to compile.
 
-    * `Py++`_ has small nice future - "license". User can specify the
+    * :doc:`Py++ <../pyplusplus>` has small nice future - "license". User can specify the
       license and it will appear in every generated file.
 
-    * `Py++`_ allows user to define custom call policies resolver. See
+    * :doc:`Py++ <../pyplusplus>` allows user to define custom call policies resolver. See
       boost.date_time example
 
-    * `Py++`_ allows user to create custom code creators. See
+    * :doc:`Py++ <../pyplusplus>` allows user to create custom code creators. See
       "custom_code_creator" example.
 
     * real world examples:
@@ -397,9 +397,9 @@ generated code:
 Conclusion
 ----------
 
-If I were you I would choose `Py++`_ to create bindings for your project.
-For very small projects or for educational reasons you may use `Py++`_.GUI.
-For big projects, you need flexibility and power of `Py++`_.
+If I were you I would choose :doc:`Py++ <../pyplusplus>` to create bindings for your project.
+For very small projects or for educational reasons you may use :doc:`Py++ <../pyplusplus>`.GUI.
+For big projects, you need flexibility and power of :doc:`Py++ <../pyplusplus>`.
 
 ----
 P.S.
@@ -408,22 +408,21 @@ P.S.
 This comparison was a little unfair. First of all `Pyste`_ is no more under
 active development\\support. Second, `Pyste`_ has been written 2 years ago and
 had different goal. The following definitions will help you to understand the main
-difference between `Pyste`_ and `Py++`_.
+difference between `Pyste`_ and :doc:`Py++ <../pyplusplus>`.
 
  `Pyste`_
    `Pyste`_ is `Boost.Python`_ code generator.
 
- `Py++`_
+ :doc:`Py++ <../pyplusplus>`
    .. include:: ../definition.irest
 
-`Pyste`_ and `Py++`_ have been created to handle different tasks, hence
+`Pyste`_ and :doc:`Py++ <../pyplusplus>` have been created to handle different tasks, hence
 the difference in design, user interface and complexity. Bruno da Silva de
 Oliveira, the `Pyste`_ author, understands the problems, I raised here. He
-thought about them, long before I created `Py++`_. But unfortunately, lack
+thought about them, long before I created :doc:`Py++ <../pyplusplus>`. But unfortunately, lack
 of time and motivation prevents him to work on `Pyste`_.
 
 .. _`screenshot` : ./../documentation/tutorials/pyplusplus_gui.html
-.. _`Py++` : ./../pyplusplus.html
 .. _`Pyste`: http://www.boost.org/libs/python/doc/index.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`SourceForge`: http://sourceforge.net/index.php

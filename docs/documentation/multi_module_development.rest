@@ -50,8 +50,8 @@ The desired goal is to expose every class in its own package.
 ``already_exposed``
 -------------------
 
-Every `Py++`_ declaration has ``already_exposed`` property. This property says
-to `Py++`_ that the declaration is already exposed in another module:
+Every :doc:`Py++ <../pyplusplus>` declaration has ``already_exposed`` property. This property says
+to :doc:`Py++ <../pyplusplus>` that the declaration is already exposed in another module:
 
 .. code-block:: python
 
@@ -68,7 +68,7 @@ to `Py++`_ that the declaration is already exposed in another module:
   mb_core.build_code_creator( 'png' )
   mb.write_module( 'png.cpp' )
 
-`Py++`_ will generate code very similar to the the following one:
+:doc:`Py++ <../pyplusplus>` will generate code very similar to the the following one:
 
 .. code-block:: c++
 
@@ -131,12 +131,12 @@ Semi-automatic solution
 
 ``already_exposed`` solution is pretty good when you mix hand-written modules with
 the Py++ generated ones. It doesn't work/scale for "true" multi-module development. 
-This is exactly the reason why `Py++`_ offers "semi automatic" solution.
+This is exactly the reason why :doc:`Py++ <../pyplusplus>` offers "semi automatic" solution.
 
-For every exposed module, `Py++`_ generates "exposed_decl.pypp.txt" file. This
+For every exposed module, :doc:`Py++ <../pyplusplus>` generates "exposed_decl.pypp.txt" file. This
 file contains the list of all parsed declarations and whether they were included
-or excluded. Later, when you work on another module, you can tell `Py++`_ that 
-the current module depends on the previously generated one. `Py++`_ will load 
+or excluded. Later, when you work on another module, you can tell :doc:`Py++ <../pyplusplus>` that 
+the current module depends on the previously generated one. :doc:`Py++ <../pyplusplus>` will load 
 "exposed_decl.pypp.txt" file and update the declarations.
 
 Usage example:
@@ -155,7 +155,6 @@ You should import module "core", before "png". `Boost.Python`_ requires definiti
 of any base class to be exposed\\registered before a derive one.
 
 
-.. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

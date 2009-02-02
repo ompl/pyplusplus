@@ -6,7 +6,7 @@ Graphical interface
 -------------------
 
 
-`Py++`_ has nice, small and simple `graphical interface`_. Please, read
+:doc:`Py++ <../pyplusplus>` has nice, small and simple `graphical interface`_. Please, read
 `tutorials`_ for more information.
 
 .. _`graphical interface` : ./../documentation/tutorials/pyplusplus_gui.html
@@ -26,7 +26,7 @@ to create Python bindings for the library. Read more `here`__.
 boost libraries
 ---------------
 
-Boost provides free peer-reviewed portable C++ source libraries. Using `Py++`_ I
+Boost provides free peer-reviewed portable C++ source libraries. Using :doc:`Py++ <../pyplusplus>` I
 created Python bindings for few libraries:
 
   * `Boost.Date_Time`_
@@ -54,6 +54,5 @@ package documentation.
 
 .. _`GUI`: ./../tutorials/pyplusplus_demo.png
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
-.. _`Py++` : ./../pyplusplus.html
 .. _`EasyBMP`: http://easybmp.sourceforge.net/
 

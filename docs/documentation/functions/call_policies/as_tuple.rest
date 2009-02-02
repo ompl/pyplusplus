@@ -61,7 +61,7 @@ Example
 
    * none - do nothing
 
-The `Py++`_ code is slightly different from the C++ one, but it is definitely shorter:
+The :doc:`Py++ <../../../pyplusplus>` code is slightly different from the C++ one, but it is definitely shorter:
 
 .. code-block:: python
 
@@ -78,7 +78,6 @@ The `Py++`_ code is slightly different from the C++ one, but it is definitely sh
 .. _`ResultConverterGenerator` : http://boost.org/libs/python/doc/v2/ResultConverter.html#ResultConverterGenerator-concept
 .. _`CallPolicies` : http://www.boost.org/libs/python/doc/v2/CallPolicies.html#CallPolicies-concept
 
-.. _`Py++` : ./../../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

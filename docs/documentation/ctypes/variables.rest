@@ -7,10 +7,10 @@ expose_address
 --------------
 
 ``variable_t`` declarations have got new property ``expose_address``. If you set
-it value to ``True``, `Py++`_ will register new property with the same name, but
+it value to ``True``, :doc:`Py++ <../../pyplusplus>` will register new property with the same name, but
 the type of it will be ``unsigned int`` and the value is address of the variable.
 
-`Py++`_ will take care and generate the right code for global, static and member
+:doc:`Py++ <../../pyplusplus>` will take care and generate the right code for global, static and member
 variables.
 
 ----------------
@@ -45,7 +45,7 @@ have to turn on ``expose_address`` property to ``True``:
     bytes = mb.class_( 'bytes_t' )
     bytes.vars().expose_address = True
 
-`Py++`_ will generate code, which will expose the address of the variables.
+:doc:`Py++ <../../pyplusplus>` will generate code, which will expose the address of the variables.
 
 and now it is a time to show some `ctypes`_ magic:
 
@@ -68,7 +68,6 @@ and now it is a time to show some `ctypes`_ magic:
 
 .. _`ctypes` : http://docs.python.org/lib/module-ctypes.html
 .. _`from_address` : http://docs.python.org/lib/ctypes-data-types.html
-.. _`Py++` : ./../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

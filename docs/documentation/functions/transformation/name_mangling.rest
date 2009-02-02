@@ -14,7 +14,7 @@ Wikipedia has a nice `explanation`_ what name mangling is.
 Why?
 ----
 
-I am sure you want to ask why and where `Py++`_ uses name mangling? `Py++`_ uses
+I am sure you want to ask why and where :doc:`Py++ <../../../pyplusplus>` uses name mangling? :doc:`Py++ <../../../pyplusplus>` uses
 name mangling to create function-wrappers for overloaded and\\or free functions.
 Consider the following use case:
 
@@ -47,7 +47,7 @@ otherwise they will not be callable from `Python`_:
 The solution
 ------------
 
-`Py++`_ implements a solution to the problem. The generated wrapper names are
+:doc:`Py++ <../../../pyplusplus>` implements a solution to the problem. The generated wrapper names are
 unique in the whole project. However, they are pretty ugly:
 
 * ``get_distance_610ef0e8a293a62001a25cd3dc59b769`` for ``get_distance( long& )``
@@ -59,7 +59,7 @@ unique in the whole project. However, they are pretty ugly:
 The good news - they will not be changed between different runs of the code
 generator.
 
-If you are exposing an overloaded function, in that case `Py++`_ uses the ugly
+If you are exposing an overloaded function, in that case :doc:`Py++ <../../../pyplusplus>` uses the ugly
 function-wrapper name as an alias. It is up to you to change the alias:
 
   .. code-block:: python
@@ -77,7 +77,6 @@ There are two main reasons for such implementation\\behaviour:
 2. If you forgot to give an alias to a function, your users will still be able
    to call the function. So no need to rush and create new release.
 
-.. _`Py++` : ./../../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

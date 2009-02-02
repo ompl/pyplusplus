@@ -6,11 +6,11 @@ Py++ download
 Py++ on SourceForge
 -------------------
 
-`Py++`_ project is hosted on SourceForge. Using SourceForge services you
+:doc:`Py++ <pyplusplus>` project is hosted on SourceForge. Using SourceForge services you
 can:
 
 1) get access to source code
-2) get access to latest release version of `Py++`_
+2) get access to latest release version of :doc:`Py++ <pyplusplus>`
 
 
 -----------------
@@ -30,11 +30,11 @@ Installation
 ------------
 
 In command prompt or shell change current directory to be "pyplusplus-X.Y.Z".
-"X.Y.Z" is version of `Py++`_. Type the following command:
+"X.Y.Z" is version of :doc:`Py++ <pyplusplus>`. Type the following command:
 
 | ``python setup.py install``
 
-After this command complete, you should have installed `Py++`_ package.
+After this command complete, you should have installed :doc:`Py++ <pyplusplus>` package.
 
 Boost.Python installation
 -------------------------
@@ -56,7 +56,3 @@ Dependencies
 ------------
 
 * :doc:`pygccxml <../pygccxml/pygccxml>`
-
-
-.. _`Py++` : ./pyplusplus.html
-

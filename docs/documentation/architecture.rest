@@ -6,7 +6,7 @@ Architecture
 Introduction
 ------------
 
-This document will describe an architecture behind `Py++`_.
+This document will describe an architecture behind :doc:`Py++ <../pyplusplus>`.
 
 ---------------------------
 Py++ & pygccxml integration
@@ -32,7 +32,7 @@ and C++ parser independent. It provides the following services:
 * C++ source files parsing and caching functionality
 
 
-`Py++`_ uses those services to:
+:doc:`Py++ <../pyplusplus>` uses those services to:
 
 * extract declarations from source files and to provide powerful query interface
 
@@ -50,14 +50,14 @@ and C++ parser independent. It provides the following services:
 Integration details
 -------------------
 
-`Py++`_ uses different approaches to expose these services to the user.
+:doc:`Py++ <../pyplusplus>` uses different approaches to expose these services to the user.
 
 Parsing integration
 ~~~~~~~~~~~~~~~~~~~
 
-`Py++`_ provides it's own "API" to configure :doc:`pygccxml <../../pygccxml/pygccxml>` parsing services. The
+:doc:`Py++ <../pyplusplus>` provides it's own "API" to configure :doc:`pygccxml <../../pygccxml/pygccxml>` parsing services. The
 "API" I am talking about, is arguments to ``module_builder.__init__`` method.
-We think, that exposing those services via `Py++`_ simplifies its usage.
+We think, that exposing those services via :doc:`Py++ <../pyplusplus>` simplifies its usage.
 
 
 Declarations tree integration
@@ -95,7 +95,7 @@ code:
 
 
 What you see here, is a common pattern, that will appear in all projects, that
-use `Py++`_:
+use :doc:`Py++ <../pyplusplus>`:
 
 * find the declaration(s)
 
@@ -103,7 +103,7 @@ use `Py++`_:
 
 What is the point of this example? From the user point of view it is perfectly
 good, it makes a lot of sense to configure the code generation engine, using
-the declarations tree. How does `Py++`_ add missing functionality to
+the declarations tree. How does :doc:`Py++ <../pyplusplus>` add missing functionality to
 ``pygccxml.declarations`` classes? There were few possible solutions to the
 problem. The following one was implemented:
 
@@ -146,7 +146,7 @@ different problems the engine should solve:
 
 * How it should be written to files?
 
-  Remember, `Py++`_ is targeting big projects. It cannot generate all code
+  Remember, :doc:`Py++ <../pyplusplus>` is targeting big projects. It cannot generate all code
   in one file - this will not work, not at all.
 
 ``Code creators`` and file writers provides solution for both problems.
@@ -290,7 +290,7 @@ their dependency graphs. As a result, this class can:
 ----------------
 
 ``File writers`` classes are responsible for writing ``code creators tree`` into
-the files. `Py++`_ implements the following strategies of writing ``code creators tree``
+the files. :doc:`Py++ <../pyplusplus>` implements the following strategies of writing ``code creators tree``
 into files:
 
 * single file
@@ -318,11 +318,10 @@ This package provides an interface to all code generator engine services.
 Conclusion
 ----------
 
-It safe to use `Py++`_ for big and small projects!
+It safe to use :doc:`Py++ <../pyplusplus>` for big and small projects!
 
 .. _`open-closed principle` : http://www.google.com/search?sourceid=gmail&q=open%20closed%20principle
 
-.. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

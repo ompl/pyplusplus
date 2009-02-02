@@ -6,7 +6,7 @@ Splitting generated code to files
 Introduction
 ------------
 
-`Py++`_ provides 4 different strategies for splitting the generated code into files:
+:doc:`Py++ <../pyplusplus>` provides 4 different strategies for splitting the generated code into files:
 
 * single file
 
@@ -20,7 +20,7 @@ Introduction
 Single file
 -----------
 
-If you just start with `Py++`_ or you are developing small module, than you should 
+If you just start with :doc:`Py++ <../pyplusplus>` or you are developing small module, than you should 
 start with this strategy. It is simple - all source code generated to a single file.
 
 Of course this solution has it's price - every time you change the code you will
@@ -44,7 +44,7 @@ Usage example
 Multiple files
 --------------
 
-I believe this is the most widely used strategy. `Py++`_ splits generated code 
+I believe this is the most widely used strategy. :doc:`Py++ <../pyplusplus>` splits generated code 
 as follows:
 
 * every class has it's own source & header file
@@ -63,7 +63,7 @@ projects.
 
 There are few problems with this mode:
 
-1. There are use cases, when the generated file name is too long. `Py++`_
+1. There are use cases, when the generated file name is too long. :doc:`Py++ <../pyplusplus>`
    uses class name as a basis for the file name. So in case of template
    instantiations the file name could be really long, very long.
 
@@ -100,7 +100,7 @@ Multiple files, where single class code is split to few files
 This mode solves the problem, I mentioned earlier - you have to expose huge class
 and you have problems to compile generated code. 
 
-`Py++`_ will split huge class to files using the following strategy:
+:doc:`Py++ <../pyplusplus>` will split huge class to files using the following strategy:
 
 * every generated source file can contain maximum 20 exposed declarations
 * the following declarations are split to separate source files:
@@ -163,9 +163,9 @@ Usage of precompiled header file reduces overall compilation time. Not all
 compilers support the feature, moreover some of them can't handle presence of 
 "boost/python.hpp" header in precompiled header file. 
 
-`Py++`_ doesn't provide user-friendly API to add/define precompiled header file
+:doc:`Py++ <../pyplusplus>` doesn't provide user-friendly API to add/define precompiled header file
 to the generated code. The main reason is that I don't have a good idea how to
-integrate/add this functionality to `Py++`_. Nevertheless, you can enjoy from 
+integrate/add this functionality to :doc:`Py++ <../pyplusplus>`. Nevertheless, you can enjoy from 
 this time-saving feature:
 
 .. code-block:: python
@@ -206,9 +206,9 @@ Class ``module_builder_t`` contains 3 functions, related to file generation:
   * ``dir_name`` - directory name the generated files will be put in
   * ``huge_classes`` - list of names of huge classes
   * ``on_unused_file_found`` - callable object, which is called every time
-    `Py++`_ found that previously generated file is not in use anymore.
+    :doc:`Py++ <../pyplusplus>` found that previously generated file is not in use anymore.
   * ``use_files_sum_repository``
-    `Py++`_ is able to store md5 sum of the generated files in a file. Next 
+    :doc:`Py++ <../pyplusplus>` is able to store md5 sum of the generated files in a file. Next 
     time you will generate code, Py++ will compare generated file content 
     against the sum, instead of loading the content of the previously generated
     file from the disk and comparing against it. 
@@ -237,7 +237,6 @@ Class ``module_builder_t`` contains 3 functions, related to file generation:
   * ``number_of_files`` - the desired number of generated source files
   
 
-.. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

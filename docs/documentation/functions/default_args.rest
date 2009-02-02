@@ -23,7 +23,7 @@ proceed, please take a look on the following class:
 Do nothing approach
 -------------------
 
-By default `Py++`_ exposes function with its default arguments.
+By default :doc:`Py++ <../../pyplusplus>` exposes function with its default arguments.
 
 .. code-block:: c++
 
@@ -96,8 +96,8 @@ use the first one, until you have "registration order" problem:
 The good news is that it is very easy to identify the problem: the module could
 not be loaded. The main reason is that expression ``arg("s1")=S1()`` requires
 ``S1`` struct to be registered. `GCC-XML`_ reports default arguments as strings.
-`Py++`_ doesn't have enough information to generate code with the right class
-registration order. In this case you have to instruct `Py++`_ to use macros:
+:doc:`Py++ <../../pyplusplus>` doesn't have enough information to generate code with the right class
+registration order. In this case you have to instruct :doc:`Py++ <../../pyplusplus>` to use macros:
 
 .. code-block:: python
 
@@ -134,13 +134,12 @@ Class constructors are special case:
   };
 
 
-You cannot use same work around and `Py++`_ ( version 0.8.2 ) could not help you.
+You cannot use same work around and :doc:`Py++ <../../pyplusplus>` ( version 0.8.2 ) could not help you.
 The use case presented here is a little bit esoteric. If you have such use case
-and you cannot change the source code, consider contacting `Py++`_ developers.
+and you cannot change the source code, consider contacting :doc:`Py++ <../../pyplusplus>` developers.
 I am sure we will be able to help you.
 
 
-.. _`Py++` : ./../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

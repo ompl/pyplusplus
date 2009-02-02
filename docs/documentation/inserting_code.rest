@@ -6,7 +6,7 @@ Inserting code
 Introduction
 ------------
 
-`Py++`_ is not a magician! Sometimes there is a need to add code to
+:doc:`Py++ <../pyplusplus>` is not a magician! Sometimes there is a need to add code to
 generated file(s). This document will describe how you can insert your code to
 almost any place.
 
@@ -69,7 +69,7 @@ Lets take a look on the following use case:
 ``int`` is immutable type in Python. So you cannot expose ``get_size`` member
 function as is. You need to create a wrapper and expose it.
 
-In the near future `Py++`_ will eliminate the need of creating hand
+In the near future :doc:`Py++ <../pyplusplus>` will eliminate the need of creating hand
 written wrapper for this use case.
 
 .. code-block:: c++
@@ -90,14 +90,14 @@ Now you have to register it:
       ...
   ;
 
-How it could be achieved with `Py++`_? Class declaration, has also two
+How it could be achieved with :doc:`Py++ <../pyplusplus>`? Class declaration, has also two
 functions:
 
 * ``add_declaration_code( self, code )``
 
   This method will add the code to the declaration section within the module.
 
-  If you split your module to few files, `Py++`_ will add this code to the
+  If you split your module to few files, :doc:`Py++ <../pyplusplus>` will add this code to the
   "cpp" file, class registration code will be written in.
 
   Attention: there is no defined order between wrapper code and declaration section
@@ -207,7 +207,7 @@ Now, when you know how to add your code to a generated one, I think you also sho
 now how to add your own set of include directives to the generated files. There
 are few ways to do this.
 
-1. The easiest and the most effective one - tell to `Py++`_ that generated code
+1. The easiest and the most effective one - tell to :doc:`Py++ <../pyplusplus>` that generated code
    for the declaration should include additional files:
 
    .. code-block:: python
@@ -237,11 +237,10 @@ are few ways to do this.
 
 Of course you can, and may be should, use both approaches.
 
-I suggest you to spend some time and to tweak `Py++`_ to generate source code
+I suggest you to spend some time and to tweak :doc:`Py++ <../pyplusplus>` to generate source code
 with as little as possible include directives. This will save you huge amount of
 time later.
 
-.. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

@@ -55,7 +55,7 @@ The long answer is here:
 Py++ and indexing suites
 ------------------------
 
-`Py++`_ implements support for both indexing suites. More over, you can
+:doc:`Py++ <../pyplusplus>` implements support for both indexing suites. More over, you can
 freely mix indexing suites. For example you can expose ``std::vector<int>`` using
 `Boost.Python`_ built-in indexing suite and ``std::map< int, std::string>`` using
 Raoul Gough's indexing suite.
@@ -64,9 +64,9 @@ Raoul Gough's indexing suite.
 How does it work?
 -----------------
 
-In both cases, `Py++`_ provides almost "hands free" solution. `Py++`_
+In both cases, :doc:`Py++ <../pyplusplus>` provides almost "hands free" solution. :doc:`Py++ <../pyplusplus>`
 keeps track of all exported functions and variables, and if it sees that there is
-a usage of stl container, it exports the container. In both cases, `Py++`_
+a usage of stl container, it exports the container. In both cases, :doc:`Py++ <../pyplusplus>`
 analyzes the container ``value_type`` ( or in case of mapping container
 ``mapped_type`` ), in order to set reasonable defaults, when it generates the code.
 
@@ -74,7 +74,7 @@ analyzes the container ``value_type`` ( or in case of mapping container
 Indexing suites API
 -------------------
 
-By default, `Py++`_ works with built-in indexing suite. If you want to use
+By default, :doc:`Py++ <../pyplusplus>` works with built-in indexing suite. If you want to use
 indexing suite version 2, you should tell this to the ``module_builder_t.__init__``
 method:
 
@@ -87,7 +87,7 @@ instantiation of STL container, this property contains reference to an instance
 of ``indexing_suite1_t`` or ``indexing_suite2_t`` class.
 
 
-How does `Py++`_ know, that a class represents STL container instantiation?
+How does :doc:`Py++ <../pyplusplus>` know, that a class represents STL container instantiation?
 Well, it uses ``pygccxml.declarations.container_traits`` to find out this.
 ``pygccxml.declarations.container_traits`` class, provides all functionality
 needed to identify container and to find out its ``value_type``
@@ -97,7 +97,7 @@ needed to identify container and to find out its ``value_type``
 Built-in indexing suite API
 ---------------------------
 
-`Py++`_ defines ``indexing_suite1_t`` class. This class allows configure
+:doc:`Py++ <../pyplusplus>` defines ``indexing_suite1_t`` class. This class allows configure
 any detail of generated code:
 
 * ``no_proxy`` - a boolean, if ``value_type`` is one of the the following types
@@ -138,19 +138,19 @@ functionality. Please take a look on the following C++ code:
   };
 
 
-`Py++`_ declarations tree will contains ``item``, ``my_data``,
+:doc:`Py++ <../pyplusplus>` declarations tree will contains ``item``, ``my_data``,
 ``vector<item>`` and ``map<string,item>`` class declarations.
 
 If ``value_type`` does not support "equal" or "less than" functionality, sort
 and search functionality could not be exported.
 
-`Py++`_ class declaration has two properties: ``equality_comparable`` and
+:doc:`Py++ <../pyplusplus>` class declaration has two properties: ``equality_comparable`` and
 ``less_than_comparable``. The value of those properties is calculated on first
-invocation. If `Py++`_ can find ``operator==``, that works on ``value_type``,
+invocation. If :doc:`Py++ <../pyplusplus>` can find ``operator==``, that works on ``value_type``,
 then, ``equality_comparable`` property value will be set to ``True``, otherwise
 to ``False``. Same process is applied on ``less_than_comparable`` property.
 
-In our case, `Py++`_ will set both properties to ``False``, thus sort and
+In our case, :doc:`Py++ <../pyplusplus>` will set both properties to ``False``, thus sort and
 search functionality will not be exported.
 
 It is the time to introduce ``indexing_suite2_t`` class:
@@ -165,13 +165,13 @@ It is the time to introduce ``indexing_suite2_t`` class:
 * ``element_type`` - is a reference to container ``value_type`` or ``mapped_type``.
 
 * ``call_policies`` - read/write property, in near future I will add code to
-  `Py++`_ that will analyze container ``value_type`` and will decide about
+  :doc:`Py++ <../pyplusplus>` that will analyze container ``value_type`` and will decide about
   default call policies. Just an example: for non-copy constructable classes
   ``call_policies`` should be set to ``return_internal_reference``.
 
 * ``[disable|enable]_method`` - new indexing suite, allows to configure
   functionality exported to Python, using simple bitwise operations on predefined
-  flags. `Py++`_ allows you to specify what methods you want to disable
+  flags. :doc:`Py++ <../pyplusplus>` allows you to specify what methods you want to disable
   or enable. ``indexing_suite2_t.METHODS`` contains names of all supported methods.
 
 * ``[disable|enable]_methods_group`` - almost same as above, but allows you
@@ -186,11 +186,10 @@ Small tips/hints
    explicitly to disable method or methods group.
 
 2. The documentation of new indexing suite contains few small mistakes.
-   I hope, I will have time to fix them. Any way, `Py++`_ generates
+   I hope, I will have time to fix them. Any way, :doc:`Py++ <../pyplusplus>` generates
    correct code.
 
 
-.. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

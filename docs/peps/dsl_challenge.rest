@@ -61,7 +61,7 @@ different code:
 The current approach is pretty readable and simple. The drawbacks of this approach
 are:
 
-1. before the user starts with `Py++`_ he is forced to read a lot of documentation
+1. before the user starts with :doc:`Py++ <../pyplusplus>` he is forced to read a lot of documentation
 2. verbosity - in order to complete the task, the user have to write "a lot" of
    code
 
@@ -132,7 +132,7 @@ Special syntax should be introduce to support
              '::std::basic_string<char,std::char_traits<char>,std::allocator<char> >'
            , '::std::allocator<char>' )
 
-  Using current `Py++`_ interface the user can get reference to the class
+  Using current :doc:`Py++ <../pyplusplus>` interface the user can get reference to the class
   instantiation in one line of code:
 
     .. code-block:: python
@@ -153,7 +153,7 @@ Readability counts
 ------------------
 
 It is not clear from the script, on how many and on what declarations
-configuration is applied. It is possible to introduce a bug. Using current `Py++`_
+configuration is applied. It is possible to introduce a bug. Using current :doc:`Py++ <../pyplusplus>`
 API the user always states, whether he expects a declaration to be unique or not
 and its type.
 
@@ -192,7 +192,7 @@ Another Python rule says: "In the face of ambiguity, refuse the temptation to gu
 Action item
 -----------
 
-I think, it should be obvious to you, that we cannot drop current `Py++`_ user
+I think, it should be obvious to you, that we cannot drop current :doc:`Py++ <../pyplusplus>` user
 interface. The only solution I see, is to build B-API on top of it. The reason
 the project does not have B-API is simple. I don't feel comfortable to introduce
 it, while I am aware to all these problems.
@@ -204,7 +204,6 @@ very powerful and easy to use code generator.
 
 
 
-.. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

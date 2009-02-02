@@ -6,7 +6,7 @@ Links
 Wiki
 ----
 
-Thanks to Allen Bierbaum `Py++`_ now has `wiki`_. We use it primary to
+Thanks to Allen Bierbaum :doc:`Py++ <pyplusplus>` now has `wiki`_. We use it primary to
 discuss new features, which will be introduced in future versions.
 
 .. _`wiki` : https://realityforge.vrsource.org/view/PyppApi/WebHome
@@ -28,14 +28,14 @@ Reading
   the result using a tool that `understands` the syntax and semantics of both
   the underlying language and the library. ..."
 
-  `Py++`_ + Boost.Python is a SELL!
+  :doc:`Py++ <pyplusplus>` + Boost.Python is a SELL!
 
 
 * `Aspect oriented programming`_
 
   .. _`Aspect oriented programming` : http://en.wikipedia.org/wiki/Aspect-oriented_programming
 
-  `Py++`_ borrowed few ideas from this programming paradigm.
+  :doc:`Py++ <pyplusplus>` borrowed few ideas from this programming paradigm.
 
 --------------
 Help resources
@@ -56,7 +56,7 @@ Help resources
 * http://boost.cvs.sourceforge.net/boost/boost/libs/python/test/ - `Boost.Python`_
   unit tests. They could be very, very helpful.
 
-* http://pygccxml.svn.sourceforge.net/viewvc/pygccxml/pyplusplus_dev/unittests/ - `Py++`_
+* http://pygccxml.svn.sourceforge.net/viewvc/pygccxml/pyplusplus_dev/unittests/ - :doc:`Py++ <pyplusplus>`
   unit tests. They could be even more helpful!
 
 -------------
@@ -72,8 +72,6 @@ Mailing lists
   .. _`Py++ mailing list` : http://sourceforge.net/mail/?group_id=118209
 
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
-.. _`Py++` : ./pyplusplus.html
-
 
 ----------------------------------
 Libraries inspired by Boost.Python

@@ -8,7 +8,7 @@ Introduction
 
 `Boost.Python`_ allows users to specify class properties. You can read about
 this functionality in the `tutorials`_  or in the `reference manual`_. Since
-version 0.8.2 `Py++`_ provides a convenient API to specify class properties.
+version 0.8.2 :doc:`Py++ <../pyplusplus>` provides a convenient API to specify class properties.
 
 .. _`tutorials` : http://boost.org/libs/python/doc/tutorial/doc/html/python/exposing.html#python.class_properties
 .. _`reference manual` : http://boost.org/libs/python/doc/v2/class.html
@@ -37,7 +37,7 @@ Usage example
                        , number.member_function( 'value' )
                        , number.member_function( 'set_value' ) )
 
-This is rather the hard way to add properties to the class. `Py++`_ comes with
+This is rather the hard way to add properties to the class. :doc:`Py++ <../pyplusplus>` comes with
 built-in algorithm, which automatically recognizes properties and adds them to the
 class:
 
@@ -50,7 +50,7 @@ class:
 Small advise to you: try ``add_properties`` algorithm first, it should work.
 If it doesn't than:
 
-* Please, bring your use case to the developers of `Py++`_, so we could improve
+* Please, bring your use case to the developers of :doc:`Py++ <../pyplusplus>`, so we could improve
   it
 
 * Switch to the ``add_property`` method for a while
@@ -87,7 +87,7 @@ property:
   get_nested.call_policies = call_policies.return_internal_reference()
   mb.class_( 'data' ).add_properties()
 
-`Py++`_ will take the `call policies`_ information from the relevant accessor.
+:doc:`Py++ <../pyplusplus>` will take the `call policies`_ information from the relevant accessor.
 
 .. _`call policies` : http://boost.org/libs/python/doc/tutorial/doc/html/python/functions.html#python.call_policies
 
@@ -98,7 +98,7 @@ Property recognition algorithm
 Description
 -----------
 
-In general the algorithm is very simple. `Py++`_ understands few coding
+In general the algorithm is very simple. :doc:`Py++ <../pyplusplus>` understands few coding
 conventions. It is aware of few widely used get\\set prefixes. It scans the class
 and its base classes for accessors and after this it tries to match between
 "get" and "set" accessors. If there is "set" accessors, but there is no "get"
@@ -139,10 +139,10 @@ Recognize property
 ------------------
 
 This part of the algorithm is responsible to recognize the pair of "get" and "set"
-accessors, which constructs the property. `Py++`_ does it by analyzing name and
+accessors, which constructs the property. :doc:`Py++ <../pyplusplus>` does it by analyzing name and
 type of the accessors.
 
-`Py++`_ understands the following coding conventions:
+:doc:`Py++ <../pyplusplus>` understands the following coding conventions:
 
 * lowercase_with_underscores
 * UpperCamel
@@ -155,10 +155,9 @@ It is also aware of few common prefixes for set\\get accessors: get, is, has, se
 Documentation
 -------------
 You can use ``doc`` attribute to specify the property documentation. If you
-don't, than `Py++`_ will construct documentation, which will describe from what
+don't, than :doc:`Py++ <../pyplusplus>` will construct documentation, which will describe from what
 functions this property was built from.
 
-.. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

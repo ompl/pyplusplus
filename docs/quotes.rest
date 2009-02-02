@@ -79,7 +79,7 @@ Who is using Py++?
 
   .. _`ReSP` : http://www.resp-sim.org/?page_id=2
 
-* Allen Bierbaum, the author of `PyOpenSG`_ project, is using `Py++`_ to create
+* Allen Bierbaum, the author of `PyOpenSG`_ project, is using :doc:`Py++ <pyplusplus>` to create
   Python bindings for `OpenSG`_
 
   `OpenSG`_ - is a portable scenegraph system to create realtime graphics
@@ -87,18 +87,18 @@ Who is using Py++?
 
 
 * Matthias Baas, the author of `Python Computer Graphics Kit`_ project, is using
-  `Py++`_ to create Python bindings for `Maya C++ SDK`__.
+  :doc:`Py++ <pyplusplus>` to create Python bindings for `Maya C++ SDK`__.
 
   .. __ : http://www.highend3d.com/maya
 
-* Lakin Wecker, the author of `Python-OGRE`_ project, is using `Py++`_ to
+* Lakin Wecker, the author of `Python-OGRE`_ project, is using :doc:`Py++ <pyplusplus>` to
   create Python bindings for `OGRE`_.
 
   `OGRE`_ - is a scene-oriented, flexible 3D engine written in C++ designed to
   make it easier and more intuitive for developers to produce applications
   utilizing hardware-accelerated 3D graphics.
 
-* Andy Miller, another developer of `Python-OGRE`_ project, is using `Py++`_ to
+* Andy Miller, another developer of `Python-OGRE`_ project, is using :doc:`Py++ <pyplusplus>` to
   create Python bindings for:
 
   * `CEGUI`_ - a free library providing windowing and widgets for graphics
@@ -118,7 +118,7 @@ Who is using Py++?
   * All in all, `Python-OGRE`_ project contains bindings for more than 30 libraries.
     You can find code generation scripts here: https://python-ogre.svn.sourceforge.net/svnroot/python-ogre/trunk/python-ogre/code_generators/
 
-* `Rising Sun Pictures`_ company is using `Py++`_ to create Python bindings for 
+* `Rising Sun Pictures`_ company is using :doc:`Py++ <pyplusplus>` to create Python bindings for 
   `Apple Shake API`_. `PyShake`_ enables running of Python code from within Shake
   and by exposing the Shake API to Python.
   
@@ -126,7 +126,7 @@ Who is using Py++?
   .. _`Apple Shake API` : http://www.apple.com/shake/
   .. _`PyShake` :  http://open.rsp.com.au/projects/pyshake
 
-* Paviot Thomas, the author of `pythonOCC`_ project, is using `Py++`_ to create 
+* Paviot Thomas, the author of `pythonOCC`_ project, is using :doc:`Py++ <pyplusplus>` to create 
   Python bindings for `OpenCascade`_, a 3D modeling & numerical simulation library.
 
   .. _`pythonOCC` : http://www.minerva-plm.org/pythonOCC/
@@ -146,7 +146,6 @@ Who is using Py++?
 
   You can download the bindings from https://sourceforge.net/project/showfiles.php?group_id=118209 .
 
-.. _`Py++` : ./pyplusplus.html
 .. _`Python Computer Graphics Kit` : http://cgkit.sourceforge.net/
 .. _`TnFOX`: http://www.nedprod.com/TnFOX/
 .. _`Python-OGRE` : http://www.python-ogre.org

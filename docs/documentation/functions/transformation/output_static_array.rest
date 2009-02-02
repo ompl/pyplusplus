@@ -31,7 +31,7 @@ Example
    };
 
 In order to expose ``get_values`` member function we need to create small wrapper.
-The following `Py++`_ code does it for you:
+The following :doc:`Py++ <../../../pyplusplus>` code does it for you:
 
   .. code-block:: python
 
@@ -69,7 +69,6 @@ What you see below is the relevant pieces of generated code:
             .def_readwrite( "z", &ft::vector3::z );
      }
 
-.. _`Py++` : ./../../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

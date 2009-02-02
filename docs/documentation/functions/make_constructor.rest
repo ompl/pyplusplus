@@ -37,7 +37,7 @@ I am going to use the following code to demonstrate the functionality:
 The code is pretty simple - it defines two ``create`` functions, which construct
 new class ``number_t`` instances.
 
-`Py++`_ configuration is pretty simple:
+:doc:`Py++ <../../pyplusplus>` configuration is pretty simple:
 
 .. code-block:: python
 
@@ -70,7 +70,6 @@ The usage code is even more boring:
   print number.x
 
 .. _`make_constructor`: http://www.boost.org/doc/libs/1_35_0/libs/python/doc/v2/make_function.html#make_constructor-spec
-.. _`Py++` : ./../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

@@ -6,13 +6,13 @@ Py++ documentation
 Help needed!
 ------------
 
-`Py++`_ documentation is always under active development. It is not an easy
+:doc:`Py++ <../pyplusplus>` documentation is always under active development. It is not an easy
 task to create and maintain it. I will appreciate **any help**!
 
 How can you help?
 
-* Lets face it: today it is not possible to use `Py++`_ without eventually
-  looking into source code. `Py++`_ uses `epydoc`_ to generate documentation
+* Lets face it: today it is not possible to use :doc:`Py++ <../pyplusplus>` without eventually
+  looking into source code. :doc:`Py++ <../pyplusplus>` uses `epydoc`_ to generate documentation
   from source files. So, if you found some undocumented piece of code and you
   understand what it does, please write documentation string.
 
@@ -48,7 +48,7 @@ Overview
 
 .. _`STL containers` : ./containers.html
 
-* `architecture`_ - describes the architecture behind `Py++`_
+* `architecture`_ - describes the architecture behind :doc:`Py++ <../pyplusplus>`
 
 .. _`architecture` : ./architecture.html
 
@@ -63,7 +63,7 @@ Overview
 .. _`functions & operators` : ./functions/functions.html
 
 * `how to ... ?`_ - contains answers for different FAQs and my suggestions about
-  better `Py++`_ usage.
+  better :doc:`Py++ <../pyplusplus>` usage.
 
 .. _`how to ... ?` : ./how_to/how_to.html
 
@@ -76,24 +76,24 @@ Overview
 
 .. _`multi-module development`: ./multi_module_development.html
 
-* `properties`_ - describes how to create class properties using `Py++`_ and
+* `properties`_ - describes how to create class properties using :doc:`Py++ <../pyplusplus>` and
   built-in algorithm for automatic properties recognition
 
 .. _`properties`: ./properties.html
 
-* `splitting generated code to files`_ - `Py++`_ provides 4 different strategies
+* `splitting generated code to files`_ - :doc:`Py++ <../pyplusplus>` provides 4 different strategies
    for splitting the generated code into files. Take a look on this document,
    it will save you the time.
 
 .. _`splitting generated code to files` : ./split_module.html
 
 * `tutorials`_ - don't know where to start? Start here. Small and simple example
-  will help you to start with `Py++`_. If you want to evaluate `Py++`_ you will
+  will help you to start with :doc:`Py++ <../pyplusplus>`. If you want to evaluate :doc:`Py++ <../pyplusplus>` you will
   find here small and handy GUI program.
 
 .. _`tutorials` : ./tutorials/tutorials.html
 
-* `warnings`_ - `Py++`_ could be used as some kind of validator. It checks the
+* `warnings`_ - :doc:`Py++ <../pyplusplus>` could be used as some kind of validator. It checks the
   exposed declarations and reports the potential errors. Thus you are able to
   create high quality Python bindings from the beginning. This document also
   describes how to suppress the errors\\warnings.
@@ -102,7 +102,6 @@ Overview
 
 
 .. _`epydoc` : http://epydoc.sourceforge.net/
-.. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

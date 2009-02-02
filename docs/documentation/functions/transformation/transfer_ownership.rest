@@ -32,7 +32,7 @@ Example
 
 Lets say that you need to expose "do_smth" function. According to the FAQ, you
 have to create small wrapper, which will take ``std::auto_ptr`` as an argument.
-The following `Py++`_ code does it for you:
+The following :doc:`Py++ <../../../pyplusplus>` code does it for you:
 
   .. code-block:: python
 
@@ -62,7 +62,6 @@ What you see below is the relevant pieces of generated code:
          bp::def( "do_smth", &do_smth_4cf7cde5fca92efcdb8519f8c1a4bccd, ( bp::arg("r") ) );
      }
 
-.. _`Py++` : ./../../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

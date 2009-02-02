@@ -10,7 +10,7 @@ Introduction
 In this document, I am going to show you a complete example how to get access
 to the data, stored in the variable.
 
-`Py++`_ will not expose a union - it is impossible using `Boost.Python`_,
+:doc:`Py++ <../../pyplusplus>` will not expose a union - it is impossible using `Boost.Python`_,
 instead it will expose the address of the variable and the rest is done from the
 `Python`_ using `ctypes`_ package.
 
@@ -30,7 +30,7 @@ For this example I am going to use the following code:
         actual_data_t data;
     };
 
-As in many other cases, `Py++`_ does the job automatically:
+As in many other cases, :doc:`Py++ <../../pyplusplus>` does the job automatically:
 
   .. code-block:: python
 
@@ -65,7 +65,6 @@ checks this functionality.
 
 .. _`ctypes` : http://docs.python.org/lib/module-ctypes.html
 .. _`from_address` : http://docs.python.org/lib/ctypes-data-types.html
-.. _`Py++` : ./../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

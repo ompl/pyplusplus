@@ -164,7 +164,7 @@ I think, now you are ready to see the whole solution:
 Py++ integration
 ~~~~~~~~~~~~~~~~
 
-The `Py++`_ code is not that different from what you already know:
+The :doc:`Py++ <../../../pyplusplus>` code is not that different from what you already know:
 
 .. code-block:: python
 
@@ -192,12 +192,12 @@ The `Py++`_ code is not that different from what you already know:
 
 call_policies.return_range arguments:
 
-1. A reference to function. `Py++`_ will extract by itself the type of the array
+1. A reference to function. :doc:`Py++ <../../../pyplusplus>` will extract by itself the type of the array
    element.
 
 2. A name of "get size" class.
 
-3. A call policies for "__getitem__" function. `Py++`_ will analyze the array
+3. A call policies for "__getitem__" function. :doc:`Py++ <../../../pyplusplus>` will analyze the array
    element type. If the type is mapped to immutable type, than ``default_call_policies``
    is used, otherwise you have to specify call policies.
 
@@ -215,7 +215,7 @@ Python usage code:
 Dependencies
 ~~~~~~~~~~~~
 
-The new call policy depends on `new indexing suite`_ and `Py++`_ :-). But if you
+The new call policy depends on `new indexing suite`_ and :doc:`Py++ <../../../pyplusplus>` :-). But if you
 want you can extract the relevant piece of code from `this file`_.
 
 .. _`new indexing suite` : ./../../containers.html
@@ -224,7 +224,6 @@ want you can extract the relevant piece of code from `this file`_.
 .. _`ResultConverterGenerator` : http://boost.org/libs/python/doc/v2/ResultConverter.html#ResultConverterGenerator-concept
 .. _`CallPolicies` : http://www.boost.org/libs/python/doc/v2/CallPolicies.html#CallPolicies-concept
 
-.. _`Py++` : ./../../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

@@ -30,6 +30,5 @@ Download
 .. _`smart_ptrs.zip` : ./smart_ptrs.zip
 
 
-.. _`Py++` : ./../pyplusplus.html
 .. _`SourceForge`: http://sourceforge.net/index.php
 

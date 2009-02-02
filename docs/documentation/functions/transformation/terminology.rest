@@ -4,7 +4,7 @@ Terminology
 
 **Function transformation**
 
-  `Py++`_ sub-system\\framework, which allows you to create function wrappers
+  :doc:`Py++ <../../../pyplusplus>` sub-system\\framework, which allows you to create function wrappers
   and to keep smile.
   
   The operation of changing one function into another in accordance with some 

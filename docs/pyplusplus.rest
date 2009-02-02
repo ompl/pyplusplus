@@ -8,7 +8,7 @@ What is Py++?
 Definition:
   .. include:: ./definition.irest
 
-`Py++`_ uses few different programming paradigms to help you to expose C++
+`Py++` uses few different programming paradigms to help you to expose C++
 declarations to Python. This code generator will not stand on your way. It will
 guide you through the whole process. It will raise warnings in the case you are
 doing something wrong with a link to the explanation. And the most important it
@@ -124,18 +124,18 @@ Py++ implements both strategies.
 Features list
 -------------
 
-* `Py++`_ supports almost all features found in `Boost.Python`_ library
+* `Py++` supports almost all features found in `Boost.Python`_ library
 
-* Using `Py++`_ you can develop few extension modules simultaneously, especially
+* Using `Py++` you can develop few extension modules simultaneously, especially
   when they share the code.
 
-* `Py++`_ generates code, which will help you:
+* `Py++` generates code, which will help you:
 
    * to understand compiler generated error messages
 
    * to minimize project built time
 
-* `Py++`_ has few modes of writing code into files:
+* `Py++` has few modes of writing code into files:
 
   * single file
 
@@ -150,13 +150,13 @@ Features list
 
 * Your license is written at the top of every generated file
 
-* `Py++`_ will check the "completeness" of the bindings. It will check for you
+* `Py++` will check the "completeness" of the bindings. It will check for you
   that the exposed declarations don't have references to unexposed ones.
 
-* `Py++`_ provides enough functionality to extract source code documentation
+* `Py++` provides enough functionality to extract source code documentation
   and write it as Python documentation string
 
-* `Py++`_ provides simple and powerful framework to create a wrapper for
+* `Py++` provides simple and powerful framework to create a wrapper for
   functions, which could not be exposed as is to `Python`_.
 
 * ...
@@ -185,7 +185,6 @@ Py++ documentation contents
    troubleshooting_guide/lessons_learned.rest
 
 
-.. _`Py++` : ./pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

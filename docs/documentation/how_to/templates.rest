@@ -97,7 +97,7 @@ Functions templated on return type
 But, in this case there is a catch: the name of both functions is "**get_value**".
 The only difference is "return type".
 
-In this situation, `Py++`_ will generate code that contains errors. If your are
+In this situation, :doc:`Py++ <../../pyplusplus>` will generate code that contains errors. If your are
 lucky, it depends on the compiler you use, the generated code will not compile.
 Otherwise, you will discover the errors while testing the bindings.
 
@@ -137,7 +137,7 @@ The perfect one:
 Work-around
 -----------
 
-`Py++`_ contains a work-around to the problem:
+:doc:`Py++ <../../pyplusplus>` contains a work-around to the problem:
 
 .. code-block:: python
 
@@ -158,10 +158,10 @@ Before you read the rest of the solution, you should understand what is
 
 The solution is pretty simple. `GCC-XML`_ reports mangled and demangled function
 names. The demangled function name contains "real" function name:
-``get_value< used type >``. You only have to instruct `Py++`_ to use it.
+``get_value< used type >``. You only have to instruct :doc:`Py++ <../../pyplusplus>` to use it.
 
-`Py++`_ does not use by default demangled function name for mainly one reason.
-Demangled function name is a string that contains a lot of information. `Py++`_
+:doc:`Py++ <../../pyplusplus>` does not use by default demangled function name for mainly one reason.
+Demangled function name is a string that contains a lot of information. :doc:`Py++ <../../pyplusplus>`
 implements a parser, which extracts the only relevant one. The parser
 implementation is a little bit complex and was not heavily tested. By "heavily" I
 mean that I tested it on a lot of crazy use cases and on a real project, but
@@ -170,7 +170,7 @@ you. The problem, we deal with, is rare, so by default "demangled_name"
 feature is turned off.
 
 By the way, almost the same problem exists for template classes. But, in the
-classes use case `Py++`_ uses demangled name by default.
+classes use case :doc:`Py++ <../../pyplusplus>` uses demangled name by default.
 
 -----------
 Help wanted
@@ -179,14 +179,13 @@ I understand that the provided solutions are not perfect and that something
 better and simpler should be done. Unfortunatelly the priority of this task is
 low.
 
-Allen Bierbaum has few suggestion that could improve `Py++`_. He created a
+Allen Bierbaum has few suggestion that could improve :doc:`Py++ <../../pyplusplus>`. He created a
 `wiki page`_, that discuss possible solutions. Your contribution is welcome too!
 
 .. _`wiki page` : https://realityforge.vrsource.org/view/PyppApi/TemplateSupport
 
 
 
-.. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

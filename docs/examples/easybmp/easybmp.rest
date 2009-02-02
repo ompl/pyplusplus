@@ -13,8 +13,8 @@ What is EasyBMP?
 for easily reading, writing, and modifying Windows bitmap (BMP) image files.
 In this example I am referring to version 0.70.
 
-What is `Py++`_?
-----------------------
+What is Py++?
+-------------
 
 .. include:: ./../../definition.irest
 
@@ -22,10 +22,10 @@ What is `Py++`_?
 Description
 -----------
 
-`Py++`_ has been used to create `Python`_ bindings for `EasyBMP`_
+:doc:`Py++ <../../pyplusplus>` has been used to create `Python`_ bindings for `EasyBMP`_
 library. Before proceeding with this example, I should say, that I did not work
 with `EasyBMP`_ at all. I have seen it's announcement on www.freshmeat.org site
-and decided to test `Py++`_ with "real world" project. It took me 30
+and decided to test :doc:`Py++ <../../pyplusplus>` with "real world" project. It took me 30
 minutes, to create full working python version of this library. These examples
 consist few files and directories:
 
@@ -65,7 +65,6 @@ Download
 
 http://sourceforge.net/project/showfiles.php?group_id=118209.
 
-.. _`Py++` : ./../../pyplusplus.html
 .. _`environment.py`: http://cvs.sourceforge.net/viewcvs.py/pygccxml/source/pyplusplus/examples/py_easybmp/environment.py?view=markup
 .. _`sconstruct`: http://cvs.sourceforge.net/viewcvs.py/pygccxml/source/pyplusplus/examples/py_easybmp/sconstruct?view=markup
 .. _`greyscale.py`: http://cvs.sourceforge.net/viewcvs.py/pygccxml/source/pyplusplus/examples/py_easybmp/grayscale.py?view=markup

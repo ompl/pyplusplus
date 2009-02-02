@@ -16,26 +16,26 @@ document will provide you with formal definition.
 Syntax
 ------
 
-The call policies in `Py++`_ are named exactly as in `Boost.Python`_, only the
+The call policies in :doc:`Py++ <../../../pyplusplus>` are named exactly as in `Boost.Python`_, only the
 syntax is slightly different. For instance, this call policy:
 
 .. code-block:: c++
 
   return_internal_reference< 1, with_custodian_and_ward<1, 2> >()
 
-becomes in `Py++`_
+becomes in :doc:`Py++ <../../../pyplusplus>`
 
 .. code-block:: python
 
   return_internal_reference( 1, with_custodian_and_ward(1, 2) )
 
-`Py++`_ supports all call policies presented in `Boost.Python`_.
+:doc:`Py++ <../../../pyplusplus>` supports all call policies presented in `Boost.Python`_.
 
 -------------
 Usage example
 -------------
 
-Every "callable" object in `Py++`_ has ``call_policies`` property.
+Every "callable" object in :doc:`Py++ <../../../pyplusplus>` has ``call_policies`` property.
 
 C++ code:
 
@@ -70,7 +70,7 @@ Python code:
 Defaults
 --------
 
-`Py++`_ is able to "guess" few call policies, base on analysis of return type
+:doc:`Py++ <../../../pyplusplus>` is able to "guess" few call policies, base on analysis of return type
 and\\or callable name:
 
 * ``default_call_policies``:
@@ -92,7 +92,7 @@ and\\or callable name:
     * return type is ``T*`` and ``T`` is a user defined opaque type
 
       ``class_t`` and ``class_declaration_t`` classes have ``opaque`` property.
-      You have to set it to ``True``, if you want `Py++`_ to create this call
+      You have to set it to ``True``, if you want :doc:`Py++ <../../../pyplusplus>` to create this call
       policy automatically for all functions, that use ``T*`` as return type.
 
   * ``copy_const_reference``
@@ -124,15 +124,15 @@ Missing call policies
 If you don't specify call policy for a function and it needs one, few things will
 happen:
 
-* `Py++`_ prints a warning message
+* :doc:`Py++ <../../../pyplusplus>` prints a warning message
 
-* `Py++`_ generates code with
+* :doc:`Py++ <../../../pyplusplus>` generates code with
 
   .. code-block:: c++
 
     /* undefined call policies */
 
-  comment, instead of call policy. If `Py++`_ was wrong and function doesn't
+  comment, instead of call policy. If :doc:`Py++ <../../../pyplusplus>` was wrong and function doesn't
   need call policy the generate code will compile fine, otherwise you will get a
   compilation error.
 
@@ -146,11 +146,11 @@ Before you read this paragraph consider to read `Boost.Python`_ `return_opaque_p
 ``return_value_policy( return_opaque_pointer )`` is a special policy for `Boost.Python`_.
 In this case, it requires from you to define specialization for the
 ``boost::python::type_id`` function on the type pointed to by returned pointer.
-`Py++`_ will generate the required code.
+:doc:`Py++ <../../../pyplusplus>` will generate the required code.
 
 
 Actually you should define ``boost::python::type_id`` specialization also in case
-a function takes the opaque type as an argument. `Py++`_ can do it for you, all
+a function takes the opaque type as an argument. :doc:`Py++ <../../../pyplusplus>` can do it for you, all
 you need is to mark a declaration as opaque.
 
 Example:
@@ -169,7 +169,7 @@ Example:
       ...
   };
 
-`Py++`_ code:
+:doc:`Py++ <../../../pyplusplus>` code:
 
 .. code-block:: python
 
@@ -183,7 +183,7 @@ Example:
 Py++ defined call policies
 --------------------------
 
-`Py++`_ defines few call policies. I hope you will find them useful. I don't mind
+:doc:`Py++ <../../../pyplusplus>` defines few call policies. I hope you will find them useful. I don't mind
 to contribute them to `Boost.Python`_ library, but I don't have enough free time
 to "boostify" them.
 
@@ -202,7 +202,6 @@ to "boostify" them.
 .. _`ResultConverterGenerator` : http://boost.org/libs/python/doc/v2/ResultConverter.html#ResultConverterGenerator-concept
 .. _`CallPolicies` : http://www.boost.org/libs/python/doc/v2/CallPolicies.html#CallPolicies-concept
 
-.. _`Py++` : ./../../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

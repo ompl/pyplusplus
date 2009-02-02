@@ -38,7 +38,7 @@ Example
       { return "do_smth( int )"; }
   };
 
-`Py++`_ generates code, that register functions in the order they appear in the
+:doc:`Py++ <../../pyplusplus>` generates code, that register functions in the order they appear in the
 source code:
 
 .. code-block:: c++
@@ -103,7 +103,7 @@ a correct functionality:
 
 2. You can reorder the declarations within the source file.
 
-3. You can ask `Py++`_ to generate code, which takes into account the order of
+3. You can ask :doc:`Py++ <../../pyplusplus>` to generate code, which takes into account the order of
    declarations:
 
    .. code-block:: python
@@ -113,7 +113,7 @@ a correct functionality:
      sort_algorithms.USE_CALLDEF_ORGANIZER = True
      # The functionality is available from version 0.8.3
 
-4. The last and the perfect solution. `Py++`_ will let you know, when your code
+4. The last and the perfect solution. :doc:`Py++ <../../pyplusplus>` will let you know, when your code
    has such problem. The functionality is available from version 0.8.3. After
    this you can change the aliases of the functions. The third step is to create
    small "dispatch" function in Python:
@@ -133,7 +133,7 @@ a correct functionality:
    The technique shown here described pretty good in `Boost.Python`_
    `Extending Wrapped Objects in Python tutorials`_ .
 
-   May be in future, `Py++`_ will generate this code for you. Anyway, if you have
+   May be in future, :doc:`Py++ <../../pyplusplus>` will generate this code for you. Anyway, if you have
    a lot of use cases like this consider to generate `Python`_ code and not to
    write it manually.
 
@@ -142,7 +142,6 @@ a correct functionality:
 
 
 
-.. _`Py++` : ./../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

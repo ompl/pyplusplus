@@ -6,9 +6,9 @@ Best practices
 Introduction
 ------------
 
-`Py++`_ has reach interface and a lot of functionality. Sometimes reach
+:doc:`Py++ <../../pyplusplus>` has reach interface and a lot of functionality. Sometimes reach
 interface helps, but sometimes it can confuse. This document will describe how
-effectively to use `Py++`_.
+effectively to use :doc:`Py++ <../../pyplusplus>`.
 
 ------------
 Big projects
@@ -18,7 +18,7 @@ Definition
 ----------
 
 First of all, let me to define "big project". "Big project" is a project with
-few hundred of header files. `Py++`_ was born to create `Python`_ bindings
+few hundred of header files. :doc:`Py++ <../../pyplusplus>` was born to create `Python`_ bindings
 for such projects. If you take a look `here`__ you will find few such projects.
 
 .. __ : ./../../quotes.html
@@ -46,7 +46,7 @@ Tips
 
 * Single header file, will also improve performance compiling the generated bindings.
 
-  When `Py++`_ generated the bindings, you have a lot of .cpp files to
+  When :doc:`Py++ <../../pyplusplus>` generated the bindings, you have a lot of .cpp files to
   compile. The project you are working on is big. I am sure it takes a lot of
   time to compile projects that depend on it. Generated code also depend on it,
   more over this code contains a lot of template instantiations. So it could
@@ -67,12 +67,12 @@ Tips
 
   ``precompiled_header`` argument could be ``None`` or string, that contains
   name of precompiled header file, which will be created in the directory.
-  `Py++`_ will add to it header files from `Boost.Python`_ library and
+  :doc:`Py++ <../../pyplusplus>` will add to it header files from `Boost.Python`_ library and
   your header files.
 
   What is ``huge_classes`` argument for? ``huge_classes`` could be ``None`` or
   list of references to class declarations. It is there to provide a solution to
-  `this error`_. `Py++`_ will automatically split generated code for the
+  `this error`_. :doc:`Py++ <../../pyplusplus>` will automatically split generated code for the
   huge classes to few files:
 
   .. code-block:: python
@@ -139,10 +139,10 @@ Tips
   option using the ``start_with_declarations`` attribute of the
   ``pygccxml.parser.config_t`` object that you are passing to the parser.
 
-* Use `Py++`_ repository of generated files md5 sum.
+* Use :doc:`Py++ <../../pyplusplus>` repository of generated files md5 sum.
 
-  `Py++`_ is able to store md5 sum of generated files in a file. Next time you 
-  will generate code, `Py++`_ will compare generated file content against the sum,
+  :doc:`Py++ <../../pyplusplus>` is able to store md5 sum of generated files in a file. Next time you 
+  will generate code, :doc:`Py++ <../../pyplusplus>` will compare generated file content against the sum,
   instead of loading the content of the previously generated file from the disk 
   and comparing against it. 
     
@@ -153,7 +153,7 @@ Tips
     my_big_class = mb.class_( my_big_class )
     mb.split_module( ..., use_files_sum_repository=True )
 
-  `Py++`_ will generate file named "<your module name>.md5.sum" in the directory
+  :doc:`Py++ <../../pyplusplus>` will generate file named "<your module name>.md5.sum" in the directory
   it will generate all the files.
   
   Enabling this functionality should give you 10-15% of performance boost.
@@ -162,12 +162,11 @@ Tips
   
     If you changed manually some of the files - don't forget to delete the relevant
     line from "md5.sum" file. You can also delete the whole file. If the file is
-    missing, `Py++`_ will use old plain method of comparing content of the files.
+    missing, :doc:`Py++ <../../pyplusplus>` will use old plain method of comparing content of the files.
     It will not re-write "unchanged" files and you will not be forced to recompile 
     the whole project.
 
 
-.. _`Py++` : ./../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

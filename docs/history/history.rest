@@ -52,7 +52,7 @@ Version 1.0
       class B: public A{
       };
 
-   Previous version of `Py++`_ didn't generate wrapper for class ``B``, even
+   Previous version of :doc:`Py++ <../pyplusplus>` didn't generate wrapper for class ``B``, even
    though ``B`` inherits ``A``'s virtual function. Now if you have the following
    Python code:
 
@@ -83,7 +83,7 @@ Version 1.0
           virtual void foo(int& i) {/*do smth else*/}
       };
 
-   The `Py++`_ code:
+   The :doc:`Py++ <../pyplusplus>` code:
 
    .. code-block:: python
 
@@ -137,7 +137,7 @@ Version 1.0
 
    * use ``inout`` transformation - it preserves a function signature
 
-   * `Py++`_ can introduce a configuration, that will preserve the previous behaviour.
+   * :doc:`Py++ <../pyplusplus>` can introduce a configuration, that will preserve the previous behaviour.
      I think this is a wrong way to go and doing the API changes is the 'right'
      longer term solution.
 
@@ -186,10 +186,10 @@ Version 0.9.5
      generated
 
    * STD containers are generated without default arguments. For example instead
-     of ``std::vector< int, std::allocator< int > >``, in many cases `Py++`_ will
+     of ``std::vector< int, std::allocator< int > >``, in many cases :doc:`Py++ <../pyplusplus>` will
      generate ``std::vector< int >``.
 
-5. `create_with_signature`_ algorithm was improved. `Py++`_ will generate correct
+5. `create_with_signature`_ algorithm was improved. :doc:`Py++ <../pyplusplus>` will generate correct
    code in one more use case.
 
 .. _`create_with_signature` : ../documentation/functions/overloading.html
@@ -197,14 +197,14 @@ Version 0.9.5
 6. Added ability to exclude declarations from being exposed, if they will cause
    compilation to fail.
 
-7. Starting from this version, `Py++`_ provides a complete solution for
+7. Starting from this version, :doc:`Py++ <../pyplusplus>` provides a complete solution for
    `multi-module development`_.
 
 .. _`multi-module development` : ../documentation/multi_module_development.html
 
 8. Classes, which expose C arrays will be registered only once.
 
-9. Starting from this version, `Py++`_ supports a code generation with different
+9. Starting from this version, :doc:`Py++ <../pyplusplus>` supports a code generation with different
    encodings.
 
 10. There is a new strategy to split code into files. It is IDE friendly. Be sure
@@ -245,7 +245,7 @@ Version 0.9.0
 .. _`custom_call_policies` : ../documentation/functions/call_policies/custom_call_policies.html
 
 4. Added an initial support for multi-module development. Now you can mark your
-   declarations as ``already_exposed`` and `Py++`_ will do the rest. For more
+   declarations as ``already_exposed`` and :doc:`Py++ <../pyplusplus>` will do the rest. For more
    information read `multi-module development guide`_.
 
 .. _`multi-module development guide` : ../documentation/multi_module_development.html
@@ -257,7 +257,7 @@ Version 0.9.0
 
 .. _`input_c_buffer` : ../documentation/functions/transformation/input_c_buffer.html
 
-6. Added ability to control generated "include" directives. Now you can ask `Py++`_
+6. Added ability to control generated "include" directives. Now you can ask :doc:`Py++ <../pyplusplus>`
    to include a header file, when it generates code for some declaration. For more
    information refers to `inserting code guide`_.
 
@@ -278,7 +278,7 @@ Version 0.9.0
 
 .. _`member function API documentation` : ../documentation/apidocs/pyplusplus.decl_wrappers.calldef_wrapper.member_function_t-class.html
 
-10. `Py++`_ will generate documentation for automatically constructed properties.
+10. :doc:`Py++ <../pyplusplus>` will generate documentation for automatically constructed properties.
     For more information refer to `properties guide`_
 
 .. _`properties guide`: ../documentation/properties.html#documentation
@@ -341,11 +341,11 @@ Version 0.8.2
 
 3. Convenience API for registering exception translator was introduced.
 
-4. `Py++`_ can generate code that uses ``BOOST_PYTHON_FUNCTION_OVERLOADS`` and
+4. :doc:`Py++ <../pyplusplus>` can generate code that uses ``BOOST_PYTHON_FUNCTION_OVERLOADS`` and
    ``BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS`` macros.
 
 5. Treatment to previously generated and no more in-use files was added. By
-   default `Py++`_ will delete these files, but of course you can redefine this
+   default :doc:`Py++ <../pyplusplus>` will delete these files, but of course you can redefine this
    behaviour.
 
 6. Generated code changes:
@@ -353,14 +353,14 @@ Version 0.8.2
    * ``default_call_policies`` should not be generated any more.
 
    * For functions that have ``return_value_policy< return_opaque_pointer >``
-     call policy, `Py++`_ will automatically generate ``BOOST_PYTHON_OPAQUE_SPECIALIZED_TYPE_ID``
+     call policy, :doc:`Py++ <../pyplusplus>` will automatically generate ``BOOST_PYTHON_OPAQUE_SPECIALIZED_TYPE_ID``
      macro. Thank you very much for Gottfried Ganssauge for this idea.
 
-7. Support for Boost.Python properties was introduced. `Py++`_ implements small
+7. Support for Boost.Python properties was introduced. :doc:`Py++ <../pyplusplus>` implements small
    algorithm, that will automatically discover properties, base on naming conventions.
 
 8. ``decl_wrappers.class_t`` has new function: ``is_wrapper_needed``. This
-   function explains why `Py++`_ creates class wrapper for exposed class.
+   function explains why :doc:`Py++ <../pyplusplus>` creates class wrapper for exposed class.
 
 9. Python type traits module was introduce. Today it contains only single function:
 
@@ -373,11 +373,11 @@ Version 0.8.1
 -------------
 
 
-1. Georgiy Dernovoy contributed a patch, which allows `Py++`_ GUI to
+1. Georgiy Dernovoy contributed a patch, which allows :doc:`Py++ <../pyplusplus>` GUI to
    save\\load last used header file.
 
 
-2. `Py++`_ improved a lot functionality related to providing feedback to user:
+2. :doc:`Py++ <../pyplusplus>` improved a lot functionality related to providing feedback to user:
 
    * every package has its own logger
    * only important user messages are written to ``stdout``
@@ -392,10 +392,10 @@ Version 0.8.1
 5. Generated code for member and free functions was changed. This changed was
    introduced to fix compilation errors on msvc 7.1 compiler.
 
-6. `Py++`_ generates "stable" code. If header files were not changed,
-   `Py++`_ will not change any file.
+6. :doc:`Py++ <../pyplusplus>` generates "stable" code. If header files were not changed,
+   :doc:`Py++ <../pyplusplus>` will not change any file.
 
-7. Support for huge classes was added. `Py++`_ is able to split registration
+7. Support for huge classes was added. :doc:`Py++ <../pyplusplus>` is able to split registration
    code for the class to multiple cpp files.
 
 8. User code could be added almost anywhere, without use of low level API.
@@ -426,19 +426,19 @@ There were few reasons to this:
 Version 0.8.0
 -------------
 
-1. `Py++`_ "user guide" functionality has been improved. Now `Py++`_
+1. :doc:`Py++ <../pyplusplus>` "user guide" functionality has been improved. Now :doc:`Py++ <../pyplusplus>`
    can answer few questions:
 
    * why this declaration could not be exported
 
    * why this function could not be overridden from Python
 
-2. `Py++`_ can suggest an alias for exported classes.
+2. :doc:`Py++ <../pyplusplus>` can suggest an alias for exported classes.
 
 3. Small redesign has been done - now it is much easier to understand and
    maintain code creators, which creates code for C++ functions.
 
-4. Exception specification is taken into account, when `Py++`_ exports
+4. Exception specification is taken into account, when :doc:`Py++ <../pyplusplus>` exports
    member functions.
 
 5. Member variables, that are pointers exported correctly.
@@ -454,7 +454,7 @@ Version 0.7.0
 Many thanks to *Matthias Baas* and *Allen Bierbaum*! They contributed so much to
 Py++, especially Matthias:
 
-    * New high-level API: `Py++`_ has simple and powerful API
+    * New high-level API: :doc:`Py++ <../pyplusplus>` has simple and powerful API
 
     * Documentation: Matthias and Allen added a lot of documentation strings
 
@@ -465,7 +465,7 @@ Py++, especially Matthias:
     * It is possible now to see XML generated by GCC-XML.
 
     * It is possible to use GUI as wizard. It will help you to start  with
-      `Py++`_, by generating `Py++`_ code.
+      :doc:`Py++ <../pyplusplus>`, by generating :doc:`Py++ <../pyplusplus>` code.
 
 2. **Attention - non backward compatible change**.
 
@@ -508,7 +508,7 @@ Py++, especially Matthias:
 7. Boost.Python ``optional`` is now supported and used when a constructor has a
    a default argument.
 
-8. `Py++`_ now generates correct code for hierarchy of abstract classes:
+8. :doc:`Py++ <../pyplusplus>` now generates correct code for hierarchy of abstract classes:
 
    .. code-block:: c++
 
@@ -574,6 +574,5 @@ Version 0.5.1
 3. Few bug fixes
 
 
-.. _`Py++` : ./../pyplusplus.html
 .. _`SourceForge`: http://sourceforge.net/index.php
 

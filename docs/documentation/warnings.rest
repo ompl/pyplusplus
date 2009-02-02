@@ -6,7 +6,7 @@ Py++ warnings
 Introduction
 ------------
 
-`Py++`_ has been created with few goals in mind:
+:doc:`Py++ <../pyplusplus>` has been created with few goals in mind:
 
 * to allow users create `Python`_ bindings for large projects using the `Boost.Python`_
   library
@@ -16,8 +16,8 @@ Introduction
 * to serve as a user's guide for `Boost.Python`_ library
 
 
-Those goals all have something in common. In order to achieve them, `Py++`_ must
-give useful feedback to the user. Because `Py++`_ understands the declarations
+Those goals all have something in common. In order to achieve them, :doc:`Py++ <../pyplusplus>` must
+give useful feedback to the user. Because :doc:`Py++ <../pyplusplus>` understands the declarations
 it exports, it can scan declarations for potential problems, report them and in
 some cases provide hints about how to resolve the problem. Few examples:
 
@@ -57,11 +57,11 @@ some cases provide hints about how to resolve the problem. Few examples:
 
      void do_smth( X x );
 
-  If you expose ``do_smth`` function and don't expose struct ``X``, `Py++`_
+  If you expose ``do_smth`` function and don't expose struct ``X``, :doc:`Py++ <../pyplusplus>`
   will tell you that struct ``X`` is used in exported declaration, but was not
   exposed.
 
-For these problems and many other `Py++`_ gives a nice explanation
+For these problems and many other :doc:`Py++ <../pyplusplus>` gives a nice explanation
 and sometimes a link to the relevant information on the Internet.
 
 I don't know what about you, but I found these messages pretty useful. They allow
@@ -72,11 +72,11 @@ How it works?
 -------------
 
 In previous paragraph, I described some pretty useful functionality but what should you
-do to enable it? - *Nothing!* By default, `Py++`_ only prints the
+do to enable it? - *Nothing!* By default, :doc:`Py++ <../pyplusplus>` only prints the
 important messages to ``stdout``. More over, it prints them only for to be exposed 
 declarations.
 
-`Py++`_ uses the python  `logging`_ package to write all user messages. By
+:doc:`Py++ <../pyplusplus>` uses the python  `logging`_ package to write all user messages. By
 default, messages with ``DEBUG`` level will be skipped, all other messages will
 be reported.
 
@@ -91,7 +91,7 @@ Example of the warning:
   > warning W1020: Py++ will generate class wrapper - hand written code
   > should be added to the wrapper class
 
-Almost every warning reported by `Py++`_ consists from 3 parts:
+Almost every warning reported by :doc:`Py++ <../pyplusplus>` consists from 3 parts:
 
 * description of the declaration it refers to: "containers::item_t [struct]"
 
@@ -149,12 +149,12 @@ and want to change it, right?
 
 
 2. But what if you want to disable some messages and leave others? This is also possible.
-   `Py++`_ and :doc:`pygccxml <../../pygccxml/pygccxml>` do not use a single logger. Almost every internal
+   :doc:`Py++ <../pyplusplus>` and :doc:`pygccxml <../../pygccxml/pygccxml>` do not use a single logger. Almost every internal
    package has its own logger. So you can enable one logger and disable another one.
 
    The :doc:`pygccxml <../../pygccxml/pygccxml>` package defines all loggers in the ``pygccxml.utils`` package.
 
-   The `Py++`_ package defines all loggers in the ``pyplusplus._logging_`` package.
+   The :doc:`Py++ <../pyplusplus>` package defines all loggers in the ``pyplusplus._logging_`` package.
 
    Both packages define a ``loggers`` class. Those classes keep references to
    different loggers. The ``loggers`` classes look very similar to the following class:
@@ -178,7 +178,7 @@ and want to change it, right?
    You can use these references in the ``logging`` package to complete
    your task of adjusting individual loggers.
 
-   One more thing, `Py++`_ automatically splits long message, where line
+   One more thing, :doc:`Py++ <../pyplusplus>` automatically splits long message, where line
    length defaults to 70 characters. Thus it is very convenient to read them on your screen.
    If you want to use different tools to monitor those messages, consider to use
    standard `Formatter`_ class, instead of ``multi_line_formatter_t`` one.
@@ -199,7 +199,7 @@ Every declaration class has the following methods:
 
 * ``readme( self )``
 
-  This method gives you access to all tips/hints/warnings `Py++`_ has about
+  This method gives you access to all tips/hints/warnings :doc:`Py++ <../pyplusplus>` has about
   the declaration. This methods returns a list of strings. If the declaration is
   not exportable, than first message within the list is an explanation, why it
   is not exportable.
@@ -207,7 +207,6 @@ Every declaration class has the following methods:
 
 .. _`Formatter` : http://docs.python.org/lib/node422.html
 .. _`logging` : http://docs.python.org/lib/module-logging.html
-.. _`Py++` : ./../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

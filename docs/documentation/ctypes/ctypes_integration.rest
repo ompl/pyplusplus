@@ -24,7 +24,7 @@ The idea
 --------
 
 The idea behind "ctypes integration" functionality is really simple: you
-configure `Py++`_ to expose address of the variable\\return value, and than you
+configure :doc:`Py++ <../../pyplusplus>` to expose address of the variable\\return value, and than you
 you use `ctypes`_ `from_address`_ functionality to access and modify the data.
 
 Obviously, this approach has pros and cons:
@@ -57,7 +57,7 @@ In my opinion, the better way to go is to "mix":
 Implemented functionality
 -------------------------
 
-`Py++`_ is able to
+:doc:`Py++ <../../pyplusplus>` is able to
 
 * expose global and member variable address
 
@@ -93,7 +93,6 @@ the following features:
 .. _`new call policy was created` : ./../../documentation/functions/call_policies/return_addressof.html
 .. _`ctypes` : http://docs.python.org/lib/module-ctypes.html
 .. _`from_address` : http://docs.python.org/lib/ctypes-data-types.html
-.. _`Py++` : ./../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

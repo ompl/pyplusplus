@@ -32,7 +32,7 @@ Example
          , bpl::return_value_policy< pyplusplus::call_policies::return_addressof<> >() );
   }
 
-The `Py++`_ code is not that different from what you already know:
+The :doc:`Py++ <../../../pyplusplus>` code is not that different from what you already know:
 
 .. code-block:: python
 
@@ -56,7 +56,6 @@ Python code:
 
 .. _`ResultConverterGenerator` : http://boost.org/libs/python/doc/v2/ResultConverter.html#ResultConverterGenerator-concept
 
-.. _`Py++` : ./../../../pyplusplus.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
