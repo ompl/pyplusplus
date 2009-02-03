@@ -6,7 +6,7 @@ TODO
 Description
 -----------
 
-This page is an official `Py++`_ "TODO" page.
+This page is an official `Py++` "TODO" page.
 
 For small features, the description of the feature and it's implementation will
 be written here. Big features will get their own page.
