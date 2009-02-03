@@ -30,10 +30,8 @@ created Python bindings for few libraries:
 
 This is not "just another example". I went father and created new package:
 `pyboost`_. This is fully working Python package, with almost all unit test from
-the libraries ported to Python. For more information please read `pyboost`_
+the libraries ported to Python. For more information please read :doc:`pyboost <boost/boost>`
 package documentation.
-
-.. _`pyboost` : ./boost/boost.html
 
 
 .. toctree::

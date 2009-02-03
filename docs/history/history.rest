@@ -150,13 +150,9 @@ Version 1.0
    for reporting them.
 
 3. New and highly experimental feature was introduced -
-   `Boost.Python and ctypes integration`_.
+   :doc:`Boost.Python and ctypes integration <../documentation/ctypes/ctypes_integration>`.
 
-.. _`Boost.Python and ctypes integration` : ../documentation/ctypes/ctypes_integration.html
-
-4. Support for `boost::python::make_constructor`_ functionality was added.
-
-.. _`boost::python::make_constructor` : ../documentation/functions/make_constructor.html
+4. Support for :doc:`boost::python::make_constructor <../documentation/functions/make_constructor>` functionality was added.
 
 5. Support for unions and unnamed classes was added.
 
@@ -189,18 +185,14 @@ Version 0.9.5
      of ``std::vector< int, std::allocator< int > >``, in many cases :doc:`Py++ <../pyplusplus>` will
      generate ``std::vector< int >``.
 
-5. `create_with_signature`_ algorithm was improved. :doc:`Py++ <../pyplusplus>` will generate correct
-   code in one more use case.
-
-.. _`create_with_signature` : ../documentation/functions/overloading.html
+5. :doc:`create_with_signature <../documentation/functions/overloading>` algorithm was improved. 
+   :doc:`Py++ <../pyplusplus>` will generate correct code in one more use case.
 
 6. Added ability to exclude declarations from being exposed, if they will cause
    compilation to fail.
 
 7. Starting from this version, :doc:`Py++ <../pyplusplus>` provides a complete solution for
-   `multi-module development`_.
-
-.. _`multi-module development` : ../documentation/multi_module_development.html
+   :doc:`multi-module development <../documentation/multi_module_development>`.
 
 8. Classes, which expose C arrays will be registered only once.
 
@@ -208,9 +200,7 @@ Version 0.9.5
    encodings.
 
 10. There is a new strategy to split code into files. It is IDE friendly. Be sure
-    to read `the updated documentation`_.
-
-.. _`the updated documentation` : ../documentation/split_module.html
+    to read :doc:`the updated documentation <../documentation/split_module>`.
 
 -------------
 Version 0.9.0
@@ -222,15 +212,11 @@ Version 0.9.0
      an empty throw was fixed. Now the exception specification is generated properly.
      Many thanks to Martin Preisler for reporting the bug.
 
-.. line-separator
-
 2. Added exposing of copy constructor, ``operator=`` and ``operator<<``.
 
    * ``operator=`` is exposed under "assign" name
 
    * ``operator<<`` is exposed under "__str__" name
-
-.. line-separator
 
 3. Added new call policies:
 

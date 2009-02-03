@@ -19,9 +19,7 @@ Definition
 
 First of all, let me to define "big project". "Big project" is a project with
 few hundred of header files. :doc:`Py++ <../../pyplusplus>` was born to create `Python`_ bindings
-for such projects. If you take a look `here`__ you will find few such projects.
-
-.. __ : ./../../quotes.html
+for such projects. If you take a look :doc:`here <../../quotes>` you will find few such projects.
 
 Tips
 ----
@@ -35,7 +33,8 @@ Tips
   `GCC-XML`_ processing time from multiple hours with gigabytes of caches to a
   couple minutes with a reasonable cache size.
 
-  You can read more about different caches supported by :doc:`pygccxml <../../../pygccxml/pygccxml>` `here`__.
+  You can read more about different caches supported by :doc:`pygccxml <../../../pygccxml/pygccxml>` 
+  :doc:`here <../../../pygccxml/design>`.
   ``module_builder_t.__init__`` method takes reference to an instance of cache
   class or ``None``:
 
@@ -107,7 +106,6 @@ Tips
       mb = module_builder( [ os.path.abspath('date_time/date_time.hpp') ], ... ) 
 
 .. _`this error` : http://boost.org/libs/python/doc/v2/faq.html#c1204
-.. __ : ./../../../pygccxml/design.html
 
 * Keep the declaration tree small.
 

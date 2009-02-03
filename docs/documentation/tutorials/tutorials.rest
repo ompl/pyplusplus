@@ -16,11 +16,11 @@ What is Py++?
 -------------------
 Graphical interface
 -------------------
-:doc:`Py++ <../../pyplusplus>` includes a `graphical interface`_. `Graphical interface`_ is invoked
+:doc:`Py++ <../../pyplusplus>` includes a :doc:`graphical interface <pyplusplus_gui>`. :doc:`Graphical interface <pyplusplus_gui>` is invoked
 with the ``pyplusplus_gui`` command, or with ``pyplusplus_gui.pyw`` from the
 ``scripts`` subdirectory, of the `Python`_ installation directory.
 
-My advise to you - start with `graphical interface`_, because:
+My advise to you - start with :doc:`graphical interface <pyplusplus_gui>`, because:
 
   * you don't have to learn new API
 
@@ -34,17 +34,12 @@ My advise to you - start with `graphical interface`_, because:
 
   * it is able to generate :doc:`Py++ <../../pyplusplus>` code for you
 
-.. _`graphical interface` : ./pyplusplus_gui.html
-.. _`Graphical interface` : ./pyplusplus_gui.html
-
 ---------------
 Getting started
 ---------------
 
-I suppose you decided to do some coding with :doc:`Py++ <../../pyplusplus>`. `Module builder`_
-tutorials will help you.
-
-.. _`Module builder` : ./module_builder/module_builder.html
+I suppose you decided to do some coding with :doc:`Py++ <../../pyplusplus>`. 
+:doc:`Module builder <module_builder/module_builder>` tutorials will help you.
 
 --------
 Advanced

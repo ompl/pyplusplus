@@ -38,9 +38,8 @@ It is pretty simple to change the alias of the class, or any other declaration:
   holder.rename( 'IntHolder' )
 
 Another solution to the problem, is to use different strategy to split the generated
-code to files. You can read more about splitting files `here`_.
+code to files. You can read more about splitting files :doc:`here <../split_module>`.
 
-.. _`here` : ./../split_module.html
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

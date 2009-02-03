@@ -216,9 +216,7 @@ things:
          modify\\create `Pyste`_ interface files.
 
       They are solved by :doc:`pygccxml <../../pygccxml/pygccxml>` package. Please take a look on :doc:`pygccxml <../../pygccxml/pygccxml>`
-      `query interface`__ documentation.
-
-.. __ : ./../../pygccxml/query_interface.html
+      :doc:`query interface <../../pygccxml/query_interface>` documentation.
 
 Now about mistakes. There is a gold rule: one class, one responsibility. `Pyste`_
 breaks this rule. One more time *Exporter* class responsibilities:

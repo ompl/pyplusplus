@@ -9,11 +9,9 @@ Introduction
 Boost.Python provides functionality to translate any C++ exception to a Python one.
 :doc:`Py++ <../../pyplusplus>` provides a convenient API to do this.
 
-By the way, be sure to take a look on "`troubleshooting guide - exceptions`_".
+By the way, be sure to take a look on ":doc:`troubleshooting guide - exceptions <../../troubleshooting_guide/exceptions/exceptions>`".
 The guide will introduces a complete solution for handling exceptions within
 Python scripts.
-
-.. _`troubleshooting guide - exceptions` :  ./../../troubleshooting_guide/exceptions/exceptions.html
 
 --------
 Solution

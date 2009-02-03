@@ -15,10 +15,8 @@ If you are using ``split_module``, but still the generated code for some class
 could not be compiled, because of the error, you can ask :doc:`Py++ <../../pyplusplus>` to split the
 code generated for class to be split to few source files.
 
-For more information, considre to read the `splitting generated code to files`_
+For more information, considre to read the :doc:`splitting generated code to files <../split_module>`
 document.
-
-.. _`splitting generated code to files` : ./../split_module.html
 
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
