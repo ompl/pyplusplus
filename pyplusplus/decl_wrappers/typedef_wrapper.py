@@ -9,11 +9,11 @@ from pygccxml import declarations
 import decl_wrapper
 
 class typedef_t(decl_wrapper.decl_wrapper_t, declarations.typedef_t):
-    """defines a set of properties, that will instruct Py++ how to expose the typedef
+    """defines a set of properties, that will instruct `Py++` how to expose the typedef
 
-    Today, Py++ does not exposes typedefs, but this could be changed in future.
+    Today, `Py++` does not exposes typedefs, but this could be changed in future.
     In C++, it is a common practises to give an aliases to the class. May be in
-    future, Py++ will generate code, that will register all those aliases.
+    future, `Py++` will generate code, that will register all those aliases.
     """
 
     def __init__(self, *arguments, **keywords):

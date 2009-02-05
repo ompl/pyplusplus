@@ -3,7 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""Py++ - Boost.Python code generator
+"""`Py++` - Boost.Python code generator
 ========================================
 
 This package (together with the accompanying pygccxml package and
@@ -19,7 +19,7 @@ code befor it is written to disk. As a last step, these source code blocks are
 finally written into one or more C++ source files, which can then be compiled to
 generate the final Python module.
 
-If you are just starting with U{Py++<http://www.language-binding.net>},
+If you are just starting with U{`Py++`<http://www.language-binding.net>},
 then consider to read documentation of L{module_builder} package.
 """
 
@@ -38,14 +38,14 @@ __version__ = '1.0.0'
 
 import pygccxml
 if not hasattr( pygccxml, '__revision__' ) or pygccxml.__revision__ < 1080:
-    msg = 'This revision of Py++ requieres pygccxml revision to be ' \
+    msg = 'This revision of `Py++` requieres pygccxml revision to be ' \
           'greater or equal to %d. ' \
           'Please install right pygccxml version.'          
     raise AssertionError( msg % pygccxml.__revision__ )
 
 #Known issues:
 #3.
-#~ > > 2. An other difference: when Py++ creates bindings for a set of
+#~ > > 2. An other difference: when `Py++` creates bindings for a set of
 #~ > > declarations, it
 #~ > > should (?) see all declarations that are going to be exported:
 #~ > >     reasons:

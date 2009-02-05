@@ -46,12 +46,12 @@ class loggers:
     module_builder = _create_logger_( 'pyplusplus.module_builder' )
     """logger that in use by L{module_builder_t} class.
 
-    Just another logger. It exists mostly for Py++ developers.
+    Just another logger. It exists mostly for `Py++` developers.
     """
     
     #root logger exists for configuration purpose only
     root = logging.getLogger( 'pyplusplus' )
-    """root logger exists for your convinience only"""
+    """root logger exists for your convenience only"""
     
     all = [ root, file_writer, module_builder, declarations ]
     """contains all logger classes, defined by the class"""

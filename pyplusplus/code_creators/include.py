@@ -25,7 +25,7 @@ class include_t(code_creator.code_creator_t):
 
     @property
     def is_system(self):
-        """Return True if header file is system( Boost.Python or Py++ ) header file"""
+        """Return True if header file is system( Boost.Python or `Py++` ) header file"""
         return self._system
 
     def _get_header(self):

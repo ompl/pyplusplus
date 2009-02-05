@@ -52,12 +52,12 @@ class multiple_files_t(writer.writer_t):
 
     def write_file( self, fpath, content ):
         if fpath in self.written_files:
-            msg = ['Py++ is going to write different content to the same file(%s).' % fpath]
+            msg = ['`Py++` is going to write different content to the same file(%s).' % fpath]
             msg.append('The following is a short list of possible explanations for this behaviour:' )
-            msg.append('* Py++ bug, in this case, please report it' )
+            msg.append('* `Py++` bug, in this case, please report it' )
             msg.append('* module_builder_t contains two or more classes with the same alias')
             msg.append('* module_builder_t contains two or more classes with the same wrapper alias')
-            msg.append('Please carefully review Py++ warning messages. It should contain an additional information.')
+            msg.append('Please carefully review `Py++` warning messages. It should contain an additional information.')
             raise RuntimeError( os.linesep.join(msg) )
 
         self.written_files.append( fpath )
@@ -112,14 +112,14 @@ class multiple_files_t(writer.writer_t):
         return "void %s();" % function_name
 
     def create_header( self, file_name, code ):
-        """Return the content of a header file.
+        """
+        return the content of a header file.
 
         :param file_name: A string that uniquely identifies the file name
         :type file_name: str
         :param function_name: The name of the register_xyz() function
         :type function_name: str
-        @returns: The content for a header file
-        @rtype: str
+        :rtype: str
         """
         tmpl = os.linesep.join([
                     "#ifndef %(file_name)s_hpp__pyplusplus_wrapper"
@@ -159,7 +159,7 @@ class multiple_files_t(writer.writer_t):
                 return None
             value_class = class_traits.get_declaration( element_type )
             if value_class.less_than_comparable and value_class.equality_comparable:
-                return None #Py++ doesn't create value traits for class that has
+                return None #`Py++` doesn't create value traits for class that has
                             # = and < operators available
             return self.create_value_traits_header_name( value_class )
         except RuntimeError, error:
@@ -216,7 +216,8 @@ class multiple_files_t(writer.writer_t):
             return os.linesep.join( map( lambda creator: creator.create(), ns_creators ) )
 
     def create_source( self, file_name, function_name, registration_creators ):
-        """Return the content of a cpp file.
+        """
+        return the content of a cpp file.
 
         :param file_name: The base name of the corresponding include file (without extension)
         :type file_name: str
@@ -224,8 +225,7 @@ class multiple_files_t(writer.writer_t):
         :type function_name: str
         :param creators: The code creators that create the register_xyz() function
         :type creators: list of code_creator_t
-        @returns: The content for a cpp file
-        @rtype: str
+        :rtype: str
         """
         declaration_creators = []
         for rc in registration_creators:

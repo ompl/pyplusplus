@@ -11,7 +11,7 @@ from pyplusplus import messages
 class scopedef_t(decl_wrapper.decl_wrapper_t):
     """base class for L{decl_wrappers.class_t} and L{decl_wrappers.namespace_t} classes
 
-    It provides convinience functionality: include\\exclude all internal declarations
+    It provides convenience functionality: include\\exclude all internal declarations
     (not) to be exported.
     """
 

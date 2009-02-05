@@ -9,9 +9,9 @@ import scopedef_wrapper
 from pygccxml import declarations
 
 class namespace_t(scopedef_wrapper.scopedef_t, declarations.namespace_t):
-    """defines a set of properties, that will instruct Py++ how to expose the namespace
+    """defines a set of properties, that will instruct `Py++` how to expose the namespace
 
-    Today, Py++ does not exposes namespaces, but this could be changed in future.
+    Today, `Py++` does not exposes namespaces, but this could be changed in future.
     The future direction I see here, is to expose every namespace as sub-module
     of the main one.
     """

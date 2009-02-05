@@ -77,7 +77,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
     def _set_create_with_signature(self, create_with_signature):
         self._create_with_signature = create_with_signature
     create_with_signature = property( _get_create_with_signature, _set_create_with_signature
-                                      , doc="boolean, if True Py++ will generate next code: def( ..., function type( function ref )"\
+                                      , doc="boolean, if True `Py++` will generate next code: def( ..., function type( function ref )"\
                                          +"Thus, the generated code is safe, when a user creates function overloading." \
                                          +"Default value is computed, based on information from the declarations tree" )
 
@@ -86,7 +86,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
     def _set_use_default_arguments(self, use_default_arguments):
         self._use_default_arguments = use_default_arguments
     use_default_arguments = property( _get_use_default_arguments, _set_use_default_arguments
-                                      , doc="boolean, if True Py++ will generate code that will set default arguments" \
+                                      , doc="boolean, if True `Py++` will generate code that will set default arguments" \
                                            +"Default value is True.")
 
     def has_wrapper( self ):
@@ -132,7 +132,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         """mark this function as non-overridable
 
         Not all fucntions could be overrided from Python, for example virtual function
-        that returns non const reference to a member variable. Py++ allows you to
+        that returns non const reference to a member variable. `Py++` allows you to
         mark these functions and provide and explanation to the user.
         """
         self.overridable = False
@@ -142,7 +142,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
     def transformations(self):
         """return list of function transformations that should be applied on the function"""
         if None is self._transformations:
-            #TODO: for trivial cases get_size( int&, int& ) Py++ should guess
+            #TODO: for trivial cases get_size( int&, int& ) `Py++` should guess
             #function transformers
             self._transformations = []
         return self._transformations
@@ -239,7 +239,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         return msgs
 
 class member_function_t( declarations.member_function_t, calldef_t ):
-    """defines a set of properties, that will instruct Py++ how to expose the member function"""
+    """defines a set of properties, that will instruct `Py++` how to expose the member function"""
     def __init__(self, *arguments, **keywords):
         declarations.member_function_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
@@ -287,7 +287,7 @@ class member_function_t( declarations.member_function_t, calldef_t ):
         return msgs
 
 class constructor_t( declarations.constructor_t, calldef_t ):
-    """defines a set of properties, that will instruct Py++ how to expose the constructor"""
+    """defines a set of properties, that will instruct `Py++` how to expose the constructor"""
     def __init__(self, *arguments, **keywords):
         declarations.constructor_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
@@ -332,7 +332,7 @@ class constructor_t( declarations.constructor_t, calldef_t ):
     def _set_allow_implicit_conversion(self, allow_implicit_conversion):
         self._allow_implicit_conversion = allow_implicit_conversion
     allow_implicit_conversion = property( _get_allow_implicit_conversion, _set_allow_implicit_conversion
-                     , doc="boolean, indicates whether Py++ should generate implicitly_convertible code or not" \
+                     , doc="boolean, indicates whether `Py++` should generate implicitly_convertible code or not" \
                            "Default value is calculated from the constructor type." )
 
 class destructor_t( declarations.destructor_t, calldef_t ):
@@ -347,7 +347,7 @@ class destructor_t( declarations.destructor_t, calldef_t ):
         calldef_t.__init__( self )
 
 class operators_helper:
-    """helps Py++ to deal with C++ operators"""
+    """helps `Py++` to deal with C++ operators"""
     inplace = [ '+=', '-=', '*=', '/=',  '%=', '>>=', '<<=', '&=', '^=', '|=' ]
     comparison = [ '==', '!=', '<', '>', '<=', '>=' ]
     non_member = [ '+', '-', '*', '/', '%', '&', '^', '|', ]
@@ -389,13 +389,13 @@ class operators_helper:
 
     @staticmethod
     def exportable( oper ):
-        """returns True if Boost.Python or Py++ know how to export the operator"""
+        """returns True if Boost.Python or `Py++` know how to export the operator"""
         if isinstance( oper, declarations.member_operator_t ) and oper.symbol in ( '()', '[]', '=' ):
             return ''
         if not operators_helper.is_supported( oper ):
             return messages.W1014 % oper.name
         if isinstance( oper, declarations.free_operator_t ):
-            #Py++ should find out whether the relevant class is exposed to Python
+            #`Py++` should find out whether the relevant class is exposed to Python
             #and if not, than this operator should not be exposed too
             included = filter( lambda decl: decl.ignore == False, oper.class_types )
             if not included:
@@ -430,7 +430,7 @@ class operators_helper:
 
 
 class member_operator_t( declarations.member_operator_t, calldef_t ):
-    """defines a set of properties, that will instruct Py++ how to expose the member operator"""
+    """defines a set of properties, that will instruct `Py++` how to expose the member operator"""
     def __init__(self, *arguments, **keywords):
         declarations.member_operator_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
@@ -477,7 +477,7 @@ class member_operator_t( declarations.member_operator_t, calldef_t ):
         return self.parent
 
 class casting_operator_t( declarations.casting_operator_t, calldef_t ):
-    """defines a set of properties, that will instruct Py++ how to expose the casting operator"""
+    """defines a set of properties, that will instruct `Py++` how to expose the casting operator"""
 
     def prepare_special_cases():
         """
@@ -552,7 +552,7 @@ class casting_operator_t( declarations.casting_operator_t, calldef_t ):
 
 
 class free_function_t( declarations.free_function_t, calldef_t ):
-    """defines a set of properties, that will instruct Py++ how to expose the free function"""
+    """defines a set of properties, that will instruct `Py++` how to expose the free function"""
     def __init__(self, *arguments, **keywords):
         declarations.free_function_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
@@ -582,7 +582,7 @@ class free_function_t( declarations.free_function_t, calldef_t ):
 
 
 class free_operator_t( declarations.free_operator_t, calldef_t ):
-    """defines a set of properties, that will instruct Py++ how to expose the free operator"""
+    """defines a set of properties, that will instruct `Py++` how to expose the free operator"""
     def __init__(self, *arguments, **keywords):
         declarations.free_operator_t.__init__( self, *arguments, **keywords )
         calldef_t.__init__( self )
@@ -600,7 +600,7 @@ class free_operator_t( declarations.free_operator_t, calldef_t ):
         self._target_class = class_
 
     _target_class_doc_ = "reference to class_t or class_declaration_t object." \
-                       + " There are use cases, where Py++ doesn't guess right, in what scope" \
+                       + " There are use cases, where `Py++` doesn't guess right, in what scope" \
                        + " free operator should be registered( exposed ). If this is your use case " \
                        + " than setting the class will allow you to quickly fix the situation. "
 

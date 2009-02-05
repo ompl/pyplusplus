@@ -17,7 +17,7 @@ mb = module_builder.module_builder_t(
                 [ module_builder.create_text_fc( 'struct x{};' ) ]
                 , gccxml_path=autoconfig.gccxml.executable
                 , encoding='UTF-8'
-                , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler())
+                , compiler=autoconfig.cxx_parsers_cfg.gccxml.compiler)
 
 mb.build_code_creator( module_name='unicode_bug' )
 mb.code_creator.license = "//абвгдеёжзийклмнопрстуфхцчшщъыьэюя"

@@ -13,7 +13,7 @@ class multi_line_formatter_t(logging.Formatter):
     """Custom log formatter to split long message into several lines.
 
     This formatter is used for the default stream handler that outputs
-    its messages to stdout.
+    its messages to `stdout`.
     """
 
     def __init__(self, fmt=None, datefmt=None, width=None):
@@ -38,13 +38,13 @@ class multi_line_formatter_t(logging.Formatter):
     def format(self, record):
         """This method overwrites the original one.
 
-        The first thing that is done in the original format() method
-        is the creation of the record.message attribute:
+        The first thing, that is done in the original format() method, is the
+        creation of the record.message attribute:
 
           record.message = record.getMessage()
 
         Now this method temporarily replaces the getMessage() method of
-        the record by a version that returns a pregenerated message that
+        the record by a version that returns a pre-generated message that
         spans several lines. Then the original format() method is called
         which will invoke the 'fake' method.
         """
@@ -68,10 +68,10 @@ class multi_line_formatter_t(logging.Formatter):
 
         msgline is a string containing a single message. It can either be
         a plain message string which is reformatted using the textwrap
-        module or it can be of the form <decl>;<msg> where <decl> is the
-        declaration string and <msg> an arbitrary message. Lines of this
-        form will be separated so that the declaration and the message
-        appear in individual text blocks, where every line of message will start
+        module or it can be of the form <declaration>;<message> where <declaration>
+        is the declaration string and <message> an arbitrary message. Lines of this
+        form will be separated so that the declaration and the message appear in
+        individual text blocks, where every line of message will start
         with '>' character.
 
         width is the maximum width of any text blocks (without indendation).
@@ -81,13 +81,13 @@ class multi_line_formatter_t(logging.Formatter):
         if len( txts ) != 2:
             #If message is not in format we expected, just return it
             return os.linesep.join( textwrap.wrap( msgline, width ) )
-            
+
         lines = [ txts[0] ] #I don't want to break declaration string to few lines
-        
+
         # Insert a separator if there are two parts (=decl and msg)
         # Apply the text wrapper to shorten the maximum line length
         wrapped_lines = textwrap.wrap( txts[1], width )
         lines.extend( map( lambda s: "> " + s.strip(), wrapped_lines ) )
-        
+
         return os.linesep.join(lines)
 

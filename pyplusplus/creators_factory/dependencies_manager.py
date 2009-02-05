@@ -61,7 +61,7 @@ class manager_t( object ):
         self.__exported_decls.append( decl )
 
     def __is_std_decl( self, decl ):
-        #Every class under std should be exported by Boost.Python and\\or Py++
+        #Every class under std should be exported by Boost.Python and\\or `Py++`
         #Also this is not the case right now, I prefer to hide the warnings
         dpath = declarations.declaration_path( decl )
         if len( dpath ) < 3:
@@ -76,7 +76,7 @@ class manager_t( object ):
     def __build_dependencies( self, decl ):
         if self.__is_std_decl( decl ):
             #TODO add element_type to the list of dependencies
-            return [] #std declarations should be exported by Py++!
+            return [] #std declarations should be exported by `Py++`!
         if decl.already_exposed:
             return []
         dependencies = decl.i_depend_on_them(recursive=False)

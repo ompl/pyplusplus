@@ -26,7 +26,7 @@ from md5sum_repository import repository_t
 from md5sum_repository import cached_repository_t
 
 def has_pypp_extenstion( fname ):
-    """returns True if file has Py++ specific extension, otherwise False"""
+    """returns True if file has `Py++` specific extension, otherwise False"""
     for ext in ( multiple_files_t.HEADER_EXT, multiple_files_t.SOURCE_EXT ):
         if fname.endswith( ext ):
             return True

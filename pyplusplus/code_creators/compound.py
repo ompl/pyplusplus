@@ -62,11 +62,12 @@ class compound_t(code_creator.code_creator_t):
 
     @staticmethod
     def create_internal_code( creators, indent_code=True ):
-        """Concatenate the code from a list of code creators.
+        """
+        concatenate the code from a list of code creators.
 
         :param creators: A list with code creators
         :type creators: list of L{code_creator_t}
-        @rtype: str
+        :rtype: str
         """
         internals = map( lambda expr: expr.create(), creators )
         internals = filter(None, internals )

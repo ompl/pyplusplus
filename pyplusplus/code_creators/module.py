@@ -123,13 +123,13 @@ class bpmodule_t(module_t):
         return self.__body
 
     def last_include_index(self):
-        """Return the children index of the last L{include_t} object.
+        """
+        return the children index of the last L{include_t} object.
 
         An exception is raised when there is no include_t object among
         the children creators.
 
-        @returns: Children index
-        @rtype: int
+        :rtype: int
         """
         for i in range( len(self.creators) - 1, -1, -1 ):
             if isinstance( self.creators[i], include.include_t ):

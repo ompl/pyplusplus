@@ -253,7 +253,7 @@ class bpcreator_t( declarations.decl_visitor_t ):
         """list of exposed declarations, which were not ``included``, but still
         were exposed. For example, std containers
 
-        std containers exposed by Py++, even if the user didn't ``include`` them.
+        std containers exposed by `Py++`, even if the user didn't ``include`` them.
         """
         cmp_by_name = lambda cls1, cls2: cmp( cls1.decl_string, cls2.decl_string )
         used_containers = list( self.__types_db.used_containers )
@@ -320,12 +320,12 @@ class bpcreator_t( declarations.decl_visitor_t ):
         self.__module_body.adopt_creators( creators, 0 )
 
     def create(self, decl_headers=None):
-        """Create and return the module for the extension.
+        """
+        create and return the module for the extension - code creators tree root.
 
         :param decl_headers: If None the headers for the wrapped decls are automatically found.
         But you can pass a list of headers here to override that search.
-        @returns: Returns the root of the code creators tree
-        @rtype: L{module_t<code_creators.module_t>}
+        @rtype: :class:`code_creators.module_t`
         """
         # Invoke the appropriate visit_*() method on all decls
         for decl in self.__decls:

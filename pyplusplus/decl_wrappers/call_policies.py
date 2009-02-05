@@ -9,7 +9,7 @@ import algorithm
 import python_traits
 from pygccxml import declarations
 
-#keeps file name, where Py++ defined call policies will be defined
+#keeps file name, where `Py++` defined call policies will be defined
 PYPP_CALL_POLICIES_HEADER_FILE = "__call_policies.pypp.hpp"
 
 class CREATION_POLICY:
@@ -294,7 +294,7 @@ def custom_call_policies(call_policies, header_file=None):
     return custom_call_policies_t(call_policies, header_file)
 
 class memory_managers:
-    """implements code generation for Py++ defined memory managers
+    """implements code generation for `Py++` defined memory managers
 
     For complete documentation and usage example see http://language-binding.net/pyplusplus/documentation/functions/call_policies.html
     """
@@ -310,7 +310,7 @@ class memory_managers:
         return mem_manager
 
 class convert_array_to_tuple_t( compound_policy_t ):
-    """implements code generation for Py++ defined "as_tuple" value policy
+    """implements code generation for `Py++` defined "as_tuple" value policy
 
     For complete documentation and usage example see http://language-binding.net/pyplusplus/documentation/functions/call_policies.html
     """
@@ -367,7 +367,7 @@ def convert_array_to_tuple( array_size, memory_manager, make_object_call_policie
     return convert_array_to_tuple_t( array_size, memory_manager, make_object_call_policies, base )
 
 class return_range_t( call_policy_t ):
-    """implements code generation for Py++ defined "return_range" call policies
+    """implements code generation for `Py++` defined "return_range" call policies
 
     For complete documentation and usage example see http://language-binding.net/pyplusplus/documentation/functions/call_policies.html
     """
@@ -413,7 +413,7 @@ class return_range_t( call_policy_t ):
         return declarations.templates.join( name, args )
 
 def return_range( function, get_size_class, value_policies=None ):
-    """create Py++ defined return_range call policies code generator"""
+    """create `Py++` defined return_range call policies code generator"""
     r_type = function.return_type
     if not declarations.is_pointer( r_type ):
         raise TypeError( 'Function "%s" return type should be pointer, got "%s"'

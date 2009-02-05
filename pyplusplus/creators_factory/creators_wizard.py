@@ -21,7 +21,7 @@ def find_out_mem_fun_creator_classes( decl ):
     fwrapper_cls = None
     access_level = decl.parent.find_out_member_access_type( decl )
     if len( decl.transformations ) not in ( 0, 1 ):
-        raise RuntimeError( "Right now Py++ does not support multiple transformation applied on a single function." )
+        raise RuntimeError( "Right now `Py++` does not support multiple transformation applied on a single function." )
     if access_level == ACCESS_TYPES.PUBLIC:
         if decl.virtuality == VIRTUALITY_TYPES.NOT_VIRTUAL:
             if decl.transformations:

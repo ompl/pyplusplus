@@ -13,7 +13,7 @@ from pyplusplus import messages
 from pygccxml import declarations
 
 class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
-    """defines a set of properties, that will instruct Py++ how to expose the variable"""
+    """defines a set of properties, that will instruct `Py++` how to expose the variable"""
     def __init__(self, *arguments, **keywords):
         declarations.variable_t.__init__(self, *arguments, **keywords )
         decl_wrapper.decl_wrapper_t.__init__( self )
@@ -26,11 +26,11 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
         self._expose_value = None
 
     __call_policies_doc__ = \
-    """There are usecase, when exporting member variable forces Py++ to
+    """There are usecase, when exporting member variable forces `Py++` to
     create accessors functions. Sometime, those functions requires call policies.
     To be more specific: when you export member variable that has reference or
     pointer type, you need to tell Boost.Python library how to manage object
-    life-time. In all cases, Py++ will give reasonable default value. I am
+    life-time. In all cases, `Py++` will give reasonable default value. I am
     sure, that there are use cases, when you will have to change it. You should
     use this property to change it.
     """
@@ -76,7 +76,7 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
       conversion.
 
     Setting "apply_smart_ptr_wa" and/or "use_make_functions" to "True" will tell
-    Py++ to generate such code.
+    `Py++` to generate such code.
     """
 
     def get_apply_smart_ptr_wa( self ):
@@ -115,7 +115,7 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
     //or
     char* buffer; //in case you want to modify the buffer in place
 
-    In this cases Py++ doesn't help too. In these cases it is possible to expose
+    In this cases `Py++` doesn't help too. In these cases it is possible to expose
     the actual address of the variable. After that, you can use built-in "ctypes"
     package to edit the content of the variable.
     """
@@ -133,7 +133,7 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
     it is possible to get access to the data stored in a variable, which
     has some union type.
 
-    This property controls whether Py++ should expose the variable value
+    This property controls whether `Py++` should expose the variable value
     or not. In case, this variable has type union, this property will be False.
     """
     def get_expose_value( self ):

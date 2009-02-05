@@ -172,7 +172,7 @@ class ModuleBuilder:
       This method can be called anytime after initialization and all
       Template() calls have been made.
 
-      @returns: Returns the root of the declaration tree
+      :rtype: Returns the root of the declaration tree
       @rtype: L{IDecl<declwrapper.IDecl>}
       @postcondition: This class can act as a wrapper for namespace("::") and all declarations are set to be ignored.
       """
@@ -646,7 +646,7 @@ void %s_translator(const %s& exc)
       
       @param t: Time value in seconds
       @type t: float
-      @returns: The time as a string
+      :rtype: The time as a string
       @rtype: str
       """
       if t<60:

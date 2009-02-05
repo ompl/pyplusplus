@@ -6,7 +6,7 @@
 """defines controller classes which help to define the function transformation
 
 The idea behind implementation of "Function Transformation" functionality is simple:
-Py++ defines few templates. Transformers are just editors for the templates.
+`Py++` defines few templates. Transformers are just editors for the templates.
 In most cases, transformers don't directly edit the template, but use controller
 classes for this purpose. Controller classes provide an abstraction of the templates.
 """

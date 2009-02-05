@@ -4,14 +4,14 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 """defines class that will print in a user friendly format declarations tree and
-declarations Py++ configuration instructions"""
+declarations `Py++` configuration instructions"""
 
 import os
 import sys
 from pygccxml import declarations
 
 class decl_wrapper_printer_t( declarations.decl_printer_t ):
-    """ Helper class for printing declarations tree and Py++ configuration instructions"""
+    """ Helper class for printing declarations tree and `Py++` configuration instructions"""
     JUSTIFY = 20
     INDENT_SIZE = 4
 

@@ -94,17 +94,15 @@ class code_creator_t(object):
         actually creates code and returns it. Return value of this function is
         string.
 
-        @rtype: str
+        :rtype: str
         """
         raise NotImplementedError()
 
     def create(self):
         """
-        this function should be used in order to get code that should be
-        generated.
-
-        @returns: Returns a text block of C++ source code.
-        @rtype: str
+        generates source code
+        
+        :rtype: str
         """
         code = self._create_impl()
         assert isinstance( code, types.StringTypes )
@@ -153,7 +151,7 @@ class code_creator_t(object):
 
         :param code: A code block with C++ source code.
         :type code: str
-        @rtype: str
+        :rtype: str
         """
         assert isinstance( code, types.StringTypes )
         return code.strip()
@@ -167,8 +165,7 @@ class code_creator_t(object):
         :type code: str
         :param size: The number of indentation levels that the code is shifted
         :type size: int
-        @returns: Returns indented source code
-        @rtype: str
+        :rtype: str
         """
         assert isinstance( code, types.StringTypes )
         return code_creator_t.__INDENTATION * size\
@@ -182,7 +179,7 @@ class code_creator_t(object):
 
         :param code: C++ code block.
         :type code: str
-        @rtype: str
+        :rtype: str
         """
         assert isinstance( code, types.StringTypes )
         if code.startswith(code_creator_t.__INDENTATION):
@@ -198,10 +195,10 @@ class code_creator_t(object):
 
         :param line: C++ source code
         :type line: str
-        @rtype: bool
-
         :param language: the programming language, the line was written in. Possible values: C++, Python
         :type line: str
+        
+        :rtype: bool        
         """
         assert isinstance( line, types.StringTypes )
         l = line.lstrip()

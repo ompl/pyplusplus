@@ -44,7 +44,7 @@ class _StringMatcher:
 
         @param txt: The string to match
         @type txt: str
-        @returns: True if txt matches the pattern 
+        :rtype: True if txt matches the pattern 
         """
         if self.regexp==None:
             return txt==self.pattern
@@ -83,7 +83,7 @@ class FilterBase:
 
         A return value of None means the filter's range is unlimited.
 
-        @returns: Filter range or None
+        :rtype: Filter range or None
         @rtype: TreeRange
         """
         return None
@@ -109,7 +109,7 @@ class FilterBase:
         always return False so the search algorithm may decide not to visit
         them at all to speed up the search.
         
-        @returns: None, an empty list or a list of tuples (parent, recursive).
+        :rtype: None, an empty list or a list of tuples (parent, recursive).
         """
         return None
 

@@ -122,7 +122,7 @@ class TreeRange:
 
         @param other: A simple range (parent, recursive).
         @type other: 2-tuple
-        @returns: The new root node.
+        :rtype: The new root node.
         @rtype: TreeRange        
         """
 
@@ -147,7 +147,7 @@ class TreeRange:
 
         @param simplerange: A simple range (parent, recursive).
         @type simplerange: 2-tuple
-        @returns: The new root node.
+        :rtype: The new root node.
         @rtype: TreeRange        
         """
         otherparent, otherrecursive = simplerange
@@ -215,7 +215,7 @@ class TreeRange:
         
         @param other: Another TreeRange object
         @type other: TreeRange
-        @returns: The new root node.
+        :rtype: The new root node.
         @rtype: TreeRange
         """
         res = self
@@ -231,7 +231,7 @@ class TreeRange:
         
         @param simplerange: A simple range (parent, recursive).
         @type simplerange: 2-tuple
-        @returns: The new root node.
+        :rtype: The new root node.
         @rtype: TreeRange
         """
         otherparent, otherrecursive = simplerange
@@ -311,7 +311,7 @@ class TreeRange:
     def _rangeRelationship(self, parent1, parent2):
         """Determines the relationship between two nodes.
         
-        @returns: Returns the relationship as an integer value:
+        :rtype: Returns the relationship as an integer value:
            - 0: The sub trees rooted at parent1 and parent2 are disjoint
            - 1: parent2 is below parent1
            - 2: parent1 is below parent2
@@ -331,7 +331,7 @@ class TreeRange:
         """Returns a list with all nodes from node to the root (including node).
 
         @precondition: node must have a parent attribute
-        @returns: Returns a list of nodes
+        :rtype: Returns a list of nodes
         @rtype: list
         """
         res = []

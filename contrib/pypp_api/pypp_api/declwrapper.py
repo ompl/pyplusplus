@@ -128,7 +128,7 @@ class IDecl:
 
         @param flag: Determines whether the declaration is actually exposed or ignored.
         @type flag: bool
-        @returns: Returns self
+        :rtype: Returns self
         @see: L{ignore()}
         """
         if not flag:
@@ -482,7 +482,7 @@ class IDecl:
         @type allow_empty: bool
         @param assert_count: Check the number of matched declarations in the resulting Decl object
         @type assert_count: int
-        @returns: Returns a Decl object that may reference an arbitrary number of declarations.
+        :rtype: Returns a Decl object that may reference an arbitrary number of declarations.
         @rtype: IDecl
         @see: Namespace(), Class(), Method(), Function(), Enum()
         """
@@ -602,7 +602,7 @@ class IDecl:
 
         See Decl() for a full description of this method.
 
-        @returns: Returns a Decl object that may reference an arbitrary number of declarations.
+        :rtype: Returns a Decl object that may reference an arbitrary number of declarations.
         @see: L{Decl()}
         """
         return self.Decls(name=name, type=type|NAMESPACE, **args)
@@ -692,7 +692,7 @@ class IDecl:
     def _checkOverloads(self):
         """Check if all contained declarations are from the same set of overloads.
 
-        @returns: True if all contained declarations are from the same set of overloads.
+        :rtype: True if all contained declarations are from the same set of overloads.
         @rtype: bool
         """
         if len(self.decl_handles)==0:
@@ -712,7 +712,7 @@ class IDecl:
     def _parseDefArgs(self, args):
         """Determine which of the args is the doc string, call policies and keywords argument.
 
-        @returns: Returns a tuple (doc, policies, keywords).
+        :rtype: Returns a tuple (doc, policies, keywords).
         """
         if len(args)>3:
             raise ValueError, "Too many arguments (%d)"%len(args)
@@ -802,7 +802,7 @@ class IDecl:
         describes the source code line that created this instance.
         funcname is None if the source code is not located inside a function.
 
-        @returns: (filename, funcname, linenr, sourceline)
+        :rtype: (filename, funcname, linenr, sourceline)
         @rtype: 4-tuple
         """
         frame = inspect.currentframe()

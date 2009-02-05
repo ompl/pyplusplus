@@ -23,8 +23,8 @@ from pyplusplus import creators_factory
 
 class builder_t(module_builder.module_builder_t):
     """
-    This class provides users with simple and intuitive interface to Py++
-    and/or pygccxml functionality. If this is your first attempt to use Py++
+    This class provides users with simple and intuitive interface to `Py++`
+    and/or pygccxml functionality. If this is your first attempt to use `Py++`
     consider to read tutorials. You can find them on U{web site<http://www.language-binding.net>}.
     """
 
@@ -109,15 +109,15 @@ class builder_t(module_builder.module_builder_t):
 
     def register_module_dependency( self, other_module_generated_code_dir ):
         """``already_exposed`` solution is pretty good when you mix hand-written
-        modules with Py++ generated. It doesn't work/scale for "true"
-        multi-module development. This is exactly the reason why ``Py++``_
+        modules with `Py++` generated. It doesn't work/scale for "true"
+        multi-module development. This is exactly the reason why `Py++`
         offers "semi automatic" solution.
 
-        For every exposed module, ``Py++``_ generates "exposed_decl.pypp.txt" file.
+        For every exposed module, `Py++` generates "exposed_decl.pypp.txt" file.
         This file contains the list of all parsed declarations and whether they
         were included or excluded. Later, when you work on another module, you
-        can tell ``Py++``_ that the current module depends on the previously
-        generated one. ``Py++``_ will load "exposed_decl.pypp.txt" file and
+        can tell `Py++` that the current module depends on the previously
+        generated one. `Py++` will load "exposed_decl.pypp.txt" file and
         update the declarations.
         """
 
@@ -343,7 +343,7 @@ class builder_t(module_builder.module_builder_t):
         :param on_unused_file_found: callable object that represents the action that should be taken on
                                      file, which is no more in use
 
-        @use_files_sum_repository: Py++ can generate file, which will contain md5 sum of every generated file.
+        @use_files_sum_repository: `Py++` can generate file, which will contain md5 sum of every generated file.
                                    Next time you generate code, md5sum will be loaded from the file and compared.
                                    This could speed-up code generation process by 10-15%.
         """
@@ -389,7 +389,7 @@ class builder_t(module_builder.module_builder_t):
         :param on_unused_file_found: callable object that represents the action that should be taken on
                                      file, which is no more in use
 
-        @use_files_sum_repository: Py++ can generate file, which will contain md5 sum of every generated file.
+        @use_files_sum_repository: `Py++` can generate file, which will contain md5 sum of every generated file.
                                    Next time you generate code, md5sum will be loaded from the file and compared.
                                    This could speed-up code generation process by 10-15%.
         """

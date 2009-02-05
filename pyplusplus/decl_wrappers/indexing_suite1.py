@@ -59,7 +59,7 @@ class indexing_suite1_t( object ):
     no_proxy = property( _get_no_proxy, _set_no_proxy
                          , doc="NoProxy value, the initial value depends on container"
                               +" element_type( mapped_type ) type. In most cases, "
-                              +"Py++ is able to guess this value, right. If you are not "
+                              +"`Py++` is able to guess this value, right. If you are not "
                               +"lucky, you will have to set the property value.")
 
     def _get_derived_policies( self ):

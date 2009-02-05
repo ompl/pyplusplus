@@ -27,7 +27,7 @@ class impl_details:
 
 
 always_expose_using_scope_documentation = \
-"""boolean, configures how Py++ should generate code for class.
+"""boolean, configures how `Py++` should generate code for class.
 Py can generate code using IDL like syntax:
 
     class_< ... >( ... )
@@ -46,7 +46,7 @@ Also, the second way is much longer, it solves few problems:
     - you will get much better compilation errors
     - the code looks like regular C++ code after all :-)
 
-By default, this property is set to False. Also, Py++ knows pretty well
+By default, this property is set to False. Also, `Py++` knows pretty well
 when it have to ignore this property and generate right code
 """
 
@@ -140,7 +140,7 @@ class class_common_details_t( object ):
     def _set_opaque( self, value ):
         self._opaque = value
     opaque = property( _get_opaque, _set_opaque
-                      , doc="If True, Py++ will treat return types and arguments T* as opaque types. "
+                      , doc="If True, `Py++` will treat return types and arguments T* as opaque types. "
                            +"nFor Boost.Python code generator it means that macro BOOST_PYTHON_OPAQUE_SPECIALIZED_TYPE_ID everywhere it needed. "
                            +"For ctypes code generator it means that the class will be introduced, but without fields. "
                            +"For both code generators it means: you will only be able to get and pass pointers around. "
@@ -216,7 +216,7 @@ class class_t( class_common_details_t
     def _set_redefine_operators( self, new_value ):
         self._redefine_operators = new_value
     redefine_operators = property( _get_redefine_operators, _set_redefine_operators
-                                   , doc="tells Py++ to redefine operators from base class in this class, False by default")
+                                   , doc="tells `Py++` to redefine operators from base class in this class, False by default")
 
     def _get_exposed_class_type(self):
         return self._exposed_class_type
@@ -232,7 +232,7 @@ class class_t( class_common_details_t
     def _set_held_type(self, held_type):
         self._held_type = held_type
     held_type = property( _get_held_type, _set_held_type
-                          , doc="string, this property tells Py++ what HeldType this class has" \
+                          , doc="string, this property tells `Py++` what HeldType this class has" \
                                +"Default value is calculated, based on information presented in exposed declarations" )
 
     def _get_noncopyable(self):
@@ -362,7 +362,7 @@ class class_t( class_common_details_t
         #NICE TO HAVE:
         #1. exception\assert\warning should be raised if python_exception_type
         #   does not contain valid Python exception
-        #2. Py++ can validate, that member function returns char*
+        #2. `Py++` can validate, that member function returns char*
         code = "PyErr_SetString( %(exception_type)s, %(to_string)s ); " \
                % { 'exception_type' : python_exception_type, 'to_string' : to_string }
         self.exception_translation_code = code
@@ -436,7 +436,7 @@ class class_t( class_common_details_t
         members.extend( filter( vfunction_selector, self.private_members ) )
 
         def is_exportable( decl ):
-            #filter out non-public member operators - Py++ does not support them right now
+            #filter out non-public member operators - `Py++` does not support them right now
             if isinstance( decl, declarations.member_operator_t ) \
                and decl.access_type != declarations.ACCESS_TYPES.PUBLIC:
                 return False

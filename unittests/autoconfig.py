@@ -12,6 +12,14 @@ import subprocess
 
 this_module_dir_path = os.path.abspath ( os.path.dirname( sys.modules[__name__].__file__) )
 
+sys.path.append( os.path.abspath( os.path.join( this_module_dir_path, '..', '..', 'pydsc_dev' ) ) )
+
+#~ import pydsc
+#~ pydsc.ignore_dictionary( os.path.join( this_module_dir_path, 'ignore_dictionary.txt' ) )
+#~ pydsc.set_text_preprocessor( pydsc.sphinx_preprocessor )
+#~ pydsc.include_paths( os.path.join( this_module_dir_path, '..', '..', 'pyplusplus_dev' ) )
+
+
 data_directory = os.path.join( this_module_dir_path, 'data' )
 build_directory = os.path.join( this_module_dir_path, 'temp' )
 build_dir = build_directory

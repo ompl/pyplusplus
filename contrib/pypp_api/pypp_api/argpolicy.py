@@ -448,7 +448,7 @@ class WrapperManager:
 
         @param idx: Argument index of the original function
         @type idx: int
-        @returns: Returns the argument_t object that was removed (or None
+        :rtype: Returns the argument_t object that was removed (or None
           if idx is 0 and the function has no return type)
         """
         if idx==0 and self.funcargs[0]==None:

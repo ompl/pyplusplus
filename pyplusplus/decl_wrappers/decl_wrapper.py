@@ -169,7 +169,7 @@ class decl_wrapper_t(object):
     def set_exportable( self, exportable ):
         """change "exportable" status
 
-        This function should be use in case Py++ made a mistake and signed the
+        This function should be use in case `Py++` made a mistake and signed the
         declaration as unexportable."""
         self._exportable = exportable
 
@@ -180,7 +180,7 @@ class decl_wrapper_t(object):
         return []
 
     def readme( self, skip_ignored=True ):
-        """return important information( hints/tips/warning message ) Py++ has about
+        """return important information( hints/tips/warning message ) `Py++` has about
         this declaration.
 
         skip_ignored argument allows you to control the information reported to you.

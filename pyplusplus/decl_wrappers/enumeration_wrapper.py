@@ -10,9 +10,9 @@ from pyplusplus import messages
 from pygccxml import declarations
 
 class enumeration_t(decl_wrapper.decl_wrapper_t, declarations.enumeration_t):
-    """defines a set of properties, that will instruct Py++ how to expose the enumeration
+    """defines a set of properties, that will instruct `Py++` how to expose the enumeration
 
-    By default, Py++ will export all enumeration values.
+    By default, `Py++` will export all enumeration values.
     """
     def __init__(self, *arguments, **keywords):
         declarations.enumeration_t.__init__(self, *arguments, **keywords )

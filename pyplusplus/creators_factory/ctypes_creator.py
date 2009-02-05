@@ -113,10 +113,10 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
             self.__add_class_introductions( ci_creator, internal_class )
 
     def create(self ):
-        """Create and return the module for the extension.
+        """
+        create and return the module for the extension - code creators tree root
 
-        @returns: Returns the root of the code creators tree
-        @rtype: L{module_t<code_creators.module_t>}
+        :rtype: :class:`code_creators.module_t`
         """
         # Invoke the appropriate visit_*() method on all decls
         ccc = self.curr_code_creator
