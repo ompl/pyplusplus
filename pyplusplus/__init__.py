@@ -15,7 +15,7 @@ step is a I{declaration tree} that represents all declarations found
 in the headers. You can then modify (decorate) this tree to customize
 the bindings. After that, a I{code creators} tree is created where
 each node represents a block of C++ source code. So you can change any piece of
-code befor it is written to disk. As a last step, these source code blocks are
+code before it is written to disk. As a last step, these source code blocks are
 finally written into one or more C++ source files, which can then be compiled to
 generate the final Python module.
 
@@ -40,7 +40,7 @@ import pygccxml
 if not hasattr( pygccxml, '__revision__' ) or pygccxml.__revision__ < 1080:
     msg = 'This revision of `Py++` requieres pygccxml revision to be ' \
           'greater or equal to %d. ' \
-          'Please install right pygccxml version.'          
+          'Please install right pygccxml version.'
     raise AssertionError( msg % pygccxml.__revision__ )
 
 #Known issues:

@@ -8,7 +8,7 @@ import code_creator
 
 
 class name_mappings_t(code_creator.code_creator_t):
-    """creates dictionery { [un]decorated name : [un]decorated name }"""
+    """creates dictionary { [un]decorated name : [un]decorated name }"""
 
     def __init__( self, exported_symbols ):
         code_creator.code_creator_t.__init__(self)

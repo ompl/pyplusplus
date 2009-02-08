@@ -12,7 +12,7 @@ import registration_based
 class enum_t( registration_based.registration_based_t
               , declaration_based.declaration_based_t ):
     """
-    Creates boost.python code that expose C++ enum
+    create code that exposes C++ enumeration
     """
     def __init__(self, enum ):
         registration_based.registration_based_t.__init__( self )

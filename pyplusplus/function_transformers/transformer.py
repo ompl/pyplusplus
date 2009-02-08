@@ -14,15 +14,15 @@ return_ = -1
 
 class transformer_t(object):
     """Base class for a function transformer."""
-    
+
     USE_1_BASED_INDEXING = False
-        
+
     def __init__(self, function):
         """:param function: reference to function declaration"""
         object.__init__( self )
         self.__function = function
 
-    @property 
+    @property
     def function( self ):
         """reference to the function, for which a wrapper will be generated"""
         return self.__function
@@ -33,7 +33,7 @@ class transformer_t(object):
 
     def get_argument( self, reference ):
         """returns reference to the desired argument
-        
+
         :param reference: name( str ) or index( int ) of the argument
         """
         if isinstance( reference, str ):
@@ -49,9 +49,9 @@ class transformer_t(object):
 
     def get_type( self, reference ):
         """returns type of the desired argument or return type of the function
-        
+
         :param reference: name( str ) or index( int ) of the argument
-        """       
+        """
         global return_
         if isinstance( reference, int ) and reference == return_:
             return self.function.return_type
@@ -59,35 +59,36 @@ class transformer_t(object):
             return self.get_argument( reference ).type
 
     def configure_mem_fun( self, controller ):
-        """Transformers should overridde the method, in order to define custom 
+        """Transformers should override the method, in order to define custom
         transformation for non-virtual member function.
-        
-        :param controller: instance of L{mem_fun_controller_t} class
+
+        :param controller: instance of :class:`mem_fun_controller_t` class
         """
         raise NotImplementedError(self.__class__.__name__)
-    
+
     def configure_free_fun( self, controller ):
-        """Transformers should overridde the method, in order to define custom 
+        """
+        transformers should override the method, in order to define custom
         transformation for free function.
-        
+
         :param controller: instance of L{free_fun_controller_t} class
-        """        
+        """
         raise NotImplementedError(self.__class__.__name__)
-    
+
     def configure_virtual_mem_fun( self, controller ):
-        """Transformers should overridde the method, in order to define custom 
+        """Transformers should override the method, in order to define custom
         transformation for virtual member function.
-        
-        :param controller: instance of L{virtual_mem_fun_controller_t} class
-        """        
+
+        :param controller: instance of :class:`virtual_mem_fun_controller_t` class
+        """
         raise NotImplementedError(self.__class__.__name__)
 
 #TODO: FT for constructor
     #~ def configure_constructor( self, controller ):
-        #~ """Transformers should overridde the method, in order to define custom 
+        #~ """Transformers should override the method, in order to define custom
         #~ transformation for constructor.
-        
+
         #~ :param controller: instance of L{constructor_controller_t} class
-        #~ """        
+        #~ """
         #~ raise NotImplementedError(self.__class__.__name__)
-        
+

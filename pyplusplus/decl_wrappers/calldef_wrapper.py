@@ -14,7 +14,7 @@ from pygccxml import declarations
 from pyplusplus import function_transformers as ft
 
 class calldef_t(decl_wrapper.decl_wrapper_t):
-    """base class, for code generator configration, for function declaration classes."""
+    """base class, for code generator configuration, for function declaration classes."""
 
     BOOST_PYTHON_MAX_ARITY = 10
     """Boost.Python configuration macro value.
@@ -125,13 +125,14 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
 
     @property
     def non_overridable_reason( self ):
-        """returns the reason the function could not be overriden"""
+        """returns the reason the function could not be overridden"""
         return self._non_overridable_reason
 
     def mark_as_non_overridable( self, reason ):
-        """mark this function as non-overridable
+        """
+        mark this function as final - user will not be able to override it from Python
 
-        Not all fucntions could be overrided from Python, for example virtual function
+        Not all functions could be overridden from Python, for example virtual function
         that returns non const reference to a member variable. `Py++` allows you to
         mark these functions and provide and explanation to the user.
         """
@@ -248,7 +249,7 @@ class member_function_t( declarations.member_function_t, calldef_t ):
         self._default_precall_code =  []
 
     def add_override_precall_code(self, code):
-        """add code, which should be executed, before overrided member function call"""
+        """add code, which should be executed, before overridden member function call"""
         self._override_precall_code.append( code )
 
     @property

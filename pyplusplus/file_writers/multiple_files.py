@@ -3,7 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""defines a class that writes L{code_creators.bpmodule_t} to multiple files"""
+"""defines a class that writes :class:`code_creators.bpmodule_t` to multiple files"""
 
 import os
 import writer
@@ -117,8 +117,6 @@ class multiple_files_t(writer.writer_t):
 
         :param file_name: A string that uniquely identifies the file name
         :type file_name: str
-        :param function_name: The name of the register_xyz() function
-        :type function_name: str
         :rtype: str
         """
         tmpl = os.linesep.join([
@@ -221,10 +219,12 @@ class multiple_files_t(writer.writer_t):
 
         :param file_name: The base name of the corresponding include file (without extension)
         :type file_name: str
-        :param function_name: The name of the register_xyz() function
+
+        :param function_name: "register" function name
         :type function_name: str
-        :param creators: The code creators that create the register_xyz() function
-        :type creators: list of code_creator_t
+
+        :param creators: "register" function code creators
+        :type creators: list of :class:`code_creators.code_creator_t`
         :rtype: str
         """
         declaration_creators = []
@@ -334,12 +334,15 @@ class multiple_files_t(writer.writer_t):
         """Write non-class creators into a particular .h/.cpp file.
 
         :param creators: The code creators that should be written
-        :type creators: list of code_creator_t
+        :type creators: list of :class:`code_creators.code_creator_t`
+
         :param pattern: Name pattern that is used for constructing the final output file name
         :type pattern: str
-        :param function_name: The name of the register_xyz() function
+
+        :param function_name: "register" function name
         :type function_name: str
-        :param registrator_pos: The position of the code creator that creates the code to invoke the register_xyz() function.
+
+        :param registrator_pos: The position of the code creator that creates the code to invoke the "register" function.
         :type registrator_pos: int
         """
         if not creators:
@@ -385,15 +388,16 @@ class multiple_files_t(writer.writer_t):
         creators = filter( lambda x: isinstance(x, free_functions ), self.extmodule.body.creators )
         self.split_creators( creators, '_free_functions', 'register_free_functions', -1 )
 
-    #TODO: move write_main to __init__
     def write(self):
-        """ Write out the module.
-            Creates a separate source/header combo for each class and for enums, globals,
-            and free functions.
-            If write_main is True it writes out a main file that calls all the registration methods.
-            After this call split_header_names and split_method_names will contain
-            all the header files and registration methods used.  This can be used by
-            user code to create custom registration methods if main is not written.
+        """
+        writes out the module.
+
+        Creates a separate source/header combo for each class and for enumerations,
+        globals and free functions.
+        If :meth:`write_main` is True it writes out a main file that calls all the registration methods.
+        After this call :meth:`split_header_names` and :meth:`split_method_names`
+        will contain all the header files and registration methods used.  This
+        can be used by user code to create custom registration methods if main is not written.
         """
 
         self.write_code_repository( self.__directory_path )

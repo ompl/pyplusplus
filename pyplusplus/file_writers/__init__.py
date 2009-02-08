@@ -4,16 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 """
-This package contains few classes, that writes L{code_creators.module_t} to files.
-
-Right now 3 strategies were implemented:
-
-    1. All code is written in one file
-
-    2. Classic strategy of deviding classes to files: one class in one header + source files.
-
-        2.1 Huge classes are splitten to few source files.
-
+This package contains few classes, which write :class:`code_creators.module_t` to files.
 """
 
 import types
@@ -47,7 +38,7 @@ def write_multiple_files( extmodule, dir_path, files_sum_repository=None, encodi
     return mfs.written_files
 
 def write_balanced_files( extmodule, dir_path, number_of_buckets, files_sum_repository=None, encoding='ascii' ):
-    """writes extmodule to fixed number of multiple cpp files"""
+    """writes extmodule to fixed number of multiple .cpp files"""
     mfs = balanced_files_t( extmodule, dir_path, number_of_buckets, files_sum_repository=files_sum_repository, encoding=encoding )
     mfs.write()
     return mfs.written_files

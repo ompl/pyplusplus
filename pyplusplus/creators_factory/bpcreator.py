@@ -204,8 +204,9 @@ class bpcreator_t( declarations.decl_visitor_t ):
                 assert not "unknown instace of registrator: " % str( registered )
 
     def _treat_smart_pointers( self ):
-        """ Go to all class creators and apply held_type and creator registrators
-            as needed.
+        """
+        goes over all class creators and apply held_type and registers smart pointers
+        classes as needed
         """
         find_classes = code_creators.creator_finder.find_by_class_instance
         class_creators = find_classes( what=code_creators.class_t
@@ -324,8 +325,8 @@ class bpcreator_t( declarations.decl_visitor_t ):
         create and return the module for the extension - code creators tree root.
 
         :param decl_headers: If None the headers for the wrapped decls are automatically found.
-        But you can pass a list of headers here to override that search.
-        @rtype: :class:`code_creators.module_t`
+                             But you can pass a list of headers here to override that search.
+        :rtype: :class:`code_creators.module_t`
         """
         # Invoke the appropriate visit_*() method on all decls
         for decl in self.__decls:

@@ -325,10 +325,9 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
     def _get_system_files_impl( self ):
         return []
 
-#open question: should I put class wrapper under some specifiec namespace?
 class class_wrapper_t( scoped.scoped_t ):
     """
-    Creates C++ code that creates wrapper arround some class
+    creates C++ code, which creates wrapper around a class
     """
 
     def __init__(self, declaration, class_creator ):

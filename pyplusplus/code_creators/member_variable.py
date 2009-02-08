@@ -167,7 +167,7 @@ class member_variable_t( member_variable_base_t ):
 class member_variable_wrapper_t( code_creator.code_creator_t
                                  , declaration_based.declaration_based_t ):
     """
-    Creates C++ code that creates accessor for pointer class variables
+    creates get/set accessors for class variables, that has type pointer
     """
     #TODO: give user a way to set call policies
     #      treat void* pointer
@@ -316,7 +316,7 @@ class bit_field_t( member_variable_base_t ):
 class bit_field_wrapper_t( code_creator.code_creator_t
                            , declaration_based.declaration_based_t ):
     """
-    Creates C++ code that creates accessor for bit fields
+    creates get/set accessors for bit fields
     """
 
     indent = code_creator.code_creator_t.indent
@@ -431,13 +431,9 @@ class array_mv_t( member_variable_base_t ):
         return []
 
 
-#TODO: generated fucntion should be static and take instance of the wrapped class
-#as first argument.
 class array_mv_wrapper_t( code_creator.code_creator_t
                           , declaration_based.declaration_based_t ):
-    """
-    Creates C++ code that register array class.
-    """
+    """registers array class"""
 
     def __init__(self, variable ):
         code_creator.code_creator_t.__init__( self )
@@ -499,7 +495,7 @@ class array_mv_wrapper_t( code_creator.code_creator_t
 
 class mem_var_ref_t( member_variable_base_t ):
     """
-    Creates C++ code that creates accessor for class member variable, that has type reference.
+    creates get/set accessors for class member variable, that has type reference.
     """
     def __init__(self, variable, wrapper ):
         member_variable_base_t.__init__( self, variable=variable, wrapper=wrapper )
@@ -554,7 +550,7 @@ class mem_var_ref_t( member_variable_base_t ):
 class mem_var_ref_wrapper_t( code_creator.code_creator_t
                              , declaration_based.declaration_based_t ):
     """
-    Creates C++ code that creates accessor for class member variable, that has type reference.
+    creates get/set accessors for class member variable, that has type reference.
     """
 
     indent = code_creator.code_creator_t.indent

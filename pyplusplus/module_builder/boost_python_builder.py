@@ -67,7 +67,7 @@ class builder_t(module_builder.module_builder_t):
 
         :param gccxml_config: instance of pygccxml.parser.config_t class, holds
         gccxml( compiler ) configuration. You can use this argument instead of
-        passing the compiler configuration separatly.
+        passing the compiler configuration separately.
         """
         module_builder.module_builder_t.__init__( self, global_ns=None, encoding=encoding )
 
@@ -247,7 +247,7 @@ class builder_t(module_builder.module_builder_t):
 
     @property
     def code_creator( self ):
-        "reference to L{code_creators.bpmodule_t} instance"
+        "reference to :class:`code_creators.bpmodule_t` instance"
         if not self.__code_creator:
             raise RuntimeError( "self.module is equal to None. Did you forget to call build_code_creator function?" )
         return self.__code_creator

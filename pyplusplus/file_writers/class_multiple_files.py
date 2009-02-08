@@ -3,7 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""defines a class that writes L{code_creators.bpmodule_t} to multiple files, the class
+"""defines a class that writes :class:`code_creators.bpmodule_t` to multiple files, the class
 also splits huge C++ classes to few source files
 """
 
@@ -24,7 +24,7 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
     2. pyplusplus will generate
        wrapper header - header that will contain code generated for class wrappers
        classes h/cpp - will contain registration code for internal classes
-       memfun h/cpp - will contain registration code for member functions
+       `memfun` h/cpp - will contain registration code for member functions
 
        alias + _main h/cpp this class will contain main registration function.
     """
@@ -69,7 +69,7 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
         creators = [class_creator]
         if class_creator.wrapper:
             creators.append( class_creator.wrapper )
-            
+
         answer.append( self.create_include_code( creators ) )
         answer.append( '' )
         answer.append( self.create_namespaces_code( creators ) )

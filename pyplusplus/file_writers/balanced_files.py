@@ -3,7 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""defines a class that writes L{code_creators.bpmodule_t} to multiple files"""
+"""defines a class that writes :class:`code_creators.bpmodule_t` to multiple files"""
 
 import os
 import math
@@ -34,7 +34,7 @@ class balanced_files_t(multiple_files.multiple_files_t):
         """Constructor.
 
         :param extmodule: The root of a code creator tree
-        :type extmodule: bpmodule_t
+        :type extmodule: :class:`code_creators.bpmodule_t`
         :param directory_path: The output directory where the source files are written
         :type directory_path: str
 
@@ -48,15 +48,15 @@ class balanced_files_t(multiple_files.multiple_files_t):
     def split_classes( self ):
         class_creators = filter( lambda x: isinstance(x, ( code_creators.class_t, code_creators.class_declaration_t ) )
                                  , self.extmodule.body.creators )
-        
-        class_creators = filter( lambda cc: not cc.declaration.already_exposed 
+
+        class_creators = filter( lambda cc: not cc.declaration.already_exposed
                                  , class_creators )
-        
-        buckets = split_sequence(class_creators, len(class_creators)/self.number_of_buckets ) 
+
+        buckets = split_sequence(class_creators, len(class_creators)/self.number_of_buckets )
         if len(buckets) > self.number_of_buckets:
             buckets[len(buckets)-2] += buckets[len(buckets)-1]
-            buckets = buckets[:len(buckets)-1]        
-        
+            buckets = buckets[:len(buckets)-1]
+
         for index, bucket in enumerate( buckets ):
             self.split_creators( bucket
                                  , '_classes_%d' % (index+1)

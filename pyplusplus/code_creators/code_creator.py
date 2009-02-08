@@ -17,9 +17,9 @@ class code_creator_t(object):
 
     The purpose of a code creator is the generation of a block of C++
     source code as it will appear in the final source code for the
-    extension module. The source code is obtained by calling the L{create()}
-    method. Derived classes must implement the L{_create_impl()} method
-    which is called by the create() method.
+    extension module. The source code is obtained by calling the :meth:`code_creator_t.create`
+    method. Derived classes must implement the :meth:`code_creator_t._create_impl` method
+    which is called by the :meth:`code_creator_t.create` method.
     """
     PYPLUSPLUS_NS_NAME = 'pyplusplus'
     __INDENTATION = '    '
@@ -101,7 +101,7 @@ class code_creator_t(object):
     def create(self):
         """
         generates source code
-        
+
         :rtype: str
         """
         code = self._create_impl()
@@ -197,8 +197,8 @@ class code_creator_t(object):
         :type line: str
         :param language: the programming language, the line was written in. Possible values: C++, Python
         :type line: str
-        
-        :rtype: bool        
+
+        :rtype: bool
         """
         assert isinstance( line, types.StringTypes )
         l = line.lstrip()

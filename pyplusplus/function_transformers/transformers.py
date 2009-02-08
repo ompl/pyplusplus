@@ -5,17 +5,8 @@
 #
 # Initial author: Matthias Baas
 
-"""This module contains the standard argument policy objects.
+"""defines few argument transformation classes"""
 
-The following policies are available:
-
- - L{output_t}
- - L{input_t}
- - L{inout_t}
- - L{input_array_t}
- - L{output_array_t}
- - L{type_modifier_t}
-"""
 import os
 import string
 import transformer
@@ -56,7 +47,7 @@ class output_t( transformer.transformer_t ):
 
         The specified argument must be a reference or a pointer.
 
-        :param arg_ref: Index of the argument that is an output value (the first arg has index 1).
+        :param arg_ref: Index of the argument that is an output value.
         :type arg_ref: int
         """
         self.arg = self.get_argument( arg_ref )
@@ -155,15 +146,12 @@ class input_t(type_modifier_t):
 
     The reference on the specified variable is removed.
 
-    void setValue(int& v) -> setValue(v)
+    void set_value(int& v) -> void set_value(int v)
     """
 
     def __init__(self, function, arg_ref):
-        """Constructor.
-
-        The specified argument must be a reference or a pointer.
-
-        :param idx: Index of the argument that is an output value (the first arg has index 1).
+        """
+        :param idx: Index of the argument that is an output value.
         :type idx: int
         """
         type_modifier_t.__init__( self, function, arg_ref, remove_ref_or_ptr )
@@ -180,10 +168,9 @@ class from_address_t(type_modifier_t):
     """Handles a single input variable.
 
     Replaces the actual argument type with some integral type, so you
-    can use ctypes package.
+    could use :mod:`ctypes` package.
 
-    void do_smth(int** image) -> do_smth(unsigned int addressof_image)
-
+    void do_something(int** image) -> do_something(unsigned int image_address)
     """
 
     def __init__(self, function, arg_ref):
@@ -191,7 +178,7 @@ class from_address_t(type_modifier_t):
 
         The specified argument must be a reference or a pointer.
 
-        :param idx: Index of the argument that is an output value (the first arg has index 1).
+        :param idx: Index of the argument that is an output value.
         :type idx: int
         """
         modifier = lambda type_: declarations.FUNDAMENTAL_TYPES[ 'unsigned int' ]
@@ -204,11 +191,10 @@ class from_address_t(type_modifier_t):
     def __str__(self):
         return "from_address(%s)"%(self.arg.name)
 
-# inout_t
 class inout_t(transformer.transformer_t):
     """Handles a single input/output variable.
 
-    void foo(int& v) -> v = foo(v)
+    void do_something(int& v) -> v = do_something(v)
     """
 
     def __init__(self, function, arg_ref):
@@ -216,7 +202,7 @@ class inout_t(transformer.transformer_t):
 
         The specified argument must be a reference or a pointer.
 
-        :param idx: Index of the argument that is an in/out value (the first arg has index 1).
+        :param idx: Index of the argument that is an in/out value
         :type idx: int
         """
         transformer.transformer_t.__init__( self, function )
@@ -276,8 +262,9 @@ _arr2seq = string.Template(
 class input_static_array_t(transformer.transformer_t):
     """Handles an input array with fixed size.
 
-    void setVec3(double* v) ->  setVec3(object v)
-    # v must be a sequence of 3 floats
+    void do_something(double* v) ->  do_something(object v2)
+
+    where v2 is a Python sequence
     """
 
     def __init__(self, function, arg_ref, size):
@@ -360,7 +347,7 @@ class output_static_array_t(transformer.transformer_t):
     def __init__(self, function, arg_ref, size):
         """Constructor.
 
-        :param idx: Index of the argument that is an output array (the first arg has index 1).
+        :param idx: Index of the argument that is an output array.
         :type idx: int
         :param size: The fixed size of the output array
         :type size: int
@@ -441,7 +428,7 @@ class output_static_array_t(transformer.transformer_t):
 
 
 class input_c_buffer_t(transformer.transformer_t):
-    """Handles an input of C buffere:
+    """handles an input of C buffer:
 
     void write( byte *buffer, int size ) -> void write( python sequence )
     """

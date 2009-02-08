@@ -10,8 +10,8 @@ import instruction
 class include_directories_t(instruction.instruction_t):
     """
     The instance of this class holds a list of user defined directories.
-    L{include_t} and {precompiled_header_t} code creators use it to generate
-    relative include directives.
+    :class:`code_creators.include_t` and :class:`code_creators.precompiled_header_t`
+    code creators use it to generate relative include directives.
     """
     def __init__(self):
         instruction.instruction_t.__init__(self)
@@ -21,7 +21,7 @@ class include_directories_t(instruction.instruction_t):
     @staticmethod
     def normalize( path ):
         return os.path.normpath( os.path.normcase( path ) )
-    
+
     def _get_user_defined(self):
         self._user_defined = map( self.normalize, self._user_defined )
         return self._user_defined
@@ -41,7 +41,7 @@ class include_directories_t(instruction.instruction_t):
         headers.append( self.normalize( header ) )
         dname = os.path.commonprefix( headers )
         return dname in headers[:-1]
-        
+
     def is_user_defined(self, header):
         return not self.is_std( header )
 
@@ -62,15 +62,14 @@ class include_directories_t(instruction.instruction_t):
         headers = self.std + self.user_defined
         answer = self._remove_common_prefix( header, headers )
         return answer.replace( '\\', '/' )
-        
+
     def _generate_description(self):
         desc = ["std directories: " + pprint.pformat( self.std )]
-        temp = pprint.pformat( self.user_defined ) 
+        temp = pprint.pformat( self.user_defined )
         if os.linesep not in temp:
             #fixing bug on windows where linesep == \n\r
             #while pformat uses \n
             temp = temp.replace( '\n', os.linesep )
         desc.append( "user defined directories: " + temp )
         return os.linesep.join( desc )
-    
-    
+

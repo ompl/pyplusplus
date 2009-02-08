@@ -66,15 +66,15 @@ class multi_line_formatter_t(logging.Formatter):
     def formatMessage(msgline, width=70):
         """Format a long single line message so that it is easier to read.
 
-        msgline is a string containing a single message. It can either be
-        a plain message string which is reformatted using the textwrap
+        `msgline` is a string containing a single message. It can either be
+        a plain message string which is reformatted using the :mod:`textwrap`
         module or it can be of the form <declaration>;<message> where <declaration>
         is the declaration string and <message> an arbitrary message. Lines of this
         form will be separated so that the declaration and the message appear in
         individual text blocks, where every line of message will start
         with '>' character.
 
-        width is the maximum width of any text blocks (without indendation).
+        width is the maximum width of any text blocks (without indentation).
         """
         txts = msgline.split(";")
         # Ensure that there are no more than two items in txts

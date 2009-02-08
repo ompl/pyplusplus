@@ -12,7 +12,7 @@ class typedef_t(decl_wrapper.decl_wrapper_t, declarations.typedef_t):
     """defines a set of properties, that will instruct `Py++` how to expose the typedef
 
     Today, `Py++` does not exposes typedefs, but this could be changed in future.
-    In C++, it is a common practises to give an aliases to the class. May be in
+    In C++, it is a common practices to give an aliases to the class. May be in
     future, `Py++` will generate code, that will register all those aliases.
     """
 
@@ -20,7 +20,7 @@ class typedef_t(decl_wrapper.decl_wrapper_t, declarations.typedef_t):
         declarations.typedef_t.__init__(self, *arguments, **keywords )
         decl_wrapper.decl_wrapper_t.__init__( self )
         self.__is_directive = None
-        
+
     @property
     def is_directive( self ):
         if None is self.__is_directive:
