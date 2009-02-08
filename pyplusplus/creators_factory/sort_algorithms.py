@@ -116,20 +116,20 @@ class class_organizer_t(object):
         for fname in self.__desired_order:
             answer.append( fname2inst[fname] )
         return answer
-        
-class calldef_organizer_t( object ):  
+
+class calldef_organizer_t( object ):
     #Take a look on this post:
     #  http://mail.python.org/pipermail/c++-sig/2006-October/011463.html
 
-    #calldef_organizer_t will take into account only requiered arguments.
+    #calldef_organizer_t will take into account only required arguments.
     #Next rules are implemented:
     #1. calldef( bool ) will be the last registered function
     #2. T* will come after T ( const T& )
     def __init__( self ):
         object.__init__( self )
-        #preserve order in which functions where defined        
+        #preserve order in which functions where defined
         self.__cmp_unrelated = lambda d1, d2: cmp( d1.location.line, d2.location.line )
-        
+
     def __build_groups( self, decls ):
         groups = { None: [] }
         for d in decls:
@@ -145,7 +145,7 @@ class calldef_organizer_t( object ):
         return decl_wrappers.algorithm.registration_order.is_related( t1, t2 )
 
     def __cmp( self, f1, f2 ):
-        result = self.__cmp_types( f1.arguments[0].type, f2.arguments[0].type )    
+        result = self.__cmp_types( f1.arguments[0].type, f2.arguments[0].type )
         if None is result:
             result = self.__cmp_unrelated( f1, f2 )
         return result
@@ -155,7 +155,7 @@ class calldef_organizer_t( object ):
             if None is group:
                 continue
             groups[ group ].sort( self.__cmp )
-    
+
     def __join_groups( self, groups ):
         decls = []
         sorted_keys = groups.keys()
@@ -168,7 +168,7 @@ class calldef_organizer_t( object ):
         groups = self.__build_groups( decls )
         self.__sort_groups(groups)
         result = self.__join_groups(groups)
-        return result    
+        return result
 
 def sort_classes( classes ):
     organizer = class_organizer_t( classes )
@@ -177,8 +177,8 @@ def sort_classes( classes ):
 def sort_calldefs( decls ):
     return calldef_organizer_t().sort( decls )
 
-USE_CALLDEF_ORGANIZER = False 
-#If you understand what problem calldef_organizer_t solves, than may be you should 
+USE_CALLDEF_ORGANIZER = False
+#If you understand what problem calldef_organizer_t solves, than may be you should
 #use this.
 
 def sort( decls ):
@@ -219,7 +219,7 @@ def sort( decls ):
     else:
         others.sort( cmp=cmp_by_name )
         constructors.sort( cmp=cmp_by_line )
-    
+
     new_ordered = []
     new_ordered.extend( enums )
     new_ordered.extend( classes )

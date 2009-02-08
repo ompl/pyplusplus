@@ -92,7 +92,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
     def has_wrapper( self ):
         """returns True, if function - wrapper is needed
 
-        The functionality by this function is uncomplete. So please don't
+        The functionality by this function is incomplete. So please don't
         use it in your code.
         """
         if not isinstance( self, declarations.member_calldef_t ):

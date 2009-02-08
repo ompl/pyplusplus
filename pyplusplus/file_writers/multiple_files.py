@@ -16,22 +16,19 @@ from pyplusplus import code_creators
 #TODO: to add namespace_alias_t classes
 class multiple_files_t(writer.writer_t):
     """
-    This class implements classic strategy of deviding classes to files
+    This class implements classic strategy of dividing classes to files
     one class in one header + source files.
     """
     HEADER_EXT = '.pypp.hpp'
     SOURCE_EXT = '.pypp.cpp'
 
     def __init__(self, extmodule, directory_path, write_main=True, files_sum_repository=None, encoding='ascii'):
-        """Constructor.
-
-        :param extmodule: The root of a code creator tree
-        :type extmodule: bpmodule_t
-        :param directory_path: The output directory where the source files are written
+        """
+        :param extmodule: code creators tree root
+        :type extmodule: :class:`code_creators.bpmodule_t`
+        :param directory_path: generated source files directory
         :type directory_path: str
-
-        :param write_main:  if it is True, the class will write out a main file
-            that calls all the registration methods.
+        :param write_main:  if True, the class will write out a main file that calls all the registration methods.
         :type write_main: boolean
         """
         writer.writer_t.__init__( self, extmodule, files_sum_repository, encoding=encoding )

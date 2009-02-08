@@ -82,7 +82,7 @@ class smart_pointer_registrator_t( registration_based.registration_based_t
 class smart_pointers_converter_t( registration_based.registration_based_t
                                   , declaration_based.declaration_based_t ):
     """ creator for boost::python::implicitly_convertible.
-        This creates a statemnt that allows the usage of C++ implicit
+        This creates a statement that allows the usage of C++ implicit
         conversion from source to target.
         See: http://www.boost.org/libs/python/doc/v2/implicit.html
     """

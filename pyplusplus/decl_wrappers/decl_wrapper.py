@@ -170,7 +170,7 @@ class decl_wrapper_t(object):
         """change "exportable" status
 
         This function should be use in case `Py++` made a mistake and signed the
-        declaration as unexportable."""
+        declaration as non-exportable."""
         self._exportable = exportable
 
     exportable = property( get_exportable, set_exportable

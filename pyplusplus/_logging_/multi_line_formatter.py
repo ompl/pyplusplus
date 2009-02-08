@@ -44,7 +44,7 @@ class multi_line_formatter_t(logging.Formatter):
           record.message = record.getMessage()
 
         Now this method temporarily replaces the getMessage() method of
-        the record by a version that returns a pre-generated message that
+        the record by a version that returns a generated message that
         spans several lines. Then the original format() method is called
         which will invoke the 'fake' method.
         """

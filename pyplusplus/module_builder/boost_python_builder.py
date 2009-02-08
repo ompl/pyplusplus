@@ -216,20 +216,17 @@ class builder_t(module_builder.module_builder_t):
                        , enable_indexing_suite=True
                        , doc_extractor=None):
         """
-        Creates L{bpmodule_t} code creator.
+        Creates :class:`code_creators.bpmodule_t` code creator.
 
         :param module_name: module name
-        :type module_name: string
+        :type module_name: str
 
-        :param boost_python_ns_name: boost::python namespace alias, by default
-        it is 'bp'
-        :type boost_python_ns_name: string
+        :param boost_python_ns_name: boost::python namespace alias, by default it is `bp`
+        :type boost_python_ns_name: str
 
-        :param call_policies_resolver_: callable, that will be invoked on every
-        calldef object. It should return call policies.
+        :param call_policies_resolver_: callable, that will be invoked on every calldef object. It should return call policies.
         :type call_policies_resolver_: callable
-        :param doc_extractor: callable, that takes as argument reference to declaration
-            and returns documentation string
+        :param doc_extractor: callable, that takes as argument reference to declaration and returns documentation string
         :type doc_extractor: callable or None
         """
 
@@ -333,17 +330,17 @@ class builder_t(module_builder.module_builder_t):
                       , on_unused_file_found=os.remove
                       , use_files_sum_repository=False):
         """
-        Writes module to multiple files
+        writes module to multiple files
 
         :param dir_name: directory name
-        :type dir_name: string
+        :type dir_name: str
 
         :param huge_classes: list that contains reference to classes, that should be split
 
         :param on_unused_file_found: callable object that represents the action that should be taken on
                                      file, which is no more in use
 
-        @use_files_sum_repository: `Py++` can generate file, which will contain md5 sum of every generated file.
+        @use_files_sum_repository: `Py++` can generate file, which will contain `md5` sum of every generated file.
                                    Next time you generate code, md5sum will be loaded from the file and compared.
                                    This could speed-up code generation process by 10-15%.
         """

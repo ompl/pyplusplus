@@ -147,7 +147,7 @@ class code_creator_t(object):
 
     def beautify( self, code ):
         """
-        function that returns code without leading and trailing whitespaces.
+        function that returns code without leading and trailing white spaces.
 
         :param code: A code block with C++ source code.
         :type code: str

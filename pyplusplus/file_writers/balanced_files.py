@@ -18,7 +18,7 @@ from pyplusplus.utils import split_sequence
 #TODO: to add namespace_alias_t classes
 class balanced_files_t(multiple_files.multiple_files_t):
     """
-    This class implements classic strategy of deviding classes to files
+    This class implements classic strategy of dividing classes to files
     one class in one header + source files.
     """
     HEADER_EXT = '.pypp.hpp'
