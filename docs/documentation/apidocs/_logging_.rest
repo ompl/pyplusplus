@@ -1,0 +1,10 @@
+============================
+pyplusplus._logging_ package
+============================
+
+multi_line_formatter
+--------------------
+
+.. automodule:: pyplusplus._logging_.multi_line_formatter
+    :members:
+    :show-inheritance:

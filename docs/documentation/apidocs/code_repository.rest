@@ -1,0 +1,39 @@
+==================================
+pyplusplus.code_repository package
+==================================
+
+sub-packages
+------------
+
+.. toctree::
+
+    code_repository/indexing_suite.rest
+
+ctypes_integration
+------------------
+
+.. automodule:: pyplusplus.code_repository.ctypes_integration
+    :members:
+    :show-inheritance:
+
+ctypes_utils
+------------
+
+.. automodule:: pyplusplus.code_repository.ctypes_utils
+    :members:
+    :show-inheritance:
+
+gil_guard
+---------
+
+.. automodule:: pyplusplus.code_repository.gil_guard
+    :members:
+    :show-inheritance:
+
+named_tuple
+-----------
+
+.. automodule:: pyplusplus.code_repository.named_tuple
+    :members:
+    :show-inheritance:
+

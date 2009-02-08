@@ -1,0 +1,122 @@
+================================
+pyplusplus.decl_wrappers package
+================================
+
+algorithm
+---------
+
+.. automodule:: pyplusplus.decl_wrappers.algorithm
+    :members:
+    :show-inheritance:
+
+calldef_wrapper
+---------------
+
+.. automodule:: pyplusplus.decl_wrappers.calldef_wrapper
+    :members:
+    :show-inheritance:
+
+call_policies
+-------------
+
+.. automodule:: pyplusplus.decl_wrappers.call_policies
+    :members:
+    :show-inheritance:
+
+class_wrapper
+-------------
+
+.. automodule:: pyplusplus.decl_wrappers.class_wrapper
+    :members:
+    :show-inheritance:
+
+decl_wrapper
+------------
+
+.. automodule:: pyplusplus.decl_wrappers.decl_wrapper
+    :members:
+    :show-inheritance:
+
+decl_wrapper_printer
+--------------------
+
+.. automodule:: pyplusplus.decl_wrappers.decl_wrapper_printer
+    :members:
+    :show-inheritance:
+
+doc_extractor
+-------------
+
+.. automodule:: pyplusplus.decl_wrappers.doc_extractor
+    :members:
+    :show-inheritance:
+
+enumeration_wrapper
+-------------------
+
+.. automodule:: pyplusplus.decl_wrappers.enumeration_wrapper
+    :members:
+    :show-inheritance:
+
+indexing_suite1
+---------------
+
+.. automodule:: pyplusplus.decl_wrappers.indexing_suite1
+    :members:
+    :show-inheritance:
+
+indexing_suite2
+---------------
+
+.. automodule:: pyplusplus.decl_wrappers.indexing_suite2
+    :members:
+    :show-inheritance:
+
+namespace_wrapper
+-----------------
+
+.. automodule:: pyplusplus.decl_wrappers.namespace_wrapper
+    :members:
+    :show-inheritance:
+
+properties
+----------
+
+.. automodule:: pyplusplus.decl_wrappers.properties
+    :members:
+    :show-inheritance:
+
+python_traits
+-------------
+
+.. automodule:: pyplusplus.decl_wrappers.python_traits
+    :members:
+    :show-inheritance:
+
+scopedef_wrapper
+----------------
+
+.. automodule:: pyplusplus.decl_wrappers.scopedef_wrapper
+    :members:
+    :show-inheritance:
+
+typedef_wrapper
+---------------
+
+.. automodule:: pyplusplus.decl_wrappers.typedef_wrapper
+    :members:
+    :show-inheritance:
+
+user_text
+---------
+
+.. automodule:: pyplusplus.decl_wrappers.user_text
+    :members:
+    :show-inheritance:
+
+variable_wrapper
+----------------
+
+.. automodule:: pyplusplus.decl_wrappers.variable_wrapper
+    :members:
+    :show-inheritance:

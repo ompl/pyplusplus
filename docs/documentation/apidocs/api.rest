@@ -2,8 +2,18 @@
 API
 ===
 
-`Py++` consists from XXX sub packages
+`Py++` consists from few sub packages
 
 .. toctree::
    :maxdepth: 4
 
+   module_builder.rest
+   decl_wrappers.rest
+   file_writers.rest
+   function_transformers.rest
+   messages.rest
+   utils.rest
+   _logging_.rest
+   code_creators.rest
+   code_repository.rest
+   creators_factory.rest
