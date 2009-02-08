@@ -3,9 +3,11 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""This package defines all user messages( warnings + errors ), which will be 
+"""This package defines all user messages( warnings + errors ), which will be
 reported to user.
 """
+
+import warnings_
 from warnings_ import *
 
 def find_out_message_id( msg ):
@@ -21,11 +23,11 @@ def disable( *args ):
 
 def filter_disabled_msgs( msgs, disable_messages=None ):
     report = []
-    
+
     skip_them = DISABLE_MESSAGES[:]
     if disable_messages:
         skip_them.extend( disable_messages )
-    
+
     skip_them = filter( None, map( find_out_message_id, skip_them ) )
 
     for msg in msgs:
