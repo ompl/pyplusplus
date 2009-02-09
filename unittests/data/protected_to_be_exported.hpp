@@ -29,6 +29,22 @@ struct protected_v_derived_t : public protected_v_t{
 
 }
 
+class Thing
+{
+protected:
+   virtual ~Thing() {}
+};
+
+class Callback
+{
+public:
+   Callback() { }
+   virtual void execute(const Thing& t) { }
+protected:
+   virtual ~Callback() {}
+};
+
+
 #endif//__protected_to_be_exported_hpp__
 
 

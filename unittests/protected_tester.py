@@ -8,6 +8,7 @@ import sys
 import unittest
 import fundamental_tester_base
 from pygccxml import declarations
+from pyplusplus import function_transformers as ft
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'protected'
@@ -19,8 +20,16 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , *args )
                                                                     
     def customize(self, mb ):
+        def tt( type_ ):
+            type_ = declarations.remove_reference( type_ )
+            type_ = declarations.remove_const( type_ )
+            return declarations.reference_t( type_ )
         mb.classes().always_expose_using_scope = True
         mb.calldefs().create_with_signature = True
+        mb.class_( 'Callback' ).add_wrapper_code( '//hhhh' )
+        execute = mb.class_( 'Callback' ).mem_fun( 'execute' )
+        execute.add_transformation( ft.modify_type(0, tt ) )
+        #execute.exclude()
 
     def create_protected_s_derived_no_override( self, module ):
         class derived(module.protected_v_t):
