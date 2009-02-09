@@ -65,18 +65,21 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
                                      , doc=__call_policies_doc__ )
 
     __use_make_functions_doc__ = \
-    """Generate code using make_getter and make_setter functions
+    """
+    Generate code using `make_getter` and `make_setter` functions
 
-    Basically you don't need to use this, untill you have one of the next use-cases:
-    * member variable is smart pointer - in this case Boost.Python has small problem
-      to expose it right. Using the functions is a work around to the problem.
-    * member variable defined custom r-value converter - may be you don't know
-      but the conversion is applied only on functions arguments. So you need to
-      use make_getter/make_setter in order to allow user to enjoy from the
-      conversion.
+    Basically you don't need to use this, untill you have one of the following
+    use-cases:
 
-    Setting "apply_smart_ptr_wa" and/or "use_make_functions" to "True" will tell
-    `Py++` to generate such code.
+      * member variable is smart pointer - in this case Boost.Python has small
+        problem to expose it right. Using get/set functions is a work-around.
+
+      * member variable defined custom r-value converter - may be you don't know
+        but the conversion is applied only on functions arguments. So you need to
+        use make_getter/make_setter functions, allow users to enjoy from the conversion.
+
+    Setting :attr:`apply_smart_ptr_wa` and/or :attr:`use_make_functions` to "True"
+    will tell `Py++` to generate such code.
     """
 
     def get_apply_smart_ptr_wa( self ):

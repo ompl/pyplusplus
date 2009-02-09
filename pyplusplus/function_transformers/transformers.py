@@ -428,9 +428,10 @@ class output_static_array_t(transformer.transformer_t):
 
 
 class input_c_buffer_t(transformer.transformer_t):
-    """handles an input of C buffer:
+    """
+    handles an input of C buffer:
 
-    void write( byte *buffer, int size ) -> void write( python sequence )
+    void write( byte \\*buffer, int size ) -> void write( python sequence )
     """
 
     def __init__(self, function, buffer_arg_ref, size_arg_ref):

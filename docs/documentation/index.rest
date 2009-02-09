@@ -12,7 +12,7 @@ task to create and maintain it. I will appreciate **any help**!
 How can you help?
 
 * Lets face it: today it is not possible to use :doc:`Py++ <../pyplusplus>` without eventually
-  looking into source code. :doc:`Py++ <../pyplusplus>` uses `epydoc`_ to generate documentation
+  looking into source code. :doc:`Py++ <../pyplusplus>` uses Sphinx to generate documentation
   from source files. So, if you found some undocumented piece of code and you
   understand what it does, please write documentation string.
 
@@ -44,7 +44,6 @@ Overview
    functions/functions.rest
    how_to/how_to.rest
 
-.. _`epydoc` : http://epydoc.sourceforge.net/
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

@@ -12,11 +12,14 @@ from pygccxml import declarations
 templates = declarations.templates
 
 class held_type_t(object):
-    """ Helper class that can hold name of `smart_ptr` type and create
-        identifier for held type from that given a creator.
+    """
+    Helper class that can hold smart pointer name and create identifier for the
+    held type from that given a creator.
     """
     def __init__( self, smart_ptr ):
-        """ smart_ptr: string of ptr type.  Ex: `boost::shared_ptr`"""
+        """
+        :param smart_ptr: smart pointer type as string
+        """
         object.__init__( self )
         self._smart_ptr = smart_ptr
 

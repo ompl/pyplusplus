@@ -1,19 +1,10 @@
-Pyplusplus\Messages Documentation
-=================================
+===========================
+pyplusplus.messages package
+===========================
 
-This page contains the Pyplusplus\Messages Package documentation.
+warnings_
+---------
 
-The :mod:`messages.warnings_` Modules
--------------------------------------
-
-.. automodule:: messages.warnings_
+.. automodule:: pyplusplus.messages.warnings_
     :members:
     :show-inheritance:
-
-The :mod:`pyplusplus\messages` Package
---------------------------------------
-
-.. automodule:: pyplusplus\messages
-    :members:
-    :show-inheritance:
-

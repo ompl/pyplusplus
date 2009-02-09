@@ -41,8 +41,7 @@ setup script:
 
   python setup.py doc
 
-In order for this to work you need epydoc (http://epydoc.sourceforge.net)
-and pygccxml.
+In order for this to work you need Sphinx and pygccxml.
 
 
 --------------------------------------------------------------------------

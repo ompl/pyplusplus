@@ -3,8 +3,9 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""defines a class that writes :class:`code_creators.bpmodule_t` to multiple files, the class
-also splits huge C++ classes to few source files
+"""
+defines a class that writes :class:`code_creators.bpmodule_t` to multiple files,
+the class also splits huge C++ classes to few source files.
 """
 
 import os
@@ -15,18 +16,21 @@ from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
 from pyplusplus import utils as pypp_utils
 
-#TODO: to add namespace_alias_t classes
 class class_multiple_files_t(multiple_files.multiple_files_t):
     """
     This class will split code, generated for huge classes, to few files.
-    Next strategy will be used:
-    1. New directory with class alias name will be created.
-    2. pyplusplus will generate
-       wrapper header - header that will contain code generated for class wrappers
-       classes h/cpp - will contain registration code for internal classes
-       `memfun` h/cpp - will contain registration code for member functions
+    The following strategy will be used:
 
-       alias + _main h/cpp this class will contain main registration function.
+      * New directory, named after a class alias, will be created.
+
+      * `Py++` will generate
+
+        * wrapper header - header that will contain code generated for class wrappers
+        * classes h/cpp - will contain registration code for internal classes
+        * `memfun` h/cpp - will contain registration code for member functions
+
+    The main class registration function will be placed in "%(class alias)s_main"
+    header and source files.
     """
 
     def __init__( self
