@@ -5,7 +5,6 @@
 
 import os
 import module
-import import_
 import library_reference
 from pygccxml import utils
 
