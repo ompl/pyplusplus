@@ -50,7 +50,7 @@ class module_t(compound.compound_t):
                         doc="""License text.
 
                         The license text will always be the first children node.
-                        @type: str or L{license_t}""")
+                        @type: str or :class:`code_creators.license_t`""")
 
     def _get_system_files_impl( self ):
         return []
@@ -113,18 +113,18 @@ class bpmodule_t(module_t):
 
     @property
     def body(self):
-        """Return reference to L{module_body_t} code creator"""
+        """Return reference to :class:`code_creators.module_body_t` code creator"""
         if None is self.__body:
             found = algorithm.creator_finder.find_by_class_instance( what=module_body.module_body_t
-                                                                 , where=self.creators
-                                                                 , recursive=False )
+																	 , where=self.creators
+																	 , recursive=False )
             if found:
                 self.__body = found[0]
         return self.__body
 
     def last_include_index(self):
         """
-        return the children index of the last L{include_t} object.
+        return the children index of the last :class:`code_creators.include_t` object.
 
         An exception is raised when there is no include_t object among
         the children creators.
@@ -157,12 +157,12 @@ class bpmodule_t(module_t):
              , headers )
 
     def adopt_include(self, include_creator):
-        """Insert an L{include_t} object.
+        """Insert an :class:`code_creators.include_t` object.
 
         The include creator is inserted right after the last include file.
 
         :param include_creator: Include creator object
-        :type include_creator: L{include_t}
+        :type include_creator: :class:`code_creators.include_t`
         """
         lii = self.last_include_index()
         if lii == 0:

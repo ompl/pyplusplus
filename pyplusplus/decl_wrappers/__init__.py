@@ -5,8 +5,8 @@
 
 """Code generator configuration classes
 
-L{pygccxml.declarations} package contains classes, which describe C++ declarations.
-This package contains classes that derive from the L{pygccxml.declarations} classes.
+:mod:`pygccxml.declarations` package contains classes, which describe C++ declarations.
+This package contains classes that derive from the :mod:`pygccxml.declarations` classes.
 The classes in this package allow you to configure the code generator.
 """
 

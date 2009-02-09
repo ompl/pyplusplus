@@ -4,12 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 """
-This package provides users with simple and convenient interface to `Py++`
-functionality.
-
-L{module_builder_t} class is the main class. Please read it's documentation first.
-Also take a look on tutorials. You can find them on `Py++`
-U{web site<http://www.language-binding.net>}
+This package provides simple and convenient interface to `Py++` functionality.
 """
 
 from boost_python_builder import builder_t as module_builder_t

@@ -3,7 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"defines few classes, used by L{decl_wrapper.class_t} class to keep user code"
+"defines few classes, used by :class:`decl_wrapper.class_t` class to keep user code"
 
 class user_text_t(object):
     "keeps reference to user code that belongs to declaration section"

@@ -14,7 +14,7 @@ class declaration_based_t:
         """Constructor.
 
         :param declaration: Declaration object
-        :type declaration: L{decl_wrapper_t<decl_wrappers.decl_wrapper_t>}
+        :type declaration: :class:`decl_wrappers.decl_wrapper_t`
         :param parent: Parent code creator.
         :type parent: code_creator_t
         """
@@ -28,7 +28,7 @@ class declaration_based_t:
     @property
     def declaration(self):
         """The declaration this code creator is based on.
-        @type: L{decl_wrapper_t<decl_wrappers.decl_wrapper_t>}
+        @type: :class:`decl_wrappers.decl_wrapper_t`
         """
         return self._decl
 

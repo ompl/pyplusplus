@@ -3,8 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""This module contains the class L{transformer_t}.
-"""
+"""defines :class:transformer_t class"""
 
 import sys, os.path, copy, re, types
 from pygccxml import declarations, parser
@@ -71,7 +70,7 @@ class transformer_t(object):
         transformers should override the method, in order to define custom
         transformation for free function.
 
-        :param controller: instance of L{free_fun_controller_t} class
+        :param controller: instance of :class:`free_fun_controller_t` class
         """
         raise NotImplementedError(self.__class__.__name__)
 

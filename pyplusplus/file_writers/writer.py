@@ -3,7 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""defines interface for all classes that writes L{code_creators.module_t} to file(s)"""
+"""defines interface for all classes that writes :class:`code_creators.module_t` to file(s)"""
 
 import os
 import time
@@ -60,7 +60,7 @@ class writer_t(object):
 
     @staticmethod
     def create_backup(fpath):
-        """creates backup of the file, by renaming it to C{fpath + ~}"""
+        """creates backup of the file"""
         if not os.path.exists( fpath ):
             return
         backup_fpath = fpath + '~'
@@ -69,7 +69,7 @@ class writer_t(object):
         os.rename( fpath, backup_fpath )
 
     def write_code_repository(self, dir):
-        """creates files defined in L{code_repository} package"""
+        """creates files defined in :mod:`code_repository` package"""
         visited = set()
         system_files = self.extmodule.get_system_files( recursive=True )
         for cr in code_repository.all:

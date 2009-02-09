@@ -3,7 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""defines a class that writes L{code_creators.module_t} to single file"""
+"""defines a class that writes :class:`code_creators.module_t` to single file"""
 
 import os
 import writer

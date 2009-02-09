@@ -20,7 +20,7 @@ class variable_t( object ):
     def __init__( self, type, name, initialize_expr='' ):
         """
         :param type: type of the variable
-        :type type: instance of L{pygccxml.declarations.type_t}
+        :type type: instance of :class:`pygccxml.declarations.type_t`
         
         :param name: name( str ) of the variable
         
@@ -74,7 +74,7 @@ class variables_manager_t( object ):
         """declare variable
         
         :param type: type of the variable
-        :type type: instance of L{pygccxml.declarations.type_t}
+        :type type: instance of :class:`pygccxml.declarations.type_t`
         
         :param name: name( str ) of the variable
         

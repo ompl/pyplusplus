@@ -42,7 +42,7 @@ class decl_wrapper_t(object):
 
     @property
     def logger( self ):
-        """reference to L{_logging_.loggers.declarations}"""
+        """reference to :attr:`_logging_.loggers.declarations`"""
         return _logging_.loggers.declarations
 
     def _get_documentation( self ):
@@ -210,9 +210,13 @@ class decl_wrapper_t(object):
     disabled_messaged = disabled_messages
 
     def disable_messages( self, *args ):
-        """set messages, which should not be reported to you
+        """
+        disable messages - `Py++` will not report the disabled messages
+        Usage example:
 
-        Usage example: decl.disable_messages( messages.W1001, messages.W1040 )
+        .. code-block:: python
+
+           decl.disable_messages( messages.W1001, messages.W1040 )
         """
         for msg in args:
             msg_id = messages.find_out_message_id( msg )

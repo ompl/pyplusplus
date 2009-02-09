@@ -40,7 +40,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
     def set_call_policies(self, call_policies):
         self._call_policies = call_policies
     call_policies = property( get_call_policies, set_call_policies
-                              , doc="reference to L{call policies<call_policy_t>} class." \
+                              , doc="reference to :class:`decl_wrappers.call_policy_t` class." \
                                    +"Default value is calculated at runtime, based on return value.")
 
     def _get_use_keywords(self):
@@ -152,7 +152,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         """add new function transformation.
 
         transformer_creators - list of transformer creators, which should be applied on the function
-        keywd - keyword arguments for L{function_transformation_t} class initialization
+        keywd - keyword arguments for :class:`function_transformers.function_transformation_t` class initialization
         """
         self.transformations.append( ft.function_transformation_t( self, transformer_creators, **keywd ) )
 

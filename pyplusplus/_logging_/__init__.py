@@ -44,7 +44,7 @@ class loggers:
     """
     
     module_builder = _create_logger_( 'pyplusplus.module_builder' )
-    """logger that in use by L{module_builder_t} class.
+    """logger that in use by :class:`module_builder.module_builder_t` class.
 
     Just another logger. It exists mostly for `Py++` developers.
     """

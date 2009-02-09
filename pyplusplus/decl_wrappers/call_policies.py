@@ -25,11 +25,11 @@ class call_policy_t(object):
     def create(self, function_creator, creation_policy=CREATION_POLICY.AS_INSTANCE):
         """Creates code from the call policies class instance.
         :param function_creator: parent code creator
-        :type function_creator: L{code_creators.function_t} or L{code_creators.constructor_t}
+        :type function_creator: :class:`code_creators.function_t` or :class:`code_creators.constructor_t`
 
         :param creation_policy: indicates whether we this call policy used as template
                                 argument or as an instance
-        :type creation_policy: L{CREATION_POLICY}
+        :type creation_policy: :class:`decl_wrappers.CREATION_POLICY`
         """
         code = self._create_impl( function_creator )
         if code and creation_policy == CREATION_POLICY.AS_INSTANCE:
@@ -45,7 +45,7 @@ class call_policy_t(object):
         return self.create( function_creator, CREATION_POLICY.AS_TEMPLATE_ARGUMENT )
 
     def is_default( self ):
-        """return True is self is instance of L{default_call_policies_t} class"""
+        """return True is self is instance of :class:`decl_wrappers.default_call_policies_t` class"""
         return False
 
     def is_predefined( self ):
@@ -91,7 +91,7 @@ class compound_policy_t( call_policy_t ):
     def _set_base_policy( self, new_policy ):
         self._base = new_policy
     base_policy = property( _get_base_policy, _set_base_policy
-                            , doc="base call policy, by default is reference to L{default_call_policies_t} call policy")
+                            , doc="base call policy, by default is reference to :class:`decl_wrappers.default_call_policies_t` call policy")
 
     def _get_args(self, function_creator):
         return []

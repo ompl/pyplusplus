@@ -36,9 +36,9 @@ class module_builder_t(object):
 
     def run_query_optimizer(self):
         """
-        It is possible to optimze time that takes to execute queries. In most cases
-        this is done from __init__ method. But there are use-case, when you need
-        to disable optimizer at __init__ and run it later.
+        It is possible to optimize time that takes to execute queries. In most cases
+        this is done from the :meth:`__init__` method. But there are use-case,
+        when you need to disable optimizer and run it later.
         """
         self.global_ns.init_optimizer()
 
@@ -48,7 +48,7 @@ class module_builder_t(object):
         some specific one.
 
         :param decl: optional, if passed, then only it will be printed
-        :type decl: instance of L{decl_wrappers.decl_wrapper_t} class
+        :type decl: instance of :class:`decl_wrappers.decl_wrapper_t` class
         """
         if None is decl:
             decl = self.global_ns

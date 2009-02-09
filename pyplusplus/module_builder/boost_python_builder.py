@@ -25,7 +25,7 @@ class builder_t(module_builder.module_builder_t):
     """
     This class provides users with simple and intuitive interface to `Py++`
     and/or pygccxml functionality. If this is your first attempt to use `Py++`
-    consider to read tutorials. You can find them on U{web site<http://www.language-binding.net>}.
+    consider to read tutorials. You can find them on `web site <http://www.language-binding.net>`_.
     """
 
     def __init__( self
@@ -47,7 +47,7 @@ class builder_t(module_builder.module_builder_t):
                   , gccxml_config=None):
         """
         :param files: list of files, declarations from them you want to export
-        :type files: list of strings or L{file_configuration_t} instances
+        :type files: list of strings or :class:`parser.file_configuration_t` instances
 
         :param gccxml_path: path to gccxml binary. If you don't pass this argument,
         pygccxml parser will try to locate it using you environment PATH variable

@@ -26,7 +26,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
     """
     This class provides users with simple and intuitive interface to `Py++`
     and/or pygccxml functionality. If this is your first attempt to use `Py++`
-    consider to read tutorials. You can find them on U{web site<http://www.language-binding.net>}.
+    consider to read tutorials. You can find them on `web site <http://www.language-binding.net>`_.
     """
     def __init__( self
                   , files
@@ -36,7 +36,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
                   , encoding='ascii' ):
         """
         :param files: list of files, declarations from them you want to export
-        :type files: list of strings or L{file_configuration_t} instances
+        :type files: list of strings or :class:`parser.file_configuration_t` instances
 
         :param gccxml_path: path to gccxml binary. If you don't pass this argument,
         pygccxml parser will try to locate it using you environment PATH variable
@@ -108,7 +108,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
 
     @property
     def code_creator( self ):
-        "reference to L{code_creators.ctypes_module_t} instance"
+        "reference to :class:`code_creators.ctypes_module_t` instance"
         if not self.__code_creator:
             raise RuntimeError( "self.module is equal to None. Did you forget to call build_code_creator function?" )
         return self.__code_creator

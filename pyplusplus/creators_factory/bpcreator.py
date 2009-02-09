@@ -21,17 +21,13 @@ ACCESS_TYPES = declarations.ACCESS_TYPES
 VIRTUALITY_TYPES = declarations.VIRTUALITY_TYPES
 
 class bpcreator_t( declarations.decl_visitor_t ):
-    """Creating code creators.
+    """
+    code creators factory for Boost.Python library
 
     This class takes a set of declarations as input and creates a code
-    creator tree that contains the Boost.Python C++ source code for the
+    creators tree that contains the Boost.Python C++ source code for the
     final extension module. Each node in the code creators tree represents
     a block of text (C++ source code).
-
-    Usage of this class: Create an instance and pass all relevant input
-    data to the constructor. Then call L{create()} to obtain the code
-    creator tree whose root node is a L{module_t<code_creators.module_t>}
-    object representing the source code for the entire extension module.
     """
 
     def __init__( self
@@ -57,8 +53,8 @@ class bpcreator_t( declarations.decl_visitor_t ):
         :type module_name: str
         :type boost_python_ns_name: str
         :type call_policies_resolver_: callable
-        :type types_db: L{types_database_t<types_database.types_database_t>}
-        :type target_configuration: L{target_configuration_t<code_creators.target_configuration_t>}
+        :type types_db: L:class:`types_database.types_database_t`
+        :type target_configuration: :class:`code_creators.target_configuration_t`
         :type doc_extractor: callable
         :type already_exposed_dbs: list of strings
         """

@@ -3,13 +3,13 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""defines base class for L{decl_wrappers.class_t} and L{decl_wrappers.namespace_t} classes"""
+"""defines base class for :class:`decl_wrappers.class_t` and :class:`decl_wrappers.namespace_t` classes"""
 
 import decl_wrapper
 from pyplusplus import messages
 
 class scopedef_t(decl_wrapper.decl_wrapper_t):
-    """base class for L{decl_wrappers.class_t} and L{decl_wrappers.namespace_t} classes
+    """base class for :class:`decl_wrappers.class_t` and :class:`decl_wrappers.namespace_t` classes
 
     It provides convenience functionality: include\\exclude all internal declarations
     (not) to be exported.

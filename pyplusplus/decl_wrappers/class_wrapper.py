@@ -51,9 +51,9 @@ when it have to ignore this property and generate right code
 """
 
 class class_common_details_t( object ):
-    """defines few properties that are common to
-    L{class declaration<pygccxml.declarations.class_declaration_t>} and
-    L{definition<pygccxml.declarations.class_t>} classes
+    """
+    defines :class:`pygccxml.declarations.class_declaration_t` and :class:`pygccxml.declarations.class_t`
+    classes common properties
     """
     def __init__(self):
         object.__init__( self )
@@ -109,7 +109,7 @@ class class_common_details_t( object ):
     def _set_always_expose_using_scope( self, value ):
         self._always_expose_using_scope = value
     always_expose_using_scope = property( _get_always_expose_using_scope, _set_always_expose_using_scope
-                                          , doc="please see L{class_wrapper.always_expose_using_scope_documentation} variable for documentation."  )
+                                          , doc="please see :attr:`class_wrapper.always_expose_using_scope_documentation` variable for documentation."  )
 
     def _get_equality_comparable( self ):
         if None is self._equality_comparable:
@@ -480,24 +480,28 @@ class class_t( class_common_details_t
         self._properties.append( properties.property_t( name, fget, fset, doc, True ) )
 
     def redefined_funcs( self ):
-        """returns list of member functions that should be defined in class wrapper
+        """
+        returns list of member functions that should be defined in the class wrapper
 
         It comes useful in 3 tier hierarchy:
-        struct base{
-            virtual void do_nothing() = 0;
-        };
 
-        struct derived{
-            virtual void do_something() = 0;
-        };
+        .. code-block:: c++
 
-        struct concrete{
-            virtual void do_nothing(){}
-            virtual void do_something(){}
-        };
+           struct base{
+               virtual void do_nothing() = 0;
+           };
 
-        derived_wrapper should define do_nothing function, otherwise the generated
-        code will not compile
+           struct derived{
+               virtual void do_something() = 0;
+           };
+
+           struct concrete{
+               virtual void do_nothing(){}
+               virtual void do_something(){}
+           };
+
+        The wrapper for class `derived`, should define `do_nothing` function,
+        otherwise the generated code will not compile
         """
 
         if isinstance( self._redefined_funcs, list ):

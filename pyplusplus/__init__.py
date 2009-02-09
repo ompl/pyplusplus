@@ -7,7 +7,7 @@
 ========================================
 
 This package (together with the accompanying pygccxml package and
-U{Boost.Python<http://www.boost.org/libs/python/doc/index.html>})
+`Boost.Python <http://www.boost.org/libs/python/doc/index.html>`_
 assists you in creating Python bindings for a C/C++ library. This is
 done by parsing a set of header files that contain all the
 stuff you want to expose in Python. The result of this parsing
@@ -18,9 +18,6 @@ each node represents a block of C++ source code. So you can change any piece of
 code before it is written to disk. As a last step, these source code blocks are
 finally written into one or more C++ source files, which can then be compiled to
 generate the final Python module.
-
-If you are just starting with U{`Py++`<http://www.language-binding.net>},
-then consider to read documentation of L{module_builder} package.
 """
 
 import code_creators

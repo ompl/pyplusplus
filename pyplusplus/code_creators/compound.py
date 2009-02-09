@@ -11,7 +11,7 @@ class compound_t(code_creator.code_creator_t):
         """Constructor.
 
         :param parent: Parent code creator.
-        :type parent: L{code_creator_t}
+        :type parent: :class:`code_creators.code_creator_t`
         """
         code_creator.code_creator_t.__init__( self )
         self._creators = []
@@ -20,13 +20,13 @@ class compound_t(code_creator.code_creator_t):
         return self._creators
     creators = property(_get_creators,
                         doc="""A list of children nodes.
-                        @type: list of L{code_creator_t}""")
+                        @type: list of :class:`code_creators.code_creator_t`""")
 
     def adopt_creator( self, creator, index=None):
         """Add a creator to the list of children creators.
 
         :param creator: Creator object
-        :type creator: L{code_creator_t}
+        :type creator: :class:`code_creators.code_creator_t`
         :param index: Desired position of the creator or None to append it to the end of the list
         :type index: int
         """
@@ -40,7 +40,7 @@ class compound_t(code_creator.code_creator_t):
         """Add a creators to the list of children creators.
 
         :param creators: list of creators object
-        :type creator: L{code_creator_t}
+        :type creator: :class:`code_creators.code_creator_t`
         :param index: Desired position of the creator or None to append it to the end of the list
         :type index: int
         """
@@ -55,7 +55,7 @@ class compound_t(code_creator.code_creator_t):
 
         @precondition: creator must be a children of self
         :param creator: The creator node to remove
-        :type creator: L{code_creator_t}
+        :type creator: :class:`code_creators.code_creator_t`
         """
         creator.parent = None
         del self._creators[ self._creators.index( creator ) ]
@@ -66,7 +66,7 @@ class compound_t(code_creator.code_creator_t):
         concatenate the code from a list of code creators.
 
         :param creators: A list with code creators
-        :type creators: list of L{code_creator_t}
+        :type creators: list of :class:`code_creators.code_creator_t`
         :rtype: str
         """
         internals = map( lambda expr: expr.create(), creators )

@@ -118,8 +118,10 @@ class decl_wrapper_printer_t( declarations.decl_printer_t ):
         super( decl_wrapper_printer_t, self ).visit_variable()
 
 def print_declarations( decls, detailed=True, recursive=True, writer=sys.stdout.write ):
-    """ Print decl tree rooted at each of the included nodes.
-        decls - either a single decl or a list of decls.
+    """
+    print declarations tree
+
+    :param decls: could be single :class:`pygccxml.declarations.declaration_t` object or list of them
     """
     prn = decl_wrapper_printer_t(0, detailed, recursive, writer)
     if type(decls) is not list:

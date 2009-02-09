@@ -11,7 +11,7 @@ the final extension module (even when the source code will later be
 distributed among several source files) and each individual code
 creator represents a single block of source code.
 
-The base class for all code creators is L{code_creator_t}.
+The base class for all code creators is :class:`code_creators.code_creator_t`.
 """
 
 

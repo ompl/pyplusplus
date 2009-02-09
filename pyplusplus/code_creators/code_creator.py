@@ -60,7 +60,7 @@ class code_creator_t(object):
     """parent - reference to parent code creator"""
     parent = property( _get_parent, _set_parent,
                        doc="""Parent code creator or None if this is the root node.
-                       @type: L{code_creator_t}
+                       @type: :class:`code_creators.code_creator_t`
                        """)
 
     def _get_target_configuration( self ):
@@ -70,14 +70,14 @@ class code_creator_t(object):
     """target_configuration - reference to target_configuration_t class instance"""
     target_configuration = property( _get_target_configuration, _set_target_configuration,
                                      doc="""Target configuration.
-                                     @type: L{target_configuration_t}
+                                     @type: :class:`target_configuration_t`
                                      """)
 
     @property
     def top_parent(self):
         """top_parent - reference to top parent code creator
 
-        @type: L{code_creator_t}
+        @type: :class:`code_creators.code_creator_t`
         """
         parent = self.parent
         me = self
