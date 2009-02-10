@@ -2,6 +2,18 @@
 pyplusplus.module_builder package
 =================================
 
+--------
+Overview
+--------
+
+.. automodule:: pyplusplus.module_builder
+    :members:
+    :show-inheritance:
+
+--------
+Modules
+--------
+
 boost_python_builder
 --------------------
 

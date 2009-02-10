@@ -2,6 +2,18 @@
 pyplusplus.messages package
 ===========================
 
+--------
+Overview
+--------
+
+.. automodule:: pyplusplus.messages
+    :members:
+    :show-inheritance:
+
+--------
+Modules
+--------
+
 warnings_
 ---------
 

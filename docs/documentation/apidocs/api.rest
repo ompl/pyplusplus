@@ -5,12 +5,11 @@ API
 `Py++` consists from few sub packages
 
 .. toctree::
-   :maxdepth: 4
 
    module_builder.rest
    decl_wrappers.rest
-   file_writers.rest
    function_transformers.rest
+   file_writers.rest
    messages.rest
    utils.rest
    _logging_.rest

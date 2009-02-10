@@ -2,6 +2,18 @@
 pyplusplus.creators_factory package
 ===================================
 
+--------
+Overview
+--------
+
+.. automodule:: pyplusplus.creators_factory
+    :members:
+    :show-inheritance:
+
+--------
+Modules
+--------
+
 bpcreator
 ---------
 

@@ -2,6 +2,18 @@
 pyplusplus.decl_wrappers package
 ================================
 
+--------
+Overview
+--------
+
+.. automodule:: pyplusplus.decl_wrappers
+    :members:
+    :show-inheritance:
+
+--------
+Modules
+--------
+
 algorithm
 ---------
 

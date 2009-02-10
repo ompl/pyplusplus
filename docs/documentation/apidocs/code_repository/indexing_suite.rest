@@ -2,6 +2,18 @@
 pyplusplus.code_repository.indexing_suite package
 =================================================
 
+--------
+Overview
+--------
+
+.. automodule:: pyplusplus.code_repository.indexing_suite
+    :members:
+    :show-inheritance:
+
+--------
+Modules
+--------
+
 deque_header
 ------------
 

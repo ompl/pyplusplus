@@ -2,12 +2,25 @@
 pyplusplus.code_repository package
 ==================================
 
+--------
+Overview
+--------
+
+.. automodule:: pyplusplus.code_repository
+    :members:
+    :show-inheritance:
+
+------------
 sub-packages
 ------------
 
 .. toctree::
 
     code_repository/indexing_suite.rest
+
+--------
+Modules
+--------
 
 ctypes_integration
 ------------------

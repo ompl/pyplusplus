@@ -1,8 +1,18 @@
-Pyplusplus\Function_Transformers Documentation
-==============================================
 ========================================
 pyplusplus.function_transformers package
 ========================================
+
+--------
+Overview
+--------
+
+.. automodule:: pyplusplus.function_transformers
+    :members:
+    :show-inheritance:
+
+--------
+Modules
+--------
 
 controllers
 -----------

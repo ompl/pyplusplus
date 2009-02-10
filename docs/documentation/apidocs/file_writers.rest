@@ -2,6 +2,18 @@
 pyplusplus.file_writers package
 ===============================
 
+--------
+Overview
+--------
+
+.. automodule:: pyplusplus.file_writers
+    :members:
+    :show-inheritance:
+
+--------
+Modules
+--------
+
 balanced_files
 --------------
 

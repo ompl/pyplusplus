@@ -2,6 +2,18 @@
 pyplusplus._logging_ package
 ============================
 
+--------
+Overview
+--------
+
+.. automodule:: pyplusplus._logging_
+    :members:
+    :show-inheritance:
+
+--------
+Modules
+--------
+
 multi_line_formatter
 --------------------
 

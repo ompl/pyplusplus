@@ -2,6 +2,18 @@
 pyplusplus.code_creators package
 ================================
 
+--------
+Overview
+--------
+
+.. automodule:: pyplusplus.code_creators
+    :members:
+    :show-inheritance:
+
+--------
+Modules
+--------
+
 algorithm
 ---------
 
