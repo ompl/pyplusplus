@@ -32,19 +32,15 @@ Overview
 
    tutorials/tutorials.rest
    architecture.rest
-   apidocs/api.rest
+   functions/functions.rest
+   inserting_code.rest
+   split_module.rest
+   properties.rest
+   multi_module_development.rest
    containers.rest
    doc_string.rest
-   multi_module_development.rest
-   properties.rest
-   split_module.rest
    warnings.rest
-   inserting_code.rest
    ctypes/ctypes_integration.rest
-   functions/functions.rest
    how_to/how_to.rest
-
-.. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
-.. _`Python`: http://www.python.org
-.. _`GCC-XML`: http://www.gccxml.org
-
+   apidocs/api.rest
+   

@@ -9,10 +9,10 @@ API
    module_builder.rest
    decl_wrappers.rest
    function_transformers.rest
-   file_writers.rest
    messages.rest
+   file_writers.rest
    utils.rest
    _logging_.rest
+   creators_factory.rest
    code_creators.rest
    code_repository.rest
-   creators_factory.rest
