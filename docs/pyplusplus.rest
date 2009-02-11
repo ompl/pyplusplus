@@ -105,7 +105,7 @@ control over code creators tree, before it is written to disc. Here you
 can find UML diagram of almost all code creators: `class diagram`_.
 
 .. _`AST`: http://en.wikipedia.org/wiki/Abstract_syntax_tree
-.. _`class diagram`: ./code_creators_uml.png
+.. _`class diagram`: code_creators_uml.png
 
 At the end of this step you have code creators tree, which is ready to be written
 to disc.

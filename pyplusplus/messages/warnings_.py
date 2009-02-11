@@ -85,8 +85,7 @@ W1009 = execution_error(
 
 W1010 = execution_error(
             'The function introduces registration order problem. '
-            'For more information about the problem read next document: '
-            'http://language-binding.net/pyplusplus/documentation/functions/registration_order.html '
+            'For more information about the problem read "registration order" document.'
             'Problematic functions list: %s' )
 
 W1011 = warning( "`Py++` doesn't export private not virtual functions." )
@@ -206,8 +205,7 @@ W1049 = warning(
 
 W1050 = compilation_error(
             'The function returns "%s" type. You have to specify a call policies.'
-            'Be sure to take a look on `Py++` defined call policies: '
-            'http://language-binding.net/pyplusplus/documentation/functions/call_policies.html#py-defined-call-policies' )
+            'Be sure to take a look on `Py++` defined call policies' )
 
 W1051 = warning(
             'The function takes as argument (name=%s, pos=%d) "%s" type. '
