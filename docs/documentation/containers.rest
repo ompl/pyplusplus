@@ -35,7 +35,7 @@ containers. In October 2003, Raoul Gough implemented support for the rest of
 containers. Well, actually he did much more - he implemented new framework.
 This framework provides support for almost all C++ containers and also an easy
 way to add support for custom ones. You'd better read his `post`_ to
-`Boost.Python`_ mailing list or `documentation`_ for the new indexing suite.
+`Boost.Python`_ mailing list or :doc:`documentation <indexing_suite_v2.html>` for the new indexing suite.
 
 
 Now, I am sure you have the following question: if this suite is so good, why it is not
@@ -47,7 +47,6 @@ The long answer is here:
 * http://mail.python.org/pipermail/c++-sig/2006-June/010835.html
 
 
-.. _`documentation` : ./indexing_suite_v2.html
 .. _`post` : http://mail.python.org/pipermail/c++-sig/2003-October/005802.html
 
 
@@ -192,5 +191,4 @@ Small tips/hints
 
 .. _`Boost.Python`: http://www.boost.org/libs/python/doc/index.html
 .. _`Python`: http://www.python.org
-.. _`GCC-XML`: http://www.gccxml.org
 

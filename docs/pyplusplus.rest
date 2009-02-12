@@ -1,6 +1,6 @@
-====================
-`Py++` introduction
-====================
+==============
+`Py++` package
+==============
 
 ----------------
 What is `Py++`?
@@ -19,7 +19,7 @@ time source code is changed.
 Code generation process
 -----------------------
 
-Code generation process, using `Py++` consists from few steps. The following 
+Code generation process, using `Py++` consists from few steps. The following
 paragraphs will tell you more about every step.
 
 
@@ -89,10 +89,10 @@ the rules, which will continue to work even after exported C++ code was changed.
 It means that you don't have to change code generator source code every time.
 
 So far, so good what about second question? Well, by default `Py++` generates a
-code that will satisfy almost all developers. `Py++` could be configured in many 
-ways to satisfy your needs. But sometimes this is still not enough. There are 
-use cases when you need full control over generated code. One of the biggest 
-problems, with code generators in general, is modifying generated code and 
+code that will satisfy almost all developers. `Py++` could be configured in many
+ways to satisfy your needs. But sometimes this is still not enough. There are
+use cases when you need full control over generated code. One of the biggest
+problems, with code generators in general, is modifying generated code and
 preserving changes. How many code generators did you use or know, that
 allow you to put your code anywhere or to reorder generated code as you wish?
 `Py++` allows you to do that.
@@ -171,7 +171,7 @@ Documentation contents
 
 .. toctree::
    :maxdepth: 1
-   
+
    documentation/tutorials/tutorials.rest
    quotes.rest
    download.rest

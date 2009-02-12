@@ -38,9 +38,10 @@ Overview
    properties.rest
    multi_module_development.rest
    containers.rest
+   indexing_suite_v2.html.rest
    doc_string.rest
    warnings.rest
    ctypes/ctypes_integration.rest
    how_to/how_to.rest
    apidocs/api.rest
-   
+

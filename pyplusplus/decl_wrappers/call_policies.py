@@ -296,7 +296,7 @@ def custom_call_policies(call_policies, header_file=None):
 class memory_managers:
     """implements code generation for `Py++` defined memory managers
 
-    For complete documentation and usage example see :doc:`call policies document <pyplusplus/documentation/functions/call_policies/call_policies>`
+    For complete documentation and usage example see "Call policies" document.
     """
     none = 'none'
     delete_ = 'delete_'
@@ -312,7 +312,7 @@ class memory_managers:
 class convert_array_to_tuple_t( compound_policy_t ):
     """implements code generation for `Py++` defined "as_tuple" value policy
 
-    For complete documentation and usage example see :doc:`call policies document <pyplusplus/documentation/functions/call_policies/call_policies>`
+    For complete documentation and usage example see "Call policies" document.
     """
     def __init__( self, array_size, memory_manager, make_object_call_policies=None, base=None):
         compound_policy_t.__init__( self, base )
@@ -369,7 +369,7 @@ def convert_array_to_tuple( array_size, memory_manager, make_object_call_policie
 class return_range_t( call_policy_t ):
     """implements code generation for `Py++` defined "return_range" call policies
 
-    For complete documentation and usage example see :doc:`call policies document <pyplusplus/documentation/functions/call_policies/call_policies>`
+    For complete documentation and usage example see "Call policies" document.
     """
     HEADER_FILE = "__return_range.pypp.hpp"
     def __init__( self, get_size_class, value_type, value_policies):
