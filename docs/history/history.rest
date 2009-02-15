@@ -33,6 +33,15 @@ SVN Version
 
 2. Few bugs were fixed for 64Bit platform. Many thanks to Carsten.
 
+3. `ctypes`_ backend was introduced - :doc:`Py++ <../pyplusplus>` is able to generate
+   Python code, which uses `ctypes`_ package to call functions in DLLs or shared libraries.
+
+4. From now on, :doc:`Py++ <../pyplusplus>` will use `Sphinx <http://sphinx.pocoo.org/>`_
+   for all documentation.
+
+
+.. _`ctypes` : http://docs.python.org/library/ctypes.html
+
 -----------
 Version 1.0
 -----------
@@ -185,7 +194,7 @@ Version 0.9.5
      of ``std::vector< int, std::allocator< int > >``, in many cases :doc:`Py++ <../pyplusplus>` will
      generate ``std::vector< int >``.
 
-5. :doc:`create_with_signature <../documentation/functions/overloading>` algorithm was improved. 
+5. :doc:`create_with_signature <../documentation/functions/overloading>` algorithm was improved.
    :doc:`Py++ <../pyplusplus>` will generate correct code in one more use case.
 
 6. Added ability to exclude declarations from being exposed, if they will cause
@@ -232,7 +241,7 @@ Version 0.9.0
 
 .. line-separator
 
-5. :doc:`input_c_buffer <../documentation/functions/transformation/input_c_buffer>` - new functions 
+5. :doc:`input_c_buffer <../documentation/functions/transformation/input_c_buffer>` - new functions
    transformation, which allows to pass a Python sequence to function, instead of pair of arguments: pointer to buffer and size.
 
 6. Added ability to control generated "include" directives. Now you can ask :doc:`Py++ <../pyplusplus>`
@@ -270,7 +279,7 @@ Version 0.8.5
 3. Added new algorithm, which controls the registration order of the functions.
    See :doc:`registration order document <../documentation/functions/registration_order>`
 
-4. New "Py++" defined :doc:`return_pointee_value <../documentation/functions/call_policies/return_pointee_value>` 
+4. New "Py++" defined :doc:`return_pointee_value <../documentation/functions/call_policies/return_pointee_value>`
    call policy was introduced.
 
 5. Support for opaque types was added. Read more about this feature `here`__.
