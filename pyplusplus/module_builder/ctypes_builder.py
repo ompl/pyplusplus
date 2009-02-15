@@ -101,9 +101,9 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
     def build_code_creator( self, library_path, doc_extractor=None ):
         creator = creators_factory.ctypes_creator_t( self.global_ns
                                                     , library_path
-                                                    , self.__blob2decl
-                                                    , doc_extractor)
+                                                    , self.__blob2decl )
         self.__code_creator = creator.create()
+        self.__code_creator.update_documentation( doc_extractor )
         return self.__code_creator
 
     @property

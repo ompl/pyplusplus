@@ -19,8 +19,7 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
     def __init__( self
                   , global_ns
                   , library_path
-                  , exported_symbols
-                  , doc_extractor=None ):
+                  , exported_symbols ):
         declarations.decl_visitor_t.__init__(self)
         self.logger = _logging_.loggers.module_builder
         self.decl_logger = _logging_.loggers.declarations
@@ -71,7 +70,7 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
                 return decl in self.__exported_decls
         return True
 
-    #~ def __prepare_decls( self, global_ns, doc_extractor ):
+    #~ def __prepare_decls( self, global_ns ):
         #~ to_be_exposed = []
         #~ for decl in declarations.make_flatten( global_ns ):
             #~ if decl.ignore:
@@ -89,9 +88,6 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
             #~ if isinstance( decl.parent, declarations.namespace_t ):
                 #~ #leave only declarations defined under namespace, but remove namespaces
                 #~ to_be_exposed.append( decl )
-
-            #~ if doc_extractor:
-                #~ decl.documentation = doc_extractor( decl )
 
             #~ self.__print_readme( decl )
 

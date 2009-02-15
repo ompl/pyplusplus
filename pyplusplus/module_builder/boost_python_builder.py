@@ -237,10 +237,10 @@ class builder_t(module_builder.module_builder_t):
                                                 , call_policies_resolver_
                                                 , types_db
                                                 , target_configuration
-                                                , enable_indexing_suite
-                                                , doc_extractor)
+                                                , enable_indexing_suite )
         self.__code_creator = creator.create()
         self.__code_creator.replace_included_headers(self.__parsed_files)
+        self.__code_creator.update_documentation( doc_extractor )
         return self.__code_creator
 
     @property

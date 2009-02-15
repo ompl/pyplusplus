@@ -37,8 +37,7 @@ class bpcreator_t( declarations.decl_visitor_t ):
                   , call_policies_resolver_=None
                   , types_db=None
                   , target_configuration=None
-                  , enable_indexing_suite=True
-                  , doc_extractor=None ):
+                  , enable_indexing_suite=True ):
         """Constructor.
 
         :param decls: Declarations that should be exposed in the final module.
@@ -47,7 +46,6 @@ class bpcreator_t( declarations.decl_visitor_t ):
         :param call_policies_resolver_: Callable that takes one declaration (calldef_t) as input and returns a call policy object which should be used for this declaration.
         :param types_db: ...todo...
         :param target_configuration: A target configuration object can be used to customize the generated source code to a particular compiler or a particular version of Boost.Python.
-        :param doc_extractor: callable, that takes as argument declaration reference and returns documentation string
         :param already_exposed_dbs: list of files/directories other modules, this module depends on, generated their code too
         :type decls: list of declaration_t
         :type module_name: str
@@ -55,7 +53,6 @@ class bpcreator_t( declarations.decl_visitor_t ):
         :type call_policies_resolver_: callable
         :type types_db: L:class:`types_database.types_database_t`
         :type target_configuration: :class:`code_creators.target_configuration_t`
-        :type doc_extractor: callable
         :type already_exposed_dbs: list of strings
         """
         declarations.decl_visitor_t.__init__(self)
@@ -91,7 +88,7 @@ class bpcreator_t( declarations.decl_visitor_t ):
         self.__opaque_types_manager = opaque_types_manager.manager_t( self.__extmodule )
         self.__dependencies_manager = dependencies_manager.manager_t(self.decl_logger)
 
-        prepared_decls = self._prepare_decls( decls, doc_extractor )
+        prepared_decls = self._prepare_decls( decls )
         self.__decls = sort_algorithms.sort( prepared_decls )
 
         self.curr_code_creator = self.__module_body
@@ -115,7 +112,7 @@ class bpcreator_t( declarations.decl_visitor_t ):
         for msg in readme:
             self.decl_logger.warn( "%s;%s" % ( decl, msg ) )
 
-    def _prepare_decls( self, decls, doc_extractor ):
+    def _prepare_decls( self, decls ):
         to_be_exposed = []
         for decl in declarations.make_flatten( decls ):
             if decl.ignore:
@@ -151,9 +148,6 @@ class bpcreator_t( declarations.decl_visitor_t ):
 
             #if isinstance( decl, declarations.variable_t ):
                 #self.__types_db.update( decl )
-
-            if doc_extractor:
-                decl.documentation = doc_extractor( decl )
 
             self.__print_readme( decl )
 

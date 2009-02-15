@@ -71,7 +71,17 @@ class module_t(compound.compound_t):
 
         return set( decls )
 
-
+    def update_documentation( self, doc_extractor ):
+        if not doc_extractor:
+            return
+        visited = set()
+        for cc in algorithm.make_flatten( self ):
+            if not isinstance( cc, declaration_based.declaration_based_t ):
+                continue
+            if id( cc.declaration ) in visited:
+                continue
+            cc.declaration.documentation = doc_extractor( cc.declaration )
+            visited.add( cc.declaration )
 
 class bpmodule_t(module_t):
     """This class represents the source code for the entire extension module.
@@ -116,8 +126,8 @@ class bpmodule_t(module_t):
         """Return reference to :class:`code_creators.module_body_t` code creator"""
         if None is self.__body:
             found = algorithm.creator_finder.find_by_class_instance( what=module_body.module_body_t
-																	 , where=self.creators
-																	 , recursive=False )
+                                                                    , where=self.creators
+                                                                    , recursive=False )
             if found:
                 self.__body = found[0]
         return self.__body
