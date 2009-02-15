@@ -8,7 +8,7 @@
 from pygccxml import declarations
 
 def is_immutable( type_ ):
-    """returns True, if type_ represents Python immutable type"""
+    """returns True, if `type_` represents Python immutable type"""
     return declarations.is_fundamental( type_ )      \
            or declarations.is_enum( type_ )          \
            or declarations.is_std_string( type_ )    \
