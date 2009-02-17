@@ -113,6 +113,7 @@ import make_constructor_tester
 import return_auto_ptr_tester
 import ctypes_tester
 import refee_refer_tester
+import indexing_suites_v2_bug_tester
 #import ogre_generate_tester
 
 testers = [
@@ -213,6 +214,7 @@ testers = [
     , protected_bug_tester
     , ctypes_tester
     , refee_refer_tester
+    , indexing_suites_v2_bug_tester
 #    , ogre_generate_tester too much time
 ]
 
