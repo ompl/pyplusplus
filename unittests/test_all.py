@@ -87,9 +87,6 @@ import final_classes_tester
 import templates_tester
 import deepcopy_tester
 import override_bug_tester
-#gui_tester
-#gui_wizard_tester
-#
 import mem_fun_with_exception_tester
 import overriden_virtual_functions_bug_tester
 import split_module_bug_tester
@@ -114,6 +111,8 @@ import return_auto_ptr_tester
 import ctypes_tester
 import refee_refer_tester
 import indexing_suites_v2_bug_tester
+import virtual_inheritance_tester
+import indexing_suite_v1_tester
 #import ogre_generate_tester
 
 testers = [
@@ -215,6 +214,8 @@ testers = [
     , ctypes_tester
     , refee_refer_tester
     , indexing_suites_v2_bug_tester
+    , virtual_inheritance_tester
+    , indexing_suite_v1_tester    
 #    , ogre_generate_tester too much time
 ]
 

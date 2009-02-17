@@ -4,21 +4,35 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
+import dl
 import sys
 import unittest
 import autoconfig
 import fundamental_tester_base
 from pyplusplus import code_creators
 
+sys.setdlopenflags(dl.RTLD_NOW | dl.RTLD_GLOBAL)
+
+
+
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def __init__( self, *args ):
         fundamental_tester_base.fundamental_tester_base_t.__init__( self, self.EXTENSION_NAME, indexing_suite_version=2, *args  )
 
     def run_tests(self, module):
-        v = module.create_vector()
-        for i in v:
-            print i
-
+        try:
+            v = module.create_vector()
+            print self.__class__.__name__
+            for i in v:
+                print i
+            print self.__class__.__name__, ' - done'
+            print self.__class__.__name__
+            for i in v:
+                print i
+            print self.__class__.__name__, ' - done(2)'
+        except Exception, ex:
+            print 'Error: ', str( ex )
+            
 class tester_a_t(tester_t):
     EXTENSION_NAME = 'indexing_suites_v2_bug_a'
     def __init__( self, *args ):
