@@ -81,7 +81,7 @@ class module_t(compound.compound_t):
             if id( cc.declaration ) in visited:
                 continue
             cc.declaration.documentation = doc_extractor( cc.declaration )
-            visited.add( cc.declaration )
+            visited.add( id( cc.declaration ) )
 
 class bpmodule_t(module_t):
     """This class represents the source code for the entire extension module.
