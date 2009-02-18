@@ -170,9 +170,6 @@ class bpcreator_t( declarations.decl_visitor_t ):
                 pass
             else:
                 assert not "Found %d class code creators" % len(creator)
-        import pdb
-        if '<<' == operator.symbol:
-            pdb.set_trace()
         find = code_creators.creator_finder.find_by_declaration
         if operator.target_class and operator.target_class.ignore == False:
             found = find( lambda decl: operator.target_class is decl
