@@ -11,9 +11,9 @@ from pyplusplus import code_creators
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'vector3'
-    
+
     def __init__( self, *args ):
-        fundamental_tester_base.fundamental_tester_base_t.__init__( 
+        fundamental_tester_base.fundamental_tester_base_t.__init__(
             self
             , tester_t.EXTENSION_NAME
             , *args )
@@ -26,16 +26,19 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         vec3.add_registration_code( 'add_property( "x", &vector3::Vector3::x)' )
         vec3.add_registration_code( 'add_property( "y", &vector3::Vector3::y)' )
         vec3.add_registration_code( 'add_property( "z", &vector3::Vector3::z)' )
+        mb.operator( lambda o: o.symbol == '<<' and 'Vector3' in o.decl_string ).include()
 
-        
     def run_tests( self, module):
         v3 = module.Vector3()
         self.failUnless( v3.ZERO == v3.do_smth() )
         #test copy constructor
         self.failUnless( module.Vector3(v3.ZERO) == v3.do_smth() )
-        
+
+        x = module.Vector3( 1,2,3)
+        print str(x)
+
 def create_suite():
-    suite = unittest.TestSuite()    
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

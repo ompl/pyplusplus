@@ -6,6 +6,8 @@
 #ifndef __vector3_to_be_exported_hpp__
 #define __vector3_to_be_exported_hpp__
 
+#include <iostream>
+
 namespace vector3{
 
 class Vector3
@@ -58,6 +60,11 @@ public:
     inline Vector3( const Vector3& rkVector )
         : x( rkVector.x ), y( rkVector.y ), z( rkVector.z )
     {
+    }
+
+    friend 
+    std::ostream& operator<<(std::ostream& out, const Vector3& v ){
+        out << "( " << v.x << "," << v.y << "," << v.z << ")";
     }
 
     inline float operator [] ( const unsigned int i ) const
@@ -301,6 +308,7 @@ public:
     static const Vector3 ZERO;
 
 };
+
 
 
 }

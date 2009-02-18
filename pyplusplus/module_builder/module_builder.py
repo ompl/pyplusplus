@@ -131,7 +131,6 @@ class module_builder_t(object):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
         return self.global_ns.operator( name=name
                                         , symbol=symbol
-                                        , decl_type=decl_type
                                         , return_type=return_type
                                         , arg_types=arg_types
                                         , header_dir=header_dir
@@ -142,7 +141,6 @@ class module_builder_t(object):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
         return self.global_ns.operators( name=name
                                          , symbol=symbol
-                                         , decl_type=decl_type
                                          , return_type=return_type
                                          , arg_types=arg_types
                                          , header_dir=header_dir
