@@ -62,9 +62,10 @@ public:
     {
     }
 
-    friend 
+    friend
     std::ostream& operator<<(std::ostream& out, const Vector3& v ){
-        out << "( " << v.x << "," << v.y << "," << v.z << ")";
+        out << "( " << v.x << "," << v.y << "," << v.z << " )";
+        return out;
     }
 
     inline float operator [] ( const unsigned int i ) const

@@ -425,7 +425,11 @@ class operators_helper:
             arg_2_class = find_class( oper.arguments[1].type )
 
         if arg_1_class:
-            return arg_1_class
+            if declarations.is_std_ostream( arg_1_class ) or declarations.is_std_wostream( arg_1_class ):
+                #in most cases users doesn't expose std::ostream class
+                return arg_2_class
+            else:
+                return arg_1_class
         else:
             return arg_2_class
 
