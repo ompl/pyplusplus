@@ -63,11 +63,57 @@ Raoul Gough's indexing suite.
 How does it work?
 -----------------
 
-In both cases, :doc:`Py++ <../pyplusplus>` provides almost "hands free" solution. :doc:`Py++ <../pyplusplus>`
-keeps track of all exported functions and variables, and if it sees that there is
-a usage of stl container, it exports the container. In both cases, :doc:`Py++ <../pyplusplus>`
-analyzes the container ``value_type`` ( or in case of mapping container
-``mapped_type`` ), in order to set reasonable defaults, when it generates the code.
+In both cases, :doc:`Py++ <../pyplusplus>` provides almost "hands free" solution.
+:doc:`Py++ <../pyplusplus>` keeps track of all exported functions and variables,
+and if it sees that there is a usage of stl container, it exports the container.
+In both cases, :doc:`Py++ <../pyplusplus>` analyzes the container ``value_type``
+( or in case of mapping container ``mapped_type`` ), in order to set reasonable
+defaults, when it generates the code.
+
+-------------------------------------
+Indexing suite version 2 installation
+-------------------------------------
+
+None :-)
+
+`Py++` version 1.1, introduceds few breaking changes to this indexing suite:
+
+* the suite implements all functionality in the header files only. Few `.cpp` files
+  were dropped
+
+* header files include directive was changed from
+
+  .. code-block:: c++
+
+     #include "boost/python/suite/indexing/..."
+
+  to
+
+  .. code-block:: c++
+
+     #include "indexing_suite/..."
+
+The change was done to simplify the indexing suite installation and redistribution.
+The gain list:
+
+   * no need to deal with patching and rebuilding Boost
+
+   * it is possible to use Boost libraries, which comes with your system
+
+   * you can put the library anywhere you want - just update the include paths in
+     your build script
+
+   * it is easier to redistribute it - just include the library with your sources
+
+   * If you are a happy :doc:`Py++ <../pyplusplus>` user:
+
+        + :doc:`Py++ <../pyplusplus>` will generate the indexing suite source files
+          in the "generated code" directory, under `indexing_suite` directory.
+
+        + :doc:`Py++ <../pyplusplus>` will take care to upgrade the files
+
+The bottom line: :doc:`Py++ <../pyplusplus>` makes C++ STL containers handling fully
+transparent for its users.
 
 -------------------
 Indexing suites API

@@ -1,6 +1,6 @@
-﻿========================
-Py++ development history
-========================
+﻿===================
+Development history
+===================
 
 ------------
 Contributors
@@ -26,21 +26,28 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Carsten( spom.spom )
 
 -----------
-SVN Version
+Version 1.1
 -----------
 
 1. The bug related to exposing free operators was fixed. Many thanks to Andrei Vermel.
 
 2. Few bugs were fixed for 64Bit platform. Many thanks to Carsten.
 
-3. `ctypes`_ backend was introduced - :doc:`Py++ <../pyplusplus>` is able to generate
-   Python code, which uses `ctypes`_ package to call functions in DLLs or shared libraries.
+3. :mod:`ctypes` backend was introduced - :doc:`Py++ <../pyplusplus>` is able to
+   generate Python code, which uses :mod:`ctypes` package to call functions in
+   DLLs or shared libraries.
+
+   Massive refactoring, which preserve backward compatibility to previous releases,
+   was done.
 
 4. From now on, :doc:`Py++ <../pyplusplus>` will use `Sphinx <http://sphinx.pocoo.org/>`_
    for all documentation.
 
+5. :doc:`Indexing Suite V2 <../documentation/indexing_suite_v2.html>` introduces
+   few backward compatibility changes. The indexing suite became "headers only"
+   library and doesn't requier Boost.Python library patching.
+   See ":doc:`../documentation/containers`" document for more information.
 
-.. _`ctypes` : http://docs.python.org/library/ctypes.html
 
 -----------
 Version 1.0
