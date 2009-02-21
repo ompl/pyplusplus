@@ -642,6 +642,8 @@ class class_t( class_common_details_t
         return explanation
 
     def _readme_impl( self ):
+        if self.indexing_suite:
+            return []
         explanation = self.is_wrapper_needed()
         for fc in self.fake_constructors:
             if fc.ignore:

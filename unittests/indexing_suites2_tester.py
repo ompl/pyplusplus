@@ -25,6 +25,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         items = generator.global_ns.typedef( 'items_t' )
         items = declarations.remove_declarated( items.type )
         items.alias = "items_t"
+        items.include()
 
         strings = generator.global_ns.typedef( 'strings_t' )
         strings = declarations.remove_declarated( strings.type )

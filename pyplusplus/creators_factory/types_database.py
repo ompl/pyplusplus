@@ -20,6 +20,10 @@ class types_database_t( object ):
         self.__normalize_data = [ ',', '<', '>', '*', '&', '(', ')', '::' ]
         self.__containers = set()
 
+    def update_containers( self, decl ):
+        assert decl.indexing_suite
+        self.__containers.add( decl )
+
     def update( self, decl ):
         if isinstance( decl, declarations.calldef_t ):
             if not isinstance( decl, declarations.constructor_t ):

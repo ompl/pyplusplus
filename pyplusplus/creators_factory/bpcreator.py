@@ -565,6 +565,9 @@ class bpcreator_t( declarations.decl_visitor_t ):
         return exposed
 
     def visit_class(self ):
+        if self.curr_decl.indexing_suite:
+            self.__types_db.update_containers( self.curr_decl )
+            return #it will be exposed later, using other code creators
         self.__dependencies_manager.add_exported( self.curr_decl )
         cls_decl = self.curr_decl
         cls_parent_cc = self.curr_code_creator
