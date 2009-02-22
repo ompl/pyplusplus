@@ -80,6 +80,14 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         set_of_strings.add("s1")
         set_of_strings.add("s")
         
+        x = module.get_int_mapping()
+        self.failUnless( x[1] == 1 )
+        try:
+            x = module.get_int_multimapping()
+            self.failUnless( x[1] == 1 )
+        except TypeError:
+            pass
+
 def create_suite():
     suite = unittest.TestSuite()    
     suite.addTest( unittest.makeSuite(tester_t))

@@ -100,7 +100,10 @@ class indexing_suite2_t( registration_based.registration_based_t
         if self.declaration.indexing_suite.use_container_suite:
             answer.append( bpi + '::container_suite' )
         else:
-            answer.append( bpi + '::' + self.declaration.name.split( '<' )[0] + '_suite' )
+            container_name = self.declaration.name.split( '<' )[0]
+            if container_name.startswith( 'hash_' ):
+                container_name = container_name[len( 'hash_'):]
+            answer.append( bpi + '::' + container_name + '_suite' )
         answer.append( '< ' )
         answer.append( self.decl_identifier )
         if self.does_user_disable_methods():

@@ -40,9 +40,10 @@ containers = {
       , 'map' : "indexing_suite/map.hpp"
       , 'multimap' : "indexing_suite/multimap.hpp"
       , 'hash_map' : "indexing_suite/map.hpp"
+      #, 'hash_multimap' : "indexing_suite/multimap.hpp"
       , 'set' : "indexing_suite/set.hpp"
       , 'hash_set' : "indexing_suite/set.hpp"
-    #TODO: queue, priority, stack, hash_multimap, multiset, hash_multiset
+    #TODO: queue, priority, stack, multiset, hash_multiset
 }
 
 class indexing_suite2_t( object ):

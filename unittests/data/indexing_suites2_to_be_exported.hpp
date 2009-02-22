@@ -6,7 +6,20 @@
 #ifndef __indexing_suites2_to_be_exported_hpp__
 #define __indexing_suites2_to_be_exported_hpp__
 
-#include <hash_map>
+#if defined( __GNUC__ )
+    #include <ext/hash_set>
+    #include <ext/hash_map>
+    #define HASH_XXX_NS __gnu_cxx
+#else
+    #include <hash_set>
+    #include <hash_map>
+	#if defined( __GCCXML__ ) && !defined( __PYGCCXML_MSVC9__ )
+		#define HASH_XXX_NS std
+	#else
+		#define HASH_XXX_NS stdext
+	#endif//GCCXML
+#endif
+
 #include <vector>
 #include <string>
 #include <map>
@@ -59,8 +72,16 @@ inline void set_value( std::vector<item_t>& vec, unsigned int index, item_t valu
 typedef std::vector<float> fvector;
 fvector empty_fvector(){ return fvector(); }
 
-stdext::hash_map< int, int > get_int_mapping(){
-    return stdext::hash_map< int, int >();
+HASH_XXX_NS::hash_map< int, int > get_int_mapping(){
+    HASH_XXX_NS::hash_map< int, int > x;
+    x[ 1 ] = 1;
+    return x;
+}
+
+HASH_XXX_NS::hash_multimap< int, int > get_int_multimapping(){
+    HASH_XXX_NS::hash_multimap< int, int > x;
+    x.insert( HASH_XXX_NS::hash_multimap< int, int >::value_type( 1,1) );
+    return x;
 }
 
 typedef std::map< std::string, std::string > name2value_t;
