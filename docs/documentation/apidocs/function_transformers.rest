@@ -8,6 +8,7 @@ Overview
 
 .. automodule:: pyplusplus.function_transformers
     :members:
+    :undoc-members:
     :show-inheritance:
 
 --------
@@ -19,6 +20,7 @@ controllers
 
 .. automodule:: pyplusplus.function_transformers.controllers
     :members:
+    :undoc-members:
     :show-inheritance:
 
 function_transformation
@@ -26,6 +28,7 @@ function_transformation
 
 .. automodule:: pyplusplus.function_transformers.function_transformation
     :members:
+    :undoc-members:
     :show-inheritance:
 
 templates
@@ -33,6 +36,7 @@ templates
 
 .. automodule:: pyplusplus.function_transformers.templates
     :members:
+    :undoc-members:
     :show-inheritance:
 
 transformer
@@ -40,6 +44,7 @@ transformer
 
 .. automodule:: pyplusplus.function_transformers.transformer
     :members:
+    :undoc-members:
     :show-inheritance:
 
 transformers
@@ -47,4 +52,5 @@ transformers
 
 .. automodule:: pyplusplus.function_transformers.transformers
     :members:
+    :undoc-members:
     :show-inheritance:

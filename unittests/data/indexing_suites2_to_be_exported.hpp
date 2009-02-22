@@ -6,6 +6,7 @@
 #ifndef __indexing_suites2_to_be_exported_hpp__
 #define __indexing_suites2_to_be_exported_hpp__
 
+#include <hash_map>
 #include <vector>
 #include <string>
 #include <map>
@@ -17,18 +18,18 @@ typedef std::vector< std::string > strings_t;
 
 inline void do_nothing( const strings_t& ){}
 
-struct item_t{    
+struct item_t{
     item_t() : value( -1 ){}
     explicit item_t( int v) : value( v ){}
-        
-    bool operator==(item_t const& item) const { 
-        return value == item.value; 
+
+    bool operator==(item_t const& item) const {
+        return value == item.value;
     }
-    
-    bool operator!=(item_t const& item) const { 
-        return value != item.value; 
-    }    
-    
+
+    bool operator!=(item_t const& item) const {
+        return value != item.value;
+    }
+
     int value;
 };
 
@@ -42,7 +43,7 @@ inline items_ptr_t create_items_ptr(){
     items.push_back( new item_t(1) );
     items.push_back( new item_t(2) );
     items.push_back( new item_t(3) );
-    items.push_back( new item_t(4) );    
+    items.push_back( new item_t(4) );
     return items;
 }
 
@@ -57,6 +58,10 @@ inline void set_value( std::vector<item_t>& vec, unsigned int index, item_t valu
 
 typedef std::vector<float> fvector;
 fvector empty_fvector(){ return fvector(); }
+
+stdext::hash_map< int, int > get_int_mapping(){
+    return stdext::hash_map< int, int >();
+}
 
 typedef std::map< std::string, std::string > name2value_t;
 inline std::string get_first_name( name2value_t const * names ){
