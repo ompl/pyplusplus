@@ -113,6 +113,7 @@ import refee_refer_tester
 import indexing_suites_v2_bug_tester
 import virtual_inheritance_tester
 import indexing_suite_v1_tester
+import derive_from_deque_tester
 #import ogre_generate_tester
 
 testers = [
@@ -215,7 +216,8 @@ testers = [
     , refee_refer_tester
     , indexing_suites_v2_bug_tester
     , virtual_inheritance_tester
-    , indexing_suite_v1_tester    
+    , indexing_suite_v1_tester
+    , derive_from_deque_tester
 #    , ogre_generate_tester too much time
 ]
 
