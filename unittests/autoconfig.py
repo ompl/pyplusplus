@@ -44,7 +44,12 @@ class scons_config:
     libs = []
     libpath = [ python.libs ] + boost.libs
     cpppath = [ boost.include, python.include, build_directory ] #indexing_suite.include ]
-    include_dirs = cpppath + [data_directory]
+    include_dirs = cpppath + [data_directory] + cxx_parsers_cfg.gccxml.include_paths
+    if cxx_parsers_cfg.gccxml.compiler == 'msvc9':
+        libpath.append( r'C:\Program Files\Microsoft Visual Studio 9.0\VC\lib' )
+        libpath.append( r'C:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib' )
+        include_dirs.append( r'C:\Program Files\Microsoft Visual Studio 9.0\VC\include' )
+        include_dirs.append( r'C:\Program Files\Microsoft SDKs\Windows\v6.0A\Include' )
 
     @staticmethod
     def create_sconstruct():

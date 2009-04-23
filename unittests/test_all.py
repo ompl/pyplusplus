@@ -244,7 +244,7 @@ class module_runner_t( object ):
         test_file_name = self.module.__file__
         if test_file_name.endswith( 'pyc' ):
             test_file_name = test_file_name[:-1]
-        command_line = ' '.join([ sys.executable, test_file_name ])
+        command_line = ' '.join([ '"%s"' % sys.executable, test_file_name ])
         input_, output = os.popen4( command_line )
         input_.close()
         report = []
