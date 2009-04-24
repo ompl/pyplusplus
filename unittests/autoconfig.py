@@ -37,6 +37,7 @@ class cxx_parsers_cfg:
         gccxml.define_symbols.append( '__PYGCCXML_%s__' % gccxml.compiler.upper() )
         if 'msvc9' == gccxml.compiler:
             gccxml.define_symbols.append( '_HAS_TR1=0' )
+    gccxml.include_paths.append( boost.include )
 
 print 'GCCXML configured to simulate compiler ', cxx_parsers_cfg.gccxml.compiler
 

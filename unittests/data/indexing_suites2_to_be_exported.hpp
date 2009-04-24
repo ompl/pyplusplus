@@ -20,6 +20,7 @@
 	#endif//GCCXML
 #endif
 
+#include <iostream>
 #include <vector>
 #include <string>
 #include <map>
@@ -105,6 +106,13 @@ inline set_strings_t create_set_strings(){
     return set_strings_t();
 }
 
+}
+
+std::ostream& operator<<( std::ostream& o, const indexing_suites2::set_strings_t& x){
+    for( indexing_suites2::set_strings_t::const_iterator index = x.begin(); index != x.end(); ++index ){
+        o << *index << ',';
+    }
+    return o;
 }
 
 namespace pyplusplus{ namespace aliases{
