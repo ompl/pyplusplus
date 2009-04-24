@@ -10,19 +10,21 @@ import fundamental_tester_base
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'virtual_inheritance'
-    
+
     def __init__( self, *args ):
-        fundamental_tester_base.fundamental_tester_base_t.__init__( 
+        fundamental_tester_base.fundamental_tester_base_t.__init__(
             self
             , tester_t.EXTENSION_NAME
             , *args )
 
-    
+    def customize( self, mb ):
+        mb.classes().always_expose_using_scope = True
+
     def run_tests( self, module):
         pass
 
 def create_suite():
-    suite = unittest.TestSuite()    
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 
