@@ -18,9 +18,9 @@ from pyplusplus import decl_wrappers
 use_enum_workaround = False
 
 class argument_utils_t:
-    
+
     PARAM_SEPARATOR = code_creator.code_creator_t.PARAM_SEPARATOR
-    
+
     def __init__( self, declaration, identifier_creator, arguments=None ):
         self.__decl = declaration
         if None is arguments:
@@ -57,7 +57,7 @@ class argument_utils_t:
                     if declarations.is_fundamental( arg_type_no_alias ) \
                        and declarations.is_integral( arg_type_no_alias ) \
                        and not arg.default_value.startswith( arg_type_no_alias.decl_string ):
-                        result.append( '=(%s)(%s)' % ( arg_type_no_alias.partial_decl_string
+                        result.append( '=(%s)(%s)' % ( arg.type.partial_decl_string
                                                        , arg.default_value ) )
                     elif self.__should_use_enum_wa( arg ):
                         #Work around for bug/missing functionality in boost.python.
@@ -87,7 +87,7 @@ class argument_utils_t:
         if len( args ) == 1:
             return args[ 0 ]
         return self.PARAM_SEPARATOR.join( args )
-        
+
     def call_args( self ):
         params = []
         for index, arg in enumerate( self.__args ):
@@ -106,7 +106,7 @@ class return_stmt_creator_t( object ):
         self.__return_stmt = None
         self.__result_var = result_var
         self.__call_policy_alias = controller.register_variable_name( 'call_policies_t' )
-        
+
     @property
     def pre_return_code( self ):
         if None is self.__pre_return_code:
@@ -124,11 +124,11 @@ class return_stmt_creator_t( object ):
         return self.__pre_return_code
 
     @property
-    def statement( self ):      
+    def statement( self ):
         if None is self.__return_stmt:
             stmt = ''
-            bpl_object = algorithm.create_identifier( self.__creator, 'boost::python::object' )            
-            make_tuple = algorithm.create_identifier( self.__creator, 'boost::python::make_tuple' )            
+            bpl_object = algorithm.create_identifier( self.__creator, 'boost::python::object' )
+            make_tuple = algorithm.create_identifier( self.__creator, 'boost::python::make_tuple' )
             make_object = algorithm.create_identifier( self.__creator, 'pyplusplus::call_policies::make_object' )
 
             if not declarations.is_void( self.__function.return_type ):
@@ -136,23 +136,23 @@ class return_stmt_creator_t( object ):
                     self.__return_vars.insert( 0, self.__result_var.name )
                 else:
                     self.__return_vars.insert( 0
-                            , declarations.call_invocation.join( 
+                            , declarations.call_invocation.join(
                                 declarations.templates.join( make_object
                                                             , [self.__call_policy_alias, self.__result_var.type.decl_string] )
                                 , [self.__result_var.name] ) )
-            
+
             if 0 == len( self.__return_vars ):
                 pass
             elif 1 == len( self.__return_vars ):
                 stmt = bpl_object + '( %s )' % self.__return_vars[ 0 ]
-            else: # 1 < 
+            else: # 1 <
                 stmt = declarations.call_invocation.join( make_tuple, self.__return_vars )
                 if self.__creator.LINE_LENGTH < len( stmt ):
-                    stmt = declarations.call_invocation.join( 
+                    stmt = declarations.call_invocation.join(
                                   make_tuple
                                 , self.__return_vars
                                 , os.linesep + self.__creator.indent( self.__creator.PARAM_SEPARATOR, 6 ) )
-                    
+
             if stmt:
                 stmt = 'return ' + stmt + ';'
             self.__return_stmt = stmt
