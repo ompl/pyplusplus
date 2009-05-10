@@ -59,6 +59,9 @@ class manager_t( object ):
 
     def add_exported( self, decl ):
         self.__exported_decls.append( decl )
+        if isinstance( decl, declarations.class_t ) and decl.indexing_suite:
+            included_decls = decl.decls( lambda d: d.ignore==False, allow_empty=True, recursive=True )
+            map( self.add_exported, included_decls )
 
     def __is_std_decl( self, decl ):
         #Every class under std should be exported by Boost.Python and\\or `Py++`

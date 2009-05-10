@@ -69,10 +69,10 @@ class fundamental_tester_base_t( unittest.TestCase ):
                 self.failUnless( not exposed_db.is_exposed( d )
                                  , '''Declaration "%s" is NOT exposed, but for some reason it is marked as such.'''
                                    % str( d ) )
-            #if d.ignore or not d.exportable or isinstance( d, irrelevant_decl_types ):
-                #continue
-            #if d.parent and not d.parent.name:
-                #continue #unnamed classes
+            elif d.parent \
+                 and isinstance( d.parent, declarations.class_t ) \
+                 and d.parent.indexing_suite:
+                continue
             else:
                 self.failUnless( exposed_db.is_exposed( d )
                                  , '''Declaration "%s" is exposed, but for some reason it isn't marked as such.'''
@@ -98,11 +98,9 @@ class fundamental_tester_base_t( unittest.TestCase ):
         global LICENSE
 
         mb = module_builder.module_builder_t( [self.__to_be_exported_header]
-                                              , gccxml_path=autoconfig.gccxml.executable
-                                              , include_paths=[autoconfig.boost.include]
-                                              , undefine_symbols=['__MINGW32__']
+                                              #, undefine_symbols=['__MINGW32__']
                                               , indexing_suite_version=self.__indexing_suite_version
-                                              , compiler=autoconfig.cxx_parsers_cfg.gccxml.compiler)
+                                              , gccxml_config=autoconfig.cxx_parsers_cfg.gccxml)
         for decl in mb.decls():
             decl.documentation = '"documentation"'
         self.customize( mb )
