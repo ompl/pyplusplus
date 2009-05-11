@@ -48,6 +48,7 @@ Version 1.1
    library and doesn't requier Boost.Python library patching.
    See ":doc:`../documentation/containers`" document for more information.
 
+6. Support for `std::hash_map<...>` and `std::hash_set<...>` containers was added.
 
 -----------
 Version 1.0
