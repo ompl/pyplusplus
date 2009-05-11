@@ -9,6 +9,7 @@ import unittest
 import fundamental_tester_base
 
 EXPECTED_ERROR_INFO = "I don't have time to find out what is going wrong"
+EXPECTED_FAILURE_INFO = EXPECTED_ERROR_INFO
 
 
 MODULE_SPTR_DECL_CODE = \

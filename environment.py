@@ -44,7 +44,7 @@ if 'roman' in getpass.getuser():
         scons.ccflags = ['-DBOOST_PYTHON_NO_PY_SIGNATURES' ]
         boost.libs = ['/home/roman/include/libs' ]
         boost.include = '/home/roman/boost_svn'
-        python.include = '/usr/include/python2.5'
+        python.include = '/usr/include/python2.6'
 elif 'root' == getpass.getuser():
     if sys.platform == 'win32':
         scons.suffix = '.pyd'
