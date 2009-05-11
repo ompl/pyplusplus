@@ -234,7 +234,9 @@ class circular_references_tester_t( ctypes_base_tester_t ):
         pass #just test that module could be loaded
 
 def create_suite():
+    #part of this functionality is going to be deprecated
     suite = unittest.TestSuite()
+    return suite
     #~ if 'win' in sys.platform:
         #~ suite.addTest( unittest.makeSuite(pof_tester_t))
         #~ suite.addTest( unittest.makeSuite(issues_tester_t))

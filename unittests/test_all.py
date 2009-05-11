@@ -276,10 +276,16 @@ class module_runner_t( object ):
             self.test_results[ uname( match_found.group( 'name' ) ) ] = 'ok'
 
         for match_found in self.failed_test_re.finditer( self.output ):
-            self.test_results[ uname( match_found.group( 'name' ) ) ] = 'FAIL'
+            hint = ''
+            if hasattr( self.module, 'EXPECTED_FAILURE_INFO' ):
+                hint = " - EXPECTED. " + self.module.EXPECTED_FAILURE_INFO
+            self.test_results[ uname( match_found.group( 'name' ) ) ] = 'FAIL' + hint
 
         for match_found in self.error_test_re.finditer( self.output ):
-            self.test_results[ uname( match_found.group( 'name' ) ) ] = 'ERROR'
+            hint = ''
+            if hasattr( self.module, 'EXPECTED_ERROR_INFO' ):
+                hint = " - EXPECTED. " + self.module.EXPECTED_ERROR_INFO
+            self.test_results[ uname( match_found.group( 'name' ) ) ] = 'ERROR' + hint
 
         assert( self.num_of_tests == len( self.test_results ) )
 

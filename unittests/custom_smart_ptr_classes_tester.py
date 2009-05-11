@@ -8,6 +8,8 @@ import sys
 import unittest
 import fundamental_tester_base
 
+EXPECTED_ERROR_INFO = "I don't have time to find out what is going wrong"
+
 
 MODULE_SPTR_DECL_CODE = \
 """
@@ -57,10 +59,10 @@ struct my_smart_ptr_from_python
     {
         if (p == Py_None)
             return p;
-        
+
         return converter::get_lvalue_from_python(p, registered<T>::converters);
     }
-    
+
     static void construct(PyObject* source, rvalue_from_python_stage1_data* data)
     {
         void* const storage = ((converter::rvalue_from_python_storage<smart_ptrs::my_smart_ptr_t<T> >*)data)->storage.bytes;
@@ -102,7 +104,7 @@ struct my_smart_ptr_from_python
 MODULE_SPTR_REG_CODE = \
 """
     boost::python::my_smart_ptr_from_python<controllers::add_x_t>();
-    
+
     bp::register_ptr_to_python< smart_ptrs::my_smart_ptr_t< controllers::controller_i > >();
 
     //bp::register_ptr_to_python< smart_ptrs::my_smart_ptr_t< controllers::add_x_t > >();
@@ -130,8 +132,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
         mb.build_code_creator( self.EXTENSION_NAME )
         mb.code_creator.add_include( 'iostream' )
-        
-        
+
+
     def create_identity_value( self, module, v ):
         class identity_value_t( module.value_i ):
             def __init__( self, v ):

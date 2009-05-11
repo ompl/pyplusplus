@@ -8,8 +8,7 @@ import sys
 import unittest
 import fundamental_tester_base
 
-EXPECTED_TO_FAIL = True
-EXPECTED_TO_FAIL_INFO = "Boost.Python doesn't support virtual inheritance"
+EXPECTED_ERROR_INFO = "Boost.Python doesn't support virtual inheritance"
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'virtual_inheritance'

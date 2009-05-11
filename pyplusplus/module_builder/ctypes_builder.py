@@ -24,9 +24,6 @@ from pyplusplus import creators_factory
 
 class ctypes_module_builder_t(module_builder.module_builder_t):
     """
-    This class provides users with simple and intuitive interface to `Py++`
-    and/or pygccxml functionality. If this is your first attempt to use `Py++`
-    consider to read tutorials. You can find them on `web site <http://www.language-binding.net>`_.
     """
     def __init__( self
                   , files
@@ -37,22 +34,6 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         """
         :param files: list of files, declarations from them you want to export
         :type files: list of strings or :class:`parser.file_configuration_t` instances
-
-        :param gccxml_path: path to gccxml binary. If you don't pass this argument,
-        pygccxml parser will try to locate it using you environment PATH variable
-        :type gccxml_path: str
-
-        :param include_paths: additional header files location. You don't have to
-        specify system and standard directories.
-        :type include_paths: list of strings
-
-        :param define_symbols: list of symbols to be defined for preprocessor.
-        :param define_symbols: list of strings
-
-        :param undefine_symbols: list of symbols to be undefined for preprocessor.
-        :param undefine_symbols: list of strings
-
-        :param cflags: Raw string to be added to gccxml command line.
         """
         module_builder.module_builder_t.__init__( self, global_ns=None, encoding=encoding )
 
@@ -115,16 +96,17 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
 
     def has_code_creator( self ):
         """
-        Function, that will return True if build_code_creator function has been
-        called and False otherwise
+        Returns True if build_code_creator function has been called and False otherwise
         """
         return not ( None is self.__code_creator )
 
     def write_module( self, file_name ):
         """
         Writes module to single file
+
         :param file_name: file name
         :type file_name: string
+
         """
         file_writers.write_file( self.code_creator, file_name, encoding=self.encoding )
 

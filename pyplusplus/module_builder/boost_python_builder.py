@@ -50,11 +50,11 @@ class builder_t(module_builder.module_builder_t):
         :type files: list of strings or :class:`parser.file_configuration_t` instances
 
         :param gccxml_path: path to gccxml binary. If you don't pass this argument,
-        pygccxml parser will try to locate it using you environment PATH variable
+                            pygccxml parser will try to locate it using you environment PATH variable
         :type gccxml_path: str
 
         :param include_paths: additional header files location. You don't have to
-        specify system and standard directories.
+                              specify system and standard directories.
         :type include_paths: list of strings
 
         :param define_symbols: list of symbols to be defined for preprocessor.
@@ -66,8 +66,8 @@ class builder_t(module_builder.module_builder_t):
         :param cflags: Raw string to be added to gccxml command line.
 
         :param gccxml_config: instance of pygccxml.parser.config_t class, holds
-        gccxml( compiler ) configuration. You can use this argument instead of
-        passing the compiler configuration separately.
+                              gccxml( compiler ) configuration. You can use this
+                              argument instead of passing the compiler configuration separately.
         """
         module_builder.module_builder_t.__init__( self, global_ns=None, encoding=encoding )
 
@@ -227,6 +227,7 @@ class builder_t(module_builder.module_builder_t):
 
         :param call_policies_resolver_: callable, that will be invoked on every calldef object. It should return call policies.
         :type call_policies_resolver_: callable
+
         :param doc_extractor: callable, that takes as argument reference to declaration and returns documentation string
         :type doc_extractor: callable or None
         """
@@ -313,9 +314,11 @@ class builder_t(module_builder.module_builder_t):
 
     def write_module( self, file_name ):
         """
-        Writes module to single file
+        Writes module to a single file
+
         :param file_name: file name
         :type file_name: string
+
         """
         self.__merge_user_code()
         file_writers.write_file( self.code_creator, file_name, encoding=self.encoding )
@@ -350,9 +353,9 @@ class builder_t(module_builder.module_builder_t):
         :param on_unused_file_found: callable object that represents the action that should be taken on
                                      file, which is no more in use
 
-        @use_files_sum_repository: `Py++` can generate file, which will contain `md5` sum of every generated file.
-                                   Next time you generate code, md5sum will be loaded from the file and compared.
-                                   This could speed-up code generation process by 10-15%.
+        :param use_files_sum_repository: `Py++` can generate file, which will contain `md5` sum of every generated file.
+                                          Next time you generate code, md5sum will be loaded from the file and compared.
+                                          This could speed-up code generation process by 10-15%.
         """
         self.__merge_user_code()
 
@@ -396,9 +399,9 @@ class builder_t(module_builder.module_builder_t):
         :param on_unused_file_found: callable object that represents the action that should be taken on
                                      file, which is no more in use
 
-        @use_files_sum_repository: `Py++` can generate file, which will contain md5 sum of every generated file.
-                                   Next time you generate code, md5sum will be loaded from the file and compared.
-                                   This could speed-up code generation process by 10-15%.
+        :param use_files_sum_repository: `Py++` can generate file, which will contain md5 sum of every generated file.
+                                          Next time you generate code, md5sum will be loaded from the file and compared.
+                                          This could speed-up code generation process by 10-15%.
         """
         self.__merge_user_code()
 

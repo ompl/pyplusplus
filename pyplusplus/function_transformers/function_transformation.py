@@ -5,7 +5,7 @@
 
 """defines :class:function_transformation_t class"""
 
-import md5
+import hashlib
 import controllers
 from pygccxml import declarations
 from pyplusplus import code_repository
@@ -33,7 +33,7 @@ class function_transformation_t:
     @property
     def unique_name( self ):
         if None is self.__unique_name:
-            obj = md5.new()
+            obj = hashlib.md5()
             if self.__function.mangled: # free functions don't have a mangled value
                 obj.update( self.__function.mangled )
             else:
