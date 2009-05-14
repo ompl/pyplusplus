@@ -49,10 +49,10 @@ webpage were very helpful. "
   David Carpman
 
 
-"... I started a few months ago to develop a set of Python bindings for 
-OpenCascade modeling/visualization library. After a quick tour to evaluate 
-different solutions, my choice lead me to Py++, which is a very convenient 
-tool : I was able to achieve the first release of my project only two weeks after 
+"... I started a few months ago to develop a set of Python bindings for
+OpenCascade modeling/visualization library. After a quick tour to evaluate
+different solutions, my choice lead me to Py++, which is a very convenient
+tool : I was able to achieve the first release of my project only two weeks after
 the project start !"
 
   Paviot Thomas
@@ -114,23 +114,28 @@ Who is using Py++?
   * `OIS`_ - an object oriented input system.
 
     .. _`OIS` : http://www.wreckedgames.com/forum/
-    
+
   * All in all, `Python-OGRE`_ project contains bindings for more than 30 libraries.
     You can find code generation scripts here: https://python-ogre.svn.sourceforge.net/svnroot/python-ogre/trunk/python-ogre/code_generators/
 
-* `Rising Sun Pictures`_ company is using :doc:`Py++ <pyplusplus>` to create Python bindings for 
+* `Rising Sun Pictures`_ company is using :doc:`Py++ <pyplusplus>` to create Python bindings for
   `Apple Shake API`_. `PyShake`_ enables running of Python code from within Shake
   and by exposing the Shake API to Python.
-  
+
   .. _`Rising Sun Pictures` : http://open.rsp.com.au/
   .. _`Apple Shake API` : http://www.apple.com/shake/
   .. _`PyShake` :  http://open.rsp.com.au/projects/pyshake
 
-* Paviot Thomas, the author of `pythonOCC`_ project, is using :doc:`Py++ <pyplusplus>` to create 
+* Paviot Thomas, the author of `pythonOCC`_ project, is using :doc:`Py++ <pyplusplus>` to create
   Python bindings for `OpenCascade`_, a 3D modeling & numerical simulation library.
 
   .. _`pythonOCC` : http://www.minerva-plm.org/pythonOCC/
   .. _`OpenCascade` : http://www.opencascade.org/
+
+* Adrien Saladin, the author of `PTools`_ project, is using :doc:`Py++ <pyplusplus>`
+  to create an opensource molecular docking library.
+
+  .. _`PTools` : http://www.biomedcentral.com/1472-6807/9/27/abstract
 
 * I am :-). I created Python bindings for the following libraries:
 
