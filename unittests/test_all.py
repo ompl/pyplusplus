@@ -115,6 +115,7 @@ import virtual_inheritance_tester
 import indexing_suite_v1_tester
 import derive_from_deque_tester
 import std_pair_tester
+import mem_var_compile_error_bug_tester
 #import ogre_generate_tester
 
 testers = [
@@ -220,6 +221,7 @@ testers = [
     , indexing_suite_v1_tester
     , derive_from_deque_tester
     , std_pair_tester
+    , mem_var_compile_error_bug_tester
 #    , ogre_generate_tester too much time
 ]
 
