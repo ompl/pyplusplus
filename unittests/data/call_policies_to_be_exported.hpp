@@ -122,6 +122,15 @@ struct return_range_image_t{
     }
 };
 
+
+struct immutable_by_ref_t{
+    immutable_by_ref_t() : value ( 2977 ){};
+
+    int& get_value(){ return value; }
+
+    int value;
+};
+
 }
 
 #endif//__call_policies_to_be_exported_hpp__

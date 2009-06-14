@@ -24,7 +24,7 @@ struct raw_data_size_t{
     ssize_t
     operator()( boost::python::tuple args ){
         boost::python::object self = args[0];
-        call_policies::return_range_image_t& image 
+        call_policies::return_range_image_t& image
             = boost::python::extract<call_policies::return_range_image_t&>( self );
         return image.raw_data.size();
     }
@@ -82,6 +82,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                                           , 'get_create_images_size_t'
                                           , call_policies.return_value_policy(call_policies.reference_existing_object) )
 
+        mb.calldef( '::call_policies::immutable_by_ref_t::get_value' ).call_policies \
+            = call_policies.return_value_policy( call_policies.copy_non_const_reference )
+
     def run_tests(self, module):
         self.failUnless( module.compare( module.my_address() ) )
 
@@ -99,25 +102,28 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( 1977 == cont[1977] )
 
         self.failUnless( 0.5 == module.get_fundamental_ptr_value() )
-        
+
         self.failUnless( None is module.get_fundamental_ptr_value_null() )
-        
+
         module.get_impl_details()
 
         module.get_opaque()
-        
+
         x = module.arrays()
         for i in range( 4 ):
             arr3 = x.create_arr_3()
             self.failUnless( arr3 == (0,1,2) )
-            
+
         image = module.return_range_image_t()
         raw_data = image.get_raw_data()
         self.failUnless( ['1', '\0', '2']==list( raw_data ) )
-        raw_data[1] = 'x'            
+        raw_data[1] = 'x'
         self.failUnless( raw_data[1] == image.raw_data[1] )
         for index, img in enumerate( image.create_images() ):
             print index, img
+
+        ibr = module.immutable_by_ref_t()
+        self.failUnless( ibr.get_value() == ibr.value )
 
 def create_suite():
     suite = unittest.TestSuite()
