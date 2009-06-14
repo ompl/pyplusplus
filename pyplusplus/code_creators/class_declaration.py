@@ -34,7 +34,8 @@ class class_declaration_t( scoped.scoped_t
             tmpl = '%s.%s'
             if self.is_comment( code ):
                 tmpl = '%s%s'
-            result.append( self.indent( tmpl % ( os.linesep, code ) ) )
+            if code:
+                result.append( self.indent( tmpl % ( os.linesep, code ) ) )
         result.append( ';' )
         return ''.join( result )
 
@@ -249,7 +250,8 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
                 tmpl = '%s.%s'
                 if self.is_comment( code ):
                     tmpl = '%s%s'
-                result.append( self.indent( tmpl % ( os.linesep, code ) ) )
+                if code:
+                    result.append( self.indent( tmpl % ( os.linesep, code ) ) )
         result.append( ';' )
         return ''.join( result )
 
