@@ -117,6 +117,8 @@ import derive_from_deque_tester
 import std_pair_tester
 import mem_var_compile_error_bug_tester
 import return_ref_to_ptr_tester
+import function_adaptor_tester
+import selection_bug_tester
 #import ogre_generate_tester
 
 testers = [
@@ -224,6 +226,8 @@ testers = [
     , std_pair_tester
     , mem_var_compile_error_bug_tester
     , return_ref_to_ptr_tester
+    , function_adaptor_tester
+    , selection_bug_tester
 #    , ogre_generate_tester too much time
 ]
 
