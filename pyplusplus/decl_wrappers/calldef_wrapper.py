@@ -247,6 +247,17 @@ class member_function_t( declarations.member_function_t, calldef_t ):
         self._use_overload_macro = False
         self._override_precall_code = []
         self._default_precall_code =  []
+        self._adaptor = None
+
+    def _get_adaptor(self):
+        return self._adaptor
+    def _set_adaptor(self, adaptor):
+        self._adaptor = adaptor
+    adaptor = property( _get_adaptor, _set_adaptor
+                        , doc="string, if contains value `Py++` will generate code the following code: " \
+                             +".def(<name>, <adaptor>(<function reference>), <other args> ) " \
+                             +". The property is relevant for public, non virtual member functions." )
+
 
     def add_override_precall_code(self, code):
         """add code, which should be executed, before overridden member function call"""
@@ -563,6 +574,15 @@ class free_function_t( declarations.free_function_t, calldef_t ):
         calldef_t.__init__( self )
         self._use_overload_macro = False
         self._declaration_code = []
+        self._adaptor = None
+
+    def _get_adaptor(self):
+        return self._adaptor
+    def _set_adaptor(self, adaptor):
+        self._adaptor = adaptor
+    adaptor = property( _get_adaptor, _set_adaptor
+                        , doc="string, if contains value `Py++` will generate code the following code: " \
+                             +"def(<name>, <adaptor>(<function reference>), <other args> ) " )
 
     def add_declaration_code( self, code ):
         """adds the code to the declaration section"""

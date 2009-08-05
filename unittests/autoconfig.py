@@ -92,9 +92,11 @@ class scons_config:
 
         while process.poll() is None:
             line = process.stdout.readline()
-            print line.rstrip()
+            if line.strip():
+                print line.rstrip()
         for line in process.stdout.readlines():
-            print line.rstrip()
+            if line.strip():
+                print line.rstrip()
         if process.returncode:
             raise RuntimeError( "unable to compile extension. See output for the errors." )
 

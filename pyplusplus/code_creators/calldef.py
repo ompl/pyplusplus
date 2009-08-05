@@ -199,12 +199,16 @@ class free_function_t( calldef_t ):
 
     def create_function_ref_code(self, use_function_alias=False):
         fname = declarations.full_name( self.declaration, with_defaults=False )
+        result = ''
         if use_function_alias:
-            return '%s( &%s )' % ( self.function_type_alias, fname )
+            result = '%s( &%s )' % ( self.function_type_alias, fname )
         elif self.declaration.create_with_signature:
-            return '(%s)( &%s )' % ( self.declaration.function_type().partial_decl_string, fname )
+            result = '(%s)( &%s )' % ( self.declaration.function_type().partial_decl_string, fname )
         else:
-            return '&%s' % fname
+            result = '&%s' % fname
+        if self.declaration.adaptor:
+            result = "%s( %s )" % ( self.declaration.adaptor, result )
+        return result
 
 class mem_fun_t( calldef_t ):
     def __init__( self, function ):
@@ -216,12 +220,16 @@ class mem_fun_t( calldef_t ):
 
     def create_function_ref_code(self, use_function_alias=False):
         fname = declarations.full_name( self.declaration, with_defaults=False )
+        result = ''
         if use_function_alias:
-            return '%s( &%s )' % ( self.function_type_alias, fname )
+            result = '%s( &%s )' % ( self.function_type_alias, fname )
         elif self.declaration.create_with_signature:
-            return '(%s)( &%s )' % ( self.declaration.function_type().partial_decl_string, fname )
+            result = '(%s)( &%s )' % ( self.declaration.function_type().partial_decl_string, fname )
         else:
-            return '&%s' % fname
+            result = '&%s' % fname
+        if hasattr( self.declaration, 'adaptor' ) and self.declaration.adaptor:
+            result = "%s( %s )" % ( self.declaration.adaptor, result )
+        return result
 
 class make_constructor_t( calldef_t ):
     def __init__( self, function ):

@@ -137,6 +137,7 @@ class fundamental_tester_base_t( unittest.TestCase ):
                 break
         exit_status = output.close()
         scons_msg = ''.join(scons_reports)
+        scons_msg = scons_msg.strip()
         if exit_status:
             raise RuntimeError( "unable to clean extension. error: %s" % scons_msg )
 
