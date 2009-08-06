@@ -93,18 +93,8 @@ from calldef_transformed import mem_fun_v_transformed_wrapper_t
 #~ from calldef_transformed import constructor_transformed_t
 #~ from calldef_transformed import constructor_transformed_wrapper_t
 
-from calldef_ctypes import del_definition_t
-from calldef_ctypes import del_introduction_t
-from calldef_ctypes import methods_definition_t
-from calldef_ctypes import mem_fun_definition_t
-from calldef_ctypes import mem_fun_introduction_t
 from calldef_ctypes import function_definition_t
-from calldef_ctypes import vmem_fun_introduction_t
-from calldef_ctypes import multi_method_definition_t
-from calldef_ctypes import init_definition_t
-from calldef_ctypes import init_introduction_t
 from calldef_ctypes import opaque_init_introduction_t
-
 
 from global_variable import global_variable_base_t
 from global_variable import global_variable_t
