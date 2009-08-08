@@ -1,5 +1,0 @@
-Import('*')
-
-target_name = 'issues'
-shlib = env.SharedLibrary( target=target_name, source=[ target_name + '.cpp' ] )
-env.Alias( target_name, shlib )
