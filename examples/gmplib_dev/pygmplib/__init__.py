@@ -633,6 +633,9 @@ class _IO_marker(ctypes.Structure):
     def __init__( self, *args, **keywd ):
         raise RuntimeError( "Unable to create instance of opaque type." )
 
+class __mpz_struct(ctypes.Structure):
+    """class __mpz_struct"""
+
 class __gmp_randstate_struct(ctypes.Structure):
     """class __gmp_randstate_struct"""
     
@@ -645,24 +648,9 @@ class __mpf_struct(ctypes.Structure):
 class __mpq_struct(ctypes.Structure):
     """class __mpq_struct"""
 
-class __mpz_struct(ctypes.Structure):
-    """class __mpz_struct"""
-
-__mpq_struct._fields_ = [ #class __mpq_struct
-    ("_mp_num", __mpz_struct),
-    ("_mp_den", __mpz_struct),
-]
-
 __mpz_struct._fields_ = [ #class __mpz_struct
     ("_mp_alloc", ctypes.c_int),
     ("_mp_size", ctypes.c_int),
-    ("_mp_d", ctypes.POINTER( ctypes.c_ulong )),
-]
-
-__mpf_struct._fields_ = [ #class __mpf_struct
-    ("_mp_prec", ctypes.c_int),
-    ("_mp_size", ctypes.c_int),
-    ("_mp_exp", ctypes.c_long),
     ("_mp_d", ctypes.POINTER( ctypes.c_ulong )),
 ]
 
@@ -675,6 +663,18 @@ __gmp_randstate_struct._fields_ = [ #class __gmp_randstate_struct
     ("_mp_seed", ( __mpz_struct * 1 )),
     ("_mp_alg", gmp_randalg_t),
     ("_mp_algdata", __gmp_randstate_struct._),
+]
+
+__mpf_struct._fields_ = [ #class __mpf_struct
+    ("_mp_prec", ctypes.c_int),
+    ("_mp_size", ctypes.c_int),
+    ("_mp_exp", ctypes.c_long),
+    ("_mp_d", ctypes.POINTER( ctypes.c_ulong )),
+]
+
+__mpq_struct._fields_ = [ #class __mpq_struct
+    ("_mp_num", __mpz_struct),
+    ("_mp_den", __mpz_struct),
 ]
 
 gmpq_add_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )

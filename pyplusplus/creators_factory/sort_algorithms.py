@@ -12,9 +12,10 @@ class COLOR:
     BLACK = 2
 
 class class_organizer_t(object):
-    def __init__( self, decls ):
+    def __init__( self, decls, include_vars=False):
         object.__init__( self )
 
+        self.__include_vars = include_vars
         self.__classes = filter( lambda x: isinstance( x, declarations.class_t )
                                  , decls )
         self.__classes.sort( lambda cls1, cls2: cmp( cls1.decl_string, cls2.decl_string ) )
@@ -60,6 +61,19 @@ class class_organizer_t(object):
                 if declarations.is_pointer( arg.type ) and arg.default_value == 0:
                     continue
                 base_type = declarations.base_type( arg.type )
+                if not isinstance( base_type, declarations.declarated_t ):
+                    continue
+                top_class_inst = self.__get_top_class_inst( base_type.declaration )
+                if top_class_inst:
+                    i_depend_on_them.add( full_name( top_class_inst ) )
+
+        if self.__include_vars:
+            vars = filter( lambda decl: isinstance( decl, declarations.variable_t )
+                           , declarations.make_flatten( class_ ))
+            for var in vars:
+                if declarations.is_pointer( var.type ):
+                    continue
+                base_type = declarations.base_type( var.type )
                 if not isinstance( base_type, declarations.declarated_t ):
                     continue
                 top_class_inst = self.__get_top_class_inst( base_type.declaration )
@@ -170,8 +184,8 @@ class calldef_organizer_t( object ):
         result = self.__join_groups(groups)
         return result
 
-def sort_classes( classes ):
-    organizer = class_organizer_t( classes )
+def sort_classes( classes, include_vars=False ):
+    organizer = class_organizer_t( classes, include_vars=include_vars )
     return organizer.desired_order()
 
 def sort_calldefs( decls ):

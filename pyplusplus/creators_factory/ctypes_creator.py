@@ -70,29 +70,6 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
                 return decl in self.__exported_decls
         return True
 
-    #~ def __prepare_decls( self, global_ns ):
-        #~ to_be_exposed = []
-        #~ for decl in declarations.make_flatten( global_ns ):
-            #~ if decl.ignore:
-                #~ continue
-
-            #~ if not decl.exportable:
-                #~ #leave only decls that user wants to export and that could be exported
-                #~ self.__print_readme( decl )
-                #~ continue
-
-            #~ if decl.already_exposed:
-                #~ #check wether this is already exposed in other module
-                #~ continue
-
-            #~ if isinstance( decl.parent, declarations.namespace_t ):
-                #~ #leave only declarations defined under namespace, but remove namespaces
-                #~ to_be_exposed.append( decl )
-
-            #~ self.__print_readme( decl )
-
-        #~ return to_be_exposed
-
     def __contains_exported( self, decl ):
         return bool( decl.decls( self.__should_generate_code, recursive=True, allow_empty=True ) )
 
@@ -104,10 +81,13 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         self.__class2introduction[ class_ ] = ci_creator
         cc.adopt_creator( ci_creator )
         classes = class_.classes( recursive=False, allow_empty=True)
-        classes = sort_algorithms.sort_classes( classes )
+        classes = sort_algorithms.sort_classes( classes, include_vars=True )
         for internal_class in classes:
             self.__add_class_introductions( ci_creator, internal_class )
 
+        if not class_.opaque:
+            self.__class_defs_ccs.adopt_creator( code_creators.fields_definition_t( class_ ) )
+            
     def create(self ):
         """
         create and return the module for the extension - code creators tree root
@@ -134,7 +114,7 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         f = lambda cls: self.__should_generate_code( cls ) \
                         and isinstance( cls.parent, declarations.namespace_t )
         ns_classes = self.global_ns.classes( f, recursive=True, allow_empty=True)
-        ns_classes = sort_algorithms.sort_classes( ns_classes )
+        ns_classes = sort_algorithms.sort_classes( ns_classes, include_vars=True )
         for class_ in ns_classes:
             self.__add_class_introductions( self.__class_ccs, class_ )
 
@@ -241,9 +221,6 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
                     self.curr_decl = decl
                     declarations.apply_visitor( self, decl )
             self.curr_decl = class_
-            #fields definition should be recursive using the visitor
-            #internal classes fields should be defined first
-            self.__class_defs_ccs.adopt_creator( code_creators.fields_definition_t( self.curr_decl ) )
         else:
             cls_intro_cc = self.__class2introduction[ self.curr_decl ]
             cls_intro_cc.adopt_creator( code_creators.opaque_init_introduction_t( self.curr_decl ) )
