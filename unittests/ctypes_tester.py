@@ -77,41 +77,6 @@ class ctypes_base_tester_t(unittest.TestCase):
         return sys.modules[ self.base_name ]
 
 
-class pof_tester_t( ctypes_base_tester_t ):
-    def __init__( self, *args, **keywd ):
-        ctypes_base_tester_t.__init__( self, 'pof', *args, **keywd )
-
-    def test_constructors(self):
-        n0 = self.module_ref.pof.number_t()
-        self.failUnless( 0 == n0.get_value() )
-        n1 = self.module_ref.pof.number_t( ctypes.c_long(32) )
-        self.failUnless( 32 == n1.get_value() )
-        n2 = self.module_ref.pof.number_t( ctypes.pointer(n1) )
-        self.failUnless( 32 == n2.get_value() )
-
-    def test_free_functions(self):
-        #the following code fails - difference in the calling conventions
-        #TODO: the following test failes, because of the wrong calling convention used
-        self.failUnless( self.module_ref.identity_cpp( int(111) ) == 111 )
-
-    def test_get_set_values( self ):
-        n0 = self.module_ref.pof.number_t()
-        n0.set_value( 1977 )
-        self.failUnless( 1977 == n0.get_value() )
-
-    #the following functionality is still missing
-    #~ def test_operator_assign( self ):
-        #~ obj1 = number_t(1)
-        #~ obj2 = number_t(2)
-        #~ x = obj1.operator_assign( obj2 )
-        #~ #there are special cases, where ctypes could introduce "optimized" behaviour and not create new python object
-        #~ self.failUnless( x is obj1 )
-        #~ self.failUnless( obj1.m_value == obj2.m_value )
-
-    #~ def test_clone( self ):
-        #~ obj1 = number_t(1)
-        #~ obj2 = obj1.clone()
-        #~ self.fail( obj1.get_value() == obj2.get_value() )
 
 
 class issues_tester_t( ctypes_base_tester_t ):
@@ -208,16 +173,6 @@ class varargs_tester_t( ctypes_base_tester_t ):
     def test(self):
         self.failUnless( 21 == self.module_ref.sum_ints( 3, 5,7,9) )
 
-class templates_tester_t( ctypes_base_tester_t ):
-    def __init__( self, *args, **keywd ):
-        ctypes_base_tester_t.__init__( self, 'templates', *args, **keywd )
-
-    def customize( self, mb ):
-        mb.class_( 'value_t<int>' ).alias = 'int_value_t'
-
-    def test(self):
-        pass
-
 class circular_references_tester_t( ctypes_base_tester_t ):
     def __init__( self, *args, **keywd ):
         ctypes_base_tester_t.__init__( self, 'circular_references', *args, **keywd )
@@ -236,17 +191,12 @@ class circular_references_tester_t( ctypes_base_tester_t ):
 def create_suite():
     #part of this functionality is going to be deprecated
     suite = unittest.TestSuite()
-    return suite
-    #~ if 'win' in sys.platform:
-        #~ suite.addTest( unittest.makeSuite(pof_tester_t))
-        #~ suite.addTest( unittest.makeSuite(issues_tester_t))
     suite.addTest( unittest.makeSuite(enums_tester_t))
     suite.addTest( unittest.makeSuite(opaque_tester_t))
     suite.addTest( unittest.makeSuite(include_algorithm_tester_t))
     suite.addTest( unittest.makeSuite(anonymous_tester_t))
     suite.addTest( unittest.makeSuite(variables_tester_t))
     suite.addTest( unittest.makeSuite(varargs_tester_t))
-    suite.addTest( unittest.makeSuite(templates_tester_t))
     suite.addTest( unittest.makeSuite(circular_references_tester_t))
     return suite
 

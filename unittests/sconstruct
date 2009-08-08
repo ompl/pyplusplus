@@ -25,9 +25,7 @@ if 'win32' in sys.platform:
 
 env.AppendUnique( CPPPATH=['#data'] )
 
-scripts = [ 'pof'
-            , 'issues'
-            , 'enums'
+scripts = [ 'enums'
             , 'opaque'
             , 'include_algorithm'
             , 'anonymous'
