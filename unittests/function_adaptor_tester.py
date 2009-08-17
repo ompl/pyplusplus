@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0. (See
 # accompanying file LICENSE_1_0.txt or copy at
@@ -20,8 +21,15 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def customize(self, mb ):
         for suffix in [ 'zero', 'one', 'two' ]:
-            mb.calldef( 'get_' + suffix ).adaptor = 'PYPP_IDENTITY'
-            mb.calldef( 'get_' + suffix ).create_with_signature = False
+            funs = mb.calldefs( 'get_' + suffix )
+            funs.adaptor = 'PYPP_IDENTITY'
+            funs.create_with_signature = False
+            mfuns = mb.global_ns.mem_funs( 'get_' + suffix, allow_empty=True )
+            mfuns.add_default_precall_code( '//add_default_precall_code' )
+            mfuns.add_override_precall_code( '//add_override_precall_code' )
+            mfuns.add_override_native_precall_code( '//add_override_native_precall_code' )
+        mb.class_('base3_t' ).add_wrapper_code( '//just a comment to force Py++ create wrapper' )
+
     def run_tests( self, module):
         foo = module.foo_t()
         self.failUnless( foo.get_zero() == 0 )

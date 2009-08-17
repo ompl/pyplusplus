@@ -18,4 +18,24 @@ struct foo_t{
 
 inline int get_one(){ return 1; }
 
+struct base_t{
+protected:
+    virtual int get_zero() const { return 0; }
+    virtual int get_two() const { return 2; }
+
+};
+
+struct derived_t : public base_t{
+protected:
+    virtual int get_two() const { return 22; }
+};
+
+
+struct base3_t{
+protected:
+    virtual int get_zero() const = 0;
+
+};
+
+
 #endif//__function_adaptor_to_be_exported_hpp__

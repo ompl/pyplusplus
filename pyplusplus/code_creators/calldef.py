@@ -477,8 +477,12 @@ class mem_fun_v_wrapper_t( calldef_wrapper_t ):
             template.append( os.linesep.join( precall_code ) )
         template.append( 'if( %(override)s func_%(alias)s = this->get_override( "%(alias)s" ) )' )
         template.append( self.indent('%(return_)sfunc_%(alias)s( %(args)s );') )
-        template.append( 'else' )
+        template.append( 'else{' )
+        native_precall_code = self.declaration.override_native_precall_code
+        if native_precall_code:
+            template.append( self.indent( os.linesep.join( native_precall_code ) ) )
         template.append( self.indent('%(return_)sthis->%(wrapped_class)s::%(name)s( %(args)s );') )
+        template.append( '}' )
         template = os.linesep.join( template )
 
         return_ = ''
@@ -716,8 +720,12 @@ class mem_fun_protected_v_wrapper_t( calldef_wrapper_t ):
 
         template.append( 'if( %(override)s func_%(alias)s = this->get_override( "%(alias)s" ) )' )
         template.append( self.indent('%(return_)sfunc_%(alias)s( %(args)s );') )
-        template.append( 'else' )
+        template.append( 'else{' )
+        native_precall_code = self.declaration.override_native_precall_code
+        if native_precall_code:
+            template.append( self.indent( os.linesep.join( native_precall_code ) ) )       
         template.append( self.indent('%(return_)sthis->%(wrapped_class)s::%(name)s( %(args)s );') )
+        template.append( '}' )
         template = os.linesep.join( template )
 
         return_ = ''

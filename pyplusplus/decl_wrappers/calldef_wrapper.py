@@ -246,6 +246,7 @@ class member_function_t( declarations.member_function_t, calldef_t ):
         calldef_t.__init__( self )
         self._use_overload_macro = False
         self._override_precall_code = []
+        self._overide_native_precall_code = []
         self._default_precall_code =  []
         self._adaptor = None
 
@@ -267,6 +268,15 @@ class member_function_t( declarations.member_function_t, calldef_t ):
     def override_precall_code(self):
         """code, which should be executed, before overrided member function call"""
         return self._override_precall_code
+
+    def add_override_native_precall_code(self, code):
+        """add code, which should be executed, before native member function call"""
+        self._overide_native_precall_code.append( code )
+
+    @property
+    def override_native_precall_code(self):
+        """code, which should be executed, before overrided member function call"""
+        return self._overide_native_precall_code
 
     def add_default_precall_code(self, code):
         """add code, which should be executed, before this member function call"""
@@ -452,7 +462,8 @@ class member_operator_t( declarations.member_operator_t, calldef_t ):
         calldef_t.__init__( self )
         self._override_precall_code = []
         self._default_precall_code =  []
-
+        self._overide_native_precall_code = []
+        
     def add_override_precall_code(self, code):
         self._override_precall_code.append( code )
 
@@ -466,6 +477,16 @@ class member_operator_t( declarations.member_operator_t, calldef_t ):
     @property
     def default_precall_code(self):
         return self._default_precall_code
+
+    def add_override_native_precall_code(self, code):
+        """add code, which should be executed, before native member function call"""
+        self._overide_native_precall_code.append( code )
+
+    @property
+    def override_native_precall_code(self):
+        """code, which should be executed, before overrided member function call"""
+        return self._overide_native_precall_code
+
 
     def _get_alias( self):
         alias = super( member_operator_t, self )._get_alias()
