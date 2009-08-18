@@ -315,19 +315,25 @@ class mem_fun_pv_t( calldef_t ):
         return 'typedef %s;' % ftype.create_typedef( self.function_type_alias, exported_class_alias )
 
     def create_function_ref_code(self, use_function_alias=False):
+        result = ''
         fname = declarations.full_name( self.declaration, with_defaults=False )
         if use_function_alias:
-            return '%s( %s(&%s) )' \
+            result = '%s( %s(&%s) )' \
                    % ( self.pure_virtual_identifier()
                        , self.function_type_alias
                        , fname )
         elif self.declaration.create_with_signature:
-            return '%s( (%s)(&%s) )' \
+            result = '%s( (%s)(&%s) )' \
                    % ( self.pure_virtual_identifier()
                        , self.declaration.function_type().partial_decl_string
                        , fname )
         else:
-            return '%s( &%s )' % ( self.pure_virtual_identifier(), fname)
+            result = '%s( &%s )' % ( self.pure_virtual_identifier(), fname)
+
+        if hasattr( self.declaration, 'adaptor' ) and self.declaration.adaptor:
+            result = "%s( %s )" % ( self.declaration.adaptor, result )
+            
+        return result
 
 class mem_fun_pv_wrapper_t( calldef_wrapper_t ):
     def __init__( self, function ):

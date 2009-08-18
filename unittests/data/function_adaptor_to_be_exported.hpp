@@ -37,5 +37,10 @@ protected:
 
 };
 
+struct base4_t{
+    virtual int get_zero() const = 0;
+
+};
+
 
 #endif//__function_adaptor_to_be_exported_hpp__
