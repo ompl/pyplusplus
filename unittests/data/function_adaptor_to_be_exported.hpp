@@ -42,5 +42,24 @@ struct base4_t{
 
 };
 
+class Foo
+{
+public:
+    Foo() { }
+    virtual ~Foo() { }
+public:
+    virtual int virtual_public()
+    {
+        return 1;
+    }
+    int call_virtual_protected(){
+        return virtual_protected();
+    }
+protected:
+    virtual int virtual_protected()
+    {
+        return 2;
+    }
+};
 
 #endif//__function_adaptor_to_be_exported_hpp__

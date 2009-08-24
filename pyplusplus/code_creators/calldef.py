@@ -332,7 +332,7 @@ class mem_fun_pv_t( calldef_t ):
 
         if hasattr( self.declaration, 'adaptor' ) and self.declaration.adaptor:
             result = "%s( %s )" % ( self.declaration.adaptor, result )
-            
+
         return result
 
 class mem_fun_pv_wrapper_t( calldef_wrapper_t ):
@@ -530,7 +530,7 @@ class mem_fun_v_wrapper_t( calldef_wrapper_t ):
 
     def _create_impl(self):
         answer = [ self.create_function() ]
-        answer.append( os.linesep )
+        answer.append( '' )
         answer.append( self.create_default_function() )
         return os.linesep.join( answer )
 
@@ -681,12 +681,12 @@ class mem_fun_protected_v_t( calldef_t ):
     def create_function_ref_code(self, use_function_alias=False):
         if use_function_alias:
             return '%s( &%s )' \
-                   % ( self.function_type_alias, self.wrapper.full_name() )
+                   % ( self.function_type_alias, self.wrapper.default_full_name() )
         elif self.declaration.create_with_signature:
             return '(%s)(&%s)' \
-                   % ( self.wrapper.function_type().partial_decl_string, self.wrapper.full_name() )
+                   % ( self.wrapper.function_type().partial_decl_string, self.wrapper.default_full_name() )
         else:
-            return '&%s' % self.wrapper.full_name()
+            return '&%s' % self.wrapper.default_full_name()
 
 class mem_fun_protected_v_wrapper_t( calldef_wrapper_t ):
     def __init__( self, function):
@@ -694,6 +694,9 @@ class mem_fun_protected_v_wrapper_t( calldef_wrapper_t ):
 
     def full_name(self):
         return self.parent.full_name + '::' + self.declaration.name
+
+    def default_full_name(self):
+        return self.parent.full_name + '::default_' + self.declaration.alias
 
     def function_type(self):
         return declarations.member_function_type_t(
@@ -729,7 +732,7 @@ class mem_fun_protected_v_wrapper_t( calldef_wrapper_t ):
         template.append( 'else{' )
         native_precall_code = self.declaration.override_native_precall_code
         if native_precall_code:
-            template.append( self.indent( os.linesep.join( native_precall_code ) ) )       
+            template.append( self.indent( os.linesep.join( native_precall_code ) ) )
         template.append( self.indent('%(return_)sthis->%(wrapped_class)s::%(name)s( %(args)s );') )
         template.append( '}' )
         template = os.linesep.join( template )
@@ -753,8 +756,30 @@ class mem_fun_protected_v_wrapper_t( calldef_wrapper_t ):
         answer.append( '}' )
         return os.linesep.join( answer )
 
+
+    def create_default_body(self):
+        function_call = declarations.call_invocation.join( self.declaration.partial_name
+                                                           , [ self.function_call_args() ] )
+        body = self.wrapped_class_identifier() + '::' + function_call + ';'
+        if not declarations.is_void( self.declaration.return_type ):
+            body = 'return ' + body
+        precall_code = self.declaration.default_precall_code
+        if precall_code:
+            body = os.linesep.join( precall_code ) + os.linesep + body
+        return body
+
+    def create_default_function( self ):
+        answer = [ self.create_declaration('default_' + self.declaration.alias) + '{' ]
+        answer.append( self.indent( self.create_default_body() ) )
+        answer.append( '}' )
+        return os.linesep.join( answer )
+
     def _create_impl(self):
-        return self.create_function()
+        answer = [ self.create_function() ]
+        answer.append( '' )
+        answer.append( self.create_default_function() )
+        return os.linesep.join( answer )
+
 
 class mem_fun_protected_pv_t( calldef_t ):
     def __init__( self, function, wrapper ):
@@ -1035,7 +1060,7 @@ class copy_constructor_wrapper_t( code_creator.code_creator_t
     def __init__( self, constructor ):
         code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=constructor )
-        
+
     @property
     def parent_class( self ):
         return self.declaration.parent
@@ -1080,11 +1105,11 @@ class null_constructor_wrapper_t( code_creator.code_creator_t
     def __init__( self, constructor ):
         code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=constructor )
-        
+
     @property
     def parent_class( self ):
         return self.declaration.parent
-        
+
     def _create_constructor_call( self ):
         return algorithm.create_identifier( self, self.parent_class.decl_string ) + '()'
 
