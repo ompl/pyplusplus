@@ -49,7 +49,8 @@ void set_a( bit_fields_t& inst, unsigned int new_value );
 unsigned int get_b(const bit_fields_t& inst);
 
 struct array_t{
-    array_t(){
+    array_t()
+    {
         for( int i = 0; i < 10; ++i ){
             ivars[i] = -i;
         }
@@ -64,7 +65,7 @@ struct array_t{
         return ivars[index];
     }
 
-    const variable_t vars[3];
+    static const variable_t vars[3];
     int ivars[10];
     int ivars2[10];
 };
