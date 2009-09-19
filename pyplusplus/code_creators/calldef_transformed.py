@@ -281,6 +281,9 @@ class mem_fun_v_transformed_t( calldef_t ):
         else:
             return '&%s' % full_name
 
+    def create_call_policies( self ):
+        return ''
+
 class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
     def __init__( self, function ):
         calldef_wrapper_t.__init__( self, function=function )

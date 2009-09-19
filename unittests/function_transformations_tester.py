@@ -13,6 +13,14 @@ from pyplusplus import function_transformers as ft
 from pyplusplus.module_builder import call_policies
 
 
+def remove_const_ref(type):
+    """Converts "T const&" into "T &" """
+    if declarations.type_traits.is_reference(type):
+        t = declarations.cpptypes.reference_t(declarations.type_traits.remove_const(type.base))
+        return t
+    return type
+
+
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'function_transformations'
 
@@ -94,6 +102,14 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         render_queue_listener_t = mb.class_( 'render_queue_listener_t' )
         render_queue_ended = render_queue_listener_t.mem_fun( 'render_queue_ended' )
         render_queue_ended.add_transformation( ft.inout(2) )
+
+        ft_bugs = mb.namespace( 'ft_bugs' )
+        h = ft_bugs.mem_fun( 'h' )
+        h.add_transformation( ft.modify_type(0, remove_const_ref ) )
+        h.call_policies = call_policies.return_internal_reference()
+        ft_bugs.class_( 'B' ).always_expose_using_scope = True
+        ft_bugs.mem_fun( 'get_a' ).call_policies \
+            = call_policies.return_value_policy( call_policies.reference_existing_object )
         
     def run_tests(self, module):
         """Run the actual unit tests.
@@ -252,7 +268,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         tmp = module.transfer_ownership_tester_t()
         resource = tmp.resources_t();
         tmp.tester( resource )
-        
+
+        b = module.B()
+        self.failUnless( b.h( module.A.get_a() ) == None )
 def create_suite():
     suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))

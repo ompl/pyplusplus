@@ -254,4 +254,26 @@ struct render_queue_listener_t{
 
 }
 
+namespace ft_bugs{
+
+class C {};
+
+class A {
+public:
+    
+    static const A& get_a(){ static A a; return a; }
+
+protected:
+    virtual ~A(){};
+};
+
+class B {
+public:
+  virtual C* h(A const & x){ return 0;}  // this does not work
+  //C *h(A const & x);        // this works
+  //virtual C *h();           // and this
+};
+
+}
+
 #endif//__function_transformations_to_be_exported_hpp__
