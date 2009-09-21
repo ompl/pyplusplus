@@ -107,6 +107,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         h = ft_bugs.mem_fun( 'h' )
         h.add_transformation( ft.modify_type(0, remove_const_ref ) )
         h.call_policies = call_policies.return_internal_reference()
+
+        h2 = ft_bugs.mem_fun( 'h2' )
+        h2.add_transformation( ft.modify_type(0, remove_const_ref ) )
+        h2.call_policies = call_policies.return_internal_reference()
+
+        
         ft_bugs.class_( 'B' ).always_expose_using_scope = True
         ft_bugs.mem_fun( 'get_a' ).call_policies \
             = call_policies.return_value_policy( call_policies.reference_existing_object )

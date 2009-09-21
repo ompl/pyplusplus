@@ -131,8 +131,15 @@ class sealed_fun_controller_t( controller_base_t ):
         controller_base_t.__init__( self, function )
         self.__vars_manager = create_variables_manager( function )
         self.__wrapper_args = [ arg.clone() for arg in function.arguments ]
-        self.__result_var = variable_t( self.function.return_type
-                                        , self.register_variable_name( 'result' ) )
+
+        initialize_expr = ''
+        result_type = self.function.return_type
+        if declarations.is_reference( self.function.return_type ):
+            initialize_expr = ' = 0'
+            result_type = declarations.pointer_t( declarations.remove_reference( self.function.return_type ) )
+        self.__result_var = variable_t( result_type
+                                        , self.register_variable_name( 'result' )
+                                        , initialize_expr=initialize_expr )
         self.__return_variables = []
         self.__pre_call = []
         self.__post_call = []

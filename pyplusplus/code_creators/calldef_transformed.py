@@ -351,7 +351,10 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
 
         tmpl_values['save_result'] = ''
         if not declarations.is_void( self.declaration.return_type ):
-            tmpl_values['save_result'] = '%s = ' % cntrl.result_variable.name
+            tmpl_tmp = '%(result_var_name)s = '
+            if declarations.is_reference( self.declaration.return_type ):
+                tmpl_tmp = '%(result_var_name)s = &'
+            tmpl_values['save_result'] = tmpl_tmp % dict( result_var_name=cntrl.result_variable.name )
 
         tmpl_values['function_name'] = self.declaration.name
         tmpl_values['arg_expressions'] = self.PARAM_SEPARATOR.join( cntrl.arg_expressions )

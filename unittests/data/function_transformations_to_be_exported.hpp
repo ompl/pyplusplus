@@ -269,9 +269,10 @@ protected:
 
 class B {
 public:
-  virtual C* h(A const & x){ return 0;}  // this does not work
-  //C *h(A const & x);        // this works
-  //virtual C *h();           // and this
+    virtual C* h(A const & x){ return 0;}
+    virtual C& h2(A const & x){ return c;}
+private:
+    C c;
 };
 
 }
