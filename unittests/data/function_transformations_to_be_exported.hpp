@@ -277,4 +277,24 @@ private:
 
 }
 
+
+namespace ft_bugs2{
+
+class A2 {
+protected:
+    virtual ~A2(){};
+};
+
+class B2 {};
+
+class C2 {
+public:
+  B2& g(A2 const & x, int n){ return b; }
+private:
+    B2 b;
+};
+
+
+}
+
 #endif//__function_transformations_to_be_exported_hpp__

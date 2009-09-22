@@ -90,10 +90,13 @@ class sealed_fun_transformed_wrapper_t( calldef_wrapper_t ):
 
         tmpl_values['save_result'] = ''
         if not declarations.is_void( self.declaration.return_type ):
-            tmpl_values['save_result'] \
-                = '%(type)s %(name)s = ' \
-                  % { 'type': cntrl.result_variable.type.decl_string
-                      , 'name' : cntrl.result_variable.name }
+            tmpl_tmp = '%(type)s %(name)s = '
+            if declarations.is_reference( self.declaration.return_type ):
+                tmpl_tmp = tmpl_tmp + '&'
+
+            tmpl_values['save_result'] = tmpl_tmp \
+                                         % { 'type': cntrl.result_variable.type.decl_string
+                                             , 'name' : cntrl.result_variable.name }
 
         tmpl_values['function_name'] = self.resolve_function_ref()
         tmpl_values['arg_expressions'] = self.PARAM_SEPARATOR.join( cntrl.arg_expressions )
@@ -353,7 +356,7 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
         if not declarations.is_void( self.declaration.return_type ):
             tmpl_tmp = '%(result_var_name)s = '
             if declarations.is_reference( self.declaration.return_type ):
-                tmpl_tmp = '%(result_var_name)s = &'
+                tmpl_tmp = tmpl_tmp + '&'
             tmpl_values['save_result'] = tmpl_tmp % dict( result_var_name=cntrl.result_variable.name )
 
         tmpl_values['function_name'] = self.declaration.name
