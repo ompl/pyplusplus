@@ -42,8 +42,6 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         self.curr_code_creator = self.module
         #mapping between class declaration and class introduction code creator
         self.__class2introduction = {}
-        #mapping between classs and its methods definition dictionary
-        self.__class2methods_def = {}
         #mapping between namespace and its code creator
         self.__namespace2pyclass = {}
 
