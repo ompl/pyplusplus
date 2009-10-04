@@ -57,7 +57,7 @@
 ~@destructor_t@~._11@ ( ::pthread_mutexattr_t::* )(  )  ( ::pthread_mutexattr_t::* )(  ) 
 ~@destructor_t@~._13@ ( ::pthread_cond_t::* )(  )  ( ::pthread_cond_t::* )(  ) 
 ~@destructor_t@~._12@ ( ::pthread_cond_t::* )(  )  ( ::pthread_cond_t::* )(  ) 
-~@enumeration_t@('/usr/include/bits/socket.h', 184)@::
+~@enumeration_t@('/usr/include/bits/socket.h', 320)@::
 ~@enumeration_t@memcached_server_distribution@::memcached_server_distribution
 +@enumeration_t@memcached_behavior@::memcached_behavior
 +@enumeration_t@memcached_callback@::memcached_callback
@@ -68,7 +68,7 @@
 +@enumeration_t@memcached_return@::memcached_return
 ~@enumeration_t@('/usr/include/sys/socket.h', 54)@::
 ~@enumeration_t@('/usr/include/netinet/in.h', 32)@::
-~@enumeration_t@('/usr/include/bits/socket.h', 308)@::
+~@enumeration_t@('/usr/include/bits/socket.h', 196)@::
 ~@typedef_t@__uint16_t@::__uint16_t
 ~@typedef_t@__int16_t@::__int16_t
 ~@typedef_t@__u_char@::__u_char
@@ -214,6 +214,7 @@
 ~@typedef_t@int8_t@::int8_t
 ~@typedef_t@useconds_t@::useconds_t
 ~@typedef_t@memcached_realloc_function@::memcached_realloc_function
+~@typedef_t@locale_t@::locale_t
 ~@typedef_t@memcached_cleanup_func@::memcached_cleanup_func
 ~@typedef_t@in_addr_t@::in_addr_t
 ~@typedef_t@__u_int@::__u_int
@@ -749,6 +750,7 @@
 +@free_function_t@memcached_clone@::memcached_st * (*)( ::memcached_st *,::memcached_st * )::memcached_st * (*)( ::memcached_st *,::memcached_st * )
 ~@free_function_t@rand_r@int (*)( unsigned int * )int (*)( unsigned int * )
 ~@free_function_t@getpt@int (*)(  )int (*)(  )
+~@free_function_t@preadv64@::ssize_t (*)( int,::iovec const *,int,::__off64_t )::ssize_t (*)( int,::iovec const *,int,::__off64_t )
 ~@free_function_t@__builtin_tan@double (*)( double )double (*)( double )
 ~@free_function_t@__builtin_csinf@complex float (*)( complex float )complex float (*)( complex float )
 +@free_function_t@memcached_add_by_key@::memcached_return (*)( ::memcached_st *,char const *,::size_t,char const *,::size_t,char const *,::size_t,::time_t,::uint32_t )::memcached_return (*)( ::memcached_st *,char const *,::size_t,char const *,::size_t,char const *,::size_t,::time_t,::uint32_t )
@@ -772,6 +774,7 @@
 +@free_function_t@memcached_server_add_udp@::memcached_return (*)( ::memcached_st *,char const *,unsigned int )::memcached_return (*)( ::memcached_st *,char const *,unsigned int )
 ~@free_function_t@__ctype_get_mb_cur_max@::size_t (*)(  )::size_t (*)(  )
 +@free_function_t@memcached_flush@::memcached_return (*)( ::memcached_st *,::time_t )::memcached_return (*)( ::memcached_st *,::time_t )
+~@free_function_t@pwritev@::ssize_t (*)( int,::iovec const *,int,::__off_t )::ssize_t (*)( int,::iovec const *,int,::__off_t )
 +@free_function_t@memcached_server_create_with@::memcached_server_st * (*)( ::memcached_st *,::memcached_server_st *,char const *,unsigned int,::uint32_t,::memcached_connection )::memcached_server_st * (*)( ::memcached_st *,::memcached_server_st *,char const *,unsigned int,::uint32_t,::memcached_connection )
 ~@free_function_t@mktemp@char * (*)( char * )char * (*)( char * )
 +@free_function_t@memcached_lib_version@char const * (*)(  )char const * (*)(  )
@@ -823,6 +826,7 @@
 ~@free_function_t@setkey@void (*)( char const * )void (*)( char const * )
 +@free_function_t@memcached_stat_free@void (*)( ::memcached_st *,::memcached_stat_st * )void (*)( ::memcached_st *,::memcached_stat_st * )
 ~@free_function_t@valloc@void * (*)( ::size_t )void * (*)( ::size_t )
+~@free_function_t@at_quick_exit@int (*)( void (*)(  ) * )int (*)( void (*)(  ) * )
 ~@free_function_t@__secure_getenv@char * (*)( char const * )char * (*)( char const * )
 ~@free_function_t@getsourcefilter@int (*)( int,::uint32_t,::sockaddr const *,::socklen_t,::uint32_t *,::uint32_t *,::sockaddr_storage * )int (*)( int,::uint32_t,::sockaddr const *,::socklen_t,::uint32_t *,::uint32_t *,::sockaddr_storage * )
 ~@free_function_t@bind@int (*)( int,::sockaddr const *,::socklen_t )int (*)( int,::sockaddr const *,::socklen_t )
@@ -927,7 +931,7 @@
 ~@free_function_t@__builtin_nansl@long double (*)( char const * )long double (*)( char const * )
 ~@free_function_t@__builtin_return_address@void * (*)( unsigned int )void * (*)( unsigned int )
 ~@free_function_t@inet6_option_next@int (*)( ::cmsghdr const *,::uint8_t * * )int (*)( ::cmsghdr const *,::uint8_t * * )
-~@free_function_t@getenv@char * (*)( char const * )char * (*)( char const * )
+~@free_function_t@__builtin_cosh@double (*)( double )double (*)( double )
 +@free_function_t@memcached_callback_get@void * (*)( ::memcached_st *,::memcached_callback,::memcached_return * )void * (*)( ::memcached_st *,::memcached_callback,::memcached_return * )
 ~@free_function_t@__builtin_cosl@long double (*)( long double )long double (*)( long double )
 ~@free_function_t@inet6_option_append@int (*)( ::cmsghdr *,::uint8_t const *,int,int )int (*)( ::cmsghdr *,::uint8_t const *,int,int )
@@ -966,6 +970,7 @@
 ~@free_function_t@__builtin_ctanhl@complex long double (*)( complex long double )complex long double (*)( complex long double )
 ~@free_function_t@qgcvt@char * (*)( long double,int,char * )char * (*)( long double,int,char * )
 ~@free_function_t@atexit@int (*)( void (*)(  ) * )int (*)( void (*)(  ) * )
+~@free_function_t@quick_exit@void (*)( int )void (*)( int )
 ~@free_function_t@getsockname@int (*)( int,__restrict__ ::sockaddr *,__restrict__ ::socklen_t * )int (*)( int,__restrict__ ::sockaddr *,__restrict__ ::socklen_t * )
 ~@free_function_t@jrand48@long int (*)( short unsigned int * )long int (*)( short unsigned int * )
 ~@free_function_t@__builtin_atan2l@long double (*)( long double,long double )long double (*)( long double,long double )
@@ -979,6 +984,7 @@
 ~@free_function_t@__builtin_csqrtl@complex long double (*)( complex long double )complex long double (*)( complex long double )
 ~@free_function_t@__builtin_csqrtf@complex float (*)( complex float )complex float (*)( complex float )
 ~@free_function_t@__builtin_ccos@complex double (*)( complex double )complex double (*)( complex double )
+~@free_function_t@inet6_option_alloc@::uint8_t * (*)( ::cmsghdr *,int,int,int )::uint8_t * (*)( ::cmsghdr *,int,int,int )
 ~@free_function_t@seed48_r@int (*)( short unsigned int *,::drand48_data * )int (*)( short unsigned int *,::drand48_data * )
 ~@free_function_t@setsockopt@int (*)( int,int,int,void const *,::socklen_t )int (*)( int,int,int,void const *,::socklen_t )
 ~@free_function_t@__builtin_ctzll@int (*)( long long int )int (*)( long long int )
@@ -1044,7 +1050,7 @@
 +@free_function_t@memcached_result_set_value@::memcached_return (*)( ::memcached_result_st *,char *,::size_t )::memcached_return (*)( ::memcached_result_st *,char *,::size_t )
 ~@free_function_t@__builtin_popcount@int (*)( int )int (*)( int )
 +@free_function_t@memcached_server_list_free@void (*)( ::memcached_server_st * )void (*)( ::memcached_server_st * )
-~@free_function_t@inet6_option_alloc@::uint8_t * (*)( ::cmsghdr *,int,int,int )::uint8_t * (*)( ::cmsghdr *,int,int,int )
+~@free_function_t@preadv@::ssize_t (*)( int,::iovec const *,int,::__off_t )::ssize_t (*)( int,::iovec const *,int,::__off_t )
 ~@free_function_t@ldiv@::ldiv_t (*)( long int,long int )::ldiv_t (*)( long int,long int )
 ~@free_function_t@ptsname@char * (*)( int )char * (*)( int )
 +@free_function_t@memcached_fetch_execute@::memcached_return (*)( ::memcached_st *,::memcached_execute_function *,void *,unsigned int )::memcached_return (*)( ::memcached_st *,::memcached_execute_function *,void *,unsigned int )
@@ -1072,6 +1078,7 @@
 ~@free_function_t@mblen@int (*)( char const *,::size_t )int (*)( char const *,::size_t )
 ~@free_function_t@__builtin_sinf@float (*)( float )float (*)( float )
 ~@free_function_t@__builtin_sinl@long double (*)( long double )long double (*)( long double )
+~@free_function_t@accept4@int (*)( int,__restrict__ ::sockaddr *,__restrict__ ::socklen_t *,int )int (*)( int,__restrict__ ::sockaddr *,__restrict__ ::socklen_t *,int )
 ~@free_function_t@__builtin_isfinite@bool (*)( ... )bool (*)( ... )
 ~@free_function_t@__builtin_sinh@double (*)( double )double (*)( double )
 ~@free_function_t@qecvt_r@int (*)( long double,int,__restrict__ int *,__restrict__ int *,__restrict__ char *,::size_t )int (*)( long double,int,__restrict__ int *,__restrict__ int *,__restrict__ char *,::size_t )
@@ -1091,7 +1098,6 @@
 +@free_function_t@memcached_set@::memcached_return (*)( ::memcached_st *,char const *,::size_t,char const *,::size_t,::time_t,::uint32_t )::memcached_return (*)( ::memcached_st *,char const *,::size_t,char const *,::size_t,::time_t,::uint32_t )
 +@free_function_t@memcached_behavior_get@::uint64_t (*)( ::memcached_st *,::memcached_behavior )::uint64_t (*)( ::memcached_st *,::memcached_behavior )
 ~@free_function_t@sockatmark@int (*)( int )int (*)( int )
-~@free_function_t@__builtin_cosh@double (*)( double )double (*)( double )
 ~@free_function_t@putenv@int (*)( char * )int (*)( char * )
 +@free_function_t@memcached_generate_hash_value@::uint32_t (*)( char const *,::size_t,::memcached_hash )::uint32_t (*)( char const *,::size_t,::memcached_hash )
 +@free_function_t@memcached_result_value@char * (*)( ::memcached_result_st * )char * (*)( ::memcached_result_st * )
@@ -1101,7 +1107,7 @@
 ~@free_function_t@l64a@char * (*)( long int )char * (*)( long int )
 ~@free_function_t@mrand48@long int (*)(  )long int (*)(  )
 +@free_function_t@memcached_stat@::memcached_stat_st * (*)( ::memcached_st *,char *,::memcached_return * )::memcached_stat_st * (*)( ::memcached_st *,char *,::memcached_return * )
-~@free_function_t@llabs@long long int (*)( long long int )long long int (*)( long long int )
+~@free_function_t@getenv@char * (*)( char const * )char * (*)( char const * )
 +@free_function_t@memcached_server_list_append_with_weight@::memcached_server_st * (*)( ::memcached_server_st *,char const *,unsigned int,::uint32_t,::memcached_return * )::memcached_server_st * (*)( ::memcached_server_st *,char const *,unsigned int,::uint32_t,::memcached_return * )
 ~@free_function_t@atoi@int (*)( char const * )int (*)( char const * )
 ~@free_function_t@atol@long int (*)( char const * )long int (*)( char const * )
@@ -1111,6 +1117,7 @@
 ~@free_function_t@imaxdiv@::imaxdiv_t (*)( ::intmax_t,::intmax_t )::imaxdiv_t (*)( ::intmax_t,::intmax_t )
 +@free_function_t@memcached_fetch_result@::memcached_result_st * (*)( ::memcached_st *,::memcached_result_st *,::memcached_return * )::memcached_result_st * (*)( ::memcached_st *,::memcached_result_st *,::memcached_return * )
 ~@free_function_t@connect@int (*)( int,::sockaddr const *,::socklen_t )int (*)( int,::sockaddr const *,::socklen_t )
+~@free_function_t@llabs@long long int (*)( long long int )long long int (*)( long long int )
 ~@free_function_t@__builtin_frexpf@float (*)( float,int * )float (*)( float,int * )
 ~@free_function_t@htonl@::uint32_t (*)( ::uint32_t )::uint32_t (*)( ::uint32_t )
 ~@free_function_t@inet6_option_space@int (*)( int )int (*)( int )
@@ -1127,6 +1134,7 @@
 ~@free_function_t@__builtin_ccoshl@complex long double (*)( complex long double )complex long double (*)( complex long double )
 ~@free_function_t@__builtin_inff@float (*)(  )float (*)(  )
 ~@free_function_t@__builtin_ccoshf@complex float (*)( complex float )complex float (*)( complex float )
+~@free_function_t@pwritev64@::ssize_t (*)( int,::iovec const *,int,::__off64_t )::ssize_t (*)( int,::iovec const *,int,::__off64_t )
 +@free_function_t@memcached_server_list_append@::memcached_server_st * (*)( ::memcached_server_st *,char const *,unsigned int,::memcached_return * )::memcached_server_st * (*)( ::memcached_server_st *,char const *,unsigned int,::memcached_return * )
 ~@free_function_t@mkostemp64@int (*)( char *,int )int (*)( char *,int )
 ~@free_function_t@strtoul_l@long unsigned int (*)( __restrict__ char const *,__restrict__ char * *,int,::__locale_t )long unsigned int (*)( __restrict__ char const *,__restrict__ char * *,int,::__locale_t )
