@@ -53,7 +53,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         point3d.add_wrapper_code( '' )
         point3d.mem_fun( 'initialize' ).add_transformation( ft.input_static_array(0, size=3) )
         point3d.mem_fun( 'position' ).add_transformation( ft.output_static_array(0, size=3) )
-        point3d.mem_fun( 'distance' ).add_transformation( ft.output(1) )
+        distance = point3d.mem_fun( 'distance' )
+        distance.add_transformation( ft.output(1) )
+        distance.transformations[0].controller.add_pre_call_code( '//dddddddddddddd' )
+        distance.transformations[0].controller.add_post_call_code( '//qqqqqqqqqqqqq' )
         
         image = mb.class_( "image_t" )
         image.always_expose_using_scope = True
