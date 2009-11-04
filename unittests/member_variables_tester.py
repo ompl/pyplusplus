@@ -55,23 +55,6 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( bf.b == module.get_b( bf ) )
         self.failIfNotRaisesAny( lambda: self.set_b( bf, 23 ) )
 
-        array = module.array_t()
-        self.failUnless( len( array.vars ) == 3 )
-        for i in range( len( array.vars ) ):
-            self.failUnless( array.vars[i].value == -9 )
-        self.failUnless( len( array.ivars ) == 10 )
-
-        ivars = array.ivars
-        del array #testing call policies
-        for i in range(20):
-            for index in range(10):
-                self.failUnless( ivars[index] == -index )
-
-        array = module.array_t()
-        for index in range( len(array.ivars) ):
-            array.ivars[index] = index * index
-            self.failUnless( array.get_ivars_item( index ) == index * index )
-
         tree = module.create_tree()
         self.failUnless( tree.parent is None )
         self.failUnless( tree.data.value == 0 )
@@ -108,6 +91,24 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         data_type = ctypes.POINTER( ctypes.c_int )
         data = data_type.from_address( module.image_t.none_image )
         self.failUnless( 1997 == data.contents.value )
+
+        array = module.array_t()
+        self.failUnless( len( array.ivars ) == 10 )
+
+        ivars = array.ivars
+        del array #testing call policies
+        for i in range(20):
+            for index in range(10):
+                self.failUnless( ivars[index] == -index )
+
+        array = module.array_t()
+        for index in range( len(array.ivars) ):
+            array.ivars[index] = index * index
+            self.failUnless( array.get_ivars_item( index ) == index * index )
+
+        self.failUnless( len( array.vars ) == 3 )
+        for i in range( len( array.vars ) ):
+            self.failUnless( array.vars[i].value == -9 )
 
 def create_suite():
     suite = unittest.TestSuite()

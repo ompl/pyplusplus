@@ -165,7 +165,7 @@ class input_t(type_modifier_t):
     def __str__(self):
         return "input(%s)"%(self.arg.name)
 
-# input_t
+# from_address_t
 class from_address_t(type_modifier_t):
     """Handles a single input variable.
 
@@ -193,6 +193,7 @@ class from_address_t(type_modifier_t):
     def __str__(self):
         return "from_address(%s)"%(self.arg.name)
 
+# inout_t
 class inout_t(transformer.transformer_t):
     """Handles a single input/output variable.
 
@@ -260,6 +261,10 @@ _seq2vector = string.Template( os.linesep.join([
 
 _arr2seq = string.Template(
             'pyplus_conv::copy_container( $native_array, $native_array + $array_size, pyplus_conv::list_inserter( $pylist ) );' )
+
+_mat2seq = string.Template(
+            'for (int i=0; i<$matrix_size1; ++i) { boost::python::list ${pylist}_i; pyplus_conv::copy_container( $native_matrix[i], $native_matrix[i] + $matrix_size2, pyplus_conv::list_inserter( ${pylist}_i ) ); $pylist.append(${pylist}_i); }' )
+
 
 class input_static_array_t(transformer.transformer_t):
     """Handles an input array with fixed size.
@@ -430,7 +435,378 @@ class output_static_array_t(transformer.transformer_t):
         self.__configure_v_mem_fun_override( controller.override_controller )
         self.__configure_v_mem_fun_default( controller.default_controller )
 
+# inout_static_array_t
+class inout_static_array_t(transformer.transformer_t):
+    """Handles an input/output array with fixed size.
 
+    void do_something(double* v) ->  v2 = do_something(object v2)
+
+    where v2 is a Python sequence
+    """
+
+    def __init__(self, function, arg_ref, size):
+        """Constructor.
+
+        :param arg_ref: Index of the argument that is an input/output array
+        :type arg_ref: int
+        :param size: The fixed size of the input/output array
+        :type size: int
+        """
+        transformer.transformer_t.__init__( self, function )
+
+        self.arg = self.get_argument( arg_ref )
+        self.arg_index = self.function.arguments.index( self.arg )
+
+        if not is_ptr_or_array( self.arg.type ):
+            raise ValueError( '%s\nin order to use "inout_array" transformation, argument %s type must be a array or a pointer (got %s).' ) \
+                  % ( function, self.arg.name, self.arg.type)
+
+        self.array_size = size
+        self.array_item_type = declarations.remove_const( declarations.array_item_type( self.arg.type ) )
+
+    def __str__(self):
+        return "inout_array(%s,%d)"%( self.arg.name, self.array_size)
+
+    def required_headers( self ):
+        """Returns list of header files that transformer generated code depends on."""
+        return [ code_repository.convenience.file_name ]
+
+    def __configure_sealed(self, controller):
+        global _seq2arr
+        global _arr2seq
+        w_arg = controller.find_wrapper_arg( self.arg.name )
+        w_arg.type = declarations.dummy_type_t( "boost::python::object" )
+
+        # Declare a variable that will hold the C array...
+        native_array = controller.declare_variable( self.array_item_type
+                                                    , "native_" + self.arg.name
+                                                    , '[%d]' % self.array_size )
+
+        copy_pylist2arr = _seq2arr.substitute( type=self.array_item_type
+                                                , pylist=w_arg.name
+                                                , array_size=self.array_size
+                                                , native_array=native_array )
+
+        controller.add_pre_call_code( copy_pylist2arr )
+        controller.modify_arg_expression( self.arg_index, native_array )
+        
+        # Declare a Python list which will receive the output...
+        pylist = controller.declare_variable( declarations.dummy_type_t( "boost::python::list" )
+                                              , 'py_' + self.arg.name )
+
+        copy_arr2pylist = _arr2seq.substitute( native_array=native_array
+                                              , array_size=self.array_size
+                                              , pylist=pylist )
+        controller.add_post_call_code( copy_arr2pylist )
+
+        #adding the variable to return variables list
+        controller.return_variable( pylist )
+
+    def __configure_v_mem_fun_default( self, controller ):
+        self.__configure_sealed( controller )
+
+    def __configure_v_mem_fun_override( self, controller ):
+        global _arr2seq
+        pylist = controller.declare_py_variable( declarations.dummy_type_t( 'boost::python::list' )
+                                                 , 'py_' + self.arg.name )
+
+        copy_arr2pylist = _arr2seq.substitute( native_array=self.arg.name
+                                                , array_size=self.array_size
+                                                , pylist=pylist )
+
+        controller.add_py_pre_call_code( copy_arr2pylist )
+
+    def configure_mem_fun( self, controller ):
+        self.__configure_sealed( controller )
+
+    def configure_free_fun(self, controller ):
+        self.__configure_sealed( controller )
+
+    def configure_virtual_mem_fun( self, controller ):
+        self.__configure_v_mem_fun_override( controller.override_controller )
+        self.__configure_v_mem_fun_default( controller.default_controller )
+
+# input_static_matrix_t
+class input_static_matrix_t(transformer.transformer_t):
+    """Handles an input matrix with fixed size.
+
+    is_identity(double m[3][3]) ->  is_identity(object m)
+    # m must be a sequence of 3 sequences of 3 floats
+    """
+
+    def __init__(self, function, arg_ref, size1, size2):
+        """Constructor.
+
+        :param size1, size2: The fixed size of the input matrix
+        :type size1, size2: int
+        """
+        transformer.transformer_t.__init__( self, function )
+
+        self.arg = self.get_argument( arg_ref )
+        self.arg_index = self.function.arguments.index( self.arg )
+
+        if not is_ptr_or_array( self.arg.type ):
+            raise ValueError( '%s\nin order to use "input_matrix" transformation, argument %s type must be a array or a pointer (got %s).' ) \
+                  % ( function, self.arg.name, self.arg.type)
+
+        self.matrix_size1 = size1
+        self.matrix_size2 = size2
+        self.matrix_item_type = declarations.remove_const( declarations.array_item_type( declarations.array_item_type( self.arg.type ) ) )
+
+    def __str__(self):
+        return "input_matrix(%s,%d,%d)"%( self.arg.name, self.matrix_size1, self.matrix_size2)
+
+    def required_headers( self ):
+        """Returns list of header files that transformer generated code depends on."""
+        return [ code_repository.convenience.file_name ]
+
+    def __configure_sealed(self, controller):
+        global _seq2arr
+        w_arg = controller.find_wrapper_arg( self.arg.name )
+        w_arg.type = declarations.dummy_type_t( "boost::python::object" )
+
+        # Declare a variable that will hold the C matrix...
+        native_matrix = controller.declare_variable( self.matrix_item_type
+                                                    , "native_" + self.arg.name
+                                                    , '[%d][%d]' % (self.matrix_size1, self.matrix_size2)
+                                                    )
+
+        pre_call = string.Template('pyplus_conv::ensure_uniform_sequence< $type >( $pylist, $array_size );')
+        controller.add_pre_call_code(pre_call.substitute(type='boost::python::list', pylist=w_arg.name,array_size=self.matrix_size1))
+
+        #TODO: may be a better idea is move this loop to the generated code.
+        for i in range(0,self.matrix_size1):
+            copy_pylist2arr = _seq2arr.substitute( type=self.matrix_item_type
+                                                   , pylist=w_arg.name+"["+str(i)+"]"
+                                                   , array_size=self.matrix_size2
+                                                   , native_array=native_matrix+'['+str(i)+']' )
+
+            controller.add_pre_call_code( copy_pylist2arr )
+
+        controller.modify_arg_expression( self.arg_index, native_matrix )
+
+    def __configure_v_mem_fun_default( self, controller ):
+        self.__configure_sealed( controller )
+
+    def __configure_v_mem_fun_override( self, controller ):
+        global _arr2seq
+        pylist = controller.declare_py_variable( declarations.dummy_type_t( 'boost::python::list' )
+                                                 , 'py_' + self.arg.name )
+
+        #TODO: may be a better idea is move this loop to the generated code.
+        for i in range(0, self.matrix_size1):
+            copy_arr2pylist = _arr2seq.substitute( native_array=self.arg.name+'[%d]'%i
+                                                   , array_size=self.matrix_size2
+                                                   , pylist=pylist )
+
+            controller.add_py_pre_call_code( copy_arr2pylist )
+
+    def configure_mem_fun( self, controller ):
+        self.__configure_sealed( controller )
+
+    def configure_free_fun(self, controller ):
+        self.__configure_sealed( controller )
+
+    def configure_virtual_mem_fun( self, controller ):
+        self.__configure_v_mem_fun_override( controller.override_controller )
+        self.__configure_v_mem_fun_default( controller.default_controller )
+
+# output_static_matrix_t
+class output_static_matrix_t(transformer.transformer_t):
+    """Handles an output matrix with fixed size.
+
+    get_matrix(double m[3][3]) ->  m = get_matrix()
+    # m will be a sequence of 3 sequences of 3 floats
+    """
+
+    def __init__(self, function, arg_ref, size1, size2):
+        """Constructor.
+
+        :param arg_ref: Index of the argument that is an output matrix
+        :type arg_ref: int
+        :param size1, size2: The fixed size of the output matrix
+        :type size1, size2: int
+        
+        """
+        transformer.transformer_t.__init__( self, function )
+
+        self.arg = self.get_argument( arg_ref )
+        self.arg_index = self.function.arguments.index( self.arg )
+
+        if not is_ptr_or_array( self.arg.type ):
+            raise ValueError( '%s\nin order to use "output_matrix" transformation, argument %s type must be a array or a pointer (got %s).' ) \
+                  % ( function, self.arg.name, self.arg.type)
+
+        self.matrix_size1 = size1
+        self.matrix_size2 = size2
+        self.matrix_item_type = declarations.remove_const( declarations.array_item_type( declarations.array_item_type( self.arg.type ) ) )
+
+    def __str__(self):
+        return "output_matrix(%s,%d,%d)"%( self.arg.name, self.matrix_size1, self.matrix_size2)
+
+    def required_headers( self ):
+        """Returns list of header files that transformer generated code depends on."""
+        return [ code_repository.convenience.file_name ]
+
+    def __configure_sealed(self, controller):
+        global _mat2seq
+        #removing arg from the function wrapper definition
+        controller.remove_wrapper_arg( self.arg.name )
+
+        # Declare a variable that will hold the C matrix...
+        native_matrix = controller.declare_variable( self.matrix_item_type
+                                                    , "native_" + self.arg.name
+                                                    , '[%d][%d]' % (self.matrix_size1, self.matrix_size2)
+                                                    )
+        #adding just declared variable to the original function call expression
+        controller.modify_arg_expression( self.arg_index, native_matrix )
+
+        # Declare a Python list which will receive the output...
+        pylist = controller.declare_variable( declarations.dummy_type_t( "boost::python::list" )
+                                              , 'py_' + self.arg.name )
+
+        copy_mat2pylist = _mat2seq.substitute( native_matrix = native_matrix,
+                             matrix_size1=self.matrix_size1,
+                             matrix_size2=self.matrix_size2,
+                             pylist=pylist)
+
+        controller.add_post_call_code( copy_mat2pylist )
+        
+        #adding the variable to return variables list
+        controller.return_variable( pylist )
+
+    def __configure_v_mem_fun_default( self, controller ):
+        self.__configure_sealed( controller )
+
+    def __configure_v_mem_fun_override( self, controller ):
+        global _seq2arr
+        seq = controller.declare_py_variable( declarations.dummy_type_t( 'boost::python::object' )
+                                              , 'py_' + self.arg.name )
+        controller.remove_py_arg( self.arg_index )
+        tmpl = string.Template( '$seq = pyplus_conv::get_out_argument( $py_result, "$name" );' )
+        get_ref_to_seq = tmpl.substiture( seq=seq
+                                          , py_result=controller.py_result_variable_name
+                                          , name=self.arg.name )
+        controller.add_py_post_call_code( get_ref_to_seq )
+
+        #TODO: may be a better idea is move this loop to the generated code.
+        for i in range(0, self.matrix_size1):
+            copy_pylist2arr = _seq2arr.substitute( type=self.matrix_item_type
+                                                   , pylist=seq
+                                                   , array_size=self.matrix_size2
+                                                   , native_array=self.arg.name+'[%d]'%i )
+            controller.add_py_post_call_code( copy_pylist2arr )
+
+    def configure_mem_fun( self, controller ):
+        self.__configure_sealed( controller )
+
+    def configure_free_fun(self, controller ):
+        self.__configure_sealed( controller )
+
+    def configure_virtual_mem_fun( self, controller ):
+        self.__configure_v_mem_fun_override( controller.override_controller )
+        self.__configure_v_mem_fun_default( controller.default_controller )
+
+# inout_static_matrix_t
+class inout_static_matrix_t(transformer.transformer_t):
+    """Handles an input/output matrix with fixed size.
+
+    transpose_matrix(double m[3][3]) ->  m = transpose_matrix(object m)
+    # m must be a sequence of 3 sequences of 3 floats
+    """
+
+    def __init__(self, function, arg_ref, size1, size2):
+        """Constructor.
+
+        :param arg_ref: Index of the argument that is an input/output matrix
+        :type arg_ref: int
+        :param size1,size2: The fixed size of the input/output matrix
+        :type size1,size2: int
+        """
+        transformer.transformer_t.__init__( self, function )
+
+        self.arg = self.get_argument( arg_ref )
+        self.arg_index = self.function.arguments.index( self.arg )
+
+        if not is_ptr_or_array( self.arg.type ):
+            raise ValueError( '%s\nin order to use "inout_matrix" transformation, argument %s type must be a array or a pointer (got %s).' ) \
+                  % ( function, self.arg.name, self.arg.type)
+
+        self.matrix_size1 = size1
+        self.matrix_size2 = size2
+        self.matrix_item_type = declarations.remove_const( declarations.array_item_type( declarations.array_item_type( self.arg.type ) ) )
+
+    def __str__(self):
+        return "inout_matrix(%s,%d,%d)"%( self.arg.name, self.matrix_size1, self.matrix_size2)
+
+    def required_headers( self ):
+        """Returns list of header files that transformer generated code depends on."""
+        return [ code_repository.convenience.file_name ]
+
+    def __configure_sealed(self, controller):
+        global _seq2arr
+        global _mat2seq
+        w_arg = controller.find_wrapper_arg( self.arg.name )
+        w_arg.type = declarations.dummy_type_t( "boost::python::object" )
+
+        # Declare a variable that will hold the C matrix...
+        native_matrix = controller.declare_variable( self.matrix_item_type
+                                                    , "native_" + self.arg.name
+                                                    , '[%d][%d]' % (self.matrix_size1, self.matrix_size2)
+                                                    )
+
+        pre_call = string.Template('pyplus_conv::ensure_uniform_sequence< $type >( $pylist, $array_size );')
+        controller.add_pre_call_code(pre_call.substitute(type='boost::python::list', pylist=w_arg.name,array_size=self.matrix_size1))
+
+        #TODO: may be a better idea is move this loop to the generated code.
+        for i in range(0,self.matrix_size1):
+            copy_pylist2arr = _seq2arr.substitute( type=self.matrix_item_type
+                                                   , pylist=w_arg.name+"["+str(i)+"]"
+                                                   , array_size=self.matrix_size2
+                                                   , native_array=native_matrix+'['+str(i)+']' )
+
+            controller.add_pre_call_code( copy_pylist2arr )
+
+        controller.modify_arg_expression( self.arg_index, native_matrix )
+
+        pylist = controller.declare_variable( declarations.dummy_type_t( "boost::python::list" )
+                                              , 'py_' + self.arg.name )
+        copy_mat2pylist = _mat2seq.substitute( native_matrix = native_matrix,
+                             matrix_size1=self.matrix_size1,
+                             matrix_size2=self.matrix_size2,
+                             pylist=pylist)
+
+        controller.add_post_call_code( copy_mat2pylist )
+        
+        #adding the variable to return variables list
+        controller.return_variable( pylist )
+
+    def __configure_v_mem_fun_default( self, controller ):
+        self.__configure_sealed( controller )
+
+    def __configure_v_mem_fun_override( self, controller ):
+        global _mat2seq
+        pylist = controller.declare_py_variable( declarations.dummy_type_t( 'boost::python::list' )
+                                                 , 'py_' + self.arg.name )
+
+        copy_mat2pylist = _mat2seq.substitute( native_matrix=self.arg.name
+                                               , matrix_size1=self.matrix_size1
+                                               , matrix_size2=self.matrix_size2
+                                               , pylist=pylist )
+
+        controller.add_py_pre_call_code( copy_arr2pylist )
+
+    def configure_mem_fun( self, controller ):
+        self.__configure_sealed( controller )
+
+    def configure_free_fun(self, controller ):
+        self.__configure_sealed( controller )
+
+    def configure_virtual_mem_fun( self, controller ):
+        self.__configure_v_mem_fun_override( controller.override_controller )
+        self.__configure_v_mem_fun_default( controller.default_controller )
+
+# input_c_buffer_t
 class input_c_buffer_t(transformer.transformer_t):
     """
     handles an input of C buffer:
@@ -522,7 +898,6 @@ class input_c_buffer_t(transformer.transformer_t):
     def configure_virtual_mem_fun( self, controller ):
         self.__configure_v_mem_fun_override( controller.override_controller )
         self.__configure_v_mem_fun_default( controller.default_controller )
-
 
 class transfer_ownership_t(type_modifier_t):
     """see http://boost.org/libs/python/doc/v2/faq.html#ownership

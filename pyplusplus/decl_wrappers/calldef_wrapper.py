@@ -160,6 +160,11 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
         return ''
 
     def _exportable_impl( self ):
+        if self.transformations:
+            #It is possible that the function asked for the user attention.
+            #The user paid attention and created a transformation.
+            #Py++ should be silent in this case.
+            return '' 
         if not self.parent.name:
             return messages.W1057 % str( self )
         all_types = [ arg.type for arg in self.arguments ]

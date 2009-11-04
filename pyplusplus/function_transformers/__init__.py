@@ -30,6 +30,26 @@ def output_static_array( *args, **keywd ):
     def creator( function ):
         return transformers.output_static_array_t( function, *args, **keywd )
     return creator
+ 
+def inout_static_array( *args, **keywd ):
+    def creator( function ):
+        return transformers.inout_static_array_t( function, *args, **keywd )
+    return creator
+
+def input_static_matrix( *args, **keywd ):
+    def creator( function ):
+        return transformers.input_static_matrix_t( function, *args, **keywd )
+    return creator
+
+def output_static_matrix( *args, **keywd ):
+    def creator( function ):
+        return transformers.output_static_matrix_t( function, *args, **keywd )
+    return creator
+
+def inout_static_matrix( *args, **keywd ):
+    def creator( function ):
+        return transformers.inout_static_matrix_t( function, *args, **keywd )
+    return creator
 
 def modify_type( *args, **keywd ):
     def creator( function ):
