@@ -38,7 +38,7 @@ class output_t( transformer.transformer_t ):
     The specified variable is removed from the argument list and is turned
     into a return value.
 
-    void getValue(int& v) -> v = getValue()
+    void get_value(int& v) -> v = get_value()
     """
 
     def __init__(self, function, arg_ref):
@@ -47,7 +47,7 @@ class output_t( transformer.transformer_t ):
 
         The specified argument must be a reference or a pointer.
 
-        :param arg_ref: Index of the argument that is an output value.
+        :param arg_ref: Index of the argument that is an output value
         :type arg_ref: int
         """
         self.arg = self.get_argument( arg_ref )
@@ -106,8 +106,10 @@ class type_modifier_t(transformer.transformer_t):
     def __init__(self, function, arg_ref, modifier):
         """Constructor.
 
-        modifier is callable, which take the type of the argument and should return
-        new type
+        modifier is callable, which take the type of the argument and should return new type
+        
+        :param arg_ref: Index of the argument which will be transformed
+        :type arg_ref: int
         """
         transformer.transformer_t.__init__( self, function )
         self.arg = self.get_argument( arg_ref )
@@ -151,8 +153,8 @@ class input_t(type_modifier_t):
 
     def __init__(self, function, arg_ref):
         """
-        :param idx: Index of the argument that is an output value.
-        :type idx: int
+        :param arg_ref: Index of the argument that is an input value
+        :type arg_ref: int
         """
         type_modifier_t.__init__( self, function, arg_ref, remove_ref_or_ptr )
 
@@ -178,8 +180,8 @@ class from_address_t(type_modifier_t):
 
         The specified argument must be a reference or a pointer.
 
-        :param idx: Index of the argument that is an output value.
-        :type idx: int
+        :param arg_ref: Index of the argument that is an output value
+        :type arg_ref: int
         """
         modifier = lambda type_: declarations.FUNDAMENTAL_TYPES[ 'unsigned int' ]
         type_modifier_t.__init__( self, function, arg_ref, modifier )
@@ -202,8 +204,8 @@ class inout_t(transformer.transformer_t):
 
         The specified argument must be a reference or a pointer.
 
-        :param idx: Index of the argument that is an in/out value
-        :type idx: int
+        :param arg_ref: Index of the argument that is an in/out value
+        :type arg_ref: int
         """
         transformer.transformer_t.__init__( self, function )
         self.arg = self.get_argument( arg_ref )
@@ -270,7 +272,9 @@ class input_static_array_t(transformer.transformer_t):
     def __init__(self, function, arg_ref, size):
         """Constructor.
 
-        :param size: The fixed size of the input array
+        :param arg_ref: Index of the argument that is an input array
+        :type arg_ref: int
+        :param size: The fixed size of the input array        
         :type size: int
         """
         transformer.transformer_t.__init__( self, function )
@@ -340,15 +344,15 @@ class input_static_array_t(transformer.transformer_t):
 class output_static_array_t(transformer.transformer_t):
     """Handles an output array of a fixed size.
 
-    void getVec3(double* v) -> v = getVec3()
+    void get_vec3(double* v) -> v = get_vec3()
     # v will be a list with 3 floats
     """
 
     def __init__(self, function, arg_ref, size):
         """Constructor.
 
-        :param idx: Index of the argument that is an output array.
-        :type idx: int
+        :param arg_ref: Index of the argument that is an output array
+        :type arg_ref: int        
         :param size: The fixed size of the output array
         :type size: int
         """
@@ -357,7 +361,7 @@ class output_static_array_t(transformer.transformer_t):
         self.arg_index = self.function.arguments.index( self.arg )
 
         if not is_ptr_or_array( self.arg.type ):
-            raise ValueError( '%s\nin order to use "input_array" transformation, argument %s type must be a array or a pointer (got %s).' ) \
+            raise ValueError( '%s\nin order to use "output_array" transformation, argument %s type must be a array or a pointer (got %s).' ) \
                   % ( function, self.arg.name, self.arg.type)
 
         self.array_size = size
@@ -524,12 +528,16 @@ class transfer_ownership_t(type_modifier_t):
     """see http://boost.org/libs/python/doc/v2/faq.html#ownership
     """
     def __init__(self, function, arg_ref):
-        """Constructor."""
+        """Constructor.
+        
+        :param arg_ref: Index of the argument on which to transfer ownership
+        :type arg_ref: int
+        """
         transformer.transformer_t.__init__( self, function )
         self.arg = self.get_argument( arg_ref )
         self.arg_index = self.function.arguments.index( self.arg )
         if not declarations.is_pointer( self.arg.type ):
-            raise ValueError( '%s\nin order to use "transfer ownership" transformation, argument %s type must be a pointer (got %s).' ) \
+            raise ValueError( '%s\nin order to use "transfer_ownership" transformation, argument %s type must be a pointer (got %s).' ) \
                   % ( function, self.arg_ref.name, arg.type)
 
     def __str__(self):

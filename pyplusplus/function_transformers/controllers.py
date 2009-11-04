@@ -42,7 +42,7 @@ class variable_t( object ):
         
     @property 
     def initialize_expr( self ):
-        "inirialize expression"
+        "initialize expression"
         return self.__initialize_expr
         
     def declare_var_string( self ):
@@ -79,8 +79,10 @@ class variables_manager_t( object ):
         :param name: name( str ) of the variable
         
         :param initialize_expr: an expression that initialize the variable
+
+        :returns: the variable name, which is unique in a whole scope, based on "name" argument
         
-        :rtype: the unique variable name
+        :rtype: str
         """
         unique_name = self.__create_unique_var_name( name )
         self.__variables.append( variable_t( type, unique_name, initialize_expr ) )
