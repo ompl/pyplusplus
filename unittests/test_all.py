@@ -120,6 +120,7 @@ import return_ref_to_ptr_tester
 import function_adaptor_tester
 import selection_bug_tester
 #import ogre_generate_tester
+import ft_from_address
 
 testers = [
     algorithms_tester
@@ -228,6 +229,7 @@ testers = [
     , return_ref_to_ptr_tester
     , function_adaptor_tester
     , selection_bug_tester
+    , ft_from_address
 #    , ogre_generate_tester too much time
 ]
 
