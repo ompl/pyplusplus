@@ -49,12 +49,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         double_ptr_type = ctypes.POINTER( ctypes.c_double )
         value = double_ptr_type.from_address( ptr.value )
         self.failUnless( value.contents.value == 5.9 )
-        dd = double_ptr_type(ctypes.c_double(0.0) )
-        print dir( ctypes.pointer( dd ).contents )
-        
-        ptr.get_v_address( ctypes.pointer( dd ).contents.value )
-        print ptr.value
-        print dd.contents.value
+        d_ptr = double_ptr_type(ctypes.c_double(0.0) )
+        d_ptr_ptr = ctypes.pointer( d_ptr )
+        ptr.get_v_address( ctypes.addressof( d_ptr ) )
+
 
 def create_suite():
     suite = unittest.TestSuite()
