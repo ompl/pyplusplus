@@ -122,6 +122,7 @@ import selection_bug_tester
 #import ogre_generate_tester
 import ft_from_address
 import indexing_suites2_support_tester
+import ft_input_static_matrix
 
 testers = [
     algorithms_tester
@@ -232,6 +233,7 @@ testers = [
     , selection_bug_tester
     , ft_from_address
     , indexing_suites2_support_tester
+    , ft_input_static_matrix
 #    , ogre_generate_tester too much time
 ]
 

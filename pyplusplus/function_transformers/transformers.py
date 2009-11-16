@@ -263,7 +263,8 @@ _arr2seq = string.Template(
             'pyplus_conv::copy_container( $native_array, $native_array + $array_size, pyplus_conv::list_inserter( $pylist ) );' )
 
 _mat2seq = string.Template(
-            'for (int i=0; i<$matrix_size1; ++i) { boost::python::list ${pylist}_i; pyplus_conv::copy_container( $native_matrix[i], $native_matrix[i] + $matrix_size2, pyplus_conv::list_inserter( ${pylist}_i ) ); $pylist.append(${pylist}_i); }' )
+            'for (int i=0; i<$rows; ++i) { boost::python::list ${pylist}_i; pyplus_conv::copy_container( $native_matrix[i], $native_matrix[i] + $columns, pyplus_conv::list_inserter( ${pylist}_i ) ); $pylist.append(${pylist}_i); }' )
+
 
 
 class input_static_array_t(transformer.transformer_t):
@@ -526,6 +527,13 @@ class inout_static_array_t(transformer.transformer_t):
         self.__configure_v_mem_fun_override( controller.override_controller )
         self.__configure_v_mem_fun_default( controller.default_controller )
 
+_pymatrix2cmatrix = string.Template( os.linesep.join([
+   'pyplus_conv::ensure_uniform_sequence< boost::python::list >( $pymatrix, $rows );'
+ , 'for( size_t $row = 0; $row < $rows; ++$row ){'
+ , '    pyplus_conv::ensure_uniform_sequence< $type >( $pymatrix[$row], $columns );'
+ , '    pyplus_conv::copy_sequence( $pymatrix[$row], pyplus_conv::array_inserter( $native_matrix[$row], $columns ) );'
+ , '}']))
+
 # input_static_matrix_t
 class input_static_matrix_t(transformer.transformer_t):
     """Handles an input matrix with fixed size.
@@ -534,11 +542,11 @@ class input_static_matrix_t(transformer.transformer_t):
     # m must be a sequence of 3 sequences of 3 floats
     """
 
-    def __init__(self, function, arg_ref, size1, size2):
+    def __init__(self, function, arg_ref, rows, columns):
         """Constructor.
 
-        :param size1, size2: The fixed size of the input matrix
-        :type size1, size2: int
+        :param rows, columns: The fixed size of the input matrix
+        :type rows, columns: int
         """
         transformer.transformer_t.__init__( self, function )
 
@@ -549,12 +557,12 @@ class input_static_matrix_t(transformer.transformer_t):
             raise ValueError( '%s\nin order to use "input_matrix" transformation, argument %s type must be a array or a pointer (got %s).' ) \
                   % ( function, self.arg.name, self.arg.type)
 
-        self.matrix_size1 = size1
-        self.matrix_size2 = size2
+        self.rows = rows
+        self.columns = columns
         self.matrix_item_type = declarations.remove_const( declarations.array_item_type( declarations.array_item_type( self.arg.type ) ) )
 
     def __str__(self):
-        return "input_matrix(%s,%d,%d)"%( self.arg.name, self.matrix_size1, self.matrix_size2)
+        return "input_matrix(%s,%d,%d)"%( self.arg.name, self.rows, self.columns)
 
     def required_headers( self ):
         """Returns list of header files that transformer generated code depends on."""
@@ -568,20 +576,16 @@ class input_static_matrix_t(transformer.transformer_t):
         # Declare a variable that will hold the C matrix...
         native_matrix = controller.declare_variable( self.matrix_item_type
                                                     , "native_" + self.arg.name
-                                                    , '[%d][%d]' % (self.matrix_size1, self.matrix_size2)
-                                                    )
+                                                    , '[%d][%d]' % (self.rows, self.columns) )
 
-        pre_call = string.Template('pyplus_conv::ensure_uniform_sequence< $type >( $pylist, $array_size );')
-        controller.add_pre_call_code(pre_call.substitute(type='boost::python::list', pylist=w_arg.name,array_size=self.matrix_size1))
+        conversion_code = _pymatrix2cmatrix.substitute( type=self.matrix_item_type
+                                                        , pymatrix=w_arg.name
+                                                        , columns='%d' % self.columns
+                                                        , row=controller.register_variable_name( "row" )
+                                                        , rows='%d' % self.rows
+                                                        , native_matrix=native_matrix )
 
-        #TODO: may be a better idea is move this loop to the generated code.
-        for i in range(0,self.matrix_size1):
-            copy_pylist2arr = _seq2arr.substitute( type=self.matrix_item_type
-                                                   , pylist=w_arg.name+"["+str(i)+"]"
-                                                   , array_size=self.matrix_size2
-                                                   , native_array=native_matrix+'['+str(i)+']' )
-
-            controller.add_pre_call_code( copy_pylist2arr )
+        controller.add_pre_call_code( conversion_code )
 
         controller.modify_arg_expression( self.arg_index, native_matrix )
 
@@ -594,9 +598,9 @@ class input_static_matrix_t(transformer.transformer_t):
                                                  , 'py_' + self.arg.name )
 
         #TODO: may be a better idea is move this loop to the generated code.
-        for i in range(0, self.matrix_size1):
+        for i in range(0, self.rows):
             copy_arr2pylist = _arr2seq.substitute( native_array=self.arg.name+'[%d]'%i
-                                                   , array_size=self.matrix_size2
+                                                   , array_size=self.columns
                                                    , pylist=pylist )
 
             controller.add_py_pre_call_code( copy_arr2pylist )
@@ -619,13 +623,13 @@ class output_static_matrix_t(transformer.transformer_t):
     # m will be a sequence of 3 sequences of 3 floats
     """
 
-    def __init__(self, function, arg_ref, size1, size2):
+    def __init__(self, function, arg_ref, rows, columns):
         """Constructor.
 
         :param arg_ref: Index of the argument that is an output matrix
         :type arg_ref: int
-        :param size1, size2: The fixed size of the output matrix
-        :type size1, size2: int
+        :param rows, columns: The fixed size of the output matrix
+        :type rows, columns: int
         
         """
         transformer.transformer_t.__init__( self, function )
@@ -637,12 +641,12 @@ class output_static_matrix_t(transformer.transformer_t):
             raise ValueError( '%s\nin order to use "output_matrix" transformation, argument %s type must be a array or a pointer (got %s).' ) \
                   % ( function, self.arg.name, self.arg.type)
 
-        self.matrix_size1 = size1
-        self.matrix_size2 = size2
+        self.rows = rows
+        self.columns = columns
         self.matrix_item_type = declarations.remove_const( declarations.array_item_type( declarations.array_item_type( self.arg.type ) ) )
 
     def __str__(self):
-        return "output_matrix(%s,%d,%d)"%( self.arg.name, self.matrix_size1, self.matrix_size2)
+        return "output_matrix(%s,%d,%d)"%( self.arg.name, self.rows, self.columns)
 
     def required_headers( self ):
         """Returns list of header files that transformer generated code depends on."""
@@ -656,7 +660,7 @@ class output_static_matrix_t(transformer.transformer_t):
         # Declare a variable that will hold the C matrix...
         native_matrix = controller.declare_variable( self.matrix_item_type
                                                     , "native_" + self.arg.name
-                                                    , '[%d][%d]' % (self.matrix_size1, self.matrix_size2)
+                                                    , '[%d][%d]' % (self.rows, self.columns)
                                                     )
         #adding just declared variable to the original function call expression
         controller.modify_arg_expression( self.arg_index, native_matrix )
@@ -666,8 +670,8 @@ class output_static_matrix_t(transformer.transformer_t):
                                               , 'py_' + self.arg.name )
 
         copy_mat2pylist = _mat2seq.substitute( native_matrix = native_matrix,
-                             matrix_size1=self.matrix_size1,
-                             matrix_size2=self.matrix_size2,
+                             rows=self.rows,
+                             columns=self.columns,
                              pylist=pylist)
 
         controller.add_post_call_code( copy_mat2pylist )
@@ -690,10 +694,10 @@ class output_static_matrix_t(transformer.transformer_t):
         controller.add_py_post_call_code( get_ref_to_seq )
 
         #TODO: may be a better idea is move this loop to the generated code.
-        for i in range(0, self.matrix_size1):
+        for i in range(0, self.rows):
             copy_pylist2arr = _seq2arr.substitute( type=self.matrix_item_type
                                                    , pylist=seq
-                                                   , array_size=self.matrix_size2
+                                                   , array_size=self.columns
                                                    , native_array=self.arg.name+'[%d]'%i )
             controller.add_py_post_call_code( copy_pylist2arr )
 
@@ -711,17 +715,17 @@ class output_static_matrix_t(transformer.transformer_t):
 class inout_static_matrix_t(transformer.transformer_t):
     """Handles an input/output matrix with fixed size.
 
-    transpose_matrix(double m[3][3]) ->  m = transpose_matrix(object m)
-    # m must be a sequence of 3 sequences of 3 floats
+    transpose_matrix(double m[2][3]) ->  m = transpose_matrix(object m)
+    # m must be a sequence of 2 sequences of 3 floats
     """
 
-    def __init__(self, function, arg_ref, size1, size2):
+    def __init__(self, function, arg_ref, rows, columns):
         """Constructor.
 
         :param arg_ref: Index of the argument that is an input/output matrix
         :type arg_ref: int
-        :param size1,size2: The fixed size of the input/output matrix
-        :type size1,size2: int
+        :param rows,columns: The fixed size of the input/output matrix
+        :type rows,columns: int
         """
         transformer.transformer_t.__init__( self, function )
 
@@ -732,12 +736,12 @@ class inout_static_matrix_t(transformer.transformer_t):
             raise ValueError( '%s\nin order to use "inout_matrix" transformation, argument %s type must be a array or a pointer (got %s).' ) \
                   % ( function, self.arg.name, self.arg.type)
 
-        self.matrix_size1 = size1
-        self.matrix_size2 = size2
+        self.rows = rows
+        self.columns = columns
         self.matrix_item_type = declarations.remove_const( declarations.array_item_type( declarations.array_item_type( self.arg.type ) ) )
 
     def __str__(self):
-        return "inout_matrix(%s,%d,%d)"%( self.arg.name, self.matrix_size1, self.matrix_size2)
+        return "inout_matrix(%s,%d,%d)"%( self.arg.name, self.rows, self.columns)
 
     def required_headers( self ):
         """Returns list of header files that transformer generated code depends on."""
@@ -752,17 +756,17 @@ class inout_static_matrix_t(transformer.transformer_t):
         # Declare a variable that will hold the C matrix...
         native_matrix = controller.declare_variable( self.matrix_item_type
                                                     , "native_" + self.arg.name
-                                                    , '[%d][%d]' % (self.matrix_size1, self.matrix_size2)
+                                                    , '[%d][%d]' % (self.rows, self.columns)
                                                     )
 
         pre_call = string.Template('pyplus_conv::ensure_uniform_sequence< $type >( $pylist, $array_size );')
-        controller.add_pre_call_code(pre_call.substitute(type='boost::python::list', pylist=w_arg.name,array_size=self.matrix_size1))
+        controller.add_pre_call_code(pre_call.substitute(type='boost::python::list', pylist=w_arg.name,array_size=self.rows))
 
         #TODO: may be a better idea is move this loop to the generated code.
-        for i in range(0,self.matrix_size1):
+        for i in range(0,self.rows):
             copy_pylist2arr = _seq2arr.substitute( type=self.matrix_item_type
                                                    , pylist=w_arg.name+"["+str(i)+"]"
-                                                   , array_size=self.matrix_size2
+                                                   , array_size=self.columns
                                                    , native_array=native_matrix+'['+str(i)+']' )
 
             controller.add_pre_call_code( copy_pylist2arr )
@@ -771,10 +775,10 @@ class inout_static_matrix_t(transformer.transformer_t):
 
         pylist = controller.declare_variable( declarations.dummy_type_t( "boost::python::list" )
                                               , 'py_' + self.arg.name )
-        copy_mat2pylist = _mat2seq.substitute( native_matrix = native_matrix,
-                             matrix_size1=self.matrix_size1,
-                             matrix_size2=self.matrix_size2,
-                             pylist=pylist)
+        copy_mat2pylist = _mat2seq.substitute( native_matrix = native_matrix
+                                               , rows=self.rows
+                                               , columns=self.columns
+                                               , pylist=pylist)
 
         controller.add_post_call_code( copy_mat2pylist )
         
@@ -790,8 +794,8 @@ class inout_static_matrix_t(transformer.transformer_t):
                                                  , 'py_' + self.arg.name )
 
         copy_mat2pylist = _mat2seq.substitute( native_matrix=self.arg.name
-                                               , matrix_size1=self.matrix_size1
-                                               , matrix_size2=self.matrix_size2
+                                               , rows=self.rows
+                                               , columns=self.columns
                                                , pylist=pylist )
 
         controller.add_py_pre_call_code( copy_arr2pylist )
