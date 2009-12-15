@@ -141,28 +141,30 @@ class manager_t( object ):
         exported_ids = set( map( lambda d: id( d ), self.__exported_decls ) )
         for decl in self.__exported_decls:
             for dependency in self.__build_dependencies( decl ):
-                depend_on_decl = dependency.find_out_depend_on_declaration()
-                if self.__has_unexposed_dependency( exported_ids, depend_on_decl, dependency ):
-                    if messages.filter_disabled_msgs([messages.W1040], depend_on_decl.disabled_messages ):
-                        #need to report dependency errors
-                        used_not_exported.append(dependency)
+                for depend_on_decl in dependency.find_out_depend_on_it_declarations():
+                    if self.__has_unexposed_dependency( exported_ids, depend_on_decl, dependency ):
+                        if messages.filter_disabled_msgs([messages.W1040], depend_on_decl.disabled_messages ):
+                            #need to report dependency errors
+                            used_not_exported.append(dependency)
         return used_not_exported
 
     def __group_by_unexposed( self, dependencies ):
         groups = {}
         for dependency in dependencies:
-            depend_on_decl = dependency.find_out_depend_on_declaration()
-            if not groups.has_key( id( depend_on_decl ) ):
-                groups[ id( depend_on_decl ) ] = []
-            groups[ id( depend_on_decl ) ].append( dependency )
+            for depend_on_decl in dependency.find_out_depend_on_it_declarations():
+                if not groups.has_key( id( depend_on_decl ) ):
+                    groups[ id( depend_on_decl ) ] = []
+                groups[ id( depend_on_decl ) ].append( dependency )
         return groups
 
     def __create_dependencies_msg( self, dependencies ):
-        depend_on_decl = dependencies[0].find_out_depend_on_declaration()
-        decls = []
-        for dependency in dependencies:
-            decls.append( os.linesep + ' ' + str( dependency.declaration ) )
-        return "%s;%s" % ( depend_on_decl, messages.W1040 % ''.join( decls ) )
+        msg = []
+        for depend_on_decl in dependencies[0].find_out_depend_on_it_declarations():
+            decls = []
+            for dependency in dependencies:
+                decls.append( os.linesep + ' ' + str( dependency.declaration ) )
+            msg.append( "%s;%s" % ( depend_on_decl, messages.W1040 % ''.join( decls ) ) )
+        return os.linesep.join( msg )
 
     def __report_duplicated_aliases( self ):
         decls = filter( lambda decl: isinstance( decl, declarations.class_types ) \
