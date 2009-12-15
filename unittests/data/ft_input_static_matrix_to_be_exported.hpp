@@ -12,15 +12,30 @@
 
 namespace ft{
     
-int sum( int m[2][3] ){
+template< int rows, int columns >
+int sum_impl( const int m[rows][columns] ){
     int result = 0;
-    for( int r = 0; r < 2; ++r ){
-    	for( int c = 0; c < 3; ++c ){
+    for( int r = 0; r < rows; ++r ){
+    	for( int c = 0; c < columns; ++c ){
     		result += m[r][c];
     	}
     }
     return result;
 }
+
+int sum( int m[2][3]){
+	return sum_impl<2, 3>( m );
+}
+
+int sum_const( int m[2][3]){
+	return sum_impl<2, 3>( m );
+}
+
+struct matrix_sum_t{
+    virtual int calculate( const int m[3][5] ) const{
+    	return sum_impl<3,5>( m );
+    }
+};
 
 }
 

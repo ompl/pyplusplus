@@ -23,8 +23,16 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def customize( self, mb ):
         mb.global_ns.calldefs().create_with_signature = True
+        mb.free_funs( 'sum_impl' ).exclude()
+        
         sum = mb.free_fun( 'sum' )
         sum.add_transformation( ft.input_static_matrix('m', rows=2, columns=3) )
+
+        sum = mb.free_funs( lambda d: d.name in ('sum', 'sum_const' ) )
+        sum.add_transformation( ft.input_static_matrix('m', rows=2, columns=3) )
+        
+        calculate = mb.mem_fun( 'calculate' )
+        calculate.add_transformation( ft.input_static_matrix('m', rows=3, columns=5) )
                
     def run_tests(self, module):
         """Run the actual unit tests"""

@@ -569,7 +569,7 @@ class input_static_matrix_t(transformer.transformer_t):
         return [ code_repository.convenience.file_name ]
 
     def __configure_sealed(self, controller):
-        global _seq2arr
+        global _pymatrix2cmatrix
         w_arg = controller.find_wrapper_arg( self.arg.name )
         w_arg.type = declarations.dummy_type_t( "boost::python::object" )
 
@@ -592,7 +592,7 @@ class input_static_matrix_t(transformer.transformer_t):
     def __configure_v_mem_fun_default( self, controller ):
         self.__configure_sealed( controller )
 
-    def __configure_v_mem_fun_override( self, controller ):
+    def __configure_v_mem_fun_override( self, controller ):       
         global _arr2seq
         pylist = controller.declare_py_variable( declarations.dummy_type_t( 'boost::python::list' )
                                                  , 'py_' + self.arg.name )
