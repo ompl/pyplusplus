@@ -341,14 +341,14 @@ class constructor_t( declarations.constructor_t, calldef_t ):
         For more information see:
 
             * http://boost.org/libs/python/doc/v2/implicit.html#implicitly_convertible-spec
-
             * http://msdn2.microsoft.com/en-us/library/h1y7x448.aspx
+            * http://msdn.microsoft.com/en-us/library/s2ff0fz8%28VS.100%29.aspx
         """
         if self.parent.is_abstract: #user is not able to create an instance of the class
             return False
         if self.is_copy_constructor:
             return False
-        if 1 != len( self.arguments ):
+        if 1 != len( self.required_args ):
             return False
         if self.parent.find_out_member_access_type( self ) != declarations.ACCESS_TYPES.PUBLIC:
             return False

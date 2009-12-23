@@ -28,6 +28,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( 0 == module.x_value(False) )
         fv = module.float_vector( 5.0 )
 
+        cc = module.get_value_a( 78 );
+        self.failUnless( cc == -78 )
+
 def create_suite():
     suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))

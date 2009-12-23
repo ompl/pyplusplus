@@ -8,6 +8,20 @@
 
 namespace casting{ 
 
+struct conversion_constructor_t{
+   conversion_constructor_t( int a, int b=0 )
+   : value_a( a* (-1) ), value_b( b * (-1) )
+   {}
+   int value_a;
+   bool value_b;
+};
+
+int get_value_a( int a ){
+    conversion_constructor_t cc( a );
+    return cc.value_a;
+}
+
+
 struct y{};
     
 struct x{
