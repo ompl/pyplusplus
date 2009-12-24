@@ -9,7 +9,7 @@
 namespace casting{ 
 
 struct conversion_constructor_t{
-   conversion_constructor_t( int a, int b=0 )
+   conversion_constructor_t( int a=2, int b=0 )
    : value_a( a* (-1) ), value_b( b * (-1) )
    {}
    int value_a;

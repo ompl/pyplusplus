@@ -348,7 +348,7 @@ class constructor_t( declarations.constructor_t, calldef_t ):
             return False
         if self.is_copy_constructor:
             return False
-        if 1 != len( self.required_args ):
+        if not( len( self.arguments) and len( self.required_args ) < 2 ):
             return False
         if self.parent.find_out_member_access_type( self ) != declarations.ACCESS_TYPES.PUBLIC:
             return False
