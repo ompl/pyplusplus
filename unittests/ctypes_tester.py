@@ -151,6 +151,8 @@ class variables_tester_t( ctypes_base_tester_t ):
         self.module_ref.init()
         self.failUnless( self.module_ref.j.value == 87 )
         self.failUnless( self.module_ref.data.i == 1900 )
+
+        self.failUnless( self.module_ref.data.j == 7 )
         self.failUnless( self.module_ref.data_ptr.contents.i == 11 )
 
         self.module_ref.j.value = 78
@@ -158,6 +160,12 @@ class variables_tester_t( ctypes_base_tester_t ):
 
         self.module_ref.data.i = 987
         self.failUnless( self.module_ref.get_value_data() == 987 )
+
+        self.module_ref.data.j = 8
+        self.failUnless( self.module_ref.get_value_data_j() == 0 )
+
+        self.module_ref.data.j = 5
+        self.failUnless( self.module_ref.get_value_data_j() == 5 )
 
         self.module_ref.data_ptr.contents.i = 34
         self.failUnless( self.module_ref.get_value_data_p() == 34 )

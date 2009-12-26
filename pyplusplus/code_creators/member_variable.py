@@ -735,9 +735,14 @@ class fields_definition_t(code_creator.code_creator_t, declaration_based.declara
             vars = vars.to_list()
             vars.sort( key=lambda d: d.location.line )
             for v in vars:
-                result.append( self.indent( '("%(name)s", %(type)s),'
-                               % dict( name=v.alias
-                                       ,type=ctypes_formatter.as_ctype( v.type ) ) ) )
+                tmp = None
+                type_as_str = ctypes_formatter.as_ctype( v.type )
+                if v.bits != None:
+                    tmp = '("%(name)s", %(type)s, %(bits)d),' \
+                          % dict( name=v.alias, type=type_as_str, bits=v.bits )
+                else:
+                    tmp = '("%(name)s", %(type)s),' % dict( name=v.alias, type=type_as_str )
+                result.append( self.indent( tmp ) )
         result.append( ']' )
         return os.linesep.join( result )
 
