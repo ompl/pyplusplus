@@ -171,6 +171,22 @@ class variables_tester_t( ctypes_base_tester_t ):
         self.failUnless( self.module_ref.get_value_data_p() == 34 )
 
 
+class function_ptr_as_variable_tester_t( ctypes_base_tester_t ):
+    def __init__( self, *args, **keywd ):
+        ctypes_base_tester_t.__init__( self, 'function_ptr_as_variable', *args, **keywd )
+
+    def customize( self, mb ):
+        mb.global_ns.typedef('do_smth_fun_t').include()
+
+    @staticmethod
+    def identity(v):
+        return v
+        
+    def test(self):
+        info = self.module_ref.info()
+        info.do_smth_fun = self.module_ref.do_smth_fun_t(self.identity)
+        self.failUnless( 21 == self.module_ref.execute_callback( info, 21 ) )
+        
 class varargs_tester_t( ctypes_base_tester_t ):
     def __init__( self, *args, **keywd ):
         ctypes_base_tester_t.__init__( self, 'varargs', *args, **keywd )
@@ -206,6 +222,7 @@ def create_suite():
     suite.addTest( unittest.makeSuite(variables_tester_t))
     suite.addTest( unittest.makeSuite(varargs_tester_t))
     suite.addTest( unittest.makeSuite(circular_references_tester_t))
+    suite.addTest( unittest.makeSuite(function_ptr_as_variable_tester_t))
     return suite
 
 def run_suite():

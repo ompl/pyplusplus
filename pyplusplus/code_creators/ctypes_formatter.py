@@ -93,7 +93,10 @@ class type_converter_t(declarations.type_visitor_t):
         else:
             base_visitor = type_converter_t( self.user_type.base, self.decl_formatter )
             internal_type_str = declarations.apply_visitor( base_visitor, base_visitor.user_type )
-            return "ctypes.POINTER( %s )" % internal_type_str
+            if declarations.is_calldef_pointer( self.user_type ):
+                return internal_type_str
+            else:
+                return "ctypes.POINTER( %s )" % internal_type_str
 
     def visit_reference( self ):
         no_ref = declarations.remove_const( declarations.remove_reference( self.user_type ) )

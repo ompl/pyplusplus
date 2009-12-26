@@ -32,7 +32,8 @@ scripts = [ 'enums'
             , 'variables'
             , 'varargs'
             , 'templates'
-            , 'circular_references' ]
+            , 'circular_references'
+            , 'function_ptr_as_variable' ]
 
 for s in scripts:
     SConscript( 'data/ctypes/%s/sconscript' % s
