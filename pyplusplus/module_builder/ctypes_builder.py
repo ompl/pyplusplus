@@ -47,6 +47,8 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         if optimize_queries:
             self.run_query_optimizer()
 
+        self.__treat_char_ptr_as_binary_data = None
+
     def __parse_declarations( self, files, gccxml_config, compilation_mode=None, cache=None ):
         if None is gccxml_config:
             gccxml_config = parser.config_t()
@@ -79,12 +81,27 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         anonymous_vars = self.global_ns.vars( '', recursive=True, allow_empty=True )
         anonymous_vars.alias = '_'
 
+    def __get_treat_char_ptr_as_binary_data(self):
+        if self.has_code_creator():
+            return self.code_creator.treat_char_ptr_as_binary_data
+        else:
+            return self.__treat_char_ptr_as_binary_data
+    def __set_treat_char_ptr_as_binary_data( self, value ):
+        self.__treat_char_ptr_as_binary_data = value
+        if self.has_code_creator():
+            self.code_creator.treat_char_ptr_as_binary_data = value
+            
+    treat_char_ptr_as_binary_data = property( __get_treat_char_ptr_as_binary_data, __set_treat_char_ptr_as_binary_data,
+                                              doc="""If True, Py++ will generate "POINTER( char )", instead of "c_char_p" for "char*" type. By default it is False""" )
+
     def build_code_creator( self, library_path, doc_extractor=None ):
         creator = creators_factory.ctypes_creator_t( self.global_ns
                                                     , library_path
                                                     , self.__blob2decl )
         self.__code_creator = creator.create()
         self.__code_creator.update_documentation( doc_extractor )
+        if self.__treat_char_ptr_as_binary_data != None:
+            self.__code_creator.treat_char_ptr_as_binary_data = self.__treat_char_ptr_as_binary_data
         return self.__code_creator
 
     @property

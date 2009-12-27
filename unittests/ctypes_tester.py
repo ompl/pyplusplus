@@ -49,9 +49,6 @@ class ctypes_base_tester_t(unittest.TestCase):
     def customize(self, mb ):
         pass
 
-    def customize_cc( self, mb ):
-        pass
-        
     def __build_scons_cmd( self ):
         cmd = autoconfig.scons.cmd_build + ' ' + self.base_name
         if autoconfig.cxx_parsers_cfg.gccxml.compiler == 'msvc71':
@@ -71,7 +68,6 @@ class ctypes_base_tester_t(unittest.TestCase):
         mb = ctypes_module_builder_t( [self.header], self.symbols_file, autoconfig.cxx_parsers_cfg.gccxml )
         self.customize( mb )        
         mb.build_code_creator( self.library_file )
-        self.customize_cc( mb )
         mb.write_module( os.path.join( self.project_dir, 'binaries', self.base_name + '.py' ) )
         sys.path.insert( 0, os.path.join( self.project_dir, 'binaries' ) )
         __import__( self.base_name )
@@ -221,8 +217,8 @@ class char_ptr_as_binary_data_tester_t( ctypes_base_tester_t ):
     def __init__( self, *args, **keywd ):
         ctypes_base_tester_t.__init__( self, 'char_ptr_as_binary_data', *args, **keywd )
 
-    def customize_cc( self, mb ):
-        mb.code_creator.treat_char_ptr_as_binary_data = True
+    def customize( self, mb ):
+        mb.treat_char_ptr_as_binary_data = True
 
     def test(self):
         data = self.module_ref.get_empty()
