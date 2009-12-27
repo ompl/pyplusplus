@@ -192,7 +192,7 @@ class global_variable_reference_t( code_creator.code_creator_t, declaration_base
     def _create_impl( self ):
         return '%(alias)s = %(type)s.in_dll( %(library_var_name)s, %(library_var_name)s.undecorated_names["%(undecorated_decl_name)s"] )' \
                % dict( alias=self.alias
-                       , type=ctypes_formatter.as_ctype( self.declaration.type )
+                       , type=ctypes_formatter.as_ctype( self.declaration.type, self.top_parent.treat_char_ptr_as_binary_data )
                        , library_var_name=self.top_parent.library_var_name
                        , undecorated_decl_name=self.undecorated_decl_name )
 

@@ -736,7 +736,7 @@ class fields_definition_t(code_creator.code_creator_t, declaration_based.declara
             vars.sort( key=lambda d: d.location.line )
             for v in vars:
                 tmp = None
-                type_as_str = ctypes_formatter.as_ctype( v.type )
+                type_as_str = ctypes_formatter.as_ctype( v.type, self.top_parent.treat_char_ptr_as_binary_data )
                 if v.bits != None:
                     tmp = '("%(name)s", %(type)s, %(bits)d),' \
                           % dict( name=v.alias, type=type_as_str, bits=v.bits )

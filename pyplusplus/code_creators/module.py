@@ -237,7 +237,8 @@ class ctypes_module_t(module_t):
         """Constructor.
         """
         module_t.__init__(self, global_ns, ctypes_module_t.CODE_GENERATOR_TYPES.CTYPES)
-
+        self.treat_char_ptr_as_binary_data = False
+        
     def _create_impl(self):
         return self.create_internal_code( self.creators, indent_code=False )
 

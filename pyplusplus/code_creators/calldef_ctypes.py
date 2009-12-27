@@ -66,14 +66,15 @@ class callable_definition_t(code_creator.code_creator_t, declaration_based.decla
 
     def restype_code(self):
         if not declarations.is_void( self.ftype.return_type ):
-            return ctypes_formatter.as_ctype( self.ftype.return_type )
+            return ctypes_formatter.as_ctype( self.ftype.return_type, self.top_parent.treat_char_ptr_as_binary_data )
         else:
             return ''
 
     def argtypes_code(self, group_in_list=True):
         if not self.ftype.arguments_types:
             return ''
-        args = map( ctypes_formatter.as_ctype, self.ftype.arguments_types )
+        args = map( lambda type_: ctypes_formatter.as_ctype( type_, self.top_parent.treat_char_ptr_as_binary_data )
+                    , self.ftype.arguments_types )
         return self.join_arguments( args, group_in_list )
 
     def _get_system_files_impl( self ):

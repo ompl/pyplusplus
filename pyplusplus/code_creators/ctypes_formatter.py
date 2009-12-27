@@ -16,11 +16,15 @@ class type_converter_t(declarations.type_visitor_t):
 
     All functions within this class should be redefined in derived classes.
     """
-    def __init__(self, type_, decl_formatter):
+    def __init__(self, type_, treat_char_ptr_as_binary_data, decl_formatter=algorithm.complete_py_name):
         declarations.type_visitor_t.__init__(self)
         self.user_type = type_
         self.decl_formatter = decl_formatter
+        self.treat_char_ptr_as_binary_data = treat_char_ptr_as_binary_data
 
+    def create_converter( self, type_):
+        return type_converter_t( type_, self.treat_char_ptr_as_binary_data, self.decl_formatter )
+            
     def visit_void( self ):
         return "None"
 
@@ -75,23 +79,23 @@ class type_converter_t(declarations.type_visitor_t):
     #skip complex and jxxx types
 
     def visit_volatile( self ):
-        base_visitor = type_converter_t( self.user_type.base, self.decl_formatter )
+        base_visitor = self.create_converter( self.user_type.base )
         return declarations.apply_visitor( base_visitor, base_visitor.user_type )
 
     def visit_const( self ):
-        base_visitor = type_converter_t( self.user_type.base, self.decl_formatter )
+        base_visitor = self.create_converter( self.user_type.base )
         return declarations.apply_visitor( base_visitor, base_visitor.user_type )
 
     def visit_pointer( self ):
         no_ptr = declarations.remove_const( declarations.remove_pointer( self.user_type ) )
-        if declarations.is_same( declarations.char_t(), no_ptr ):
+        if declarations.is_same( declarations.char_t(), no_ptr ) and self.treat_char_ptr_as_binary_data == False:
             return "ctypes.c_char_p"
-        elif declarations.is_same( declarations.wchar_t(), no_ptr ):
+        elif declarations.is_same( declarations.wchar_t(), no_ptr ) and self.treat_char_ptr_as_binary_data == False:
             return "ctypes.c_wchar_p"
         elif declarations.is_same( declarations.void_t(), no_ptr ):
             return "ctypes.c_void_p"
         else:
-            base_visitor = type_converter_t( self.user_type.base, self.decl_formatter )
+            base_visitor = self.create_converter( self.user_type.base )
             internal_type_str = declarations.apply_visitor( base_visitor, base_visitor.user_type )
             if declarations.is_calldef_pointer( self.user_type ):
                 return internal_type_str
@@ -107,13 +111,12 @@ class type_converter_t(declarations.type_visitor_t):
         elif declarations.is_same( declarations.void_t(), no_ref ):
             return "ctypes.c_void_p"
         else:
-            base_visitor = type_converter_t( self.user_type.base, self.decl_formatter )
+            base_visitor = self.create_converter( self.user_type.base )
             internal_type_str = declarations.apply_visitor( base_visitor, base_visitor.user_type )
             return "ctypes.POINTER( %s )" % internal_type_str
 
     def visit_array( self ):
-        item_visitor = type_converter_t( declarations.array_item_type(self.user_type)
-                                         , self.decl_formatter )
+        item_visitor = self.create_converter( declarations.array_item_type(self.user_type) )
         item_type = declarations.apply_visitor( item_visitor, item_visitor.user_type )
         size = declarations.array_size( self.user_type )
         if size == declarations.array_t.SIZE_UNKNOWN:
@@ -121,11 +124,11 @@ class type_converter_t(declarations.type_visitor_t):
         return "( %s * %d )" % ( item_type, size )
 
     def visit_free_function_type( self ):
-        return_visitor = type_converter_t( self.user_type.return_type, self.decl_formatter )
-        return_type = declarations.apply_visitor(return_visitor, self.user_type.return_type)
+        return_visitor = self.create_converter( self.user_type.return_type )
+        return_type = declarations.apply_visitor( return_visitor, self.user_type.return_type )
         argtypes = []
         for arg in self.user_type.arguments_types:
-            arg_visitor = type_converter_t( arg, self.decl_formatter )
+            arg_visitor = self.create_converter( arg )
             argtypes.append( declarations.apply_visitor(arg_visitor, arg) )
         return declarations.call_invocation.join( "ctypes.CFUNCTYPE", [return_type] + argtypes )
 
@@ -138,19 +141,19 @@ class type_converter_t(declarations.type_visitor_t):
     def visit_declarated( self ):
         #TODO: the follwoing code removes typedefs
         if isinstance( self.user_type.declaration, declarations.typedef_t ):
-            base_visitor = type_converter_t( self.user_type.declaration.type, self.decl_formatter )
+            base_visitor = self.create_converter( self.user_type.declaration.type )
             return declarations.apply_visitor( base_visitor, base_visitor.user_type )
         else:
             return self.decl_formatter( self.user_type.declaration )
 
     def visit_restrict( self ):
-        base_visitor = type_converter_t( self.user_type.base, self.decl_formatter )
+        base_visitor = self.create_converter( self.user_type.base )
         return declarations.apply_visitor( base_visitor, base_visitor.user_type )
 
     def visit_ellipsis( self ):
         return ''
 
-def as_ctype( type_, decl_formatter=algorithm.complete_py_name ):
-    v = type_converter_t( type_, decl_formatter )
+def as_ctype( type_, treat_char_ptr_as_binary_data=False):
+    v = type_converter_t( type_, treat_char_ptr_as_binary_data )
     return declarations.apply_visitor( v, type_ )
 
