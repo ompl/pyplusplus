@@ -49,6 +49,9 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
 
         self.__treat_char_ptr_as_binary_data = None
 
+        self.__module_code_head = []
+        self.__module_code_tail = []
+
     def __parse_declarations( self, files, gccxml_config, compilation_mode=None, cache=None ):
         if None is gccxml_config:
             gccxml_config = parser.config_t()
@@ -94,6 +97,23 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
     treat_char_ptr_as_binary_data = property( __get_treat_char_ptr_as_binary_data, __set_treat_char_ptr_as_binary_data,
                                               doc="""If True, Py++ will generate "POINTER( char )", instead of "c_char_p" for "char*" type. By default it is False""" )
 
+    @property
+    def module_code_head( self ):
+        "A list of the user code, which will be added to the top of the module"
+        return self.__module_code_head
+
+    @property
+    def module_code_tail( self ):
+        "A list of the user code, which will be added to the bottom of the module"
+        return self.__module_code_tail
+
+    def add_module_code( self, code, tail=True ):
+        """adds the user code to the generated one"""
+        if tail:
+            self.__module_code_tail.append( code )
+        else:
+            self.__module_code_head.append( code )
+
     def build_code_creator( self, library_path, doc_extractor=None ):
         creator = creators_factory.ctypes_creator_t( self.global_ns
                                                     , library_path
@@ -117,6 +137,13 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         """
         return not ( None is self.__code_creator )
 
+    def __merge_user_code( self ):
+        for code in self.module_code_tail:
+            self.code_creator.adopt_creator( code_creators.custom_text_t( code ) )
+
+        for code in self.module_code_head:
+            self.code_creator.adopt_creator( code_creators.custom_text_t( code ), 0 )
+
     def write_module( self, file_name ):
         """
         Writes module to single file
@@ -125,6 +152,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         :type file_name: string
 
         """
+        self.__merge_user_code()
         file_writers.write_file( self.code_creator, file_name, encoding=self.encoding )
 
 

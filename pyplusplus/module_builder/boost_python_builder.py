@@ -190,22 +190,22 @@ class builder_t(module_builder.module_builder_t):
 
     @property
     def declarations_code_head( self ):
-        "List of user code, that will be added to the head of the declarations section."
+        "A list of the user code, which will be added to the head of the declarations section."
         return self.__declarations_code_head
 
     @property
     def declarations_code_tail( self ):
-        "List of user code, that will be added to the tail of the declarations section."
+        "A list of the user code, which will be added to the tail of the declarations section."
         return self.__declarations_code_tail
 
     @property
     def registrations_code_head( self ):
-        "List of user code, that will be added to the head of the registrations section."
+        "A list of the user code, which will be added to the head of the registrations section."
         return self.__registrations_code_head
 
     @property
     def registrations_code_tail( self ):
-        "List of user code, that will be added to the tail of the registrations section."
+        "A list of the user code, which will be added to the tail of the registrations section."
         return self.__registrations_code_tail
 
     def build_code_creator( self
@@ -259,12 +259,14 @@ class builder_t(module_builder.module_builder_t):
         return not ( None is self.__code_creator )
 
     def add_declaration_code( self, code, tail=True ):
+        """adds the user code to the generated one"""
         if tail:
             self.__declarations_code_tail.append( code )
         else:
             self.__declarations_code_head.append( code )
 
     def add_registration_code( self, code, tail=True ):
+        """adds the user code to the generated one"""
         if tail:
             self.__registrations_code_tail.append( code )
         else:

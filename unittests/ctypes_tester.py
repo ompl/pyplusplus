@@ -229,6 +229,28 @@ class char_ptr_as_binary_data_tester_t( ctypes_base_tester_t ):
         self.failUnless( data.contents.size == len( "hello world" ) )
         self.failUnless( data.contents.bytes[0:data.contents.size + 1] == "hello\0world\0" )
 
+class user_code_tester_t( ctypes_base_tester_t ):
+    def __init__( self, *args, **keywd ):
+        ctypes_base_tester_t.__init__( self, 'user_code', *args, **keywd )
+        self.module_top_code = "top = 'top'"
+        self.module_bottom_code = "bottom = 'bottom'"
+        
+    def customize(self, mb ):
+        mb.add_module_code( self.module_top_code, tail=False )
+        mb.add_module_code( self.module_bottom_code, tail=True )
+
+    def test(self):
+        self.failUnless( self.module_ref.top == "top" )
+        self.failUnless( self.module_ref.bottom == "bottom" )
+        content = []
+        for line in file( self.module_ref.__file__ ):
+            if line.lstrip().startswith( '#' ) or not line.strip():
+                continue
+            else:
+                content.append( line.rstrip() )
+        self.failUnless( content[0] == self.module_top_code )
+        self.failUnless( content[-1] == self.module_bottom_code )
+        
 def create_suite():
     #part of this functionality is going to be deprecated
     suite = unittest.TestSuite()
@@ -241,6 +263,7 @@ def create_suite():
     suite.addTest( unittest.makeSuite(circular_references_tester_t))
     suite.addTest( unittest.makeSuite(function_ptr_as_variable_tester_t))
     suite.addTest( unittest.makeSuite(char_ptr_as_binary_data_tester_t))
+    suite.addTest( unittest.makeSuite(user_code_tester_t))
     return suite
 
 def run_suite():

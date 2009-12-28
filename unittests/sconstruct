@@ -34,6 +34,7 @@ scripts = [ 'enums'
             , 'templates'
             , 'circular_references'
             , 'function_ptr_as_variable'
+            , 'user_code'
             , 'char_ptr_as_binary_data' ]
 
 for s in scripts:
