@@ -4,63 +4,66 @@ import ctypes
 
 import ctypes_utils
 
-libgmp_lib = ctypes.CDLL( r"/usr/lib/libgmp.so.3.4.4" )
+libgmp_lib = ctypes.CDLL( r"/usr/lib/libgmp.so.3.5.0" )
 
 libgmp_lib.undecorated_names = {#mapping between decorated and undecorated names
     "extern double __gmpf_get_d(mpf_srcptr arg0) [free function]" : "__gmpf_get_d", 
     "extern int __gmpf_cmp_ui(mpf_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpf_cmp_ui", 
-    "extern void __gmpz_fac_ui(mpz_ptr arg0, long unsigned int arg1) [free function]" : "__gmpz_fac_ui", 
+    "extern void __gmpz_mul_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_mul_ui", 
     "extern void __gmpz_and(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_and", 
     "extern void __gmpf_urandomb(__mpf_struct * arg0, __gmp_randstate_struct * arg1, long unsigned int arg2) [free function]" : "__gmpf_urandomb", 
-    "extern mp_limb_t __gmpn_mul_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]" : "__gmpn_mul_1", 
-    "extern void __gmpz_mul_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_mul_2exp", 
+    "extern long unsigned int __gmpz_tdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_tdiv_q_ui", 
     "extern void __gmpz_clrbit(mpz_ptr arg0, long unsigned int arg1) [free function]" : "__gmpz_clrbit", 
     "extern void __gmpz_cdiv_r_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_cdiv_r_2exp", 
     "extern void __gmpz_lcm(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_lcm", 
-    "extern void __gmpz_gcd(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_gcd", 
+    "extern double __gmpf_get_d_2exp(long int * arg0, mpf_srcptr arg1) [free function]" : "__gmpf_get_d_2exp", 
     "extern int __gmpz_divisible_2exp_p(mpz_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpz_divisible_2exp_p", 
     "extern int __gmpz_congruent_2exp_p(mpz_srcptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_congruent_2exp_p", 
     "extern void __gmpz_pow_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_pow_ui", 
     "void __gmpq_neg(mpq_ptr __gmp_w, mpq_srcptr __gmp_u) [free function]" : "__gmpq_neg", 
+    "extern void __gmpf_reldiff(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]" : "__gmpf_reldiff", 
     "extern void __gmpz_import(mpz_ptr arg0, size_t arg1, int arg2, size_t arg3, int arg4, size_t arg5, void const * arg6) [free function]" : "__gmpz_import", 
-    "extern long unsigned int __gmpz_fdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpz_fdiv_ui", 
+    "extern void __gmpz_fac_ui(mpz_ptr arg0, long unsigned int arg1) [free function]" : "__gmpz_fac_ui", 
     "extern int __gmpz_root(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_root", 
     "extern void __gmpz_fdiv_q(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_fdiv_q", 
     "extern void __gmpz_fdiv_r(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_fdiv_r", 
-    "extern size_t __gmpq_inp_str(mpq_ptr arg0, FILE * arg1, int arg2) [free function]" : "__gmpq_inp_str", 
-    "extern int __gmpz_ui_kronecker(long unsigned int arg0, mpz_srcptr arg1) [free function]" : "__gmpz_ui_kronecker", 
-    "extern long unsigned int __gmpz_remove(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_remove", 
-    "extern int __gmpz_tstbit(mpz_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpz_tstbit", 
+    "extern void __gmp_set_memory_functions(void * (*)( ::size_t ) * arg0, void * (*)( void *,::size_t,::size_t ) * arg1, void (*)( void *,::size_t ) * arg2) [free function]" : "__gmp_set_memory_functions", 
+    "extern long unsigned int __gmpz_tdiv_r_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_tdiv_r_ui", 
+    "extern long unsigned int __gmpz_cdiv_r_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_cdiv_r_ui", 
+    "extern void __gmpz_realloc2(mpz_ptr arg0, long unsigned int arg1) [free function]" : "__gmpz_realloc2", 
     "extern void __gmpn_tdiv_qr(mp_ptr arg0, mp_ptr arg1, mp_size_t arg2, mp_srcptr arg3, mp_size_t arg4, mp_srcptr arg5, mp_size_t arg6) [free function]" : "__gmpn_tdiv_qr", 
     "extern void __gmpz_fdiv_r_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_fdiv_r_2exp", 
-    "extern void __gmpf_div(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]" : "__gmpf_div", 
+    "extern void __gmpz_sqrt(mpz_ptr arg0, mpz_srcptr arg1) [free function]" : "__gmpz_sqrt", 
+    "extern void __gmpq_add(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]" : "__gmpq_add", 
     "extern void __gmpq_div(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]" : "__gmpq_div", 
-    "extern void __gmpz_ui_pow_ui(mpz_ptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]" : "__gmpz_ui_pow_ui", 
+    "extern long unsigned int __gmpf_get_default_prec() [free function]" : "__gmpf_get_default_prec", 
     "extern void __gmpq_sub(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]" : "__gmpq_sub", 
     "extern void __gmpf_set_ui(mpf_ptr arg0, long unsigned int arg1) [free function]" : "__gmpf_set_ui", 
-    "extern mp_limb_t __gmpn_lshift(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, unsigned int arg3) [free function]" : "__gmpn_lshift", 
+    "extern double __gmpz_get_d(mpz_srcptr arg0) [free function]" : "__gmpz_get_d", 
     "extern void __gmpz_add(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_add", 
-    "extern void __gmpf_trunc(mpf_ptr arg0, mpf_srcptr arg1) [free function]" : "__gmpf_trunc", 
+    "int __gmpn_cmp(mp_srcptr __gmp_xp, mp_srcptr __gmp_yp, mp_size_t __gmp_size) [free function]" : "__gmpn_cmp", 
     "extern void __gmpz_divexact_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_divexact_ui", 
     "extern long unsigned int __gmpz_gcd_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_gcd_ui", 
-    "extern void __gmpz_cdiv_r(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_cdiv_r", 
     "extern size_t __gmpz_inp_str(mpz_ptr arg0, FILE * arg1, int arg2) [free function]" : "__gmpz_inp_str", 
-    "extern double __gmpq_get_d(mpq_srcptr arg0) [free function]" : "__gmpq_get_d", 
-    "extern int __gmp_sprintf(char * arg0, char const * arg1, ...) [free function]" : "__gmp_sprintf", 
-    "extern void __gmpn_random2(mp_ptr arg0, mp_size_t arg1) [free function]" : "__gmpn_random2", 
+    "extern int __gmp_snprintf(char * arg0, size_t arg1, char const * arg2, ...) [free function]" : "__gmp_snprintf", 
+    "extern void __gmpf_set_prec_raw(mpf_ptr arg0, long unsigned int arg1) [free function]" : "__gmpf_set_prec_raw", 
     "extern void __gmpz_cdiv_q_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_cdiv_q_2exp", 
-    "extern int __gmpf_eq(mpf_srcptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpf_eq", 
+    "extern int __gmpz_fits_sshort_p(mpz_srcptr arg0) [free function]" : "__gmpz_fits_sshort_p", 
     "extern mp_limb_t __gmpn_divrem(mp_ptr arg0, mp_size_t arg1, mp_ptr arg2, mp_size_t arg3, mp_srcptr arg4, mp_size_t arg5) [free function]" : "__gmpn_divrem", 
-    "extern void __gmpz_cdiv_q(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_cdiv_q", 
-    "void __gmpz_abs(mpz_ptr __gmp_w, mpz_srcptr __gmp_u) [free function]" : "__gmpz_abs", 
+    "extern void __gmpz_submul(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_submul", 
+    "extern void __gmpz_init_set(mpz_ptr arg0, mpz_srcptr arg1) [free function]" : "__gmpz_init_set", 
     "extern void __gmpz_xor(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_xor", 
     "extern void __gmpz_init_set_d(mpz_ptr arg0, double arg1) [free function]" : "__gmpz_init_set_d", 
     "int __gmpz_fits_ushort_p(mpz_srcptr __gmp_z) [free function]" : "__gmpz_fits_ushort_p", 
-    "extern void __gmpq_set_f(mpq_ptr arg0, mpf_srcptr arg1) [free function]" : "__gmpq_set_f", 
+    "extern int __gmp_sscanf(char const * arg0, char const * arg1, ...) [free function]" : "__gmp_sscanf", 
+    "extern void __gmpz_mul_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_mul_2exp", 
+    "extern void __gmpz_sub(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_sub", 
     "extern int __gmpf_fits_ulong_p(mpf_srcptr arg0) [free function]" : "__gmpf_fits_ulong_p", 
+    "extern void __gmpz_ui_pow_ui(mpz_ptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]" : "__gmpz_ui_pow_ui", 
+    "extern long unsigned int __gmp_urandomm_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]" : "__gmp_urandomm_ui", 
     "long unsigned int __gmpz_get_ui(mpz_srcptr __gmp_z) [free function]" : "__gmpz_get_ui", 
     "extern int __gmpz_cmpabs_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpz_cmpabs_ui", 
-    "extern long unsigned int __gmp_urandomm_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]" : "__gmp_urandomm_ui", 
+    "extern void __gmpz_tdiv_q_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_tdiv_q_2exp", 
     "int __gmpz_perfect_square_p(mpz_srcptr __gmp_a) [free function]" : "__gmpz_perfect_square_p", 
     "extern void __gmpq_set_d(mpq_ptr arg0, double arg1) [free function]" : "__gmpq_set_d", 
     "extern int __gmpz_cmp_d(mpz_srcptr arg0, double arg1) [free function]" : "__gmpz_cmp_d", 
@@ -69,13 +72,13 @@ libgmp_lib.undecorated_names = {#mapping between decorated and undecorated names
     "extern int __gmpz_probab_prime_p(mpz_srcptr arg0, int arg1) [free function]" : "__gmpz_probab_prime_p", 
     "extern mp_limb_t __gmpn_rshift(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, unsigned int arg3) [free function]" : "__gmpn_rshift", 
     "extern void __gmpz_array_init(mpz_ptr arg0, mp_size_t arg1, mp_size_t arg2) [free function]" : "__gmpz_array_init", 
-    "extern long unsigned int __gmpf_get_default_prec() [free function]" : "__gmpf_get_default_prec", 
+    "int __gmpz_fits_uint_p(mpz_srcptr __gmp_z) [free function]" : "__gmpz_fits_uint_p", 
     "extern void __gmpf_random2(mpf_ptr arg0, mp_size_t arg1, mp_exp_t arg2) [free function]" : "__gmpf_random2", 
     "extern void __gmp_randinit_set(__gmp_randstate_struct * arg0, __gmp_randstate_struct const * arg1) [free function]" : "__gmp_randinit_set", 
-    "extern void __gmpq_inv(mpq_ptr arg0, mpq_srcptr arg1) [free function]" : "__gmpq_inv", 
+    "extern void __gmpz_tdiv_qr(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]" : "__gmpz_tdiv_qr", 
     "extern mp_size_t __gmpn_set_str(mp_ptr arg0, unsigned char const * arg1, size_t arg2, int arg3) [free function]" : "__gmpn_set_str", 
-    "extern void __gmp_randinit(__gmp_randstate_struct * arg0, gmp_randalg_t arg1, ...) [free function]" : "__gmp_randinit", 
-    "extern mp_size_t __gmpn_sqrtrem(mp_ptr arg0, mp_ptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]" : "__gmpn_sqrtrem", 
+    "extern long unsigned int __gmpn_scan0(mp_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpn_scan0", 
+    "extern void __gmpz_cdiv_r(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_cdiv_r", 
     "extern long unsigned int __gmpz_fdiv_qr_ui(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]" : "__gmpz_fdiv_qr_ui", 
     "extern void __gmpf_init_set_ui(mpf_ptr arg0, long unsigned int arg1) [free function]" : "__gmpf_init_set_ui", 
     "extern void __gmpn_mul_n(mp_ptr arg0, mp_srcptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]" : "__gmpn_mul_n", 
@@ -84,88 +87,88 @@ libgmp_lib.undecorated_names = {#mapping between decorated and undecorated names
     "extern void __gmpq_set_si(mpq_ptr arg0, long int arg1, long unsigned int arg2) [free function]" : "__gmpq_set_si", 
     "extern void __gmpq_set_ui(mpq_ptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]" : "__gmpq_set_ui", 
     "extern void __gmpf_sqrt_ui(mpf_ptr arg0, long unsigned int arg1) [free function]" : "__gmpf_sqrt_ui", 
-    "extern void __gmpz_init_set_ui(mpz_ptr arg0, long unsigned int arg1) [free function]" : "__gmpz_init_set_ui", 
-    "extern int __gmpz_divisible_ui_p(mpz_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpz_divisible_ui_p", 
+    "extern size_t __gmpq_inp_str(mpq_ptr arg0, FILE * arg1, int arg2) [free function]" : "__gmpq_inp_str", 
+    "extern int __gmpf_fits_sint_p(mpf_srcptr arg0) [free function]" : "__gmpf_fits_sint_p", 
     "extern void __gmpq_swap(mpq_ptr arg0, mpq_ptr arg1) [free function]" : "__gmpq_swap", 
     "extern int __gmpf_set_str(mpf_ptr arg0, char const * arg1, int arg2) [free function]" : "__gmpf_set_str", 
     "extern void __gmpz_sub_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_sub_ui", 
     "extern void __gmpz_divexact(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_divexact", 
     "extern void __gmpz_com(mpz_ptr arg0, mpz_srcptr arg1) [free function]" : "__gmpz_com", 
     "extern void __gmpz_ior(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_ior", 
-    "extern void __gmpz_init_set(mpz_ptr arg0, mpz_srcptr arg1) [free function]" : "__gmpz_init_set", 
-    "extern long unsigned int __gmpz_cdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_cdiv_q_ui", 
-    "extern void __gmpz_submul(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_submul", 
+    "extern int __gmpz_fits_slong_p(mpz_srcptr arg0) [free function]" : "__gmpz_fits_slong_p", 
     "extern int __gmp_asprintf(char * * arg0, char const * arg1, ...) [free function]" : "__gmp_asprintf", 
     "__gmp_bits_per_limb [variable]" : "__gmp_bits_per_limb", 
-    "extern int __gmp_scanf(char const * arg0, ...) [free function]" : "__gmp_scanf", 
     "extern void __gmpf_set_prec(mpf_ptr arg0, long unsigned int arg1) [free function]" : "__gmpf_set_prec", 
     "extern int __gmpz_init_set_str(mpz_ptr arg0, char const * arg1, int arg2) [free function]" : "__gmpz_init_set_str", 
     "mp_limb_t __gmpn_sub_1(mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n) [free function]" : "__gmpn_sub_1", 
     "extern int __gmpz_millerrabin(mpz_srcptr arg0, int arg1) [free function]" : "__gmpz_millerrabin", 
     "extern void __gmpz_mod(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_mod", 
     "extern int __gmpz_invert(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_invert", 
+    "extern void __gmp_randinit_mt(__gmp_randstate_struct * arg0) [free function]" : "__gmp_randinit_mt", 
     "extern void __gmpf_set_d(mpf_ptr arg0, double arg1) [free function]" : "__gmpf_set_d", 
-    "extern int __gmpf_fits_uint_p(mpf_srcptr arg0) [free function]" : "__gmpf_fits_uint_p", 
+    "extern void __gmpf_sub(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]" : "__gmpf_sub", 
     "extern mp_limb_t __gmpn_addmul_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]" : "__gmpn_addmul_1", 
     "extern void __gmpf_set_z(mpf_ptr arg0, mpz_srcptr arg1) [free function]" : "__gmpf_set_z", 
     "extern void __gmpz_ui_sub(mpz_ptr arg0, long unsigned int arg1, mpz_srcptr arg2) [free function]" : "__gmpz_ui_sub", 
-    "extern double __gmpz_get_d(mpz_srcptr arg0) [free function]" : "__gmpz_get_d", 
-    "extern void __gmpf_set_prec_raw(mpf_ptr arg0, long unsigned int arg1) [free function]" : "__gmpf_set_prec_raw", 
-    "extern int __gmpf_cmp(mpf_srcptr arg0, mpf_srcptr arg1) [free function]" : "__gmpf_cmp", 
+    "extern void __gmpf_div(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]" : "__gmpf_div", 
+    "extern void __gmpn_random2(mp_ptr arg0, mp_size_t arg1) [free function]" : "__gmpn_random2", 
+    "extern mp_limb_t __gmpn_divexact_by3c(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]" : "__gmpn_divexact_by3c", 
     "extern void __gmpz_lucnum_ui(mpz_ptr arg0, long unsigned int arg1) [free function]" : "__gmpz_lucnum_ui", 
     "extern void __gmpf_set_q(mpf_ptr arg0, mpq_srcptr arg1) [free function]" : "__gmpf_set_q", 
-    "extern mp_limb_t __gmpn_gcd_1(mp_srcptr arg0, mp_size_t arg1, mp_limb_t arg2) [free function]" : "__gmpn_gcd_1", 
-    "extern void __gmpz_tdiv_qr(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]" : "__gmpz_tdiv_qr", 
+    "extern void __gmpz_random(mpz_ptr arg0, mp_size_t arg1) [free function]" : "__gmpz_random", 
+    "extern int __gmp_scanf(char const * arg0, ...) [free function]" : "__gmp_scanf", 
+    "extern mp_size_t __gmpn_sqrtrem(mp_ptr arg0, mp_ptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]" : "__gmpn_sqrtrem", 
     "extern int __gmpq_set_str(mpq_ptr arg0, char const * arg1, int arg2) [free function]" : "__gmpq_set_str", 
     "extern int __gmpf_fits_slong_p(mpf_srcptr arg0) [free function]" : "__gmpf_fits_slong_p", 
     "extern void __gmpz_setbit(mpz_ptr arg0, long unsigned int arg1) [free function]" : "__gmpz_setbit", 
     "extern void __gmp_randinit_lc_2exp(__gmp_randstate_struct * arg0, mpz_srcptr arg1, long unsigned int arg2, long unsigned int arg3) [free function]" : "__gmp_randinit_lc_2exp", 
     "extern int __gmp_randinit_lc_2exp_size(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]" : "__gmp_randinit_lc_2exp_size", 
-    "extern int __gmpf_cmp_si(mpf_srcptr arg0, long int arg1) [free function]" : "__gmpf_cmp_si", 
-    "extern void __gmp_randclear(__gmp_randstate_struct * arg0) [free function]" : "__gmp_randclear", 
+    "extern void __gmpz_set_d(mpz_ptr arg0, double arg1) [free function]" : "__gmpz_set_d", 
+    "extern int __gmpz_jacobi(mpz_srcptr arg0, mpz_srcptr arg1) [free function]" : "__gmpz_jacobi", 
     "extern void __gmpz_set_f(mpz_ptr arg0, mpf_srcptr arg1) [free function]" : "__gmpz_set_f", 
     "extern size_t __gmpf_out_str(FILE * arg0, int arg1, size_t arg2, mpf_srcptr arg3) [free function]" : "__gmpf_out_str", 
     "extern int __gmpf_fits_sshort_p(mpf_srcptr arg0) [free function]" : "__gmpf_fits_sshort_p", 
     "extern void __gmpq_div_2exp(mpq_ptr arg0, mpq_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpq_div_2exp", 
     "extern long unsigned int __gmpf_get_prec(mpf_srcptr arg0) [free function]" : "__gmpf_get_prec", 
-    "extern void __gmpq_init(mpq_ptr arg0) [free function]" : "__gmpq_init", 
     "extern int __gmpz_kronecker_si(mpz_srcptr arg0, long int arg1) [free function]" : "__gmpz_kronecker_si", 
-    "extern int __gmpz_fits_sint_p(mpz_srcptr arg0) [free function]" : "__gmpz_fits_sint_p", 
-    "extern int __gmp_snprintf(char * arg0, size_t arg1, char const * arg2, ...) [free function]" : "__gmp_snprintf", 
+    "extern void __gmpf_floor(mpf_ptr arg0, mpf_srcptr arg1) [free function]" : "__gmpf_floor", 
+    "extern int __gmpq_cmp(mpq_srcptr arg0, mpq_srcptr arg1) [free function]" : "__gmpq_cmp", 
+    "extern int __gmpf_integer_p(mpf_srcptr arg0) [free function]" : "__gmpf_integer_p", 
     "extern void __gmpz_powm(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]" : "__gmpz_powm", 
     "extern long unsigned int __gmpz_hamdist(mpz_srcptr arg0, mpz_srcptr arg1) [free function]" : "__gmpz_hamdist", 
     "extern void __gmpz_fib_ui(mpz_ptr arg0, long unsigned int arg1) [free function]" : "__gmpz_fib_ui", 
     "extern int __gmpz_cmp_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpz_cmp_ui", 
     "extern mp_limb_t __gmpn_submul_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]" : "__gmpn_submul_1", 
     "extern void __gmpf_init2(mpf_ptr arg0, long unsigned int arg1) [free function]" : "__gmpf_init2", 
-    "extern int __gmpz_cmpabs(mpz_srcptr arg0, mpz_srcptr arg1) [free function]" : "__gmpz_cmpabs", 
-    "extern long unsigned int __gmpz_tdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_tdiv_q_ui", 
+    "extern mp_limb_t __gmpn_mul_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]" : "__gmpn_mul_1", 
     "extern mp_limb_t __gmpn_mod_1(mp_srcptr arg0, mp_size_t arg1, mp_limb_t arg2) [free function]" : "__gmpn_mod_1", 
     "size_t __gmpz_size(mpz_srcptr __gmp_z) [free function]" : "__gmpz_size", 
     "extern void __gmpq_get_den(mpz_ptr arg0, mpq_srcptr arg1) [free function]" : "__gmpq_get_den", 
     "extern mp_limb_t __gmpn_preinv_mod_1(mp_srcptr arg0, mp_size_t arg1, mp_limb_t arg2, mp_limb_t arg3) [free function]" : "__gmpn_preinv_mod_1", 
     "extern long unsigned int __gmpz_tdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpz_tdiv_ui", 
-    "int __gmpz_fits_uint_p(mpz_srcptr __gmp_z) [free function]" : "__gmpz_fits_uint_p", 
+    "extern mp_limb_t __gmpn_gcd_1(mp_srcptr arg0, mp_size_t arg1, mp_limb_t arg2) [free function]" : "__gmpn_gcd_1", 
+    "extern void __gmp_randinit(__gmp_randstate_struct * arg0, gmp_randalg_t arg1, ...) [free function]" : "__gmp_randinit", 
     "extern void __gmpf_init(mpf_ptr arg0) [free function]" : "__gmpf_init", 
-    "extern double __gmpf_get_d_2exp(long int * arg0, mpf_srcptr arg1) [free function]" : "__gmpf_get_d_2exp", 
     "extern void __gmpz_mul(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_mul", 
-    "extern void __gmpq_add(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]" : "__gmpq_add", 
+    "extern long unsigned int __gmpn_scan1(mp_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpn_scan1", 
     "extern void __gmpq_set(mpq_ptr arg0, mpq_srcptr arg1) [free function]" : "__gmpq_set", 
-    "extern long unsigned int __gmpn_scan0(mp_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpn_scan0", 
-    "mp_limb_t __gmpn_sub(mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize) [free function]" : "__gmpn_sub", 
-    "extern void __gmpz_fdiv_q_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_fdiv_q_2exp", 
-    "extern void __gmpz_sqrtrem(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_sqrtrem", 
+    "extern int __gmpz_fits_sint_p(mpz_srcptr arg0) [free function]" : "__gmpz_fits_sint_p", 
+    "extern long unsigned int __gmpz_cdiv_qr_ui(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]" : "__gmpz_cdiv_qr_ui", 
+    "extern void __gmpz_clear(mpz_ptr arg0) [free function]" : "__gmpz_clear", 
+    "extern mp_limb_t __gmpn_mul(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_srcptr arg3, mp_size_t arg4) [free function]" : "__gmpn_mul", 
     "extern void __gmpz_init_set_si(mpz_ptr arg0, long int arg1) [free function]" : "__gmpz_init_set_si", 
     "extern int __gmpz_divisible_p(mpz_srcptr arg0, mpz_srcptr arg1) [free function]" : "__gmpz_divisible_p", 
     "__gmp_errno [variable]" : "__gmp_errno", 
-    "extern void __gmpf_pow_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpf_pow_ui", 
+    "extern void __gmpf_sub_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpf_sub_ui", 
     "extern void __gmpz_swap(mpz_ptr arg0, mpz_ptr arg1) [free function]" : "__gmpz_swap", 
     "extern int __gmpz_cmp(mpz_srcptr arg0, mpz_srcptr arg1) [free function]" : "__gmpz_cmp", 
     "extern void __gmpf_init_set_si(mpf_ptr arg0, long int arg1) [free function]" : "__gmpf_init_set_si", 
-    "extern long unsigned int __gmpz_tdiv_r_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_tdiv_r_ui", 
+    "extern mp_limb_t __gmpn_lshift(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, unsigned int arg3) [free function]" : "__gmpn_lshift", 
     "extern int __gmpq_cmp_si(mpq_srcptr arg0, long int arg1, long unsigned int arg2) [free function]" : "__gmpq_cmp_si", 
+    "void __gmpz_abs(mpz_ptr __gmp_w, mpz_srcptr __gmp_u) [free function]" : "__gmpz_abs", 
     "extern int __gmp_fprintf(FILE * arg0, char const * arg1, ...) [free function]" : "__gmp_fprintf", 
-    "extern int __gmpf_fits_sint_p(mpf_srcptr arg0) [free function]" : "__gmpf_fits_sint_p", 
+    "extern void __gmpf_set(mpf_ptr arg0, mpf_srcptr arg1) [free function]" : "__gmpf_set", 
+    "extern int __gmpz_divisible_ui_p(mpz_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpz_divisible_ui_p", 
     "extern int __gmpf_cmp_d(mpf_srcptr arg0, double arg1) [free function]" : "__gmpf_cmp_d", 
     "extern char * __gmpf_get_str(char * arg0, mp_exp_t * arg1, int arg2, size_t arg3, mpf_srcptr arg4) [free function]" : "__gmpf_get_str", 
     "extern long unsigned int __gmpz_fdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_fdiv_q_ui", 
@@ -175,47 +178,46 @@ libgmp_lib.undecorated_names = {#mapping between decorated and undecorated names
     "extern void __gmpz_urandomm(mpz_ptr arg0, __gmp_randstate_struct * arg1, mpz_srcptr arg2) [free function]" : "__gmpz_urandomm", 
     "extern void __gmpq_mul(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]" : "__gmpq_mul", 
     "extern void __gmpz_tdiv_q(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_tdiv_q", 
-    "extern void __gmpf_sub(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]" : "__gmpf_sub", 
-    "extern void __gmpz_set_ui(mpz_ptr arg0, long unsigned int arg1) [free function]" : "__gmpz_set_ui", 
-    "extern void __gmpz_random(mpz_ptr arg0, mp_size_t arg1) [free function]" : "__gmpz_random", 
+    "extern int __gmpf_fits_uint_p(mpf_srcptr arg0) [free function]" : "__gmpf_fits_uint_p", 
+    "extern void * __gmpz_realloc(mpz_ptr arg0, mp_size_t arg1) [free function]" : "__gmpz_realloc", 
     "extern long unsigned int __gmp_urandomb_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]" : "__gmp_urandomb_ui", 
-    "extern void __gmpf_floor(mpf_ptr arg0, mpf_srcptr arg1) [free function]" : "__gmpf_floor", 
+    "extern int __gmpz_perfect_power_p(mpz_srcptr arg0) [free function]" : "__gmpz_perfect_power_p", 
     "extern char * __gmpq_get_str(char * arg0, int arg1, mpq_srcptr arg2) [free function]" : "__gmpq_get_str", 
     "extern int __gmpn_perfect_square_p(mp_srcptr arg0, mp_size_t arg1) [free function]" : "__gmpn_perfect_square_p", 
     "extern void __gmpz_addmul(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_addmul", 
-    "extern int __gmpq_cmp(mpq_srcptr arg0, mpq_srcptr arg1) [free function]" : "__gmpq_cmp", 
+    "extern long unsigned int __gmpz_fdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpz_fdiv_ui", 
+    "extern int __gmp_sprintf(char * arg0, char const * arg1, ...) [free function]" : "__gmp_sprintf", 
     "extern void __gmpz_bin_uiui(mpz_ptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]" : "__gmpz_bin_uiui", 
     "void __gmpz_set_q(mpz_ptr __gmp_w, mpq_srcptr __gmp_u) [free function]" : "__gmpz_set_q", 
-    "extern int __gmpz_congruent_ui_p(mpz_srcptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]" : "__gmpz_congruent_ui_p", 
+    "mp_limb_t __gmpn_neg_n(mp_ptr __gmp_rp, mp_srcptr __gmp_up, mp_size_t __gmp_n) [free function]" : "__gmpn_neg_n", 
     "extern void __gmpf_neg(mpf_ptr arg0, mpf_srcptr arg1) [free function]" : "__gmpf_neg", 
     "extern void __gmp_randseed(__gmp_randstate_struct * arg0, mpz_srcptr arg1) [free function]" : "__gmp_randseed", 
-    "extern void __gmpz_mul_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_mul_ui", 
-    "extern void __gmpz_init2(mpz_ptr arg0, long unsigned int arg1) [free function]" : "__gmpz_init2", 
+    "extern long unsigned int __gmpz_scan1(mpz_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpz_scan1", 
     "extern void __gmpz_nextprime(mpz_ptr arg0, mpz_srcptr arg1) [free function]" : "__gmpz_nextprime", 
-    "extern void __gmpz_set_d(mpz_ptr arg0, double arg1) [free function]" : "__gmpz_set_d", 
-    "extern size_t __gmpz_inp_raw(mpz_ptr arg0, FILE * arg1) [free function]" : "__gmpz_inp_raw", 
-    "extern void __gmpz_rrandomb(mpz_ptr arg0, __gmp_randstate_struct * arg1, long unsigned int arg2) [free function]" : "__gmpz_rrandomb", 
-    "extern long unsigned int __gmpz_cdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpz_cdiv_ui", 
     "extern int __gmpz_si_kronecker(long int arg0, mpz_srcptr arg1) [free function]" : "__gmpz_si_kronecker", 
-    "extern mp_limb_t __gmpn_divrem_2(mp_ptr arg0, mp_size_t arg1, mp_ptr arg2, mp_size_t arg3, mp_srcptr arg4) [free function]" : "__gmpn_divrem_2", 
-    "extern void __gmp_randseed_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]" : "__gmp_randseed_ui", 
+    "extern int __gmpz_congruent_ui_p(mpz_srcptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]" : "__gmpz_congruent_ui_p", 
+    "extern long unsigned int __gmpz_cdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpz_cdiv_ui", 
+    "extern void __gmpz_init_set_ui(mpz_ptr arg0, long unsigned int arg1) [free function]" : "__gmpz_init_set_ui", 
+    "extern mp_limb_t __gmpn_sub_n(mp_ptr arg0, mp_srcptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]" : "__gmpn_sub_n", 
+    "extern void __gmpq_set_num(mpq_ptr arg0, mpz_srcptr arg1) [free function]" : "__gmpq_set_num", 
     "extern int __gmpz_kronecker_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpz_kronecker_ui", 
     "extern void __gmpf_add_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpf_add_ui", 
     "extern void __gmpz_gcdext(mpz_ptr arg0, mpz_ptr arg1, mpz_ptr arg2, mpz_srcptr arg3, mpz_srcptr arg4) [free function]" : "__gmpz_gcdext", 
-    "extern void __gmpz_tdiv_q_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_tdiv_q_2exp", 
+    "extern void __gmpq_get_num(mpz_ptr arg0, mpq_srcptr arg1) [free function]" : "__gmpq_get_num", 
     "extern size_t __gmpf_size(mpf_srcptr arg0) [free function]" : "__gmpf_size", 
-    "extern void __gmpf_swap(mpf_ptr arg0, mpf_ptr arg1) [free function]" : "__gmpf_swap", 
+    "extern void __gmpq_inv(mpq_ptr arg0, mpq_srcptr arg1) [free function]" : "__gmpq_inv", 
     "extern mp_limb_t __gmpn_divrem_1(mp_ptr arg0, mp_size_t arg1, mp_srcptr arg2, mp_size_t arg3, mp_limb_t arg4) [free function]" : "__gmpn_divrem_1", 
     "extern void __gmpq_canonicalize(mpq_ptr arg0) [free function]" : "__gmpq_canonicalize", 
     "long unsigned int __gmpz_popcount(mpz_srcptr __gmp_u) [free function]" : "__gmpz_popcount", 
     "extern void __gmpf_ui_sub(mpf_ptr arg0, long unsigned int arg1, mpf_srcptr arg2) [free function]" : "__gmpf_ui_sub", 
     "extern int __gmpz_cmp_si(mpz_srcptr arg0, long int arg1) [free function]" : "__gmpz_cmp_si", 
     "extern int __gmpz_set_str(mpz_ptr arg0, char const * arg1, int arg2) [free function]" : "__gmpz_set_str", 
-    "extern void __gmpz_realloc2(mpz_ptr arg0, long unsigned int arg1) [free function]" : "__gmpz_realloc2", 
+    "extern int __gmpz_tstbit(mpz_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpz_tstbit", 
     "extern void __gmpz_set_si(mpz_ptr arg0, long int arg1) [free function]" : "__gmpz_set_si", 
-    "int __gmpn_cmp(mp_srcptr __gmp_xp, mp_srcptr __gmp_yp, mp_size_t __gmp_size) [free function]" : "__gmpn_cmp", 
+    "extern void __gmpq_init(mpq_ptr arg0) [free function]" : "__gmpq_init", 
     "extern size_t __gmpz_out_raw(FILE * arg0, mpz_srcptr arg1) [free function]" : "__gmpz_out_raw", 
-    "extern int __gmp_sscanf(char const * arg0, char const * arg1, ...) [free function]" : "__gmp_sscanf", 
+    "extern void __gmpf_trunc(mpf_ptr arg0, mpf_srcptr arg1) [free function]" : "__gmpf_trunc", 
+    "extern mp_limb_t __gmpn_gcdext_1(mp_ptr arg0, mp_ptr arg1, mp_limb_t arg2, mp_limb_t arg3) [free function]" : "__gmpn_gcdext_1", 
     "extern int __gmpz_cmpabs_d(mpz_srcptr arg0, double arg1) [free function]" : "__gmpz_cmpabs_d", 
     "extern void * __gmpz_export(void * arg0, size_t * arg1, int arg2, size_t arg3, int arg4, size_t arg5, mpz_srcptr arg6) [free function]" : "__gmpz_export", 
     "extern double __gmpz_get_d_2exp(long int * arg0, mpz_srcptr arg1) [free function]" : "__gmpz_get_d_2exp", 
@@ -225,86 +227,86 @@ libgmp_lib.undecorated_names = {#mapping between decorated and undecorated names
     "extern size_t __gmpz_sizeinbase(mpz_srcptr arg0, int arg1) [free function]" : "__gmpz_sizeinbase", 
     "extern long unsigned int __gmpz_fdiv_r_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_fdiv_r_ui", 
     "extern void __gmp_randinit_default(__gmp_randstate_struct * arg0) [free function]" : "__gmp_randinit_default", 
+    "mp_limb_t __gmpz_getlimbn(mpz_srcptr __gmp_z, mp_size_t __gmp_n) [free function]" : "__gmpz_getlimbn", 
     "extern long int __gmpf_get_si(mpf_srcptr arg0) [free function]" : "__gmpf_get_si", 
     "extern void __gmpz_init(mpz_ptr arg0) [free function]" : "__gmpz_init", 
     "extern void __gmpf_div_2exp(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpf_div_2exp", 
     "extern void __gmpf_set_si(mpf_ptr arg0, long int arg1) [free function]" : "__gmpf_set_si", 
     "extern int __gmpq_equal(mpq_srcptr arg0, mpq_srcptr arg1) [free function]" : "__gmpq_equal", 
-    "extern void __gmpq_set_num(mpq_ptr arg0, mpz_srcptr arg1) [free function]" : "__gmpq_set_num", 
-    "extern void * __gmpz_realloc(mpz_ptr arg0, mp_size_t arg1) [free function]" : "__gmpz_realloc", 
+    "extern void __gmpz_rrandomb(mpz_ptr arg0, __gmp_randstate_struct * arg1, long unsigned int arg2) [free function]" : "__gmpz_rrandomb", 
+    "extern int __gmpf_cmp_si(mpf_srcptr arg0, long int arg1) [free function]" : "__gmpf_cmp_si", 
     "extern long unsigned int __gmpz_scan0(mpz_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpz_scan0", 
-    "extern long unsigned int __gmpz_scan1(mpz_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpz_scan1", 
+    "extern void __gmpz_init2(mpz_ptr arg0, long unsigned int arg1) [free function]" : "__gmpz_init2", 
     "extern void __gmpz_random2(mpz_ptr arg0, mp_size_t arg1) [free function]" : "__gmpz_random2", 
     "extern mp_size_t __gmpn_pow_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3, mp_ptr arg4) [free function]" : "__gmpn_pow_1", 
+    "extern void __gmpz_gcd(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_gcd", 
     "extern void __gmpf_mul_2exp(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpf_mul_2exp", 
-    "extern long unsigned int __gmpn_scan1(mp_srcptr arg0, long unsigned int arg1) [free function]" : "__gmpn_scan1", 
-    "extern int __gmpz_fits_slong_p(mpz_srcptr arg0) [free function]" : "__gmpz_fits_slong_p", 
+    "extern double __gmpq_get_d(mpq_srcptr arg0) [free function]" : "__gmpq_get_d", 
     "extern void __gmpf_mul(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]" : "__gmpf_mul", 
     "extern void __gmpf_div_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpf_div_ui", 
-    "extern long unsigned int __gmpn_popcount(mp_srcptr arg0, mp_size_t arg1) [free function]" : "__gmpn_popcount", 
-    "extern int __gmpz_fits_sshort_p(mpz_srcptr arg0) [free function]" : "__gmpz_fits_sshort_p", 
-    "extern mp_limb_t __gmpn_sub_n(mp_ptr arg0, mp_srcptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]" : "__gmpn_sub_n", 
-    "mp_limb_t __gmpz_getlimbn(mpz_srcptr __gmp_z, mp_size_t __gmp_n) [free function]" : "__gmpz_getlimbn", 
     "extern void __gmpq_mul_2exp(mpq_ptr arg0, mpq_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpq_mul_2exp", 
+    "extern size_t __gmpz_out_str(FILE * arg0, int arg1, mpz_srcptr arg2) [free function]" : "__gmpz_out_str", 
+    "extern mp_limb_t __gmpn_divrem_2(mp_ptr arg0, mp_size_t arg1, mp_ptr arg2, mp_size_t arg3, mp_srcptr arg4) [free function]" : "__gmpn_divrem_2", 
+    "extern int __gmpz_cmpabs(mpz_srcptr arg0, mpz_srcptr arg1) [free function]" : "__gmpz_cmpabs", 
+    "extern void __gmpz_powm_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2, mpz_srcptr arg3) [free function]" : "__gmpz_powm_ui", 
     "extern size_t __gmpq_out_str(FILE * arg0, int arg1, mpq_srcptr arg2) [free function]" : "__gmpq_out_str", 
     "void __gmpz_neg(mpz_ptr __gmp_w, mpz_srcptr __gmp_u) [free function]" : "__gmpz_neg", 
+    "extern void __gmpf_swap(mpf_ptr arg0, mpf_ptr arg1) [free function]" : "__gmpf_swap", 
+    "extern void __gmp_randseed_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]" : "__gmp_randseed_ui", 
+    "extern void __gmpz_sqrtrem(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_sqrtrem", 
     "extern long unsigned int __gmpz_tdiv_qr_ui(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]" : "__gmpz_tdiv_qr_ui", 
     "extern mp_limb_t __gmpn_bdivmod(mp_ptr arg0, mp_ptr arg1, mp_size_t arg2, mp_srcptr arg3, mp_size_t arg4, long unsigned int arg5) [free function]" : "__gmpn_bdivmod", 
-    "extern void __gmpz_powm_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2, mpz_srcptr arg3) [free function]" : "__gmpz_powm_ui", 
+    "extern void __gmpn_random(mp_ptr arg0, mp_size_t arg1) [free function]" : "__gmpn_random", 
     "extern void __gmpq_set_z(mpq_ptr arg0, mpz_srcptr arg1) [free function]" : "__gmpq_set_z", 
-    "extern void __gmpz_set(mpz_ptr arg0, mpz_srcptr arg1) [free function]" : "__gmpz_set", 
-    "extern void __gmpz_tdiv_r_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_tdiv_r_2exp", 
+    "extern void __gmpz_cdiv_q(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_cdiv_q", 
     "extern long int __gmpz_get_si(mpz_srcptr arg0) [free function]" : "__gmpz_get_si", 
     "extern void __gmpf_init_set(mpf_ptr arg0, mpf_srcptr arg1) [free function]" : "__gmpf_init_set", 
     "extern void __gmpf_init_set_d(mpf_ptr arg0, double arg1) [free function]" : "__gmpf_init_set_d", 
-    "extern void __gmpf_reldiff(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]" : "__gmpf_reldiff", 
-    "extern long unsigned int __gmpz_cdiv_r_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_cdiv_r_ui", 
-    "extern void __gmpz_sqrt(mpz_ptr arg0, mpz_srcptr arg1) [free function]" : "__gmpz_sqrt", 
-    "extern long unsigned int __gmpf_get_ui(mpf_srcptr arg0) [free function]" : "__gmpf_get_ui", 
+    "extern int __gmpf_cmp(mpf_srcptr arg0, mpf_srcptr arg1) [free function]" : "__gmpf_cmp", 
+    "extern int __gmpf_eq(mpf_srcptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpf_eq", 
+    "extern long unsigned int __gmpn_popcount(mp_srcptr arg0, mp_size_t arg1) [free function]" : "__gmpn_popcount", 
+    "extern void __gmpf_ceil(mpf_ptr arg0, mpf_srcptr arg1) [free function]" : "__gmpf_ceil", 
     "mp_limb_t __gmpn_add_1(mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n) [free function]" : "__gmpn_add_1", 
-    "extern void __gmp_set_memory_functions(void * (*)( ::size_t ) * arg0, void * (*)( void *,::size_t,::size_t ) * arg1, void (*)( void *,::size_t ) * arg2) [free function]" : "__gmp_set_memory_functions", 
     "extern void __gmpz_fib2_ui(mpz_ptr arg0, mpz_ptr arg1, long unsigned int arg2) [free function]" : "__gmpz_fib2_ui", 
     "extern int __gmp_printf(char const * arg0, ...) [free function]" : "__gmp_printf", 
-    "extern void __gmpz_sub(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_sub", 
+    "extern void __gmpq_set_f(mpq_ptr arg0, mpf_srcptr arg1) [free function]" : "__gmpq_set_f", 
     "extern void __gmpf_clear(mpf_ptr arg0) [free function]" : "__gmpf_clear", 
     "extern size_t __gmpn_get_str(unsigned char * arg0, int arg1, mp_ptr arg2, mp_size_t arg3) [free function]" : "__gmpn_get_str", 
     "extern int __gmp_fscanf(FILE * arg0, char const * arg1, ...) [free function]" : "__gmp_fscanf", 
+    "extern int __gmpz_ui_kronecker(long unsigned int arg0, mpz_srcptr arg1) [free function]" : "__gmpz_ui_kronecker", 
     "mp_limb_t __gmpn_add(mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize) [free function]" : "__gmpn_add", 
-    "extern long unsigned int __gmpz_cdiv_qr_ui(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]" : "__gmpz_cdiv_qr_ui", 
+    "mp_limb_t __gmpn_sub(mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize) [free function]" : "__gmpn_sub", 
     "extern void __gmpz_bin_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_bin_ui", 
-    "extern mp_size_t __gmpn_gcd(mp_ptr arg0, mp_ptr arg1, mp_size_t arg2, mp_ptr arg3, mp_size_t arg4) [free function]" : "__gmpn_gcd", 
-    "extern void __gmpz_clear(mpz_ptr arg0) [free function]" : "__gmpz_clear", 
+    "extern void __gmpz_fdiv_q_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_fdiv_q_2exp", 
     "extern void __gmpf_dump(mpf_srcptr arg0) [free function]" : "__gmpf_dump", 
-    "extern void __gmp_randinit_mt(__gmp_randstate_struct * arg0) [free function]" : "__gmp_randinit_mt", 
+    "extern void __gmpz_tdiv_r_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_tdiv_r_2exp", 
     "extern void __gmpz_submul_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_submul_ui", 
-    "extern mp_limb_t __gmpn_divexact_by3c(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]" : "__gmpn_divexact_by3c", 
+    "extern long unsigned int __gmpz_cdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_cdiv_q_ui", 
     "extern void __gmpz_dump(mpz_srcptr arg0) [free function]" : "__gmpz_dump", 
-    "extern int __gmpz_jacobi(mpz_srcptr arg0, mpz_srcptr arg1) [free function]" : "__gmpz_jacobi", 
+    "extern void __gmp_randclear(__gmp_randstate_struct * arg0) [free function]" : "__gmp_randclear", 
     "__gmp_version [variable]" : "__gmp_version", 
-    "extern int __gmpf_integer_p(mpf_srcptr arg0) [free function]" : "__gmpf_integer_p", 
+    "extern long unsigned int __gmpz_remove(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_remove", 
     "extern void __gmpf_set_default_prec(long unsigned int arg0) [free function]" : "__gmpf_set_default_prec", 
     "extern int __gmpz_congruent_p(mpz_srcptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]" : "__gmpz_congruent_p", 
-    "extern void __gmpn_random(mp_ptr arg0, mp_size_t arg1) [free function]" : "__gmpn_random", 
-    "extern void __gmpf_sub_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpf_sub_ui", 
+    "extern void __gmpf_pow_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpf_pow_ui", 
     "extern void __gmpz_lcm_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpz_lcm_ui", 
     "extern void __gmpz_rootrem(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]" : "__gmpz_rootrem", 
     "extern void __gmpz_lucnum2_ui(mpz_ptr arg0, mpz_ptr arg1, long unsigned int arg2) [free function]" : "__gmpz_lucnum2_ui", 
-    "extern void __gmpf_set(mpf_ptr arg0, mpf_srcptr arg1) [free function]" : "__gmpf_set", 
+    "extern void __gmpz_set_ui(mpz_ptr arg0, long unsigned int arg1) [free function]" : "__gmpz_set_ui", 
     "void __gmpq_abs(mpq_ptr __gmp_w, mpq_srcptr __gmp_u) [free function]" : "__gmpq_abs", 
     "extern long unsigned int __gmpn_hamdist(mp_srcptr arg0, mp_srcptr arg1, mp_size_t arg2) [free function]" : "__gmpn_hamdist", 
     "extern int __gmpf_fits_ushort_p(mpf_srcptr arg0) [free function]" : "__gmpf_fits_ushort_p", 
-    "extern size_t __gmpz_out_str(FILE * arg0, int arg1, mpz_srcptr arg2) [free function]" : "__gmpz_out_str", 
+    "extern void __gmpz_set(mpz_ptr arg0, mpz_srcptr arg1) [free function]" : "__gmpz_set", 
     "extern void __gmpq_set_den(mpq_ptr arg0, mpz_srcptr arg1) [free function]" : "__gmpq_set_den", 
     "extern void __gmpf_abs(mpf_ptr arg0, mpf_srcptr arg1) [free function]" : "__gmpf_abs", 
     "extern void __gmp_get_memory_functions(void * (*)( ::size_t ) * * arg0, void * (*)( void *,::size_t,::size_t ) * * arg1, void (*)( void *,::size_t ) * * arg2) [free function]" : "__gmp_get_memory_functions", 
     "extern void __gmpf_ui_div(mpf_ptr arg0, long unsigned int arg1, mpf_srcptr arg2) [free function]" : "__gmpf_ui_div", 
-    "extern void __gmpq_get_num(mpz_ptr arg0, mpq_srcptr arg1) [free function]" : "__gmpq_get_num", 
+    "extern mp_size_t __gmpn_gcd(mp_ptr arg0, mp_ptr arg1, mp_size_t arg2, mp_ptr arg3, mp_size_t arg4) [free function]" : "__gmpn_gcd", 
     "extern mp_limb_t __gmpn_add_n(mp_ptr arg0, mp_srcptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]" : "__gmpn_add_n", 
-    "extern mp_limb_t __gmpn_mul(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_srcptr arg3, mp_size_t arg4) [free function]" : "__gmpn_mul", 
-    "extern int __gmpz_perfect_power_p(mpz_srcptr arg0) [free function]" : "__gmpz_perfect_power_p", 
+    "extern size_t __gmpz_inp_raw(mpz_ptr arg0, FILE * arg1) [free function]" : "__gmpz_inp_raw", 
     "int __gmpz_fits_ulong_p(mpz_srcptr __gmp_z) [free function]" : "__gmpz_fits_ulong_p", 
     "extern void __gmpq_clear(mpq_ptr arg0) [free function]" : "__gmpq_clear", 
-    "extern void __gmpf_ceil(mpf_ptr arg0, mpf_srcptr arg1) [free function]" : "__gmpf_ceil", 
+    "extern long unsigned int __gmpf_get_ui(mpf_srcptr arg0) [free function]" : "__gmpf_get_ui", 
     "extern void __gmpz_fdiv_qr(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]" : "__gmpz_fdiv_qr", 
     "extern void __gmpf_mul_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]" : "__gmpf_mul_ui", 
     "extern void __gmpz_combit(mpz_ptr arg0, long unsigned int arg1) [free function]" : "__gmpz_combit", 
@@ -313,58 +315,61 @@ libgmp_lib.undecorated_names = {#mapping between decorated and undecorated names
     "extern int __gmpf_init_set_str(mpf_ptr arg0, char const * arg1, int arg2) [free function]" : "__gmpf_init_set_str", 
     "__gmpf_get_d" : "extern double __gmpf_get_d(mpf_srcptr arg0) [free function]", 
     "__gmpf_cmp_ui" : "extern int __gmpf_cmp_ui(mpf_srcptr arg0, long unsigned int arg1) [free function]", 
-    "__gmpz_fac_ui" : "extern void __gmpz_fac_ui(mpz_ptr arg0, long unsigned int arg1) [free function]", 
+    "__gmpz_mul_ui" : "extern void __gmpz_mul_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpz_and" : "extern void __gmpz_and(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
     "__gmpf_urandomb" : "extern void __gmpf_urandomb(__mpf_struct * arg0, __gmp_randstate_struct * arg1, long unsigned int arg2) [free function]", 
-    "__gmpn_mul_1" : "extern mp_limb_t __gmpn_mul_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]", 
-    "__gmpz_mul_2exp" : "extern void __gmpz_mul_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
+    "__gmpz_tdiv_q_ui" : "extern long unsigned int __gmpz_tdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpz_clrbit" : "extern void __gmpz_clrbit(mpz_ptr arg0, long unsigned int arg1) [free function]", 
     "__gmpz_cdiv_r_2exp" : "extern void __gmpz_cdiv_r_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpz_lcm" : "extern void __gmpz_lcm(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
-    "__gmpz_gcd" : "extern void __gmpz_gcd(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
+    "__gmpf_get_d_2exp" : "extern double __gmpf_get_d_2exp(long int * arg0, mpf_srcptr arg1) [free function]", 
     "__gmpz_divisible_2exp_p" : "extern int __gmpz_divisible_2exp_p(mpz_srcptr arg0, long unsigned int arg1) [free function]", 
     "__gmpz_congruent_2exp_p" : "extern int __gmpz_congruent_2exp_p(mpz_srcptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpz_pow_ui" : "extern void __gmpz_pow_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpq_neg" : "void __gmpq_neg(mpq_ptr __gmp_w, mpq_srcptr __gmp_u) [free function]", 
+    "__gmpf_reldiff" : "extern void __gmpf_reldiff(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]", 
     "__gmpz_import" : "extern void __gmpz_import(mpz_ptr arg0, size_t arg1, int arg2, size_t arg3, int arg4, size_t arg5, void const * arg6) [free function]", 
-    "__gmpz_fdiv_ui" : "extern long unsigned int __gmpz_fdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]", 
+    "__gmpz_fac_ui" : "extern void __gmpz_fac_ui(mpz_ptr arg0, long unsigned int arg1) [free function]", 
     "__gmpz_root" : "extern int __gmpz_root(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpz_fdiv_q" : "extern void __gmpz_fdiv_q(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
     "__gmpz_fdiv_r" : "extern void __gmpz_fdiv_r(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
-    "__gmpq_inp_str" : "extern size_t __gmpq_inp_str(mpq_ptr arg0, FILE * arg1, int arg2) [free function]", 
-    "__gmpz_ui_kronecker" : "extern int __gmpz_ui_kronecker(long unsigned int arg0, mpz_srcptr arg1) [free function]", 
-    "__gmpz_remove" : "extern long unsigned int __gmpz_remove(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
-    "__gmpz_tstbit" : "extern int __gmpz_tstbit(mpz_srcptr arg0, long unsigned int arg1) [free function]", 
+    "__gmp_set_memory_functions" : "extern void __gmp_set_memory_functions(void * (*)( ::size_t ) * arg0, void * (*)( void *,::size_t,::size_t ) * arg1, void (*)( void *,::size_t ) * arg2) [free function]", 
+    "__gmpz_tdiv_r_ui" : "extern long unsigned int __gmpz_tdiv_r_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
+    "__gmpz_cdiv_r_ui" : "extern long unsigned int __gmpz_cdiv_r_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
+    "__gmpz_realloc2" : "extern void __gmpz_realloc2(mpz_ptr arg0, long unsigned int arg1) [free function]", 
     "__gmpn_tdiv_qr" : "extern void __gmpn_tdiv_qr(mp_ptr arg0, mp_ptr arg1, mp_size_t arg2, mp_srcptr arg3, mp_size_t arg4, mp_srcptr arg5, mp_size_t arg6) [free function]", 
     "__gmpz_fdiv_r_2exp" : "extern void __gmpz_fdiv_r_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
-    "__gmpf_div" : "extern void __gmpf_div(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]", 
+    "__gmpz_sqrt" : "extern void __gmpz_sqrt(mpz_ptr arg0, mpz_srcptr arg1) [free function]", 
+    "__gmpq_add" : "extern void __gmpq_add(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]", 
     "__gmpq_div" : "extern void __gmpq_div(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]", 
-    "__gmpz_ui_pow_ui" : "extern void __gmpz_ui_pow_ui(mpz_ptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]", 
+    "__gmpf_get_default_prec" : "extern long unsigned int __gmpf_get_default_prec() [free function]", 
     "__gmpq_sub" : "extern void __gmpq_sub(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]", 
     "__gmpf_set_ui" : "extern void __gmpf_set_ui(mpf_ptr arg0, long unsigned int arg1) [free function]", 
-    "__gmpn_lshift" : "extern mp_limb_t __gmpn_lshift(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, unsigned int arg3) [free function]", 
+    "__gmpz_get_d" : "extern double __gmpz_get_d(mpz_srcptr arg0) [free function]", 
     "__gmpz_add" : "extern void __gmpz_add(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
-    "__gmpf_trunc" : "extern void __gmpf_trunc(mpf_ptr arg0, mpf_srcptr arg1) [free function]", 
+    "__gmpn_cmp" : "int __gmpn_cmp(mp_srcptr __gmp_xp, mp_srcptr __gmp_yp, mp_size_t __gmp_size) [free function]", 
     "__gmpz_divexact_ui" : "extern void __gmpz_divexact_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpz_gcd_ui" : "extern long unsigned int __gmpz_gcd_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
-    "__gmpz_cdiv_r" : "extern void __gmpz_cdiv_r(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
     "__gmpz_inp_str" : "extern size_t __gmpz_inp_str(mpz_ptr arg0, FILE * arg1, int arg2) [free function]", 
-    "__gmpq_get_d" : "extern double __gmpq_get_d(mpq_srcptr arg0) [free function]", 
-    "__gmp_sprintf" : "extern int __gmp_sprintf(char * arg0, char const * arg1, ...) [free function]", 
-    "__gmpn_random2" : "extern void __gmpn_random2(mp_ptr arg0, mp_size_t arg1) [free function]", 
+    "__gmp_snprintf" : "extern int __gmp_snprintf(char * arg0, size_t arg1, char const * arg2, ...) [free function]", 
+    "__gmpf_set_prec_raw" : "extern void __gmpf_set_prec_raw(mpf_ptr arg0, long unsigned int arg1) [free function]", 
     "__gmpz_cdiv_q_2exp" : "extern void __gmpz_cdiv_q_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
-    "__gmpf_eq" : "extern int __gmpf_eq(mpf_srcptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]", 
+    "__gmpz_fits_sshort_p" : "extern int __gmpz_fits_sshort_p(mpz_srcptr arg0) [free function]", 
     "__gmpn_divrem" : "extern mp_limb_t __gmpn_divrem(mp_ptr arg0, mp_size_t arg1, mp_ptr arg2, mp_size_t arg3, mp_srcptr arg4, mp_size_t arg5) [free function]", 
-    "__gmpz_cdiv_q" : "extern void __gmpz_cdiv_q(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
-    "__gmpz_abs" : "void __gmpz_abs(mpz_ptr __gmp_w, mpz_srcptr __gmp_u) [free function]", 
+    "__gmpz_submul" : "extern void __gmpz_submul(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
+    "__gmpz_init_set" : "extern void __gmpz_init_set(mpz_ptr arg0, mpz_srcptr arg1) [free function]", 
     "__gmpz_xor" : "extern void __gmpz_xor(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
     "__gmpz_init_set_d" : "extern void __gmpz_init_set_d(mpz_ptr arg0, double arg1) [free function]", 
     "__gmpz_fits_ushort_p" : "int __gmpz_fits_ushort_p(mpz_srcptr __gmp_z) [free function]", 
-    "__gmpq_set_f" : "extern void __gmpq_set_f(mpq_ptr arg0, mpf_srcptr arg1) [free function]", 
+    "__gmp_sscanf" : "extern int __gmp_sscanf(char const * arg0, char const * arg1, ...) [free function]", 
+    "__gmpz_mul_2exp" : "extern void __gmpz_mul_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
+    "__gmpz_sub" : "extern void __gmpz_sub(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
     "__gmpf_fits_ulong_p" : "extern int __gmpf_fits_ulong_p(mpf_srcptr arg0) [free function]", 
+    "__gmpz_ui_pow_ui" : "extern void __gmpz_ui_pow_ui(mpz_ptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]", 
+    "__gmp_urandomm_ui" : "extern long unsigned int __gmp_urandomm_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]", 
     "__gmpz_get_ui" : "long unsigned int __gmpz_get_ui(mpz_srcptr __gmp_z) [free function]", 
     "__gmpz_cmpabs_ui" : "extern int __gmpz_cmpabs_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]", 
-    "__gmp_urandomm_ui" : "extern long unsigned int __gmp_urandomm_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]", 
+    "__gmpz_tdiv_q_2exp" : "extern void __gmpz_tdiv_q_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpz_perfect_square_p" : "int __gmpz_perfect_square_p(mpz_srcptr __gmp_a) [free function]", 
     "__gmpq_set_d" : "extern void __gmpq_set_d(mpq_ptr arg0, double arg1) [free function]", 
     "__gmpz_cmp_d" : "extern int __gmpz_cmp_d(mpz_srcptr arg0, double arg1) [free function]", 
@@ -373,13 +378,13 @@ libgmp_lib.undecorated_names = {#mapping between decorated and undecorated names
     "__gmpz_probab_prime_p" : "extern int __gmpz_probab_prime_p(mpz_srcptr arg0, int arg1) [free function]", 
     "__gmpn_rshift" : "extern mp_limb_t __gmpn_rshift(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, unsigned int arg3) [free function]", 
     "__gmpz_array_init" : "extern void __gmpz_array_init(mpz_ptr arg0, mp_size_t arg1, mp_size_t arg2) [free function]", 
-    "__gmpf_get_default_prec" : "extern long unsigned int __gmpf_get_default_prec() [free function]", 
+    "__gmpz_fits_uint_p" : "int __gmpz_fits_uint_p(mpz_srcptr __gmp_z) [free function]", 
     "__gmpf_random2" : "extern void __gmpf_random2(mpf_ptr arg0, mp_size_t arg1, mp_exp_t arg2) [free function]", 
     "__gmp_randinit_set" : "extern void __gmp_randinit_set(__gmp_randstate_struct * arg0, __gmp_randstate_struct const * arg1) [free function]", 
-    "__gmpq_inv" : "extern void __gmpq_inv(mpq_ptr arg0, mpq_srcptr arg1) [free function]", 
+    "__gmpz_tdiv_qr" : "extern void __gmpz_tdiv_qr(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]", 
     "__gmpn_set_str" : "extern mp_size_t __gmpn_set_str(mp_ptr arg0, unsigned char const * arg1, size_t arg2, int arg3) [free function]", 
-    "__gmp_randinit" : "extern void __gmp_randinit(__gmp_randstate_struct * arg0, gmp_randalg_t arg1, ...) [free function]", 
-    "__gmpn_sqrtrem" : "extern mp_size_t __gmpn_sqrtrem(mp_ptr arg0, mp_ptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]", 
+    "__gmpn_scan0" : "extern long unsigned int __gmpn_scan0(mp_srcptr arg0, long unsigned int arg1) [free function]", 
+    "__gmpz_cdiv_r" : "extern void __gmpz_cdiv_r(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
     "__gmpz_fdiv_qr_ui" : "extern long unsigned int __gmpz_fdiv_qr_ui(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]", 
     "__gmpf_init_set_ui" : "extern void __gmpf_init_set_ui(mpf_ptr arg0, long unsigned int arg1) [free function]", 
     "__gmpn_mul_n" : "extern void __gmpn_mul_n(mp_ptr arg0, mp_srcptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]", 
@@ -388,88 +393,88 @@ libgmp_lib.undecorated_names = {#mapping between decorated and undecorated names
     "__gmpq_set_si" : "extern void __gmpq_set_si(mpq_ptr arg0, long int arg1, long unsigned int arg2) [free function]", 
     "__gmpq_set_ui" : "extern void __gmpq_set_ui(mpq_ptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]", 
     "__gmpf_sqrt_ui" : "extern void __gmpf_sqrt_ui(mpf_ptr arg0, long unsigned int arg1) [free function]", 
-    "__gmpz_init_set_ui" : "extern void __gmpz_init_set_ui(mpz_ptr arg0, long unsigned int arg1) [free function]", 
-    "__gmpz_divisible_ui_p" : "extern int __gmpz_divisible_ui_p(mpz_srcptr arg0, long unsigned int arg1) [free function]", 
+    "__gmpq_inp_str" : "extern size_t __gmpq_inp_str(mpq_ptr arg0, FILE * arg1, int arg2) [free function]", 
+    "__gmpf_fits_sint_p" : "extern int __gmpf_fits_sint_p(mpf_srcptr arg0) [free function]", 
     "__gmpq_swap" : "extern void __gmpq_swap(mpq_ptr arg0, mpq_ptr arg1) [free function]", 
     "__gmpf_set_str" : "extern int __gmpf_set_str(mpf_ptr arg0, char const * arg1, int arg2) [free function]", 
     "__gmpz_sub_ui" : "extern void __gmpz_sub_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpz_divexact" : "extern void __gmpz_divexact(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
     "__gmpz_com" : "extern void __gmpz_com(mpz_ptr arg0, mpz_srcptr arg1) [free function]", 
     "__gmpz_ior" : "extern void __gmpz_ior(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
-    "__gmpz_init_set" : "extern void __gmpz_init_set(mpz_ptr arg0, mpz_srcptr arg1) [free function]", 
-    "__gmpz_cdiv_q_ui" : "extern long unsigned int __gmpz_cdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
-    "__gmpz_submul" : "extern void __gmpz_submul(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
+    "__gmpz_fits_slong_p" : "extern int __gmpz_fits_slong_p(mpz_srcptr arg0) [free function]", 
     "__gmp_asprintf" : "extern int __gmp_asprintf(char * * arg0, char const * arg1, ...) [free function]", 
     "__gmp_bits_per_limb" : "__gmp_bits_per_limb [variable]", 
-    "__gmp_scanf" : "extern int __gmp_scanf(char const * arg0, ...) [free function]", 
     "__gmpf_set_prec" : "extern void __gmpf_set_prec(mpf_ptr arg0, long unsigned int arg1) [free function]", 
     "__gmpz_init_set_str" : "extern int __gmpz_init_set_str(mpz_ptr arg0, char const * arg1, int arg2) [free function]", 
     "__gmpn_sub_1" : "mp_limb_t __gmpn_sub_1(mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n) [free function]", 
     "__gmpz_millerrabin" : "extern int __gmpz_millerrabin(mpz_srcptr arg0, int arg1) [free function]", 
     "__gmpz_mod" : "extern void __gmpz_mod(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
     "__gmpz_invert" : "extern int __gmpz_invert(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
+    "__gmp_randinit_mt" : "extern void __gmp_randinit_mt(__gmp_randstate_struct * arg0) [free function]", 
     "__gmpf_set_d" : "extern void __gmpf_set_d(mpf_ptr arg0, double arg1) [free function]", 
-    "__gmpf_fits_uint_p" : "extern int __gmpf_fits_uint_p(mpf_srcptr arg0) [free function]", 
+    "__gmpf_sub" : "extern void __gmpf_sub(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]", 
     "__gmpn_addmul_1" : "extern mp_limb_t __gmpn_addmul_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]", 
     "__gmpf_set_z" : "extern void __gmpf_set_z(mpf_ptr arg0, mpz_srcptr arg1) [free function]", 
     "__gmpz_ui_sub" : "extern void __gmpz_ui_sub(mpz_ptr arg0, long unsigned int arg1, mpz_srcptr arg2) [free function]", 
-    "__gmpz_get_d" : "extern double __gmpz_get_d(mpz_srcptr arg0) [free function]", 
-    "__gmpf_set_prec_raw" : "extern void __gmpf_set_prec_raw(mpf_ptr arg0, long unsigned int arg1) [free function]", 
-    "__gmpf_cmp" : "extern int __gmpf_cmp(mpf_srcptr arg0, mpf_srcptr arg1) [free function]", 
+    "__gmpf_div" : "extern void __gmpf_div(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]", 
+    "__gmpn_random2" : "extern void __gmpn_random2(mp_ptr arg0, mp_size_t arg1) [free function]", 
+    "__gmpn_divexact_by3c" : "extern mp_limb_t __gmpn_divexact_by3c(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]", 
     "__gmpz_lucnum_ui" : "extern void __gmpz_lucnum_ui(mpz_ptr arg0, long unsigned int arg1) [free function]", 
     "__gmpf_set_q" : "extern void __gmpf_set_q(mpf_ptr arg0, mpq_srcptr arg1) [free function]", 
-    "__gmpn_gcd_1" : "extern mp_limb_t __gmpn_gcd_1(mp_srcptr arg0, mp_size_t arg1, mp_limb_t arg2) [free function]", 
-    "__gmpz_tdiv_qr" : "extern void __gmpz_tdiv_qr(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]", 
+    "__gmpz_random" : "extern void __gmpz_random(mpz_ptr arg0, mp_size_t arg1) [free function]", 
+    "__gmp_scanf" : "extern int __gmp_scanf(char const * arg0, ...) [free function]", 
+    "__gmpn_sqrtrem" : "extern mp_size_t __gmpn_sqrtrem(mp_ptr arg0, mp_ptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]", 
     "__gmpq_set_str" : "extern int __gmpq_set_str(mpq_ptr arg0, char const * arg1, int arg2) [free function]", 
     "__gmpf_fits_slong_p" : "extern int __gmpf_fits_slong_p(mpf_srcptr arg0) [free function]", 
     "__gmpz_setbit" : "extern void __gmpz_setbit(mpz_ptr arg0, long unsigned int arg1) [free function]", 
     "__gmp_randinit_lc_2exp" : "extern void __gmp_randinit_lc_2exp(__gmp_randstate_struct * arg0, mpz_srcptr arg1, long unsigned int arg2, long unsigned int arg3) [free function]", 
     "__gmp_randinit_lc_2exp_size" : "extern int __gmp_randinit_lc_2exp_size(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]", 
-    "__gmpf_cmp_si" : "extern int __gmpf_cmp_si(mpf_srcptr arg0, long int arg1) [free function]", 
-    "__gmp_randclear" : "extern void __gmp_randclear(__gmp_randstate_struct * arg0) [free function]", 
+    "__gmpz_set_d" : "extern void __gmpz_set_d(mpz_ptr arg0, double arg1) [free function]", 
+    "__gmpz_jacobi" : "extern int __gmpz_jacobi(mpz_srcptr arg0, mpz_srcptr arg1) [free function]", 
     "__gmpz_set_f" : "extern void __gmpz_set_f(mpz_ptr arg0, mpf_srcptr arg1) [free function]", 
     "__gmpf_out_str" : "extern size_t __gmpf_out_str(FILE * arg0, int arg1, size_t arg2, mpf_srcptr arg3) [free function]", 
     "__gmpf_fits_sshort_p" : "extern int __gmpf_fits_sshort_p(mpf_srcptr arg0) [free function]", 
     "__gmpq_div_2exp" : "extern void __gmpq_div_2exp(mpq_ptr arg0, mpq_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpf_get_prec" : "extern long unsigned int __gmpf_get_prec(mpf_srcptr arg0) [free function]", 
-    "__gmpq_init" : "extern void __gmpq_init(mpq_ptr arg0) [free function]", 
     "__gmpz_kronecker_si" : "extern int __gmpz_kronecker_si(mpz_srcptr arg0, long int arg1) [free function]", 
-    "__gmpz_fits_sint_p" : "extern int __gmpz_fits_sint_p(mpz_srcptr arg0) [free function]", 
-    "__gmp_snprintf" : "extern int __gmp_snprintf(char * arg0, size_t arg1, char const * arg2, ...) [free function]", 
+    "__gmpf_floor" : "extern void __gmpf_floor(mpf_ptr arg0, mpf_srcptr arg1) [free function]", 
+    "__gmpq_cmp" : "extern int __gmpq_cmp(mpq_srcptr arg0, mpq_srcptr arg1) [free function]", 
+    "__gmpf_integer_p" : "extern int __gmpf_integer_p(mpf_srcptr arg0) [free function]", 
     "__gmpz_powm" : "extern void __gmpz_powm(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]", 
     "__gmpz_hamdist" : "extern long unsigned int __gmpz_hamdist(mpz_srcptr arg0, mpz_srcptr arg1) [free function]", 
     "__gmpz_fib_ui" : "extern void __gmpz_fib_ui(mpz_ptr arg0, long unsigned int arg1) [free function]", 
     "__gmpz_cmp_ui" : "extern int __gmpz_cmp_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]", 
     "__gmpn_submul_1" : "extern mp_limb_t __gmpn_submul_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]", 
     "__gmpf_init2" : "extern void __gmpf_init2(mpf_ptr arg0, long unsigned int arg1) [free function]", 
-    "__gmpz_cmpabs" : "extern int __gmpz_cmpabs(mpz_srcptr arg0, mpz_srcptr arg1) [free function]", 
-    "__gmpz_tdiv_q_ui" : "extern long unsigned int __gmpz_tdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
+    "__gmpn_mul_1" : "extern mp_limb_t __gmpn_mul_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]", 
     "__gmpn_mod_1" : "extern mp_limb_t __gmpn_mod_1(mp_srcptr arg0, mp_size_t arg1, mp_limb_t arg2) [free function]", 
     "__gmpz_size" : "size_t __gmpz_size(mpz_srcptr __gmp_z) [free function]", 
     "__gmpq_get_den" : "extern void __gmpq_get_den(mpz_ptr arg0, mpq_srcptr arg1) [free function]", 
     "__gmpn_preinv_mod_1" : "extern mp_limb_t __gmpn_preinv_mod_1(mp_srcptr arg0, mp_size_t arg1, mp_limb_t arg2, mp_limb_t arg3) [free function]", 
     "__gmpz_tdiv_ui" : "extern long unsigned int __gmpz_tdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]", 
-    "__gmpz_fits_uint_p" : "int __gmpz_fits_uint_p(mpz_srcptr __gmp_z) [free function]", 
+    "__gmpn_gcd_1" : "extern mp_limb_t __gmpn_gcd_1(mp_srcptr arg0, mp_size_t arg1, mp_limb_t arg2) [free function]", 
+    "__gmp_randinit" : "extern void __gmp_randinit(__gmp_randstate_struct * arg0, gmp_randalg_t arg1, ...) [free function]", 
     "__gmpf_init" : "extern void __gmpf_init(mpf_ptr arg0) [free function]", 
-    "__gmpf_get_d_2exp" : "extern double __gmpf_get_d_2exp(long int * arg0, mpf_srcptr arg1) [free function]", 
     "__gmpz_mul" : "extern void __gmpz_mul(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
-    "__gmpq_add" : "extern void __gmpq_add(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]", 
+    "__gmpn_scan1" : "extern long unsigned int __gmpn_scan1(mp_srcptr arg0, long unsigned int arg1) [free function]", 
     "__gmpq_set" : "extern void __gmpq_set(mpq_ptr arg0, mpq_srcptr arg1) [free function]", 
-    "__gmpn_scan0" : "extern long unsigned int __gmpn_scan0(mp_srcptr arg0, long unsigned int arg1) [free function]", 
-    "__gmpn_sub" : "mp_limb_t __gmpn_sub(mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize) [free function]", 
-    "__gmpz_fdiv_q_2exp" : "extern void __gmpz_fdiv_q_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
-    "__gmpz_sqrtrem" : "extern void __gmpz_sqrtrem(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2) [free function]", 
+    "__gmpz_fits_sint_p" : "extern int __gmpz_fits_sint_p(mpz_srcptr arg0) [free function]", 
+    "__gmpz_cdiv_qr_ui" : "extern long unsigned int __gmpz_cdiv_qr_ui(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]", 
+    "__gmpz_clear" : "extern void __gmpz_clear(mpz_ptr arg0) [free function]", 
+    "__gmpn_mul" : "extern mp_limb_t __gmpn_mul(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_srcptr arg3, mp_size_t arg4) [free function]", 
     "__gmpz_init_set_si" : "extern void __gmpz_init_set_si(mpz_ptr arg0, long int arg1) [free function]", 
     "__gmpz_divisible_p" : "extern int __gmpz_divisible_p(mpz_srcptr arg0, mpz_srcptr arg1) [free function]", 
     "__gmp_errno" : "__gmp_errno [variable]", 
-    "__gmpf_pow_ui" : "extern void __gmpf_pow_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]", 
+    "__gmpf_sub_ui" : "extern void __gmpf_sub_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpz_swap" : "extern void __gmpz_swap(mpz_ptr arg0, mpz_ptr arg1) [free function]", 
     "__gmpz_cmp" : "extern int __gmpz_cmp(mpz_srcptr arg0, mpz_srcptr arg1) [free function]", 
     "__gmpf_init_set_si" : "extern void __gmpf_init_set_si(mpf_ptr arg0, long int arg1) [free function]", 
-    "__gmpz_tdiv_r_ui" : "extern long unsigned int __gmpz_tdiv_r_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
+    "__gmpn_lshift" : "extern mp_limb_t __gmpn_lshift(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, unsigned int arg3) [free function]", 
     "__gmpq_cmp_si" : "extern int __gmpq_cmp_si(mpq_srcptr arg0, long int arg1, long unsigned int arg2) [free function]", 
+    "__gmpz_abs" : "void __gmpz_abs(mpz_ptr __gmp_w, mpz_srcptr __gmp_u) [free function]", 
     "__gmp_fprintf" : "extern int __gmp_fprintf(FILE * arg0, char const * arg1, ...) [free function]", 
-    "__gmpf_fits_sint_p" : "extern int __gmpf_fits_sint_p(mpf_srcptr arg0) [free function]", 
+    "__gmpf_set" : "extern void __gmpf_set(mpf_ptr arg0, mpf_srcptr arg1) [free function]", 
+    "__gmpz_divisible_ui_p" : "extern int __gmpz_divisible_ui_p(mpz_srcptr arg0, long unsigned int arg1) [free function]", 
     "__gmpf_cmp_d" : "extern int __gmpf_cmp_d(mpf_srcptr arg0, double arg1) [free function]", 
     "__gmpf_get_str" : "extern char * __gmpf_get_str(char * arg0, mp_exp_t * arg1, int arg2, size_t arg3, mpf_srcptr arg4) [free function]", 
     "__gmpz_fdiv_q_ui" : "extern long unsigned int __gmpz_fdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
@@ -479,47 +484,46 @@ libgmp_lib.undecorated_names = {#mapping between decorated and undecorated names
     "__gmpz_urandomm" : "extern void __gmpz_urandomm(mpz_ptr arg0, __gmp_randstate_struct * arg1, mpz_srcptr arg2) [free function]", 
     "__gmpq_mul" : "extern void __gmpq_mul(mpq_ptr arg0, mpq_srcptr arg1, mpq_srcptr arg2) [free function]", 
     "__gmpz_tdiv_q" : "extern void __gmpz_tdiv_q(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
-    "__gmpf_sub" : "extern void __gmpf_sub(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]", 
-    "__gmpz_set_ui" : "extern void __gmpz_set_ui(mpz_ptr arg0, long unsigned int arg1) [free function]", 
-    "__gmpz_random" : "extern void __gmpz_random(mpz_ptr arg0, mp_size_t arg1) [free function]", 
+    "__gmpf_fits_uint_p" : "extern int __gmpf_fits_uint_p(mpf_srcptr arg0) [free function]", 
+    "__gmpz_realloc" : "extern void * __gmpz_realloc(mpz_ptr arg0, mp_size_t arg1) [free function]", 
     "__gmp_urandomb_ui" : "extern long unsigned int __gmp_urandomb_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]", 
-    "__gmpf_floor" : "extern void __gmpf_floor(mpf_ptr arg0, mpf_srcptr arg1) [free function]", 
+    "__gmpz_perfect_power_p" : "extern int __gmpz_perfect_power_p(mpz_srcptr arg0) [free function]", 
     "__gmpq_get_str" : "extern char * __gmpq_get_str(char * arg0, int arg1, mpq_srcptr arg2) [free function]", 
     "__gmpn_perfect_square_p" : "extern int __gmpn_perfect_square_p(mp_srcptr arg0, mp_size_t arg1) [free function]", 
     "__gmpz_addmul" : "extern void __gmpz_addmul(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
-    "__gmpq_cmp" : "extern int __gmpq_cmp(mpq_srcptr arg0, mpq_srcptr arg1) [free function]", 
+    "__gmpz_fdiv_ui" : "extern long unsigned int __gmpz_fdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]", 
+    "__gmp_sprintf" : "extern int __gmp_sprintf(char * arg0, char const * arg1, ...) [free function]", 
     "__gmpz_bin_uiui" : "extern void __gmpz_bin_uiui(mpz_ptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]", 
     "__gmpz_set_q" : "void __gmpz_set_q(mpz_ptr __gmp_w, mpq_srcptr __gmp_u) [free function]", 
-    "__gmpz_congruent_ui_p" : "extern int __gmpz_congruent_ui_p(mpz_srcptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]", 
+    "__gmpn_neg_n" : "mp_limb_t __gmpn_neg_n(mp_ptr __gmp_rp, mp_srcptr __gmp_up, mp_size_t __gmp_n) [free function]", 
     "__gmpf_neg" : "extern void __gmpf_neg(mpf_ptr arg0, mpf_srcptr arg1) [free function]", 
     "__gmp_randseed" : "extern void __gmp_randseed(__gmp_randstate_struct * arg0, mpz_srcptr arg1) [free function]", 
-    "__gmpz_mul_ui" : "extern void __gmpz_mul_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
-    "__gmpz_init2" : "extern void __gmpz_init2(mpz_ptr arg0, long unsigned int arg1) [free function]", 
+    "__gmpz_scan1" : "extern long unsigned int __gmpz_scan1(mpz_srcptr arg0, long unsigned int arg1) [free function]", 
     "__gmpz_nextprime" : "extern void __gmpz_nextprime(mpz_ptr arg0, mpz_srcptr arg1) [free function]", 
-    "__gmpz_set_d" : "extern void __gmpz_set_d(mpz_ptr arg0, double arg1) [free function]", 
-    "__gmpz_inp_raw" : "extern size_t __gmpz_inp_raw(mpz_ptr arg0, FILE * arg1) [free function]", 
-    "__gmpz_rrandomb" : "extern void __gmpz_rrandomb(mpz_ptr arg0, __gmp_randstate_struct * arg1, long unsigned int arg2) [free function]", 
-    "__gmpz_cdiv_ui" : "extern long unsigned int __gmpz_cdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]", 
     "__gmpz_si_kronecker" : "extern int __gmpz_si_kronecker(long int arg0, mpz_srcptr arg1) [free function]", 
-    "__gmpn_divrem_2" : "extern mp_limb_t __gmpn_divrem_2(mp_ptr arg0, mp_size_t arg1, mp_ptr arg2, mp_size_t arg3, mp_srcptr arg4) [free function]", 
-    "__gmp_randseed_ui" : "extern void __gmp_randseed_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]", 
+    "__gmpz_congruent_ui_p" : "extern int __gmpz_congruent_ui_p(mpz_srcptr arg0, long unsigned int arg1, long unsigned int arg2) [free function]", 
+    "__gmpz_cdiv_ui" : "extern long unsigned int __gmpz_cdiv_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]", 
+    "__gmpz_init_set_ui" : "extern void __gmpz_init_set_ui(mpz_ptr arg0, long unsigned int arg1) [free function]", 
+    "__gmpn_sub_n" : "extern mp_limb_t __gmpn_sub_n(mp_ptr arg0, mp_srcptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]", 
+    "__gmpq_set_num" : "extern void __gmpq_set_num(mpq_ptr arg0, mpz_srcptr arg1) [free function]", 
     "__gmpz_kronecker_ui" : "extern int __gmpz_kronecker_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]", 
     "__gmpf_add_ui" : "extern void __gmpf_add_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpz_gcdext" : "extern void __gmpz_gcdext(mpz_ptr arg0, mpz_ptr arg1, mpz_ptr arg2, mpz_srcptr arg3, mpz_srcptr arg4) [free function]", 
-    "__gmpz_tdiv_q_2exp" : "extern void __gmpz_tdiv_q_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
+    "__gmpq_get_num" : "extern void __gmpq_get_num(mpz_ptr arg0, mpq_srcptr arg1) [free function]", 
     "__gmpf_size" : "extern size_t __gmpf_size(mpf_srcptr arg0) [free function]", 
-    "__gmpf_swap" : "extern void __gmpf_swap(mpf_ptr arg0, mpf_ptr arg1) [free function]", 
+    "__gmpq_inv" : "extern void __gmpq_inv(mpq_ptr arg0, mpq_srcptr arg1) [free function]", 
     "__gmpn_divrem_1" : "extern mp_limb_t __gmpn_divrem_1(mp_ptr arg0, mp_size_t arg1, mp_srcptr arg2, mp_size_t arg3, mp_limb_t arg4) [free function]", 
     "__gmpq_canonicalize" : "extern void __gmpq_canonicalize(mpq_ptr arg0) [free function]", 
     "__gmpz_popcount" : "long unsigned int __gmpz_popcount(mpz_srcptr __gmp_u) [free function]", 
     "__gmpf_ui_sub" : "extern void __gmpf_ui_sub(mpf_ptr arg0, long unsigned int arg1, mpf_srcptr arg2) [free function]", 
     "__gmpz_cmp_si" : "extern int __gmpz_cmp_si(mpz_srcptr arg0, long int arg1) [free function]", 
     "__gmpz_set_str" : "extern int __gmpz_set_str(mpz_ptr arg0, char const * arg1, int arg2) [free function]", 
-    "__gmpz_realloc2" : "extern void __gmpz_realloc2(mpz_ptr arg0, long unsigned int arg1) [free function]", 
+    "__gmpz_tstbit" : "extern int __gmpz_tstbit(mpz_srcptr arg0, long unsigned int arg1) [free function]", 
     "__gmpz_set_si" : "extern void __gmpz_set_si(mpz_ptr arg0, long int arg1) [free function]", 
-    "__gmpn_cmp" : "int __gmpn_cmp(mp_srcptr __gmp_xp, mp_srcptr __gmp_yp, mp_size_t __gmp_size) [free function]", 
+    "__gmpq_init" : "extern void __gmpq_init(mpq_ptr arg0) [free function]", 
     "__gmpz_out_raw" : "extern size_t __gmpz_out_raw(FILE * arg0, mpz_srcptr arg1) [free function]", 
-    "__gmp_sscanf" : "extern int __gmp_sscanf(char const * arg0, char const * arg1, ...) [free function]", 
+    "__gmpf_trunc" : "extern void __gmpf_trunc(mpf_ptr arg0, mpf_srcptr arg1) [free function]", 
+    "__gmpn_gcdext_1" : "extern mp_limb_t __gmpn_gcdext_1(mp_ptr arg0, mp_ptr arg1, mp_limb_t arg2, mp_limb_t arg3) [free function]", 
     "__gmpz_cmpabs_d" : "extern int __gmpz_cmpabs_d(mpz_srcptr arg0, double arg1) [free function]", 
     "__gmpz_export" : "extern void * __gmpz_export(void * arg0, size_t * arg1, int arg2, size_t arg3, int arg4, size_t arg5, mpz_srcptr arg6) [free function]", 
     "__gmpz_get_d_2exp" : "extern double __gmpz_get_d_2exp(long int * arg0, mpz_srcptr arg1) [free function]", 
@@ -529,86 +533,86 @@ libgmp_lib.undecorated_names = {#mapping between decorated and undecorated names
     "__gmpz_sizeinbase" : "extern size_t __gmpz_sizeinbase(mpz_srcptr arg0, int arg1) [free function]", 
     "__gmpz_fdiv_r_ui" : "extern long unsigned int __gmpz_fdiv_r_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmp_randinit_default" : "extern void __gmp_randinit_default(__gmp_randstate_struct * arg0) [free function]", 
+    "__gmpz_getlimbn" : "mp_limb_t __gmpz_getlimbn(mpz_srcptr __gmp_z, mp_size_t __gmp_n) [free function]", 
     "__gmpf_get_si" : "extern long int __gmpf_get_si(mpf_srcptr arg0) [free function]", 
     "__gmpz_init" : "extern void __gmpz_init(mpz_ptr arg0) [free function]", 
     "__gmpf_div_2exp" : "extern void __gmpf_div_2exp(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpf_set_si" : "extern void __gmpf_set_si(mpf_ptr arg0, long int arg1) [free function]", 
     "__gmpq_equal" : "extern int __gmpq_equal(mpq_srcptr arg0, mpq_srcptr arg1) [free function]", 
-    "__gmpq_set_num" : "extern void __gmpq_set_num(mpq_ptr arg0, mpz_srcptr arg1) [free function]", 
-    "__gmpz_realloc" : "extern void * __gmpz_realloc(mpz_ptr arg0, mp_size_t arg1) [free function]", 
+    "__gmpz_rrandomb" : "extern void __gmpz_rrandomb(mpz_ptr arg0, __gmp_randstate_struct * arg1, long unsigned int arg2) [free function]", 
+    "__gmpf_cmp_si" : "extern int __gmpf_cmp_si(mpf_srcptr arg0, long int arg1) [free function]", 
     "__gmpz_scan0" : "extern long unsigned int __gmpz_scan0(mpz_srcptr arg0, long unsigned int arg1) [free function]", 
-    "__gmpz_scan1" : "extern long unsigned int __gmpz_scan1(mpz_srcptr arg0, long unsigned int arg1) [free function]", 
+    "__gmpz_init2" : "extern void __gmpz_init2(mpz_ptr arg0, long unsigned int arg1) [free function]", 
     "__gmpz_random2" : "extern void __gmpz_random2(mpz_ptr arg0, mp_size_t arg1) [free function]", 
     "__gmpn_pow_1" : "extern mp_size_t __gmpn_pow_1(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3, mp_ptr arg4) [free function]", 
+    "__gmpz_gcd" : "extern void __gmpz_gcd(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
     "__gmpf_mul_2exp" : "extern void __gmpf_mul_2exp(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]", 
-    "__gmpn_scan1" : "extern long unsigned int __gmpn_scan1(mp_srcptr arg0, long unsigned int arg1) [free function]", 
-    "__gmpz_fits_slong_p" : "extern int __gmpz_fits_slong_p(mpz_srcptr arg0) [free function]", 
+    "__gmpq_get_d" : "extern double __gmpq_get_d(mpq_srcptr arg0) [free function]", 
     "__gmpf_mul" : "extern void __gmpf_mul(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]", 
     "__gmpf_div_ui" : "extern void __gmpf_div_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]", 
-    "__gmpn_popcount" : "extern long unsigned int __gmpn_popcount(mp_srcptr arg0, mp_size_t arg1) [free function]", 
-    "__gmpz_fits_sshort_p" : "extern int __gmpz_fits_sshort_p(mpz_srcptr arg0) [free function]", 
-    "__gmpn_sub_n" : "extern mp_limb_t __gmpn_sub_n(mp_ptr arg0, mp_srcptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]", 
-    "__gmpz_getlimbn" : "mp_limb_t __gmpz_getlimbn(mpz_srcptr __gmp_z, mp_size_t __gmp_n) [free function]", 
     "__gmpq_mul_2exp" : "extern void __gmpq_mul_2exp(mpq_ptr arg0, mpq_srcptr arg1, long unsigned int arg2) [free function]", 
+    "__gmpz_out_str" : "extern size_t __gmpz_out_str(FILE * arg0, int arg1, mpz_srcptr arg2) [free function]", 
+    "__gmpn_divrem_2" : "extern mp_limb_t __gmpn_divrem_2(mp_ptr arg0, mp_size_t arg1, mp_ptr arg2, mp_size_t arg3, mp_srcptr arg4) [free function]", 
+    "__gmpz_cmpabs" : "extern int __gmpz_cmpabs(mpz_srcptr arg0, mpz_srcptr arg1) [free function]", 
+    "__gmpz_powm_ui" : "extern void __gmpz_powm_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2, mpz_srcptr arg3) [free function]", 
     "__gmpq_out_str" : "extern size_t __gmpq_out_str(FILE * arg0, int arg1, mpq_srcptr arg2) [free function]", 
     "__gmpz_neg" : "void __gmpz_neg(mpz_ptr __gmp_w, mpz_srcptr __gmp_u) [free function]", 
+    "__gmpf_swap" : "extern void __gmpf_swap(mpf_ptr arg0, mpf_ptr arg1) [free function]", 
+    "__gmp_randseed_ui" : "extern void __gmp_randseed_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]", 
+    "__gmpz_sqrtrem" : "extern void __gmpz_sqrtrem(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2) [free function]", 
     "__gmpz_tdiv_qr_ui" : "extern long unsigned int __gmpz_tdiv_qr_ui(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]", 
     "__gmpn_bdivmod" : "extern mp_limb_t __gmpn_bdivmod(mp_ptr arg0, mp_ptr arg1, mp_size_t arg2, mp_srcptr arg3, mp_size_t arg4, long unsigned int arg5) [free function]", 
-    "__gmpz_powm_ui" : "extern void __gmpz_powm_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2, mpz_srcptr arg3) [free function]", 
+    "__gmpn_random" : "extern void __gmpn_random(mp_ptr arg0, mp_size_t arg1) [free function]", 
     "__gmpq_set_z" : "extern void __gmpq_set_z(mpq_ptr arg0, mpz_srcptr arg1) [free function]", 
-    "__gmpz_set" : "extern void __gmpz_set(mpz_ptr arg0, mpz_srcptr arg1) [free function]", 
-    "__gmpz_tdiv_r_2exp" : "extern void __gmpz_tdiv_r_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
+    "__gmpz_cdiv_q" : "extern void __gmpz_cdiv_q(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
     "__gmpz_get_si" : "extern long int __gmpz_get_si(mpz_srcptr arg0) [free function]", 
     "__gmpf_init_set" : "extern void __gmpf_init_set(mpf_ptr arg0, mpf_srcptr arg1) [free function]", 
     "__gmpf_init_set_d" : "extern void __gmpf_init_set_d(mpf_ptr arg0, double arg1) [free function]", 
-    "__gmpf_reldiff" : "extern void __gmpf_reldiff(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]", 
-    "__gmpz_cdiv_r_ui" : "extern long unsigned int __gmpz_cdiv_r_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
-    "__gmpz_sqrt" : "extern void __gmpz_sqrt(mpz_ptr arg0, mpz_srcptr arg1) [free function]", 
-    "__gmpf_get_ui" : "extern long unsigned int __gmpf_get_ui(mpf_srcptr arg0) [free function]", 
+    "__gmpf_cmp" : "extern int __gmpf_cmp(mpf_srcptr arg0, mpf_srcptr arg1) [free function]", 
+    "__gmpf_eq" : "extern int __gmpf_eq(mpf_srcptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]", 
+    "__gmpn_popcount" : "extern long unsigned int __gmpn_popcount(mp_srcptr arg0, mp_size_t arg1) [free function]", 
+    "__gmpf_ceil" : "extern void __gmpf_ceil(mpf_ptr arg0, mpf_srcptr arg1) [free function]", 
     "__gmpn_add_1" : "mp_limb_t __gmpn_add_1(mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n) [free function]", 
-    "__gmp_set_memory_functions" : "extern void __gmp_set_memory_functions(void * (*)( ::size_t ) * arg0, void * (*)( void *,::size_t,::size_t ) * arg1, void (*)( void *,::size_t ) * arg2) [free function]", 
     "__gmpz_fib2_ui" : "extern void __gmpz_fib2_ui(mpz_ptr arg0, mpz_ptr arg1, long unsigned int arg2) [free function]", 
     "__gmp_printf" : "extern int __gmp_printf(char const * arg0, ...) [free function]", 
-    "__gmpz_sub" : "extern void __gmpz_sub(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
+    "__gmpq_set_f" : "extern void __gmpq_set_f(mpq_ptr arg0, mpf_srcptr arg1) [free function]", 
     "__gmpf_clear" : "extern void __gmpf_clear(mpf_ptr arg0) [free function]", 
     "__gmpn_get_str" : "extern size_t __gmpn_get_str(unsigned char * arg0, int arg1, mp_ptr arg2, mp_size_t arg3) [free function]", 
     "__gmp_fscanf" : "extern int __gmp_fscanf(FILE * arg0, char const * arg1, ...) [free function]", 
+    "__gmpz_ui_kronecker" : "extern int __gmpz_ui_kronecker(long unsigned int arg0, mpz_srcptr arg1) [free function]", 
     "__gmpn_add" : "mp_limb_t __gmpn_add(mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize) [free function]", 
-    "__gmpz_cdiv_qr_ui" : "extern long unsigned int __gmpz_cdiv_qr_ui(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]", 
+    "__gmpn_sub" : "mp_limb_t __gmpn_sub(mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize) [free function]", 
     "__gmpz_bin_ui" : "extern void __gmpz_bin_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
-    "__gmpn_gcd" : "extern mp_size_t __gmpn_gcd(mp_ptr arg0, mp_ptr arg1, mp_size_t arg2, mp_ptr arg3, mp_size_t arg4) [free function]", 
-    "__gmpz_clear" : "extern void __gmpz_clear(mpz_ptr arg0) [free function]", 
+    "__gmpz_fdiv_q_2exp" : "extern void __gmpz_fdiv_q_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpf_dump" : "extern void __gmpf_dump(mpf_srcptr arg0) [free function]", 
-    "__gmp_randinit_mt" : "extern void __gmp_randinit_mt(__gmp_randstate_struct * arg0) [free function]", 
+    "__gmpz_tdiv_r_2exp" : "extern void __gmpz_tdiv_r_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpz_submul_ui" : "extern void __gmpz_submul_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
-    "__gmpn_divexact_by3c" : "extern mp_limb_t __gmpn_divexact_by3c(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_limb_t arg3) [free function]", 
+    "__gmpz_cdiv_q_ui" : "extern long unsigned int __gmpz_cdiv_q_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpz_dump" : "extern void __gmpz_dump(mpz_srcptr arg0) [free function]", 
-    "__gmpz_jacobi" : "extern int __gmpz_jacobi(mpz_srcptr arg0, mpz_srcptr arg1) [free function]", 
+    "__gmp_randclear" : "extern void __gmp_randclear(__gmp_randstate_struct * arg0) [free function]", 
     "__gmp_version" : "__gmp_version [variable]", 
-    "__gmpf_integer_p" : "extern int __gmpf_integer_p(mpf_srcptr arg0) [free function]", 
+    "__gmpz_remove" : "extern long unsigned int __gmpz_remove(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
     "__gmpf_set_default_prec" : "extern void __gmpf_set_default_prec(long unsigned int arg0) [free function]", 
     "__gmpz_congruent_p" : "extern int __gmpz_congruent_p(mpz_srcptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]", 
-    "__gmpn_random" : "extern void __gmpn_random(mp_ptr arg0, mp_size_t arg1) [free function]", 
-    "__gmpf_sub_ui" : "extern void __gmpf_sub_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]", 
+    "__gmpf_pow_ui" : "extern void __gmpf_pow_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpz_lcm_ui" : "extern void __gmpz_lcm_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpz_rootrem" : "extern void __gmpz_rootrem(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, long unsigned int arg3) [free function]", 
     "__gmpz_lucnum2_ui" : "extern void __gmpz_lucnum2_ui(mpz_ptr arg0, mpz_ptr arg1, long unsigned int arg2) [free function]", 
-    "__gmpf_set" : "extern void __gmpf_set(mpf_ptr arg0, mpf_srcptr arg1) [free function]", 
+    "__gmpz_set_ui" : "extern void __gmpz_set_ui(mpz_ptr arg0, long unsigned int arg1) [free function]", 
     "__gmpq_abs" : "void __gmpq_abs(mpq_ptr __gmp_w, mpq_srcptr __gmp_u) [free function]", 
     "__gmpn_hamdist" : "extern long unsigned int __gmpn_hamdist(mp_srcptr arg0, mp_srcptr arg1, mp_size_t arg2) [free function]", 
     "__gmpf_fits_ushort_p" : "extern int __gmpf_fits_ushort_p(mpf_srcptr arg0) [free function]", 
-    "__gmpz_out_str" : "extern size_t __gmpz_out_str(FILE * arg0, int arg1, mpz_srcptr arg2) [free function]", 
+    "__gmpz_set" : "extern void __gmpz_set(mpz_ptr arg0, mpz_srcptr arg1) [free function]", 
     "__gmpq_set_den" : "extern void __gmpq_set_den(mpq_ptr arg0, mpz_srcptr arg1) [free function]", 
     "__gmpf_abs" : "extern void __gmpf_abs(mpf_ptr arg0, mpf_srcptr arg1) [free function]", 
     "__gmp_get_memory_functions" : "extern void __gmp_get_memory_functions(void * (*)( ::size_t ) * * arg0, void * (*)( void *,::size_t,::size_t ) * * arg1, void (*)( void *,::size_t ) * * arg2) [free function]", 
     "__gmpf_ui_div" : "extern void __gmpf_ui_div(mpf_ptr arg0, long unsigned int arg1, mpf_srcptr arg2) [free function]", 
-    "__gmpq_get_num" : "extern void __gmpq_get_num(mpz_ptr arg0, mpq_srcptr arg1) [free function]", 
+    "__gmpn_gcd" : "extern mp_size_t __gmpn_gcd(mp_ptr arg0, mp_ptr arg1, mp_size_t arg2, mp_ptr arg3, mp_size_t arg4) [free function]", 
     "__gmpn_add_n" : "extern mp_limb_t __gmpn_add_n(mp_ptr arg0, mp_srcptr arg1, mp_srcptr arg2, mp_size_t arg3) [free function]", 
-    "__gmpn_mul" : "extern mp_limb_t __gmpn_mul(mp_ptr arg0, mp_srcptr arg1, mp_size_t arg2, mp_srcptr arg3, mp_size_t arg4) [free function]", 
-    "__gmpz_perfect_power_p" : "extern int __gmpz_perfect_power_p(mpz_srcptr arg0) [free function]", 
+    "__gmpz_inp_raw" : "extern size_t __gmpz_inp_raw(mpz_ptr arg0, FILE * arg1) [free function]", 
     "__gmpz_fits_ulong_p" : "int __gmpz_fits_ulong_p(mpz_srcptr __gmp_z) [free function]", 
     "__gmpq_clear" : "extern void __gmpq_clear(mpq_ptr arg0) [free function]", 
-    "__gmpf_ceil" : "extern void __gmpf_ceil(mpf_ptr arg0, mpf_srcptr arg1) [free function]", 
+    "__gmpf_get_ui" : "extern long unsigned int __gmpf_get_ui(mpf_srcptr arg0) [free function]", 
     "__gmpz_fdiv_qr" : "extern void __gmpz_fdiv_qr(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]", 
     "__gmpf_mul_ui" : "extern void __gmpf_mul_ui(mpf_ptr arg0, mpf_srcptr arg1, long unsigned int arg2) [free function]", 
     "__gmpz_combit" : "extern void __gmpz_combit(mpz_ptr arg0, long unsigned int arg1) [free function]", 
@@ -700,6 +704,9 @@ gmpn_scan0 = gmpn_scan0_type( ( libgmp_lib.undecorated_names["extern long unsign
 
 gmpn_scan1_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_ulong  )
 gmpn_scan1 = gmpn_scan1_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmpn_scan1(mp_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
+
+gmpn_gcdext_1_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_ulong, ctypes.c_ulong  )
+gmpn_gcdext_1 = gmpn_gcdext_1_type( ( libgmp_lib.undecorated_names["extern mp_limb_t __gmpn_gcdext_1(mp_ptr arg0, mp_ptr arg1, mp_limb_t arg2, mp_limb_t arg3) [free function]"], libgmp_lib ) )
 
 gmpz_init_set_d_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_double  )
 gmpz_init_set_d = gmpz_init_set_d_type( ( libgmp_lib.undecorated_names["extern void __gmpz_init_set_d(mpz_ptr arg0, double arg1) [free function]"], libgmp_lib ) )
@@ -816,7 +823,7 @@ gmpn_mul_n = gmpn_mul_n_type( ( libgmp_lib.undecorated_names["extern void __gmpn
 gmpz_addmul_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
 gmpz_addmul = gmpz_addmul_type( ( libgmp_lib.undecorated_names["extern void __gmpz_addmul(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
 
-gmp_set_memory_functions_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.c_uint ) ), ctypes.POINTER( ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint ) ), ctypes.POINTER( ctypes.CFUNCTYPE( None, ctypes.c_void_p, ctypes.c_uint ) )  )
+gmp_set_memory_functions_type = ctypes.CFUNCTYPE( None, ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.c_uint ), ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint ), ctypes.CFUNCTYPE( None, ctypes.c_void_p, ctypes.c_uint )  )
 gmp_set_memory_functions = gmp_set_memory_functions_type( ( libgmp_lib.undecorated_names["extern void __gmp_set_memory_functions(void * (*)( ::size_t ) * arg0, void * (*)( void *,::size_t,::size_t ) * arg1, void (*)( void *,::size_t ) * arg2) [free function]"], libgmp_lib ) )
 
 gmpz_sqrt_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
@@ -857,6 +864,9 @@ gmpz_sub = gmpz_sub_type( ( libgmp_lib.undecorated_names["extern void __gmpz_sub
 
 gmpz_cdiv_r_2exp_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
 gmpz_cdiv_r_2exp = gmpz_cdiv_r_2exp_type( ( libgmp_lib.undecorated_names["extern void __gmpz_cdiv_r_2exp(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
+
+gmp_randinit_default_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __gmp_randstate_struct )  )
+gmp_randinit_default = gmp_randinit_default_type( ( libgmp_lib.undecorated_names["extern void __gmp_randinit_default(__gmp_randstate_struct * arg0) [free function]"], libgmp_lib ) )
 
 gmpf_integer_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpf_struct )  )
 gmpf_integer_p = gmpf_integer_p_type( ( libgmp_lib.undecorated_names["extern int __gmpf_integer_p(mpf_srcptr arg0) [free function]"], libgmp_lib ) )
@@ -918,9 +928,6 @@ gmpz_fdiv_ui = gmpz_fdiv_ui_type( ( libgmp_lib.undecorated_names["extern long un
 gmpz_cmpabs_ui_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
 gmpz_cmpabs_ui = gmpz_cmpabs_ui_type( ( libgmp_lib.undecorated_names["extern int __gmpz_cmpabs_ui(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
-gmpz_divexact_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_divexact = gmpz_divexact_type( ( libgmp_lib.undecorated_names["extern void __gmpz_divexact(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
-
 gmpz_cmpabs_d_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_double  )
 gmpz_cmpabs_d = gmpz_cmpabs_d_type( ( libgmp_lib.undecorated_names["extern int __gmpz_cmpabs_d(mpz_srcptr arg0, double arg1) [free function]"], libgmp_lib ) )
 
@@ -965,6 +972,9 @@ gmpf_set_q = gmpf_set_q_type( ( libgmp_lib.undecorated_names["extern void __gmpf
 
 gmpq_set_d_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.c_double  )
 gmpq_set_d = gmpq_set_d_type( ( libgmp_lib.undecorated_names["extern void __gmpq_set_d(mpq_ptr arg0, double arg1) [free function]"], libgmp_lib ) )
+
+gmpn_neg_n_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( ctypes.c_ulong ), ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
+gmpn_neg_n = gmpn_neg_n_type( ( libgmp_lib.undecorated_names["mp_limb_t __gmpn_neg_n(mp_ptr __gmp_rp, mp_srcptr __gmp_up, mp_size_t __gmp_n) [free function]"], libgmp_lib ) )
 
 gmpn_random2_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
 gmpn_random2 = gmpn_random2_type( ( libgmp_lib.undecorated_names["extern void __gmpn_random2(mp_ptr arg0, mp_size_t arg1) [free function]"], libgmp_lib ) )
@@ -1017,8 +1027,11 @@ gmpf_cmp = gmpf_cmp_type( ( libgmp_lib.undecorated_names["extern int __gmpf_cmp(
 gmpq_cmp_si_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpq_struct ), ctypes.c_long, ctypes.c_ulong  )
 gmpq_cmp_si = gmpq_cmp_si_type( ( libgmp_lib.undecorated_names["extern int __gmpq_cmp_si(mpq_srcptr arg0, long int arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
-gmpz_perfect_power_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct )  )
-gmpz_perfect_power_p = gmpz_perfect_power_p_type( ( libgmp_lib.undecorated_names["extern int __gmpz_perfect_power_p(mpz_srcptr arg0) [free function]"], libgmp_lib ) )
+gmpz_divexact_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
+gmpz_divexact = gmpz_divexact_type( ( libgmp_lib.undecorated_names["extern void __gmpz_divexact(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2) [free function]"], libgmp_lib ) )
+
+gmpz_fib_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
+gmpz_fib_ui = gmpz_fib_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_fib_ui(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
 
 gmpn_get_str_type = ctypes.CFUNCTYPE( ctypes.c_uint, ctypes.POINTER( ctypes.c_ubyte ), ctypes.c_int, ctypes.POINTER( ctypes.c_ulong ), ctypes.c_long  )
 gmpn_get_str = gmpn_get_str_type( ( libgmp_lib.undecorated_names["extern size_t __gmpn_get_str(unsigned char * arg0, int arg1, mp_ptr arg2, mp_size_t arg3) [free function]"], libgmp_lib ) )
@@ -1047,7 +1060,7 @@ gmp_randinit_mt = gmp_randinit_mt_type( ( libgmp_lib.undecorated_names["extern v
 gmpf_get_str_type = ctypes.CFUNCTYPE( ctypes.c_char_p, ctypes.c_char_p, ctypes.POINTER( ctypes.c_long ), ctypes.c_int, ctypes.c_uint, ctypes.POINTER( __mpf_struct )  )
 gmpf_get_str = gmpf_get_str_type( ( libgmp_lib.undecorated_names["extern char * __gmpf_get_str(char * arg0, mp_exp_t * arg1, int arg2, size_t arg3, mpf_srcptr arg4) [free function]"], libgmp_lib ) )
 
-gmp_get_memory_functions_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( ctypes.POINTER( ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.c_uint ) ) ), ctypes.POINTER( ctypes.POINTER( ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint ) ) ), ctypes.POINTER( ctypes.POINTER( ctypes.CFUNCTYPE( None, ctypes.c_void_p, ctypes.c_uint ) ) )  )
+gmp_get_memory_functions_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.c_uint ) ), ctypes.POINTER( ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint ) ), ctypes.POINTER( ctypes.CFUNCTYPE( None, ctypes.c_void_p, ctypes.c_uint ) )  )
 gmp_get_memory_functions = gmp_get_memory_functions_type( ( libgmp_lib.undecorated_names["extern void __gmp_get_memory_functions(void * (*)( ::size_t ) * * arg0, void * (*)( void *,::size_t,::size_t ) * * arg1, void (*)( void *,::size_t ) * * arg2) [free function]"], libgmp_lib ) )
 
 gmpz_out_raw_type = ctypes.CFUNCTYPE( ctypes.c_uint, ctypes.POINTER( _IO_FILE ), ctypes.POINTER( __mpz_struct )  )
@@ -1112,6 +1125,9 @@ gmpq_set_ui = gmpq_set_ui_type( ( libgmp_lib.undecorated_names["extern void __gm
 gmpf_set_si_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_long  )
 gmpf_set_si = gmpf_set_si_type( ( libgmp_lib.undecorated_names["extern void __gmpf_set_si(mpf_ptr arg0, long int arg1) [free function]"], libgmp_lib ) )
 
+gmpf_init_set_d_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_double  )
+gmpf_init_set_d = gmpf_init_set_d_type( ( libgmp_lib.undecorated_names["extern void __gmpf_init_set_d(mpf_ptr arg0, double arg1) [free function]"], libgmp_lib ) )
+
 gmpz_jacobi_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
 gmpz_jacobi = gmpz_jacobi_type( ( libgmp_lib.undecorated_names["extern int __gmpz_jacobi(mpz_srcptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
@@ -1129,6 +1145,9 @@ gmpf_random2 = gmpf_random2_type( ( libgmp_lib.undecorated_names["extern void __
 
 gmpf_init_set_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_ulong  )
 gmpf_init_set_ui = gmpf_init_set_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpf_init_set_ui(mpf_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
+
+gmpq_swap_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
+gmpq_swap = gmpq_swap_type( ( libgmp_lib.undecorated_names["extern void __gmpq_swap(mpq_ptr arg0, mpq_ptr arg1) [free function]"], libgmp_lib ) )
 
 gmpq_clear_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct )  )
 gmpq_clear = gmpq_clear_type( ( libgmp_lib.undecorated_names["extern void __gmpq_clear(mpq_ptr arg0) [free function]"], libgmp_lib ) )
@@ -1165,9 +1184,6 @@ gmpf_inp_str = gmpf_inp_str_type( ( libgmp_lib.undecorated_names["extern size_t 
 
 gmpz_init_set_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
 gmpz_init_set_ui = gmpz_init_set_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_init_set_ui(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
-
-gmpz_cmp_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_cmp = gmpz_cmp_type( ( libgmp_lib.undecorated_names["extern int __gmpz_cmp(mpz_srcptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_powm_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
 gmpz_powm = gmpz_powm_type( ( libgmp_lib.undecorated_names["extern void __gmpz_powm(mpz_ptr arg0, mpz_srcptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]"], libgmp_lib ) )
@@ -1252,9 +1268,6 @@ gmpz_get_si = gmpz_get_si_type( ( libgmp_lib.undecorated_names["extern long int 
 
 gmpf_set_default_prec_type = ctypes.CFUNCTYPE( None, ctypes.c_ulong  )
 gmpf_set_default_prec = gmpf_set_default_prec_type( ( libgmp_lib.undecorated_names["extern void __gmpf_set_default_prec(long unsigned int arg0) [free function]"], libgmp_lib ) )
-
-gmpz_init_set_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
-gmpz_init_set = gmpz_init_set_type( ( libgmp_lib.undecorated_names["extern void __gmpz_init_set(mpz_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmp_urandomb_ui_type = ctypes.CFUNCTYPE( ctypes.c_ulong, ctypes.POINTER( __gmp_randstate_struct ), ctypes.c_ulong  )
 gmp_urandomb_ui = gmp_urandomb_ui_type( ( libgmp_lib.undecorated_names["extern long unsigned int __gmp_urandomb_ui(__gmp_randstate_struct * arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
@@ -1358,14 +1371,8 @@ gmpz_bin_ui = gmpz_bin_ui_type( ( libgmp_lib.undecorated_names["extern void __gm
 gmpf_sub_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
 gmpf_sub = gmpf_sub_type( ( libgmp_lib.undecorated_names["extern void __gmpf_sub(mpf_ptr arg0, mpf_srcptr arg1, mpf_srcptr arg2) [free function]"], libgmp_lib ) )
 
-gmp_randinit_default_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __gmp_randstate_struct )  )
-gmp_randinit_default = gmp_randinit_default_type( ( libgmp_lib.undecorated_names["extern void __gmp_randinit_default(__gmp_randstate_struct * arg0) [free function]"], libgmp_lib ) )
-
 gmpz_gcdext_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
 gmpz_gcdext = gmpz_gcdext_type( ( libgmp_lib.undecorated_names["extern void __gmpz_gcdext(mpz_ptr arg0, mpz_ptr arg1, mpz_ptr arg2, mpz_srcptr arg3, mpz_srcptr arg4) [free function]"], libgmp_lib ) )
-
-gmpf_init_set_d_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_double  )
-gmpf_init_set_d = gmpf_init_set_d_type( ( libgmp_lib.undecorated_names["extern void __gmpf_init_set_d(mpf_ptr arg0, double arg1) [free function]"], libgmp_lib ) )
 
 gmpz_cdiv_qr_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
 gmpz_cdiv_qr = gmpz_cdiv_qr_type( ( libgmp_lib.undecorated_names["extern void __gmpz_cdiv_qr(mpz_ptr arg0, mpz_ptr arg1, mpz_srcptr arg2, mpz_srcptr arg3) [free function]"], libgmp_lib ) )
@@ -1403,6 +1410,9 @@ gmpz_fac_ui = gmpz_fac_ui_type( ( libgmp_lib.undecorated_names["extern void __gm
 gmpf_swap_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
 gmpf_swap = gmpf_swap_type( ( libgmp_lib.undecorated_names["extern void __gmpf_swap(mpf_ptr arg0, mpf_ptr arg1) [free function]"], libgmp_lib ) )
 
+gmpz_init_set_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
+gmpz_init_set = gmpz_init_set_type( ( libgmp_lib.undecorated_names["extern void __gmpz_init_set(mpz_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
+
 gmpz_lcm_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
 gmpz_lcm_ui = gmpz_lcm_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_lcm_ui(mpz_ptr arg0, mpz_srcptr arg1, long unsigned int arg2) [free function]"], libgmp_lib ) )
 
@@ -1420,9 +1430,6 @@ gmpz_fits_slong_p = gmpz_fits_slong_p_type( ( libgmp_lib.undecorated_names["exte
 
 gmpf_floor_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.POINTER( __mpf_struct )  )
 gmpf_floor = gmpf_floor_type( ( libgmp_lib.undecorated_names["extern void __gmpf_floor(mpf_ptr arg0, mpf_srcptr arg1) [free function]"], libgmp_lib ) )
-
-gmpq_swap_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpq_swap = gmpq_swap_type( ( libgmp_lib.undecorated_names["extern void __gmpq_swap(mpq_ptr arg0, mpq_ptr arg1) [free function]"], libgmp_lib ) )
 
 gmpf_out_str_type = ctypes.CFUNCTYPE( ctypes.c_uint, ctypes.POINTER( _IO_FILE ), ctypes.c_int, ctypes.c_uint, ctypes.POINTER( __mpf_struct )  )
 gmpf_out_str = gmpf_out_str_type( ( libgmp_lib.undecorated_names["extern size_t __gmpf_out_str(FILE * arg0, int arg1, size_t arg2, mpf_srcptr arg3) [free function]"], libgmp_lib ) )
@@ -1475,9 +1482,6 @@ gmpz_lucnum_ui = gmpz_lucnum_ui_type( ( libgmp_lib.undecorated_names["extern voi
 gmpf_fits_slong_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpf_struct )  )
 gmpf_fits_slong_p = gmpf_fits_slong_p_type( ( libgmp_lib.undecorated_names["extern int __gmpf_fits_slong_p(mpf_srcptr arg0) [free function]"], libgmp_lib ) )
 
-gmpz_fib_ui_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
-gmpz_fib_ui = gmpz_fib_ui_type( ( libgmp_lib.undecorated_names["extern void __gmpz_fib_ui(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
-
 gmpz_neg_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
 gmpz_neg = gmpz_neg_type( ( libgmp_lib.undecorated_names["void __gmpz_neg(mpz_ptr __gmp_w, mpz_srcptr __gmp_u) [free function]"], libgmp_lib ) )
 
@@ -1490,11 +1494,14 @@ gmpn_sqrtrem = gmpn_sqrtrem_type( ( libgmp_lib.undecorated_names["extern mp_size
 gmpz_com_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
 gmpz_com = gmpz_com_type( ( libgmp_lib.undecorated_names["extern void __gmpz_com(mpz_ptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
-gmpq_abs_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
-gmpq_abs = gmpq_abs_type( ( libgmp_lib.undecorated_names["void __gmpq_abs(mpq_ptr __gmp_w, mpq_srcptr __gmp_u) [free function]"], libgmp_lib ) )
-
 gmpz_divisible_2exp_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
 gmpz_divisible_2exp_p = gmpz_divisible_2exp_p_type( ( libgmp_lib.undecorated_names["extern int __gmpz_divisible_2exp_p(mpz_srcptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
+
+gmpz_perfect_power_p_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct )  )
+gmpz_perfect_power_p = gmpz_perfect_power_p_type( ( libgmp_lib.undecorated_names["extern int __gmpz_perfect_power_p(mpz_srcptr arg0) [free function]"], libgmp_lib ) )
+
+gmpz_cmp_type = ctypes.CFUNCTYPE( ctypes.c_int, ctypes.POINTER( __mpz_struct ), ctypes.POINTER( __mpz_struct )  )
+gmpz_cmp = gmpz_cmp_type( ( libgmp_lib.undecorated_names["extern int __gmpz_cmp(mpz_srcptr arg0, mpz_srcptr arg1) [free function]"], libgmp_lib ) )
 
 gmpz_dump_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct )  )
 gmpz_dump = gmpz_dump_type( ( libgmp_lib.undecorated_names["extern void __gmpz_dump(mpz_srcptr arg0) [free function]"], libgmp_lib ) )
@@ -1519,6 +1526,9 @@ gmpf_sub_ui = gmpf_sub_ui_type( ( libgmp_lib.undecorated_names["extern void __gm
 
 gmpz_realloc2_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpz_struct ), ctypes.c_ulong  )
 gmpz_realloc2 = gmpz_realloc2_type( ( libgmp_lib.undecorated_names["extern void __gmpz_realloc2(mpz_ptr arg0, long unsigned int arg1) [free function]"], libgmp_lib ) )
+
+gmpq_abs_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpq_struct ), ctypes.POINTER( __mpq_struct )  )
+gmpq_abs = gmpq_abs_type( ( libgmp_lib.undecorated_names["void __gmpq_abs(mpq_ptr __gmp_w, mpq_srcptr __gmp_u) [free function]"], libgmp_lib ) )
 
 gmpf_set_d_type = ctypes.CFUNCTYPE( None, ctypes.POINTER( __mpf_struct ), ctypes.c_double  )
 gmpf_set_d = gmpf_set_d_type( ( libgmp_lib.undecorated_names["extern void __gmpf_set_d(mpf_ptr arg0, double arg1) [free function]"], libgmp_lib ) )
