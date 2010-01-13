@@ -6,7 +6,7 @@
 Definition
 ----------
 
-``inout`` transformer is a combination of :doc:`input <inout>` and :doc:`output <output>` transformers.
+``inout`` transformer is a combination of :doc:`input <input>` and :doc:`output <output>` transformers.
 It removes a "reference" type from the function argument and then adds the
 "returned", by the original function, value to the return statement of the
 function-wrapper.

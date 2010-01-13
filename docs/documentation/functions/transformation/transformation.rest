@@ -97,6 +97,7 @@ Transformers contents
    from_address.rest
    input_static_matrix.rest
    output_static_matrix.rest
+   inout_static_matrix.rest
 
 
 
