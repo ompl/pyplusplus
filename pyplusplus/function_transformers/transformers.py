@@ -716,8 +716,9 @@ class output_static_matrix_t(transformer.transformer_t):
         self.__configure_sealed( controller )
 
     def configure_virtual_mem_fun( self, controller ):
-        self.__configure_v_mem_fun_override( controller.override_controller )
-        self.__configure_v_mem_fun_default( controller.default_controller )
+        raise RuntimeError( '"output_static_matrix" transformation does not support virtual functions yet.' )
+        #self.__configure_v_mem_fun_override( controller.override_controller )
+        #self.__configure_v_mem_fun_default( controller.default_controller )
 
 # inout_static_matrix_t
 class inout_static_matrix_t(transformer.transformer_t):
@@ -756,42 +757,46 @@ class inout_static_matrix_t(transformer.transformer_t):
         return [ code_repository.convenience.file_name ]
 
     def __configure_sealed(self, controller):
-        global _seq2arr
-        global _mat2seq
+        global _pymatrix2cmatrix
+        global _cmatrix2pymatrix
         w_arg = controller.find_wrapper_arg( self.arg.name )
         w_arg.type = declarations.dummy_type_t( "boost::python::object" )
 
         # Declare a variable that will hold the C matrix...
         native_matrix = controller.declare_variable( self.matrix_item_type
                                                     , "native_" + self.arg.name
-                                                    , '[%d][%d]' % (self.rows, self.columns)
-                                                    )
+                                                    , '[%d][%d]' % (self.rows, self.columns) )
 
-        pre_call = string.Template('pyplus_conv::ensure_uniform_sequence< $type >( $pylist, $array_size );')
-        controller.add_pre_call_code(pre_call.substitute(type='boost::python::list', pylist=w_arg.name,array_size=self.rows))
+        conversion_code = _pymatrix2cmatrix.substitute( type=self.matrix_item_type
+                                                        , pymatrix=w_arg.name
+                                                        , columns='%d' % self.columns
+                                                        , row=controller.register_variable_name( "row" )
+                                                        , rows='%d' % self.rows
+                                                        , native_matrix=native_matrix )
 
-        #TODO: may be a better idea is move this loop to the generated code.
-        for i in range(0,self.rows):
-            copy_pylist2arr = _seq2arr.substitute( type=self.matrix_item_type
-                                                   , pylist=w_arg.name+"["+str(i)+"]"
-                                                   , array_size=self.columns
-                                                   , native_array=native_matrix+'['+str(i)+']' )
-
-            controller.add_pre_call_code( copy_pylist2arr )
+        controller.add_pre_call_code( conversion_code )
 
         controller.modify_arg_expression( self.arg_index, native_matrix )
 
-        pylist = controller.declare_variable( declarations.dummy_type_t( "boost::python::list" )
-                                              , 'py_' + self.arg.name )
-        copy_mat2pylist = _mat2seq.substitute( native_matrix = native_matrix
-                                               , rows=self.rows
-                                               , columns=self.columns
-                                               , pylist=pylist)
 
-        controller.add_post_call_code( copy_mat2pylist )
+        #adding just declared variable to the original function call expression
+        controller.modify_arg_expression( self.arg_index, native_matrix )
+
+        # Declare a Python list which will receive the output...
+        pymatrix = controller.declare_variable( declarations.dummy_type_t( "boost::python::list" )
+                                              , 'py_' + self.arg.name )
+
+        conversion_code = _cmatrix2pymatrix.substitute( pymatrix=pymatrix
+                                                        , columns='%d' % self.columns
+                                                        , row=controller.register_variable_name( "row" )
+                                                        , pyrow=controller.register_variable_name( "pyrow" )
+                                                        , rows='%d' % self.rows
+                                                        , native_matrix=native_matrix )
+
+        controller.add_post_call_code( conversion_code )
         
         #adding the variable to return variables list
-        controller.return_variable( pylist )
+        controller.return_variable( pymatrix )
 
     def __configure_v_mem_fun_default( self, controller ):
         self.__configure_sealed( controller )
@@ -815,8 +820,9 @@ class inout_static_matrix_t(transformer.transformer_t):
         self.__configure_sealed( controller )
 
     def configure_virtual_mem_fun( self, controller ):
-        self.__configure_v_mem_fun_override( controller.override_controller )
-        self.__configure_v_mem_fun_default( controller.default_controller )
+        raise RuntimeError( '"output_static_matrix" transformation does not support virtual functions yet.' )
+        #self.__configure_v_mem_fun_override( controller.override_controller )
+        #self.__configure_v_mem_fun_default( controller.default_controller )
 
 # input_c_buffer_t
 class input_c_buffer_t(transformer.transformer_t):
