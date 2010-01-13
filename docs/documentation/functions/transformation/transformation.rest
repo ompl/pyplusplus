@@ -95,6 +95,7 @@ Transformers contents
    transfer_ownership.rest
    input_c_buffer.rest
    from_address.rest
+   input_static_matrix.rest
 
 
 

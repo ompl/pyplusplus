@@ -612,8 +612,9 @@ class input_static_matrix_t(transformer.transformer_t):
         self.__configure_sealed( controller )
 
     def configure_virtual_mem_fun( self, controller ):
-        self.__configure_v_mem_fun_override( controller.override_controller )
-        self.__configure_v_mem_fun_default( controller.default_controller )
+        raise RuntimeError( '"input_static_matrix" transformation does not support virtual functions yet.' )
+        #self.__configure_v_mem_fun_override( controller.override_controller )
+        #self.__configure_v_mem_fun_default( controller.default_controller )
 
 # output_static_matrix_t
 class output_static_matrix_t(transformer.transformer_t):
