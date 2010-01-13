@@ -20,6 +20,7 @@
 #include <boost/config.hpp>
 #include <indexing_suite/container_traits.hpp>
 #include <indexing_suite/container_suite.hpp>
+#include <indexing_suite/registry_utils.hpp>
 #include <indexing_suite/algorithms.hpp>
 #include <boost/detail/workaround.hpp>
 
@@ -36,11 +37,16 @@ struct pair_exposer_t{
     typedef pair_exposer_t< TValueType, TValueCallPolicies > exposer_type;
 
     pair_exposer_t(const std::string& name){
-        class_< pair_type >( name.c_str() )
-            .def( "__len__", &exposer_type::len )
-            .def( "__getitem__", &exposer_type::get_item )
-            .add_property( "key", &exposer_type::get_key )
-            .add_property( "value", &exposer_type::get_mapped );
+        if( boost::python::registry::utils::is_registered< pair_type >() ){
+            boost::python::registry::utils::register_alias<pair_type>( name.c_str() );
+        }
+        else{
+            class_< pair_type >( name.c_str() )
+                .def( "__len__", &exposer_type::len )
+                .def( "__getitem__", &exposer_type::get_item )
+                .add_property( "key", &exposer_type::get_key )
+                .add_property( "value", &exposer_type::get_mapped );
+        }
     }
 
 private:
