@@ -120,9 +120,9 @@ import return_ref_to_ptr_tester
 import function_adaptor_tester
 import selection_bug_tester
 #import ogre_generate_tester
-import ft_from_address
+import ft_from_address_tester
 import indexing_suites2_support_tester
-import ft_input_static_matrix
+import ft_input_static_matrix_tester
 
 testers = [
     algorithms_tester
@@ -231,9 +231,9 @@ testers = [
     , return_ref_to_ptr_tester
     , function_adaptor_tester
     , selection_bug_tester
-    , ft_from_address
+    , ft_from_address_tester
     , indexing_suites2_support_tester
-    , ft_input_static_matrix
+    , ft_input_static_matrix_tester
 #    , ogre_generate_tester too much time
 ]
 
