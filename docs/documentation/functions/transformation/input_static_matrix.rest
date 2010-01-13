@@ -13,7 +13,7 @@ and columns should be known in advance.
 
 "input_static_matrix" transformer takes as first argument name or index of the
 original function argument. The argument should have "array" or "pointer" type.
-The second and the third arguments specfies rows and columns size.
+The second and the third arguments specify rows and columns size.
 
 -----------
 Limitations
@@ -43,7 +43,7 @@ Example
    }
 
 
-In order to expose ``sum`` function we need to create small wrapper:
+In order to expose ``sum`` function we need to create a small wrapper:
 The following :doc:`Py++ <../../../pyplusplus>` code does it for you:
 
   .. code-block:: python

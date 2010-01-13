@@ -262,11 +262,6 @@ _seq2vector = string.Template( os.linesep.join([
 _arr2seq = string.Template(
             'pyplus_conv::copy_container( $native_array, $native_array + $array_size, pyplus_conv::list_inserter( $pylist ) );' )
 
-_mat2seq = string.Template(
-            'for (int i=0; i<$rows; ++i) { boost::python::list ${pylist}_i; pyplus_conv::copy_container( $native_matrix[i], $native_matrix[i] + $columns, pyplus_conv::list_inserter( ${pylist}_i ) ); $pylist.append(${pylist}_i); }' )
-
-
-
 class input_static_array_t(transformer.transformer_t):
     """Handles an input array with fixed size.
 
@@ -534,6 +529,17 @@ _pymatrix2cmatrix = string.Template( os.linesep.join([
  , '    pyplus_conv::copy_sequence( $pymatrix[$row], pyplus_conv::array_inserter( $native_matrix[$row], $columns ) );'
  , '}']))
 
+
+_cmatrix2pymatrix = string.Template( os.linesep.join([
+    'for (int $row = 0; $row < $rows; ++$row ){'
+  , '    boost::python::list $pyrow;'
+  , '    pyplus_conv::copy_container( $native_matrix[$row]'
+  , '                                 , $native_matrix[$row] + $columns'
+  , '                                 , pyplus_conv::list_inserter( $pyrow ) );'
+  , '    $pymatrix.append( $pyrow ); '
+  , '}' ]))
+
+
 # input_static_matrix_t
 class input_static_matrix_t(transformer.transformer_t):
     """Handles an input matrix with fixed size.
@@ -654,31 +660,32 @@ class output_static_matrix_t(transformer.transformer_t):
         return [ code_repository.convenience.file_name ]
 
     def __configure_sealed(self, controller):
-        global _mat2seq
+        global _cmatrix2pymatrix
         #removing arg from the function wrapper definition
         controller.remove_wrapper_arg( self.arg.name )
 
         # Declare a variable that will hold the C matrix...
         native_matrix = controller.declare_variable( self.matrix_item_type
                                                     , "native_" + self.arg.name
-                                                    , '[%d][%d]' % (self.rows, self.columns)
-                                                    )
+                                                    , '[%d][%d]' % (self.rows, self.columns ) )
         #adding just declared variable to the original function call expression
         controller.modify_arg_expression( self.arg_index, native_matrix )
 
         # Declare a Python list which will receive the output...
-        pylist = controller.declare_variable( declarations.dummy_type_t( "boost::python::list" )
+        pymatrix = controller.declare_variable( declarations.dummy_type_t( "boost::python::list" )
                                               , 'py_' + self.arg.name )
 
-        copy_mat2pylist = _mat2seq.substitute( native_matrix = native_matrix,
-                             rows=self.rows,
-                             columns=self.columns,
-                             pylist=pylist)
+        conversion_code = _cmatrix2pymatrix.substitute( pymatrix=pymatrix
+                                                        , columns='%d' % self.columns
+                                                        , row=controller.register_variable_name( "row" )
+                                                        , pyrow=controller.register_variable_name( "pyrow" )
+                                                        , rows='%d' % self.rows
+                                                        , native_matrix=native_matrix )
 
-        controller.add_post_call_code( copy_mat2pylist )
+        controller.add_post_call_code( conversion_code )
         
         #adding the variable to return variables list
-        controller.return_variable( pylist )
+        controller.return_variable( pymatrix )
 
     def __configure_v_mem_fun_default( self, controller ):
         self.__configure_sealed( controller )

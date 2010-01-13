@@ -96,6 +96,7 @@ Transformers contents
    input_c_buffer.rest
    from_address.rest
    input_static_matrix.rest
+   output_static_matrix.rest
 
 
 
