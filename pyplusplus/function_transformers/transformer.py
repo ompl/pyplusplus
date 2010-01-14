@@ -39,7 +39,7 @@ class transformer_t(object):
             found = filter( lambda arg: arg.name == reference, self.function.arguments )
             if len( found ) == 1:
                 return found[0]
-            raise RuntimeError( "Argument with %s was not found" % reference )
+            raise RuntimeError( "Argument with name \"%s\" was not found" % reference )
         else:
            assert isinstance( reference, int )
            if transformer_t.USE_1_BASED_INDEXING:

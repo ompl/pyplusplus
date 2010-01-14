@@ -125,6 +125,7 @@ import indexing_suites2_support_tester
 import ft_input_static_matrix_tester
 import ft_output_static_matrix_tester
 import ft_inout_static_matrix_tester
+import ft_inout_static_array_tester
 
 testers = [
     algorithms_tester
@@ -238,6 +239,7 @@ testers = [
     , ft_input_static_matrix_tester
     , ft_output_static_matrix_tester
     , ft_inout_static_matrix_tester
+    , ft_inout_static_array_tester
 #    , ogre_generate_tester too much time
 ]
 

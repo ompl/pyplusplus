@@ -92,6 +92,7 @@ Transformers contents
    modify_type.rest
    input_static_array.rest
    output_static_array.rest
+   inout_static_array.rest
    transfer_ownership.rest
    input_c_buffer.rest
    from_address.rest
