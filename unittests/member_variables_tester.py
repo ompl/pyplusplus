@@ -106,9 +106,16 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             array.ivars[index] = index * index
             self.failUnless( array.get_ivars_item( index ) == index * index )
 
-        self.failUnless( len( array.vars ) == 3 )
-        for i in range( len( array.vars ) ):
-            self.failUnless( array.vars[i].value == -9 )
+        #~ import pdb
+        #~ pdb.set_trace()
+
+        self.failUnless( len( module.array_t.vars ) == 3 )
+        for i in range( len( module.array_t.vars ) ):
+            self.failUnless( module.array_t.vars[i].value == -9 )
+
+        self.failUnless( len( module.array_t.vars_nonconst ) == 3 )
+        for i in range( len( module.array_t.vars_nonconst ) ):
+            self.failUnless( module.array_t.vars_nonconst[i].value == -9 )
 
 def create_suite():
     suite = unittest.TestSuite()

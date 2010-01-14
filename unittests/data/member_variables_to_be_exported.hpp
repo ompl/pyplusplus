@@ -66,6 +66,7 @@ struct array_t{
     }
 
     static const variable_t vars[3];
+    static variable_t vars_nonconst[3];
     int ivars[10];
     int ivars2[10];
 };

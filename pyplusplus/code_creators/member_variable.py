@@ -434,7 +434,6 @@ class array_mv_t( member_variable_base_t ):
 class array_mv_wrapper_t( code_creator.code_creator_t
                           , declaration_based.declaration_based_t ):
     """registers array class"""
-
     def __init__(self, variable ):
         code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=variable)
@@ -463,9 +462,12 @@ class array_mv_wrapper_t( code_creator.code_creator_t
 
     @property
     def wrapper_creator_type(self):
-        return declarations.free_function_type_t(
-                return_type=self.wrapper_type
-                , arguments_types=[self.wrapped_class_type] )
+        if self.declaration.type_qualifiers.has_static:
+            return declarations.free_function_type_t( return_type=self.wrapper_type )
+        else:
+            return declarations.free_function_type_t(
+                    return_type=self.wrapper_type
+                    , arguments_types=[self.wrapped_class_type] )
 
     @property
     def wrapper_creator_name(self):
@@ -475,15 +477,21 @@ class array_mv_wrapper_t( code_creator.code_creator_t
     def wrapper_creator_full_name(self):
         return '::'.join( [self.parent.full_name, self.wrapper_creator_name] )
 
-    def _create_impl( self ):
-        tmpl = os.linesep.join([
-            "static %(wrapper_type)s"
-          , "%(wrapper_creator_name)s( %(wrapped_class_type)s inst ){"
-          , self.indent( "return %(wrapper_type)s( inst.%(mem_var_ref)s );" )
-          , "}"
-        ])
+    def _create_impl( self ):        
+        tmpl = [ "static %(wrapper_type)s" ]
+        if self.declaration.type_qualifiers.has_static:
+            tmpl.append( "%(wrapper_creator_name)s(){" )
+            tmpl.append( self.indent( "return %(wrapper_type)s( %(parent_class_type)s::%(mem_var_ref)s );" ) )
+        else:
+            tmpl.append( "%(wrapper_creator_name)s( %(wrapped_class_type)s inst ){" )
+            tmpl.append( self.indent( "return %(wrapper_type)s( inst.%(mem_var_ref)s );" ) )
+        tmpl.append( "}" )
+        
+        tmpl = os.linesep.join( tmpl )
+        
         return tmpl % {
                 'wrapper_type' : self.wrapper_type.decl_string
+              , 'parent_class_type' : self.parent.declaration.partial_decl_string
               , 'wrapper_creator_name' : self.wrapper_creator_name
               , 'wrapped_class_type' : self.wrapped_class_type.decl_string
               , 'mem_var_ref' : self.declaration.name
