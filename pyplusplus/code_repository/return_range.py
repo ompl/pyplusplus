@@ -34,8 +34,8 @@ namespace bpl = boost::python;
 
 namespace detail{
 
-struct return_raw_data_ref{
-
+struct return_raw_data_ref
+{
     template <class T>
     struct apply{
 
@@ -57,10 +57,12 @@ struct return_raw_data_ref{
                     return PyCObject_FromVoidPtr( data, NULL );
                 }
             }
+
+            static PyTypeObject const * get_pytype(){
+                return &PyCObject_Type;
+            }
         };
-
     };
-
 };
 
 } //detail

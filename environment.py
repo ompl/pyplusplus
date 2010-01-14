@@ -32,7 +32,7 @@ class scons:
 if 'roman' in getpass.getuser():
     if sys.platform == 'win32':
         scons.suffix = '.pyd'
-        scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope', '-DBOOST_PYTHON_NO_PY_SIGNATURES' ]
+        scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope' ]
         boost.libs = [ r'e:\dev\boost_svn\bin.v2\libs\python\build\msvc-9.0\release\threading-multi' ]
         boost.include = 'e:/dev/boost_svn'
         python.libs = 'c:/program files/python26/libs'
@@ -41,14 +41,14 @@ if 'roman' in getpass.getuser():
         os.nice( 20 )
         print 'test process niceness: 20'
         scons.suffix = '.so'
-        scons.ccflags = ['-DBOOST_PYTHON_NO_PY_SIGNATURES' ]
+        scons.ccflags = []
         boost.libs = ['/home/roman/include/libs' ]
         boost.include = '/home/roman/boost_svn'
         python.include = '/usr/include/python2.6'
 elif 'root' == getpass.getuser():
     if sys.platform == 'win32':
         scons.suffix = '.pyd'
-        scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope', '-DBOOST_PYTHON_NO_PY_SIGNATURES' ]
+        scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope' ]
         boost.libs = [ 'd:/dev/boost_svn/bin.v2/libs/python/build/msvc-7.1/release/threading-multi' ]
         boost.include = 'd:/dev/boost_svn'
         python.libs = 'e:/python25/libs'
