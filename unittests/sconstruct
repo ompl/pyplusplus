@@ -1,11 +1,11 @@
 import os
 import sys
 
-opts = Options( "options.txt", ARGUMENTS )
+vars = Variables()
 
-opts.Add( BoolOption( 'use_msvc71', 'use msvc71 compiler', False ) )
+vars.Add( BoolVariable( 'use_msvc71', 'use msvc71 compiler', False ) )
 
-env = Environment(options=opts)
+env = Environment(variables=vars)
 
 if 'win32' in sys.platform:
     if os.path.exists( r'E:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib' ):
