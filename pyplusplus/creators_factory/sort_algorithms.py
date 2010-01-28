@@ -142,35 +142,49 @@ class calldef_organizer_t( object ):
     def __init__( self ):
         object.__init__( self )
         #preserve order in which functions where defined
-        self.__cmp_unrelated = lambda d1, d2: cmp( d1.location.line, d2.location.line )
+        self.cmp_calldefs_fallback = lambda d1, d2: cmp( d1.location.line, d2.location.line )
 
-    def __build_groups( self, decls ):
+    def build_groups( self, decls ):
         groups = { None: [] }
-        for d in decls:
-            if not isinstance( d, declarations.calldef_t ) or 1 != len( d.required_args ):
+        decl2order = {}
+        for index,d in enumerate( decls ):
+            decl2order[d] = index
+            if not isinstance( d, declarations.calldef_t ) or 0 == len( d.required_args ):
                 groups[ None ].append( d )
             else:
-                if not groups.has_key( d.name ):
-                    groups[ d.name ] = []
-                groups[ d.name ].append( d )
+                key = ( d.name, len( d.required_args ) )
+                if not groups.has_key( key ):
+                    groups[ key ] = []
+                groups[key].append( d )
+        #keep backward compatibility
+        to_be_deleted = []
+        for group, group_decls in groups.iteritems():
+            if None is group:
+                continue
+            if len( group_decls ) == 1:
+                groups[ None ].append( group_decls[0] )
+                to_be_deleted.append( group )
+        for group in to_be_deleted:
+            del groups[ group ]
+        groups[ None ].sort( lambda d1, d2: cmp( decl2order[d1], decl2order[d2] ) )
         return groups
 
-    def __cmp_types( self, t1, t2 ):
+    def cmp_args_types( self, t1, t2 ):
         return decl_wrappers.algorithm.registration_order.is_related( t1, t2 )
 
-    def __cmp( self, f1, f2 ):
-        result = self.__cmp_types( f1.arguments[0].type, f2.arguments[0].type )
+    def cmp_calldefs( self, f1, f2 ):
+        result = self.cmp_args_types( f1.required_args[-1].type, f2.required_args[-1].type )
         if None is result:
-            result = self.__cmp_unrelated( f1, f2 )
+            result = self.cmp_calldefs_fallback( f1, f2 )
         return result
 
-    def __sort_groups( self, groups ):
+    def sort_groups( self, groups ):
         for group in groups.keys():
             if None is group:
                 continue
-            groups[ group ].sort( self.__cmp )
+            groups[ group ].sort( self.cmp_calldefs )
 
-    def __join_groups( self, groups ):
+    def join_groups( self, groups ):
         decls = []
         sorted_keys = groups.keys()
         sorted_keys.sort()
@@ -179,9 +193,9 @@ class calldef_organizer_t( object ):
         return decls
 
     def sort( self, decls ):
-        groups = self.__build_groups( decls )
-        self.__sort_groups(groups)
-        result = self.__join_groups(groups)
+        groups = self.build_groups( decls )
+        self.sort_groups(groups)
+        result = self.join_groups(groups)
         return result
 
 def sort_classes( classes, include_vars=False ):
