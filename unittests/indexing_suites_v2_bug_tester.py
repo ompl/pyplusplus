@@ -11,8 +11,12 @@ import fundamental_tester_base
 from pyplusplus import code_creators
 
 if 'linux' in sys.platform:
-    import dl
-    sys.setdlopenflags(dl.RTLD_NOW | dl.RTLD_GLOBAL)
+    try:
+        from ctypes import RTLD_NOW, RTLD_GLOBAL
+    except ImportError:
+        RTLD_NOW = 2
+        RTLD_GLOBAL = 256
+    sys.setdlopenflags(RTLD_NOW | RTLD_GLOBAL)
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def __init__( self, *args ):

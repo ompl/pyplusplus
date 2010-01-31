@@ -1,6 +1,7 @@
 import os
 import sys
 import getpass
+import platform
 
 this_module_dir_path = os.path.abspath ( os.path.dirname( sys.modules[__name__].__file__) )
 
@@ -16,11 +17,12 @@ class python:
     include = ''
 
 class gccxml:
-    gccxml_09_path = os.path.join( this_module_dir_path, '..', 'gccxml_bin', 'v09', sys.platform, 'bin' )
 
-    gccxml_path = gccxml_09_path
+    gccxml_path = os.path.join( this_module_dir_path, '..', 'gccxml_bin', 'v09', platform.system(), platform.machine(), 'bin' )
+    if not os.path.exists( gccxml_path ):
+        gccxml_path = os.path.join( this_module_dir_path, '..', 'gccxml_bin', 'v09', sys.platform, 'bin' )
+
     gccxml_version = '__GCCXML_09__'
-
     executable = gccxml_path
 
 class scons:
@@ -42,7 +44,7 @@ if 'roman' in getpass.getuser():
         print 'test process niceness: 20'
         scons.suffix = '.so'
         scons.ccflags = []
-        boost.libs = ['/home/roman/include/libs' ]
+        boost.libs = ['/home/roman/include/libs', '/home/roman/include/lib' ]
         boost.include = '/home/roman/boost_svn'
         python.include = '/usr/include/python2.6'
 elif 'root' == getpass.getuser():
