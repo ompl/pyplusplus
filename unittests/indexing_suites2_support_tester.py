@@ -35,7 +35,11 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( v[0].bar == 0 )
         v[0].bar = 10 
         self.failUnless( v[0].bar == 10 )
-
+        x = module.create_set_strings()
+        self.failUnless( len(x) == 0 )
+        x = module.ffff()
+        self.failUnless( len(x) == 0 )
+        
 def create_suite():
     suite = unittest.TestSuite()    
     suite.addTest( unittest.makeSuite(tester_t))

@@ -115,6 +115,11 @@ std::ostream& operator<<( std::ostream& o, const indexing_suites2::set_strings_t
     return o;
 }
 
+std::set<int> ffff( ) {
+    return std::set<int>();
+}
+
+
 namespace pyplusplus{ namespace aliases{
     typedef std::vector<indexing_suites2::item_t*> items_ptr_t;
 }}
