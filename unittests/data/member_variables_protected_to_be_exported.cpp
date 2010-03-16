@@ -7,6 +7,9 @@
 
 namespace member_variables{
 
+const array_t::variable_t array_t::vars[] = { array_t::variable_t(), array_t::variable_t(), array_t::variable_t() };
+array_t::variable_t array_t::vars_nonconst[] = { array_t::variable_t(), array_t::variable_t(), array_t::variable_t() };
+
 int point::instance_count = 0;
 const point::color point::default_color = point::red;
 
