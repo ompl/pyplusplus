@@ -106,6 +106,36 @@ inline set_strings_t create_set_strings(){
     return set_strings_t();
 }
 
+struct protected_item_t{
+    protected_item_t() : value( -1 ){}
+    explicit protected_item_t( int v) : value( v ){}
+
+    int value;
+protected:
+    bool operator==(protected_item_t const& item) const {
+        return value == item.value;
+    }
+
+    bool operator!=(protected_item_t const& item) const {
+        return value != item.value;
+    }
+    
+};
+
+
+typedef std::vector<protected_item_t> protected_items_t;
+
+typedef std::vector<protected_item_t> protected_items_ptr_t;
+inline protected_items_t create_protected_items(){
+    protected_items_t items;
+    items.push_back( protected_item_t(0) );
+    items.push_back( protected_item_t(1) );
+    items.push_back( protected_item_t(2) );
+    items.push_back( protected_item_t(3) );
+    items.push_back( protected_item_t(4) );
+    return items;
+}
+
 }
 
 std::ostream& operator<<( std::ostream& o, const indexing_suites2::set_strings_t& x){
@@ -122,6 +152,7 @@ std::set<int> ffff( ) {
 
 namespace pyplusplus{ namespace aliases{
     typedef std::vector<indexing_suites2::item_t*> items_ptr_t;
+    typedef std::vector<indexing_suites2::protected_item_t*> protected_items_ptr_t;
 }}
 
 #endif//__indexing_suites2_to_be_exported_hpp__
