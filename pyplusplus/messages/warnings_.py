@@ -258,6 +258,8 @@ W1065 = code_generation_error(
             'Other classes : %s' )
 
 
+W1066 = warning( '`Py++` will generate class wrapper - class contains "%s" - protected member variable' )
+
 warnings = globals()
 
 all_warning_msgs = []
