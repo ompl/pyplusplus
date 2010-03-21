@@ -10,7 +10,7 @@
 #include <iostream>
 
 namespace member_variables{
-
+/*
 struct point{
     enum color{ red, green, blue };
 
@@ -35,7 +35,7 @@ protected:
     static int instance_count;
     static const color default_color;
 };
-
+*/
 struct bit_fields_t{
     friend unsigned int get_a(const bit_fields_t& inst);
     friend void set_a( bit_fields_t& inst, unsigned int new_value );
@@ -69,13 +69,13 @@ struct array_t{
     int get_ivars_item( int index ){
         return ivars[index];
     }
-
+protected:
     static const variable_t vars[3];
     static variable_t vars_nonconst[3];
     int ivars[10];
     int ivars2[10];
 };
-
+/*
 namespace pointers{
 
 struct  tree_node_t;
@@ -193,7 +193,7 @@ namespace ctypes{
         void * userData;
     };
 
-}
+}*/
 
 }
 #endif//__member_variables_protected_to_be_exported_hpp__

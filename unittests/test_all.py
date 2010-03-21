@@ -126,6 +126,7 @@ import ft_input_static_matrix_tester
 import ft_output_static_matrix_tester
 import ft_inout_static_matrix_tester
 import ft_inout_static_array_tester
+import member_variables_protected_tester
 
 testers = [
     algorithms_tester
@@ -240,6 +241,7 @@ testers = [
     , ft_output_static_matrix_tester
     , ft_inout_static_matrix_tester
     , ft_inout_static_array_tester
+    , member_variables_protected_tester
 #    , ogre_generate_tester too much time
 ]
 

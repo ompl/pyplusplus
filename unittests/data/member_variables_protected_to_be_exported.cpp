@@ -9,10 +9,10 @@ namespace member_variables{
 
 const array_t::variable_t array_t::vars[] = { array_t::variable_t(), array_t::variable_t(), array_t::variable_t() };
 array_t::variable_t array_t::vars_nonconst[] = { array_t::variable_t(), array_t::variable_t(), array_t::variable_t() };
-
+/*
 int point::instance_count = 0;
 const point::color point::default_color = point::red;
-
+*/
 unsigned int get_a(const bit_fields_t& inst){
     return inst.a;
 }
@@ -24,7 +24,7 @@ void set_a( bit_fields_t& inst, unsigned int new_value ){
 unsigned int get_b(const bit_fields_t& inst){
     return inst.b;
 }
-
+/*
 namespace pointers{
 
 std::auto_ptr<tree_node_t> create_tree(){
@@ -50,5 +50,5 @@ namespace ctypes{
     int xxx = 1997;
     int* image_t::none_image = &xxx;
 }
-
+*/
 }

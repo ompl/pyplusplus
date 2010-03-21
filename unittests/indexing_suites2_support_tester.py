@@ -13,9 +13,9 @@ from pyplusplus import module_builder
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'indexing_suites2_support'
-    
+
     def __init__( self, *args ):
-        fundamental_tester_base.fundamental_tester_base_t.__init__( 
+        fundamental_tester_base.fundamental_tester_base_t.__init__(
             self
             , tester_t.EXTENSION_NAME
             , indexing_suite_version=2
@@ -26,22 +26,18 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         fvector = declarations.remove_declarated( fvector.type )
         fvector.indexing_suite.call_policies \
             =  module_builder.call_policies.return_internal_reference()
-       
+
     def run_tests( self, module):
         v = module.foo_vector()
         f = module.foo()
         f.bar = 0
         v.append(f)
         self.failUnless( v[0].bar == 0 )
-        v[0].bar = 10 
+        v[0].bar = 10
         self.failUnless( v[0].bar == 10 )
-        x = module.create_set_strings()
-        self.failUnless( len(x) == 0 )
-        x = module.ffff()
-        self.failUnless( len(x) == 0 )
-        
+
 def create_suite():
-    suite = unittest.TestSuite()    
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

@@ -437,6 +437,37 @@ class array_mv_wrapper_t( code_creator.code_creator_t
     def __init__(self, variable ):
         code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=variable)
+        self.__is_protected = bool( variable.access_type == declarations.ACCESS_TYPES.PROTECTED )
+
+    @property
+    def public_accessor_name(self):
+        return "pyplusplus_%s_accessor" % self.declaration.name
+
+    def generate_public_accessor( self ):
+        tmpl = os.linesep.join([
+            "%(static)s%(const_item_type)s%(item_type)s* %(accessor_name)s()%(const_function)s{"
+          , "    return %(name)s;"
+          , "}"
+        ])
+        constness = ''
+        const_function = ''
+        if declarations.is_const( self.declaration.type ):
+            constness = 'const '
+            const_function = ' const'
+
+        static = ''
+        if self.declaration.type_qualifiers.has_static:
+            static = 'static '
+            const_function = ''
+
+        return tmpl % {
+                'static' : static
+              , 'const_item_type' : constness
+              , 'item_type' : declarations.array_item_type( self.declaration.type ).decl_string
+              , 'accessor_name': self.public_accessor_name
+              , 'name' : self.declaration.name
+              , 'const_function' : const_function
+        }
 
     @property
     def wrapper_type( self ):
@@ -455,7 +486,10 @@ class array_mv_wrapper_t( code_creator.code_creator_t
 
     @property
     def wrapped_class_type( self ):
-        wrapped_cls_type = declarations.declarated_t( self.declaration.parent )
+        if self.__is_protected:
+            wrapped_cls_type = declarations.dummy_type_t( self.parent.full_name )
+        else:
+            wrapped_cls_type = declarations.declarated_t( self.declaration.parent )
         if declarations.is_const( self.declaration.type ):
             wrapped_cls_type = declarations.const_t( wrapped_cls_type )
         return declarations.reference_t( wrapped_cls_type )
@@ -477,25 +511,39 @@ class array_mv_wrapper_t( code_creator.code_creator_t
     def wrapper_creator_full_name(self):
         return '::'.join( [self.parent.full_name, self.wrapper_creator_name] )
 
-    def _create_impl( self ):        
+    def _create_impl( self ):
+        result = []
+        if self.__is_protected:
+            result.append( self.generate_public_accessor() )
+            result.append( '' )
+
         tmpl = [ "static %(wrapper_type)s" ]
         if self.declaration.type_qualifiers.has_static:
             tmpl.append( "%(wrapper_creator_name)s(){" )
-            tmpl.append( self.indent( "return %(wrapper_type)s( %(parent_class_type)s::%(mem_var_ref)s );" ) )
+            if self.__is_protected:
+                tmpl.append( self.indent( "return %(wrapper_type)s( %(wrapped_class_type_only)s::%(public_accessor_name)s() );" ) )
+            else:
+                tmpl.append( self.indent( "return %(wrapper_type)s( %(parent_class_type)s::%(mem_var_ref)s );" ) )
         else:
             tmpl.append( "%(wrapper_creator_name)s( %(wrapped_class_type)s inst ){" )
-            tmpl.append( self.indent( "return %(wrapper_type)s( inst.%(mem_var_ref)s );" ) )
+            if self.__is_protected:
+                tmpl.append( self.indent( "return %(wrapper_type)s( inst.%(public_accessor_name)s() );" ) )
+            else:
+                tmpl.append( self.indent( "return %(wrapper_type)s( inst.%(mem_var_ref)s );" ) )
+
         tmpl.append( "}" )
-        
+
         tmpl = os.linesep.join( tmpl )
-        
-        return tmpl % {
-                'wrapper_type' : self.wrapper_type.decl_string
-              , 'parent_class_type' : self.parent.declaration.partial_decl_string
-              , 'wrapper_creator_name' : self.wrapper_creator_name
-              , 'wrapped_class_type' : self.wrapped_class_type.decl_string
-              , 'mem_var_ref' : self.declaration.name
-            }
+
+        result.append( tmpl % { 'wrapper_type' : self.wrapper_type.decl_string
+                                , 'parent_class_type' : self.parent.declaration.partial_decl_string
+                                , 'wrapper_creator_name' : self.wrapper_creator_name
+                                , 'wrapped_class_type' : self.wrapped_class_type.decl_string
+                                , 'wrapped_class_type_only' : self.parent.full_name
+                                , 'mem_var_ref' : self.declaration.name
+                                , 'public_accessor_name' : self.public_accessor_name
+                        } )
+        return os.linesep.join( result )
 
     def _get_system_files_impl( self ):
         return [code_repository.array_1.file_name]
