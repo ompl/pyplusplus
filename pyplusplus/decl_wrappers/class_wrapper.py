@@ -10,6 +10,7 @@ import user_text
 import properties
 import decl_wrapper
 import scopedef_wrapper
+import variable_wrapper
 from pyplusplus import messages
 from pygccxml import declarations
 import indexing_suite1 as isuite1
@@ -426,10 +427,12 @@ class class_t( class_common_details_t
         #protected and private virtual functions that not overridable and not pure
         #virtual should not be exported
         for member in self.protected_members:
-            if not isinstance( member, declarations.calldef_t ):
-                continue
-            else:
+            if isinstance( member, declarations.calldef_t ):
                 members.append( member )
+            elif isinstance( member, declarations.variable_t ) and variable_wrapper.variable_t.EXPOSE_PROTECTED_VARIABLES:
+                members.append( member )
+            else:
+                pass
 
         vfunction_selector = lambda member: isinstance( member, declarations.member_function_t ) \
                                             and member.virtuality == declarations.VIRTUALITY_TYPES.PURE_VIRTUAL

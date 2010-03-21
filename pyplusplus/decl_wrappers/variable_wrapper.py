@@ -14,6 +14,9 @@ from pygccxml import declarations
 
 class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
     """defines a set of properties, that will instruct `Py++` how to expose the variable"""
+
+    EXPOSE_PROTECTED_VARIABLES = False
+
     def __init__(self, *arguments, **keywords):
         declarations.variable_t.__init__(self, *arguments, **keywords )
         decl_wrapper.decl_wrapper_t.__init__( self )
@@ -213,7 +216,11 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
             #    return messages.W1061 % ( str( self ), str( cls ) )
         if isinstance( self.parent, declarations.class_t ):
             if self.access_type != declarations.ACCESS_TYPES.PUBLIC:
-                return messages.W1039
+                if self.access_type == declarations.ACCESS_TYPES.PRIVATE:
+                    return messages.W1039
+                else: #protected
+                    if not self.EXPOSE_PROTECTED_VARIABLES:
+                        return messages.W1039
         if declarations.is_array( type_ ):
             item_type = declarations.array_item_type( type_ )
             if declarations.is_pointer( item_type ):
@@ -236,4 +243,6 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
             explanation.append( messages.W1026 % self.name )
         if declarations.is_array( self.type ):
             explanation.append( messages.W1027 % self.name)
+        if self.access_type == declarations.ACCESS_TYPES.PROTECTED:
+            explanation.append( messages.W1066 % self.name)
         return explanation
