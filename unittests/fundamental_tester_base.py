@@ -97,7 +97,11 @@ class fundamental_tester_base_t( unittest.TestCase ):
     def _create_extension_source_file(self):
         global LICENSE
 
-        mb = module_builder.module_builder_t( [self.__to_be_exported_header]
+        test_header_cfg \
+            = pygccxml.parser.create_cached_source_fc( self.__to_be_exported_header
+                                                       , self.__generated_source_file_name + '.xml' )
+
+        mb = module_builder.module_builder_t( [ test_header_cfg ]
                                               #, undefine_symbols=['__MINGW32__']
                                               , indexing_suite_version=self.__indexing_suite_version
                                               , gccxml_config=autoconfig.cxx_parsers_cfg.gccxml)

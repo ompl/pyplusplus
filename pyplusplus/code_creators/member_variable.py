@@ -627,13 +627,17 @@ class mem_var_ref_wrapper_t( code_creator.code_creator_t
     def __init__(self, variable ):
         code_creator.code_creator_t.__init__( self )
         declaration_based.declaration_based_t.__init__( self, declaration=variable)
+        self.__is_protected = bool( variable.access_type == declarations.ACCESS_TYPES.PROTECTED )
 
     def _get_getter_full_name(self):
         return self.parent.full_name + '::' + 'get_' + self.declaration.name
     getter_full_name = property( _get_getter_full_name )
 
     def _get_class_inst_type( self ):
-        return declarations.declarated_t( self.declaration.parent )
+        if self.__is_protected:
+            return declarations.dummy_type_t( self.parent.full_name )
+        else:
+            return declarations.declarated_t( self.declaration.parent )
 
     def _get_exported_var_type( self ):
         type_ = declarations.remove_reference( self.declaration.type )
@@ -685,7 +689,7 @@ class mem_var_ref_wrapper_t( code_creator.code_creator_t
 
     def _create_impl(self):
         answer = []
-        cls_type = algorithm.create_identifier( self, self.declaration.parent.decl_string )
+        cls_type = algorithm.create_identifier( self, self._get_class_inst_type().decl_string )
 
         substitutions = dict( type=self._get_exported_var_type().decl_string
                               , class_type=cls_type

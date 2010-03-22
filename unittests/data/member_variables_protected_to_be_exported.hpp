@@ -112,7 +112,7 @@ public:
 std::auto_ptr<tree_node_t> create_tree();
 
 }
-
+*/
 namespace reference{
 
 enum EFruit{ apple, orange };
@@ -142,7 +142,7 @@ protected:
 };
 
 }
-
+/*
 namespace statics{
 
 struct mem_var_str_t{
