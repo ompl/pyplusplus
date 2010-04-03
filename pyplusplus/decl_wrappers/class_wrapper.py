@@ -429,8 +429,6 @@ class class_t( class_common_details_t
         for member in self.protected_members:
             if isinstance( member, declarations.calldef_t ):
                 members.append( member )
-            elif isinstance( member, declarations.variable_t ) and variable_wrapper.variable_t.EXPOSE_PROTECTED_VARIABLES:
-                members.append( member )
             else:
                 pass
 
