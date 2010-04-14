@@ -109,7 +109,7 @@ and\\or callable name:
 
     * return type is ``T&``, for member ``operator[]`` that returns reference to immutable type
 
-  * ``return_internal_reference``
+* ``return_internal_reference``
 
     * return type is ``T&``, for member ``operator[]``
 
