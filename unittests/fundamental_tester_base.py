@@ -97,6 +97,9 @@ class fundamental_tester_base_t( unittest.TestCase ):
     def _create_extension_source_file(self):
         global LICENSE
 
+        if os.path.exists( self.__generated_source_file_name + '.xml' ):
+            os.remove( self.__generated_source_file_name + '.xml' )
+
         test_header_cfg \
             = pygccxml.parser.create_cached_source_fc( self.__to_be_exported_header
                                                        , self.__generated_source_file_name + '.xml' )

@@ -29,7 +29,7 @@ typedef boost::shared_ptr< base > base_s_ptr;
 
 typedef std::auto_ptr< data > data_a_ptr;
 typedef boost::shared_ptr< data > data_s_ptr;
-    
+
 data_a_ptr create_auto();
 data_s_ptr create_shared();
 
@@ -61,7 +61,7 @@ int const_ref_auto_some_value( const base_a_ptr& a );
 int const_ref_shared_some_value( const base_s_ptr& a );
 
 struct shared_data_buffer_t{
-    shared_data_buffer_t() 
+    shared_data_buffer_t()
     : size( 0 )
     {}
     int size;
@@ -73,11 +73,33 @@ struct shared_data_buffer_holder_t{
     : buffer( new shared_data_buffer_t() )
       , const_buffer( new shared_data_buffer_t() )
     {}
-        
+
     holder_impl_t buffer;
     const holder_impl_t const_buffer;
 };
 
-}    
+namespace autoptr_init_bug{
+
+struct A{
+   A(int value) : m_value(value) {}
+   int m_value;
+};
+
+struct B{
+   B(int value, std::auto_ptr<A> a) : m_value(value), m_a(a.release() ) {}
+
+   int m_value;
+
+   int get_a_value(){ return m_a->m_value; }
+
+private:
+   std::auto_ptr<A> m_a;
+};
+
+std::auto_ptr< B > createB(int value, std::auto_ptr<A> a);
+
+}
+
+}
 
 #endif//__smart_pointers_to_be_exported_hpp__
