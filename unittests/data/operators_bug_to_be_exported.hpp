@@ -30,6 +30,12 @@ struct integral : public number< integral, int >{
         tmp.value = value + x; 
         return tmp;
     }
+    integral operator++( ){
+        integral tmp;
+        tmp.value = value + 1; 
+        return tmp;
+    }
+    
 };
 
 struct integral2 : public number< integral, int >{
