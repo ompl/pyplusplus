@@ -47,7 +47,7 @@ The long answer is here:
 * http://mail.python.org/pipermail/c++-sig/2006-June/010835.html
 
 
-.. _`post` : http://mail.python.org/pipermail/c++-sig/2003-October/005802.html
+.. _`post` : http://mail.python.org/pipermail/cplusplus-sig/2003-October/005453.html
 
 
 ------------------------
