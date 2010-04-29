@@ -10,6 +10,7 @@
 // =======
 // 2006/10/27   Roman     File creation from map.hpp
 // 2008/12/08   Roman   Change indexing suite layout
+// 2010/04/29   Roman   Adding "__len__" method
 //
 
 #ifndef BOOST_PYTHON_INDEXING_MULTIMAP_HPP
@@ -60,6 +61,7 @@ namespace boost { namespace python { namespace indexing {
             | method_contains
             | method_count
             | method_has_key
+            | method_len
 
             | detail::method_set_if<
                   base_class::is_mutable,

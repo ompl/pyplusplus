@@ -23,6 +23,7 @@ code = """// Copyright (c) 2003 Raoul M. Gough
 // =======
 // 2003/10/28   rmg     File creation from algo_selector.hpp
 // 2008/12/08   Roman   Change indexing suite layout
+// 2010/04/29   Roman   Adding "__len__" method
 //
 // $Id: map.hpp,v 1.1.2.6 2004/02/08 18:57:42 raoulgough Exp $
 //
@@ -74,6 +75,7 @@ namespace boost { namespace python { namespace indexing {
             | method_contains
             | method_count
             | method_has_key
+            | method_len
 
             | detail::method_set_if<
                   base_class::is_mutable,

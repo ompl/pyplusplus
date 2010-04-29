@@ -55,6 +55,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         
         name2value = module.name2value_t()
         name2value[ "x" ] = "y"
+        self.failUnless( len(name2value) == 1 )
         self.failUnless( "x" == module.get_first_name( name2value ) )
         for kv in name2value:
             self.failUnless( kv.key == "x" and kv.value == "y" )
