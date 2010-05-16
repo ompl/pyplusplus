@@ -127,6 +127,7 @@ import ft_output_static_matrix_tester
 import ft_inout_static_matrix_tester
 import ft_inout_static_array_tester
 import inner_base_class_tester
+import indexing_suite2_shared_ptr_value_traits_tester
 
 testers = [
     algorithms_tester
@@ -242,6 +243,7 @@ testers = [
     , ft_inout_static_matrix_tester
     , ft_inout_static_array_tester
     , inner_base_class_tester
+    , indexing_suite2_shared_ptr_value_traits_tester
 #    , ogre_generate_tester too much time
 ]
 
