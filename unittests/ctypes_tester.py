@@ -34,14 +34,14 @@ class ctypes_base_tester_t(unittest.TestCase):
     def symbols_file( self ):
         ext = '.so'
         prefix = 'lib'
-        if 'win32' in sys.platform:
+        if 'nt' == os.name:
             prefix = ''
             ext = '.map'
         return os.path.join( self.project_dir, 'binaries', prefix + self.base_name + ext )
 
     @property
     def library_file( self ):
-        if 'win32' in sys.platform:
+        if 'nt' == os.name:
             return os.path.join( self.project_dir, 'binaries', self.base_name + '.dll' )
         else:
             return self.symbols_file

@@ -10,7 +10,7 @@ import autoconfig
 import fundamental_tester_base
 from pyplusplus import code_creators
 
-if 'linux' in sys.platform:
+if 'posix' == os.name:
     try:
         from ctypes import RTLD_NOW, RTLD_GLOBAL
     except ImportError:

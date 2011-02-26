@@ -33,7 +33,7 @@ class scons:
     ccflags = []
 
 if 'roman' in getpass.getuser():
-    if sys.platform == 'win32':
+    if os.name == 'nt':
         scons.suffix = '.pyd'
         scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope' ]
         boost.libs = [ r'e:\dev\boost_svn\bin.v2\libs\python\build\msvc-9.0\release\threading-multi' ]
@@ -59,7 +59,7 @@ if 'roman' in getpass.getuser():
 			boost.include = '/home/roman/boost_svn'
 			python.include = '/usr/include/python2.6'
 elif 'root' == getpass.getuser():
-    if sys.platform == 'win32':
+    if os.name == 'nt':
         scons.suffix = '.pyd'
         scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope' ]
         boost.libs = [ 'd:/dev/boost_svn/bin.v2/libs/python/build/msvc-7.1/release/threading-multi' ]

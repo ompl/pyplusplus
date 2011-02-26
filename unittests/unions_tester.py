@@ -43,7 +43,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         obj2.set_i( 1977 )
         self.failUnless( obj2.i == 1977 )
 
-        if 'win' not in sys.platform:
+        if 'nt' != os.name:
             mdll = ctypes.cdll.LoadLibrary( module.__file__ )
             self.failUnless( 4 == mdll.mmm( 1, 3 ) )
 

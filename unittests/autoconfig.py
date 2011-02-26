@@ -33,7 +33,7 @@ class cxx_parsers_cfg:
                                                         , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
 
     gccxml.define_symbols.append( gccxml_version )
-    if 'win' in sys.platform:
+    if 'nt' == os.name:
         gccxml.define_symbols.append( '__PYGCCXML_%s__' % gccxml.compiler.upper() )
         if 'msvc9' == gccxml.compiler:
             gccxml.define_symbols.append( '_HAS_TR1=0' )
@@ -55,14 +55,15 @@ class scons_config:
     @staticmethod
     def create_sconstruct():
         msvc_compiler = ''
-        if 'linux' not in sys.platform:
+        if 'posix' != os.name:
             msvc_compiler = str( pygccxml.utils.native_compiler.get_version()[1] )
         else:
             scons_config.libs.append( 'boost_python' )
         code = [
-              "import sys"
+               "import os"
+            ,  "import sys"
             , "env = Environment()"
-            , "if 'linux' not in sys.platform:"
+            , "if 'posix' != os.name:"
             , "    env['MSVS'] = {'VERSION': '%s'}" % msvc_compiler
             , "    env['MSVS_VERSION'] = '%s'" % msvc_compiler
             , "    Tool('msvc')(env)"
@@ -106,7 +107,7 @@ sys.path.append( build_dir )
 
 os.chdir( build_dir )
 
-if sys.platform == 'win32':
+if 'nt' == os.name:
     PATH = os.environ.get( 'PATH', '' )
     PATH=PATH + ';' + ';'.join( scons_config.libpath )
     os.environ['PATH'] = PATH
