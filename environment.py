@@ -1,5 +1,6 @@
 import os
 import sys
+import socket
 import getpass
 import platform
 
@@ -40,13 +41,23 @@ if 'roman' in getpass.getuser():
         python.libs = 'c:/program files/python26/libs'
         python.include = 'c:/program files/python26/include'
     else:
-        os.nice( 20 )
-        print 'test process niceness: 20'
-        scons.suffix = '.so'
-        scons.ccflags = []
-        boost.libs = ['/home/roman/include/libs', '/home/roman/include/lib' ]
-        boost.include = '/home/roman/boost_svn'
-        python.include = '/usr/include/python2.6'
+		if 'kubunu-vbox' == socket.gethostname():
+			os.nice( 20 )
+			print 'test process niceness: 20'
+			scons.suffix = '.so'
+			scons.ccflags = []
+			boost.libs = ['/usr/lib'] #'/home/roman/include/libs', '/home/roman/include/lib' ]
+			boost.include = '/usr/include/boost'
+			python.include = '/usr/include/python2.6'
+
+		else:
+			os.nice( 20 )
+			print 'test process niceness: 20'
+			scons.suffix = '.so'
+			scons.ccflags = []
+			boost.libs = ['/home/roman/include/libs', '/home/roman/include/lib' ]
+			boost.include = '/home/roman/boost_svn'
+			python.include = '/usr/include/python2.6'
 elif 'root' == getpass.getuser():
     if sys.platform == 'win32':
         scons.suffix = '.pyd'
