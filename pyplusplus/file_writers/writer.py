@@ -37,6 +37,9 @@ class writer_t(object):
 
     def makedirs_for_file( self, file_path ):
         destination_dir = os.path.dirname( file_path )
+        if destination_dir == "":
+            return
+
         if not os.path.exists( destination_dir ):
             os.makedirs( destination_dir )
 

@@ -27,6 +27,7 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Pertti Kellomäki
 * Benoît Leveau
 * Nikolaus Rath
+* Alan Birtles 
 
 -----------
 SVN Version
@@ -68,6 +69,8 @@ SVN Version
    Many thanks to Benoît Leveau.
 
 10. Numerous bugs in "ctypes code generator" were fixed. Many thanks to Nikolaus Rath.
+
+11. Thanks to Alan Birtles, for fixing a small issue on cygwin
 
 -----------
 Version 1.0
