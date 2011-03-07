@@ -184,7 +184,7 @@ class decl_wrapper_t(object):
         this declaration.
 
         skip_ignored argument allows you to control the information reported to you.
-        For more information please read: http://www.language-binding.net/pyplusplus/documentation/warnings.html
+        For more information please read documentation about warnings.
         """
         msgs = []
         if not self.exportable:

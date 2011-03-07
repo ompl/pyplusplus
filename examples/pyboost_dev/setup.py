@@ -16,7 +16,6 @@ setup(
     , description = ""
     , author = "Roman Yakovenko"
     , author_email = "roman.yakovenko@gmail.com"
-    , url = 'http://www.language-binding.net/pygccxml/pygccxml.html'
     , packages = [ 'pyboost'
                    , 'pyboost.boost_random'
                    , 'pyboost.crc'

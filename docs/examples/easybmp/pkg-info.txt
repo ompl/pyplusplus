@@ -5,7 +5,6 @@ Author: Roman Yakovenko
 Author-email: roman yakovenko at gmail com
 Maintainer: Roman Yakovenko
 Maintainer-email: roman yakovenko at gmail com
-Home-page: http://www.language-binding.net/pyplusplus/examples/py_easybmp/py_easybmp.html
 Download-url: http://sourceforge.net/project/showfiles.php?group_id=118209
 Summary: Python bindings for C++ EasyBMP library
 License: Boost Software License

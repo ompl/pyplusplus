@@ -100,9 +100,7 @@ def create_identifier(creator, full_name ):
         return full_name
 
 class registration_order:
-    """class-namespace, introduce few functions, which deals with functions
-    registration order problem: http://www.language-binding.net/pyplusplus/documentation/functions/registration_order.html
-    """
+    """the class, introduces few functions, which deals with functions registration order problem"""
 
     @staticmethod
     def is_related( t1, t2 ):

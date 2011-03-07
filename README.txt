@@ -5,8 +5,6 @@ Py++ is a code generator for Boost.Python that simplifies writing
 Python bindings of a C/C++ library. The tool is implemented as a Python
 module which is controlled by a user script.
 
-Homepage: http://www.language-binding.net/pyplusplus/pyplusplus.html
-
 
 Requirements
 ------------
@@ -14,8 +12,8 @@ Requirements
 In order to use Py++ you need the following additional components:
 
 - Python v2.6 (or higher)
-- pygccxml (http://www.language-binding.net/pygccxml/pygccxml.html)
-- GCC-XML (http://www.gccxml.org)
+- pygccxml
+- GCC-XML
 
 
 Install

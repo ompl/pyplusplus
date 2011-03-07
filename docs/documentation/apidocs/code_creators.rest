@@ -111,14 +111,6 @@ ctypes_integration_creators
     :undoc-members:
     :show-inheritance:
 
-ctypes_module
--------------
-
-.. automodule:: pyplusplus.code_creators.ctypes_module
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 custom
 ------
 
