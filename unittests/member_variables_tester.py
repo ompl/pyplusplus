@@ -37,6 +37,11 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         bf.b = value
 
     def run_tests(self, module):
+        sbk = module.status_bits_keeper_t()
+        sb = sbk.status_bits
+        sb.bcr = 2
+        self.failUnless( sbk.get_sb_bcr() == 2 )
+
         self.failIfRaisesAny( module.point )
         xypoint = module.point()
         self.failUnless( module.point.instance_count == 1)
@@ -78,7 +83,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         data = data_type.from_address( image.data )
         for j in range(5):
             self.failUnless( j == data[j] )
-            
+
         int_array = ctypes.c_int * 5
         array = int_array()
         for i in range( 5 ):
@@ -87,7 +92,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         data = data_type.from_address( image.data )
         for j in range(5):
             self.failUnless( j*2 == data[j] )
- 
+
         data_type = ctypes.POINTER( ctypes.c_int )
         data = data_type.from_address( module.image_t.none_image )
         self.failUnless( 1997 == data.contents.value )

@@ -80,6 +80,9 @@ SVN Version
 13. Thanks to Aron Xu, for pointing out that it is better to use "os.name",
     instead of "sys.platform" for platform specific logic
 
+14. Thanks to Scott Sturdivant, for reporting the bug, related to bit fields code generation.
+    The bug was fixed.
+
 -----------
 Version 1.0
 -----------

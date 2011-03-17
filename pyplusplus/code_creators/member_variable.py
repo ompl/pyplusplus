@@ -281,27 +281,28 @@ class bit_field_t( member_variable_base_t ):
         member_variable_base_t.__init__( self, variable=variable, wrapper=wrapper )
 
     def _create_impl( self ):
-        doc = ''
-        if self.declaration.type_qualifiers.has_static:
-            add_property = 'add_static_property'
-        else:
-            if self.documentation:
-                doc = self.documentation
-            add_property = 'add_property'
-        answer = [ add_property ]
+        answer = [ 'add_property' ]
         answer.append( '( ' )
         answer.append('"%s"' % self.alias)
         answer.append( self.PARAM_SEPARATOR )
-        answer.append( '(%s)(&%s)'
-                       % ( self.wrapper.getter_type, self.wrapper.getter_full_name ) )
+
+        make_function = algorithm.create_identifier( self, '::boost::python::make_function' )
+
+        answer.append( '%(mk_func)s( (%(getter_type)s)(&%(wfname)s) )'
+                       % { 'mk_func' : make_function
+                           , 'getter_type' : self.wrapper.getter_type
+                           , 'wfname' : self.wrapper.getter_full_name } )
 
         if self.wrapper.has_setter:
             answer.append( self.PARAM_SEPARATOR )
-            answer.append( '(%s)(&%s)'
-                           % ( self.wrapper.setter_type, self.wrapper.setter_full_name ) )
-        if doc:
+            answer.append( '%(mk_func)s( (%(setter_type)s)(&%(wfname)s) )'
+                       % { 'mk_func' : make_function
+                           , 'setter_type' : self.wrapper.setter_type
+                           , 'wfname' : self.wrapper.setter_full_name } )
+                           
+        if self.documentation:
             answer.append( self.PARAM_SEPARATOR )
-            answer.append( doc )
+            answer.append( self.documentation )
         answer.append( ' ) ' )
 
         code = ''.join( answer )
@@ -318,18 +319,17 @@ class bit_field_wrapper_t( code_creator.code_creator_t
     """
     creates get/set accessors for bit fields
     """
-
     indent = code_creator.code_creator_t.indent
-    BF_GET_TEMPLATE = os.linesep.join([
-          '%(type)s get_%(name)s() const {'
-        , indent( 'return %(name)s;' )
+    GET_TEMPLATE =os.linesep.join([
+          'static %(type)s get_%(name)s(%(cls_type)s inst ){'
+        , indent( 'return inst.%(name)s;' )
         , '}'
         , ''
     ])
 
-    BF_SET_TEMPLATE = os.linesep.join([
-          'void set_%(name)s( %(type)s new_value ){ '
-        , indent( '%(name)s = new_value;' )
+    SET_TEMPLATE = os.linesep.join([
+          'static void set_%(name)s( %(cls_type)s inst, %(type)s new_value ){ '
+        , indent( 'inst.%(name)s = new_value;' )
         , '}'
         , ''
     ])
@@ -342,12 +342,17 @@ class bit_field_wrapper_t( code_creator.code_creator_t
         return self.parent.full_name + '::' + 'get_' + self.declaration.name
     getter_full_name = property( _get_getter_full_name )
 
+    def inst_arg_type( self, has_const ):
+        inst_arg_type = declarations.declarated_t( self.declaration.parent )
+        if has_const:
+            inst_arg_type = declarations.const_t(inst_arg_type)
+        inst_arg_type = declarations.reference_t(inst_arg_type)
+        return inst_arg_type
+
     def _get_getter_type(self):
-        return declarations.member_function_type_t.create_decl_string(
+        return declarations.free_function_type_t.create_decl_string(
                 return_type=self.declaration.type
-                , class_decl_string=self.parent.full_name
-                , arguments_types=[]
-                , has_const=True
+                , arguments_types=[ self.inst_arg_type(True) ]
                 , with_defaults=False)
     getter_type = property( _get_getter_type )
 
@@ -356,11 +361,9 @@ class bit_field_wrapper_t( code_creator.code_creator_t
     setter_full_name = property(_get_setter_full_name)
 
     def _get_setter_type(self):
-        return declarations.member_function_type_t.create_decl_string(
+        return declarations.free_function_type_t.create_decl_string(
                 return_type=declarations.void_t()
-                , class_decl_string=self.parent.full_name
-                , arguments_types=[self.declaration.type]
-                , has_const=False
+                , arguments_types=[ self.inst_arg_type(False), self.declaration.type  ]
                 , with_defaults=False)
     setter_type = property( _get_setter_type )
 
@@ -370,11 +373,15 @@ class bit_field_wrapper_t( code_creator.code_creator_t
 
     def _create_impl(self):
         answer = []
-        substitutions = dict( type=self.declaration.type.decl_string
-                              , name=self.declaration.name )
-        answer.append( self.BF_GET_TEMPLATE % substitutions )
+        answer.append( self.GET_TEMPLATE % {
+            'type' : self.declaration.type.decl_string
+            , 'name' : self.declaration.name
+            , 'cls_type' : self.inst_arg_type( has_const=True ) })
         if self.has_setter:
-            answer.append( self.BF_SET_TEMPLATE % substitutions )
+            answer.append( self.SET_TEMPLATE % {
+            'type' : self.declaration.type.decl_string
+            , 'name' : self.declaration.name
+            , 'cls_type' : self.inst_arg_type( has_const=False ) })
         return os.linesep.join( answer )
 
     def _get_system_files_impl( self ):

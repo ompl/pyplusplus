@@ -48,6 +48,19 @@ unsigned int get_a(const bit_fields_t& inst);
 void set_a( bit_fields_t& inst, unsigned int new_value );
 unsigned int get_b(const bit_fields_t& inst);
 
+struct status_bits_t{
+    int bcr : 3;
+    int status : 3;
+};
+
+struct status_bits_keeper_t{
+
+    int get_sb_bcr(){ return status_bits.bcr; }
+    int get_sb_status(){ return status_bits.status; }
+
+    status_bits_t status_bits;
+};
+
 struct array_t{
     array_t()
     {
@@ -165,11 +178,11 @@ namespace ctypes{
 
         static int* none_image;
     };
-    
+
     class Andy{
     protected:
         Andy() : userData(NULL) {}
-   
+
         virtual ~Andy()    {}
 
     public:
