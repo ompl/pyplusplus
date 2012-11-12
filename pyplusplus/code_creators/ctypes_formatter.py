@@ -7,7 +7,7 @@
 defines types visitor class interface
 """
 
-import algorithm
+from . import algorithm
 from pygccxml import declarations
 
 class type_converter_t(declarations.type_visitor_t):

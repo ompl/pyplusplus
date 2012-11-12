@@ -6,7 +6,7 @@
 """defines a class that writes :class:`code_creators.bpmodule_t` to multiple files"""
 
 import os
-import writer
+from . import writer
 from pyplusplus import messages
 from pyplusplus import _logging_
 from pygccxml import declarations
@@ -41,10 +41,8 @@ class multiple_files_t(writer.writer_t):
         self.written_files = []
         self.ref_count_creators = ( code_creators.opaque_type_registrator_t, )
         self.__predefined_include_creators \
-            = filter( lambda creator: isinstance( creator, code_creators.include_t )
-                      , self.extmodule.creators )
-        self.__value_traits = filter( lambda x: isinstance(x, code_creators.value_traits_t)
-                                      , self.extmodule.creators )
+            = [creator for creator in self.extmodule.creators if isinstance( creator, code_creators.include_t )]
+        self.__value_traits = [x for x in self.extmodule.creators if isinstance(x, code_creators.value_traits_t)]
 
 
     def write_file( self, fpath, content ):
@@ -94,15 +92,13 @@ class multiple_files_t(writer.writer_t):
         internal_creators = []
         if isinstance( creator, code_creators.compound_t ):
             internal_creators.extend(
-                filter( lambda creator: isinstance( creator, code_creators.registration_based_t )
-                        , code_creators.make_flatten( creator.creators ) ) )
+                [creator for creator in code_creators.make_flatten( creator.creators ) if isinstance( creator, code_creators.registration_based_t )] )
 
-        map( lambda internal_creator: associated_creators.extend( internal_creator.associated_decl_creators )
-             , internal_creators )
+        for internal_creator in internal_creators:
+            associated_creators.extend( internal_creator.associated_decl_creators )
         #now associated_creators contains all code creators associated with the creator
         #We should leave only creators, defined in the global namespace
-        associated_creators = filter( lambda associated_creator: associated_creator.parent is self.extmodule
-                                      , associated_creators )
+        associated_creators = [associated_creator for associated_creator in associated_creators if associated_creator.parent is self.extmodule]
         return associated_creators
 
     def create_function_code( self, function_name ):
@@ -157,7 +153,7 @@ class multiple_files_t(writer.writer_t):
                 return None #`Py++` doesn't create value traits for class that has
                             # = and < operators available
             return self.create_value_traits_header_name( value_class )
-        except RuntimeError, error:
+        except RuntimeError as error:
             decls_logger = _logging_.loggers.declarations
             if not messages.filter_disabled_msgs([messages.W1042], code_creator.declaration.disabled_messages ):
                 return #user disabled property warning
@@ -169,14 +165,13 @@ class multiple_files_t(writer.writer_t):
         unique_headers = code_creators.code_creator_t.unique_headers
 
         if head_headers:
-            answer.extend( map( lambda header: '#include "%s"' % normalize( header )
-                                , head_headers ) )
+            answer.extend( ['#include "%s"' % normalize( header ) for header in head_headers] )
 
         dependend_on_headers = []
         for creator in creators:
             dependend_on_headers.extend( creator.get_system_files( recursive=True, language='C++' ) )
 
-        dependend_on_headers = unique_headers( map( normalize, dependend_on_headers ) )
+        dependend_on_headers = unique_headers( list(map( normalize, dependend_on_headers )) )
 
         for include_cc in self.__predefined_include_creators:
             if include_cc.is_system:
@@ -185,8 +180,8 @@ class multiple_files_t(writer.writer_t):
             else:# user header file - always include
                 answer.append( include_cc.create() )
 
-        map( lambda user_header: answer.append( '#include "%s"' % user_header )
-             , self.get_user_headers( creators ) )
+        for used_header in self.get_user_headers( creators ):
+            answer.append( '#include "%s"' % user_header )
 
         for creator in creators:
             header = self.find_out_value_traits_header( creator )
@@ -194,21 +189,20 @@ class multiple_files_t(writer.writer_t):
                 answer.append( '#include "%s"' % header )
 
         if tail_headers:
-            answer.extend( map( lambda header: '#include "%s"' % normalize( header )
-                                , tail_headers ) )
+            answer.extend( ['#include "%s"' % normalize( header ) for header in tail_headers] )
 
         return os.linesep.join( answer )
 
     def create_namespaces_code( self, creators ):
         # Write all 'global' namespace_alias_t and namespace_using_t creators first...
         ns_types = ( code_creators.namespace_alias_t, code_creators.namespace_using_t )
-        ns_creators = filter( lambda x: isinstance( x, ns_types ), self.extmodule.creators )
+        ns_creators = [x for x in self.extmodule.creators if isinstance( x, ns_types )]
 
-        ns_creators.extend( filter( lambda x: isinstance( x, ns_types ), self.extmodule.body.creators ) )
+        ns_creators.extend( [x for x in self.extmodule.body.creators if isinstance( x, ns_types )] )
         if not ns_creators:
             return ''
         else:
-            return os.linesep.join( map( lambda creator: creator.create(), ns_creators ) )
+            return os.linesep.join( [creator.create() for creator in ns_creators] )
 
     def create_source( self, file_name, function_name, registration_creators ):
         """
@@ -292,7 +286,7 @@ class multiple_files_t(writer.writer_t):
             if class_creator.declaration.already_exposed:
                 return
             self.split_class_impl( class_creator )
-        except IOError, error:
+        except IOError as error:
             msg = [ 'Failed to write code for class "%s" into file.;' % class_creator.declaration.name ]
             msg.append( "May be the class name is too long?." )
             msg.append( "Error: %s'" % str(error) )
@@ -301,10 +295,9 @@ class multiple_files_t(writer.writer_t):
 
     def split_classes( self ):
         # Obtain a list of all class creators...
-        class_creators = filter( lambda x: isinstance(x, ( code_creators.class_t, code_creators.class_declaration_t ) )
-                                 , self.extmodule.body.creators )
+        class_creators = [x for x in self.extmodule.body.creators if isinstance(x, ( code_creators.class_t, code_creators.class_declaration_t ) )]
         # ...and write a .h/.cpp file for each class
-        map( self.split_class, class_creators )
+        for cls in class_creators: self.split_class(cls)
 
     def create_value_traits_header_name( self, value_class ):
         return "_" + value_class.alias + "__value_traits" + self.HEADER_EXT
@@ -325,7 +318,7 @@ class multiple_files_t(writer.writer_t):
         value_traits.create = lambda: ''
 
     def split_values_traits( self ):
-        map( self.split_value_traits, self.__value_traits )
+        for trait in self.__value_traits: self.split_value_traits(trait)
 
     def split_creators( self, creators, pattern, function_name, registrator_pos ):
         """Write non-class creators into a particular .h/.cpp file.
@@ -364,25 +357,22 @@ class multiple_files_t(writer.writer_t):
     def split_enums( self ):
         """Write all enumerations into a separate .h/.cpp file.
         """
-        enums_creators = filter( lambda x: isinstance(x, code_creators.enum_t )
-                                 , self.extmodule.body.creators )
+        enums_creators = [x for x in self.extmodule.body.creators if isinstance(x, code_creators.enum_t )]
 
         self.split_creators( enums_creators, '_enumerations', 'register_enumerations', 0 )
 
     def split_global_variables( self ):
         """Write all global variables into a separate .h/.cpp file.
         """
-        creators = filter( lambda x: isinstance(x, code_creators.global_variable_t )
-                           , self.extmodule.body.creators )
-        creators.extend( filter( lambda x: isinstance(x, code_creators.unnamed_enum_t )
-                           , self.extmodule.body.creators ) )
+        creators = [x for x in self.extmodule.body.creators if isinstance(x, code_creators.global_variable_t )]
+        creators.extend( [x for x in self.extmodule.body.creators if isinstance(x, code_creators.unnamed_enum_t )] )
         self.split_creators( creators, '_global_variables', 'register_global_variables', -1 )
 
     def split_free_functions( self ):
         """Write all free functions into a separate .h/.cpp file.
         """
         free_functions = ( code_creators.free_function_t, code_creators.free_fun_overloads_t )
-        creators = filter( lambda x: isinstance(x, free_functions ), self.extmodule.body.creators )
+        creators = [x for x in self.extmodule.body.creators if isinstance(x, free_functions )]
         self.split_creators( creators, '_free_functions', 'register_free_functions', -1 )
 
     def write(self):
@@ -409,9 +399,9 @@ class multiple_files_t(writer.writer_t):
         self.split_free_functions()
 
         if self.write_main:
-            self.include_creators.sort( cmp=lambda ic1, ic2: cmp( ic1.header, ic2.header ) )
-            map( lambda creator: self.extmodule.adopt_include( creator )
-                 , self.include_creators )
+            self.include_creators.sort( key=lambda ic: ic.header )
+            for creator in self.include_creators:
+                self.extmodule.adopt_include( creator )
             main_cpp = os.path.join( self.directory_path, self.extmodule.body.name + '.main.cpp' )
             self.write_file( main_cpp, self.extmodule.create() + os.linesep )
         self.files_sum_repository.save_values()

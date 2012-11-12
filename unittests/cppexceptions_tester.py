@@ -51,7 +51,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def run_tests( self, module):
         try:
             module.throw_custom_exception()
-        except RuntimeError, error:
+        except RuntimeError as error:
             self.failUnless( "profe of concept" in str( error ) )
         #custom_exception_t = module.custom_exception_t
         #bases = list( custom_exception_t.__bases__ ) + [RuntimeError]

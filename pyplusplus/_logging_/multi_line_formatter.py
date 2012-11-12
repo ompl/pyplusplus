@@ -87,7 +87,7 @@ class multi_line_formatter_t(logging.Formatter):
         # Insert a separator if there are two parts (=decl and msg)
         # Apply the text wrapper to shorten the maximum line length
         wrapped_lines = textwrap.wrap( txts[1], width )
-        lines.extend( map( lambda s: "> " + s.strip(), wrapped_lines ) )
+        lines.extend( ["> " + s.strip() for s in wrapped_lines] )
 
         return os.linesep.join(lines)
 

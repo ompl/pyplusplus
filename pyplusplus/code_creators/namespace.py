@@ -4,9 +4,9 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import compound
-import code_creator
-import declaration_based
+from . import compound
+from . import code_creator
+from . import declaration_based
 
 class namespace_alias_t(code_creator.code_creator_t):
     def __init__( self, alias, full_namespace_name ):

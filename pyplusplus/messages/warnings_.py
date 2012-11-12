@@ -261,7 +261,7 @@ warnings = globals()
 
 all_warning_msgs = []
 
-for identifier, explanation in warnings.items():
+for identifier, explanation in list(warnings.items()):
     if len( identifier ) != 5:
         continue
     if identifier[0] != 'W':
@@ -283,11 +283,11 @@ del explanation
 
 if __name__ == '__main__':
     x = W1051 % ( 'xxxxxxxx', 122, 'yyyyyyyyyy' )
-    print x
-    print x.__class__.__name__
+    print(x)
+    print(x.__class__.__name__)
 
-    print '\n\n\n'
+    print('\n\n\n')
 
     y = W1000
-    print y
+    print(y)
 

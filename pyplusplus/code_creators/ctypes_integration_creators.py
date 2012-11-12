@@ -4,10 +4,10 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import algorithm
-import code_creator
-import declaration_based
-import registration_based
+from . import algorithm
+from . import code_creator
+from . import declaration_based
+from . import registration_based
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 from pyplusplus import code_repository

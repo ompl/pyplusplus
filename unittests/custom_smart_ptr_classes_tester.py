@@ -152,20 +152,20 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                 module.value_plus_x_t.__init__( self, v )
 
             def get_plus_value(self):
-                print "I am here"
+                print("I am here")
                 return 5
         return add_5_value_t( v )
 
     def run_tests(self, module):
         self.fail( "The test fails with Segmentation fault error." )
         add_0 = module.add_x_t( 23 )
-        print '>',1
+        print('>',1)
         self.failUnless( 23 == add_0.get_value() )
-        print '>',2
+        print('>',2)
         self.failUnless( 23 == module.val_get_value( add_0 ) )
-        print '>',3
+        print('>',3)
         self.failUnless( 23 == module.const_ref_get_value( add_0 ) )
-        print '>',4
+        print('>',4)
         self.failUnless( 23 == module.ref_get_value( add_0 ) )
 
 

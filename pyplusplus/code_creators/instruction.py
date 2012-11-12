@@ -4,7 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import code_creator
+from . import code_creator
 
 class instruction_t(code_creator.code_creator_t):
     """

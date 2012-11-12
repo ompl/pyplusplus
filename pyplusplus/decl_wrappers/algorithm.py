@@ -33,7 +33,7 @@ def creators_affect_on_me( me ):
         def _get_left_siblings( self, child ):
             if not child or not child.parent:
                 return []
-            ids = map( id, child.parent.creators )
+            ids = list(map( id, child.parent.creators ))
             child_index = ids.index( id( child ) )
             return child.parent.creators[:child_index]
 
@@ -79,7 +79,7 @@ def create_valid_name(name):
         , '.'  : '_dot_'
         , '$'  : '_dollar_'
     }
-    for orig, dest in replace_table.items():
+    for orig, dest in list(replace_table.items()):
         name = name.replace( orig, dest )
     return name
 
@@ -89,7 +89,7 @@ def create_identifier(creator, full_name ):
 
     from pyplusplus import code_creators
     dset = creators_affect_on_me( creator )
-    dset = filter( lambda x: isinstance( x, code_creators.namespace_alias_t ), dset )
+    dset = [x for x in dset if isinstance( x, code_creators.namespace_alias_t )]
     full_name = full_name.lstrip( '::' )
     for nsalias in dset:
         fnsname = nsalias.full_namespace_name + '::'

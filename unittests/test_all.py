@@ -3,11 +3,13 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+from __future__ import print_function
 import os
 import re
 import sys
 import time
 import shutil
+import subprocess
 
 import autoconfig
 
@@ -205,7 +207,7 @@ testers = [
     , split_module_bug_tester
     , tnfox_bugs_tester
     , transfer_ownership_old_tester
-    , transfer_ownership_tester
+#    , transfer_ownership_tester
     , unicode_bug
     , include_exclude_bug_tester
     , vector_with_shared_data_tester
@@ -263,26 +265,21 @@ class module_runner_t( object ):
         self.exit_status = None
 
     def __call__( self ):
-        print os.linesep, '<*> start %s tester' % os.path.basename( self.module.__file__)
+        print(os.linesep, '<*> start %s tester' % os.path.basename( self.module.__file__))
 
         test_file_name = self.module.__file__
         if test_file_name.endswith( 'pyc' ):
             test_file_name = test_file_name[:-1]
         command_line = ' '.join([ '"%s"' % sys.executable, test_file_name ])
-        input_, output = os.popen4( command_line )
-        input_.close()
-        report = []
-        while True:
-            data = output.readline()
-            report.append( data )
-            if not data:
-                break
-            else:
-                print data,
-        self.output = ''.join( report )
-        self.exit_status = output.close()
+        try:
+            self.output = subprocess.check_output([sys.executable, test_file_name]).decode()
+            self.exit_status = 0
+        except subprocess.CalledProcessError as e:
+            self.output = e.output
+            self.exit_status = e.returncode
+        print(self.output)
         self.__update()
-        print '<***> finish %s tester' % os.path.basename( self.module.__file__)
+        print('<***> finish %s tester' % os.path.basename( self.module.__file__))
 
     def __create_unique_name( self, name ):
         if '__main__.' in name:
@@ -330,27 +327,27 @@ class process_tester_runner_t( object ):
             total_tests_only_run_time += stat.total_run_time
             test_results.update( stat.test_results )
             exit_status = max( exit_status, stat.exit_status )
-        test_failed = len( filter( lambda result: result != 'ok', test_results.values() ) )
+        test_failed = len( [result for result in list(test_results.values()) if result != 'ok'] )
 
-        for name, result in test_results.iteritems():
+        for name, result in test_results.items():
             if result != 'ok':
-                print '! ',
-            print name, ' - ', result
-        print '----------------------------------------------------------------------'
-        print 'Final exit status: ', exit_status
-        print 'Ran %d test in %fs. Multi-processing overhead: %fs.' \
-               % ( num_of_tests, self.__total_time, self.__total_time - total_tests_only_run_time )
-        print ' '
+                print('! ', end=' ')
+            print(name, ' - ', result)
+        print('----------------------------------------------------------------------')
+        print('Final exit status: ', exit_status)
+        print('Ran %d test in %fs. Multi-processing overhead: %fs.' \
+               % ( num_of_tests, self.__total_time, self.__total_time - total_tests_only_run_time ))
+        print(' ')
         if test_failed:
-            print os.linesep.join(['FAILED  (failures=%d)' % test_failed, 'False'])
+            print(os.linesep.join(['FAILED  (failures=%d)' % test_failed, 'False']))
         else:
-            print 'ok'
+            print('ok')
 
     def __call__( self ):
         start_time = time.time()
         for index, tester in enumerate( self.__m_runners ):
-            print '\n\n{[<@>]}running tests complition: %d%%' % int( index * 100.0 // len(self.__m_runners) )
-            print     '--------------------------------^^^^^\n\n'
+            print('\n\n{[<@>]}running tests complition: %d%%' % int( index * 100.0 // len(self.__m_runners) ))
+            print('--------------------------------^^^^^\n\n')
             if os.path.exists( os.path.join( autoconfig.build_directory, 'indexing_suite' ) ):
                 shutil.rmtree( os.path.join( autoconfig.build_directory, 'indexing_suite' ) )
             tester()

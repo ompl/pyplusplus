@@ -3,7 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-import opaque_types_manager
+from . import opaque_types_manager
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 from pyplusplus import code_creators

@@ -3,13 +3,13 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-import types_database
-import creators_wizard
-import sort_algorithms
-import dependencies_manager
-import opaque_types_manager
-import call_policies_resolver
-import fake_constructors_manager
+from . import types_database
+from . import creators_wizard
+from . import sort_algorithms
+from . import dependencies_manager
+from . import opaque_types_manager
+from . import call_policies_resolver
+from . import fake_constructors_manager
 
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
@@ -155,8 +155,7 @@ class bpcreator_t( declarations.decl_visitor_t ):
 
     def _adopt_free_operator( self, operator ):
         def adopt_operator_impl( operator, found_creators ):
-            creator = filter( lambda creator: isinstance( creator, code_creators.class_t )
-                              , found_creators )
+            creator = [creator for creator in found_creators if isinstance( creator, code_creators.class_t )]
             if len(creator) == 1:
                 creator = creator[0]
                 #I think I don't need this condition any more
@@ -222,19 +221,17 @@ class bpcreator_t( declarations.decl_visitor_t ):
         for cls_creator in class_creators:
             cls_decl = cls_creator.declaration
 
-            uc_creators_head = map( lambda uc: ctext_t( uc.text, uc.works_on_instance )
-                                    , cls_decl.registration_code_head )
+            uc_creators_head = [ctext_t( uc.text, uc.works_on_instance ) for uc in cls_decl.registration_code_head]
             cls_creator.adopt_creators( uc_creators_head, 0 )
 
-            uc_creators_tail = map( lambda uc: ctext_t( uc.text, uc.works_on_instance )
-                                    , cls_decl.registration_code_tail )
+            uc_creators_tail = [ctext_t( uc.text, uc.works_on_instance ) for uc in cls_decl.registration_code_tail]
             cls_creator.adopt_creators( uc_creators_tail )
 
-            uc_creators = map( lambda uc: ctext_t( uc.text ), cls_decl.wrapper_code )
+            uc_creators = [ctext_t( uc.text ) for uc in cls_decl.wrapper_code]
             if uc_creators:
                 cls_creator.wrapper.adopt_creators( uc_creators )
 
-            uc_creators = map( lambda uc: ctext_t( uc.text ), cls_decl.declaration_code )
+            uc_creators = [ctext_t( uc.text ) for uc in cls_decl.declaration_code]
             insert_pos = self.__extmodule.creators.index( self.__module_body )
             self.__extmodule.adopt_creators( uc_creators, insert_pos )
             cls_creator.associated_decl_creators.extend( uc_creators )
@@ -245,13 +242,11 @@ class bpcreator_t( declarations.decl_visitor_t ):
 
         std containers exposed by `Py++`, even if the user didn't ``include`` them.
         """
-        cmp_by_name = lambda cls1, cls2: cmp( cls1.decl_string, cls2.decl_string )
+        cmp_by_name = cls: cls.decl_string
         used_containers = list( self.__types_db.used_containers )
-        used_containers = filter( lambda cls: cls.indexing_suite.include_files
-                                  , used_containers )
-        used_containers.sort( cmp_by_name )
-        used_containers = filter( lambda cnt: cnt.already_exposed == False
-                                  , used_containers )
+        used_containers = [cls for cls in used_containers if cls.indexing_suite.include_files]
+        used_containers.sort( key=cmp_by_name )
+        used_containers = [cnt for cnt in used_containers if cnt.already_exposed == False]
         return used_containers
 
     def _treat_indexing_suite( self ):
@@ -334,13 +329,13 @@ class bpcreator_t( declarations.decl_visitor_t ):
         add_include = self.__extmodule.add_include
         #add system headers
         system_headers = self.__extmodule.get_system_files( recursive=True, unique=True, language='c++' )
-        map( lambda header: add_include( header, user_defined=False, system=True )
-             , system_headers )
+        for header in system_headers:
+            add_include( header, user_defined=False, system=True )
         #add user defined header files
         if decl_headers is None:
             decl_headers = declarations.declaration_files( self.__decls )
-        map( lambda header: add_include( header, user_defined=False, system=False )
-             , decl_headers )
+        for header in decl_headers:
+            add_include( header, user_defined=False, system=False )
 
         self.__dependencies_manager.inform_user()
 
@@ -384,9 +379,8 @@ class bpcreator_t( declarations.decl_visitor_t ):
 
         if self.curr_decl.has_static:
             #static_method should be created only once.
-            found = filter( lambda creator: isinstance( creator, code_creators.static_method_t )
-                                            and creator.declaration.name == self.curr_decl.name
-                                     , self.curr_code_creator.creators )
+            found = [creator for creator in self.curr_code_creator.creators if isinstance( creator, code_creators.static_method_t )
+                                            and creator.declaration.name == self.curr_decl.name]
             if not found:
                 static_method = code_creators.static_method_t( function=self.curr_decl
                                                                , function_code_creator=maker )
@@ -465,11 +459,10 @@ class bpcreator_t( declarations.decl_visitor_t ):
 
         elif self.curr_decl.use_overload_macro:
             parent_decl = self.curr_decl.parent
-            names = set( map( lambda decl: decl.name
-                              , parent_decl.free_functions( allow_empty=True, recursive=False ) ) )
+            names = set( [decl.name for decl in parent_decl.free_functions( allow_empty=True, recursive=False )] )
             for name in names:
                 overloads = parent_decl.free_functions( name, allow_empty=True, recursive=False )
-                overloads = filter( lambda decl: decl.ignore == False and decl.use_overload_macro, overloads )
+                overloads = [decl for decl in overloads if decl.ignore == False and decl.use_overload_macro]
                 if not overloads:
                     continue
                 else:
@@ -490,7 +483,7 @@ class bpcreator_t( declarations.decl_visitor_t ):
 
                     ctext_t = code_creators.custom_text_t
                     for f in overloads:
-                        uc_creators = map( lambda uc: ctext_t( uc.text ), f.declaration_code )
+                        uc_creators = [ctext_t( uc.text ) for uc in f.declaration_code]
                         insert_pos = self.__extmodule.creators.index( self.__module_body )
                         self.__extmodule.adopt_creators( uc_creators, insert_pos )
                         overloads_reg.associated_decl_creators.extend( uc_creators )
@@ -512,7 +505,7 @@ class bpcreator_t( declarations.decl_visitor_t ):
             self.__opaque_types_manager.register_opaque( maker, self.curr_decl )
 
             ctext_t = code_creators.custom_text_t
-            uc_creators = map( lambda uc: ctext_t( uc.text ), self.curr_decl.declaration_code )
+            uc_creators = [ctext_t( uc.text ) for uc in self.curr_decl.declaration_code]
             insert_pos = self.__extmodule.creators.index( self.__module_body )
             self.__extmodule.adopt_creators( uc_creators, insert_pos )
             maker.associated_decl_creators.extend( uc_creators )
@@ -537,12 +530,10 @@ class bpcreator_t( declarations.decl_visitor_t ):
     def expose_overloaded_mem_fun_using_macro( self, cls, cls_creator ):
         #returns set of exported member functions
         exposed = set()
-        names = set( map( lambda decl: decl.name
-                          , cls.member_functions( allow_empty=True, recursive=False ) ) )
+        names = set( [decl.name for decl in cls.member_functions( allow_empty=True, recursive=False )] )
         for name in names:
             overloads = cls.member_functions( name, allow_empty=True, recursive=False )
-            overloads = filter( lambda decl: decl.ignore == False and decl.use_overload_macro
-                                , overloads )
+            overloads = [decl for decl in overloads if decl.ignore == False and decl.use_overload_macro]
             if not overloads:
                 continue
             else:
@@ -632,8 +623,7 @@ class bpcreator_t( declarations.decl_visitor_t ):
 
         #all static_methods_t should be moved to the end
         #better approach is to move them after last def of relevant function
-        static_methods = filter( lambda creator: isinstance( creator, code_creators.static_method_t )
-                                 , cls_cc.creators )
+        static_methods = [creator for creator in cls_cc.creators if isinstance( creator, code_creators.static_method_t )]
         for static_method in static_methods:
             cls_cc.remove_creator( static_method )
             cls_cc.adopt_creator( static_method )

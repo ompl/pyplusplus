@@ -4,8 +4,8 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import code_creator
-import include_directories
+from . import code_creator
+from . import include_directories
 
 class include_t(code_creator.code_creator_t):
     """

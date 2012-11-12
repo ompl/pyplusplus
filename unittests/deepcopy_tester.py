@@ -26,7 +26,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def run_tests( self, module):
         items = module.create_items()
         for i in items:
-            print i.id
+            print(i.id)
         self.failIfNotRaisesAny( copy.deepcopy,  items )
 
 def create_suite():

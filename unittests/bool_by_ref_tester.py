@@ -34,17 +34,17 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             def __init__ ( self ):
                 module.listener.__init__(self)
             def listen( self, id, name,  skip):
-                print "Python: listen called with", id, name, skip
+                print("Python: listen called with", id, name, skip)
                 return skip + 1 ## Test always returns True...
             def listenPV( self, id, name,  skip):
-                print "Python: listenPV called with", id, name, skip
+                print("Python: listenPV called with", id, name, skip)
                 return skip + 1 ## Test always returns True...
 
         c = list1()
         ret = module.callListener( c )
-        print ret
+        print(ret)
         ret = module.callListenerPV ( c )
-        print ret
+        print(ret)
         
 def create_suite():
     suite = unittest.TestSuite()

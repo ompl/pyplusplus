@@ -5,10 +5,10 @@
 
 import os
 import types
-import algorithm
-import code_creator
-import declaration_based
-import registration_based
+from . import algorithm
+from . import code_creator
+from . import declaration_based
+from . import registration_based
 from pygccxml import declarations
 
 class indexing_suite1_t( registration_based.registration_based_t

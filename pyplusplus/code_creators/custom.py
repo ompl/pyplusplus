@@ -3,7 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-import code_creator
+from . import code_creator
 
 class custom_t(code_creator.code_creator_t):
     def __init__(self, works_on_instance=True):

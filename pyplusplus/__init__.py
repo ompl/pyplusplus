@@ -20,16 +20,16 @@ finally written into one or more C++ source files, which can then be compiled to
 generate the final Python module.
 """
 
-import code_creators
-import file_writers
-import creators_factory
-import code_repository
-import utils
-import decl_wrappers
-import module_builder
-import messages
+from . import code_creators
+from . import file_writers
+from . import creators_factory
+from . import code_repository
+from . import utils
+from . import decl_wrappers
+from . import module_builder
+from . import messages
 
-from _logging_ import multi_line_formatter_t
+from ._logging_ import multi_line_formatter_t
 
 __version__ = '1.5.0'
 

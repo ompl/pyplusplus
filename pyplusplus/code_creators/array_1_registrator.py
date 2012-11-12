@@ -5,8 +5,8 @@
 
 
 import os
-import algorithm
-import registration_based
+from . import algorithm
+from . import registration_based
 from pyplusplus import code_repository
 from pyplusplus.decl_wrappers import call_policies
 from pyplusplus.decl_wrappers import python_traits

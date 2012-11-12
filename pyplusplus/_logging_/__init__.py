@@ -9,8 +9,8 @@
 import os
 import sys
 import logging
-import cStringIO
-from multi_line_formatter import multi_line_formatter_t
+import io
+from .multi_line_formatter import multi_line_formatter_t
 
 def create_handler( stream=None ):
     handler = None
@@ -58,7 +58,8 @@ class loggers:
 
     @staticmethod
     def make_inmemory():
-        loggers.stream = cStringIO.StringIO()
+        loggers.stream = io.StringIO()
         for logger in loggers.all:
-            map( lambda h: logger.removeHandler( h ), logger.handlers[:] )
+            for h in logger.handlers[:]:
+                logger.removeHandler( h )
             logger.addHandler( create_handler( loggers.stream ) )

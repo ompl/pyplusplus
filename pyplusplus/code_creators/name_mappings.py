@@ -4,7 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import code_creator
+from . import code_creator
 
 
 class name_mappings_t(code_creator.code_creator_t):
@@ -18,7 +18,7 @@ class name_mappings_t(code_creator.code_creator_t):
         tmpl = '"%s" : "%s", '
         items_decorated = []
         items_undecorated = []
-        for blob, decl in self._exported_symbols.iteritems():
+        for blob, decl in self._exported_symbols.items():
             items_decorated.append( tmpl % ( blob, str(decl) ) )
             items_undecorated.append( tmpl % ( str(decl), blob ) )
 
@@ -39,4 +39,4 @@ class name_mappings_t(code_creator.code_creator_t):
 if __name__ == '__main__':
     data = { 'a' : 'AA', 'b' : 'BB' }
     nm = name_mapping_t( 'name_mapping', data )
-    print nm.create()
+    print(nm.create())

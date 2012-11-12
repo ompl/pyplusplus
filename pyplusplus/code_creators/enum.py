@@ -4,10 +4,10 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import algorithm
-import code_creator
-import declaration_based
-import registration_based
+from . import algorithm
+from . import code_creator
+from . import declaration_based
+from . import registration_based
 
 class enum_t( registration_based.registration_based_t
               , declaration_based.declaration_based_t ):

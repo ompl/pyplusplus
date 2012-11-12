@@ -41,23 +41,23 @@ if 'roman' in getpass.getuser():
         python.libs = 'c:/program files/python26/libs'
         python.include = 'c:/program files/python26/include'
     else:
-		if 'kubunu-vbox' == socket.gethostname():
-			os.nice( 20 )
-			print 'test process niceness: 20'
-			scons.suffix = '.so'
-			scons.ccflags = []
-			boost.libs = ['/usr/lib'] #'/home/roman/include/libs', '/home/roman/include/lib' ]
-			boost.include = '/usr/include/boost'
-			python.include = '/usr/include/python2.6'
+        if 'kubunu-vbox' == socket.gethostname():
+            os.nice( 20 )
+            print('test process niceness: 20')
+            scons.suffix = '.so'
+            scons.ccflags = []
+            boost.libs = ['/usr/lib'] #'/home/roman/include/libs', '/home/roman/include/lib' ]
+            boost.include = '/usr/include/boost'
+            python.include = '/usr/include/python2.6'
 
-		else:
-			os.nice( 20 )
-			print 'test process niceness: 20'
-			scons.suffix = '.so'
-			scons.ccflags = []
-			boost.libs = ['/home/roman/include/libs', '/home/roman/include/lib' ]
-			boost.include = '/home/roman/boost_svn'
-			python.include = '/usr/include/python2.6'
+        else:
+            os.nice( 20 )
+            print('test process niceness: 20')
+            scons.suffix = '.so'
+            scons.ccflags = []
+            boost.libs = ['/home/roman/include/libs', '/home/roman/include/lib' ]
+            boost.include = '/home/roman/boost_svn'
+            python.include = '/usr/include/python2.6'
 elif 'root' == getpass.getuser():
     if os.name == 'nt':
         scons.suffix = '.pyd'
@@ -66,13 +66,19 @@ elif 'root' == getpass.getuser():
         boost.include = 'd:/dev/boost_svn'
         python.libs = 'e:/python25/libs'
         python.include = 'e:/python25/include'
+elif 'mmoll' == getpass.getuser():
+    scons.suffix = '.so'
+    boost.libs = [ '/opt/local/lib']
+    boost.include = '/opt/local/include'
+    python.libs = [ '/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib' ]
+    python.include = '/opt/local/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7'
 
 _my_path = None
 try:
     import environment_path_helper
     environment_path_helper.raise_error()
-except Exception, error:
-    _my_path = os.path.abspath( os.path.split( sys.exc_traceback.tb_frame.f_code.co_filename )[0] )
+except Exception as error:
+    _my_path = os.path.abspath( os.path.split( sys.exc_info()[2].tb_frame.f_code.co_filename )[0])
     if not os.path.exists( os.path.join( _my_path, 'environment.py' ) ):
         #try another guess
         if sys.modules.has_key('environment'):
@@ -80,11 +86,11 @@ except Exception, error:
 
 try:
     import pygccxml
-    print 'pygccxml INSTALLED version will be used'
+    print('pygccxml INSTALLED version will be used')
 except ImportError:
     sys.path.append( os.path.join( _my_path, '../pygccxml_dev' ) )
     import pygccxml
-    print 'pygccxml DEVELOPMENT version will be used'
+    print('pygccxml DEVELOPMENT version will be used')
 
 import pyplusplus
 

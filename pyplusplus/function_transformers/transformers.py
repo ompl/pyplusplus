@@ -9,8 +9,8 @@
 
 import os
 import string
-import transformer
-import controllers
+from . import transformer
+from . import controllers
 from pygccxml import declarations
 from pyplusplus import code_repository
 

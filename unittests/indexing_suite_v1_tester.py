@@ -32,7 +32,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         x = module.get_empty()
         try:
             for i in x:
-                print i
+                print(i)
             self.fail( "TypeError exception was not raised" )
         except TypeError:
             pass

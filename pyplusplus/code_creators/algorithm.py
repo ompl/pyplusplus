@@ -12,10 +12,10 @@ from pyplusplus.decl_wrappers.algorithm import *
 
 
 import types
-import namespace
+from . import namespace
 
 def _make_flatten_list( creator_or_creators ):
-    import compound
+    from . import compound
     def proceed_single( creator ):
         answer = [ creator ]
         if not isinstance( creator, compound.compound_t):
@@ -28,7 +28,7 @@ def _make_flatten_list( creator_or_creators ):
         return answer
 
     creators = []
-    if isinstance( creator_or_creators, types.ListType ):
+    if isinstance( creator_or_creators, list ):
         creators.extend( creator_or_creators )
     else:
         creators.append( creator_or_creators )
@@ -38,7 +38,7 @@ def _make_flatten_list( creator_or_creators ):
     return answer
 
 def make_flatten_generator( creator_or_creators ):
-    import compound
+    from . import compound
     def proceed_single( creator ):
         yield creator
         if not isinstance( creator, compound.compound_t):
@@ -50,7 +50,7 @@ def make_flatten_generator( creator_or_creators ):
             else:
                 yield internal
 
-    if isinstance( creator_or_creators, types.ListType ):
+    if isinstance( creator_or_creators, list ):
         for creator in creator_or_creators:
             for internal in proceed_single( creator ):
                 yield internal
@@ -78,13 +78,12 @@ class creator_finder:
         where - code creator or list of code creators
         This function returns a list of all relevant code creators
         """
-        import declaration_based #prevent cyclic import
+        from . import declaration_based #prevent cyclic import
         search_area = where
         if recursive:
             search_area = make_flatten_generator( where )
-        return filter( lambda inst: isinstance( inst, declaration_based.declaration_based_t ) \
-                                    and declaration_matcher( inst.declaration )
-                       , search_area )
+        return [inst for inst in search_area if isinstance( inst, declaration_based.declaration_based_t ) \
+                                    and declaration_matcher( inst.declaration )]
 
     @staticmethod
     def find_by_declaration_single( declaration_matcher, where, recursive=True ):
@@ -98,7 +97,7 @@ class creator_finder:
         search_area = where
         if recursive:
             search_area = make_flatten_generator( where )
-        return filter( lambda inst: isinstance( inst, what ), search_area )
+        return [inst for inst in search_area if isinstance( inst, what )]
 
 def make_id_creator( code_creator ):
     return lambda decl_string: create_identifier( code_creator, decl_string )

@@ -5,7 +5,7 @@
 
 "defines property_t helper class"
 
-import algorithm
+from . import algorithm
 from pyplusplus import messages
 from pyplusplus import _logging_
 from pygccxml import declarations
@@ -133,8 +133,8 @@ class property_recognizer_i(object):
     
     def inherited_accessors( self, cls ):
         mem_funs = []
-        map( lambda base_cls: mem_funs.extend( base_cls.mem_funs( recursive=False, allow_empty=True ) )
-             , self.base_classes( cls ) )
+        for base_cls in self.base_classes( cls ):
+            mem_funs.extend( base_cls.mem_funs( recursive=False, allow_empty=True ) )
         return self.__get_accessors( mem_funs )
 
 
@@ -335,8 +335,8 @@ class properties_finder_t:
                     self.__report_illegal_property( property_ )
                     
         if self.exclude_accessors:
-            map( lambda accessor: accessor.exclude(), used_getters )
-            map( lambda accessor: accessor.exclude(), used_setters )
+            for accessor in used_getters: accessor.exclude()
+            for accessor in used_setters: accessor.exclude()
 
         return properties
 

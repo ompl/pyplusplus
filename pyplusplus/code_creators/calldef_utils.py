@@ -4,8 +4,8 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import algorithm
-import code_creator
+from . import algorithm
+from . import code_creator
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 #virtual functions that returns const reference to something

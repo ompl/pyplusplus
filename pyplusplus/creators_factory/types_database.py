@@ -16,7 +16,7 @@ class types_database_t( object ):
         self.__return_types = {} # decl_string : [type]
         self.__arguments_types = {} #decl_string : [type]
         self.__smart_ptrs = [ 'shared_ptr', 'auto_ptr' ]
-        self.__fundamental_strs = declarations.FUNDAMENTAL_TYPES.keys()
+        self.__fundamental_strs = list(declarations.FUNDAMENTAL_TYPES.keys())
         self.__normalize_data = [ ',', '<', '>', '*', '&', '(', ')', '::' ]
         self.__containers = set()
 
@@ -28,8 +28,8 @@ class types_database_t( object ):
         if isinstance( decl, declarations.calldef_t ):
             if not isinstance( decl, declarations.constructor_t ):
                 self._update_db( self.__return_types, decl.return_type )
-            map( lambda arg: self._update_db( self.__arguments_types, arg.type )
-                 , decl.arguments )
+            for arg in decl.arguments:
+                self._update_db( self.__arguments_types, arg.type )
         elif isinstance( decl, declarations.variable_t ):
             self._update_db( self.__variables, decl.type )
         else:
@@ -94,12 +94,11 @@ class types_database_t( object ):
             return
         if not self._is_relevant( decl_string ):
             return
-        insts = filter( lambda inst: self._is_relevant_inst( inst[0], inst[1] )
-                        , templates.split_recursive( decl_string ) )
+        insts = [inst for inst in templates.split_recursive( decl_string ) if self._is_relevant_inst( inst[0], inst[1] )]
         for smart_ptr, args in insts:
             assert len( args ) == 1
             pointee = self._normalize( args[0] )
-            if not db.has_key(pointee):
+            if pointee not in db:
                 db[ pointee ] = []
             smart_ptr = self._normalize( smart_ptr )
             if (smart_ptr, type_) not in db[pointee]:
@@ -107,7 +106,7 @@ class types_database_t( object ):
 
     def _find_smart_ptrs( self, db, class_decl ):
         decl_string = self._normalize( class_decl.decl_string )
-        if db.has_key( decl_string ):
+        if decl_string in db:
             return db[ decl_string ]
         else:
             return None
@@ -133,8 +132,7 @@ class types_database_t( object ):
         if not found:
             return
         for smart_ptr, type_ in found:
-            already_registered = filter( lambda registrator: registrator.smart_ptr == smart_ptr
-                                         , registered )
+            already_registered = [registrator for registrator in registered if registrator.smart_ptr == smart_ptr]
             if not already_registered:
                 registered.append( spregistrator_t( smart_ptr=smart_ptr, class_creator=class_creator) )
 
@@ -172,11 +170,11 @@ class types_database_t( object ):
         return answer
 
     def _print_single_db(self, db):
-        for decl_string in db.keys():
-            print 'decl_string : ', decl_string
+        for decl_string in list(db.keys()):
+            print('decl_string : ', decl_string)
             for smart_ptr, type_ in db[ decl_string ]:
-                print '    smart_ptr : ', smart_ptr
-                print '    type_     : ', type_.decl_string
+                print('    smart_ptr : ', smart_ptr)
+                print('    type_     : ', type_.decl_string)
 
     def print_db( self ):
         dbs = [ self.__arguments_types, self.__return_types, self.__variables ]

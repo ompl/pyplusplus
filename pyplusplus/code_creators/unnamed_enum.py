@@ -5,9 +5,9 @@
 
 import os
 import pygccxml
-import algorithm
-import declaration_based
-import registration_based
+from . import algorithm
+from . import declaration_based
+from . import registration_based
 
 class unnamed_enum_t( registration_based.registration_based_t
                       , declaration_based.declaration_based_t ):

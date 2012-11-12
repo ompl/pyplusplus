@@ -7,7 +7,7 @@
 
 import os
 import math
-import multiple_files
+from . import multiple_files
 from pyplusplus import messages
 from pyplusplus import _logging_
 from pygccxml import declarations
@@ -46,11 +46,9 @@ class balanced_files_t(multiple_files.multiple_files_t):
         self.number_of_buckets = number_of_buckets
 
     def split_classes( self ):
-        class_creators = filter( lambda x: isinstance(x, ( code_creators.class_t, code_creators.class_declaration_t ) )
-                                 , self.extmodule.body.creators )
+        class_creators = [x for x in self.extmodule.body.creators if isinstance(x, ( code_creators.class_t, code_creators.class_declaration_t ) )]
 
-        class_creators = filter( lambda cc: not cc.declaration.already_exposed
-                                 , class_creators )
+        class_creators = [cc for cc in class_creators if not cc.declaration.already_exposed]
 
         buckets = split_sequence(class_creators, len(class_creators)/self.number_of_buckets )
         if len(buckets) > self.number_of_buckets:

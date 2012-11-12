@@ -4,7 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import compound
+from . import compound
 
 class module_body_t(compound.compound_t):
     def __init__( self, name ):

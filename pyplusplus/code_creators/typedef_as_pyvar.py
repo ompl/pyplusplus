@@ -4,9 +4,9 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import code_creator
-import ctypes_formatter
-import declaration_based
+from . import code_creator
+from . import ctypes_formatter
+from . import declaration_based
 
 class typedef_as_pyvar_t(code_creator.code_creator_t, declaration_based.declaration_based_t):
     def __init__( self, ns ):

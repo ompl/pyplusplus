@@ -27,7 +27,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
         mb.class_('Path').include()
 
-        for decl in opaqueDecls.items():
+        for decl in list(opaqueDecls.items()):
             cls = mb.class_(decl[0])
             for methodName in decl[1]:
                 cls.member_function(methodName).call_policies = call_policies.return_value_policy(call_policies.return_opaque_pointer);

@@ -8,7 +8,7 @@ import sys
 import time
 import types
 import warnings
-import module_builder
+from . import module_builder
 
 from pygccxml import parser
 from pygccxml import utils as pygccxml_utils
@@ -83,10 +83,10 @@ class builder_t(module_builder.module_builder_t):
                                              , compiler=compiler)
 
         #may be in future I will add those directories to user_defined_directories to self.__code_creator.
-        self.__parsed_files = map( pygccxml_utils.normalize_path
-                                   , parser.project_reader_t.get_os_file_names( files ) )
-        tmp = map( lambda file_: os.path.split( file_ )[0], self.__parsed_files )
-        self.__parsed_dirs = filter( None, tmp )
+        self.__parsed_files = list(map( pygccxml_utils.normalize_path
+                                   , parser.project_reader_t.get_os_file_names( files ) ))
+        tmp = [os.path.split( file_ )[0] for file_ in self.__parsed_files]
+        self.__parsed_dirs = [_f for _f in tmp if _f]
 
         self.global_ns = self.__parse_declarations( files
                                                     , gccxml_config
@@ -176,17 +176,15 @@ class builder_t(module_builder.module_builder_t):
         flatten_decls = decls_package.make_flatten( decls )
         self.__filter_by_location( flatten_decls )
         call_policies_resolver = creators_factory.built_in_resolver_t()
-        calldefs = filter( lambda decl: isinstance( decl, decls_package.calldef_t )
-                           , flatten_decls )
-        map( lambda calldef: calldef.set_call_policies( call_policies_resolver( calldef ) )
-             , calldefs )
-        mem_vars = filter( lambda decl: isinstance( decl, decls_package.variable_t )
-                                        and isinstance( decl.parent, decls_package.class_t )
-                           , flatten_decls )
-        map( lambda mem_var: mem_var.set_getter_call_policies( call_policies_resolver( mem_var, 'get' ) )
-             , mem_vars )
-        map( lambda mem_var: mem_var.set_setter_call_policies( call_policies_resolver( mem_var, 'set' ) )
-             , mem_vars )
+        calldefs = [decl for decl in flatten_decls if isinstance( decl, decls_package.calldef_t )]
+        for calldef in calldefs:
+            calldef.set_call_policies( call_policies_resolver( calldef ) )
+        mem_vars = [decl for decl in flatten_decls if isinstance( decl, decls_package.variable_t )
+                                        and isinstance( decl.parent, decls_package.class_t )]
+        for mem_var in mem_vars:
+            mem_var.set_getter_call_policies( call_policies_resolver( mem_var, 'get' ) )
+        for mem_var in mem_vars:
+            mem_var.set_setter_call_policies( call_policies_resolver( mem_var, 'set' ) )
 
     @property
     def declarations_code_head( self ):
@@ -292,8 +290,8 @@ class builder_t(module_builder.module_builder_t):
 
         """
         tmpl = 'boost::python::scope().attr("%(name)s") = %(value)s;'
-        for name, value in keywds.items():
-            if not isinstance( value, types.StringTypes ):
+        for name, value in list(keywds.items()):
+            if not isinstance( value, str ):
                 value = str( value )
             self.add_registration_code( tmpl % dict( name=name, value=value) )
 
@@ -327,8 +325,8 @@ class builder_t(module_builder.module_builder_t):
 
     def __work_on_unused_files( self, dir_name, written_files, on_unused_file_found ):
         all_files = os.listdir( dir_name )
-        all_files = map( lambda fname: os.path.join( dir_name, fname ), all_files )
-        all_files = filter( file_writers.has_pypp_extenstion, all_files )
+        all_files = [os.path.join( dir_name, fname ) for fname in all_files]
+        all_files = list(filter( file_writers.has_pypp_extenstion, all_files ))
 
         unused_files = set( all_files ).difference( set( written_files ) )
         for fpath in unused_files:
@@ -336,7 +334,7 @@ class builder_t(module_builder.module_builder_t):
                 if on_unused_file_found is os.remove:
                     self.logger.info( 'removing file "%s"' % fpath )
                 on_unused_file_found( fpath )
-            except Exception, error:
+            except Exception as error:
                 self.logger.exception( "Exception was catched, while executing 'on_unused_file_found' function."  )
 
     def split_module( self

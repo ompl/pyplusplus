@@ -5,7 +5,7 @@
 
 """defines base class for all code generator configuration classes"""
 
-import algorithm
+from . import algorithm
 from pyplusplus import _logging_
 from pygccxml import declarations
 from pyplusplus import messages
@@ -60,7 +60,7 @@ class decl_wrapper_t(object):
     def __select_alias_directives( self, be_smart ):
         if not isinstance( self, declarations.class_types ):
             return []
-        typedefs = list( set( filter( lambda typedef: typedef.is_directive, self.aliases ) ) )
+        typedefs = list( set( [typedef for typedef in self.aliases if typedef.is_directive] ) )
         if decl_wrapper_t.SPECIAL_TYPEDEF_PICK_ANY:
             if typedefs and be_smart:
                 longest_name_len = 0
@@ -85,7 +85,7 @@ class decl_wrapper_t(object):
                 if declarations.templates.is_instantiation( self.name ):
                     container_aliases = [ 'value_type', 'key_type', 'mapped_type' ]
                     if isinstance( self, declarations.class_t ) \
-                        and 1 == len( set( map( lambda typedef: typedef.name, self.aliases ) ) ) \
+                        and 1 == len( set( [typedef.name for typedef in self.aliases] ) ) \
                         and self.aliases[0].name not in container_aliases:
                             self._alias = self.aliases[0].name
                     else:
@@ -197,7 +197,7 @@ class decl_wrapper_t(object):
         directives = self.__select_alias_directives(be_smart=False)
         if 1 < len( directives ):
             msgs.append( messages.W1048
-                         % ( self.alias, ', '.join( map( lambda typedef: typedef.name, directives ) ) ) )
+                         % ( self.alias, ', '.join( [typedef.name for typedef in directives] ) ) )
 
         msgs.extend( self._readme_impl() )
 

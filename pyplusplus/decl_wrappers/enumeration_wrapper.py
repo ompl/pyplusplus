@@ -5,7 +5,7 @@
 
 """defines class that configure enumeration declaration exposing"""
 
-import decl_wrapper
+from . import decl_wrapper
 from pyplusplus import messages
 from pygccxml import declarations
 
@@ -38,7 +38,7 @@ class enumeration_t(decl_wrapper.decl_wrapper_t, declarations.enumeration_t):
 
     def _get_export_values(self):
         if self._export_values is None:
-            return map(lambda x: x[0], self.values)
+            return [x[0] for x in self.values]
         else:
             return self._export_values
     def _set_export_values(self, export_values):
@@ -48,7 +48,7 @@ class enumeration_t(decl_wrapper.decl_wrapper_t, declarations.enumeration_t):
                               @type: list""")
 
     def _get_no_export_values(self):
-        all_values = map(lambda x: x[0], self.values)
+        all_values = [x[0] for x in self.values]
         export_values = self.export_values
         res = []
         for name in all_values:
@@ -57,7 +57,7 @@ class enumeration_t(decl_wrapper.decl_wrapper_t, declarations.enumeration_t):
         return res
 
     def _set_no_export_values(self, no_export_values):
-        all_values = map(lambda x: x[0], self.values)
+        all_values = [x[0] for x in self.values]
         export_values = []
         for name in all_values:
             if name not in no_export_values:

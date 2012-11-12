@@ -18,7 +18,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , *args )
                                                                     
     def run_tests(self, module):      
-        print "module has been loaded"
+        print("module has been loaded")
 
 def create_suite():
     suite = unittest.TestSuite()    

@@ -65,27 +65,27 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                 self.container = container
                 
             def notify( self ):
-                print 'notify'
+                print('notify')
                 self.container.append( 1 )
-                print '1 was append'
+                print('1 was append')
                 
-        print 'test started'
+        print('test started')
         notify_data = []
         simulator = module.simulator_t()
-        print 'simulator created'
+        print('simulator created')
         event = py_event_t( notify_data )
-        print 'py_event_t created: ', id( event )
+        print('py_event_t created: ', id( event ))
         simulator.schedule( event )        
-        print 'event was shceduled'
-        print 'event refcount: ', sys.getrefcount( event )
-        print 'simulator refcount: ', sys.getrefcount( simulator )
+        print('event was shceduled')
+        print('event refcount: ', sys.getrefcount( event ))
+        print('simulator refcount: ', sys.getrefcount( simulator ))
         #~ del event
-        print 'event was deleted'
+        print('event was deleted')
         event = simulator.get_event()
-        print 'event was restored via saved reference in simulator: ', id( event )
-        print 'event refcount: ', sys.getrefcount( simulator.get_event() )
-        print 'call event.notify(): ', simulator.get_event().notify()
-        print 'call simulator.run()'
+        print('event was restored via saved reference in simulator: ', id( event ))
+        print('event refcount: ', sys.getrefcount( simulator.get_event() ))
+        print('call event.notify(): ', simulator.get_event().notify())
+        print('call simulator.run()')
         simulator.run()
         self.failUnless( notify_data[0] == 1 )
         

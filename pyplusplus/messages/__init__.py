@@ -7,8 +7,8 @@
 reported to user.
 """
 
-import warnings_
-from warnings_ import *
+from . import warnings_
+from .warnings_ import *
 
 def find_out_message_id( msg ):
     return msg.identifier
@@ -28,7 +28,7 @@ def filter_disabled_msgs( msgs, disable_messages=None ):
     if disable_messages:
         skip_them.extend( disable_messages )
 
-    skip_them = filter( None, map( find_out_message_id, skip_them ) )
+    skip_them = [_f for _f in map( find_out_message_id, skip_them ) if _f]
 
     for msg in msgs:
         msg_id = find_out_message_id( msg )

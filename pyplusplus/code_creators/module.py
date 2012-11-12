@@ -4,16 +4,16 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import custom
-import license
-import include
-import compound
-import namespace
-import algorithm
-import module_body
-import library_reference
-import declaration_based
-import include_directories
+from . import custom
+from . import license
+from . import include
+from . import compound
+from . import namespace
+from . import algorithm
+from . import module_body
+from . import library_reference
+from . import declaration_based
+from . import include_directories
 from pygccxml import utils
 
 
@@ -62,12 +62,11 @@ class module_t(compound.compound_t):
         """
         decls = set()
         #select all declaration based code creators
-        ccs = filter( lambda cc: isinstance( cc, declaration_based.declaration_based_t )
-                      , algorithm.make_flatten_list( self ) )
+        ccs = [cc for cc in algorithm.make_flatten_list( self ) if isinstance( cc, declaration_based.declaration_based_t )]
         #leave only "ignored"
-        ccs = filter( lambda cc: cc.declaration.ignore == True, ccs )
+        ccs = [cc for cc in ccs if cc.declaration.ignore == True]
 
-        decls = map( lambda cc: cc.declaration, ccs )
+        decls = [cc.declaration for cc in ccs]
 
         return set( decls )
 
@@ -163,8 +162,8 @@ class bpmodule_t(module_t):
                 pass
             else:
                 self.remove_creator( creator )
-        map( lambda header: self.adopt_include( include.include_t( header=header ) )
-             , headers )
+        for header in headers:
+            self.adopt_include( include.include_t( header=header ) )
 
     def adopt_include(self, include_creator):
         """Insert an :class:`code_creators.include_t` object.
@@ -186,8 +185,7 @@ class bpmodule_t(module_t):
 
     def do_include_dirs_optimization(self):
         include_dirs = self._get_include_dirs()
-        includes = filter( lambda creator: isinstance( creator, include.include_t )
-                           , self.creators )
+        includes = [creator for creator in self.creators if isinstance( creator, include.include_t )]
         for include_creator in includes:
             include_creator.include_dirs_optimization = include_dirs
 

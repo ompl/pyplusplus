@@ -4,9 +4,9 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import algorithm
-import declaration_based
-import registration_based
+from . import algorithm
+from . import declaration_based
+from . import registration_based
 from pygccxml import declarations
 
 templates = declarations.templates

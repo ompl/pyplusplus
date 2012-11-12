@@ -4,10 +4,10 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import compound
-import code_creator
-import ctypes_formatter
-import declaration_based
+from . import compound
+from . import code_creator
+from . import ctypes_formatter
+from . import declaration_based
 from pygccxml import declarations
 
 CCT = declarations.CALLING_CONVENTION_TYPES
@@ -73,8 +73,7 @@ class callable_definition_t(code_creator.code_creator_t, declaration_based.decla
     def argtypes_code(self, group_in_list=True):
         if not self.ftype.arguments_types:
             return ''
-        args = map( lambda type_: ctypes_formatter.as_ctype( type_, self.top_parent.treat_char_ptr_as_binary_data )
-                    , self.ftype.arguments_types )
+        args = [ctypes_formatter.as_ctype( type_, self.top_parent.treat_char_ptr_as_binary_data ) for type_ in self.ftype.arguments_types]
         return self.join_arguments( args, group_in_list )
 
     def _get_system_files_impl( self ):

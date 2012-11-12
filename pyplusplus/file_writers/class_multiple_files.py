@@ -9,8 +9,8 @@ the class also splits huge C++ classes to few source files.
 """
 
 import os
-import writer
-import multiple_files
+from . import writer
+from . import multiple_files
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
@@ -146,19 +146,17 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
     def split_internal_enums( self, class_creator ):
         """Write all enumerations into a separate .h/.cpp file.
         """
-        enums_creators = filter( lambda x: isinstance(x, code_creators.enum_t )
-                                 , class_creator.creators )
+        enums_creators = [x for x in class_creator.creators if isinstance(x, code_creators.enum_t )]
         self.split_internal_creators( class_creator, enums_creators, 'enums' )
         return 'enums'
 
     def split_internal_unnamed_enums( self, class_creator ):
-        creators = filter( lambda x: isinstance(x, code_creators.unnamed_enum_t )
-                           , class_creator.creators )
+        creators = [x for x in class_creator.creators if isinstance(x, code_creators.unnamed_enum_t )]
         self.split_internal_creators( class_creator, creators, 'unnamed_enums' )
         return 'unnamed_enums'
 
     def split_internal_calldefs( self, class_creator, calldef_types, pattern ):
-        creators = filter( lambda x: isinstance(x, calldef_types ), class_creator.creators )
+        creators = [x for x in class_creator.creators if isinstance(x, calldef_types )]
         grouped_creators = pypp_utils.split_sequence( creators, self.num_of_functions_per_file )
         if len( grouped_creators ) == 1:
             for creator in creators:
@@ -197,13 +195,12 @@ class class_multiple_files_t(multiple_files.multiple_files_t):
 
     def split_internal_classes( self, class_creator ):
         class_types = ( code_creators.class_t, code_creators.class_declaration_t )
-        creators = filter( lambda x: isinstance(x, class_types ), class_creator.creators )
+        creators = [x for x in class_creator.creators if isinstance(x, class_types )]
         self.split_internal_creators( class_creator, creators, 'classes' )
         return 'classes'
 
     def split_internal_member_variables( self, class_creator ):
-        creators = filter( lambda x: isinstance(x, code_creators.member_variable_base_t)
-                           , class_creator.creators )
+        creators = [x for x in class_creator.creators if isinstance(x, code_creators.member_variable_base_t)]
         self.split_internal_creators( class_creator, creators, 'memvars' )
         return 'memvars'
 

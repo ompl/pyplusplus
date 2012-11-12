@@ -120,7 +120,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         raw_data[1] = 'x'
         self.failUnless( raw_data[1] == image.raw_data[1] )
         for index, img in enumerate( image.create_images() ):
-            print index, img
+            print(index, img)
 
         ibr = module.immutable_by_ref_t()
         self.failUnless( ibr.get_value() == ibr.value )

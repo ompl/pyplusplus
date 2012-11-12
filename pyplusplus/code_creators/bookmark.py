@@ -4,7 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import compound
+from . import compound
 
 class bookmark_t(compound.compound_t):
     def __init__( self, comment='' ):

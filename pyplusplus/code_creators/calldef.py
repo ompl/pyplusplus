@@ -4,12 +4,12 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import algorithm
-import code_creator
-import calldef_utils
-import declaration_based
-import registration_based
-import class_declaration
+from . import algorithm
+from . import code_creator
+from . import calldef_utils
+from . import declaration_based
+from . import registration_based
+from . import class_declaration
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 
@@ -170,8 +170,7 @@ class calldef_wrapper_t( code_creator.code_creator_t
             if not self.declaration.exceptions:
                 return ''
             else:
-                exceptions = map( lambda exception: algorithm.create_identifier( self, exception.partial_decl_string )
-                                  , self.declaration.exceptions )
+                exceptions = [algorithm.create_identifier( self, exception.partial_decl_string ) for exception in self.declaration.exceptions]
                 return ' throw( ' + self.PARAM_SEPARATOR.join( exceptions ) + ' )'
         else:
             return ' throw()'
@@ -453,7 +452,7 @@ class mem_fun_v_wrapper_t( calldef_wrapper_t ):
         return declarations.member_function_type_t(
                 return_type=self.declaration.return_type
                 , class_inst=declarations.dummy_type_t( self.parent.full_name )
-                , arguments_types=map( lambda arg: arg.type, self.declaration.arguments )
+                , arguments_types=[arg.type for arg in self.declaration.arguments]
                 , has_const=self.declaration.has_const )
 
     def create_declaration(self, name, has_virtual=True):
@@ -564,7 +563,7 @@ class mem_fun_protected_wrapper_t( calldef_wrapper_t ):
         return declarations.member_function_type_t(
                 return_type=self.declaration.return_type
                 , class_inst=declarations.dummy_type_t( self.parent.full_name )
-                , arguments_types=map( lambda arg: arg.type, self.declaration.arguments )
+                , arguments_types=[arg.type for arg in self.declaration.arguments]
                 , has_const=self.declaration.has_const )
 
     def create_declaration(self, name):
@@ -635,7 +634,7 @@ class mem_fun_protected_s_wrapper_t( calldef_wrapper_t ):
     def function_type(self):
         return declarations.free_function_type_t(
                 return_type=self.declaration.return_type
-                , arguments_types=map( lambda arg: arg.type, self.declaration.arguments ) )
+                , arguments_types=[arg.type for arg in self.declaration.arguments] )
 
     def create_declaration(self, name):
         template = 'static %(return_type)s %(name)s( %(args)s )%(throw)s'
@@ -702,7 +701,7 @@ class mem_fun_protected_v_wrapper_t( calldef_wrapper_t ):
         return declarations.member_function_type_t(
                 return_type=self.declaration.return_type
                 , class_inst=declarations.dummy_type_t( self.parent.full_name )
-                , arguments_types=map( lambda arg: arg.type, self.declaration.arguments )
+                , arguments_types=[arg.type for arg in self.declaration.arguments]
                 , has_const=self.declaration.has_const )
 
     def create_declaration(self, name):
@@ -810,7 +809,7 @@ class mem_fun_protected_pv_wrapper_t( calldef_wrapper_t ):
         return declarations.member_function_type_t(
                 return_type=self.declaration.return_type
                 , class_inst=declarations.dummy_type_t( self.parent.full_name )
-                , arguments_types=map( lambda arg: arg.type, self.declaration.arguments )
+                , arguments_types=[arg.type for arg in self.declaration.arguments]
                 , has_const=self.declaration.has_const )
 
     def create_declaration(self):
@@ -870,7 +869,7 @@ class mem_fun_private_v_wrapper_t( calldef_wrapper_t ):
         return declarations.member_function_type_t(
                 return_type=self.declaration.return_type
                 , class_inst=declarations.dummy_type_t( self.parent.full_name )
-                , arguments_types=map( lambda arg: arg.type, self.declaration.arguments )
+                , arguments_types=[arg.type for arg in self.declaration.arguments]
                 , has_const=self.declaration.has_const )
 
     def create_declaration(self):
@@ -1338,7 +1337,7 @@ class calldef_overloads_class_t( code_creator.code_creator_t ):
         max_ = 0
         for f in self.functions:
             f_max = len( f.arguments )
-            f_min = f_max - len( filter( lambda arg: arg.default_value, f.arguments ) )
+            f_min = f_max - len( [arg for arg in f.arguments if arg.default_value] )
             if None is min_:
                 min_ = f_min
             else:

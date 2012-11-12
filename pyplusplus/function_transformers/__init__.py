@@ -2,9 +2,9 @@
 
 """This sub-package implements function transformation functionality"""
 
-from transformer import transformer_t
-import transformers
-from function_transformation import function_transformation_t
+from .transformer import transformer_t
+from . import transformers
+from .function_transformation import function_transformation_t
 
 def output( *args, **keywd ):
     def creator( function ):

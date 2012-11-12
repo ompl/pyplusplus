@@ -5,7 +5,7 @@
 
 """defines class that configure namespace exposing."""
 
-import scopedef_wrapper
+from . import scopedef_wrapper
 from pygccxml import declarations
 
 class namespace_t(scopedef_wrapper.scopedef_t, declarations.namespace_t):

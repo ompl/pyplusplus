@@ -72,7 +72,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         
     def run_tests( self, module):
         self.failUnless( "1" == module.utf16_to_string( "1" ) )
-        self.failUnless( "22" == module.utf16_to_wstring( u"22" ) )
+        print("TESTING: ",module.utf16_to_wstring( "22" ))
+        self.failUnless( "22" == module.utf16_to_wstring( "22" ) )
         n = module.name_t()
         n.m_name = '456'
         self.failUnless( '456' == module.utf16_to_string( n.m_name ) )

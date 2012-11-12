@@ -57,7 +57,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def generate_source_files( self, mb ):
         files = mb.balanced_split_module( autoconfig.build_dir, 2, on_unused_file_found=lambda fpath: fpath )
-        self.files = filter( lambda fname: fname.endswith( 'cpp' ), files )
+        self.files = [fname for fname in files if fname.endswith( 'cpp' )]
 
     def get_source_files( self ):
         return self.files

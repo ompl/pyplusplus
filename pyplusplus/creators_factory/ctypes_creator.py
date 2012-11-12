@@ -3,8 +3,8 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-import sort_algorithms
-import dependencies_manager
+from . import sort_algorithms
+from . import dependencies_manager
 from pygccxml import binary_parsers
 from pyplusplus import _logging_
 from pygccxml import declarations
@@ -28,7 +28,7 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
 
         self.__library_path = library_path
         self.__exported_symbols = exported_symbols
-        self.__exported_decls = set( exported_symbols.itervalues() )
+        self.__exported_decls = set( exported_symbols.values() )
         self.module = code_creators.ctypes_module_t( global_ns )
         self.__dependencies_manager = dependencies_manager.manager_t(self.decl_logger)
 

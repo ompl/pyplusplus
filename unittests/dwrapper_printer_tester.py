@@ -20,8 +20,7 @@ class tester_t(unittest.TestCase):
             , 'index_operator_to_be_exported.hpp'
             , 'member_functions_to_be_exported.hpp'
         ]
-        return map( lambda f: os.path.join( autoconfig.data_directory, f )
-                    , files )
+        return [os.path.join( autoconfig.data_directory, f ) for f in files]
 
     def test(self):
         mb = module_builder.module_builder_t( self._get_files()

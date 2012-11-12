@@ -4,13 +4,13 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import algorithm
-import code_creator
-import calldef_utils
-import class_declaration
+from . import algorithm
+from . import code_creator
+from . import calldef_utils
+from . import class_declaration
 from pygccxml import declarations
 from pyplusplus import code_repository
-from calldef import calldef_t, calldef_wrapper_t
+from .calldef import calldef_t, calldef_wrapper_t
 import pyplusplus.function_transformers as function_transformers
 
 #TODO: constructors also can have transformation defined. We should use make _init
@@ -18,7 +18,7 @@ import pyplusplus.function_transformers as function_transformers
 
 def remove_duplicate_linesep( code ):
     lines = code.split( os.linesep )
-    lines = filter( lambda line: line.strip(), lines )
+    lines = [line for line in lines if line.strip()]
     return os.linesep.join( lines )
     
 class sealed_fun_transformed_t( calldef_t ):
@@ -83,8 +83,7 @@ class sealed_fun_transformed_wrapper_t( calldef_wrapper_t ):
         tmpl_values['arg_declarations'] = self.args_declaration()
         
         tmpl_values['declare_variables'] \
-            = os.linesep + os.linesep.join( map( lambda var: self.indent( var.declare_var_string() )
-                                                 , cntrl.variables ) )
+            = os.linesep + os.linesep.join( [self.indent( var.declare_var_string() ) for var in cntrl.variables] )
                 
         tmpl_values['pre_call'] = os.linesep + self.indent( os.linesep.join( cntrl.pre_call ) )
 
@@ -205,7 +204,7 @@ class mem_fun_transformed_wrapper_t( sealed_fun_transformed_wrapper_t ):
         return not isinstance( self.parent, class_declaration.class_wrapper_t )
 
     def function_type(self):
-        args = map( lambda arg: arg.type, self.controller.wrapper_args ) 
+        args = [arg.type for arg in self.controller.wrapper_args] 
         if self.controller.inst_arg:
             args.insert( 0, self.controller.inst_arg.type )
         return declarations.free_function_type_t(
@@ -321,7 +320,7 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
 
     def default_function_type(self):
         cntrl = self.controller.default_controller
-        args = [cntrl.inst_arg.type] + map( lambda arg: arg.type, cntrl.wrapper_args ) 
+        args = [cntrl.inst_arg.type] + [arg.type for arg in cntrl.wrapper_args] 
         return declarations.free_function_type_t( return_type=cntrl.wrapper_return_type
                                                   , arguments_types=args )
 
@@ -347,8 +346,7 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
         if not declarations.is_void( self.declaration.return_type ):
             decl_vars.append( cntrl.result_variable )
         tmpl_values['declare_variables'] \
-            = os.linesep + os.linesep.join( map( lambda var: self.indent( var.declare_var_string() )
-                                                 , decl_vars ) )
+            = os.linesep + os.linesep.join( [self.indent( var.declare_var_string() ) for var in decl_vars] )
                 
         tmpl_values['pre_call'] = os.linesep + self.indent( os.linesep.join( cntrl.pre_call ) )
 
@@ -393,8 +391,7 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
         tmpl_values['py_function_var'] = cntrl.py_function_var
         tmpl_values['function_alias'] = self.declaration.alias
         tmpl_values['declare_py_variables'] \
-            = os.linesep + os.linesep.join( map( lambda var: self.indent( var.declare_var_string(), 2 )
-                                                 , cntrl.py_variables ) )
+            = os.linesep + os.linesep.join( [self.indent( var.declare_var_string(), 2 ) for var in cntrl.py_variables] )
 
         tmpl_values['py_pre_call'] = os.linesep + self.indent( os.linesep.join( cntrl.py_pre_call ), 2 )
         tmpl_values['py_post_call'] = os.linesep + self.indent( os.linesep.join( cntrl.py_post_call ), 2 )

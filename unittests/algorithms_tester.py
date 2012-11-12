@@ -30,7 +30,7 @@ class make_flatten_tester_t(unittest.TestCase):
         mb.namespace( name='::enums' ).include()
         mb.build_code_creator('dummy')
         flatten = code_creators.make_flatten(mb.code_creator.creators)
-        self.failUnless( filter( lambda inst: isinstance( inst, code_creators.unnamed_enum_t ), flatten ) )
+        self.failUnless( [inst for inst in flatten if isinstance( inst, code_creators.unnamed_enum_t )] )
 
 class creator_finder_tester_t( unittest.TestCase ):
     def test_find_by_declaration(self):
@@ -269,7 +269,7 @@ class exclude_ellipsis_tester_t( unittest.TestCase ):
         do_smth = mb.free_fun( 'do_smth' )
 
         self.failUnless( do_smth.exportable == False )
-        print do_smth.why_not_exportable()
+        print(do_smth.why_not_exportable())
 
 class constructors_code_tester_t( unittest.TestCase ):
     def test(self):

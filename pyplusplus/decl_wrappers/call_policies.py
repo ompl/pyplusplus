@@ -5,8 +5,8 @@
 
 """Contains definition of call policies classes"""
 
-import algorithm
-import python_traits
+from . import algorithm
+from . import python_traits
 from pygccxml import declarations
 
 #keeps file name, where `Py++` defined call policies will be defined
@@ -108,8 +108,7 @@ class compound_policy_t( call_policy_t ):
 
     def __str__(self):
         name = self._get_name(None).replace('::boost::python::', '' )
-        args = map( lambda text: text.replace( '::boost::python::', '' )
-                    , self._get_args( None ) )
+        args = [text.replace( '::boost::python::', '' ) for text in self._get_args( None )]
         return declarations.templates.join( name, args )
 
 class return_argument_t( compound_policy_t ):

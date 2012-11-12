@@ -25,22 +25,23 @@ class missing_call_policies:
 
     @staticmethod    
     def print_( extmodule ):
-        creators = filter( missing_call_policies._selector
-                           , code_creators.make_flatten_generator( extmodule.creators ) )
+        creators = list(filter( missing_call_policies._selector
+                           , code_creators.make_flatten_generator( extmodule.creators ) ))
         for creator in creators:
-            print creator.declaration.__class__.__name__, ': ', declarations.full_name( creator.declaration )
-            print '  *** MISSING CALL POLICY', creator.declaration.function_type().decl_string
-            print 
+            print(creator.declaration.__class__.__name__, ': ', declarations.full_name( creator.declaration ))
+            print('  *** MISSING CALL POLICY', creator.declaration.function_type().decl_string)
+            print() 
 
     @staticmethod    
     def exclude( extmodule ):
-        creators = filter( missing_call_policies._selector
-                           , code_creators.make_flatten_generator( extmodule.creators ) )
+        creators = list(filter( missing_call_policies._selector
+                           , code_creators.make_flatten_generator( extmodule.creators ) ))
         for creator in creators:
             creator.parent.remove_creator( creator )
     
 def split_sequence(seq, bucket_size):
     #split sequence to buckets, where every will contain maximum bucket_size items
+    bucket_size = int(bucket_size)
     seq_len = len( seq )
     if seq_len <= bucket_size:
         return [ seq ] 
@@ -120,9 +121,9 @@ class exposed_decls_db_t( object ):
     def save( self, fpath ):
         if os.path.isdir( fpath ):
             fpath = os.path.join( fpath, self.DEFAULT_FILE_NAME )
-        f = file( fpath, 'w+b' )
-        for name2rows in self.__registry.itervalues():
-            for rows in name2rows.itervalues():
+        f = open( fpath, 'w+b' )
+        for name2rows in self.__registry.values():
+            for rows in name2rows.values():
                 for row in rows:
                     f.write( '%s%s' % ( str(row), self.__row_delimiter ) )
         f.close()
@@ -130,24 +131,24 @@ class exposed_decls_db_t( object ):
     def load( self, fpath ):
         if os.path.isdir( fpath ):
             fpath = os.path.join( fpath, self.DEFAULT_FILE_NAME )        
-        f = file( fpath, 'r+b' )
+        f = open( fpath, 'r+b' )
         for line in f:
+            line = line.decode('ascii')
             row = self.row_t( line.replace( self.__row_delimiter, '' ) )            
             self.__update_registry( row )
     
     def __update_registry( self, row ):        
-        if not self.__registry.has_key( row.key ):            
+        if row.key not in self.__registry:            
             self.__registry[ row.key ] = { row.normalized_name : [row] }
         else:       
-            if not self.__registry[ row.key ].has_key( row.normalized_name ):
+            if row.normalized_name not in self.__registry[ row.key ]:
                 self.__registry[ row.key ][row.normalized_name] = [row]
             else:
                 self.__registry[ row.key ][row.normalized_name].append(row)
     
     def __find_row_in_registry( self, row ):
         try:
-            decls = filter( lambda rrow: rrow.does_refer_same_decl( row )
-                            , self.__registry[ row.key ][ row.normalized_name ] )
+            decls = [rrow for rrow in self.__registry[ row.key ][ row.normalized_name ] if rrow.does_refer_same_decl( row )]
             if decls:
                 return decls[0]
             else:

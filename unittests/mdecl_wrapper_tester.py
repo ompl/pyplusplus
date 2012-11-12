@@ -21,8 +21,7 @@ class tester_t(unittest.TestCase):
             , 'index_operator_to_be_exported.hpp'
             , 'member_functions_to_be_exported.hpp'
         ]
-        return map( lambda f: os.path.join( autoconfig.data_directory, f )
-                    , files )
+        return [os.path.join( autoconfig.data_directory, f ) for f in files]
 
     def test(self):
         mb = module_builder.module_builder_t( self._get_files()
@@ -30,8 +29,7 @@ class tester_t(unittest.TestCase):
                                               , include_paths=[autoconfig.boost.include]
                                               , undefine_symbols=['__MINGW32__']
                                               , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler())
-        classes = filter( lambda d: isinstance( d, module_builder.class_t )
-                          , declarations.make_flatten( mb.global_ns ) )
+        classes = [d for d in declarations.make_flatten( mb.global_ns ) if isinstance( d, module_builder.class_t )]
 
         mdw = module_builder.mdecl_wrapper_t( classes )
         #check set to property functionality
@@ -62,7 +60,7 @@ class tester_t(unittest.TestCase):
         try:
             mdw.call_policies = None
             self.fail( "Runtime error has not been raised." )
-        except RuntimeError, err:
+        except RuntimeError as err:
             pass
 
     def test__getitem__( self ):

@@ -4,13 +4,13 @@ import types
 
 try:
     import pygccxml
-except ImportError, err:
+except ImportError as err:
     sys.path.append( '../../pygccxml_dev' )
     import pygccxml
 
 try:
     import pyplusplus
-except ImportError, err:
+except ImportError as err:
     sys.path.append( '..' )
     import pyplusplus
     
@@ -61,10 +61,10 @@ def generate_code( options ):
     fc = pygccxml.parser.create_source_fc( options.source_file )    
     mb = pyplusplus.module_builder.ctypes_module_builder_t( [ fc ], options.shared_library, gccxml )
     mb.build_code_creator( options.shared_library )
-    if isinstance( options.output_file, types.StringTypes ):    
+    if isinstance( options.output_file, str ):    
         mb.write_module( options.output_file )
     else:
-        print mb.code_creator.create()
+        print(mb.code_creator.create())
 
 if __name__ == '__main__':
     options, unused = parser.parse_args(sys.argv[1:])
@@ -74,7 +74,7 @@ if __name__ == '__main__':
         f = file( f_path, 'w+' )
         f.write( pygccxml.parser.gccxml_configuration_example )
         f.close()
-        print 'file: "%s" was generated' % f_path
+        print('file: "%s" was generated' % f_path)
     else:
         if None is options.source_file:
             parser.error("You have to specify source file")

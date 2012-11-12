@@ -79,19 +79,19 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             def notify( self ):
                 self.container.append( 1 )
 
-        print '1'
+        print('1')
         notify_data = []
         simulator = module.simulator_t()
-        print '2'
+        print('2')
         event = py_event_t( notify_data )
-        print '3'
+        print('3')
         simulator.schedule( event )
-        print 'refcount: ', sys.getrefcount( event )
-        print '4'
+        print('refcount: ', sys.getrefcount( event ))
+        print('4')
         del event
-        print '5'
+        print('5')
         simulator.run()
-        print '6'
+        print('6')
         self.failUnless( notify_data[0] == 1 )
 
 def create_suite():

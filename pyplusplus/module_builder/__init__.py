@@ -7,8 +7,8 @@
 This package provides simple and convenient interface to `Py++` functionality.
 """
 
-from boost_python_builder import builder_t as module_builder_t
-from ctypes_builder import ctypes_module_builder_t
+from .boost_python_builder import builder_t as module_builder_t
+from .ctypes_builder import ctypes_module_builder_t
 
 #aliases for functionality located in pygccxml.parser module
 from pygccxml.parser import COMPILATION_MODE
@@ -43,7 +43,7 @@ from pyplusplus.decl_wrappers import print_declarations
 
 from pyplusplus.decl_wrappers import doc_extractor_i
 
-import call_policies
+from . import call_policies
 
 from pygccxml import utils as __pygccxml_utils
 from pyplusplus import _logging_ as __pyplusplus_logging

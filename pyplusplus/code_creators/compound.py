@@ -4,7 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import code_creator
+from . import code_creator
 
 class compound_t(code_creator.code_creator_t):
     def __init__(self ):
@@ -69,11 +69,10 @@ class compound_t(code_creator.code_creator_t):
         :type creators: list of :class:`code_creators.code_creator_t`
         :rtype: str
         """
-        internals = map( lambda expr: expr.create(), creators )
-        internals = filter(None, internals )
+        internals = [expr.create() for expr in creators]
+        internals = [_f for _f in internals if _f]
         if indent_code:
-            internals = map( lambda code: code_creator.code_creator_t.indent( code )
-                             , internals )
+            internals = [code_creator.code_creator_t.indent( code ) for code in internals]
         for index in range( len( internals ) - 1):
             internals[index] = internals[index] + os.linesep
         return os.linesep.join( internals )
@@ -83,7 +82,7 @@ class compound_t(code_creator.code_creator_t):
         if recursive:
             for creator in self._creators:
                 files.extend( creator.get_system_files(recursive, unique=False, language=language) )
-        files = filter( None, files )
+        files = [_f for _f in files if _f]
         if unique:
             files = self.unique_headers( files )
         return files
@@ -91,7 +90,7 @@ class compound_t(code_creator.code_creator_t):
     def find_by_creator_class( self, class_, unique=True, recursive=False ):
         #I will add missing functionality later
         assert recursive == False
-        found = filter( lambda cc: isinstance( cc, class_ ), self.creators )
+        found = [cc for cc in self.creators if isinstance( cc, class_ )]
         if not found:
             return None
         elif 1 == len( found ):

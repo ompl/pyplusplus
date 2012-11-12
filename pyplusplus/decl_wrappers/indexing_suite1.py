@@ -6,7 +6,7 @@
 """defines interface for exposing STD containers, using current version of indexing suite"""
 
 from pygccxml import declarations
-import python_traits
+from . import python_traits
 #NoProxy
 #By default indexed elements have Python reference semantics and are returned by
 #proxy. This can be disabled by supplying true in the NoProxy template parameter.

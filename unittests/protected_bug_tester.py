@@ -28,7 +28,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         for cls in mb.classes():
             if declarations.has_destructor(cls) \
                and cls.calldef(lambda d: d.name.startswith('~'), recursive=False).access_type == 'protected':
-                print 'protected destructor: ', str( cls )
+                print('protected destructor: ', str( cls ))
                 cls.constructors().exclude()
                 cls.noncopyable =  True
             

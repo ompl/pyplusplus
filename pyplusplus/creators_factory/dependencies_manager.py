@@ -21,11 +21,11 @@ class duplicated_names_reporter_t(object):
         duplicated = {}
         for decl in self.decls:
             value = self.get_value( decl )
-            if not duplicated.has_key( value ):
+            if value not in duplicated:
                 duplicated[ value ] = set()
             duplicated[ value ].add( decl )
         result = duplicated.copy()
-        for value, buggy_decls in duplicated.items():
+        for value, buggy_decls in list(duplicated.items()):
             if 1 == len( buggy_decls ):
                 del result[ value ]
         return result
@@ -61,7 +61,7 @@ class manager_t( object ):
         self.__exported_decls.append( decl )
         if isinstance( decl, declarations.class_t ) and decl.indexing_suite:
             included_decls = decl.decls( lambda d: d.ignore==False, allow_empty=True, recursive=True )
-            map( self.add_exported, included_decls )
+            for decl in included_decls: self.add_exported(decl)
 
     def __is_std_decl( self, decl ):
         #Every class under std should be exported by Boost.Python and\\or `Py++`
@@ -85,8 +85,7 @@ class manager_t( object ):
         dependencies = decl.i_depend_on_them(recursive=False)
 
         if isinstance( decl, declarations.class_t ):
-            dependencies = filter( lambda d: d.access_type != declarations.ACCESS_TYPES.PRIVATE
-                                   , dependencies )
+            dependencies = [d for d in dependencies if d.access_type != declarations.ACCESS_TYPES.PRIVATE]
 
         return dependencies
 
@@ -138,7 +137,7 @@ class manager_t( object ):
 
     def __find_out_used_but_not_exported( self ):
         used_not_exported = []
-        exported_ids = set( map( lambda d: id( d ), self.__exported_decls ) )
+        exported_ids = set( [id( d ) for d in self.__exported_decls] )
         for decl in self.__exported_decls:
             for dependency in self.__build_dependencies( decl ):
                 for depend_on_decl in dependency.find_out_depend_on_it_declarations():
@@ -152,7 +151,7 @@ class manager_t( object ):
         groups = {}
         for dependency in dependencies:
             for depend_on_decl in dependency.find_out_depend_on_it_declarations():
-                if not groups.has_key( id( depend_on_decl ) ):
+                if id( depend_on_decl ) not in groups:
                     groups[ id( depend_on_decl ) ] = []
                 groups[ id( depend_on_decl ) ].append( dependency )
         return groups
@@ -167,14 +166,13 @@ class manager_t( object ):
         return os.linesep.join( msg )
 
     def __report_duplicated_aliases( self ):
-        decls = filter( lambda decl: isinstance( decl, declarations.class_types ) \
-                                     and isinstance( decl.parent, declarations.namespace_t )
-                        , self.__exported_decls )
+        decls = [decl for decl in self.__exported_decls if isinstance( decl, declarations.class_types ) \
+                                     and isinstance( decl.parent, declarations.namespace_t )]
 
         dar = duplicated_aliases_reporter( decls )
         dar.report( self.__logger )
 
-        classes = filter( lambda c: isinstance( c, declarations.class_t ), decls )
+        classes = [c for c in decls if isinstance( c, declarations.class_t )]
         query = lambda decl: isinstance( decl, declarations.class_types ) \
                              and decl.ignore == False \
                              and decl._already_exposed == False
@@ -185,9 +183,8 @@ class manager_t( object ):
             dar.report( self.__logger )
 
     def __report_duplicated_wrapper_aliases( self ):
-        decls = filter( lambda decl: isinstance( decl, declarations.class_t ) \
-                                     and isinstance( decl.parent, declarations.namespace_t )
-                        , self.__exported_decls )
+        decls = [decl for decl in self.__exported_decls if isinstance( decl, declarations.class_t ) \
+                                     and isinstance( decl.parent, declarations.namespace_t )]
 
         dwar = duplicated_wrapper_aliases_reporter( decls )
         dwar.report( self.__logger )
@@ -202,7 +199,7 @@ class manager_t( object ):
     def inform_user( self ):
         used_not_exported_decls = self.__find_out_used_but_not_exported()
         groups = self.__group_by_unexposed( used_not_exported_decls )
-        for group in groups.itervalues():
+        for group in groups.values():
             self.__logger.warn( self.__create_dependencies_msg( group ) )
         self.__report_duplicated_aliases()
         self.__report_duplicated_wrapper_aliases()

@@ -6,15 +6,15 @@
 """defines class that configure class definition and class declaration exposing"""
 
 import os
-import user_text
-import properties
-import decl_wrapper
-import scopedef_wrapper
-import variable_wrapper
+from . import user_text
+from . import properties
+from . import decl_wrapper
+from . import scopedef_wrapper
+from . import variable_wrapper
 from pyplusplus import messages
 from pygccxml import declarations
-import indexing_suite1 as isuite1
-import indexing_suite2 as isuite2
+from . import indexing_suite1 as isuite1
+from . import indexing_suite2 as isuite2
 
 ACCESS_TYPES = declarations.ACCESS_TYPES
 VIRTUALITY_TYPES = declarations.VIRTUALITY_TYPES
@@ -423,7 +423,7 @@ class class_t( class_common_details_t
         """returns list of internal declarations that should\\could be exported"""
         #TODO: obviously this function should be shorter. Almost all logic of this class
         #      should be spread between decl_wrapper classes
-        members = filter( lambda mv: mv.ignore == False and mv.exportable, self.public_members )
+        members = [mv for mv in self.public_members if mv.ignore == False and mv.exportable]
         #protected and private virtual functions that not overridable and not pure
         #virtual should not be exported
         for member in self.protected_members:
@@ -434,7 +434,7 @@ class class_t( class_common_details_t
 
         vfunction_selector = lambda member: isinstance( member, declarations.member_function_t ) \
                                             and member.virtuality == declarations.VIRTUALITY_TYPES.PURE_VIRTUAL
-        members.extend( filter( vfunction_selector, self.private_members ) )
+        members.extend( list(filter( vfunction_selector, self.private_members )) )
 
         def is_exportable( decl ):
             #filter out non-public member operators - `Py++` does not support them right now
@@ -449,7 +449,7 @@ class class_t( class_common_details_t
             return True
         #-#if declarations.has_destructor( self ) \
         #-#   and not declarations.has_public_destructor( self ):
-        members = filter( is_exportable, members )
+        members = list(filter( is_exportable, members ))
         sorted_members = members
         if sort:
             sorted_members = sort( members )
@@ -559,9 +559,8 @@ class class_t( class_common_details_t
                                 break
                         else:
                             not_reimplemented_funcs.add( f )
-        functions = filter( lambda f: ( False == f.ignore and True == f.exportable )
-                                      or all_pure_virtual( f )
-                            , list( not_reimplemented_funcs ) )
+        functions = [f for f in list( not_reimplemented_funcs ) if ( False == f.ignore and True == f.exportable )
+                                      or all_pure_virtual( f )]
 
 
         #Boost.Python is not able to call for non-virtual function, from the base
@@ -595,10 +594,9 @@ class class_t( class_common_details_t
                     continue
                 if buggy_bpl_filter( rfo ):
                     tmp[ id(rfo) ] = rfo
-        functions.extend( tmp.values() )
+        functions.extend( list(tmp.values()) )
 
-        functions.sort( cmp=lambda f1, f2: cmp( ( f1.name, f1.location.as_tuple() )
-                                                , ( f2.name, f2.location.as_tuple() ) ) )
+        functions.sort( key=lambda f: ( f.name, f.location.as_tuple() ) )
 
         self._redefined_funcs = functions
         return self._redefined_funcs
@@ -623,7 +621,7 @@ class class_t( class_common_details_t
 
         redefined_funcs = self.redefined_funcs()
         if redefined_funcs:
-            funcs = map( lambda f: f.name, redefined_funcs )
+            funcs = [f.name for f in redefined_funcs]
             explanation.append( messages.W1023 % ', '.join(funcs) )
 
         for member in self.get_exportable_members():
@@ -724,8 +722,7 @@ class class_t( class_common_details_t
                or not has_suitable_constructor:
                 self._no_init = True
             elif not trivial_constructor or trivial_constructor.access_type != 'public':
-                exportable_cs = filter( lambda c: c.exportable and c.ignore == False
-                                        , cs )
+                exportable_cs = [c for c in cs if c.exportable and c.ignore == False]
                 if not exportable_cs:
                     self._no_init = True
             else:

@@ -5,7 +5,7 @@
 
 import os
 import pprint
-import instruction
+from . import instruction
 
 class include_directories_t(instruction.instruction_t):
     """
@@ -23,14 +23,14 @@ class include_directories_t(instruction.instruction_t):
         return os.path.normpath( os.path.normcase( path ) )
 
     def _get_user_defined(self):
-        self._user_defined = map( self.normalize, self._user_defined )
+        self._user_defined = list(map( self.normalize, self._user_defined ))
         return self._user_defined
     def _set_user_defined(self, includes):
         self._user_defined = includes
     user_defined = property( _get_user_defined, _set_user_defined )
 
     def _get_std(self):
-        self._std = map( self.normalize, self._std )
+        self._std = list(map( self.normalize, self._std ))
         return self._std
     def _set_std(self, includes):
         self._std = includes

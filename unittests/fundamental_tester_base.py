@@ -38,7 +38,7 @@ class fundamental_tester_base_t( unittest.TestCase ):
     def failIfRaisesAny(self, callableObj, *args, **kwargs):
         try:
             callableObj(*args, **kwargs)
-        except Exception, error:
+        except Exception as error:
             self.fail( 'exception has been raised during execution. exception: ' + str(error) )
 
     def failIfNotRaisesAny(self, callableObj, *args, **kwargs):
@@ -129,7 +129,7 @@ class fundamental_tester_base_t( unittest.TestCase ):
         sconstruct_script = autoconfig.scons_config.create_sconstruct()\
                             % { 'target' : self.__module_name
                                 , 'sources' : sources_str }
-        sconstruct_file = file( self.__generated_scons_file_name, 'w+b' )
+        sconstruct_file = open( self.__generated_scons_file_name, 'w+b' )
         sconstruct_file.write( sconstruct_script )
         sconstruct_file.close()
 
@@ -158,7 +158,7 @@ class fundamental_tester_base_t( unittest.TestCase ):
             pypp = __import__( self.__module_name )
             self.run_tests(pypp)
         finally:
-            if sys.modules.has_key( self.__module_name ):
+            if self.__module_name in sys.modules:
                 del sys.modules[self.__module_name]
             del pypp
             #self._clean_build(self.__generated_scons_file_name)

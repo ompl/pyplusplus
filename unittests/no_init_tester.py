@@ -38,7 +38,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                 module.value_plus_x_t.__init__( self, v )
 
             def get_plus_value(self):
-                print "I am here"
+                print("I am here")
                 return 5
         return plus_5_value_t( v )
 
@@ -47,8 +47,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( 23 == module.get_value( identity_value ) )
         self.failUnless( -1 == module.get_value( None ) )
         plus_5_value = self.create_plus_5_value( module, 23 )
-        print plus_5_value.get_value()
-        print module.get_value( plus_5_value )
+        print(plus_5_value.get_value())
+        print(module.get_value( plus_5_value ))
         self.failUnless( 28 == module.get_value( plus_5_value ) )
 
 

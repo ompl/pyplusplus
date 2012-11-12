@@ -36,7 +36,7 @@ class transformer_t(object):
         :param reference: name( str ) or index( int ) of the argument
         """
         if isinstance( reference, str ):
-            found = filter( lambda arg: arg.name == reference, self.function.arguments )
+            found = [arg for arg in self.function.arguments if arg.name == reference]
             if len( found ) == 1:
                 return found[0]
             raise RuntimeError( "Argument with name \"%s\" was not found" % reference )

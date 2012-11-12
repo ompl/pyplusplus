@@ -5,14 +5,14 @@
 
 import os
 import types
-import scoped
-import calldef
-import compound
-import algorithm
-import code_creator
-import smart_pointers
-import declaration_based
-import registration_based
+from . import scoped
+from . import calldef
+from . import compound
+from . import algorithm
+from . import code_creator
+from . import smart_pointers
+from . import declaration_based
+from . import registration_based
 from pygccxml import declarations
 
 class class_declaration_t( scoped.scoped_t
@@ -46,7 +46,7 @@ class class_declaration_t( scoped.scoped_t
     def is_exposed_using_scope(self):
         if self.declaration.always_expose_using_scope:
             return True
-        return bool( filter( lambda cc: not cc.works_on_instance, self.creators ) )
+        return bool( [cc for cc in self.creators if not cc.works_on_instance] )
 
     @property
     def typedef_name( self ):
@@ -107,10 +107,10 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
     def _get_held_type(self):
         return self.declaration.held_type
     def _set_held_type(self, held_type):
-        assert isinstance( held_type, types.NoneType ) \
+        assert isinstance( held_type, type(None) ) \
                or isinstance( held_type, smart_pointers.held_type_t ) \
-               or isinstance( held_type, types.StringTypes )
-        if isinstance( held_type, types.StringTypes ):
+               or isinstance( held_type, str )
+        if isinstance( held_type, str ):
             assert held_type # should be non emptry string
         self.declaration.held_type = held_type
     held_type = property( _get_held_type, _set_held_type )
@@ -137,16 +137,14 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
         #May be in future I will redefine operators on wrapper class
         #thus I will support [protected|private] [ [not|pure|] virtual] operators.
         operator_creators = []
-        for base_creator in base_creators.values():
+        for base_creator in list(base_creators.values()):
             hierarchy_info = base_classes[ id( base_creator.declaration )]
             if hierarchy_info.access_type != declarations.ACCESS_TYPES.PUBLIC:
                 continue
-            base_operator_creators = filter( lambda creator:
-                                                isinstance( creator, calldef.operator_t )
+            base_operator_creators = [creator for creator in base_creator.creators if isinstance( creator, calldef.operator_t )
                                                 and isinstance( creator.declaration, declarations.member_operator_t )
                                                 and creator.declaration.access_type
-                                                    == declarations.ACCESS_TYPES.PUBLIC
-                                             , base_creator.creators )
+                                                    == declarations.ACCESS_TYPES.PUBLIC]
             operator_creators.extend( base_operator_creators )
         return operator_creators
 
@@ -165,7 +163,7 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
             assert isinstance( base_desc, declarations.hierarchy_info_t )
             if base_desc.access != declarations.ACCESS_TYPES.PUBLIC:
                 continue
-            if base_creators.has_key( id(base_desc.related_class) ):
+            if id(base_desc.related_class) in base_creators:
                 bases.append( algorithm.create_identifier( self, base_desc.related_class.partial_decl_string ) )
             elif base_desc.related_class.already_exposed:
                 bases.append( base_desc.related_class.partial_decl_string )
@@ -177,7 +175,7 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
     def _generated_held_type(self):
         if isinstance( self.held_type, smart_pointers.held_type_t ):
             return self.held_type.create( self )
-        elif isinstance( self.held_type, types.StringTypes):
+        elif isinstance( self.held_type, str):
             return self.held_type
         else:
             return None
@@ -220,7 +218,7 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
         if self.documentation:
             result.append( ', %s' % self.documentation )
         used_init = None
-        inits = filter( lambda x: isinstance( x, calldef.constructor_t ), self.creators )
+        inits = [x for x in self.creators if isinstance( x, calldef.constructor_t )]
 
         trivial_constructor = self.declaration.find_trivial_constructor()
 
@@ -314,7 +312,7 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
     def is_exposed_using_scope(self):
         if self.declaration.always_expose_using_scope:
             return True
-        return bool( filter( lambda cc: not cc.works_on_instance, self.creators ) )
+        return bool( [cc for cc in self.creators if not cc.works_on_instance] )
 
     def _create_impl(self):
         if self.declaration.already_exposed:
@@ -349,9 +347,8 @@ class class_wrapper_t( scoped.scoped_t ):
             bases = [ hi.related_class for hi in self.declaration.bases ]
             creators_before_me = algorithm.creators_affect_on_me( self )
             self._base_wrappers \
-                = filter( lambda creator: isinstance( creator, class_wrapper_t )
-                                          and creator.declaration in bases
-                          , creators_before_me )
+                = [creator for creator in creators_before_me if isinstance( creator, class_wrapper_t )
+                                          and creator.declaration in bases]
         return self._base_wrappers
 
     @property

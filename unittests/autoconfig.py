@@ -37,13 +37,13 @@ class cxx_parsers_cfg:
         gccxml.define_symbols.append( '__PYGCCXML_%s__' % gccxml.compiler.upper() )
         if 'msvc9' == gccxml.compiler:
             gccxml.define_symbols.append( '_HAS_TR1=0' )
-    gccxml.include_paths.append( boost.include )
+    if len(boost.include) > 0: gccxml.include_paths.append( boost.include )
 
-print 'GCCXML configured to simulate compiler ', cxx_parsers_cfg.gccxml.compiler
+print('GCCXML configured to simulate compiler ', cxx_parsers_cfg.gccxml.compiler)
 
 class scons_config:
-    libs = []
-    libpath = [ python.libs ] + boost.libs
+    libs = ['python2.7']
+    libpath = [ python.libs ] + [boost.libs]
     cpppath = [ boost.include, python.include, build_directory ] #indexing_suite.include ]
     include_dirs = cpppath + [data_directory] + cxx_parsers_cfg.gccxml.include_paths
     if cxx_parsers_cfg.gccxml.compiler == 'msvc9':
@@ -82,7 +82,7 @@ class scons_config:
 
     @staticmethod
     def compile( cmd, cwd=build_directory ) :
-        print '\n', cmd
+        print('\n', cmd)
         process = subprocess.Popen( args=cmd
                                     , shell=True
                                     , stdin=subprocess.PIPE
@@ -94,10 +94,10 @@ class scons_config:
         while process.poll() is None:
             line = process.stdout.readline()
             if line.strip():
-                print line.rstrip()
+                print(line.rstrip())
         for line in process.stdout.readlines():
             if line.strip():
-                print line.rstrip()
+                print(line.rstrip())
         if process.returncode:
             raise RuntimeError( "unable to compile extension. See output for the errors." )
 

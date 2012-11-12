@@ -4,8 +4,8 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import code_creator
-import declaration_based
+from . import code_creator
+from . import declaration_based
 
 class opaque_type_registrator_t( code_creator.code_creator_t
                                  , declaration_based.declaration_based_t ):

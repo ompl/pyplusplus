@@ -6,7 +6,7 @@
 """defines interface for exposing STD containers, using next version of indexing suite"""
 
 from pygccxml import declarations
-import call_policies
+from . import call_policies
 """
 method_len
 method_iter

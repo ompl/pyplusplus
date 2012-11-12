@@ -27,12 +27,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         
     def run_tests( self, module):
         f1 = module.foo()
-        print 'f1.buffer: ', f1.buffer
-        print 'str(f1):', str(f1)
+        print('f1.buffer: ', f1.buffer)
+        print('str(f1):', str(f1))
         b1 = module.bar()
-        print 'b1.f.buffer:', b1.f.buffer
-        print 'b1.f:', b1.f
-        print 'str(b1.f):', str(b1.f)
+        print('b1.f.buffer:', b1.f.buffer)
+        print('b1.f:', b1.f)
+        print('str(b1.f):', str(b1.f))
         
         
 def create_suite():

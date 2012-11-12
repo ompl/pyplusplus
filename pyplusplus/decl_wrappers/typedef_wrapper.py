@@ -6,7 +6,7 @@
 """defines class that configure typedef exposing"""
 
 from pygccxml import declarations
-import decl_wrapper
+from . import decl_wrapper
 
 class typedef_t(decl_wrapper.decl_wrapper_t, declarations.typedef_t):
     """defines a set of properties, that will instruct `Py++` how to expose the typedef

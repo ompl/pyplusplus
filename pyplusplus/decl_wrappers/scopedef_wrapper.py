@@ -5,7 +5,7 @@
 
 """defines base class for :class:`decl_wrappers.class_t` and :class:`decl_wrappers.namespace_t` classes"""
 
-import decl_wrapper
+from . import decl_wrapper
 from pyplusplus import messages
 
 class scopedef_t(decl_wrapper.decl_wrapper_t):
@@ -27,17 +27,15 @@ class scopedef_t(decl_wrapper.decl_wrapper_t):
         if False == compilation_errors:
             #exclude all unconditionaly
             self.ignore = True
-            map( lambda decl: decl.exclude(), self.declarations )
+            for decl in self.declarations: decl.exclude()
         else:
-            if filter( lambda msg: isinstance( msg, messages.compilation_error )
-                       , self.readme() ):
+            if [msg for msg in self.readme() if isinstance( msg, messages.compilation_error )]:
                 self.exclude()
             else:
-                map( lambda decl: decl.exclude(compilation_errors=True)
-                     , self.declarations )
+                for decl in self.declarations: decl.exclude(compilation_errors=True)
 
     def include( self, already_exposed=False  ):
         """Include "self" and child declarations to be exposed."""
         self.ignore = False
         self.already_exposed = already_exposed
-        map( lambda decl: decl.include(already_exposed), self.declarations )
+        for decl in self.declarations: decl.include(already_exposed)

@@ -8,13 +8,13 @@ This package contains few classes, which write :class:`code_creators.module_t` t
 """
 
 import types
-from writer import writer_t
-from single_file import single_file_t
-from multiple_files import multiple_files_t
-from balanced_files import balanced_files_t
-from class_multiple_files import class_multiple_files_t
-from md5sum_repository import repository_t
-from md5sum_repository import cached_repository_t
+from .writer import writer_t
+from .single_file import single_file_t
+from .multiple_files import multiple_files_t
+from .balanced_files import balanced_files_t
+from .class_multiple_files import class_multiple_files_t
+from .md5sum_repository import repository_t
+from .md5sum_repository import cached_repository_t
 
 def has_pypp_extenstion( fname ):
     """returns True if file has `Py++` specific extension, otherwise False"""
@@ -25,7 +25,7 @@ def has_pypp_extenstion( fname ):
 
 def write_file( data, file_path, encoding='ascii' ):
     """writes data to file"""
-    if isinstance( data, types.StringTypes ):
+    if isinstance( data, str ):
         writer_t.write_file( data, file_path, encoding=encoding )
     else:
         sf = single_file_t( data, file_path, encoding=encoding )

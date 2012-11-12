@@ -6,7 +6,7 @@
 """defines a class that writes :class:`code_creators.module_t` to single file"""
 
 import os
-import writer
+from . import writer
 
 class single_file_t(writer.writer_t):
     """generates all code into single cpp file"""
@@ -25,9 +25,9 @@ class single_file_t(writer.writer_t):
             target_dir = os.getcwd()
         if not os.path.exists( target_dir ):
             os.makedirs( target_dir )
-        headers = self.get_user_headers( [self.extmodule] )        
-        map( lambda header: self.extmodule.add_include( header )
-             , headers )
+        headers = self.get_user_headers( [self.extmodule] )
+        for header in headers:
+            self.extmodule.add_include( header )
         self.write_code_repository( target_dir )
         self.write_file( self.file_name, self.extmodule.create(), encoding=self.encoding )
         self.save_exposed_decls_db( target_dir )

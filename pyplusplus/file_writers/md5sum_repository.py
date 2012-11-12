@@ -14,13 +14,16 @@ except:
 
 def get_md5_text_value( text ):
     m = md5()
-    m.update( text )
+    data = text
+    if isinstance(text, str):
+        data = text.encode()
+    m.update( data )
     return m.hexdigest() 
 
 def get_md5_file_value( fpath ):
     if not os.path.exists( fpath ):
         return None #file does not exist
-    f = file( fpath, 'rb' )
+    f = open( fpath, 'rb' )
     fcontent = f.read()
     f.close()
     return get_md5_text_value( fcontent )
@@ -67,7 +70,7 @@ class cached_repository_t( repository_t ):
         self.__repository = {}
         self.__repository_file = file_name
         if os.path.exists( self.__repository_file ):
-            f = file( self.__repository_file, 'r' )
+            f = open( self.__repository_file, 'r' )
             for line in f:
                 if len(line) < self.hexdigest_separator_len:
                     continue
@@ -90,8 +93,8 @@ class cached_repository_t( repository_t ):
         
     def save_values( self ):
         lines = []
-        for fpath, hexdigest in self.__repository.iteritems():
+        for fpath, hexdigest in self.__repository.items():
             lines.append( '%s%s%s%s' % ( hexdigest, self.separator, fpath, os.linesep ) )        
-        f = file( self.__repository_file, 'w+' )
+        f = open( self.__repository_file, 'w+' )
         f.writelines( lines )
         f.close()

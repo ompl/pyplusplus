@@ -8,8 +8,8 @@ import sys
 import time
 import types
 import warnings
-import module_builder
-import ctypes_decls_dependencies
+from . import module_builder
+from . import ctypes_decls_dependencies
 
 from pygccxml import binary_parsers
 from pygccxml import parser
@@ -70,10 +70,10 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
     def __include_declarations( self ):
         self.global_ns.exclude()
         #include exported declarations
-        included_decls = set( self.__blob2decl.itervalues() )
+        included_decls = set( self.__blob2decl.values() )
         to_be_included = ctypes_decls_dependencies.find_out_dependencies( included_decls )
         to_be_included.update( included_decls )
-        map( lambda d: d.include(), to_be_included )
+        for d in to_be_included: d.include()
 
     def __apply_defaults( self ):
         self.__include_declarations()

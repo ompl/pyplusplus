@@ -16,17 +16,16 @@ class class_organizer_t(object):
         object.__init__( self )
 
         self.__include_vars = include_vars
-        self.__classes = filter( lambda x: isinstance( x, declarations.class_t )
-                                 , decls )
-        self.__classes.sort( lambda cls1, cls2: cmp( cls1.decl_string, cls2.decl_string ) )
+        self.__classes = [x for x in decls if isinstance( x, declarations.class_t )]
+        self.__classes.sort( key = lambda cls: cls.decl_string )
         self.__dependencies_graph = self._build_graph()
         self.__time = 0
-        self.__colors = dict( zip( self.__dependencies_graph.keys()
-                              , [ COLOR.WHITE ] * len( self.__dependencies_graph ) ) )
-        self.__class_discovered = dict( zip( self.__dependencies_graph.keys()
-                                        , [ 0 ] * len( self.__dependencies_graph ) ) )
-        self.__class_treated = dict( zip( self.__dependencies_graph.keys()
-                                     , [ 0 ] * len( self.__dependencies_graph ) ) )
+        self.__colors = dict( list(zip( list(self.__dependencies_graph.keys())
+                              , [ COLOR.WHITE ] * len( self.__dependencies_graph ) )) )
+        self.__class_discovered = dict( list(zip( list(self.__dependencies_graph.keys())
+                                        , [ 0 ] * len( self.__dependencies_graph ) )) )
+        self.__class_treated = dict( list(zip( list(self.__dependencies_graph.keys())
+                                     , [ 0 ] * len( self.__dependencies_graph ) )) )
 
         self.__desired_order = []
 
@@ -47,8 +46,7 @@ class class_organizer_t(object):
         i_depend_on_them = set( [ full_name( base.related_class ) for base in class_.bases ] )
         #class depends on all classes that used in function as argument
         # types and those arguments have default value
-        calldefs = filter( lambda decl: isinstance( decl, declarations.calldef_t )
-                           , declarations.make_flatten( class_ ))
+        calldefs = [decl for decl in declarations.make_flatten( class_ ) if isinstance( decl, declarations.calldef_t )]
         for calldef in calldefs:
             for arg in calldef.arguments:
                 if declarations.is_enum( arg.type ):
@@ -68,8 +66,7 @@ class class_organizer_t(object):
                     i_depend_on_them.add( full_name( top_class_inst ) )
 
         if self.__include_vars:
-            vars = filter( lambda decl: isinstance( decl, declarations.variable_t )
-                           , declarations.make_flatten( class_ ))
+            vars = [decl for decl in declarations.make_flatten( class_ ) if isinstance( decl, declarations.variable_t )]
             for var in vars:
                 if declarations.is_pointer( var.type ):
                     continue
@@ -108,7 +105,7 @@ class class_organizer_t(object):
         self.__time += 1
         self.__class_discovered[base] = self.__time
         for derived in self.__dependencies_graph[base]:
-            if self.__colors.has_key( derived ) and self.__colors[derived] == COLOR.WHITE:
+            if derived in self.__colors and self.__colors[derived] == COLOR.WHITE:
                 self._dfs_visit( derived )
             else:
                 pass
@@ -153,12 +150,12 @@ class calldef_organizer_t( object ):
                 groups[ None ].append( d )
             else:
                 key = ( d.name, len( d.required_args ) )
-                if not groups.has_key( key ):
+                if key not in groups:
                     groups[ key ] = []
                 groups[key].append( d )
         #keep backward compatibility
         to_be_deleted = []
-        for group, group_decls in groups.iteritems():
+        for group, group_decls in groups.items():
             if None is group:
                 continue
             if len( group_decls ) == 1:
@@ -179,14 +176,14 @@ class calldef_organizer_t( object ):
         return result
 
     def sort_groups( self, groups ):
-        for group in groups.keys():
+        for group in list(groups.keys()):
             if None is group:
                 continue
             groups[ group ].sort( self.cmp_calldefs )
 
     def join_groups( self, groups ):
         decls = []
-        sorted_keys = groups.keys()
+        sorted_keys = list(groups.keys())
         sorted_keys.sort()
         for group in sorted_keys:
             decls.extend( groups[group] )
@@ -210,7 +207,7 @@ USE_CALLDEF_ORGANIZER = False
 #use this.
 
 def sort( decls ):
-    classes = filter( lambda x: isinstance( x, declarations.class_t ), decls )
+    classes = [x for x in decls if isinstance( x, declarations.class_t )]
     ordered = sort_classes( classes )
 
     ids = set( [ id( inst ) for inst in ordered ] )
@@ -236,17 +233,17 @@ def sort( decls ):
         else:
             others.append( inst )
     #this will prevent from py++ to change the order of generated code
-    cmp_by_name = lambda d1, d2: cmp( d1.name, d2.name )
-    cmp_by_line = lambda d1, d2: cmp( d1.location.line, d2.location.line )
+    cmp_by_name = lambda d: d.name
+    cmp_by_line = lambda d: d.location.line
 
-    enums.sort( cmp=cmp_by_name )
-    variables.sort( cmp=cmp_by_name )
+    enums.sort( key=cmp_by_name )
+    variables.sort( key=cmp_by_name )
     if USE_CALLDEF_ORGANIZER:
         others = sort_calldefs(others)
         constructors = sort_calldefs(constructors)
     else:
-        others.sort( cmp=cmp_by_name )
-        constructors.sort( cmp=cmp_by_line )
+        others.sort( key=cmp_by_name )
+        constructors.sort( key=cmp_by_line )
 
     new_ordered = []
     new_ordered.extend( enums )

@@ -105,7 +105,7 @@ class code_creator_t(object):
         :rtype: str
         """
         code = self._create_impl()
-        assert isinstance( code, types.StringTypes )
+        assert isinstance( code, str )
         return self.beautify( code )
 
     @staticmethod
@@ -130,7 +130,7 @@ class code_creator_t(object):
         else:
             files.append( code_repository.ctypes_utils.file_name )
         files.extend( self._get_system_files_impl() )
-        files = filter( None, files)
+        files = [_f for _f in files if _f]
         if unique:
             files = self.unique_headers( files )
 
@@ -143,7 +143,7 @@ class code_creator_t(object):
         else:
             selector = None
 
-        return filter( selector, files )
+        return list(filter( selector, files ))
 
     def beautify( self, code ):
         """
@@ -153,7 +153,7 @@ class code_creator_t(object):
         :type code: str
         :rtype: str
         """
-        assert isinstance( code, types.StringTypes )
+        assert isinstance( code, str )
         return code.strip()
 
     @staticmethod
@@ -167,7 +167,7 @@ class code_creator_t(object):
         :type size: int
         :rtype: str
         """
-        assert isinstance( code, types.StringTypes )
+        assert isinstance( code, str )
         return code_creator_t.__INDENTATION * size\
                + code.replace( os.linesep
                                , os.linesep + code_creator_t.__INDENTATION * size )
@@ -181,7 +181,7 @@ class code_creator_t(object):
         :type code: str
         :rtype: str
         """
-        assert isinstance( code, types.StringTypes )
+        assert isinstance( code, str )
         if code.startswith(code_creator_t.__INDENTATION):
             code = code[ len( code_creator_t.__INDENTATION ):]
         return code.replace( os.linesep + code_creator_t.__INDENTATION
@@ -200,7 +200,7 @@ class code_creator_t(object):
 
         :rtype: bool
         """
-        assert isinstance( line, types.StringTypes )
+        assert isinstance( line, str )
         l = line.lstrip()
         if language == 'C++':
             return l.startswith( '//' ) or l.startswith( '/*' )

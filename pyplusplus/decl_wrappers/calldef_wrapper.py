@@ -6,9 +6,9 @@
 """contains classes that allow to configure code generation for free\\member functions, operators and etc."""
 
 import os
-import user_text
-import algorithm
-import decl_wrapper
+from . import user_text
+from . import algorithm
+from . import decl_wrapper
 from pyplusplus import messages
 from pygccxml import declarations
 from pyplusplus import function_transformers as ft
@@ -173,8 +173,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
             if isinstance( some_type, declarations.ellipsis_t ):
                 return messages.W1053 % str( self )
             units = declarations.decompose_type( some_type )
-            ptr2functions = filter( lambda unit: isinstance( unit, declarations.calldef_type_t )
-                                    , units )
+            ptr2functions = [unit for unit in units if isinstance( unit, declarations.calldef_type_t )]
             if ptr2functions:
                 return messages.W1004
             #Function that take as agrument some instance of non public class
@@ -424,7 +423,7 @@ class operators_helper:
         if isinstance( oper, declarations.free_operator_t ):
             #`Py++` should find out whether the relevant class is exposed to Python
             #and if not, than this operator should not be exposed too
-            included = filter( lambda decl: decl.ignore == False, oper.class_types )
+            included = [decl for decl in oper.class_types if decl.ignore == False]
             if not included:
                 return messages.W1052 % str(oper)
         return ''
@@ -528,7 +527,7 @@ class casting_operator_t( declarations.casting_operator_t, calldef_t ):
         special_cases = {}
         const_t = declarations.const_t
         pointer_t = declarations.pointer_t
-        for type_ in declarations.FUNDAMENTAL_TYPES.values():
+        for type_ in list(declarations.FUNDAMENTAL_TYPES.values()):
             alias = None
             if declarations.is_same( type_, declarations.bool_t() ):
                 alias = '__int__'
@@ -569,7 +568,7 @@ class casting_operator_t( declarations.casting_operator_t, calldef_t ):
         if not self._alias or self.name == super( casting_operator_t, self )._get_alias():
             return_type = declarations.remove_alias( self.return_type )
             decl_string = return_type.decl_string
-            for type_, alias in self.SPECIAL_CASES.items():
+            for type_, alias in list(self.SPECIAL_CASES.items()):
                 if isinstance( type_, declarations.type_t ):
                     if declarations.is_same( return_type, type_ ):
                         self._alias = alias

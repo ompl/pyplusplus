@@ -3,8 +3,8 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-import algorithm
-import code_creator
+from . import algorithm
+from . import code_creator
 from pygccxml import utils
 
 class declaration_based_t:

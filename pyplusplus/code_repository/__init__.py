@@ -8,15 +8,15 @@ Code repository package is used as a repository of C++/Python classes/functions.
 Those classes/functions solve problems, that are typical to most projects.
 """
 
-import array_1
-import gil_guard
-import named_tuple
-import convenience
-import return_range
-import ctypes_utils
-import call_policies
-import indexing_suite
-import ctypes_integration
+from . import array_1
+from . import gil_guard
+from . import named_tuple
+from . import convenience
+from . import return_range
+from . import ctypes_utils
+from . import call_policies
+from . import indexing_suite
+from . import ctypes_integration
 
 all = [ array_1
         , gil_guard
@@ -29,7 +29,7 @@ all = [ array_1
 
 all.extend( indexing_suite.all )
 
-headers = map( lambda f: f.file_name, all )
+headers = [f.file_name for f in all]
 
 def i_depend_on_them( fname ):
     """returns list of files, the file fname depends on"""

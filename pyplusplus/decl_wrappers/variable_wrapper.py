@@ -5,10 +5,10 @@
 
 """defines class that configure global and member variable exposing"""
 
-import decl_wrapper
-import python_traits
-import call_policies
-import python_traits
+from . import decl_wrapper
+from . import python_traits
+from . import call_policies
+from . import python_traits
 from pyplusplus import messages
 from pygccxml import declarations
 
@@ -201,8 +201,7 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
                 return messages.W1036
 
             units = declarations.decompose_type( type_ )
-            ptr2functions = filter( lambda unit: isinstance( unit, declarations.calldef_type_t )
-                                    , units )
+            ptr2functions = [unit for unit in units if isinstance( unit, declarations.calldef_type_t )]
             if ptr2functions:
                 return messages.W1037
         type_ = declarations.remove_pointer( type_ )

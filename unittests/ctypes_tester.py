@@ -61,7 +61,7 @@ class ctypes_base_tester_t(unittest.TestCase):
 
         binaries_dir = os.path.dirname( self.symbols_file )
         if os.path.exists( binaries_dir ):
-            print '\nrmdir ', binaries_dir
+            print('\nrmdir ', binaries_dir)
             shutil.rmtree( binaries_dir )
 
         autoconfig.scons_config.compile( self.__build_scons_cmd(), cwd=autoconfig.this_module_dir_path )

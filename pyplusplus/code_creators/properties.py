@@ -4,8 +4,8 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import algorithm
-import registration_based
+from . import algorithm
+from . import registration_based
 from pygccxml import declarations
 
 class property_t( registration_based.registration_based_t ):

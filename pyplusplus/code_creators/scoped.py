@@ -4,8 +4,8 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import compound
-import declaration_based
+from . import compound
+from . import declaration_based
 
 class scoped_t(declaration_based.declaration_based_t, compound.compound_t):
     def __init__( self, declaration ):

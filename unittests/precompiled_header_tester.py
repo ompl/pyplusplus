@@ -31,7 +31,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def run_tests(self, module):
         lines = file( os.path.join( autoconfig.build_dir, 'precompiled_header.cpp' ) ).readlines()
-        lines = filter( lambda l: l.startswith( '#include' ), lines )
+        lines = [l for l in lines if l.startswith( '#include' )]
         self.failUnless( '#include "stdafx.h"' in lines[0] )
 
 

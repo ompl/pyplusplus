@@ -3,8 +3,8 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-import algorithm
-import code_creator
+from . import algorithm
+from . import code_creator
 
 class registration_based_t(code_creator.code_creator_t):
     """Code creator that is based on a declaration.

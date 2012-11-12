@@ -90,8 +90,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             pass
 
         protected_items = module.create_protected_items()
-        values = map( lambda protected_item: protected_item.value
-                      , protected_items );
+        values = [protected_item.value for protected_item in protected_items];
         values.sort()
         self.failUnless( [0,1,2,3,4]==values )
 

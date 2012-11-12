@@ -8,7 +8,7 @@
 import os
 import time
 import codecs
-import md5sum_repository
+from . import md5sum_repository
 from pyplusplus import utils
 from pyplusplus import _logging_
 from pyplusplus import code_creators
@@ -119,8 +119,8 @@ class writer_t(object):
         fcontent_new.append( content )
         fcontent_new.append( os.linesep ) #keep gcc happy
         fcontent_new = ''.join( fcontent_new )
-        if not isinstance( fcontent_new, unicode ):
-            fcontent_new = unicode( fcontent_new, encoding )
+        if not isinstance( fcontent_new, str ):
+            fcontent_new = str( fcontent_new, encoding )
 
         new_hash_value = None
         curr_hash_value = None
@@ -156,10 +156,9 @@ class writer_t(object):
 
     def get_user_headers( self, creators ):
         headers = []
-        creators = filter( lambda creator: isinstance( creator, code_creators.declaration_based_t )
-                           , creators )
-        map( lambda creator: headers.extend( creator.get_user_headers() )
-             , creators )
+        creators = [creator for creator in creators if isinstance( creator, code_creators.declaration_based_t )]
+        for creator in creators:
+            headers.extend( creator.get_user_headers() )
         return code_creators.code_creator_t.unique_headers( headers )
 
     def save_exposed_decls_db( self, file_path ):

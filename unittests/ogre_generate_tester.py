@@ -37,9 +37,9 @@ class ogre_generate_tester_t(unittest.TestCase):
 
         x = mb.global_ns.decls( lambda d: 'Animation*' in d.name and 'MapIterator' in d.name )
         for y in x:
-            print y.name
-            print y.partial_name
-            print declarations.full_name( y, with_defaults=False )
+            print(y.name)
+            print(y.partial_name)
+            print(declarations.full_name( y, with_defaults=False ))
 
         target_dir = os.path.join( autoconfig.build_directory, 'ogre' )
         #~ if os.path.exists( target_dir ):

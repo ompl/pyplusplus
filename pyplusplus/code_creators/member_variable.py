@@ -4,11 +4,11 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import algorithm
-import code_creator
-import ctypes_formatter
-import declaration_based
-import registration_based
+from . import algorithm
+from . import code_creator
+from . import ctypes_formatter
+from . import declaration_based
+from . import registration_based
 from pygccxml import declarations
 from pyplusplus import code_repository
 from pyplusplus.decl_wrappers import call_policies

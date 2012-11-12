@@ -97,10 +97,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( r1.assign( 17 ) == pyrational( 17, 1 ) )
 
         x = module.XXX()
-        print str( x )
+        print(str( x ))
 
         y = module.YYY()
-        print str( y )
+        print(str( y ))
 
         vec = module.vector_less__int__greater_()
         ins_cls_2 = module.Class2()

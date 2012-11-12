@@ -4,7 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import code_creator
+from . import code_creator
 from pyplusplus import decl_wrappers
 
 #TODO: add different dlls
@@ -51,6 +51,6 @@ class library_reference_t(code_creator.code_creator_t):
 
 if __name__ == '__main__':
     lr = library_reference_t( 'library', r'c:\temp\x1.dll', False )
-    print lr.create()
+    print(lr.create())
     lr = library_reference_t( 'library', r'c:\temp\x1.dll', True )
-    print lr.create()
+    print(lr.create())

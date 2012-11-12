@@ -73,7 +73,7 @@ class manager_t( object ):
             
         for decl in opaque_decls:
             opaque_type_registrator = None
-            if id(decl) not in self.__exposed_opaque_decls.keys():
+            if id(decl) not in list(self.__exposed_opaque_decls.keys()):
                 opaque_type_registrator = code_creators.opaque_type_registrator_t( decl )
                 self.__exposed_opaque_decls[ id(decl) ] = opaque_type_registrator
                 self.__extmodule.adopt_declaration_creator( opaque_type_registrator )

@@ -46,7 +46,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( 22223 == module.eval( Derived4() ) )
 
         bb = module.BB()
-        print dir( bb )
+        print(dir( bb ))
         x = bb.do_smth_b()
         self.failUnless( x[0] == x[1] == ord( 'b' ) )
 

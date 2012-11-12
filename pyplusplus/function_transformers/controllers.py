@@ -12,7 +12,7 @@ classes for this purpose. Controller classes provide an abstraction of the templ
 """
 
 import string
-import templates
+from . import templates
 from pygccxml import declarations
 
 class variable_t( object ):
@@ -110,7 +110,7 @@ class variables_manager_t( object ):
 
 def create_variables_manager( function ):
     vm = variables_manager_t()
-    map( lambda arg: vm.register_name( arg.name ) , function.arguments )
+    for arg in function.arguments: vm.register_name( arg.name )
     return vm
 
 class controller_base_t( object ):
@@ -167,7 +167,7 @@ class sealed_fun_controller_t( controller_base_t ):
         
     @property
     def wrapper_args( self ):
-        return filter( None, self.__wrapper_args )
+        return [_f for _f in self.__wrapper_args if _f]
 
     def find_wrapper_arg( self, name ):
         for arg in self.wrapper_args:
@@ -236,7 +236,7 @@ class mem_fun_controller_t( sealed_fun_controller_t ):
                                                        , type=inst_arg_type )
 
     def apply( self, transformations ):
-        map( lambda t: t.configure_mem_fun( self ), transformations )
+        for t in transformations: t.configure_mem_fun( self )
 
     @property 
     def inst_arg( self ):
@@ -247,7 +247,7 @@ class free_fun_controller_t( sealed_fun_controller_t ):
         sealed_fun_controller_t.__init__( self, function )
 
     def apply( self, transformations ):
-        map( lambda t: t.configure_free_fun( self ), transformations )
+        for t in transformations: t.configure_free_fun( self )
 
 
 class virtual_mem_fun_controller_t( controller_base_t ):
@@ -302,7 +302,7 @@ class virtual_mem_fun_controller_t( controller_base_t ):
         
         @property
         def py_arg_expressions( self ):
-            return filter( None, self.__py_arg_expressions )
+            return [_f for _f in self.__py_arg_expressions if _f]
     
         def remove_py_arg( self, index ):
             self.__py_arg_expressions[ index ] = None
@@ -336,7 +336,7 @@ class virtual_mem_fun_controller_t( controller_base_t ):
         self.__default_cntrl = self.default_fun_controller_t( function )
 
     def apply( self, transformations ):
-        map( lambda t: t.configure_virtual_mem_fun( self ), transformations )
+        for t in transformations: t.configure_virtual_mem_fun( self )
 
     @property
     def override_controller( self ):
