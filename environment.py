@@ -70,8 +70,8 @@ elif 'mmoll' == getpass.getuser():
     scons.suffix = '.so'
     boost.libs = '/opt/local/lib'
     boost.include = '/opt/local/include'
-    python.libs = '/opt/local/Library/Frameworks/Python.framework/Versions/3.3/lib'
-    python.include = '/opt/local/Library/Frameworks/Python.framework/Versions/3.3/include/python3.3m'
+    python.libs = '/opt/local/Library/Frameworks/Python.framework/Versions/3.2/lib'
+    python.include = '/opt/local/Library/Frameworks/Python.framework/Versions/3.2/include/python3.2m'
 
 _my_path = None
 try:
