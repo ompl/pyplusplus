@@ -242,7 +242,7 @@ class bpcreator_t( declarations.decl_visitor_t ):
 
         std containers exposed by `Py++`, even if the user didn't ``include`` them.
         """
-        cmp_by_name = cls: cls.decl_string
+        cmp_by_name = lambda cls: cls.decl_string
         used_containers = list( self.__types_db.used_containers )
         used_containers = [cls for cls in used_containers if cls.indexing_suite.include_files]
         used_containers.sort( key=cmp_by_name )

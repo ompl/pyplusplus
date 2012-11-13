@@ -270,7 +270,6 @@ class module_runner_t( object ):
         test_file_name = self.module.__file__
         if test_file_name.endswith( 'pyc' ):
             test_file_name = test_file_name[:-1]
-        command_line = ' '.join([ '"%s"' % sys.executable, test_file_name ])
         try:
             self.output = subprocess.check_output([sys.executable, test_file_name]).decode()
             self.exit_status = 0

@@ -39,7 +39,7 @@ class function_transformation_t:
             else:
                 obj.update( self.__function.decl_string.encode() )
                 obj.update( self.__function.location.file_name.encode() )
-                obj.update( str( self.__function.location.line.encode() ) )
+                obj.update( str( self.__function.location.line ).encode() )
             self.__unique_name = self.__function.name + '_' + obj.hexdigest ()
         return self.__unique_name
 

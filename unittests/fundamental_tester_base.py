@@ -130,7 +130,7 @@ class fundamental_tester_base_t( unittest.TestCase ):
                             % { 'target' : self.__module_name
                                 , 'sources' : sources_str }
         sconstruct_file = open( self.__generated_scons_file_name, 'w+b' )
-        sconstruct_file.write( sconstruct_script )
+        sconstruct_file.write( sconstruct_script.encode('ascii') )
         sconstruct_file.close()
 
     def _clean_build( self, sconstruct_file ):

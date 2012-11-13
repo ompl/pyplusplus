@@ -183,7 +183,7 @@ class from_address_t(type_modifier_t):
         :param arg_ref: Index of the argument that is an output value
         :type arg_ref: int
         """
-        modifier = lambda type_: declarations.dummy_type_t('size_t')
+        modifier = lambda type_: declarations.FUNDAMENTAL_TYPES[ 'unsigned int' ]
         type_modifier_t.__init__( self, function, arg_ref, modifier )
 
         if not is_ptr_or_array( self.arg.type ):

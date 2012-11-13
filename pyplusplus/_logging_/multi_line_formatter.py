@@ -76,6 +76,8 @@ class multi_line_formatter_t(logging.Formatter):
 
         width is the maximum width of any text blocks (without indentation).
         """
+        if isinstance(msgline, logging.LogRecord):
+            msgline = msgline.getMessage()
         txts = msgline.split(";")
         # Ensure that there are no more than two items in txts
         if len( txts ) != 2:

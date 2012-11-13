@@ -25,12 +25,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         stdafx = code_creators.include_t( 'stdafx.h' )
         mb.code_creator.adopt_creator( stdafx, 0 )
 
-        f = file( os.path.join( autoconfig.build_dir, 'stdafx.h' ), 'w+b' )
-        f.write( '//this should be the first header file' + os.linesep )
+        f = open( os.path.join( autoconfig.build_dir, 'stdafx.h' ), 'w+' )
+        f.write( '//this should be the first header file\n' )
         f.close()
 
     def run_tests(self, module):
-        lines = file( os.path.join( autoconfig.build_dir, 'precompiled_header.cpp' ) ).readlines()
+        lines = open( os.path.join( autoconfig.build_dir, 'precompiled_header.cpp' ) ).readlines()
         lines = [l for l in lines if l.startswith( '#include' )]
         self.failUnless( '#include "stdafx.h"' in lines[0] )
 

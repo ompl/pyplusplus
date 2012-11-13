@@ -12,7 +12,6 @@ from pyplusplus.decl_wrappers.algorithm import *
 
 
 import types
-from . import namespace
 
 def _make_flatten_list( creator_or_creators ):
     from . import compound

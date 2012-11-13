@@ -9,7 +9,6 @@ from . import code_creator
 from . import calldef_utils
 from . import declaration_based
 from . import registration_based
-from . import class_declaration
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 

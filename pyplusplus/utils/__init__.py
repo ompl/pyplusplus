@@ -125,7 +125,7 @@ class exposed_decls_db_t( object ):
         for name2rows in self.__registry.values():
             for rows in name2rows.values():
                 for row in rows:
-                    f.write( '%s%s' % ( str(row), self.__row_delimiter ) )
+                    f.write( ('%s%s' % ( str(row), self.__row_delimiter )).encode('ascii') )
         f.close()
 
     def load( self, fpath ):

@@ -128,6 +128,27 @@ class class_organizer_t(object):
             answer.append( fname2inst[fname] )
         return answer
 
+
+def cmp_to_key(mycmp):
+    """Convert a cmp= function into a key= function"""
+    class K(object):
+        def __init__(self, obj, *args):
+            self.obj = obj
+        def __lt__(self, other):
+            return mycmp(self.obj, other.obj) < 0
+        def __gt__(self, other):
+            return mycmp(self.obj, other.obj) > 0
+        def __eq__(self, other):
+            return mycmp(self.obj, other.obj) == 0
+        def __le__(self, other):
+            return mycmp(self.obj, other.obj) <= 0
+        def __ge__(self, other):
+            return mycmp(self.obj, other.obj) >= 0
+        def __ne__(self, other):
+            return mycmp(self.obj, other.obj) != 0
+    return K
+
+
 class calldef_organizer_t( object ):
     #Take a look on this post:
     #  http://mail.python.org/pipermail/c++-sig/2006-October/011463.html
@@ -163,7 +184,7 @@ class calldef_organizer_t( object ):
                 to_be_deleted.append( group )
         for group in to_be_deleted:
             del groups[ group ]
-        groups[ None ].sort( lambda d1, d2: cmp( decl2order[d1], decl2order[d2] ) )
+        groups[ None ].sort( key=lambda d: decl2order[d] )
         return groups
 
     def cmp_args_types( self, t1, t2 ):
@@ -179,13 +200,14 @@ class calldef_organizer_t( object ):
         for group in list(groups.keys()):
             if None is group:
                 continue
-            groups[ group ].sort( self.cmp_calldefs )
+            groups[ group ].sort( key=cmp_to_key(self.cmp_calldefs) )
 
     def join_groups( self, groups ):
         decls = []
-        sorted_keys = list(groups.keys())
-        sorted_keys.sort()
-        for group in sorted_keys:
+        keys = set(groups.keys())
+        if None in keys:
+            keys.remove(None)
+        for group in sorted(keys):
             decls.extend( groups[group] )
         return decls
 

@@ -68,10 +68,10 @@ elif 'root' == getpass.getuser():
         python.include = 'e:/python25/include'
 elif 'mmoll' == getpass.getuser():
     scons.suffix = '.so'
-    boost.libs = [ '/opt/local/lib']
+    boost.libs = '/opt/local/lib'
     boost.include = '/opt/local/include'
-    python.libs = [ '/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib' ]
-    python.include = '/opt/local/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7'
+    python.libs = '/opt/local/Library/Frameworks/Python.framework/Versions/3.3/lib'
+    python.include = '/opt/local/Library/Frameworks/Python.framework/Versions/3.3/include/python3.3m'
 
 _my_path = None
 try:
