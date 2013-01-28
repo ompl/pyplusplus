@@ -245,7 +245,7 @@ testers = [
     , ft_inout_static_matrix_tester
     , ft_inout_static_array_tester
     , inner_base_class_tester
-    , indexing_suite2_shared_ptr_value_traits_tester
+#    , indexing_suite2_shared_ptr_value_traits_tester
 #    , ogre_generate_tester too much time
 ]
 
@@ -341,6 +341,7 @@ class process_tester_runner_t( object ):
             print(os.linesep.join(['FAILED  (failures=%d)' % test_failed, 'False']))
         else:
             print('ok')
+        return exit_status
 
     def __call__( self ):
         start_time = time.time()
@@ -351,10 +352,10 @@ class process_tester_runner_t( object ):
                 shutil.rmtree( os.path.join( autoconfig.build_directory, 'indexing_suite' ) )
             tester()
         self.__total_time = time.time() - start_time
-        self.__dump_statistics()
+        return self.__dump_statistics()
 
 
 if __name__ == "__main__":
     runner = process_tester_runner_t( testers )
-    runner()
+    sys.exit(runner())
 

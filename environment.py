@@ -10,15 +10,15 @@ class indexing_suite:
     include = os.path.join( this_module_dir_path, 'indexing_suite_v2' )
 
 class boost:
-    libs = ''
-    include = ''
+    libs = '/usr/include'
+    include = '/usr/lib'
 
 class python:
-    libs = ''
-    include = ''
+    version = 'python%d.%d' % (sys.version_info[0],sys.version_info[1])
+    libs = os.path.join(sys.prefix, 'lib')
+    include = os.path.join(sys.prefix, os.path.join('include', version))
 
 class gccxml:
-
     gccxml_path = os.path.join( this_module_dir_path, '..', 'gccxml_bin', 'v09', platform.system(), platform.machine(), 'bin' )
     if not os.path.exists( gccxml_path ):
         gccxml_path = os.path.join( this_module_dir_path, '..', 'gccxml_bin', 'v09', sys.platform, 'bin' )
@@ -27,11 +27,32 @@ class gccxml:
     executable = gccxml_path
 
 class scons:
-    suffix = ''
+    suffix = '.so'
     cmd_build = 'scons'
     cmd_clean = 'scons --clean'
     ccflags = []
 
+# attemp to set correct boost and python paths
+if 'BOOST_ROOT' in os.environ:
+    boost.libs = os.path.join(os.environ, 'lib')
+    boost.include = os.path.join(os.environ, 'include')
+elif not os.path.exists(os.path.join(boost.include, 'boost')):
+    # make another guess at where boost is installed
+    boost.libs = '/opt/local/lib'
+    boost.include = '/opt/local/include'
+    if not os.path.exists(os.path.join(boost.include, 'boost')):
+        raise Exception('Cannot find Boost. Use the environment variable BOOST_ROOT')
+if os.path.exists(python.include + 'm'):
+    python.include = python.include + 'm'
+elif os.path.exists(python.include + 'u'):
+    python.include = python.include + 'u'
+elif os.path.exists(python.include + 'd'):
+    python.include = python.include + 'd'
+if not os.path.exists(python.include):
+    raise Exception('Cannot find Python include directory')
+
+# This shouldn't really be used. Eventually, we should properly detect the
+# scons/boost/python settings
 if 'roman' in getpass.getuser():
     if os.name == 'nt':
         scons.suffix = '.pyd'
@@ -66,12 +87,6 @@ elif 'root' == getpass.getuser():
         boost.include = 'd:/dev/boost_svn'
         python.libs = 'e:/python25/libs'
         python.include = 'e:/python25/include'
-elif 'mmoll' == getpass.getuser():
-    scons.suffix = '.so'
-    boost.libs = '/opt/local/lib'
-    boost.include = '/opt/local/include'
-    python.libs = '/opt/local/Library/Frameworks/Python.framework/Versions/3.2/lib'
-    python.include = '/opt/local/Library/Frameworks/Python.framework/Versions/3.2/include/python3.2m'
 
 _my_path = None
 try:
@@ -84,13 +99,8 @@ except Exception as error:
         if sys.modules.has_key('environment'):
             _my_path = os.path.split( sys.modules['environment'].__file__ )[0]
 
-try:
-    import pygccxml
-    print('pygccxml INSTALLED version will be used')
-except ImportError:
-    sys.path.append( os.path.join( _my_path, '../pygccxml_dev' ) )
-    import pygccxml
-    print('pygccxml DEVELOPMENT version will be used')
 
+sys.path.insert(0, os.path.join( _my_path, '../pygccxml' ))
+sys.path.insert(0, os.path.join( _my_path ))
+import pygccxml
 import pyplusplus
-
