@@ -10,8 +10,8 @@ class indexing_suite:
     include = os.path.join( this_module_dir_path, 'indexing_suite_v2' )
 
 class boost:
-    libs = '/usr/include'
-    include = '/usr/lib'
+    libs = '/usr/lib'
+    include = '/usr/include'
 
 class python:
     version = 'python%d.%d' % (sys.version_info[0],sys.version_info[1])
