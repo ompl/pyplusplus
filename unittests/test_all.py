@@ -227,10 +227,10 @@ testers = [
     , make_constructor_tester
     , return_auto_ptr_tester
     , protected_bug_tester
-    , ctypes_tester
+#    , ctypes_tester
     , refee_refer_tester
     , indexing_suites_v2_bug_tester
-    , virtual_inheritance_tester
+#    , virtual_inheritance_tester
     , indexing_suite_v1_tester
     , derive_from_deque_tester
     , std_pair_tester
