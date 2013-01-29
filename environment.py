@@ -42,6 +42,8 @@ elif not os.path.exists(os.path.join(boost.include, 'boost')):
     boost.include = '/opt/local/include'
     if not os.path.exists(os.path.join(boost.include, 'boost')):
         raise Exception('Cannot find Boost. Use the environment variable BOOST_ROOT')
+if os.path.exists(python.include + 'mu'):
+    python.include = python.include + 'mu'
 if os.path.exists(python.include + 'm'):
     python.include = python.include + 'm'
 elif os.path.exists(python.include + 'u'):
