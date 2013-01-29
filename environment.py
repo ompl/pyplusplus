@@ -1,5 +1,6 @@
 import os
 import sys
+import fnmatch
 import socket
 import getpass
 import platform
@@ -10,12 +11,14 @@ class indexing_suite:
     include = os.path.join( this_module_dir_path, 'indexing_suite_v2' )
 
 class boost:
-    libs = '/usr/lib'
+    libdir = '/usr/lib'
+    lib = 'boost_python'
     include = '/usr/include'
 
 class python:
     version = 'python%d.%d' % (sys.version_info[0],sys.version_info[1])
-    libs = os.path.join(sys.prefix, 'lib')
+    libdir = os.path.join(sys.prefix, 'lib')
+    lib = version
     include = os.path.join(sys.prefix, os.path.join('include', version))
 
 class gccxml:
@@ -34,24 +37,30 @@ class scons:
 
 # attemp to set correct boost and python paths
 if 'BOOST_ROOT' in os.environ:
-    boost.libs = os.path.join(os.environ['BOOST_ROOT'], 'lib')
+    boost.libdir = os.path.join(os.environ['BOOST_ROOT'], 'lib')
     boost.include = os.path.join(os.environ['BOOST_ROOT'], 'include')
 elif not os.path.exists(os.path.join(boost.include, 'boost')):
     # make another guess at where boost is installed
-    boost.libs = '/opt/local/lib'
+    boost.libdir = '/opt/local/lib'
     boost.include = '/opt/local/include'
     if not os.path.exists(os.path.join(boost.include, 'boost')):
         raise Exception('Cannot find Boost. Use the environment variable BOOST_ROOT')
-if os.path.exists(python.include + 'mu'):
-    python.include = python.include + 'mu'
-if os.path.exists(python.include + 'm'):
-    python.include = python.include + 'm'
-elif os.path.exists(python.include + 'u'):
-    python.include = python.include + 'u'
-elif os.path.exists(python.include + 'd'):
-    python.include = python.include + 'd'
-if not os.path.exists(python.include):
+pysuffixes = [ 'mu', 'm', 'u', 'd', '']
+for suffix in pysuffixes:
+    path = python.include + suffix
+    if os.path.exists(path):
+        python.include = path
+        break
+else:
     raise Exception('Cannot find Python include directory')
+
+libs = os.listdir(python.libdir)
+for suffix in pysuffixes:
+    if len(fnmatch.filter(libs, '*' + python.lib + suffix + '*')):
+        python.lib = python.lib + suffix
+        break
+else:
+    raise Exception('Cannot find Python library')
 
 # This shouldn't really be used. Eventually, we should properly detect the
 # scons/boost/python settings
@@ -59,9 +68,9 @@ if 'roman' in getpass.getuser():
     if os.name == 'nt':
         scons.suffix = '.pyd'
         scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope' ]
-        boost.libs = [ r'e:\dev\boost_svn\bin.v2\libs\python\build\msvc-9.0\release\threading-multi' ]
+        boost.libdir = [ r'e:\dev\boost_svn\bin.v2\libs\python\build\msvc-9.0\release\threading-multi' ]
         boost.include = 'e:/dev/boost_svn'
-        python.libs = 'c:/program files/python26/libs'
+        python.libdir = 'c:/program files/python26/libs'
         python.include = 'c:/program files/python26/include'
     else:
         if 'kubunu-vbox' == socket.gethostname():
@@ -69,7 +78,7 @@ if 'roman' in getpass.getuser():
             print('test process niceness: 20')
             scons.suffix = '.so'
             scons.ccflags = []
-            boost.libs = ['/usr/lib'] #'/home/roman/include/libs', '/home/roman/include/lib' ]
+            boost.libdir = ['/usr/lib'] #'/home/roman/include/libs', '/home/roman/include/lib' ]
             boost.include = '/usr/include/boost'
             python.include = '/usr/include/python2.6'
 
@@ -78,16 +87,16 @@ if 'roman' in getpass.getuser():
             print('test process niceness: 20')
             scons.suffix = '.so'
             scons.ccflags = []
-            boost.libs = ['/home/roman/include/libs', '/home/roman/include/lib' ]
+            boost.libdir = ['/home/roman/include/libs', '/home/roman/include/lib' ]
             boost.include = '/home/roman/boost_svn'
             python.include = '/usr/include/python2.6'
 elif 'root' == getpass.getuser():
     if os.name == 'nt':
         scons.suffix = '.pyd'
         scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope' ]
-        boost.libs = [ 'd:/dev/boost_svn/bin.v2/libs/python/build/msvc-7.1/release/threading-multi' ]
+        boost.libdir = [ 'd:/dev/boost_svn/bin.v2/libs/python/build/msvc-7.1/release/threading-multi' ]
         boost.include = 'd:/dev/boost_svn'
-        python.libs = 'e:/python25/libs'
+        python.libdir = 'e:/python25/libs'
         python.include = 'e:/python25/include'
 
 _my_path = None
