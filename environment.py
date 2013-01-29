@@ -34,8 +34,8 @@ class scons:
 
 # attemp to set correct boost and python paths
 if 'BOOST_ROOT' in os.environ:
-    boost.libs = os.path.join(os.environ, 'lib')
-    boost.include = os.path.join(os.environ, 'include')
+    boost.libs = os.path.join(os.environ['BOOST_ROOT'], 'lib')
+    boost.include = os.path.join(os.environ['BOOST_ROOT'], 'include')
 elif not os.path.exists(os.path.join(boost.include, 'boost')):
     # make another guess at where boost is installed
     boost.libs = '/opt/local/lib'
