@@ -43,7 +43,7 @@ print('GCCXML configured to simulate compiler ' + str(cxx_parsers_cfg.gccxml.com
 
 class scons_config:
     libs = [ python.lib ]
-    libpath = [ python.libdir ] + [boost.libdir]
+    libpath =  [ boost.libdir ] + [ python.libdir ]
     cpppath = [ boost.include, python.include, build_directory ] #indexing_suite.include ]
     include_dirs = cpppath + [data_directory] + cxx_parsers_cfg.gccxml.include_paths
     if cxx_parsers_cfg.gccxml.compiler == 'msvc9':
