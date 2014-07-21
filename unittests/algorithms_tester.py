@@ -69,7 +69,7 @@ class class_organizer_tester_t(unittest.TestCase):
         return answer
 
     def test(self):
-        config = parser.config_t( gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+        config = parser.gccxml_configuration_t( gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
         code = []
         code.append('struct a{};')
         code.append('struct b{};')

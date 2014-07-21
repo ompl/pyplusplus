@@ -34,9 +34,9 @@ from ._logging_ import multi_line_formatter_t
 __version__ = '1.5.0'
 
 import pygccxml
-if not hasattr( pygccxml, '__revision__' ) or pygccxml.__revision__ < 1080:
+if not hasattr( pygccxml, '__version__' ):
     msg = 'This revision of `Py++` requieres pygccxml revision to be ' \
-          'greater or equal to %d. ' \
+          'greater or equal to 1.5.2. ' \
           'Please install right pygccxml version.'
     raise AssertionError( msg % pygccxml.__revision__ )
 
