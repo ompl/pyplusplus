@@ -28,24 +28,24 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     
     def run_tests( self, module):
         opers = module.operators_t()
-        self.failUnless( 28 == int( opers ) )
-        self.failUnless( 3.5 == float( opers ) )
-        self.failUnless( "hello world" == str( opers ) )
+        self.assertTrue( 28 == int( opers ) )
+        self.assertTrue( 3.5 == float( opers ) )
+        self.assertTrue( "hello world" == str( opers ) )
         to_string = module.to_string_t()
         try:
-            self.failUnless( "hello world" == str(to_string) )
+            self.assertTrue( "hello world" == str(to_string) )
         except:
-            self.failUnless( "hello world" == to_string.as__scope_std_scope_string() )
+            self.assertTrue( "hello world" == to_string.as__scope_std_scope_string() )
         to_wstring = module.to_wstring_t()
-        self.failUnless( "hello world" == str( to_wstring ) )
+        self.assertTrue( "hello world" == str( to_wstring ) )
         call = module.call_t()
-        self.failUnless( 7 == call( 2, 5 ) )
-        self.failUnless( 3.5 == call( 3.5 ) )
+        self.assertTrue( 7 == call( 2, 5 ) )
+        self.assertTrue( 3.5 == call( 3.5 ) )
         python_call = self.create_python_call( module )
-        self.failUnless( 12 == module.virtual_call( python_call, 3, 4 ) )
+        self.assertTrue( 12 == module.virtual_call( python_call, 3, 4 ) )
 
         derived_call = module.derive_call_t()
-        self.failUnless( 7 == module.virtual_call( derived_call, 3, 4 ) )
+        self.assertTrue( 7 == module.virtual_call( derived_call, 3, 4 ) )
 
 def create_suite():
     suite = unittest.TestSuite()    

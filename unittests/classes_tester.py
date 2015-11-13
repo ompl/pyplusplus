@@ -22,13 +22,13 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.classes().expose_sizeof = True
         mb.class_( 'fundamental2' ).alias = 'FUNDAMENTAL2'
         apple = mb.class_( 'apple' )
-        self.failUnless( apple.alias == 'the_tastest_fruit' )
+        self.assertTrue( apple.alias == 'the_tastest_fruit' )
         apple.alias = 'apple'
         apple.add_registration_code( "/*head*/", works_on_instance=False, tail=False )
         apple.add_registration_code( "/*tail*/", works_on_instance=False, tail=True )
 
         protected_static_t = mb.class_( 'protected_static_t' )
-        self.failUnless( 'PROTECTED_STATIC' in protected_static_t.alias)
+        self.assertTrue( 'PROTECTED_STATIC' in protected_static_t.alias)
         protected_static_t.alias = 'protected_static_t'
         mb.operators()
 
@@ -37,7 +37,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failIfRaisesAny( module.FUNDAMENTAL2 )
 
         self.failIfRaisesAny( module.apple )
-        self.failUnless( isinstance( module.apple(), module.fruit ) )
+        self.assertTrue( isinstance( module.apple(), module.fruit ) )
 
         self.failIfRaisesAny( module.noncopyable1 )
 
@@ -50,12 +50,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failIfRaisesAny( module.scope_based_exposer )
         self.failIfRaisesAny( lambda: module.scope_based_exposer.EColor.red )
 
-        self.failUnless( 24 == module.protected_static_t.identity(24) )
-        self.failUnless( 29 == module.protected_static_t.identity(29) )
-        self.failUnless( -24 == module.protected_static_t().invert_sign(24) )
-        self.failUnless( 67 == module.protected_static_t().invert_sign(-67) )
-        self.failUnless( module.protected_static_t().this )
-        self.failUnless( module.protected_static_t().sizeof )
+        self.assertTrue( 24 == module.protected_static_t.identity(24) )
+        self.assertTrue( 29 == module.protected_static_t.identity(29) )
+        self.assertTrue( -24 == module.protected_static_t().invert_sign(24) )
+        self.assertTrue( 67 == module.protected_static_t().invert_sign(-67) )
+        self.assertTrue( module.protected_static_t().this )
+        self.assertTrue( module.protected_static_t().sizeof )
 
 def create_suite():
     suite = unittest.TestSuite()

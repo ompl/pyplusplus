@@ -87,7 +87,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         print('call event.notify(): ', simulator.get_event().notify())
         print('call simulator.run()')
         simulator.run()
-        self.failUnless( notify_data[0] == 1 )
+        self.assertTrue( notify_data[0] == 1 )
         
 def create_suite():
     suite = unittest.TestSuite()    

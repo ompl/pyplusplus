@@ -22,12 +22,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def run_tests(self, module):        
         d = module.data()
-        self.failUnless( d.m_i == 0 )
-        self.failUnless( d.m_j == 1 )
+        self.assertTrue( d.m_i == 0 )
+        self.assertTrue( d.m_j == 1 )
 
         d2 = module.data(0)
-        self.failUnless( d2.m_i == 0 )
-        self.failUnless( d2.m_j == 1 )
+        self.assertTrue( d2.m_i == 0 )
+        self.assertTrue( d2.m_j == 1 )
 
 def create_suite():
     suite = unittest.TestSuite()    

@@ -30,12 +30,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def run_tests( self, module):
         v3 = module.Vector3()
-        self.failUnless( v3.ZERO == v3.do_smth() )
+        self.assertTrue( v3.ZERO == v3.do_smth() )
         #test copy constructor
-        self.failUnless( module.Vector3(v3.ZERO) == v3.do_smth() )
+        self.assertTrue( module.Vector3(v3.ZERO) == v3.do_smth() )
 
         x = module.Vector3( 1,2,3)
-        self.failUnless( '( 1,2,3 )' == str(x) )
+        self.assertTrue( '( 1,2,3 )' == str(x) )
 
 def create_suite():
     suite = unittest.TestSuite()

@@ -33,7 +33,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def run_tests(self, module):      
         item_ = module.item(1,2)
         cont = module.container( item_ );
-        self.failUnless( 3 == cont.my_item.m_value )
+        self.assertTrue( 3 == cont.my_item.m_value )
 
 def create_suite():
     suite = unittest.TestSuite()    

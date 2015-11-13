@@ -40,39 +40,39 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         sbk = module.status_bits_keeper_t()
         sb = sbk.status_bits
         sb.bcr = 2
-        self.failUnless( sbk.get_sb_bcr() == 2 )
+        self.assertTrue( sbk.get_sb_bcr() == 2 )
 
         self.failIfRaisesAny( module.point )
         xypoint = module.point()
-        self.failUnless( module.point.instance_count == 1)
-        self.failUnless( xypoint.instance_count == 1)
-        self.failUnless( module.point.default_color == module.point.color.red)
-        self.failUnless( xypoint.default_color == module.point.color.red)
-        self.failUnless( xypoint.x == -1)
-        self.failUnless( xypoint.y == 2 )
-        self.failUnless( xypoint.PreferedColor == xypoint.color.blue )
-        self.failUnlessRaises( Exception, self.change_default_color )
-        self.failUnlessRaises( Exception, self.change_prefered_color )
+        self.assertTrue( module.point.instance_count == 1)
+        self.assertTrue( xypoint.instance_count == 1)
+        self.assertTrue( module.point.default_color == module.point.color.red)
+        self.assertTrue( xypoint.default_color == module.point.color.red)
+        self.assertTrue( xypoint.x == -1)
+        self.assertTrue( xypoint.y == 2 )
+        self.assertTrue( xypoint.PreferedColor == xypoint.color.blue )
+        self.assertRaises( Exception, self.change_default_color )
+        self.assertRaises( Exception, self.change_prefered_color )
 
         bf = module.bit_fields_t()
         module.set_a( bf, 1 )
-        self.failUnless( 1 == bf.a )
-        self.failUnless( bf.b == module.get_b( bf ) )
+        self.assertTrue( 1 == bf.a )
+        self.assertTrue( bf.b == module.get_b( bf ) )
         self.failIfNotRaisesAny( lambda: self.set_b( bf, 23 ) )
 
         tree = module.create_tree()
-        self.failUnless( tree.parent is None )
-        self.failUnless( tree.data.value == 0 )
-        self.failUnless( tree.right is None )
-        self.failUnless( tree.left )
-        self.failUnless( tree.left.data.value == 1 )
+        self.assertTrue( tree.parent is None )
+        self.assertTrue( tree.data.value == 0 )
+        self.assertTrue( tree.right is None )
+        self.assertTrue( tree.left )
+        self.assertTrue( tree.left.data.value == 1 )
 
         tree.right = module.create_tree()
-        self.failUnless( tree.right.parent is None )
-        self.failUnless( tree.right.data.value == 0 )
-        self.failUnless( tree.right.right is None )
-        self.failUnless( tree.right.left )
-        self.failUnless( tree.right.left.data.value == 1 )
+        self.assertTrue( tree.right.parent is None )
+        self.assertTrue( tree.right.data.value == 0 )
+        self.assertTrue( tree.right.right is None )
+        self.assertTrue( tree.right.left )
+        self.assertTrue( tree.right.left.data.value == 1 )
 
         mem_var_str = module.mem_var_str_t()
         mem_var_str.identity( module.mem_var_str_t.class_name )
@@ -82,7 +82,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         data_type = ctypes.POINTER( ctypes.c_int )
         data = data_type.from_address( image.data )
         for j in range(5):
-            self.failUnless( j == data[j] )
+            self.assertTrue( j == data[j] )
 
         int_array = ctypes.c_int * 5
         array = int_array()
@@ -91,36 +91,36 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         image.data = ctypes.addressof(array)
         data = data_type.from_address( image.data )
         for j in range(5):
-            self.failUnless( j*2 == data[j] )
+            self.assertTrue( j*2 == data[j] )
 
         data_type = ctypes.POINTER( ctypes.c_int )
         data = data_type.from_address( module.image_t.none_image )
-        self.failUnless( 1997 == data.contents.value )
+        self.assertTrue( 1997 == data.contents.value )
 
         array = module.array_t()
-        self.failUnless( len( array.ivars ) == 10 )
+        self.assertTrue( len( array.ivars ) == 10 )
 
         ivars = array.ivars
         del array #testing call policies
         for i in range(20):
             for index in range(10):
-                self.failUnless( ivars[index] == -index )
+                self.assertTrue( ivars[index] == -index )
 
         array = module.array_t()
         for index in range( len(array.ivars) ):
             array.ivars[index] = index * index
-            self.failUnless( array.get_ivars_item( index ) == index * index )
+            self.assertTrue( array.get_ivars_item( index ) == index * index )
 
         #~ import pdb
         #~ pdb.set_trace()
 
-        self.failUnless( len( module.array_t.vars ) == 3 )
+        self.assertTrue( len( module.array_t.vars ) == 3 )
         for i in range( len( module.array_t.vars ) ):
-            self.failUnless( module.array_t.vars[i].value == -9 )
+            self.assertTrue( module.array_t.vars[i].value == -9 )
 
-        self.failUnless( len( module.array_t.vars_nonconst ) == 3 )
+        self.assertTrue( len( module.array_t.vars_nonconst ) == 3 )
         for i in range( len( module.array_t.vars_nonconst ) ):
-            self.failUnless( module.array_t.vars_nonconst[i].value == -9 )
+            self.assertTrue( module.array_t.vars_nonconst[i].value == -9 )
 
 def create_suite():
     suite = unittest.TestSuite()

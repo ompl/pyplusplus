@@ -52,7 +52,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         try:
             module.throw_custom_exception()
         except RuntimeError as error:
-            self.failUnless( "profe of concept" in str( error ) )
+            self.assertTrue( "profe of concept" in str( error ) )
         #custom_exception_t = module.custom_exception_t
         #bases = list( custom_exception_t.__bases__ ) + [RuntimeError]
         #custom_exception_t.__bases__ = tuple( bases )
@@ -60,7 +60,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         #try:
             #module.throw_custom_exception()
         #except RuntimeError, error:
-            #self.failUnless( str(error) == "profe of concept" )
+            #self.assertTrue( str(error) == "profe of concept" )
         
 def create_suite():
     suite = unittest.TestSuite()    

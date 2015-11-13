@@ -52,23 +52,23 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def run_tests(self, module):        
         protected = module.protected_t()
-        self.failUnless( protected.get_1() == 1 )
+        self.assertTrue( protected.get_1() == 1 )
 
         protected_s = module.protected_s_t()
-        self.failUnless( protected_s.get_2() == 2 )
-        self.failUnless( module.protected_s_t.get_2() == 2 )
+        self.assertTrue( protected_s.get_2() == 2 )
+        self.assertTrue( module.protected_s_t.get_2() == 2 )
 
         protected_v = module.protected_v_t()
-        self.failUnless( protected_v.get_i() == 10 )
+        self.assertTrue( protected_v.get_i() == 10 )
 
         protected_v_no_override = self.create_protected_s_derived_no_override( module )
-        self.failUnless( protected_v_no_override.get_i() == 10 )
+        self.assertTrue( protected_v_no_override.get_i() == 10 )
 
         protected_v_override = self.create_protected_s_derived( module )
-        self.failUnless( protected_v_override.get_i() == 20 )
+        self.assertTrue( protected_v_override.get_i() == 20 )
 
         protected_v_d = module.protected_v_derived_t()
-        self.failUnless( protected_v_d.get_i() == 10 )
+        self.assertTrue( protected_v_d.get_i() == 10 )
 
 
 def create_suite():

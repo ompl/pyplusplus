@@ -55,15 +55,15 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         
     def run_tests(self, extmodule):   
         apple = self._create_derived_from_named_item( extmodule )
-        self.failUnless( extmodule.get_name( apple ) == 'no name' )
+        self.assertTrue( extmodule.get_name( apple ) == 'no name' )
         pv = self._create_derived_from_pure_virtual( extmodule )
 
         self.failIfNotRaisesAny( extmodule.get_name, pv )
         self.failIfNotRaisesAny( extmodule.get_name_ref, pv )
         
         virtual = self._create_derived_from_virtual( extmodule )
-        self.failUnless( extmodule.get_name( virtual ) == 'no name' )
-        self.failUnless( extmodule.get_name_ref( virtual ) == 'no name' )
+        self.assertTrue( extmodule.get_name( virtual ) == 'no name' )
+        self.assertTrue( extmodule.get_name_ref( virtual ) == 'no name' )
         
         
 def create_suite():

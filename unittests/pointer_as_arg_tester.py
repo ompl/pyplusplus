@@ -19,8 +19,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         
     def run_tests(self, module):        
         d = module.data()
-        self.failUnless( module.test_for_null( d ) )
-        self.failUnless( not module.test_for_null() )
+        self.assertTrue( module.test_for_null( d ) )
+        self.assertTrue( not module.test_for_null() )
     
 def create_suite():
     suite = unittest.TestSuite()    

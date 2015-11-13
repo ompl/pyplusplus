@@ -38,42 +38,42 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         #fvector.indexing_suite.call_policies = module_builder.call_policies.default_call_policies()
         items_ptr = generator.global_ns.typedefs( 'items_ptr_t' )[0]
         items_ptr = declarations.remove_declarated( items_ptr.type )
-        self.failUnless( items_ptr.indexing_suite.call_policies.__class__
+        self.assertTrue( items_ptr.indexing_suite.call_policies.__class__
                          is module_builder.call_policies.return_internal_reference().__class__ )
        
     def run_tests( self, module):
         fv = module.fvector()
-        self.failUnless( not hasattr( fv, 'extend' ) )
-        self.failUnless( not hasattr( fv, 'sort' ) )
-        self.failUnless( not hasattr( fv, 'reverse' ) )
+        self.assertTrue( not hasattr( fv, 'extend' ) )
+        self.assertTrue( not hasattr( fv, 'sort' ) )
+        self.assertTrue( not hasattr( fv, 'reverse' ) )
         items = module.items_t()
         item = module.item_t()
         item.value = 1977
         items.append( item )
-        self.failUnless( module.get_value( items, 0 ).value == 1977 )
-        self.failUnless( len( items ) == 1 )
+        self.assertTrue( module.get_value( items, 0 ).value == 1977 )
+        self.assertTrue( len( items ) == 1 )
         
         name2value = module.name2value_t()
         name2value[ "x" ] = "y"
-        self.failUnless( len(name2value) == 1 )
-        self.failUnless( "x" == module.get_first_name( name2value ) )
+        self.assertTrue( len(name2value) == 1 )
+        self.assertTrue( "x" == module.get_first_name( name2value ) )
         for kv in name2value:
-            self.failUnless( kv.key == "x" and kv.value == "y" )
+            self.assertTrue( kv.key == "x" and kv.value == "y" )
         for k, v in name2value:
-            self.failUnless( k == "x" and v == "y" )
+            self.assertTrue( k == "x" and v == "y" )
         #~ for k, v in name2value.iteritems():
-            #~ self.failUnless( k == "x" and v == "y" )
+            #~ self.assertTrue( k == "x" and v == "y" )
             
         items_ptr = module.items_ptr_t()
         items_ptr.append( item )
-        self.failUnless( items_ptr[0].value == 1977 )
+        self.assertTrue( items_ptr[0].value == 1977 )
         for i in items_ptr:
-            self.failUnless( i.value == 1977 )
+            self.assertTrue( i.value == 1977 )
             
         items_ptr2 = module.create_items_ptr()
         prev_value = -1
         for i in items_ptr2:
-            self.failUnless( prev_value + 1 == i.value )
+            self.assertTrue( prev_value + 1 == i.value )
             prev_value = i.value
             
         set_of_strings = module.create_set_strings()
@@ -82,17 +82,17 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         set_of_strings.add("s")
         
         x = module.get_int_mapping()
-        self.failUnless( x[1] == 1 )
+        self.assertTrue( x[1] == 1 )
         try:
             x = module.get_int_multimapping()
-            self.failUnless( x[1] == 1 )
+            self.assertTrue( x[1] == 1 )
         except TypeError:
             pass
 
         protected_items = module.create_protected_items()
         values = [protected_item.value for protected_item in protected_items];
         values.sort()
-        self.failUnless( [0,1,2,3,4]==values )
+        self.assertTrue( [0,1,2,3,4]==values )
 
 def create_suite():
     suite = unittest.TestSuite()    

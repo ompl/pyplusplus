@@ -31,12 +31,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         matcher = declarations.match_declaration_t( name='skip_a' )        
         found = code_creators.creator_finder.find_by_declaration( matcher
                                                                   , mb.code_creator.creators )
-        self.failUnless( not found, "'skip_a' declaration should not be exported" )
+        self.assertTrue( not found, "'skip_a' declaration should not be exported" )
         
         matcher = declarations.match_declaration_t( name='skip_b' )        
         found = code_creators.creator_finder.find_by_declaration( matcher
                                                                   , mb.code_creator.creators )
-        self.failUnless( not found, "'skip_b' declaration should not be exported" )                                                          
+        self.assertTrue( not found, "'skip_b' declaration should not be exported" )                                                          
        
     def run_tests(self, module):  
         pass

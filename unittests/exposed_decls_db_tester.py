@@ -73,21 +73,21 @@ class tester_t(unittest.TestCase):
         db.register_decls( global_ns, [] )
 
         for x in ns.decls(recursive=True):
-            self.failUnless( db.is_exposed( x ) == True )
+            self.assertTrue( db.is_exposed( x ) == True )
 
         for x in ns_skip.decls(recursive=True):
-            self.failUnless( db.is_exposed( x ) == False )
+            self.assertTrue( db.is_exposed( x ) == False )
 
         db.save( os.path.join( autoconfig.build_dir, 'exposed.db.pypp' ) )
 
         db2 = pypp_utils.exposed_decls_db_t()
         db2.load( os.path.join( autoconfig.build_dir, 'exposed.db.pypp' ) )
         for x in ns.decls(recursive=True):
-            self.failUnless( db.is_exposed( x ) == True )
+            self.assertTrue( db.is_exposed( x ) == True )
 
         ns_skip = global_ns.namespace( 'ns_skip' )
         for x in ns_skip.decls(recursive=True):
-            self.failUnless( db.is_exposed( x ) == False )
+            self.assertTrue( db.is_exposed( x ) == False )
 
 def create_suite():
     suite = unittest.TestSuite()

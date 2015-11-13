@@ -107,10 +107,10 @@ class bpcreator_t( declarations.decl_visitor_t ):
         if not decl.exportable:
             reason = readme[0]
             readme = readme[1:]
-            self.decl_logger.warn( "%s;%s" % ( decl, reason ) )
+            self.decl_logger.warning( "%s;%s" % ( decl, reason ) )
 
         for msg in readme:
-            self.decl_logger.warn( "%s;%s" % ( decl, msg ) )
+            self.decl_logger.warning( "%s;%s" % ( decl, msg ) )
 
     def _prepare_decls( self, decls ):
         to_be_exposed = []

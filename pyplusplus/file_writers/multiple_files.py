@@ -157,7 +157,7 @@ class multiple_files_t(writer.writer_t):
             decls_logger = _logging_.loggers.declarations
             if not messages.filter_disabled_msgs([messages.W1042], code_creator.declaration.disabled_messages ):
                 return #user disabled property warning
-            decls_logger.warn( "%s;%s" % ( code_creator.declaration, messages.W1042 ) )
+            decls_logger.warning( "%s;%s" % ( code_creator.declaration, messages.W1042 ) )
 
     def create_include_code( self, creators, head_headers=None, tail_headers=None ):
         answer = []

@@ -18,11 +18,11 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , *args )
         
     def run_tests(self, module):      
-        self.failUnless( module.a_t.get_a() == 'a' )
-        self.failUnless( module.b_t.get_b() == 'b' )
-        self.failUnless( module.c_t.get_c() == 'c' )
-        self.failUnless( module.d_t.get_d() == 'd' )
-        self.failUnless( module.dd_t.get_dd() == 'D' )
+        self.assertTrue( module.a_t.get_a() == 'a' )
+        self.assertTrue( module.b_t.get_b() == 'b' )
+        self.assertTrue( module.c_t.get_c() == 'c' )
+        self.assertTrue( module.d_t.get_d() == 'd' )
+        self.assertTrue( module.dd_t.get_dd() == 'D' )
         
 def create_suite():
     suite = unittest.TestSuite()    

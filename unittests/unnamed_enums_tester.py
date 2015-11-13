@@ -25,8 +25,8 @@ class unnamed_enums_tester_t(fundamental_tester_base.fundamental_tester_base_t):
                 = 'unnamed_enums::enum_holder_t::' + do_smth.arguments[0].default_value
 
     def run_tests(self, module):        
-        self.failUnless( module.OK == 1 )
-        self.failUnless( module.CANCEL == 0 )
+        self.assertTrue( module.OK == 1 )
+        self.assertTrue( module.CANCEL == 0 )
 
 def create_suite():
     suite = unittest.TestSuite()    

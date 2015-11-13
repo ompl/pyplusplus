@@ -19,7 +19,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         
     def run_tests(self, module):        
         cont = module.container_t()
-        self.failUnless( cont.m_item.m_value == 23 )
+        self.assertTrue( cont.m_item.m_value == 23 )
         cont.m_item.m_value = 11
     
 def create_suite():

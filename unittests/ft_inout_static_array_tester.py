@@ -51,11 +51,11 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         """
         point3d = module.point3d_t()
         result = point3d.initialize( [ 1,2,3 ] )
-        self.failUnless( result== 1*2*3 and point3d.x == 1 and point3d.y==2 and point3d.z==3 )
-        self.failUnless( [1,2,3] == point3d.position() )
+        self.assertTrue( result== 1*2*3 and point3d.x == 1 and point3d.y==2 and point3d.z==3 )
+        self.assertTrue( [1,2,3] == point3d.position() )
         
-        self.failUnless( ( 12, [10,10,10] ) == module.sum_and_fill( [2,4,6], 10 ) )
-        self.failUnless( [1,2,3] == point3d.swap( [4,5,6] )
+        self.assertTrue( ( 12, [10,10,10] ) == module.sum_and_fill( [2,4,6], 10 ) )
+        self.assertTrue( [1,2,3] == point3d.swap( [4,5,6] )
                          and [4,5,6] == point3d.position() )
         
 def create_suite():

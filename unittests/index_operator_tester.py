@@ -19,8 +19,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                                                                     
     def run_tests(self, module):        
         cont = module.container()
-        self.failUnless( cont[3] == 1 )
-        self.failUnless( cont[0] == 0 )
+        self.assertTrue( cont[3] == 1 )
+        self.assertTrue( cont[0] == 0 )
 
 def create_suite():
     suite = unittest.TestSuite()    

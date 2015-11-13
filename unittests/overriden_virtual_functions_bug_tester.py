@@ -22,8 +22,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         button_based = mb.class_( 'button_based_t')
         
         redefined = checkbox.redefined_funcs()
-        self.failUnless( 1 == len(redefined) )
-        self.failUnless( redefined[0].parent is button_based )
+        self.assertTrue( 1 == len(redefined) )
+        self.assertTrue( redefined[0].parent is button_based )
         
     def run_tests(self, module):        
         pass

@@ -32,9 +32,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         f = module.foo()
         f.bar = 0
         v.append(f)
-        self.failUnless( v[0].bar == 0 )
+        self.assertTrue( v[0].bar == 0 )
         v[0].bar = 10
-        self.failUnless( v[0].bar == 10 )
+        self.assertTrue( v[0].bar == 10 )
 
 def create_suite():
     suite = unittest.TestSuite()

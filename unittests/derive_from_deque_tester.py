@@ -31,7 +31,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         f = module.F()
         f.append(c)
         c2 = f[0]
-        self.failUnless( c2.a_ == c.a_ and c2.b_ == c.b_ )
+        self.assertTrue( c2.a_ == c.a_ and c2.b_ == c.b_ )
 
 def create_suite():
     suite = unittest.TestSuite()

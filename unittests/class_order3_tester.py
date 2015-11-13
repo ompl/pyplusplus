@@ -19,7 +19,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
    
     def run_tests(self, module):      
         cont = module.container()       
-        self.failUnless( cont.my_fruit == module.consts.apple )
+        self.assertTrue( cont.my_fruit == module.consts.apple )
 
 def create_suite():
     suite = unittest.TestSuite()    

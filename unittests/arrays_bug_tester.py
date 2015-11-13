@@ -30,7 +30,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         y = c.items[0]
         c.items[0] = m.item()
         
-        self.failUnless( id(module.X1) == id(module.X2) == id( c.items[0].values.__class__ ) )
+        self.assertTrue( id(module.X1) == id(module.X2) == id( c.items[0].values.__class__ ) )
         
 def create_suite():
     suite = unittest.TestSuite()    

@@ -47,7 +47,7 @@ class fundamental_tester_base_t( unittest.TestCase ):
             callableObj(*args, **kwargs)
         except:
             was_exception = True
-        self.failUnless(was_exception, 'exception has not been raised during execution.')
+        self.assertTrue(was_exception, 'exception has not been raised during execution.')
 
     def __test_already_exposed( self, mb ):
         exposed_db = utils.exposed_decls_db_t()
@@ -66,7 +66,7 @@ class fundamental_tester_base_t( unittest.TestCase ):
                     continue
                 if exposed_db.is_exposed( d ):
                     i = 0
-                self.failUnless( not exposed_db.is_exposed( d )
+                self.assertTrue( not exposed_db.is_exposed( d )
                                  , '''Declaration "%s" is NOT exposed, but for some reason it is marked as such.'''
                                    % str( d ) )
             elif d.parent \
@@ -74,7 +74,7 @@ class fundamental_tester_base_t( unittest.TestCase ):
                  and d.parent.indexing_suite:
                 continue
             else:
-                self.failUnless( exposed_db.is_exposed( d )
+                self.assertTrue( exposed_db.is_exposed( d )
                                  , '''Declaration "%s" is exposed, but for some reason it isn't marked as such.'''
                                    % str( d ) )
 

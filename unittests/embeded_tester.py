@@ -49,8 +49,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         item.i = 78
         
         item2 = module.clone_item(item)
-        self.failUnless( item2.i == item.i )        
-        self.failUnless( sys.getrefcount( item2 ) == 2 ) #one for boost.python second for current scope
+        self.assertTrue( item2.i == item.i )        
+        self.assertTrue( sys.getrefcount( item2 ) == 2 ) #one for boost.python second for current scope
         
 def create_suite():
     suite = unittest.TestSuite()    

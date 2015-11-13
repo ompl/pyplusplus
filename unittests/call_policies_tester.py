@@ -86,24 +86,24 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             = call_policies.return_value_policy( call_policies.copy_non_const_reference )
 
     def run_tests(self, module):
-        self.failUnless( module.compare( module.my_address() ) )
+        self.assertTrue( module.compare( module.my_address() ) )
 
         x = module.return_second_arg( 1, 2, 3)
-        self.failUnless( x == 2 )
+        self.assertTrue( x == 2 )
 
         x = module.dummy()
         y = module.return_self( x, 0 )
-        self.failUnless( x.id() == y.id() )
+        self.assertTrue( x.id() == y.id() )
 
         y = module.copy_const_reference( x )
-        self.failUnless( x.id() != y.id() )
+        self.assertTrue( x.id() != y.id() )
 
         cont = module.container()
-        self.failUnless( 1977 == cont[1977] )
+        self.assertTrue( 1977 == cont[1977] )
 
-        self.failUnless( 0.5 == module.get_fundamental_ptr_value() )
+        self.assertTrue( 0.5 == module.get_fundamental_ptr_value() )
 
-        self.failUnless( None is module.get_fundamental_ptr_value_null() )
+        self.assertTrue( None is module.get_fundamental_ptr_value_null() )
 
         module.get_impl_details()
 
@@ -112,18 +112,18 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         x = module.arrays()
         for i in range( 4 ):
             arr3 = x.create_arr_3()
-            self.failUnless( arr3 == (0,1,2) )
+            self.assertTrue( arr3 == (0,1,2) )
 
         image = module.return_range_image_t()
         raw_data = image.get_raw_data()
-        self.failUnless( ['1', '\0', '2']==list( raw_data ) )
+        self.assertTrue( ['1', '\0', '2']==list( raw_data ) )
         raw_data[1] = 'x'
-        self.failUnless( raw_data[1] == image.raw_data[1] )
+        self.assertTrue( raw_data[1] == image.raw_data[1] )
         for index, img in enumerate( image.create_images() ):
             print(index, img)
 
         ibr = module.immutable_by_ref_t()
-        self.failUnless( ibr.get_value() == ibr.value )
+        self.assertTrue( ibr.get_value() == ibr.value )
 
 def create_suite():
     suite = unittest.TestSuite()

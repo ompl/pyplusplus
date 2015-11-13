@@ -28,7 +28,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         image = module.image_t()
         buffer_type = ctypes.c_int * 5
         buffer = buffer_type.from_address( image.get_buffer() )
-        self.failUnless( [0,1,2,3,4] == list( buffer ) )
+        self.assertTrue( [0,1,2,3,4] == list( buffer ) )
 
 def create_suite():
     suite = unittest.TestSuite()

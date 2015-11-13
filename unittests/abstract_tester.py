@@ -32,10 +32,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         sq = module.square()
         cr = self.create_circle(module)
         self.failIfNotRaisesAny( sh.color )
-        self.failUnless( sq.color() == module.colors.red)
-        self.failUnless( module.call(sq) == module.colors.red)
-        self.failUnless( cr.color() == module.colors.green )
-        self.failUnless( module.call(cr) == module.colors.green )         
+        self.assertTrue( sq.color() == module.colors.red)
+        self.assertTrue( module.call(sq) == module.colors.red)
+        self.assertTrue( cr.color() == module.colors.green )
+        self.assertTrue( module.call(cr) == module.colors.green )         
 
 def create_suite():
     suite = unittest.TestSuite()    

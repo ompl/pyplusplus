@@ -131,30 +131,30 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
         ####### Do the tests directly on the wrapper C++ class ########
         calc = module.calculator_t()
-        self.failUnless( ( 0, 1, 2 ) == calc.assign_0_1_2() )
-        self.failUnless( ( 1, 2 ) == calc.assign_1_2() )
+        self.assertTrue( ( 0, 1, 2 ) == calc.assign_0_1_2() )
+        self.assertTrue( ( 1, 2 ) == calc.assign_1_2() )
         calc2, five = calc.clone_and_assign_5()
-        self.failUnless( five == 5 )
-        self.failUnless( calc2 )
+        self.assertTrue( five == 5 )
+        self.assertTrue( calc2 )
         #test make_object function
-        self.failUnless( sys.getrefcount( calc ) == sys.getrefcount( calc2 ) )
+        self.assertTrue( sys.getrefcount( calc ) == sys.getrefcount( calc2 ) )
 
         window = module.window_t()
         window.height = 0
         window.width = 0
         window.resize( 1, 2 )
-        self.failUnless( window.height==1 and window.width==2 )
+        self.assertTrue( window.height==1 and window.width==2 )
         square, h, w = window.resize_in_out( 3, 7 )
-        self.failUnless( square == 1*3*2*7 and h==3 and w==2*7 )
-        self.failUnless( window.height==3 and window.width==2*7 )
+        self.assertTrue( square == 1*3*2*7 and h==3 and w==2*7 )
+        self.assertTrue( window.height==3 and window.width==2*7 )
         
         point3d = module.point3d_t()
         result = point3d.initialize( [ 1,2,3 ] )
-        self.failUnless( result== 1*2*3 and point3d.x == 1 and point3d.y==2 and point3d.z==3 )
-        self.failUnless( [1,2,3] == point3d.position() )
-        self.failUnless( module.point3d_t.distance( point3d ) == math.sqrt( 1*1 + 2*2 + 3*3 ) )
+        self.assertTrue( result== 1*2*3 and point3d.x == 1 and point3d.y==2 and point3d.z==3 )
+        self.assertTrue( [1,2,3] == point3d.position() )
+        self.assertTrue( module.point3d_t.distance( point3d ) == math.sqrt( 1*1 + 2*2 + 3*3 ) )
         
-        self.failUnless( module.hello_world() == "hello world!" )
+        self.assertTrue( module.hello_world() == "hello world!" )
         img = module.image_t( 2, 6)
 
         # Check a method that returns two values by reference
@@ -267,24 +267,24 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         tmp = py_bug_render_target_t()
         
         tmp.get_statistics()
-        self.failUnless( 2.0 + 3.0 == module.bug_render_target_t.get_static_statistics( tmp ) )
+        self.assertTrue( 2.0 + 3.0 == module.bug_render_target_t.get_static_statistics( tmp ) )
         
         tmp = module.modify_type_tester_t()
-        self.failUnless( 123 == tmp.do_nothing(123) )
-        self.failUnless( tmp != tmp.clone(123) )
+        self.assertTrue( 123 == tmp.do_nothing(123) )
+        self.assertTrue( tmp != tmp.clone(123) )
 
         tmp = module.input_c_buffer_tester_t()
         hw = 'hello world'
         dummy = 11
-        self.failUnless( 'hello world' == tmp.write( list( hw ), dummy ) )
-        self.failUnless( 'hello world' == tmp.write_s( dummy, tuple( list( hw ) ) ) )
+        self.assertTrue( 'hello world' == tmp.write( list( hw ), dummy ) )
+        self.assertTrue( 'hello world' == tmp.write_s( dummy, tuple( list( hw ) ) ) )
 
         tmp = module.transfer_ownership_tester_t()
         resource = tmp.resources_t();
         tmp.tester( resource )
 
         b = module.B()
-        self.failUnless( b.h( module.A.get_a() ) == None )
+        self.assertTrue( b.h( module.A.get_a() ) == None )
 def create_suite():
     suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))

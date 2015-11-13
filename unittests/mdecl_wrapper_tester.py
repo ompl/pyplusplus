@@ -41,7 +41,7 @@ class tester_t(unittest.TestCase):
         for d in mdw:
             all_true &= d.always_expose_using_scope
 
-        self.failUnless( all_true )
+        self.assertTrue( all_true )
 
         #check call method functionality
         for d in mdw:
@@ -53,7 +53,7 @@ class tester_t(unittest.TestCase):
         for d in mdw:
             all_true |= d.ignore
 
-        self.failUnless( not all_false )
+        self.assertTrue( not all_false )
 
         #check for exception:
         try:
@@ -69,14 +69,14 @@ class tester_t(unittest.TestCase):
                                               , undefine_symbols=['__MINGW32__'])
 
         public_bases = mb.classes( 'public_base_t' )
-        self.failUnless( 1 == len( public_bases ) )
+        self.assertTrue( 1 == len( public_bases ) )
 
         public_bases.include()
-        self.failUnless( public_bases[0].ignore == False )
+        self.assertTrue( public_bases[0].ignore == False )
 
         mb.global_ns[ 'public_base_t' ].exclude()
 
-        self.failUnless( public_bases[0].ignore == True )
+        self.assertTrue( public_bases[0].ignore == True )
 
     #def test__getitem__2( self ):
         #mb = module_builder.module_builder_t( self._get_files()
@@ -86,16 +86,16 @@ class tester_t(unittest.TestCase):
 
         #mem_funs = mb.classes( 'public_base_t' ).member_functions('regular')
         #print len(mem_funs)
-        ##self.failUnless( 1 == len( public_bases ) )
+        ##self.assertTrue( 1 == len( public_bases ) )
 
         #mem_funs.include()
         #for mf in mem_funs:
-            #self.failUnless( mf.ignore == False )
+            #self.assertTrue( mf.ignore == False )
 
         #mb.global_ns[ 'public_base_t' ]['regular'].exclude()
 
         #for mf in mem_funs:
-            #self.failUnless( mf.ignore == False )
+            #self.assertTrue( mf.ignore == False )
 
 
 def create_suite():

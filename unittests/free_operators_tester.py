@@ -22,10 +22,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     
     def run_tests(self, module):     
         n = module.number()
-        self.failUnless( not n )
+        self.assertTrue( not n )
         n.i = 2
         n2 = n + 1
-        self.failUnless( 3 == n2.i )
+        self.assertTrue( 3 == n2.i )
     
 def create_suite():
     suite = unittest.TestSuite()    

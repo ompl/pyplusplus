@@ -21,7 +21,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def run_tests( self, module):
         o = module.Outer()
         i = o.f()
-        self.failUnless( i.t == 23 )
+        self.assertTrue( i.t == 23 )
         
 def create_suite():
     suite = unittest.TestSuite()    

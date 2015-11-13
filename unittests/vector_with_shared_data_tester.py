@@ -45,7 +45,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def run_tests(self, module):
         x = module.do_smth()
-        self.failUnless( len(x) == 2 )
+        self.assertTrue( len(x) == 2 )
 
 def create_suite():
     suite = unittest.TestSuite()

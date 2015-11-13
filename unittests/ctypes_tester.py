@@ -86,10 +86,10 @@ class issues_tester_t( ctypes_base_tester_t ):
     def test_return_by_value(self):
         x = self.module_ref.return_by_value_t()
         result = x.add( 32, 2 ).result
-        self.failUnless( 34 == result, "Expected result 34, got %d" % result)
+        self.assertTrue( 34 == result, "Expected result 34, got %d" % result)
 
     def test_free_fun_add( self ):
-        self.failUnless( 1977 == self.module_ref.add( 77, 1900 ) )
+        self.assertTrue( 1977 == self.module_ref.add( 77, 1900 ) )
 
 
 class enums_tester_t( ctypes_base_tester_t ):
@@ -100,10 +100,10 @@ class enums_tester_t( ctypes_base_tester_t ):
         mb.enums().include()
 
     def test(self):
-        self.failUnless( self.module_ref.Chisla.nol == 0 )
-        self.failUnless( self.module_ref.Chisla.odin == 1 )
-        self.failUnless( self.module_ref.Chisla.dva == 2 )
-        self.failUnless( self.module_ref.Chisla.tri == 3 )
+        self.assertTrue( self.module_ref.Chisla.nol == 0 )
+        self.assertTrue( self.module_ref.Chisla.odin == 1 )
+        self.assertTrue( self.module_ref.Chisla.dva == 2 )
+        self.assertTrue( self.module_ref.Chisla.tri == 3 )
 
 class opaque_tester_t( ctypes_base_tester_t ):
     def __init__( self, *args, **keywd ):
@@ -115,7 +115,7 @@ class opaque_tester_t( ctypes_base_tester_t ):
     def test(self):
         self.assertRaises( RuntimeError, self.module_ref.user_data_t )
         udt = self.module_ref.create()
-        self.failUnless( 1977 == self.module_ref.read_user_data(udt) )
+        self.assertTrue( 1977 == self.module_ref.read_user_data(udt) )
         self.module_ref.destroy( udt )
 
 class include_algorithm_tester_t( ctypes_base_tester_t ):
@@ -123,10 +123,10 @@ class include_algorithm_tester_t( ctypes_base_tester_t ):
         ctypes_base_tester_t.__init__( self, 'include_algorithm', *args, **keywd )
 
     def customize( self, mb ):
-        self.failUnless( mb.global_ns.class_( 'io_marker_t' ).ignore == False )
+        self.assertTrue( mb.global_ns.class_( 'io_marker_t' ).ignore == False )
 
     def test(self):
-        self.failUnless( self.module_ref.io_marker_t )
+        self.assertTrue( self.module_ref.io_marker_t )
 
 class anonymous_tester_t( ctypes_base_tester_t ):
     def __init__( self, *args, **keywd ):
@@ -149,26 +149,26 @@ class variables_tester_t( ctypes_base_tester_t ):
 
     def test(self):
         self.module_ref.init()
-        self.failUnless( self.module_ref.j.value == 87 )
-        self.failUnless( self.module_ref.data.i == 1900 )
+        self.assertTrue( self.module_ref.j.value == 87 )
+        self.assertTrue( self.module_ref.data.i == 1900 )
 
-        self.failUnless( self.module_ref.data.j == 7 )
-        self.failUnless( self.module_ref.data_ptr.contents.i == 11 )
+        self.assertTrue( self.module_ref.data.j == 7 )
+        self.assertTrue( self.module_ref.data_ptr.contents.i == 11 )
 
         self.module_ref.j.value = 78
-        self.failUnless( self.module_ref.get_value_j() == 78 )
+        self.assertTrue( self.module_ref.get_value_j() == 78 )
 
         self.module_ref.data.i = 987
-        self.failUnless( self.module_ref.get_value_data() == 987 )
+        self.assertTrue( self.module_ref.get_value_data() == 987 )
 
         self.module_ref.data.j = 8
-        self.failUnless( self.module_ref.get_value_data_j() == 0 )
+        self.assertTrue( self.module_ref.get_value_data_j() == 0 )
 
         self.module_ref.data.j = 5
-        self.failUnless( self.module_ref.get_value_data_j() == 5 )
+        self.assertTrue( self.module_ref.get_value_data_j() == 5 )
 
         self.module_ref.data_ptr.contents.i = 34
-        self.failUnless( self.module_ref.get_value_data_p() == 34 )
+        self.assertTrue( self.module_ref.get_value_data_p() == 34 )
 
 
 class function_ptr_as_variable_tester_t( ctypes_base_tester_t ):
@@ -185,7 +185,7 @@ class function_ptr_as_variable_tester_t( ctypes_base_tester_t ):
     def test(self):
         info = self.module_ref.info()
         info.do_smth_fun = self.module_ref.do_smth_fun_t(self.identity)
-        self.failUnless( 21 == self.module_ref.execute_callback( info, 21 ) )
+        self.assertTrue( 21 == self.module_ref.execute_callback( info, 21 ) )
         
 class varargs_tester_t( ctypes_base_tester_t ):
     def __init__( self, *args, **keywd ):
@@ -195,7 +195,7 @@ class varargs_tester_t( ctypes_base_tester_t ):
         pass
 
     def test(self):
-        self.failUnless( 21 == self.module_ref.sum_ints( 3, 5,7,9) )
+        self.assertTrue( 21 == self.module_ref.sum_ints( 3, 5,7,9) )
 
 class circular_references_tester_t( ctypes_base_tester_t ):
     def __init__( self, *args, **keywd ):
@@ -222,12 +222,12 @@ class char_ptr_as_binary_data_tester_t( ctypes_base_tester_t ):
 
     def test(self):
         data = self.module_ref.get_empty()
-        self.failUnless( data.contents.size == 0 )
-        self.failUnless( not data.contents.bytes )
+        self.assertTrue( data.contents.size == 0 )
+        self.assertTrue( not data.contents.bytes )
 
         data = self.module_ref.get_hello_world()
-        self.failUnless( data.contents.size == len( "hello world" ) )
-        self.failUnless( data.contents.bytes[0:data.contents.size + 1] == "hello\0world\0" )
+        self.assertTrue( data.contents.size == len( "hello world" ) )
+        self.assertTrue( data.contents.bytes[0:data.contents.size + 1] == "hello\0world\0" )
 
 class user_code_tester_t( ctypes_base_tester_t ):
     def __init__( self, *args, **keywd ):
@@ -240,16 +240,16 @@ class user_code_tester_t( ctypes_base_tester_t ):
         mb.add_module_code( self.module_bottom_code, tail=True )
 
     def test(self):
-        self.failUnless( self.module_ref.top == "top" )
-        self.failUnless( self.module_ref.bottom == "bottom" )
+        self.assertTrue( self.module_ref.top == "top" )
+        self.assertTrue( self.module_ref.bottom == "bottom" )
         content = []
         for line in file( self.module_ref.__file__ ):
             if line.lstrip().startswith( '#' ) or not line.strip():
                 continue
             else:
                 content.append( line.rstrip() )
-        self.failUnless( content[0] == self.module_top_code )
-        self.failUnless( content[-1] == self.module_bottom_code )
+        self.assertTrue( content[0] == self.module_top_code )
+        self.assertTrue( content[-1] == self.module_bottom_code )
         
 def create_suite():
     #part of this functionality is going to be deprecated

@@ -57,20 +57,20 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def run_tests( self, module):
         foo = module.foo_t()
-        self.failUnless( foo.get_zero() == 0 )
-        self.failUnless( foo.get_two() == 2 )
-        self.failUnless( module.foo_t.get_two() == 2 )
-        self.failUnless( module.get_one() == 1 )
+        self.assertTrue( foo.get_zero() == 0 )
+        self.assertTrue( foo.get_two() == 2 )
+        self.assertTrue( module.foo_t.get_two() == 2 )
+        self.assertTrue( module.get_one() == 1 )
 
         pyfoo = self.create_foo_derived( module )
-        self.failUnless( pyfoo.virtual_public() == 1 )
-        self.failUnless( pyfoo.virtual_protected() == 3 )
-        self.failUnless( pyfoo.call_virtual_protected() == 3 )
+        self.assertTrue( pyfoo.virtual_public() == 1 )
+        self.assertTrue( pyfoo.virtual_protected() == 3 )
+        self.assertTrue( pyfoo.call_virtual_protected() == 3 )
 
         pyfoo2 = self.create_foo_derived2( module )
-        self.failUnless( pyfoo2.virtual_public() == 1 )
-        self.failUnless( pyfoo2.virtual_protected() == 2 )
-        self.failUnless( pyfoo2.call_virtual_protected() == 2 )
+        self.assertTrue( pyfoo2.virtual_public() == 1 )
+        self.assertTrue( pyfoo2.virtual_protected() == 2 )
+        self.assertTrue( pyfoo2.call_virtual_protected() == 2 )
 
 def create_suite():
     suite = unittest.TestSuite()

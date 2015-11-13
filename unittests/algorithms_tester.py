@@ -19,7 +19,7 @@ from pyplusplus import function_transformers as ft
 class indent_tester_t(unittest.TestCase):
     def test( self ):
         indent = code_creators.code_creator_t.indent
-        self.failUnless( '    abc' == indent('abc') )
+        self.assertTrue( '    abc' == indent('abc') )
 
 class make_flatten_tester_t(unittest.TestCase):
     def test(self):
@@ -29,7 +29,7 @@ class make_flatten_tester_t(unittest.TestCase):
         mb.namespace( name='::enums' ).include()
         mb.build_code_creator('dummy')
         flatten = code_creators.make_flatten(mb.code_creator.creators)
-        self.failUnless( [inst for inst in flatten if isinstance( inst, code_creators.unnamed_enum_t )] )
+        self.assertTrue( [inst for inst in flatten if isinstance( inst, code_creators.unnamed_enum_t )] )
 
 class creator_finder_tester_t( unittest.TestCase ):
     def test_find_by_declaration(self):
@@ -42,7 +42,7 @@ class creator_finder_tester_t( unittest.TestCase ):
         enum_found = code_creators.creator_finder.find_by_declaration(
                         enum_matcher
                         , mb.code_creator.creators )
-        self.failUnless( enum_found )
+        self.assertTrue( enum_found )
 
     def test_find_by_class_instance(self):
         mb = module_builder.module_builder_t(
@@ -54,7 +54,7 @@ class creator_finder_tester_t( unittest.TestCase ):
             code_creators.enum_t
             , mb.code_creator.creators
             , recursive=True)
-        self.failUnless( enum_found )
+        self.assertTrue( enum_found )
 
 class class_organizer_tester_t(unittest.TestCase):
     def __init__(self, *args ):
@@ -85,11 +85,11 @@ class class_organizer_tester_t(unittest.TestCase):
         global_ns = parser.parse_string( os.linesep.join( code ), config )
         decls = global_ns[0].declarations
         dorder = creators_factory.findout_desired_order( decls )
-        self.failUnless( len( code ) == len( dorder ), 'all classes should stay within the list' )
+        self.assertTrue( len( code ) == len( dorder ), 'all classes should stay within the list' )
         for i in range( 1, len(dorder) ):
             bases = set( self._findout_base_classes( dorder[i] ) )
             exported = set( dorder[:i])
-            self.failUnless( bases.issubset( exported )
+            self.assertTrue( bases.issubset( exported )
                              , 'for derived class %s not all base classes have been exported' % dorder[i].name )
 
 class exclude_function_with_array_arg_tester_t( unittest.TestCase ):
@@ -100,7 +100,7 @@ class exclude_function_with_array_arg_tester_t( unittest.TestCase ):
         arr = mb.namespace( name='arr' )
         mem_funs = arr.calldefs( 'x', arg_types=[None,None] )
         for x in mem_funs:
-            self.failUnless( x.exportable == False )
+            self.assertTrue( x.exportable == False )
 
 class readme_tester_t( unittest.TestCase ):
     CODE = \
@@ -119,9 +119,9 @@ class readme_tester_t( unittest.TestCase ):
             , xml_generator_config=autoconfig.xml_generator_config)
         xxx = mb.namespace( name='xxx' )
         fun = xxx.calldef( 'do_smth' )
-        self.failUnless( fun.readme() == [] )
+        self.assertTrue( fun.readme() == [] )
         minus_minus = xxx.operator( symbol='--' )
-        self.failUnless( 1 == len( minus_minus.readme() ), os.linesep.join( minus_minus.readme() ) )
+        self.assertTrue( 1 == len( minus_minus.readme() ), os.linesep.join( minus_minus.readme() ) )
 
 
 class use_function_signature_bug_tester_t( unittest.TestCase ):
@@ -142,7 +142,7 @@ class use_function_signature_bug_tester_t( unittest.TestCase ):
             , xml_generator_config=autoconfig.xml_generator_config)
         d = mb.class_( 'derived' )
         f = d.mem_fun( 'f' )
-        self.failUnless( f.create_with_signature == True )
+        self.assertTrue( f.create_with_signature == True )
 
 class class_multiple_files_tester_t(unittest.TestCase):
     CLASS_DEF = \
@@ -214,15 +214,15 @@ class split_sequence_tester_t(unittest.TestCase):
     def test(self):
         seq = [ 1,2,3 ]
         split = pypp_utils.split_sequence
-        self.failUnless( [[1],[2],[3]] == split( seq, 1 ) )
-        self.failUnless( [[1,2],[3]] == split( seq, 2 ) )
-        self.failUnless( [[1,2,3]] == split( seq, 3 ) )
-        self.failUnless( [[1,2,3]] == split( seq, 4 ) )
+        self.assertTrue( [[1],[2],[3]] == split( seq, 1 ) )
+        self.assertTrue( [[1,2],[3]] == split( seq, 2 ) )
+        self.assertTrue( [[1,2,3]] == split( seq, 3 ) )
+        self.assertTrue( [[1,2,3]] == split( seq, 4 ) )
 
 class doc_extractor_tester_t( unittest.TestCase ):
     def test( self ):
         escaped_doc = module_builder.doc_extractor_i.escape_doc('Hello "Py++"')
-        self.failUnless( escaped_doc == '"Hello \\"Py++\\""' )
+        self.assertTrue( escaped_doc == '"Hello \\"Py++\\""' )
 
 class exclude_erronious_tester_t( unittest.TestCase ):
     def test(self):
@@ -248,9 +248,9 @@ class exclude_erronious_tester_t( unittest.TestCase ):
 
         xyz.exclude(compilation_errors=True)
 
-        self.failUnless( xyz.ignore == False )
-        self.failUnless( xyz.class_( 'good' ).ignore == False )
-        self.failUnless( xyz.free_fun( 'f_bad' ).ignore == True )
+        self.assertTrue( xyz.ignore == False )
+        self.assertTrue( xyz.class_( 'good' ).ignore == False )
+        self.assertTrue( xyz.free_fun( 'f_bad' ).ignore == True )
 
 class exclude_ellipsis_tester_t( unittest.TestCase ):
     def test(self):
@@ -267,7 +267,7 @@ class exclude_ellipsis_tester_t( unittest.TestCase ):
 
         do_smth = mb.free_fun( 'do_smth' )
 
-        self.failUnless( do_smth.exportable == False )
+        self.assertTrue( do_smth.exportable == False )
         print(do_smth.why_not_exportable())
 
 class constructors_code_tester_t( unittest.TestCase ):
@@ -298,11 +298,11 @@ class constructors_code_tester_t( unittest.TestCase ):
         mb.build_code_creator( 'XXX' )
         code = mb.code_creator.create()
         tmp = code.split( x.null_constructor_body )
-        self.failUnless( len( tmp ) == 2 )
+        self.assertTrue( len( tmp ) == 2 )
         tmp = code.split( x.copy_constructor_body )
-        self.failUnless( len( tmp ) == 2 )
+        self.assertTrue( len( tmp ) == 2 )
         tmp = code.split( '    //all constructors body' )
-        self.failUnless( len( tmp ) == 2 )
+        self.assertTrue( len( tmp ) == 2 )
 
 def create_suite():
     suite = unittest.TestSuite()

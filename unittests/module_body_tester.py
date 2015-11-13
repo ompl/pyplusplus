@@ -34,9 +34,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.add_constants( version='"0.0.0"')
 
     def run_tests(self, module):
-        self.failUnless( 1 == module.get1() )
-        self.failUnless( 11 == module.item_t().get11() )
-        self.failUnless( "0.0.0" == module.version )
+        self.assertTrue( 1 == module.get1() )
+        self.assertTrue( 11 == module.item_t().get11() )
+        self.assertTrue( "0.0.0" == module.version )
 def create_suite():
     suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))

@@ -37,7 +37,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def run_tests(self, module):
         """Run the actual unit tests"""
         m = [ [1, 2, 3], [4,5,6] ]
-        self.failUnless( 21 == module.sum( m ) )
+        self.assertTrue( 21 == module.sum( m ) )
 
 def create_suite():
     suite = unittest.TestSuite()

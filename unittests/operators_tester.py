@@ -70,31 +70,31 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def run_tests(self, module):
         pyrational = module.pyrational
-        self.failUnless( pyrational( 28, 7) == 4 )
-        self.failUnless( pyrational( 28, 7) == pyrational( 4 ) )
+        self.assertTrue( pyrational( 28, 7) == 4 )
+        self.assertTrue( pyrational( 28, 7) == pyrational( 4 ) )
 
         r1 = pyrational( 5, 7 )
 
         r1 += pyrational( 4, 11 )
         r2 = pyrational( 5*11 + 7*4, 7*11 )
-        self.failUnless( r1 == r2 )
+        self.assertTrue( r1 == r2 )
 
         r1 -= pyrational( 5, 7)
-        self.failUnless( r1 == pyrational( 4, 11) )
+        self.assertTrue( r1 == pyrational( 4, 11) )
 
         r1 *= 2
-        self.failUnless( r1 == pyrational( 8, 11) )
+        self.assertTrue( r1 == pyrational( 8, 11) )
 
         r1 /= 3
-        self.failUnless( r1 == pyrational( 8, 33) )
+        self.assertTrue( r1 == pyrational( 8, 33) )
 
         r2 = not r1
-        self.failUnless( r2 == False )
+        self.assertTrue( r2 == False )
 
-        self.failUnless( 0 < r1 )
+        self.assertTrue( 0 < r1 )
 
         r1 = pyrational( 5, 7 )
-        self.failUnless( r1.assign( 17 ) == pyrational( 17, 1 ) )
+        self.assertTrue( r1.assign( 17 ) == pyrational( 17, 1 ) )
 
         x = module.XXX()
         print(str( x ))

@@ -92,7 +92,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         print('5')
         simulator.run()
         print('6')
-        self.failUnless( notify_data[0] == 1 )
+        self.assertTrue( notify_data[0] == 1 )
 
 def create_suite():
     suite = unittest.TestSuite()

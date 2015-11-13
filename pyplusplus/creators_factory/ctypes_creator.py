@@ -53,10 +53,10 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         if not decl.exportable:
             reason = readme[0]
             readme = readme[1:]
-            self.decl_logger.warn( "%s;%s" % ( decl, reason ) )
+            self.decl_logger.warning( "%s;%s" % ( decl, reason ) )
 
         for msg in readme:
-            self.decl_logger.warn( "%s;%s" % ( decl, msg ) )
+            self.decl_logger.warning( "%s;%s" % ( decl, msg ) )
 
     def __should_generate_code( self, decl ):
         if decl.ignore or decl.already_exposed:

@@ -25,7 +25,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         data.add_wrapper_code( wrapper_code )
         mb.build_code_creator( self.EXTENSION_NAME )
         code = mb.code_creator.create()
-        self.failUnless( ( class_code in code ) and ( wrapper_code in code ) )
+        self.assertTrue( ( class_code in code ) and ( wrapper_code in code ) )
         
     def run_tests(self, module):        
         pass

@@ -40,16 +40,16 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         updater = module.some_updater()
         update_holder.set_updater( updater )
         update_holder.update_by_ref()
-        self.failUnless( 10 == update_holder.get_data().a )
+        self.assertTrue( 10 == update_holder.get_data().a )
         update_holder.update_by_ptr()
-        self.failUnless( 101 == update_holder.get_data().a )
+        self.assertTrue( 101 == update_holder.get_data().a )
 
         other_updater = self.create_other_updater( module )
         update_holder.set_updater( other_updater )
         update_holder.update_by_ref()
-        self.failUnless( -1 == update_holder.get_data().a )
+        self.assertTrue( -1 == update_holder.get_data().a )
         update_holder.update_by_ptr()
-        self.failUnless( -101 == update_holder.get_data().a )
+        self.assertTrue( -101 == update_holder.get_data().a )
 
 def create_suite():
     suite = unittest.TestSuite()    

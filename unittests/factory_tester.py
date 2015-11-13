@@ -20,7 +20,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def run_tests(self, module):        
         conrete_inst = module.create()
-        self.failUnless( 1 == conrete_inst.run() )
+        self.assertTrue( 1 == conrete_inst.run() )
 
 def create_suite():
     suite = unittest.TestSuite()    

@@ -30,9 +30,9 @@ class tester_true_t(tester_base_t):
 
     def run_tests( self, module):
         tester = module.declarations_order_bug_true.tester_t()
-        self.failUnless( tester.do_smth( True ) == "do_smth( bool )" )
-        self.failUnless( tester.do_smth( int(0) ) == "do_smth( bool )" )
-        self.failUnless( tester.append( chr(10) ) == "append(const char *)" )
+        self.assertTrue( tester.do_smth( True ) == "do_smth( bool )" )
+        self.assertTrue( tester.do_smth( int(0) ) == "do_smth( bool )" )
+        self.assertTrue( tester.append( chr(10) ) == "append(const char *)" )
 
 class tester_false_t(tester_base_t):
     USE_CALLDEF_ORGANIZER = False
@@ -43,9 +43,9 @@ class tester_false_t(tester_base_t):
 
     def run_tests( self, module):
         tester = module.declarations_order_bug_false.tester_t()
-        self.failUnless( tester.do_smth( True ) == "do_smth( int )" )
-        self.failUnless( tester.do_smth( int(0) ) == "do_smth( int )" )
-        self.failUnless( tester.append( chr(10) ) == "append(const char)" )
+        self.assertTrue( tester.do_smth( True ) == "do_smth( int )" )
+        self.assertTrue( tester.do_smth( int(0) ) == "do_smth( int )" )
+        self.assertTrue( tester.append( chr(10) ) == "append(const char)" )
 
 def create_suite():
     suite = unittest.TestSuite()    

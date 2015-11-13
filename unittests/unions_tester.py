@@ -29,23 +29,23 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         obj = module.data_t()
         actual_data = actual_data_t.from_address( obj.data )
         obj.set_d( 4.0 )
-        self.failUnless( actual_data.d == 4.0 )
+        self.assertTrue( actual_data.d == 4.0 )
         obj.set_i( 1977 )
-        self.failUnless( actual_data.i == 1977 )
+        self.assertTrue( actual_data.i == 1977 )
         actual_data.i = 18
-        self.failUnless( obj.get_i() == 18 )
+        self.assertTrue( obj.get_i() == 18 )
         actual_data.d = 12.12
-        self.failUnless( obj.get_d() == 12.12 )
+        self.assertTrue( obj.get_d() == 12.12 )
 
         obj2 = module.data2_t()
         obj2.set_d( 4.0 )
-        self.failUnless( obj2.d == 4.0 )
+        self.assertTrue( obj2.d == 4.0 )
         obj2.set_i( 1977 )
-        self.failUnless( obj2.i == 1977 )
+        self.assertTrue( obj2.i == 1977 )
 
         if 'nt' != os.name:
             mdll = ctypes.cdll.LoadLibrary( module.__file__ )
-            self.failUnless( 4 == mdll.mmm( 1, 3 ) )
+            self.assertTrue( 4 == mdll.mmm( 1, 3 ) )
 
 def create_suite():
     suite = unittest.TestSuite()

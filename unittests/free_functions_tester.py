@@ -22,8 +22,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.calldef('plus' ).create_with_signature = True
 
     def run_tests(self, module):        
-        self.failUnless( module.ONE() == 1 )
-        self.failUnless( module.plus( 1, 2 ) == 3 )
+        self.assertTrue( module.ONE() == 1 )
+        self.assertTrue( module.plus( 1, 2 ) == 3 )
 
 def create_suite():
     suite = unittest.TestSuite()    

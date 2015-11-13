@@ -44,12 +44,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def run_tests(self, module):
         identity_value = self.create_identity_value( module, 23 )
-        self.failUnless( 23 == module.get_value( identity_value ) )
-        self.failUnless( -1 == module.get_value( None ) )
+        self.assertTrue( 23 == module.get_value( identity_value ) )
+        self.assertTrue( -1 == module.get_value( None ) )
         plus_5_value = self.create_plus_5_value( module, 23 )
         print(plus_5_value.get_value())
         print(module.get_value( plus_5_value ))
-        self.failUnless( 28 == module.get_value( plus_5_value ) )
+        self.assertTrue( 28 == module.get_value( plus_5_value ) )
 
 
 

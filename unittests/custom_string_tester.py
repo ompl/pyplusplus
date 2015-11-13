@@ -65,16 +65,16 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.class_( 'name_t' ).add_properties();
         
     def run_tests( self, module):
-        #self.failUnless( "1" == module.utf16_to_string( "1" ) )
+        #self.assertTrue( "1" == module.utf16_to_string( "1" ) )
         #print("TESTING: ",module.utf16_to_wstring( "22" ))
-        self.failUnless( "22" == module.utf16_to_wstring( "22" ) )
+        self.assertTrue( "22" == module.utf16_to_wstring( "22" ) )
         n = module.name_t()
         n.m_name = '456'
-        self.failUnless( '456' == module.utf16_to_wstring( n.m_name ) )
-        self.failUnless( '123' == module.utf16_to_string( n.m_123 ) )
+        self.assertTrue( '456' == module.utf16_to_wstring( n.m_name ) )
+        self.assertTrue( '123' == module.utf16_to_string( n.m_123 ) )
         
         n.name = '11'
-        self.failUnless( '11' == module.utf16_to_wstring( n.m_name ) )
+        self.assertTrue( '11' == module.utf16_to_wstring( n.m_name ) )
         
 def create_suite():
     suite = unittest.TestSuite()

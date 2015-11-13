@@ -33,7 +33,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                 module.B.__init__( self )
             def foo( self ):
                 return ord( 'c' )
-        self.failUnless( ord('c') == module.invoke_foo( C() ) )
+        self.assertTrue( ord('c') == module.invoke_foo( C() ) )
 
         class Derived4(module.Derived3):
             def __init__( self ):
@@ -43,12 +43,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             def eval_c(self):
                 return 300 # ignored because eval_c excluded
 
-        self.failUnless( 22223 == module.eval( Derived4() ) )
+        self.assertTrue( 22223 == module.eval( Derived4() ) )
 
         bb = module.BB()
         print(dir( bb ))
         x = bb.do_smth_b()
-        self.failUnless( x[0] == x[1] == ord( 'b' ) )
+        self.assertTrue( x[0] == x[1] == ord( 'b' ) )
 
         # Notes:
         # would return 22222 before any patch, since Derived3 wouldn't have a wrapper
@@ -60,10 +60,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         # would return 11113 if protected virtual methods wouldn't be included
 
         b = module.B()
-        self.failUnless( 7 == b.foo( 3,4))
+        self.assertTrue( 7 == b.foo( 3,4))
         
         d = module.D()
-        self.failUnless( 12 == d.foo(3,4) )
+        self.assertTrue( 12 == d.foo(3,4) )
 
 def create_suite():
     suite = unittest.TestSuite()

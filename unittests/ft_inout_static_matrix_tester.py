@@ -34,8 +34,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         """Run the actual unit tests"""
         m = [ [1, 2, 3], [4,5,6] ]
         result = module.sum_and_fill( m, -1 )
-        self.failUnless( 21 == result[0] )
-        self.failUnless( [ [-1, -2, -3], [-4,-5,-6] ] == result[1])
+        self.assertTrue( 21 == result[0] )
+        self.assertTrue( [ [-1, -2, -3], [-4,-5,-6] ] == result[1])
 
 def create_suite():
     suite = unittest.TestSuite()

@@ -81,7 +81,7 @@ class types_database_t( object ):
             decls_logger = _logging_.loggers.declarations
             if not messages.filter_disabled_msgs([messages.W1042], container_cls.disabled_messages ):
                 return #user disabled property warning
-            decls_logger.warn( "%s;%s" % ( container_cls, messages.W1042 ) )
+            decls_logger.warning( "%s;%s" % ( container_cls, messages.W1042 ) )
         self.__containers.add( container_cls )
         return True
 

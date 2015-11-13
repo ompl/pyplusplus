@@ -43,12 +43,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                 sum += counter
                 counter += 1
         result = module.sum_matrix( ctypes.addressof( matrix ), rows, columns )
-        self.failUnless( result == sum )
+        self.assertTrue( result == sum )
 
         ptr = module.ptr_ptr_t()
         double_ptr_type = ctypes.POINTER( ctypes.c_double )
         value = double_ptr_type.from_address( ptr.value )
-        self.failUnless( value.contents.value == 5.9 )
+        self.assertTrue( value.contents.value == 5.9 )
         d_ptr = double_ptr_type(ctypes.c_double(0.0) )
         d_ptr_ptr = ctypes.pointer( d_ptr )
         ptr.get_v_address( ctypes.addressof( d_ptr ) )

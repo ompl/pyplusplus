@@ -22,14 +22,14 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def run_tests( self, module):
         x_inst = module.x()
         x_inst.value = 25
-        self.failUnless( 25 == module.identity(x_inst) )
-        self.failUnless( 25 == module.x_value(25) )
-        self.failUnless( 1 == module.x_value(True) )
-        self.failUnless( 0 == module.x_value(False) )
+        self.assertTrue( 25 == module.identity(x_inst) )
+        self.assertTrue( 25 == module.x_value(25) )
+        self.assertTrue( 1 == module.x_value(True) )
+        self.assertTrue( 0 == module.x_value(False) )
         fv = module.float_vector( 5.0 )
 
         cc = module.get_value_a( 78 );
-        self.failUnless( cc == -78 )
+        self.assertTrue( cc == -78 )
 
 def create_suite():
     suite = unittest.TestSuite()

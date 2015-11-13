@@ -31,12 +31,12 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def run_tests(self, module):
         calc = module.calculator_t()
-        self.failUnless( 3 == calc.add( 1, 2 ) )
-        self.failUnless( 9 == calc.add( 3, 2, 3 ) )
-        self.failUnless( 3 == calc.add( 1.5, 1.5 ) )
-        self.failUnless( 3 == module.add( 1, 2 ) )
-        self.failUnless( 9 == module.add( 3, 2, 3 ) )
-        self.failUnless( 3 == module.add( 1.5, 1.5 ) )
+        self.assertTrue( 3 == calc.add( 1, 2 ) )
+        self.assertTrue( 9 == calc.add( 3, 2, 3 ) )
+        self.assertTrue( 3 == calc.add( 1.5, 1.5 ) )
+        self.assertTrue( 3 == module.add( 1, 2 ) )
+        self.assertTrue( 9 == module.add( 3, 2, 3 ) )
+        self.assertTrue( 3 == module.add( 1.5, 1.5 ) )
 
 
 def create_suite():

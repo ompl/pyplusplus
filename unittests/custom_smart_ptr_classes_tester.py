@@ -160,13 +160,13 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.fail( "The test fails with Segmentation fault error." )
         add_0 = module.add_x_t( 23 )
         print('>',1)
-        self.failUnless( 23 == add_0.get_value() )
+        self.assertTrue( 23 == add_0.get_value() )
         print('>',2)
-        self.failUnless( 23 == module.val_get_value( add_0 ) )
+        self.assertTrue( 23 == module.val_get_value( add_0 ) )
         print('>',3)
-        self.failUnless( 23 == module.const_ref_get_value( add_0 ) )
+        self.assertTrue( 23 == module.const_ref_get_value( add_0 ) )
         print('>',4)
-        self.failUnless( 23 == module.ref_get_value( add_0 ) )
+        self.assertTrue( 23 == module.ref_get_value( add_0 ) )
 
 
 def create_suite():

@@ -46,10 +46,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     
     def run_tests( self, module):
         x = self.create_pv_derived(module)
-        self.failUnlessRaises( RuntimeError, module.non_overridable_pv_t.test, x )
+        self.assertRaises( RuntimeError, module.non_overridable_pv_t.test, x )
 
         y = self.create_v_derived(module)
-        self.failUnlessRaises( ReferenceError, module.non_overridable_v_t.test, y )
+        self.assertRaises( ReferenceError, module.non_overridable_v_t.test, y )
 
 def create_suite():
     suite = unittest.TestSuite()    

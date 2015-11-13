@@ -35,15 +35,15 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def run_tests(self, module):        
         final_inst = module.final()
         final_inst.set_value( -2 )
-        self.failUnless( module.get_value( final_inst ) == -2 )
-        self.failUnless( final_inst.get_value() == -2 )
+        self.assertTrue( module.get_value( final_inst ) == -2 )
+        self.assertTrue( final_inst.get_value() == -2 )
         
         inst = self.create_python_final( module.middle )
-        self.failUnless( module.get_value( inst ) == 21 )
-        self.failUnless( inst.get_value() == 21 )
+        self.assertTrue( module.get_value( inst ) == 21 )
+        self.assertTrue( inst.get_value() == 21 )
         inst.set_value( -2 )
-        self.failUnless( module.get_value( inst ) == -2 )
-        self.failUnless( inst.get_value() == -2 )
+        self.assertTrue( module.get_value( inst ) == -2 )
+        self.assertTrue( inst.get_value() == -2 )
 
 
                 

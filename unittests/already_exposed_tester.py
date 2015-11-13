@@ -42,9 +42,9 @@ class tester_t( unittest.TestCase ):
         mb.write_module( os.path.join( to_be_exposed_dir, 'to_be_exposed.cpp' ) )
 
         body = mb.code_creator.body
-        self.failUnless( 2 == len( body.creators ) )
+        self.assertTrue( 2 == len( body.creators ) )
         ae_derived_code = body.creators[0].create()
-        self.failUnless( mb.class_( 'ae_base' ).decl_string in ae_derived_code )
+        self.assertTrue( mb.class_( 'ae_base' ).decl_string in ae_derived_code )
 
 def create_suite():
     suite = unittest.TestSuite()

@@ -37,7 +37,7 @@ class duplicated_names_reporter_t(object):
         buggy_decls = duplicated[value].copy()
         buggy_decls.remove( control_decl )
         warning = self.msg % ( value, os.linesep.join( map( str, buggy_decls ) ) )
-        logger.warn( "%s;%s" % ( str( control_decl ), warning ) )
+        logger.warning( "%s;%s" % ( str( control_decl ), warning ) )
 
     def report( self, logger ):
         duplicated = self.__select()
@@ -200,6 +200,6 @@ class manager_t( object ):
         used_not_exported_decls = self.__find_out_used_but_not_exported()
         groups = self.__group_by_unexposed( used_not_exported_decls )
         for group in groups.values():
-            self.__logger.warn( self.__create_dependencies_msg( group ) )
+            self.__logger.warning( self.__create_dependencies_msg( group ) )
         self.__report_duplicated_aliases()
         self.__report_duplicated_wrapper_aliases()

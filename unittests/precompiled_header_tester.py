@@ -32,7 +32,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def run_tests(self, module):
         lines = open( os.path.join( autoconfig.build_dir, 'precompiled_header.cpp' ) ).readlines()
         lines = [l for l in lines if l.startswith( '#include' )]
-        self.failUnless( '#include "stdafx.h"' in lines[0] )
+        self.assertTrue( '#include "stdafx.h"' in lines[0] )
 
 
 def create_suite():

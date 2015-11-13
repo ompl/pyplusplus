@@ -25,9 +25,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         matcher = declarations.match_declaration_t( name='son_t'
                                                     , type=declarations.class_t)
         found = find( matcher, mb.code_creator.body.creators )
-        self.failUnless( found )
-        self.failUnless( found.wrapper )
-        #self.failUnless( 0 == len( found.creators ) )
+        self.assertTrue( found )
+        self.assertTrue( found.wrapper )
+        #self.assertTrue( 0 == len( found.creators ) )
             
     def run_tests(self, module):        
         pass

@@ -22,8 +22,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def run_tests( self, module):
         d = module.data()
-        self.failUnless( d.sum() == 0 )
-        self.failUnless( d.sum( 1, 2 ) == 6 )
+        self.assertTrue( d.sum() == 0 )
+        self.assertTrue( d.sum( 1, 2 ) == 6 )
     
 def create_suite():
     suite = unittest.TestSuite()    

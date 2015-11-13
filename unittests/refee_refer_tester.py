@@ -23,7 +23,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         refee.i = 19888
 
         refer = module.make_refer( refee )
-        self.failUnless( refer.get_refee().i == 19888 )
+        self.assertTrue( refer.get_refee().i == 19888 )
 
 def create_suite():
     suite = unittest.TestSuite()

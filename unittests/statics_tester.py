@@ -19,11 +19,11 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , *args )
        
     def run_tests( self, module):
-        self.failUnless( module.data.instances_count() == 0 )
-        self.failUnless( module.data_instances_count() == 0 )
+        self.assertTrue( module.data.instances_count() == 0 )
+        self.assertTrue( module.data_instances_count() == 0 )
         d = module.data()
-        self.failUnless( module.data.instances_count() == 1 )
-        self.failUnless( module.data_instances_count() == 1 )
+        self.assertTrue( module.data.instances_count() == 1 )
+        self.assertTrue( module.data_instances_count() == 1 )
         
 def create_suite():
     suite = unittest.TestSuite()    

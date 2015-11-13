@@ -43,28 +43,28 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         
     def run_tests(self, module):
         x = False
-        self.failUnless( True == module.set_flag( True, x ) )
-        self.failUnless( False == module.set_flag( False, x ) )
+        self.assertTrue( True == module.set_flag( True, x ) )
+        self.assertTrue( False == module.set_flag( False, x ) )
         b = module.base()
-        self.failUnless( True == b.set_flag( True, x ) )
-        self.failUnless( False == b.set_flag( False, x ) )
+        self.assertTrue( True == b.set_flag( True, x ) )
+        self.assertTrue( False == b.set_flag( False, x ) )
 
-        self.failUnless( True == module.call_set_flag( b, True, x ) )
-        self.failUnless( False == module.call_set_flag( b, False, x ) )
+        self.assertTrue( True == module.call_set_flag( b, True, x ) )
+        self.assertTrue( False == module.call_set_flag( b, False, x ) )
        
         inventor = module.inventor()        
-        self.failUnless( False == inventor.set_flag( True, x ) )
-        self.failUnless( True == inventor.set_flag( False, x ) )
+        self.assertTrue( False == inventor.set_flag( True, x ) )
+        self.assertTrue( True == inventor.set_flag( False, x ) )
         
-        self.failUnless( False == module.call_set_flag( inventor, True, x ) )
-        self.failUnless( True == module.call_set_flag( inventor, False, x ) )
+        self.assertTrue( False == module.call_set_flag( inventor, True, x ) )
+        self.assertTrue( True == module.call_set_flag( inventor, False, x ) )
         
         inventor = self.create_py_inventor( module )      
-        self.failUnless( False == inventor.set_flag( True, x ) )
-        self.failUnless( True == inventor.set_flag( False, x ) )
+        self.assertTrue( False == inventor.set_flag( True, x ) )
+        self.assertTrue( True == inventor.set_flag( False, x ) )
         
-        self.failUnless( False == module.call_set_flag( inventor, True, x ) )
-        self.failUnless( True == module.call_set_flag( inventor, False, x ) )
+        self.assertTrue( False == module.call_set_flag( inventor, True, x ) )
+        self.assertTrue( True == module.call_set_flag( inventor, False, x ) )
         
         
 def create_suite():

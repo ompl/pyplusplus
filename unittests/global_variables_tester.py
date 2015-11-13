@@ -23,23 +23,23 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.variable( 'some_value' ).expose_address = True
 
     def run_tests(self, module):
-        self.failUnless( module.NonConstVar == module.color.blue )
-        self.failUnless( module.const_var == module.color.red )
+        self.assertTrue( module.NonConstVar == module.color.blue )
+        self.assertTrue( module.const_var == module.color.red )
         module.init_garray()
-        self.failUnless( 10 == len( module.garray ) )
+        self.assertTrue( 10 == len( module.garray ) )
         for index in range( 10 ):
-            self.failUnless( -index == module.garray[index].value )
-        self.failUnless( 3 == len( module.someSin )
+            self.assertTrue( -index == module.garray[index].value )
+        self.assertTrue( 3 == len( module.someSin )
                          and module.someSin[0] == 'A'
                          and module.someSin[1] == 'B'
                          and module.someSin[2] == '\0' )
 
-        self.failUnless( module.some_value == module.get_some_value_address() )
-        self.failUnless( -7 == module.get_some_value() )
+        self.assertTrue( module.some_value == module.get_some_value_address() )
+        self.assertTrue( -7 == module.get_some_value() )
         x = ctypes.c_int.from_address( module.some_value )
-        self.failUnless( x.value == module.get_some_value() )
+        self.assertTrue( x.value == module.get_some_value() )
         x.value = 9
-        self.failUnless( x.value == module.get_some_value() == 9)
+        self.assertTrue( x.value == module.get_some_value() == 9)
 
 def create_suite():
     suite = unittest.TestSuite()

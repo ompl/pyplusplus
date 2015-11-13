@@ -25,24 +25,24 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             matcher = declarations.match_declaration_t( name='year'
                                                         , type=declarations.member_function_t)
             found = find( matcher, mb.code_creator.body.creators )
-            self.failUnless( found )
-            self.failUnless( found.is_finalizable() )
+            self.assertTrue( found )
+            self.assertTrue( found.is_finalizable() )
             found.finalize()
             #from now should be only one instances that references year function
             found = find( matcher, mb.code_creator.creators )
-            self.failUnless( found )
-            self.failUnless( not found.is_finalizable() )
+            self.assertTrue( found )
+            self.assertTrue( not found.is_finalizable() )
             
             matcher = declarations.match_declaration_t( name='whole_class_t'
                                                         , type=declarations.class_t)
             found = find( matcher, mb.code_creator.body.creators )
-            self.failUnless( found )
-            self.failUnless( found.is_finalizable() )
+            self.assertTrue( found )
+            self.assertTrue( found.is_finalizable() )
             found.finalize()
             #from now should be only one instances that references whole_class_t class
             found = find( matcher, mb.code_creator.creators )
-            self.failUnless( found )
-            self.failUnless( not found.is_finalizable() )
+            self.assertTrue( found )
+            self.assertTrue( not found.is_finalizable() )
         except:
             pass
             

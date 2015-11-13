@@ -264,7 +264,7 @@ class properties_finder_t:
         logger = _logging_.loggers.declarations
         if not messages.filter_disabled_msgs([messages.W1041], property_.fget.parent.disabled_messages ):
             return #user disabled property warning        
-        logger.warn( "%s;%s" % ( property_.fget.parent, messages.W1041 % property_ ) )
+        logger.warning( "%s;%s" % ( property_.fget.parent, messages.W1041 % property_ ) )
         
     def __is_legal_property( self, property_ ):
         """property is legal if it does not hide other declarations"""

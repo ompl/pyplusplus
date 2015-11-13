@@ -41,13 +41,13 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def run_tests( self, module):
         a = self.create_py_input( module, 3, 7 )
         c = a.create_r_input()
-        self.failUnless( c.rows() == 3 and c.cols() == 7 )
+        self.assertTrue( c.rows() == 3 and c.cols() == 7 )
         b = module.process_input(a)
-        self.failUnless( b.rows() == 3 and b.cols() == 7 )
+        self.assertTrue( b.rows() == 3 and b.cols() == 7 )
         c = a.create_r_input_shared()
-        self.failUnless( c.rows() == 3 and c.cols() == 7 )
+        self.assertTrue( c.rows() == 3 and c.cols() == 7 )
         b = module.process_input_shared(a)
-        self.failUnless( b.rows() == 3 and b.cols() == 7 )
+        self.assertTrue( b.rows() == 3 and b.cols() == 7 )
 
 def create_suite():
     suite = unittest.TestSuite()    

@@ -26,9 +26,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def run_tests(self, module):
         n = module.numbers_t( 1,2,3,4)
-        self.failUnless( n.x == 1+2 and n.y == 3+4)
+        self.assertTrue( n.x == 1+2 and n.y == 3+4)
         n = module.numbers_t( 10, 18)
-        self.failUnless( n.x == 10 and n.y == 18)
+        self.assertTrue( n.x == 10 and n.y == 18)
 
 def create_suite():
     suite = unittest.TestSuite()
