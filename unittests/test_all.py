@@ -346,7 +346,7 @@ class process_tester_runner_t( object ):
     def __call__( self ):
         start_time = time.time()
         for index, tester in enumerate( self.__m_runners ):
-            print('\n\n{[<@>]}running tests complition: %d%%' % int( index * 100.0 // len(self.__m_runners) ))
+            print('\n\n{[<@>]}running tests completion: %d%%' % int( index * 100.0 // len(self.__m_runners) ))
             print('--------------------------------^^^^^\n\n')
             if os.path.exists( os.path.join( autoconfig.build_directory, 'indexing_suite' ) ):
                 shutil.rmtree( os.path.join( autoconfig.build_directory, 'indexing_suite' ) )

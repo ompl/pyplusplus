@@ -20,7 +20,7 @@ struct S1{
 struct S2{
     void do_smth( S1* S1=0 ){};
     //void do_smth( int i, S1* S1=NULL ){};
-    void do_smth( double d, S1* S1=(S1*)(0) ){};
+    void do_smth( double d, S1* s1=(S1*)(0) ){};
 };
 
 

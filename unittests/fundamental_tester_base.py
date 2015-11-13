@@ -107,7 +107,7 @@ class fundamental_tester_base_t( unittest.TestCase ):
         mb = module_builder.module_builder_t( [ test_header_cfg ]
                                               #, undefine_symbols=['__MINGW32__']
                                               , indexing_suite_version=self.__indexing_suite_version
-                                              , gccxml_config=autoconfig.cxx_parsers_cfg.gccxml)
+                                              , xml_generator_config=autoconfig.xml_generator_config)
         for decl in mb.decls():
             decl.documentation = '"documentation"'
         self.customize( mb )

@@ -32,7 +32,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         self.failUnless( 3.5 == float( opers ) )
         self.failUnless( "hello world" == str( opers ) )
         to_string = module.to_string_t()
-        self.failUnless( "hello world" == str( to_string ) )
+        try:
+            self.failUnless( "hello world" == str(to_string) )
+        except:
+            self.failUnless( "hello world" == to_string.as__scope_std_scope_string() )
         to_wstring = module.to_wstring_t()
         self.failUnless( "hello world" == str( to_wstring ) )
         call = module.call_t()

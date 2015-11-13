@@ -51,7 +51,7 @@ class ctypes_base_tester_t(unittest.TestCase):
 
     def __build_scons_cmd( self ):
         cmd = autoconfig.scons.cmd_build + ' ' + self.base_name
-        if autoconfig.cxx_parsers_cfg.gccxml.compiler == 'msvc71':
+        if autoconfig.xml_generator_config.compiler == 'msvc71':
             cmd  = cmd + ' use_msvc71=True'
         return cmd
 
@@ -65,7 +65,7 @@ class ctypes_base_tester_t(unittest.TestCase):
             shutil.rmtree( binaries_dir )
 
         autoconfig.scons_config.compile( self.__build_scons_cmd(), cwd=autoconfig.this_module_dir_path )
-        mb = ctypes_module_builder_t( [self.header], self.symbols_file, autoconfig.cxx_parsers_cfg.gccxml )
+        mb = ctypes_module_builder_t( [self.header], self.symbols_file, autoconfig.xml_generator_config )
         self.customize( mb )        
         mb.build_code_creator( self.library_file )
         mb.write_module( os.path.join( self.project_dir, 'binaries', self.base_name + '.py' ) )
@@ -113,7 +113,7 @@ class opaque_tester_t( ctypes_base_tester_t ):
         mb.class_( 'user_data_t' ).opaque = True
 
     def test(self):
-        self.failUnlessRaises( RuntimeError, self.module_ref.user_data_t )
+        self.assertRaises( RuntimeError, self.module_ref.user_data_t )
         udt = self.module_ref.create()
         self.failUnless( 1977 == self.module_ref.read_user_data(udt) )
         self.module_ref.destroy( udt )

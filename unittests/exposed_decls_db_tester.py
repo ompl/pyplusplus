@@ -58,8 +58,7 @@ class tester_t(unittest.TestCase):
 
     def test(self):
         db = pypp_utils.exposed_decls_db_t()
-        config = parser.gccxml_configuration_t( gccxml_path=autoconfig.gccxml.executable
-                                  , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+        config = autoconfig.xml_generator_config
 
         reader = parser.project_reader_t( config, None, decl_wrappers.dwfactory_t() )
         decls = reader.read_files( [parser.create_text_fc(self.CODE)] )

@@ -28,9 +28,8 @@ class ogre_generate_tester_t(unittest.TestCase):
 
         mb = module_builder.module_builder_t(
                 [ ogre_file ]
-                , gccxml_path=autoconfig.gccxml.executable
-                , indexing_suite_version=2
-                , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler())
+                , xml_generator_config=autoconfig.xml_generator_config
+                , indexing_suite_version=2)
 
         mb.global_ns.exclude()
         mb.namespace('Ogre').include()

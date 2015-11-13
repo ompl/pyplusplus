@@ -4,8 +4,11 @@ import fnmatch
 import socket
 import getpass
 import platform
+from pygccxml.parser import load_xml_generator_configuration
 
 this_module_dir_path = os.path.abspath ( os.path.dirname( sys.modules[__name__].__file__) )
+
+xml_generator_config = load_xml_generator_configuration(os.path.join(this_module_dir_path, 'gccxml.cfg'))
 
 class indexing_suite:
     include = os.path.join( this_module_dir_path, 'indexing_suite_v2' )
@@ -20,14 +23,6 @@ class python:
     libdir = os.path.join(sys.prefix, 'lib')
     lib = version
     include = os.path.join(sys.prefix, os.path.join('include', version))
-
-class gccxml:
-    gccxml_path = os.path.join( this_module_dir_path, '..', 'gccxml_bin', 'v09', platform.system(), platform.machine(), 'bin' )
-    if not os.path.exists( gccxml_path ):
-        gccxml_path = os.path.join( this_module_dir_path, '..', 'gccxml_bin', 'v09', sys.platform, 'bin' )
-
-    gccxml_version = '__GCCXML_09__'
-    executable = gccxml_path
 
 class scons:
     suffix = '.so'
@@ -62,42 +57,6 @@ for suffix in pysuffixes:
 else:
     raise Exception('Cannot find Python library')
 
-# This shouldn't really be used. Eventually, we should properly detect the
-# scons/boost/python settings
-if 'roman' in getpass.getuser():
-    if os.name == 'nt':
-        scons.suffix = '.pyd'
-        scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope' ]
-        boost.libdir = [ r'e:\dev\boost_svn\bin.v2\libs\python\build\msvc-9.0\release\threading-multi' ]
-        boost.include = 'e:/dev/boost_svn'
-        python.libdir = 'c:/program files/python26/libs'
-        python.include = 'c:/program files/python26/include'
-    else:
-        if 'kubunu-vbox' == socket.gethostname():
-            os.nice( 20 )
-            print('test process niceness: 20')
-            scons.suffix = '.so'
-            scons.ccflags = []
-            boost.libdir = ['/usr/lib'] #'/home/roman/include/libs', '/home/roman/include/lib' ]
-            boost.include = '/usr/include/boost'
-            python.include = '/usr/include/python2.6'
-
-        else:
-            os.nice( 20 )
-            print('test process niceness: 20')
-            scons.suffix = '.so'
-            scons.ccflags = []
-            boost.libdir = ['/home/roman/include/libs', '/home/roman/include/lib' ]
-            boost.include = '/home/roman/boost_svn'
-            python.include = '/usr/include/python2.6'
-elif 'root' == getpass.getuser():
-    if os.name == 'nt':
-        scons.suffix = '.pyd'
-        scons.ccflags = ['/MD', '/EHsc', '/GR', '/Zc:wchar_t', '/Zc:forScope' ]
-        boost.libdir = [ 'd:/dev/boost_svn/bin.v2/libs/python/build/msvc-7.1/release/threading-multi' ]
-        boost.include = 'd:/dev/boost_svn'
-        python.libdir = 'e:/python25/libs'
-        python.include = 'e:/python25/include'
 
 _my_path = None
 try:

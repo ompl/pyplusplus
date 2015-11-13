@@ -20,33 +20,16 @@ if not os.path.exists( build_dir ):
 
 sys.path.append( os.path.dirname( this_module_dir_path ) )
 
-from environment import scons, boost, python, gccxml, indexing_suite
+from environment import scons, boost, python, xml_generator_config, indexing_suite
 
 import pygccxml
-
-gccxml_version = '__GCCXML_09__'
-
-class cxx_parsers_cfg:
-    gccxml = pygccxml.parser.load_gccxml_configuration( os.path.join( this_module_dir_path, 'gccxml.cfg' )
-                                                        , gccxml_path=gccxml.executable
-                                                        , working_directory=data_directory
-                                                        , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
-
-    gccxml.define_symbols.append( gccxml_version )
-    if 'nt' == os.name:
-        gccxml.define_symbols.append( '__PYGCCXML_%s__' % gccxml.compiler.upper() )
-        if 'msvc9' == gccxml.compiler:
-            gccxml.define_symbols.append( '_HAS_TR1=0' )
-    if len(boost.include) > 0: gccxml.include_paths.append( boost.include )
-
-print('GCCXML configured to simulate compiler ' + str(cxx_parsers_cfg.gccxml.compiler))
 
 class scons_config:
     libs = [ python.lib ]
     libpath =  [ boost.libdir ] + [ python.libdir ]
-    cpppath = [ boost.include, python.include, build_directory ] #indexing_suite.include ]
-    include_dirs = cpppath + [data_directory] + cxx_parsers_cfg.gccxml.include_paths
-    if cxx_parsers_cfg.gccxml.compiler == 'msvc9':
+    cpppath = [ boost.include, python.include, build_directory, data_directory ] #indexing_suite.include ]
+    include_dirs = cpppath + [data_directory] + xml_generator_config.include_paths
+    if xml_generator_config.compiler == 'msvc9':
         libpath.append( r'C:\Program Files\Microsoft Visual Studio 9.0\VC\lib' )
         libpath.append( r'C:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib' )
         include_dirs.append( r'C:\Program Files\Microsoft Visual Studio 9.0\VC\include' )

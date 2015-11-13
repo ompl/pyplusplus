@@ -25,10 +25,9 @@ class tester_t(unittest.TestCase):
 
     def test(self):
         mb = module_builder.module_builder_t( self._get_files()
-                                              , gccxml_path=autoconfig.gccxml.executable
+                                              , xml_generator_config=autoconfig.xml_generator_config
                                               , include_paths=[autoconfig.boost.include]
-                                              , undefine_symbols=['__MINGW32__']
-                                              , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler())
+                                              , undefine_symbols=['__MINGW32__'])
         classes = [d for d in declarations.make_flatten( mb.global_ns ) if isinstance( d, module_builder.class_t )]
 
         mdw = module_builder.mdecl_wrapper_t( classes )
@@ -65,10 +64,9 @@ class tester_t(unittest.TestCase):
 
     def test__getitem__( self ):
         mb = module_builder.module_builder_t( self._get_files()
-                                              , gccxml_path=autoconfig.gccxml.executable
+                                              , xml_generator_config=autoconfig.xml_generator_config
                                               , include_paths=[autoconfig.boost.include]
-                                              , undefine_symbols=['__MINGW32__']
-                                              , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+                                              , undefine_symbols=['__MINGW32__'])
 
         public_bases = mb.classes( 'public_base_t' )
         self.failUnless( 1 == len( public_bases ) )

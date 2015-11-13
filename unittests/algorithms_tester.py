@@ -25,8 +25,7 @@ class make_flatten_tester_t(unittest.TestCase):
     def test(self):
         mb = module_builder.module_builder_t(
                 [ module_builder.create_text_fc( 'namespace enums{ enum { OK=1 }; }' ) ]
-                , gccxml_path=autoconfig.gccxml.executable
-                , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+                , xml_generator_config=autoconfig.xml_generator_config)
         mb.namespace( name='::enums' ).include()
         mb.build_code_creator('dummy')
         flatten = code_creators.make_flatten(mb.code_creator.creators)
@@ -36,7 +35,7 @@ class creator_finder_tester_t( unittest.TestCase ):
     def test_find_by_declaration(self):
         mb = module_builder.module_builder_t(
             [ module_builder.create_text_fc( 'namespace enums{ enum color{ red = 1}; }' )]
-            , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+            , xml_generator_config=autoconfig.xml_generator_config)
         mb.namespace( name='::enums' ).include()
         enum_matcher = declarations.match_declaration_t( name='color' )
         mb.build_code_creator( 'dummy' )
@@ -48,7 +47,7 @@ class creator_finder_tester_t( unittest.TestCase ):
     def test_find_by_class_instance(self):
         mb = module_builder.module_builder_t(
             [ module_builder.create_text_fc( 'namespace enums{ enum color{ red = 1}; }' )]
-            , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+            , xml_generator_config=autoconfig.xml_generator_config)
         mb.namespace( name='::enums' ).include()
         mb.build_code_creator('dummy')
         enum_found = code_creators.creator_finder.find_by_class_instance(
@@ -69,7 +68,7 @@ class class_organizer_tester_t(unittest.TestCase):
         return answer
 
     def test(self):
-        config = parser.gccxml_configuration_t( gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+        config = autoconfig.xml_generator_config
         code = []
         code.append('struct a{};')
         code.append('struct b{};')
@@ -97,7 +96,7 @@ class exclude_function_with_array_arg_tester_t( unittest.TestCase ):
     def test(self):
         mb = module_builder.module_builder_t(
             [ module_builder.create_text_fc( 'namespace arr{ struct x{ x( int arr[3][3], int ){} x( const x arr[3][3], int ){} }; }' )]
-            , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+            , xml_generator_config=autoconfig.xml_generator_config)
         arr = mb.namespace( name='arr' )
         mem_funs = arr.calldefs( 'x', arg_types=[None,None] )
         for x in mem_funs:
@@ -117,7 +116,7 @@ class readme_tester_t( unittest.TestCase ):
     def test(self):
         mb = module_builder.module_builder_t(
             [ module_builder.create_text_fc( self.CODE )]
-            , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+            , xml_generator_config=autoconfig.xml_generator_config)
         xxx = mb.namespace( name='xxx' )
         fun = xxx.calldef( 'do_smth' )
         self.failUnless( fun.readme() == [] )
@@ -140,7 +139,7 @@ class use_function_signature_bug_tester_t( unittest.TestCase ):
     def test(self):
         mb = module_builder.module_builder_t(
             [ module_builder.create_text_fc( self.CODE )]
-            , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+            , xml_generator_config=autoconfig.xml_generator_config)
         d = mb.class_( 'derived' )
         f = d.mem_fun( 'f' )
         self.failUnless( f.create_with_signature == True )
@@ -189,7 +188,7 @@ class class_multiple_files_tester_t(unittest.TestCase):
     def test(self):
         mb = module_builder.module_builder_t(
                 [ module_builder.create_text_fc( self.CLASS_DEF ) ]
-                , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+                , xml_generator_config=autoconfig.xml_generator_config)
         mb.namespace( name='::tester' ).include()
         x = mb.class_( 'x' )
         x.add_registration_code( '//hello world reg' )
@@ -242,7 +241,7 @@ class exclude_erronious_tester_t( unittest.TestCase ):
 
         mb = module_builder.module_builder_t(
                 [ module_builder.create_text_fc( code ) ]
-                , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+                , xml_generator_config=autoconfig.xml_generator_config)
 
         xyz = mb.namespace( name='xyz' )
         xyz.include()
@@ -264,7 +263,7 @@ class exclude_ellipsis_tester_t( unittest.TestCase ):
 
         mb = module_builder.module_builder_t(
                 [ module_builder.create_text_fc( code ) ]
-                , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+                , xml_generator_config=autoconfig.xml_generator_config)
 
         do_smth = mb.free_fun( 'do_smth' )
 
@@ -288,7 +287,7 @@ class constructors_code_tester_t( unittest.TestCase ):
 
         mb = module_builder.module_builder_t(
                 [ module_builder.create_text_fc( code ) ]
-                , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+                , xml_generator_config=autoconfig.xml_generator_config)
 
         x = mb.class_( 'X' )
         x.include()

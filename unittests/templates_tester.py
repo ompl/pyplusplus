@@ -19,13 +19,16 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                                                                     
     def customize(self, mb ):
         mb.global_ns.exclude()
-        gcd = mb.free_fun( 'gcd' )
+        gcd = mb.free_functions( 'gcd' )[0]
         gcd.include()
         c = mb.class_('C')
         c.include()
         for f in [gcd, c.mem_fun( 'get_value' )]:
             f.alias = f.name
-            f.name = f.demangled_name
+            try:
+                f.name = f.demangled_name
+            except:
+                pass
             #f.create_with_signature = True
             
     def run_tests(self, module):        

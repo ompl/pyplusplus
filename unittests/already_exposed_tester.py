@@ -16,7 +16,7 @@ class tester_t( unittest.TestCase ):
     def test(self):
         fpath = os.path.join( autoconfig.data_directory, 'already_exposed_to_be_exported.hpp' )
         mb = module_builder.module_builder_t( [module_builder.create_source_fc( fpath )]
-                                              , gccxml_path=autoconfig.gccxml.executable, compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+                                              , xml_generator_config=autoconfig.xml_generator_config )
 
         mb.global_ns.exclude()
         mb.namespace( 'already_exposed' ).include()
@@ -29,8 +29,7 @@ class tester_t( unittest.TestCase ):
 
         fpath = os.path.join( autoconfig.data_directory, 'already_exposed_2to_be_exported.hpp' )
         mb = module_builder.module_builder_t( [module_builder.create_source_fc( fpath )]
-                                              , gccxml_path=autoconfig.gccxml.executable
-                                              , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
+                                              , xml_generator_config=autoconfig.xml_generator_config )
 
         mb.global_ns.exclude()
         mb.namespace( 'to_be_exposed' ).include()
