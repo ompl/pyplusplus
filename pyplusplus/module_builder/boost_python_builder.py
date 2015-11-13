@@ -30,7 +30,7 @@ class builder_t(module_builder.module_builder_t):
 
     def __init__( self
                   , files
-                  , gccxml_path=''
+                  , xml_generator_path=''
                   , working_directory='.'
                   , include_paths=None
                   , define_symbols=None
@@ -44,14 +44,14 @@ class builder_t(module_builder.module_builder_t):
                   , cflags=""
                   , encoding='ascii'
                   , compiler=None
-                  , gccxml_config=None):
+                  , xml_generator_config=None):
         """
         :param files: list of files, declarations from them you want to export
         :type files: list of strings or :class:`parser.file_configuration_t` instances
 
-        :param gccxml_path: path to gccxml binary. If you don't pass this argument,
-                            pygccxml parser will try to locate it using you environment PATH variable
-        :type gccxml_path: str
+        :param xml_generator_path: path to gccxml/castxml binary. If you don't pass this argument,
+                            pygccxml parser will try to locate it using your environment PATH variable
+        :type xml_generator_path: str
 
         :param include_paths: additional header files location. You don't have to
                               specify system and standard directories.
@@ -63,16 +63,16 @@ class builder_t(module_builder.module_builder_t):
         :param undefine_symbols: list of symbols to be undefined for preprocessor.
         :param undefine_symbols: list of strings
 
-        :param cflags: Raw string to be added to gccxml command line.
+        :param cflags: Raw string to be added to xml generator command line.
 
-        :param gccxml_config: instance of pygccxml.parser.gccxml_configuration_t class, holds
-                              gccxml( compiler ) configuration. You can use this
+        :param xml_generator_config: instance of pygccxml.parser.xml_generator_configuration_t class, holds
+                              xml generator configuration. You can use this
                               argument instead of passing the compiler configuration separately.
         """
         module_builder.module_builder_t.__init__( self, global_ns=None, encoding=encoding )
 
-        if not gccxml_config:
-            gccxml_config = parser.gccxml_configuration_t( gccxml_path=gccxml_path
+        if not xml_generator_config:
+            xml_generator_config = parser.xml_generator_configuration_t( xml_generator_path=xml_generator_path
                                              , working_directory=working_directory
                                              , include_paths=include_paths
                                              , define_symbols=define_symbols
@@ -89,7 +89,7 @@ class builder_t(module_builder.module_builder_t):
         self.__parsed_dirs = [_f for _f in tmp if _f]
 
         self.global_ns = self.__parse_declarations( files
-                                                    , gccxml_config
+                                                    , xml_generator_config
                                                     , compilation_mode
                                                     , cache
                                                     , indexing_suite_version)
@@ -127,14 +127,14 @@ class builder_t(module_builder.module_builder_t):
         db.update_decls( self.global_ns )
 
 
-    def __parse_declarations( self, files, gccxml_config, compilation_mode, cache, indexing_suite_version ):
-        if None is gccxml_config:
-            gccxml_config = parser.gccxml_configuration_t()
+    def __parse_declarations( self, files, xml_generator_config, compilation_mode, cache, indexing_suite_version ):
+        if None is xml_generator_config:
+            xml_generator_config = parser.xml_generator_configuration_t()
         if None is compilation_mode:
             compilation_mode = parser.COMPILATION_MODE.FILE_BY_FILE
         start_time = time.clock()
         self.logger.debug( 'parsing files - started' )
-        reader = parser.project_reader_t( gccxml_config, cache, decl_wrappers.dwfactory_t() )
+        reader = parser.project_reader_t( xml_generator_config, cache, decl_wrappers.dwfactory_t() )
         decls = reader.read_files( files, compilation_mode )
 
         self.logger.debug( 'parsing files - done( %f seconds )' % ( time.clock() - start_time ) )

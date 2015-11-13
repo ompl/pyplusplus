@@ -28,7 +28,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
     def __init__( self
                   , files
                   , exported_symbols_file
-                  , gccxml_config=None
+                  , xml_generator_config=None
                   , optimize_queries=True
                   , encoding='ascii' ):
         """
@@ -37,7 +37,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         """
         module_builder.module_builder_t.__init__( self, global_ns=None, encoding=encoding )
 
-        self.global_ns = self.__parse_declarations( files, gccxml_config )
+        self.global_ns = self.__parse_declarations( files, xml_generator_config )
         self.global_ns.decls(recursive=True, allow_empty=True)._code_generator = decl_wrappers.CODE_GENERATOR_TYPES.CTYPES
         self.__blob2decl = binary_parsers.merge_information( self.global_ns, exported_symbols_file )
 
@@ -52,14 +52,14 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         self.__module_code_head = []
         self.__module_code_tail = []
 
-    def __parse_declarations( self, files, gccxml_config, compilation_mode=None, cache=None ):
-        if None is gccxml_config:
-            gccxml_config = parser.config_t()
+    def __parse_declarations( self, files, xml_generator_config, compilation_mode=None, cache=None ):
+        if None is xml_generator_config:
+            xml_generator_config = parser.xml_generator_configuration_t()
         if None is compilation_mode:
             compilation_mode = parser.COMPILATION_MODE.FILE_BY_FILE
         start_time = time.clock()
         self.logger.debug( 'parsing files - started' )
-        reader = parser.project_reader_t( gccxml_config, cache, decl_wrappers.dwfactory_t() )
+        reader = parser.project_reader_t( xml_generator_config, cache, decl_wrappers.dwfactory_t() )
         decls = reader.read_files( files, compilation_mode )
 
         self.logger.debug( 'parsing files - done( %f seconds )' % ( time.clock() - start_time ) )
