@@ -30,6 +30,7 @@ class builder_t(module_builder.module_builder_t):
 
     def __init__( self
                   , files
+                  , gccxml_path=''
                   , xml_generator_path=''
                   , working_directory='.'
                   , include_paths=None
@@ -44,6 +45,7 @@ class builder_t(module_builder.module_builder_t):
                   , cflags=""
                   , encoding='ascii'
                   , compiler=None
+                  , gccxml_config=None
                   , xml_generator_config=None):
         """
         :param files: list of files, declarations from them you want to export
@@ -68,8 +70,17 @@ class builder_t(module_builder.module_builder_t):
         :param xml_generator_config: instance of pygccxml.parser.xml_generator_configuration_t class, holds
                               xml generator configuration. You can use this
                               argument instead of passing the compiler configuration separately.
+
+        :param gccxml_path: DEPRECATED
+        :param gccxml_config: DEPRECATED
         """
         module_builder.module_builder_t.__init__( self, global_ns=None, encoding=encoding )
+
+        # handle deprecated parameters
+        if not gccxml_path == '' and xml_generator_path == '':
+            xml_generator_path = gccxml_path
+        if gccxml_config and not xml_generator_config:
+            xml_generator_config = gccxml_config
 
         if not xml_generator_config:
             xml_generator_config = parser.xml_generator_configuration_t( xml_generator_path=xml_generator_path

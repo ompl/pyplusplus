@@ -28,6 +28,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
     def __init__( self
                   , files
                   , exported_symbols_file
+                  , gccxml_generator_config=None
                   , xml_generator_config=None
                   , optimize_queries=True
                   , encoding='ascii' ):
@@ -35,6 +36,9 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         :param files: list of files, declarations from them you want to export
         :type files: list of strings or :class:`parser.file_configuration_t` instances
         """
+        if gccxml_generator_config and not xml_generator_config:
+            xml_generator_config = gccxml_generator_config
+
         module_builder.module_builder_t.__init__( self, global_ns=None, encoding=encoding )
 
         self.global_ns = self.__parse_declarations( files, xml_generator_config )
