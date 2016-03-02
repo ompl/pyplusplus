@@ -271,7 +271,7 @@ class module_runner_t( object ):
         if test_file_name.endswith( 'pyc' ):
             test_file_name = test_file_name[:-1]
         try:
-            self.output = subprocess.check_output([sys.executable, test_file_name]).decode()
+            self.output = self.__check_output( test_file_name )
             self.exit_status = 0
         except subprocess.CalledProcessError as e:
             self.output = e.output
@@ -282,7 +282,8 @@ class module_runner_t( object ):
 
     def __create_unique_name( self, name ):
         if '__main__.' in name:
-            name = name.replace( '__main__', os.path.basename( self.module.__file__)[:-4] )
+            name = name.replace( '__main__',
+                                 os.path.splitext( os.path.basename( self.module.__file__) )[0] )
         return name
 
     def __update( self ):
@@ -308,6 +309,17 @@ class module_runner_t( object ):
             self.test_results[ uname( match_found.group( 'name' ) ) ] = 'ERROR' + hint
 
         assert( self.num_of_tests == len( self.test_results ) )
+
+    def __check_output( self, test_file_name ):
+        # Python 2.6 doesn't have subprocess.check_output, use Popen instead
+        cmd = [sys.executable, test_file_name]
+        subproc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        result = ''.join(l.decode() for l in subproc.stdout.readlines())
+        if subproc.returncode:
+            ex = subprocess.CalledProcessError(subproc.returncode, cmd)
+            ex.output = result
+            raise ex
+        return result
 
 
 class process_tester_runner_t( object ):
