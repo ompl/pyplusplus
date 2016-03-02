@@ -7,6 +7,7 @@
 #define __mem_var_compile_error_bug_to_be_exported_hpp__
 
 #include <map>
+#include <stddef.h>
 
 namespace sptCore
 {

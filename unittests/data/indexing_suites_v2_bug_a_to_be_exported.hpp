@@ -6,6 +6,7 @@
 #ifndef __indexing_suites_v2_bug_to_be_exported_hpp__
 #define __indexing_suites_v2_bug_to_be_exported_hpp__
 
+#include <stddef.h>
 #include <vector>
 
 namespace indexing_suites2 {

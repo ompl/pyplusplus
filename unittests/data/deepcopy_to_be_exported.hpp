@@ -6,6 +6,7 @@
 #ifndef __deepcopy_to_be_exported_hpp__
 #define __deepcopy_to_be_exported_hpp__
 
+#include <stddef.h>
 #include <vector>
 
 namespace deepcopy{
