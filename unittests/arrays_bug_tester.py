@@ -11,9 +11,9 @@ from pyplusplus import code_creators
 
 class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     EXTENSION_NAME = 'arrays_bug'
-    
+
     def __init__( self, *args ):
-        fundamental_tester_base.fundamental_tester_base_t.__init__( 
+        fundamental_tester_base.fundamental_tester_base_t.__init__(
             self
             , tester_t.EXTENSION_NAME
             , *args )
@@ -21,7 +21,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def customize(self, mb ):
         mb.add_registration_code( 'pyplusplus::containers::static_sized::register_array_1< int, 10 >( "X1" );' )
         mb.add_registration_code( 'pyplusplus::containers::static_sized::register_array_1< int, 10 >( "X2" );' )
-            
+
     def run_tests( self, module):
         m = module.arrays_bug
         c = m.container()
@@ -29,11 +29,27 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         c.items[0].values[0] = 1
         y = c.items[0]
         c.items[0] = m.item()
-        
+
         self.assertTrue( id(module.X1) == id(module.X2) == id( c.items[0].values.__class__ ) )
-        
+
+        i = m.nc_item()
+        i.value = 10
+        self.assertEqual(i.value, 10)
+
+        c = m.nc_item_container()
+        self.assertEqual(len(c.items), 10)
+        self.assertEqual(c.items[0].value, 1)
+        self.assertEqual(c.items[9].value, 10)
+        try:
+            c.items[0] = m.nc_item()
+            raise RuntimeError('The assignment on previous line should have failed')
+        except TypeError:
+            pass
+        c.items[0].value = 100
+        self.assertEqual(c.items[0].value, 100)
+
 def create_suite():
-    suite = unittest.TestSuite()    
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

@@ -299,7 +299,7 @@ class bit_field_t( member_variable_base_t ):
                        % { 'mk_func' : make_function
                            , 'setter_type' : self.wrapper.setter_type
                            , 'wfname' : self.wrapper.setter_full_name } )
-                           
+
         if self.documentation:
             answer.append( self.PARAM_SEPARATOR )
             answer.append( self.documentation )
@@ -449,8 +449,12 @@ class array_mv_wrapper_t( code_creator.code_creator_t
     def wrapper_type( self ):
         tmpl = "%(namespace)s::%(constness)sarray_1_t< %(item_type)s, %(array_size)d>"
 
+        item_type = declarations.array_item_type(self.declaration.type)
+        is_noncopyable = not declarations.is_fundamental(item_type) and \
+            declarations.is_noncopyable(item_type)
+
         constness = ''
-        if declarations.is_const( self.declaration.type ):
+        if declarations.is_const(self.declaration.type) or is_noncopyable:
             constness = 'const_'
         result = tmpl % {
                 'namespace' : code_repository.array_1.namespace
@@ -484,7 +488,7 @@ class array_mv_wrapper_t( code_creator.code_creator_t
     def wrapper_creator_full_name(self):
         return '::'.join( [self.parent.full_name, self.wrapper_creator_name] )
 
-    def _create_impl( self ):        
+    def _create_impl( self ):
         tmpl = [ "static %(wrapper_type)s" ]
         if self.declaration.type_qualifiers.has_static:
             tmpl.append( "%(wrapper_creator_name)s(){" )
@@ -493,9 +497,9 @@ class array_mv_wrapper_t( code_creator.code_creator_t
             tmpl.append( "%(wrapper_creator_name)s( %(wrapped_class_type)s inst ){" )
             tmpl.append( self.indent( "return %(wrapper_type)s( inst.%(mem_var_ref)s );" ) )
         tmpl.append( "}" )
-        
+
         tmpl = os.linesep.join( tmpl )
-        
+
         return tmpl % {
                 'wrapper_type' : self.wrapper_type.decl_string
               , 'parent_class_type' : self.parent.declaration.partial_decl_string

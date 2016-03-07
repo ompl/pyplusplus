@@ -4,7 +4,6 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 
-import os
 from . import algorithm
 from . import registration_based
 from pyplusplus import code_repository
@@ -51,7 +50,10 @@ class array_1_registrator_t( registration_based.registration_based_t ):
         templates = declarations.templates
         call_invocation = declarations.call_invocation
         ns_name = code_repository.array_1.namespace
-        if declarations.is_const( self.array_type ):
+        item_type = declarations.array_item_type(self.array_type)
+        is_noncopyable = not declarations.is_fundamental(item_type) and declarations.is_noncopyable(item_type)
+
+        if declarations.is_const(self.array_type) or is_noncopyable:
             fn_name = 'register_const_array_1'
         else:
             fn_name = 'register_array_1'
@@ -59,7 +61,7 @@ class array_1_registrator_t( registration_based.registration_based_t ):
         fn_def_tmpl_args = [ declarations.array_item_type(self.array_type).decl_string
                              , str( declarations.array_size(self.array_type) ) ]
         if not self.call_policies.is_default():
-            fn_def_tmpl_args.append( 
+            fn_def_tmpl_args.append(
                 self.call_policies.create(self, call_policies.CREATION_POLICY.AS_TEMPLATE_ARGUMENT ) )
 
         fn_def = templates.join( '::'.join( [ns_name, fn_name] ), fn_def_tmpl_args )
