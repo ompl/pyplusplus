@@ -29,6 +29,7 @@ class scons_config:
     libpath =  [ boost.libdir ] + [ python.libdir ]
     cpppath = [ boost.include, python.include, build_directory, data_directory ] #indexing_suite.include ]
     include_dirs = cpppath + [data_directory] + xml_generator_config.include_paths
+    compiler_path = xml_generator_config.compiler_path
     if xml_generator_config.compiler == 'msvc9':
         libpath.append( r'C:\Program Files\Microsoft Visual Studio 9.0\VC\lib' )
         libpath.append( r'C:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib' )
@@ -56,6 +57,7 @@ class scons_config:
             , "    , LIBPATH=[ %s ]" % ','.join( [ 'r"%s"' % path for path in scons_config.libpath ] )
             , "    , CPPPATH=[ %s ]" % ','.join( [ 'r"%s"' % path for path in scons_config.include_dirs] )
             , "    , CCFLAGS=[ %s ]" % ','.join( [ 'r"%s"' % flag for flag in scons.ccflags ] )
+            , "    , CXX=[ \"{0}\" ]".format(scons_config.compiler_path)
             , "    , SHLIBPREFIX=''"
             , "    , SHLIBSUFFIX='%s'" % scons.suffix #explicit better then implicit
             , ")" ]
