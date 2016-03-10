@@ -3,7 +3,6 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-import os
 import sys
 
 from pyplusplus import _logging_
@@ -63,13 +62,14 @@ class module_builder_t(object):
                                     , header_file=header_file
                                     , recursive=recursive)
 
-    def decls( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):
+    def decls( self, name=None, function=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
         return self.global_ns.decls( name=name
                                      , function=function
                                      , header_dir=header_dir
                                      , header_file=header_file
-                                     , recursive=recursive)
+                                     , recursive=recursive
+                                     , allow_empty=allow_empty)
 
     def class_( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
@@ -79,13 +79,14 @@ class module_builder_t(object):
                                       , header_file=header_file
                                       , recursive=recursive)
 
-    def classes( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):
+    def classes( self, name=None, function=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
         return self.global_ns.classes( name=name
                                        , function=function
                                        , header_dir=header_dir
                                        , header_file=header_file
-                                       , recursive=recursive)
+                                       , recursive=recursive
+                                       , allow_empty=allow_empty)
 
     def variable( self, name=None, function=None, type=None, header_dir=None, header_file=None, recursive=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
@@ -97,14 +98,15 @@ class module_builder_t(object):
                                         , recursive=recursive)
     var = variable
 
-    def variables( self, name=None, function=None, type=None, header_dir=None, header_file=None, recursive=None ):
+    def variables( self, name=None, function=None, type=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
         return self.global_ns.variables( name=name
                                          , function=function
                                          , type=type
                                          , header_dir=header_dir
                                          , header_file=header_file
-                                         , recursive=recursive)
+                                         , recursive=recursive
+                                         , allow_empty=allow_empty)
     vars = variables
 
     def calldef( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
@@ -117,7 +119,7 @@ class module_builder_t(object):
                                        , header_file=header_file
                                        , recursive=recursive )
 
-    def calldefs( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+    def calldefs( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
         return self.global_ns.calldefs( name=name
                                         , function=function
@@ -125,7 +127,8 @@ class module_builder_t(object):
                                         , arg_types=arg_types
                                         , header_dir=header_dir
                                         , header_file=header_file
-                                        , recursive=recursive)
+                                        , recursive=recursive
+                                        , allow_empty=allow_empty)
 
     def operator( self, name=None, symbol=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None, recursive=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
@@ -137,7 +140,7 @@ class module_builder_t(object):
                                         , header_file=header_file
                                         , recursive=recursive )
 
-    def operators( self, name=None, symbol=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None, recursive=None ):
+    def operators( self, name=None, symbol=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
         return self.global_ns.operators( name=name
                                          , symbol=symbol
@@ -145,7 +148,8 @@ class module_builder_t(object):
                                          , arg_types=arg_types
                                          , header_dir=header_dir
                                          , header_file=header_file
-                                         , recursive=recursive )
+                                         , recursive=recursive
+                                         , allow_empty=allow_empty )
 
     def member_function( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
@@ -158,7 +162,7 @@ class module_builder_t(object):
                                                , recursive=recursive )
     mem_fun = member_function
 
-    def member_functions( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+    def member_functions( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
         return self.global_ns.member_functions( name=name
                                                 , function=function
@@ -166,7 +170,8 @@ class module_builder_t(object):
                                                 , arg_types=arg_types
                                                 , header_dir=header_dir
                                                 , header_file=header_file
-                                                , recursive=recursive)
+                                                , recursive=recursive
+                                                , allow_empty=allow_empty)
 
     mem_funs = member_functions
 
@@ -180,7 +185,7 @@ class module_builder_t(object):
                                            , header_file=header_file
                                            , recursive=recursive )
 
-    def constructors( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+    def constructors( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
         return self.global_ns.constructors( name=name
                                             , function=function
@@ -188,7 +193,8 @@ class module_builder_t(object):
                                             , arg_types=arg_types
                                             , header_dir=header_dir
                                             , header_file=header_file
-                                            , recursive=recursive)
+                                            , recursive=recursive
+                                            , allow_empty=allow_empty)
 
     def member_operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
@@ -201,7 +207,7 @@ class module_builder_t(object):
                                                , header_file=header_file
                                                , recursive=recursive )
 
-    def member_operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+    def member_operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
         return self.global_ns.member_operators( name=name
                                                 , symbol=symbol
@@ -210,7 +216,8 @@ class module_builder_t(object):
                                                 , arg_types=arg_types
                                                 , header_dir=header_dir
                                                 , header_file=header_file
-                                                , recursive=recursive )
+                                                , recursive=recursive
+                                                , allow_empty=allow_empty )
 
     def casting_operator( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
@@ -222,7 +229,7 @@ class module_builder_t(object):
                                                 , header_file=header_file
                                                 , recursive=recursive )
 
-    def casting_operators( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+    def casting_operators( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
         return self.global_ns.casting_operators( name=name
                                                  , function=function
@@ -230,7 +237,8 @@ class module_builder_t(object):
                                                  , arg_types=arg_types
                                                  , header_dir=header_dir
                                                  , header_file=header_file
-                                                 , recursive=recursive)
+                                                 , recursive=recursive
+                                                 , allow_empty=allow_empty)
 
     def enumeration( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
@@ -241,13 +249,14 @@ class module_builder_t(object):
                                            , recursive=recursive)
     enum = enumeration
 
-    def enumerations( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):
+    def enumerations( self, name=None, function=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """Please see :class:`decl_wrappers.scopedef_t` class documentation"""
         return self.global_ns.enumerations( name=name
                                             , function=function
                                             , header_dir=header_dir
                                             , header_file=header_file
-                                            , recursive=recursive)
+                                            , recursive=recursive
+                                            , allow_empty=allow_empty)
 
     enums = enumerations
 
@@ -257,11 +266,12 @@ class module_builder_t(object):
                                          , function=function
                                          , recursive=recursive )
 
-    def namespaces( self, name=None, function=None, recursive=None ):
+    def namespaces( self, name=None, function=None, recursive=None, allow_empty=None ):
         """Please see :class:`decl_wrappers.namespace_t` class documentation"""
         return self.global_ns.namespaces( name=name
                                           , function=function
-                                          , recursive=recursive )
+                                          , recursive=recursive
+                                          , allow_empty=allow_empty )
 
     def free_function( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """Please see :class:`decl_wrappers.namespace_t` class documentation"""
@@ -274,7 +284,7 @@ class module_builder_t(object):
                                              , recursive=recursive )
     free_fun = free_function
 
-    def free_functions( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+    def free_functions( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """Please see :class:`decl_wrappers.namespace_t` class documentation"""
         return self.global_ns.free_functions( name=name
                                               , function=function
@@ -282,7 +292,8 @@ class module_builder_t(object):
                                               , arg_types=arg_types
                                               , header_dir=header_dir
                                               , header_file=header_file
-                                              , recursive=recursive)
+                                              , recursive=recursive
+                                              , allow_empty=allow_empty)
     free_funs = free_functions
 
     def free_operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
@@ -296,7 +307,7 @@ class module_builder_t(object):
                                              , header_file=header_file
                                              , recursive=recursive )
 
-    def free_operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+    def free_operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """Please see :class:`decl_wrappers.namespace_t` class documentation"""
         return self.global_ns.free_operators( name=name
                                               , symbol=symbol
@@ -305,4 +316,5 @@ class module_builder_t(object):
                                               , arg_types=arg_types
                                               , header_dir=header_dir
                                               , header_file=header_file
-                                              , recursive=recursive )
+                                              , recursive=recursive
+                                              , allow_empty=allow_empty )
