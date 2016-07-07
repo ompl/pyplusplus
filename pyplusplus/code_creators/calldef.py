@@ -451,7 +451,7 @@ class mem_fun_v_wrapper_t( calldef_wrapper_t ):
         return declarations.member_function_type_t(
                 return_type=self.declaration.return_type
                 , class_inst=declarations.dummy_type_t( self.parent.full_name )
-                , arguments_types=[arg.type for arg in self.declaration.arguments]
+                , arguments_types=[arg.decl_type for arg in self.declaration.arguments]
                 , has_const=self.declaration.has_const )
 
     def create_declaration(self, name, has_virtual=True):
@@ -562,7 +562,7 @@ class mem_fun_protected_wrapper_t( calldef_wrapper_t ):
         return declarations.member_function_type_t(
                 return_type=self.declaration.return_type
                 , class_inst=declarations.dummy_type_t( self.parent.full_name )
-                , arguments_types=[arg.type for arg in self.declaration.arguments]
+                , arguments_types=[arg.decl_type for arg in self.declaration.arguments]
                 , has_const=self.declaration.has_const )
 
     def create_declaration(self, name):
@@ -633,7 +633,7 @@ class mem_fun_protected_s_wrapper_t( calldef_wrapper_t ):
     def function_type(self):
         return declarations.free_function_type_t(
                 return_type=self.declaration.return_type
-                , arguments_types=[arg.type for arg in self.declaration.arguments] )
+                , arguments_types=[arg.decl_type for arg in self.declaration.arguments] )
 
     def create_declaration(self, name):
         template = 'static %(return_type)s %(name)s( %(args)s )%(throw)s'
@@ -700,7 +700,7 @@ class mem_fun_protected_v_wrapper_t( calldef_wrapper_t ):
         return declarations.member_function_type_t(
                 return_type=self.declaration.return_type
                 , class_inst=declarations.dummy_type_t( self.parent.full_name )
-                , arguments_types=[arg.type for arg in self.declaration.arguments]
+                , arguments_types=[arg.decl_type for arg in self.declaration.arguments]
                 , has_const=self.declaration.has_const )
 
     def create_declaration(self, name):
@@ -808,7 +808,7 @@ class mem_fun_protected_pv_wrapper_t( calldef_wrapper_t ):
         return declarations.member_function_type_t(
                 return_type=self.declaration.return_type
                 , class_inst=declarations.dummy_type_t( self.parent.full_name )
-                , arguments_types=[arg.type for arg in self.declaration.arguments]
+                , arguments_types=[arg.decl_type for arg in self.declaration.arguments]
                 , has_const=self.declaration.has_const )
 
     def create_declaration(self):
@@ -868,7 +868,7 @@ class mem_fun_private_v_wrapper_t( calldef_wrapper_t ):
         return declarations.member_function_type_t(
                 return_type=self.declaration.return_type
                 , class_inst=declarations.dummy_type_t( self.parent.full_name )
-                , arguments_types=[arg.type for arg in self.declaration.arguments]
+                , arguments_types=[arg.decl_type for arg in self.declaration.arguments]
                 , has_const=self.declaration.has_const )
 
     def create_declaration(self):
@@ -927,7 +927,7 @@ class constructor_t( calldef_t ):
         calldef_t.__init__( self, function=constructor, wrapper=wrapper )
 
     def _create_arg_code( self, arg ):
-        temp = arg.type
+        temp = arg.decl_type
         if declarations.is_const( temp ):
             #By David Abrahams:
             #Function parameters declared consts are ignored by C++
@@ -1036,7 +1036,7 @@ class constructor_wrapper_t( calldef_wrapper_t ):
         answer = [ self._create_declaration() ]
         answer.append( ': ' + self._create_constructor_call() )
         answer.append( '  , ' +  self.parent.boost_wrapper_identifier + '(){' )
-        if( self.declaration.is_copy_constructor ):
+        if( declarations.is_copy_constructor(self.declaration) ):
             answer.append( self.indent( '// copy constructor' ) )
         elif not self.declaration.arguments:
             answer.append( self.indent( '// null constructor' ) )
@@ -1154,14 +1154,14 @@ class operator_t( registration_based.registration_based_t
         assert not declarations.is_unary_operator( self.declaration )
         decompose_type = declarations.decompose_type
         parent_decl_string = self.parent.declaration.decl_string
-        arg0 = decompose_type( self.declaration.arguments[0].type )[-1].decl_string
+        arg0 = decompose_type( self.declaration.arguments[0].decl_type )[-1].decl_string
         if isinstance( self.declaration, declarations.member_operator_t ):
             if parent_decl_string == arg0:
                 return self.SELF_POSITION.BOTH
             else:
                 return self.SELF_POSITION.FIRST #may be wrong in case ++, --, but any way boost.python does not expose them
         #now we deal with non global operators
-        arg1 = decompose_type( self.declaration.arguments[1].type )[-1].decl_string
+        arg1 = decompose_type( self.declaration.arguments[1].decl_type )[-1].decl_string
         if arg0 == arg1:
             assert parent_decl_string == arg0 #in this case I have bug in module creator
             return operator_t.SELF_POSITION.BOTH
@@ -1185,12 +1185,12 @@ class operator_t( registration_based.registration_based_t
             answer[0] = self_identifier
             type_ = None
             if len( self.declaration.arguments ) == 2:
-                type_ = self.declaration.arguments[1].type
+                type_ = self.declaration.arguments[1].decl_type
             else:
-                type_ = self.declaration.arguments[0].type
+                type_ = self.declaration.arguments[0].decl_type
             answer[2] = self._call_type_constructor( type_ )
         elif self_position == self.SELF_POSITION.SECOND:
-            answer[0] = self._call_type_constructor(self.declaration.arguments[0].type )
+            answer[0] = self._call_type_constructor(self.declaration.arguments[0].decl_type )
             answer[2] = self_identifier
         else:
             answer[0] = self_identifier
@@ -1288,7 +1288,7 @@ class casting_constructor_t( registration_based.registration_based_t
     def _create_impl(self):
         implicitly_convertible = algorithm.create_identifier( self, '::boost::python::implicitly_convertible' )
         from_arg = algorithm.create_identifier( self
-                                                ,  self.declaration.arguments[0].type.partial_decl_string)
+                                                ,  self.declaration.arguments[0].decl_type.partial_decl_string)
 
         to_name = declarations.full_name( self.declaration.parent, with_defaults=False )
         to_arg = algorithm.create_identifier( self, to_name )

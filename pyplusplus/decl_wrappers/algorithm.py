@@ -135,7 +135,7 @@ class registration_order:
         """Return list of problematic functions for function "calldef" """
         if 1 != len( calldef.required_args ):
             return []
-        arg_type = calldef.arguments[0].type
+        arg_type = calldef.arguments[0].decl_type
         if declarations.is_calldef_pointer( arg_type ):
             return []
         problematics = []
@@ -144,6 +144,6 @@ class registration_order:
                 continue
             if f.ignore:
                 continue
-            if None != registration_order.is_related( calldef.arguments[0].type, f.arguments[0].type ):
+            if None != registration_order.is_related( calldef.arguments[0].decl_type, f.arguments[0].decl_type ):
                 problematics.append( f )
         return problematics

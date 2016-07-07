@@ -149,8 +149,8 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
         return operator_creators
 
     def _generate_noncopyable(self):
-        noncopyable_vars = self.declaration.find_noncopyable_vars()
-        copy_constr = self.declaration.find_copy_constructor()
+        noncopyable_vars = declarations.find_noncopyable_vars(self.declaration)
+        copy_constr = declarations.find_copy_constructor(self.declaration)
 
         if self.declaration.noncopyable \
            or copy_constr and copy_constr.is_artificial and noncopyable_vars:
@@ -220,7 +220,7 @@ class class_t( scoped.scoped_t, registration_based.registration_based_t ):
         used_init = None
         inits = [x for x in self.creators if isinstance( x, calldef.constructor_t )]
 
-        trivial_constructor = self.declaration.find_trivial_constructor()
+        trivial_constructor = declarations.find_trivial_constructor(self.declaration)
 
         if self.declaration.no_init:
             result.append( ", " )

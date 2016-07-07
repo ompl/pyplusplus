@@ -167,7 +167,7 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
             return '' 
         if not self.parent.name:
             return messages.W1057 % str( self )
-        all_types = [ arg.type for arg in self.arguments ]
+        all_types = [ arg.decl_type for arg in self.arguments ]
         all_types.append( self.return_type )
         for some_type in all_types:
             if isinstance( some_type, declarations.ellipsis_t ):
@@ -227,10 +227,10 @@ class calldef_t(decl_wrapper.decl_wrapper_t):
             msgs.append( messages.W1050 % str(self.return_type) )
 
         for index, arg in enumerate( self.arguments ):
-            if suspicious_type( arg.type ):
+            if suspicious_type( arg.decl_type ):
                 msgs.append( messages.W1009 % ( arg.name, index ) )
-            if is_double_ptr( arg.type ):
-                msgs.append( messages.W1051 % ( arg.name, index, str(arg.type) ) )
+            if is_double_ptr( arg.decl_type ):
+                msgs.append( messages.W1051 % ( arg.name, index, str(arg.decl_type) ) )
 
         if False == self.overridable:
             msgs.append( self._non_overridable_reason)
@@ -345,7 +345,7 @@ class constructor_t( declarations.constructor_t, calldef_t ):
         """
         if self.parent.is_abstract: #user is not able to create an instance of the class
             return False
-        if self.is_copy_constructor:
+        if declarations.is_copy_constructor(self):
             return False
         if not( len( self.arguments) and len( self.required_args ) < 2 ):
             return False
@@ -395,7 +395,7 @@ class operators_helper:
             return False #Boost.Python does not support member operator<< :-(
         if isinstance( oper, declarations.free_operator_t ) and args_len != 2:
             return False
-        if not declarations.is_same( oper.return_type, oper.arguments[0].type ):
+        if not declarations.is_same( oper.return_type, oper.arguments[0].decl_type ):
             return False
         type_ = oper.return_type
         if not declarations.is_reference( type_ ):
@@ -405,7 +405,7 @@ class operators_helper:
             return False
         if args_len == 2:
             #second argument should has "T const &" type, otherwise the code will not compile
-            tmp = oper.arguments[1].type
+            tmp = oper.arguments[1].decl_type
             if not declarations.is_reference( tmp ):
                 return False
             tmp = declarations.remove_reference( tmp )
@@ -444,10 +444,10 @@ class operators_helper:
             else:
                 return None
 
-        arg_1_class = find_class( oper.arguments[0].type )
+        arg_1_class = find_class( oper.arguments[0].decl_type )
         arg_2_class = None
         if 2 == len( oper.arguments ):
-            arg_2_class = find_class( oper.arguments[1].type )
+            arg_2_class = find_class( oper.arguments[1].decl_type )
 
         if arg_1_class:
             if declarations.is_std_ostream( arg_1_class ) or declarations.is_std_wostream( arg_1_class ):

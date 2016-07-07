@@ -16,7 +16,7 @@ class typedef_as_pyvar_t(code_creator.code_creator_t, declaration_based.declarat
     def _create_impl(self):
         return "%(complete_py_name)s = %(type)s" \
                 % dict( complete_py_name=self.complete_py_name
-                        , type=ctypes_formatter.as_ctype( self.declaration.type, self.top_parent.treat_char_ptr_as_binary_data ) )
+                        , type=ctypes_formatter.as_ctype( self.declaration.decl_type, self.top_parent.treat_char_ptr_as_binary_data ) )
 
     def _get_system_files_impl( self ):
         return []

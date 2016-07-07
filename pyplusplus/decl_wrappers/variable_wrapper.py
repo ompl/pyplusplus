@@ -98,7 +98,7 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
                                    , doc=__use_make_functions_doc__)
 
     def __should_be_exposed_by_address_only(self):
-        type_ = declarations.remove_alias( self.type )
+        type_ = declarations.remove_alias( self.decl_type )
         type_ = declarations.remove_const( type_ )
         type_ = declarations.remove_pointer( type_ )
         if not declarations.class_traits.is_my_case( type_ ):
@@ -150,7 +150,7 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
                              , doc= __expose_value_doc__ )
 
     def __find_out_is_read_only(self):
-        type_ = declarations.remove_alias( self.type )
+        type_ = declarations.remove_alias( self.decl_type )
 
         if isinstance( type_, declarations.const_t ):
             return True
@@ -190,9 +190,9 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
         if self.bits == 0 and self.name == "":
             return messages.W1034
         if not self.expose_address:
-            if declarations.is_array( self.type ) and declarations.array_size( self.type ) < 1:
+            if declarations.is_array( self.decl_type ) and declarations.array_size( self.decl_type ) < 1:
                 return messages.W1045
-        type_ = declarations.remove_alias( self.type )
+        type_ = declarations.remove_alias( self.decl_type )
         type_ = declarations.remove_const( type_ )
         if declarations.is_pointer( type_ ):
             if not self.expose_address and self.type_qualifiers.has_static:
@@ -230,10 +230,10 @@ class variable_t(decl_wrapper.decl_wrapper_t, declarations.variable_t):
         explanation = []
         if self.bits:
             explanation.append( messages.W1024 % self.name )
-        if declarations.is_pointer( self.type ):
+        if declarations.is_pointer( self.decl_type ):
             explanation.append( messages.W1025 % self.name )
-        if declarations.is_reference( self.type ):
+        if declarations.is_reference( self.decl_type ):
             explanation.append( messages.W1026 % self.name )
-        if declarations.is_array( self.type ):
+        if declarations.is_array( self.decl_type ):
             explanation.append( messages.W1027 % self.name)
         return explanation

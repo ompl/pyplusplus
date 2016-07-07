@@ -147,7 +147,7 @@ class free_fun_transformed_wrapper_t( sealed_fun_transformed_wrapper_t ):
     def function_type(self):
         return declarations.free_function_type_t(
                   return_type=self.controller.wrapper_return_type
-                , arguments_types=[ arg.type for arg in self.controller.wrapper_args ] )
+                , arguments_types=[ arg.decl_type for arg in self.controller.wrapper_args ] )
 
     def wrapper_name( self ):
         return self.ft.unique_name
@@ -204,9 +204,9 @@ class mem_fun_transformed_wrapper_t( sealed_fun_transformed_wrapper_t ):
         return not isinstance( self.parent, class_declaration.class_wrapper_t )
 
     def function_type(self):
-        args = [arg.type for arg in self.controller.wrapper_args] 
+        args = [arg.decl_type for arg in self.controller.wrapper_args] 
         if self.controller.inst_arg:
-            args.insert( 0, self.controller.inst_arg.type )
+            args.insert( 0, self.controller.inst_arg.decl_type )
         return declarations.free_function_type_t(
                   return_type=self.controller.wrapper_return_type
                 , arguments_types=args )
@@ -320,7 +320,7 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
 
     def default_function_type(self):
         cntrl = self.controller.default_controller
-        args = [cntrl.inst_arg.type] + [arg.type for arg in cntrl.wrapper_args] 
+        args = [cntrl.inst_arg.decl_type] + [arg.decl_type for arg in cntrl.wrapper_args] 
         return declarations.free_function_type_t( return_type=cntrl.wrapper_return_type
                                                   , arguments_types=args )
 
@@ -339,7 +339,7 @@ class mem_fun_v_transformed_wrapper_t( calldef_wrapper_t ):
         tmpl_values['wrapped_class'] = declarations.full_name( self.declaration.parent )
         tmpl_values['wrapped_inst'] = cntrl.inst_arg.name
         tmpl_values['wrapped_inst_constness'] = ''
-        if declarations.is_const( declarations.remove_reference( cntrl.inst_arg.type ) ):
+        if declarations.is_const( declarations.remove_reference( cntrl.inst_arg.decl_type ) ):
             tmpl_values['wrapped_inst_constness'] = 'const'
             
         decl_vars = cntrl.variables[:]

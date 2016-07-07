@@ -96,7 +96,7 @@ class indexing_suite2_t( object ):
     @property
     def container_traits( self ):
         "reference to container traits. See pygccxml documentation for more information."
-        return self.container_class.container_traits
+        return declarations.find_container_traits(self.container_class)
 
     def _get_call_policies( self ):
         if self.__call_policies:

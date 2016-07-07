@@ -55,7 +55,7 @@ class transformer_t(object):
         if isinstance( reference, int ) and reference == return_:
             return self.function.return_type
         else:
-            return self.get_argument( reference ).type
+            return self.get_argument( reference ).decl_type
 
     def configure_mem_fun( self, controller ):
         """Transformers should override the method, in order to define custom
