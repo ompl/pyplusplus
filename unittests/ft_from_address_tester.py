@@ -27,7 +27,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.global_ns.calldefs().create_with_signature = True
         mb.calldef( 'sum_matrix' ).add_transformation( ft.from_address(0) )
         ptr_ptr = mb.class_( 'ptr_ptr_t' )
-        ptr_ptr.var( 'value' ).expose_address = True
+        ptr_ptr.variable( 'value' ).expose_address = True
         ptr_ptr.mem_fun( 'get_v_address' ).add_transformation( ft.from_address(0 ) )
 
     def run_tests(self, module):
