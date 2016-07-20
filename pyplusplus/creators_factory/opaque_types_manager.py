@@ -40,11 +40,11 @@ class manager_t( object ):
         opaque_types = []
         is_opaque_policy = decl_wrappers.is_return_opaque_pointer_policy
         if isinstance( decl, declarations.variable_t ):
-            opaque_decl = find_out_opaque_decl( decl.type, ensure_opaque_decl=True )
+            opaque_decl = find_out_opaque_decl( decl.decl_type, ensure_opaque_decl=True )
             if opaque_decl:
                 opaque_types.append( opaque_decl )
             elif is_opaque_policy( decl.getter_call_policies ) or is_opaque_policy( decl.setter_call_policies ):
-                opaque_decl = find_out_opaque_decl( decl.type, ensure_opaque_decl=False )
+                opaque_decl = find_out_opaque_decl( decl.decl_type, ensure_opaque_decl=False )
                 if opaque_decl:
                     opaque_types.append( opaque_decl )
             else:

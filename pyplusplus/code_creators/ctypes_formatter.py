@@ -141,7 +141,7 @@ class type_converter_t(declarations.type_visitor_t):
     def visit_declarated( self ):
         #TODO: the follwoing code removes typedefs
         if isinstance( self.user_type.declaration, declarations.typedef_t ):
-            base_visitor = self.create_converter( self.user_type.declaration.type )
+            base_visitor = self.create_converter( self.user_type.declaration.decl_type )
             return declarations.apply_visitor( base_visitor, base_visitor.user_type )
         else:
             return self.decl_formatter( self.user_type.declaration )

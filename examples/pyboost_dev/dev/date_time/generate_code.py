@@ -58,7 +58,7 @@ class code_generator_t(object):
 
         local_date_time = mb.class_( lambda decl: decl.name.startswith( 'local_date_time_base<' ) )
         for c in local_date_time.constructors():
-            if not c.is_copy_constructor:
+            if not declarations.is_copy_constructor( c ):
                 local_date_time.remove_declaration( c )
 
         mb.run_query_optimizer()

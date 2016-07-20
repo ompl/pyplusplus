@@ -82,7 +82,7 @@ class class_common_details_t( object ):
         If the class is not STD container, this property will contain None"
         """
         if self._indexing_suite is None:
-            if self.container_traits:
+            if declarations.find_container_traits(self):
                 if self._isuite_version == 1:
                     self._indexing_suite = isuite1.indexing_suite1_t( self )
                 else:
@@ -296,27 +296,27 @@ class class_t( class_common_details_t
         return self._wrapper_code
 
     def _get_null_constructor_body(self):
-        c = self.find_trivial_constructor()
+        c = declarations.find_trivial_constructor(self)
         if c:
             return c.body
         else:
             return ''
     def _set_null_constructor_body(self, body):
-        c = self.find_trivial_constructor()
+        c = declarations.find_trivial_constructor(self)
         if c:
             c.body = body
     null_constructor_body = property( _get_null_constructor_body, _set_null_constructor_body
                                       , doc="null constructor code, that will be added as is to the null constructor of class-wrapper" )
 
     def _get_copy_constructor_body(self):
-        c = self.find_copy_constructor()
+        c = declarations.find_copy_constructor(self)
         if c:
             return c.body
         else:
             return ''
 
     def _set_copy_constructor_body(self, body):
-        c = self.find_copy_constructor()
+        c = declarations.find_copy_constructor(self)
         if c:
             c.body = body
     copy_constructor_body = property( _get_copy_constructor_body, _set_copy_constructor_body
@@ -705,17 +705,17 @@ class class_t( class_common_details_t
     def _get_no_init( self ):
         if None is self._no_init and False == bool( self.indexing_suite ):
             #select all public constructors and exclude copy constructor
-            cs = self.constructors( lambda c: not c.is_copy_constructor and c.access_type == 'public'
+            cs = self.constructors( lambda c: not declarations.is_copy_constructor(c) and c.access_type == 'public'
                                     , recursive=False, allow_empty=True )
 
             has_suitable_constructor = bool( cs )
-            if cs and len(cs) == 1 and cs[0].is_trivial_constructor and self.find_noncopyable_vars():
+            if cs and len(cs) == 1 and declarations.is_trivial_constructor(cs[0]) and declarations.find_noncopyable_vars(self):
                 has_suitable_constructor = False
 
             has_nonpublic_destructor = declarations.has_destructor( self ) \
                                        and not declarations.has_public_destructor( self )
 
-            trivial_constructor = self.find_trivial_constructor()
+            trivial_constructor = declarations.find_trivial_constructor(self)
 
             if has_nonpublic_destructor \
                or ( self.is_abstract and not self.is_wrapper_needed() ) \

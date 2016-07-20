@@ -29,9 +29,9 @@ class types_database_t( object ):
             if not isinstance( decl, declarations.constructor_t ):
                 self._update_db( self.__return_types, decl.return_type )
             for arg in decl.arguments:
-                self._update_db( self.__arguments_types, arg.type )
+                self._update_db( self.__arguments_types, arg.decl_type )
         elif isinstance( decl, declarations.variable_t ):
-            self._update_db( self.__variables, decl.type )
+            self._update_db( self.__variables, decl.decl_type )
         else:
             assert not "types_database_t class can not process " + str( decl )
 

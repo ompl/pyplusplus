@@ -213,7 +213,7 @@ class name_based_recognizer_t( property_recognizer_i ):
     def check_type_compatibility( self, fget, fset ):
         #algorithms allows "const" differences between types
         t1 = fget.return_type
-        t2 = fset.arguments[0].type
+        t2 = fset.arguments[0].decl_type
 
         if declarations.is_same( t1, t2 ):
             return True

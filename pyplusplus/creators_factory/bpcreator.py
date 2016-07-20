@@ -585,14 +585,14 @@ class bpcreator_t( declarations.decl_visitor_t ):
 
             #next constructors are not present in code, but compiler generated
             #Boost.Python requiers them to be declared in the wrapper class
-            noncopyable_vars = self.curr_decl.find_noncopyable_vars()
+            noncopyable_vars = declarations.find_noncopyable_vars(self.curr_decl)
 
-            copy_constr = self.curr_decl.find_copy_constructor()
+            copy_constr = declarations.find_copy_constructor(self.curr_decl)
             if not self.curr_decl.noncopyable and copy_constr and copy_constr.is_artificial:
                 cccc = code_creators.copy_constructor_wrapper_t( constructor=copy_constr)
                 wrapper.adopt_creator( cccc )
 
-            trivial_constr = self.curr_decl.find_trivial_constructor()
+            trivial_constr = declarations.find_trivial_constructor(self.curr_decl)
             if trivial_constr and trivial_constr.is_artificial and not noncopyable_vars:
                 tcons = code_creators.null_constructor_wrapper_t( constructor=trivial_constr )
                 wrapper.adopt_creator( tcons )
@@ -691,15 +691,15 @@ class bpcreator_t( declarations.decl_visitor_t ):
         if not self.curr_decl.expose_value:
             return
 
-        if declarations.is_array( self.curr_decl.type ):
-            if self._register_array_1( self.curr_decl.type ):
-                array_1_registrator = code_creators.array_1_registrator_t( array_type=self.curr_decl.type )
+        if declarations.is_array( self.curr_decl.decl_type ):
+            if self._register_array_1( self.curr_decl.decl_type ):
+                array_1_registrator = code_creators.array_1_registrator_t( array_type=self.curr_decl.decl_type )
                 self.curr_code_creator.adopt_creator( array_1_registrator )
 
         if isinstance( self.curr_decl.parent, declarations.namespace_t ):
             maker = None
             wrapper = None
-            if declarations.is_array( self.curr_decl.type ):
+            if declarations.is_array( self.curr_decl.decl_type ):
                 wrapper = code_creators.array_gv_wrapper_t( variable=self.curr_decl )
                 maker = code_creators.array_gv_t( variable=self.curr_decl, wrapper=wrapper )
             else:
@@ -712,13 +712,13 @@ class bpcreator_t( declarations.decl_visitor_t ):
             if self.curr_decl.bits != None:
                 wrapper = code_creators.bit_field_wrapper_t( variable=self.curr_decl )
                 maker = code_creators.bit_field_t( variable=self.curr_decl, wrapper=wrapper )
-            elif declarations.is_array( self.curr_decl.type ):
+            elif declarations.is_array( self.curr_decl.decl_type ):
                 wrapper = code_creators.array_mv_wrapper_t( variable=self.curr_decl )
                 maker = code_creators.array_mv_t( variable=self.curr_decl, wrapper=wrapper )
-            elif declarations.is_pointer( self.curr_decl.type ):
+            elif declarations.is_pointer( self.curr_decl.decl_type ):
                 wrapper = code_creators.member_variable_wrapper_t( variable=self.curr_decl )
                 maker = code_creators.member_variable_t( variable=self.curr_decl, wrapper=wrapper )
-            elif declarations.is_reference( self.curr_decl.type ):
+            elif declarations.is_reference( self.curr_decl.decl_type ):
                 if None is self.curr_decl.getter_call_policies:
                     self.curr_decl.getter_call_policies = self.__call_policies_resolver( self.curr_decl, 'get' )
                 if None is self.curr_decl.setter_call_policies:

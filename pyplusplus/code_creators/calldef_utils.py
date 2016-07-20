@@ -30,12 +30,12 @@ class argument_utils_t:
 
     def __should_use_enum_wa( self, arg ):
         global use_enum_workaround
-        if not declarations.is_enum( arg.type ):
+        if not declarations.is_enum( arg.decl_type ):
             return False
         if use_enum_workaround:
             return True
         #enum belongs to the class we are working on
-        if self.__decl.parent is declarations.enum_declaration( arg.type ).parent \
+        if self.__decl.parent is declarations.enum_declaration( arg.decl_type ).parent \
            and isinstance( self.__decl, declarations.constructor_t ):
             return True
         return False
@@ -52,12 +52,12 @@ class argument_utils_t:
             result.append( boost_arg )
             result.append( '("%s")' % arg.name )
             if self.__decl.use_default_arguments and arg.default_value:
-                if not declarations.is_pointer( arg.type ) or arg.default_value != '0':
-                    arg_type_no_alias = declarations.remove_alias( arg.type )
+                if not declarations.is_pointer( arg.decl_type ) or arg.default_value != '0':
+                    arg_type_no_alias = declarations.remove_alias( arg.decl_type )
                     if declarations.is_fundamental( arg_type_no_alias ) \
                        and declarations.is_integral( arg_type_no_alias ) \
                        and not arg.default_value.startswith( arg_type_no_alias.decl_string ):
-                        result.append( '=(%s)(%s)' % ( arg.type.partial_decl_string
+                        result.append( '=(%s)(%s)' % ( arg.decl_type.partial_decl_string
                                                        , arg.default_value ) )
                     elif self.__should_use_enum_wa( arg ):
                         #Work around for bug/missing functionality in boost.python.
@@ -80,7 +80,7 @@ class argument_utils_t:
     def args_declaration( self ):
         args = []
         for index, arg in enumerate( self.__args ):
-            result = arg.type.partial_decl_string + ' ' + self.argument_name(index)
+            result = arg.decl_type.partial_decl_string + ' ' + self.argument_name(index)
             if arg.default_value:
                 result += '=%s' % arg.default_value
             args.append( result )
@@ -91,7 +91,7 @@ class argument_utils_t:
     def call_args( self ):
         params = []
         for index, arg in enumerate( self.__args ):
-            params.append( decl_wrappers.python_traits.call_traits( arg.type )
+            params.append( decl_wrappers.python_traits.call_traits( arg.decl_type )
                            % self.argument_name( index ) )
         return ', '.join( params )
 

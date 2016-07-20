@@ -53,9 +53,9 @@ class output_t( transformer.transformer_t ):
         self.arg = self.get_argument( arg_ref )
         self.arg_index = self.function.arguments.index( self.arg )
 
-        if not is_ref_or_ptr( self.arg.type ):
+        if not is_ref_or_ptr( self.arg.decl_type ):
             raise ValueError( '%s\nin order to use "output" transformation, argument %s type must be a reference or a pointer (got %s).' ) \
-                  % ( function, self.arg_ref.name, arg.type)
+                  % ( function, self.arg_ref.name, arg.decl_type)
 
     def __str__(self):
         return "output(%d)"%(self.arg.name)
@@ -68,7 +68,7 @@ class output_t( transformer.transformer_t ):
         #removing arg from the function wrapper definition
         controller.remove_wrapper_arg( self.arg.name )
         #declaring new variable, which will keep result
-        var_name = controller.declare_variable( remove_ref_or_ptr( self.arg.type ), self.arg.name )
+        var_name = controller.declare_variable( remove_ref_or_ptr( self.arg.decl_type ), self.arg.name )
         #adding just declared variable to the original function call expression
         controller.modify_arg_expression( self.arg_index, var_name )
         #adding the variable to return variables list
@@ -82,7 +82,7 @@ class output_t( transformer.transformer_t ):
         tmpl = string.Template(
             '$name = boost::python::extract< $type >( pyplus_conv::get_out_argument( $py_result, "$name" ) );' )
         store_py_result_in_arg = tmpl.substitute( name=self.arg.name
-                                                  , type=remove_ref_or_ptr( self.arg.type ).decl_string
+                                                  , type=remove_ref_or_ptr( self.arg.decl_type ).decl_string
                                                   , py_result=controller.py_result_variable.name )
         controller.add_py_post_call_code( store_py_result_in_arg )
 
@@ -121,9 +121,9 @@ class type_modifier_t(transformer.transformer_t):
 
     def __configure_sealed( self, controller ):
         w_arg = controller.find_wrapper_arg( self.arg.name )
-        w_arg.type = self.modifier( self.arg.type )
-        if not declarations.is_convertible( w_arg.type, self.arg.type ):
-            casting_code = 'reinterpret_cast< %s >( %s )' % ( self.arg.type, w_arg.name )
+        w_arg.decl_type = self.modifier( self.arg.decl_type )
+        if not declarations.is_convertible( w_arg.decl_type, self.arg.decl_type ):
+            casting_code = 'reinterpret_cast< %s >( %s )' % ( self.arg.decl_type, w_arg.name )
             controller.modify_arg_expression(self.arg_index, casting_code)
 
     def __configure_v_mem_fun_default( self, controller ):
@@ -158,9 +158,9 @@ class input_t(type_modifier_t):
         """
         type_modifier_t.__init__( self, function, arg_ref, remove_ref_or_ptr )
 
-        if not is_ref_or_ptr( self.arg.type ):
+        if not is_ref_or_ptr( self.arg.decl_type ):
             raise ValueError( '%s\nin order to use "input" transformation, argument %s type must be a reference or a pointer (got %s).' ) \
-                  % ( function, self.arg_ref.name, arg.type)
+                  % ( function, self.arg_ref.name, arg.decl_type)
 
     def __str__(self):
         return "input(%s)"%(self.arg.name)
@@ -186,9 +186,9 @@ class from_address_t(type_modifier_t):
         modifier = lambda type_: declarations.FUNDAMENTAL_TYPES[ 'unsigned int' ]
         type_modifier_t.__init__( self, function, arg_ref, modifier )
 
-        if not is_ptr_or_array( self.arg.type ):
+        if not is_ptr_or_array( self.arg.decl_type ):
             raise ValueError( '%s\nin order to use "from_address_t" transformation, argument %s type must be a pointer or a array (got %s).' ) \
-                  % ( function, self.arg_ref.name, arg.type)
+                  % ( function, self.arg_ref.name, arg.decl_type)
 
     def __str__(self):
         return "from_address(%s)"%(self.arg.name)
@@ -212,16 +212,16 @@ class inout_t(transformer.transformer_t):
         self.arg = self.get_argument( arg_ref )
         self.arg_index = self.function.arguments.index( self.arg )
 
-        if not is_ref_or_ptr( self.arg.type ):
+        if not is_ref_or_ptr( self.arg.decl_type ):
             raise ValueError( '%s\nin order to use "inout" transformation, argument %s type must be a reference or a pointer (got %s).' ) \
-                  % ( function, self.arg_ref.name, arg.type)
+                  % ( function, self.arg_ref.name, arg.decl_type)
 
     def __str__(self):
         return "inout(%s)"%(self.arg.name)
 
     def __configure_sealed(self, controller):
         w_arg = controller.find_wrapper_arg( self.arg.name )
-        w_arg.type = remove_ref_or_ptr( self.arg.type )
+        w_arg.decl_type = remove_ref_or_ptr( self.arg.decl_type )
         #adding the variable to return variables list
         controller.return_variable( w_arg.name )
 
@@ -232,7 +232,7 @@ class inout_t(transformer.transformer_t):
         tmpl = string.Template(
             '$name = boost::python::extract< $type >( pyplus_conv::get_out_argument( $py_result, "$name" ) );' )
         store_py_result_in_arg = tmpl.substitute( name=self.arg.name
-                                                  , type=remove_ref_or_ptr( self.arg.type ).decl_string
+                                                  , type=remove_ref_or_ptr( self.arg.decl_type ).decl_string
                                                   , py_result=controller.py_result_variable.name )
         controller.add_py_post_call_code( store_py_result_in_arg )
 
@@ -283,12 +283,12 @@ class input_static_array_t(transformer.transformer_t):
         self.arg = self.get_argument( arg_ref )
         self.arg_index = self.function.arguments.index( self.arg )
 
-        if not is_ptr_or_array( self.arg.type ):
+        if not is_ptr_or_array( self.arg.decl_type ):
             raise ValueError( '%s\nin order to use "input_array" transformation, argument %s type must be a array or a pointer (got %s).' ) \
-                  % ( function, self.arg.name, self.arg.type)
+                  % ( function, self.arg.name, self.arg.decl_type)
 
         self.array_size = size
-        self.array_item_type = declarations.remove_const( declarations.array_item_type( self.arg.type ) )
+        self.array_item_type = declarations.remove_const( declarations.array_item_type( self.arg.decl_type ) )
 
     def __str__(self):
         return "input_array(%s,%d)"%( self.arg.name, self.array_size)
@@ -300,7 +300,7 @@ class input_static_array_t(transformer.transformer_t):
     def __configure_sealed(self, controller):
         global _seq2arr
         w_arg = controller.find_wrapper_arg( self.arg.name )
-        w_arg.type = declarations.dummy_type_t( "boost::python::object" )
+        w_arg.decl_type = declarations.dummy_type_t( "boost::python::object" )
 
         # Declare a variable that will hold the C array...
         native_array = controller.declare_variable( self.array_item_type
@@ -361,12 +361,12 @@ class output_static_array_t(transformer.transformer_t):
         self.arg = self.get_argument( arg_ref )
         self.arg_index = self.function.arguments.index( self.arg )
 
-        if not is_ptr_or_array( self.arg.type ):
+        if not is_ptr_or_array( self.arg.decl_type ):
             raise ValueError( '%s\nin order to use "output_array" transformation, argument %s type must be a array or a pointer (got %s).' ) \
-                  % ( function, self.arg.name, self.arg.type)
+                  % ( function, self.arg.name, self.arg.decl_type)
 
         self.array_size = size
-        self.array_item_type = declarations.array_item_type( self.arg.type )
+        self.array_item_type = declarations.array_item_type( self.arg.decl_type )
 
     def __str__(self):
         return "output_array(%s,%d)"%( self.arg.name, self.array_size)
@@ -453,12 +453,12 @@ class inout_static_array_t(transformer.transformer_t):
         self.arg = self.get_argument( arg_ref )
         self.arg_index = self.function.arguments.index( self.arg )
 
-        if not is_ptr_or_array( self.arg.type ):
+        if not is_ptr_or_array( self.arg.decl_type ):
             raise ValueError( '%s\nin order to use "inout_array" transformation, argument %s type must be a array or a pointer (got %s).' ) \
-                  % ( function, self.arg.name, self.arg.type)
+                  % ( function, self.arg.name, self.arg.decl_type)
 
         self.array_size = size
-        self.array_item_type = declarations.remove_const( declarations.array_item_type( self.arg.type ) )
+        self.array_item_type = declarations.remove_const( declarations.array_item_type( self.arg.decl_type ) )
 
     def __str__(self):
         return "inout_array(%s,%d)"%( self.arg.name, self.array_size)
@@ -471,7 +471,7 @@ class inout_static_array_t(transformer.transformer_t):
         global _seq2arr
         global _arr2seq
         w_arg = controller.find_wrapper_arg( self.arg.name )
-        w_arg.type = declarations.dummy_type_t( "boost::python::object" )
+        w_arg.decl_type = declarations.dummy_type_t( "boost::python::object" )
 
         # Declare a variable that will hold the C array...
         native_array = controller.declare_variable( self.array_item_type
@@ -559,13 +559,13 @@ class input_static_matrix_t(transformer.transformer_t):
         self.arg = self.get_argument( arg_ref )
         self.arg_index = self.function.arguments.index( self.arg )
 
-        if not is_ptr_or_array( self.arg.type ):
+        if not is_ptr_or_array( self.arg.decl_type ):
             raise ValueError( '%s\nin order to use "input_matrix" transformation, argument %s type must be a array or a pointer (got %s).' ) \
-                  % ( function, self.arg.name, self.arg.type)
+                  % ( function, self.arg.name, self.arg.decl_type)
 
         self.rows = rows
         self.columns = columns
-        self.matrix_item_type = declarations.remove_const( declarations.array_item_type( declarations.array_item_type( self.arg.type ) ) )
+        self.matrix_item_type = declarations.remove_const( declarations.array_item_type( declarations.array_item_type( self.arg.decl_type ) ) )
 
     def __str__(self):
         return "input_matrix(%s,%d,%d)"%( self.arg.name, self.rows, self.columns)
@@ -577,7 +577,7 @@ class input_static_matrix_t(transformer.transformer_t):
     def __configure_sealed(self, controller):
         global _pymatrix2cmatrix
         w_arg = controller.find_wrapper_arg( self.arg.name )
-        w_arg.type = declarations.dummy_type_t( "boost::python::object" )
+        w_arg.decl_type = declarations.dummy_type_t( "boost::python::object" )
 
         # Declare a variable that will hold the C matrix...
         native_matrix = controller.declare_variable( self.matrix_item_type
@@ -644,13 +644,13 @@ class output_static_matrix_t(transformer.transformer_t):
         self.arg = self.get_argument( arg_ref )
         self.arg_index = self.function.arguments.index( self.arg )
 
-        if not is_ptr_or_array( self.arg.type ):
+        if not is_ptr_or_array( self.arg.decl_type ):
             raise ValueError( '%s\nin order to use "output_matrix" transformation, argument %s type must be a array or a pointer (got %s).' ) \
-                  % ( function, self.arg.name, self.arg.type)
+                  % ( function, self.arg.name, self.arg.decl_type)
 
         self.rows = rows
         self.columns = columns
-        self.matrix_item_type = declarations.remove_const( declarations.array_item_type( declarations.array_item_type( self.arg.type ) ) )
+        self.matrix_item_type = declarations.remove_const( declarations.array_item_type( declarations.array_item_type( self.arg.decl_type ) ) )
 
     def __str__(self):
         return "output_matrix(%s,%d,%d)"%( self.arg.name, self.rows, self.columns)
@@ -741,13 +741,13 @@ class inout_static_matrix_t(transformer.transformer_t):
         self.arg = self.get_argument( arg_ref )
         self.arg_index = self.function.arguments.index( self.arg )
 
-        if not is_ptr_or_array( self.arg.type ):
+        if not is_ptr_or_array( self.arg.decl_type ):
             raise ValueError( '%s\nin order to use "inout_matrix" transformation, argument %s type must be a array or a pointer (got %s).' ) \
-                  % ( function, self.arg.name, self.arg.type)
+                  % ( function, self.arg.name, self.arg.decl_type)
 
         self.rows = rows
         self.columns = columns
-        self.matrix_item_type = declarations.remove_const( declarations.array_item_type( declarations.array_item_type( self.arg.type ) ) )
+        self.matrix_item_type = declarations.remove_const( declarations.array_item_type( declarations.array_item_type( self.arg.decl_type ) ) )
 
     def __str__(self):
         return "inout_matrix(%s,%d,%d)"%( self.arg.name, self.rows, self.columns)
@@ -760,7 +760,7 @@ class inout_static_matrix_t(transformer.transformer_t):
         global _pymatrix2cmatrix
         global _cmatrix2pymatrix
         w_arg = controller.find_wrapper_arg( self.arg.name )
-        w_arg.type = declarations.dummy_type_t( "boost::python::object" )
+        w_arg.decl_type = declarations.dummy_type_t( "boost::python::object" )
 
         # Declare a variable that will hold the C matrix...
         native_matrix = controller.declare_variable( self.matrix_item_type
@@ -846,15 +846,15 @@ class input_c_buffer_t(transformer.transformer_t):
         self.size_arg = self.get_argument( size_arg_ref )
         self.size_arg_index = self.function.arguments.index( self.size_arg )
 
-        if not is_ptr_or_array( self.buffer_arg.type ):
+        if not is_ptr_or_array( self.buffer_arg.decl_type ):
             raise ValueError( '%s\nin order to use "input_c_buffer" transformation, "buffer" argument %s type must be a array or a pointer (got %s).' ) \
-                  % ( function, self.buffer_arg.name, self.buffer_arg.type)
+                  % ( function, self.buffer_arg.name, self.buffer_arg.decl_type)
 
-        if not declarations.is_integral( self.size_arg.type ):
+        if not declarations.is_integral( self.size_arg.decl_type ):
             raise ValueError( '%s\nin order to use "input_c_buffer" transformation, "size" argument %s type must be an integral type (got %s).' ) \
-                  % ( function, self.size_arg.name, self.size_arg.type)
+                  % ( function, self.size_arg.name, self.size_arg.decl_type)
 
-        self.buffer_item_type = declarations.remove_const( declarations.array_item_type( self.buffer_arg.type ) )
+        self.buffer_item_type = declarations.remove_const( declarations.array_item_type( self.buffer_arg.decl_type ) )
 
     def __str__(self):
         return "input_c_buffer(buffer arg=%s, size arg=%s)" \
@@ -867,12 +867,12 @@ class input_c_buffer_t(transformer.transformer_t):
     def __configure_sealed(self, controller):
         global _seq2arr
         w_buffer_arg = controller.find_wrapper_arg( self.buffer_arg.name )
-        w_buffer_arg.type = declarations.dummy_type_t( "boost::python::object" )
+        w_buffer_arg.decl_type = declarations.dummy_type_t( "boost::python::object" )
 
         controller.remove_wrapper_arg( self.size_arg.name )
 
         size_var = controller.declare_variable(
-                          declarations.remove_const( self.size_arg.type )
+                          declarations.remove_const( self.size_arg.decl_type )
                         , self.size_arg.name
                         , ' = boost::python::len(%s)' % w_buffer_arg.name )
 
@@ -929,18 +929,18 @@ class transfer_ownership_t(type_modifier_t):
         transformer.transformer_t.__init__( self, function )
         self.arg = self.get_argument( arg_ref )
         self.arg_index = self.function.arguments.index( self.arg )
-        if not declarations.is_pointer( self.arg.type ):
+        if not declarations.is_pointer( self.arg.decl_type ):
             raise ValueError( '%s\nin order to use "transfer_ownership" transformation, argument %s type must be a pointer (got %s).' ) \
-                  % ( function, self.arg_ref.name, arg.type)
+                  % ( function, self.arg_ref.name, arg.decl_type)
 
     def __str__(self):
         return "transfer_ownership(%s)" % self.arg.name
 
     def __configure_sealed( self, controller ):
         w_arg = controller.find_wrapper_arg( self.arg.name )
-        naked_type = declarations.remove_pointer( self.arg.type )
+        naked_type = declarations.remove_pointer( self.arg.decl_type )
         naked_type = declarations.remove_declarated( naked_type )
-        w_arg.type = declarations.dummy_type_t( 'std::auto_ptr< %s >' % naked_type.decl_string )
+        w_arg.decl_type = declarations.dummy_type_t( 'std::auto_ptr< %s >' % naked_type.decl_string )
         controller.modify_arg_expression(self.arg_index, w_arg.name + '.release()' )
 
     def __configure_v_mem_fun_default( self, controller ):

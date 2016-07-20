@@ -49,7 +49,7 @@ class global_variable_t( global_variable_base_t ):
         result = []
         result.append( algorithm.create_identifier( self, '::boost::python::scope' ) )
         result.append( '().attr("%s")' % self.alias )
-        dtype = self.declaration.type
+        dtype = self.declaration.decl_type
         if decl_wrappers.python_traits.is_immutable( dtype ) \
            or pygccxml.declarations.is_const( dtype ) \
            or pygccxml.declarations.smart_pointer_traits.is_smart_pointer( dtype ):
@@ -96,15 +96,15 @@ class array_gv_wrapper_t( code_creator.code_creator_t
 
     def _get_wrapper_type( self ):
         ns_name = code_repository.array_1.namespace
-        if declarations.is_const( self.declaration.type ):
+        if declarations.is_const( self.declaration.decl_type ):
             class_name = 'const_array_1_t'
         else:
             class_name = 'array_1_t'
 
         decl_string = declarations.templates.join(
               '::'.join( [ns_name, class_name] )
-            , [ declarations.array_item_type( self.declaration.type ).decl_string
-                , str( declarations.array_size( self.declaration.type ) )
+            , [ declarations.array_item_type( self.declaration.decl_type ).decl_string
+                , str( declarations.array_size( self.declaration.decl_type ) )
         ])
 
         return declarations.dummy_type_t( decl_string )
@@ -192,7 +192,7 @@ class global_variable_reference_t( code_creator.code_creator_t, declaration_base
     def _create_impl( self ):
         return '%(alias)s = %(type)s.in_dll( %(library_var_name)s, %(library_var_name)s.undecorated_names["%(undecorated_decl_name)s"] )' \
                % dict( alias=self.alias
-                       , type=ctypes_formatter.as_ctype( self.declaration.type, self.top_parent.treat_char_ptr_as_binary_data )
+                       , type=ctypes_formatter.as_ctype( self.declaration.decl_type, self.top_parent.treat_char_ptr_as_binary_data )
                        , library_var_name=self.top_parent.library_var_name
                        , undecorated_decl_name=self.undecorated_decl_name )
 

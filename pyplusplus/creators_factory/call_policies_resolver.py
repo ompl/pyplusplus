@@ -42,7 +42,7 @@ class default_policy_resolver_t(resolver_t):
             return self._resolve_by_type( calldef.return_type )
         else:
             for arg in calldef.arguments:
-                if not self._resolve_by_type( arg.type ):
+                if not self._resolve_by_type( arg.decl_type ):
                     return None
             return decl_wrappers.default_call_policies()
 
@@ -138,10 +138,10 @@ class variable_accessors_resolver_t( resolver_t ):
 
         assert hint in ( 'get', 'set' )
         
-        if not declarations.is_reference( variable.type ):
+        if not declarations.is_reference( variable.decl_type ):
             return None
         
-        no_ref = declarations.remove_reference( variable.type )
+        no_ref = declarations.remove_reference( variable.decl_type )
         base_type = declarations.remove_const( no_ref )
         if python_traits.is_immutable( base_type ):
             #the relevant code creator will generate code, that will return this member variable

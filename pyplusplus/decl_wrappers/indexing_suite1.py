@@ -41,13 +41,13 @@ class indexing_suite1_t( object ):
     def element_type(self):
         """reference to container value_type( mapped_type ) type"""
         if self.__element_type is None:
-            self.__element_type = self.container_class.container_traits.element_type( self.container_class )
+            self.__element_type = declarations.find_container_traits(self.container_class).element_type( self.container_class )
         return self.__element_type
         
     @property
     def container_traits( self ):
         "reference to container traits. See pygccxml documentation for more information."
-        return self.container_class.container_traits
+        return declarations.find_container_traits(self.container_class)
     
     def _get_no_proxy( self ):
         if self.__no_proxy is None:

@@ -108,12 +108,7 @@ class exposed_decls_db_t( object ):
                                                , self.key
                                                , self.normalized_name
                                                , self.signature])
-        
-        def does_refer_same_decl( self, other ):
-            return self.key == other.key \
-                   and self.signature == other.signature \
-                   and self.normalized_name == other.normalized_name
-        
+
     def __init__( self ):
         self.__registry = {} # key : { name : set(row) }
         self.__row_delimiter = os.linesep
@@ -148,12 +143,11 @@ class exposed_decls_db_t( object ):
     
     def __find_row_in_registry( self, row ):
         try:
-            decls = [rrow for rrow in self.__registry[ row.key ][ row.normalized_name ] if rrow.does_refer_same_decl( row )]
-            if decls:
-                return decls[0]
-            else:
-                return None
-        except KeyError:
+            return next(rrow for rrow in self.__registry[ row.key ][ row.normalized_name ]
+                if (rrow.key == row.key and
+                    rrow.signature == row.signature and
+                    rrow.normalized_name == row.normalized_name))
+        except (KeyError, StopIteration):
             return None
         
     def __find_in_registry( self, decl ):
