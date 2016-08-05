@@ -32,9 +32,28 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Aron Xu
 * Mark Moll
 
+
 -----------
-SVN Version
+Version 1.6
 -----------
+
+1. Reorganize documentation, switch to readthedocs theme.
+
+2. Misc. small fixes.
+
+-----------
+Version 1.1
+-----------
+
+1. Added support for Python 3.
+
+2. Added support for pygccxml 1.7 and castxml.
+
+3. Switched to setuptools instead of distutils.
+
+--------------------------
+Version 1.0.1 (unreleased)
+--------------------------
 
 1. The bug related to exposing free operators was fixed. Many thanks to Andrei Vermel.
 
