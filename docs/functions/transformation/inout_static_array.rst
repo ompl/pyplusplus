@@ -8,7 +8,7 @@ Definition
 
 ``inout_static_array`` transformer is a combination of :doc:`input <input_static_array>`
 and :doc:`output <output_static_array>` transformers.
-It allows to call a C++ function, which takes an array using Python ``list`` class
+It allows one to call a C++ function, which takes an array using Python ``list`` class
 
 "inout_static_array" transformer takes as first argument name or index of the
 original function argument. The argument should have "array" or "pointer" type.

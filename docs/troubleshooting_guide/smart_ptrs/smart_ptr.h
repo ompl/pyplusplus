@@ -52,7 +52,7 @@ public:
         return *this;
     }
 
-    //Next two functions allows to construct smart pointer from an existing one,
+    //Next two functions allow one to construct smart pointer from an existing one,
     //which manages object with a different type.
     //For example:
     //    struct base{...};

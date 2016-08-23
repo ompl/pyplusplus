@@ -214,7 +214,7 @@ It is the time to introduce ``indexing_suite2_t`` class:
   default call policies. Just an example: for non-copy constructable classes
   ``call_policies`` should be set to ``return_internal_reference``.
 
-* ``[disable|enable]_method`` - new indexing suite, allows to configure
+* ``[disable|enable]_method`` - new indexing suite, allows one to configure
   functionality exported to Python, using simple bitwise operations on predefined
   flags. :doc:`Py++ <index>` allows you to specify what methods you want to disable
   or enable. ``indexing_suite2_t.METHODS`` contains names of all supported methods.

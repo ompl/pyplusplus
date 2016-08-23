@@ -66,11 +66,11 @@ Who is using Py++?
   `ReSP`_ is an Open-Source hardware simulation platform targeted for
   multiprocessor systems. ReSP will provide a framework for composing a
   system by connecting components chosen from a given repository or
-  developped by the designer. ReSP will provide also also a framework for
+  developed by the designer. ReSP will provide also also a framework for
   fault injection campaigns for the analysis of the reliability level of the
   system.
 
-  `ReSP`_ engineers are developping the simulator core in Python language for exploiting
+  `ReSP`_ engineers are developing the simulator core in Python language for exploiting
   reflective capabilities (missing in a pure C++ environment) that can be
   exploited for connecting components in a dynamic way and for enabling
   non-intrusive fault injection activity. Components will be described in
@@ -82,7 +82,7 @@ Who is using Py++?
 * Allen Bierbaum, the author of `PyOpenSG`_ project, is using :doc:`Py++ <index>` to create
   Python bindings for `OpenSG`_
 
-  `OpenSG`_ - is a portable scenegraph system to create realtime graphics
+  `OpenSG`_ - is a portable scene graph system to create realtime graphics
   programs, e.g. for virtual reality applications.
 
 

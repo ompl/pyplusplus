@@ -27,8 +27,8 @@
  * Fortunately, Boost.Python library provides enough functionality to implement
  * users requirements - r-value converters.
  *
- * R-Value converters allows to register custom conversion from Python type to
- * C++ type. The conversion will be handled by Boost.Python library automaticly
+ * R-Value converters allow one to register custom conallows one torom Python type to
+ * C++ type. The conversion will be handled by Boost.Python library automatically
  * "on-the-fly".
  *
  * The example introduces "colour_t" class and few testers.

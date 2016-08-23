@@ -90,7 +90,7 @@ problems it has.
 Rule based approach
 -------------------
 
-B-API does not allow to use "rule based" approach and to work on the whole
+B-API does not allow one to use "rule based" approach and to work on the whole
 declarations tree!
 
 Special syntax

@@ -8,7 +8,7 @@ Definition
 
 ``inout_static_matrix`` transformer is a combination of :doc:`input <input_static_matrix>`
 and :doc:`output <output_static_matrix>` transformers.
-It allows to call a C++ function, which takes 2D array using Python ``list`` class
+It allows one to call a C++ function, which takes 2D array using Python ``list`` class
 
 "input_static_matrix" transformer takes as first argument name or index of the
 original function argument. The argument should have "array" or "pointer" type.

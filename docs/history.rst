@@ -303,7 +303,7 @@ Version 0.9.0
 .. line-separator
 
 5. :doc:`input_c_buffer <functions/transformation/input_c_buffer>` - new functions
-   transformation, which allows to pass a Python sequence to function, instead of pair of arguments: pointer to buffer and size.
+   transformation, which allows one to pass a Python sequence to function, instead of pair of arguments: pointer to buffer and size.
 
 6. Added ability to control generated "include" directives. Now you can ask :doc:`Py++ <index>`
    to include a header file, when it generates code for some declaration. For more

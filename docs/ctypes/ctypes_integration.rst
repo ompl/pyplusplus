@@ -16,7 +16,7 @@ you don't have to create any wrapper - you can use `ctypes`_ package.
 About ctypes
 ------------
 `ctypes`_ is a foreign function library for Python. It provides C
-compatible data types, and allows to call functions in dlls/shared
+compatible data types, and allows one to call functions in dlls/shared
 libraries. It can be used to wrap these libraries in pure Python.
 
 --------

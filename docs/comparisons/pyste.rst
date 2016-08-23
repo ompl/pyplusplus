@@ -114,7 +114,7 @@ Py++
            generated code to file(s).
 
 The good news: it is very easy to evaluate :doc:`Py++ <../index>`, using GUI. The bad
-news is that you should learn an other set of API's in order to complete your
+news is that you should learn another set of API's in order to complete your
 task. It is not as awful as it sounds, but still there is some learning curve.
 
 ------
@@ -167,7 +167,7 @@ things:
 `pygccxml <http://pygccxml.readthedocs.org>`_ contributes in few ways to :doc:`Py++ <../index>`:
 
     + :doc:`Py++ <../index>` has nothing to do with code parsing. Theoretically
-      an other back-end could be added to `pygccxml <http://pygccxml.readthedocs.org>`_ without changing even one
+      another back-end could be added to `pygccxml <http://pygccxml.readthedocs.org>`_ without changing even one
       line of code within :doc:`Py++ <../index>`.
 
     + `pygccxml <http://pygccxml.readthedocs.org>`_ has type traits. A lot of type traits algorithms from
@@ -245,12 +245,12 @@ Serious re-factoring should be done. :doc:`Py++ <../index>` defines *compound_t*
 creator. *module_t*, *module_body_t*, *class_t* - are typical examples of
 compound code creators. They do know few code creators, but that is all.
 
-An other weakness is a relationship between *Exporter*'s and code units. In
+Another weakness is a relationship between *Exporter*'s and code units. In
 order to write code into code unit, *Exporter* should specify section name and
 text. There are few problems with this. First of all, this tight coupling is
 unnecessary. In order to add new *Exporter* you should understand the underlying
 protocol and may be to modify code unit. Try to add *Exporter* that exposes
-get\\set functions as property. It is not an easy task. An other problem, I see
+get\\set functions as property. It is not an easy task. Another problem, I see
 here, is that code unit is some kind of *Exporter*. Code unit also creates code.
 I did not fill good with this design. So I decided, that in :doc:`Py++ <../index>` code
 should be created only by code creators. This decision simplifies a lot of

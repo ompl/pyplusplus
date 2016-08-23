@@ -109,7 +109,7 @@ to disc.
 During this step `Py++` reads the code creators tree and writes the code to a
 disc. The code generation process result should not be different from the one,
 which would be achieved by human. For small project writing all code into single
-file is good approach, for big ones the code should be splitted into multiple files.
+file is good approach, for big ones the code should be split into multiple files.
 `Py++` implements both strategies.
 
 
