@@ -34,6 +34,16 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 
 
 -----------
+Version 1.7
+-----------
+
+1. Update due to changes in pygccxml 1.8.0.
+
+2. Performance improvements.
+
+3. Small documentation fixes.
+
+-----------
 Version 1.6
 -----------
 
