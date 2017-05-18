@@ -34,26 +34,26 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         
         mb.global_ns.calldefs().create_with_signature = True
         
-        hello_world = mb.free_fun( 'hello_world' )
+        hello_world = mb.free_function( 'hello_world' )
         hello_world.add_transformation( ft.output(0) )
         
         calc = mb.class_('calculator_t' )
-        assign_funs = calc.mem_funs( lambda decl: decl.name.startswith( 'assign' ) )
+        assign_funs = calc.member_functions( lambda decl: decl.name.startswith( 'assign' ) )
         assign_funs.add_transformation( ft.output(0), ft.output(1) )
         
-        clone_and_assign_5 = calc.mem_fun( 'clone_and_assign_5' )
+        clone_and_assign_5 = calc.member_function( 'clone_and_assign_5' )
         clone_and_assign_5.add_transformation( ft.output(0) )
         clone_and_assign_5.call_policies = call_policies.return_value_policy( call_policies.manage_new_object )
             
         window = mb.class_( 'window_t' )
-        window.mem_fun( 'resize' ).add_transformation( ft.input(0), ft.input(1) )
-        window.mem_fun( 'resize_in_out' ).add_transformation( ft.inout(0), ft.inout(1) )
+        window.member_function( 'resize' ).add_transformation( ft.input(0), ft.input(1) )
+        window.member_function( 'resize_in_out' ).add_transformation( ft.inout(0), ft.inout(1) )
         
         point3d = mb.class_( 'point3d_t' )
         point3d.add_wrapper_code( '' )
-        point3d.mem_fun( 'initialize' ).add_transformation( ft.input_static_array(0, size=3) )
-        point3d.mem_fun( 'position' ).add_transformation( ft.output_static_array(0, size=3) )
-        distance = point3d.mem_fun( 'distance' )
+        point3d.member_function( 'initialize' ).add_transformation( ft.input_static_array(0, size=3) )
+        point3d.member_function( 'position' ).add_transformation( ft.output_static_array(0, size=3) )
+        distance = point3d.member_function( 'distance' )
         distance.add_transformation( ft.output(1) )
         distance.transformations[0].controller.add_pre_call_code( '//dddddddddddddd' )
         distance.transformations[0].controller.add_post_call_code( '//qqqqqqqqqqqqq' )
@@ -80,47 +80,47 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.decls(lambda decl: decl.name.startswith("_")).exclude()
 
         cls = mb.class_("bug_render_target_t")
-        cls.mem_fun("get_statistics", arg_types=['float &']*2).add_transformation( ft.output(0), ft.output(1) )
+        cls.member_function("get_statistics", arg_types=['float &']*2).add_transformation( ft.output(0), ft.output(1) )
         
         cls = mb.class_( 'modify_type_tester_t' )
-        do_nothing = cls.mem_fun( 'do_nothing' )
+        do_nothing = cls.member_function( 'do_nothing' )
         do_nothing.add_transformation( ft.modify_type(0, declarations.remove_reference ) )
 
-        clone = cls.mem_fun( 'clone' )
+        clone = cls.member_function( 'clone' )
         clone.call_policies = call_policies.return_value_policy( call_policies.manage_new_object )
         clone.add_transformation( ft.modify_type(0, declarations.remove_reference ) )
         
         cls = mb.class_( 'input_c_buffer_tester_t')
-        write_mf = cls.mem_fun( 'write' )
+        write_mf = cls.member_function( 'write' )
         write_mf.add_transformation( ft.input_c_buffer( 'buffer', 'size' ) )
-        write_s = cls.mem_fun( 'write_s' )
+        write_s = cls.member_function( 'write_s' )
         write_s.add_transformation( ft.input_c_buffer( 'buffer', 'size' ) )
         
         resource = mb.class_( 'resources_t' )
         resource.held_type = 'std::auto_ptr< %s >' % resource.decl_string
         transfer_ownership_tester = mb.class_( 'transfer_ownership_tester_t' )
-        tester = transfer_ownership_tester.mem_fun( 'tester' )
+        tester = transfer_ownership_tester.member_function( 'tester' )
         tester.add_transformation( ft.transfer_ownership( 0 ) )
         
         render_queue_listener_t = mb.class_( 'render_queue_listener_t' )
-        render_queue_ended = render_queue_listener_t.mem_fun( 'render_queue_ended' )
+        render_queue_ended = render_queue_listener_t.member_function( 'render_queue_ended' )
         render_queue_ended.add_transformation( ft.inout(2) )
 
         ft_bugs = mb.namespace( 'ft_bugs' )
-        h = ft_bugs.mem_fun( 'h' )
+        h = ft_bugs.member_function( 'h' )
         h.add_transformation( ft.modify_type(0, remove_const_ref ) )
         h.call_policies = call_policies.return_internal_reference()
 
-        h2 = ft_bugs.mem_fun( 'h2' )
+        h2 = ft_bugs.member_function( 'h2' )
         h2.add_transformation( ft.modify_type(0, remove_const_ref ) )
         h2.call_policies = call_policies.return_internal_reference()
 
         ft_bugs.class_( 'B' ).always_expose_using_scope = True
-        ft_bugs.mem_fun( 'get_a' ).call_policies \
+        ft_bugs.member_function( 'get_a' ).call_policies \
             = call_policies.return_value_policy( call_policies.reference_existing_object )
 
         ft_bugs2 = mb.namespace( 'ft_bugs2' )
-        g = ft_bugs2.mem_fun( 'g' )
+        g = ft_bugs2.member_function( 'g' )
         g.add_transformation( ft.modify_type(0, remove_const_ref ) )
         g.call_policies = call_policies.return_internal_reference()
 

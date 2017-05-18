@@ -20,11 +20,11 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , *args )
     
     def customize( self, mb ):
-        mb.mem_funs( 'string_ref' ).call_policies \
+        mb.member_functions( 'string_ref' ).call_policies \
             = call_policies.return_value_policy( call_policies.copy_non_const_reference )
         
         non_overridable_pv_t = mb.class_( 'non_overridable_pv_t' )
-        non_overridable_pv_t.mem_fun( 'void_ptr' ).mark_as_non_overridable( reason='xxx void*' )
+        non_overridable_pv_t.member_function( 'void_ptr' ).mark_as_non_overridable( reason='xxx void*' )
         
     def create_pv_derived(self, module):
         class py_pv_t( module.non_overridable_pv_t ):

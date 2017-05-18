@@ -23,25 +23,26 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def customize(self, generator):
         items = generator.global_ns.typedef( 'items_t' )
-        items = declarations.remove_declarated( items.type )
+        items = declarations.remove_declarated( items.decl_type )
         items.alias = "items_t"
         items.include()
 
         strings = generator.global_ns.typedef( 'strings_t' )
-        strings = declarations.remove_declarated( strings.type )
+        strings = declarations.remove_declarated( strings.decl_type )
         strings.include()
         
         fvector = generator.global_ns.typedef( 'fvector' )
-        fvector = declarations.remove_declarated( fvector.type )
+        fvector = declarations.remove_declarated( fvector.decl_type )
         fvector.indexing_suite.disable_method( 'extend' )
         fvector.indexing_suite.disable_methods_group( 'reorder' )
         #fvector.indexing_suite.call_policies = module_builder.call_policies.default_call_policies()
         items_ptr = generator.global_ns.typedefs( 'items_ptr_t' )[0]
-        items_ptr = declarations.remove_declarated( items_ptr.type )
+        items_ptr = declarations.remove_declarated( items_ptr.decl_type )
         self.assertTrue( items_ptr.indexing_suite.call_policies.__class__
                          is module_builder.call_policies.return_internal_reference().__class__ )
        
     def run_tests( self, module):
+        print(dir(module))
         fv = module.fvector()
         self.assertTrue( not hasattr( fv, 'extend' ) )
         self.assertTrue( not hasattr( fv, 'sort' ) )

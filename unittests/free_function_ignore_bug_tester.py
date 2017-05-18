@@ -21,10 +21,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         do_nothing = mb.free_functions( 'do_nothing' )
         do_nothing.exclude()  
 
-        x = mb.free_fun( 'fill_some_dummy_struct_ptr_ptr' )
+        x = mb.free_function( 'fill_some_dummy_struct_ptr_ptr' )
         self.assertTrue( '1051' in ''.join( x.readme() ) )
         x.exclude()
-        x = mb.free_fun( 'return_some_dummy_struct_ptr_ptr' )
+        x = mb.free_function( 'return_some_dummy_struct_ptr_ptr' )
         self.assertTrue( '1050' in ''.join( x.readme() ) )
         x.exclude()
 

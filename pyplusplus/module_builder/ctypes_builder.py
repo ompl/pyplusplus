@@ -11,7 +11,6 @@ import warnings
 from . import module_builder
 from . import ctypes_decls_dependencies
 
-from pygccxml import binary_parsers
 from pygccxml import parser
 from pygccxml import declarations as decls_package
 
@@ -21,6 +20,7 @@ from pyplusplus import decl_wrappers
 from pyplusplus import file_writers
 from pyplusplus import code_creators
 from pyplusplus import creators_factory
+from pyplusplus import binary_parsers
 
 class ctypes_module_builder_t(module_builder.module_builder_t):
     """

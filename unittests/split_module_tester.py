@@ -27,7 +27,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def customize( self, mb ):
         mb.global_ns.exclude()
 
-        nm_t = declarations.remove_declarated( mb.global_ns.typedef( 'naive_matrix_t' ).type ) 
+        nm_t = declarations.remove_declarated( mb.global_ns.typedef( 'naive_matrix_t' ).decl_type ) 
         nm_t.include()
 
         exposed_db = utils.exposed_decls_db_t()
@@ -53,7 +53,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         nested = item.class_( 'nested_t' )
         nested.add_declaration_code( '//hello nested decl' )
         nested.add_registration_code( '//hello nested reg', False )
-        mb.free_fun( 'create_empty_mapping' ).include()
+        mb.free_function( 'create_empty_mapping' ).include()
 
     def generate_source_files( self, mb ):
         files = mb.split_module( autoconfig.build_dir, on_unused_file_found=lambda fpath: fpath )

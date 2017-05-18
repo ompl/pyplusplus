@@ -23,7 +23,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.build_code_creator( 'hierarchy3' )
         find = code_creators.creator_finder.find_by_declaration_single
         matcher = declarations.match_declaration_t( name='son_t'
-                                                    , type=declarations.class_t)
+                                                    , decl_type=declarations.class_t)
         found = find( matcher, mb.code_creator.body.creators )
         self.assertTrue( found )
         self.assertTrue( found.wrapper )

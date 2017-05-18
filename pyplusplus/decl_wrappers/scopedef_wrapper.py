@@ -27,15 +27,15 @@ class scopedef_t(decl_wrapper.decl_wrapper_t):
         if False == compilation_errors:
             #exclude all unconditionaly
             self.ignore = True
-            for decl in self.declarations: decl.exclude()
+            for declaration in self.declarations: declaration.exclude()
         else:
             if [msg for msg in self.readme() if isinstance( msg, messages.compilation_error )]:
                 self.exclude()
             else:
-                for decl in self.declarations: decl.exclude(compilation_errors=True)
+                for declaration in self.declarations: declaration.exclude(compilation_errors=True)
 
     def include( self, already_exposed=False  ):
         """Include "self" and child declarations to be exposed."""
         self.ignore = False
         self.already_exposed = already_exposed
-        for decl in self.declarations: decl.include(already_exposed)
+        for declaration in self.declarations: declaration.include(already_exposed)

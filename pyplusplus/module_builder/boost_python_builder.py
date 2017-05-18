@@ -167,10 +167,10 @@ class builder_t(module_builder.module_builder_t):
         return global_ns
 
     def __filter_by_location( self, flatten_decls ):
-        for decl in flatten_decls:
-            if not decl.location:
+        for declaration in flatten_decls:
+            if not declaration.location:
                 continue
-            fpath = pygccxml_utils.normalize_path( decl.location.file_name )
+            fpath = pygccxml_utils.normalize_path( declaration.location.file_name )
             if pygccxml_utils.contains_parent_dir( fpath, self.__parsed_dirs ):
                 continue
             if fpath in self.__parsed_files:
@@ -181,17 +181,17 @@ class builder_t(module_builder.module_builder_t):
                     found = True
                     break
             if not found:
-                decl.exclude()
+                declaration.exclude()
 
     def __apply_decls_defaults(self, decls):
         flatten_decls = decls_package.make_flatten( decls )
         self.__filter_by_location( flatten_decls )
         call_policies_resolver = creators_factory.built_in_resolver_t()
-        calldefs = [decl for decl in flatten_decls if isinstance( decl, decls_package.calldef_t )]
+        calldefs = [declaration for declaration in flatten_decls if isinstance( declaration, decls_package.calldef_t )]
         for calldef in calldefs:
             calldef.set_call_policies( call_policies_resolver( calldef ) )
-        mem_vars = [decl for decl in flatten_decls if isinstance( decl, decls_package.variable_t )
-                                        and isinstance( decl.parent, decls_package.class_t )]
+        mem_vars = [declaration for declaration in flatten_decls if isinstance( declaration, decls_package.variable_t )
+                                        and isinstance( declaration.parent, decls_package.class_t )]
         for mem_var in mem_vars:
             mem_var.set_getter_call_policies( call_policies_resolver( mem_var, 'get' ) )
         for mem_var in mem_vars:

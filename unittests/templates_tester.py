@@ -23,7 +23,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         gcd.include()
         c = mb.class_('C')
         c.include()
-        for f in [gcd, c.mem_fun( 'get_value' )]:
+        for f in [gcd, c.member_function( 'get_value' )]:
             f.alias = f.name
             try:
                 f.name = f.demangled_name

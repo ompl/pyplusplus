@@ -21,7 +21,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def customize(self, mb ):
         mb.namespace( 'final_classes' ).include()
-        mb.mem_fun('bar').virtuality = declarations.FUNCTION_VIRTUALITY_TYPES.NOT_VIRTUAL
+        mb.member_function('bar').virtuality = declarations.FUNCTION_VIRTUALITY_TYPES.NOT_VIRTUAL
 
     def run_tests(self, module):
         pass

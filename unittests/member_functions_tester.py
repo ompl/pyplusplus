@@ -45,8 +45,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         
         mb.class_('mem_fun_constness_t' ).always_expose_using_scope = True
         
-        mb.mem_funs().add_override_precall_code( '/*override precall code*/' )
-        mb.mem_funs().add_default_precall_code( '/*default precall code*/' )
+        mb.member_functions().add_override_precall_code( '/*override precall code*/' )
+        mb.member_functions().add_default_precall_code( '/*default precall code*/' )
         
     def create_py_immutable_by_ref( self, module ):
         class py_immutable_by_ref( module.immutable_by_ref_t ):

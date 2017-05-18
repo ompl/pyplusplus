@@ -22,9 +22,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.variable( 'prefered_color' ).alias = 'PreferedColor'
         mb.classes().always_expose_using_scope = True
         image = mb.class_( 'image_t' )
-        image.var( 'data' ).expose_address = True
-        image.var( 'none_image' ).expose_address = True
-        mb.class_( 'Andy' ).var('userData').expose_address = True
+        image.variable( 'data' ).expose_address = True
+        image.variable( 'none_image' ).expose_address = True
+        mb.class_( 'Andy' ).variable('userData').expose_address = True
 
     def change_default_color( self, module ):
         module.point.default_color = module.point.color.blue

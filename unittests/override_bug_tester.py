@@ -21,11 +21,11 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def customize( self, mb ):
         mb.class_("Derived2").member_functions("eval_c").exclude()
         mb.class_( 'BB' ).include()
-        do_smth = mb.mem_fun( '::override_bug::AA::do_smth' )
+        do_smth = mb.member_function( '::override_bug::AA::do_smth' )
         do_smth.add_transformation( FT.output(0), alias='do_smth_a' )
-        do_smth = mb.mem_fun( '::override_bug::BB::do_smth' )
+        do_smth = mb.member_function( '::override_bug::BB::do_smth' )
         do_smth.add_transformation( FT.output(0), FT.output(1), alias='do_smth_b' )
-        mb.class_( 'XX' ).mem_fun( 'do_smth' ).exclude()
+        mb.class_( 'XX' ).member_function( 'do_smth' ).exclude()
 
     def run_tests(self, module):
         class C( module.B ):

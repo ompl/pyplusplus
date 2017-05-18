@@ -11,9 +11,9 @@ Requirements
 
 In order to use Py++ you need the following additional components:
 
-- Python v2.6 (or higher)
-- pygccxml
-- GCC-XML
+- Python v2.7 (or higher)
+- pygccxml 1.9.0 (or higher)
+- CastXML
 
 
 Install

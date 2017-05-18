@@ -23,7 +23,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         
         #~ mb.member_functions(lambda decl:decl.virtuality == "virtual").include()
         #~ mb.member_functions(lambda decl:decl.virtuality != "virtual").exclude()
-        mb.mem_funs( lambda decl: decl.virtuality == "not virtual" ).exclude()
+        mb.member_functions( lambda decl: decl.virtuality == "not virtual" ).exclude()
     def run_tests(self, module):        
         pass
         

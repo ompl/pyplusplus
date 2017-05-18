@@ -5,12 +5,12 @@
 
 from . import sort_algorithms
 from . import dependencies_manager
-from pygccxml import binary_parsers
 from pyplusplus import _logging_
 from pygccxml import declarations
 from pyplusplus import decl_wrappers
 from pyplusplus import code_creators
 from pyplusplus import code_repository
+from pyplusplus import binary_parsers
 
 ACCESS_TYPES = declarations.ACCESS_TYPES
 VIRTUALITY_TYPES = declarations.VIRTUALITY_TYPES
@@ -45,31 +45,31 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
         #mapping between namespace and its code creator
         self.__namespace2pyclass = {}
 
-    def __print_readme( self, decl ):
-        readme = decl.readme()
+    def __print_readme( self, declaration ):
+        readme = declaration.readme()
         if not readme:
             return
 
-        if not decl.exportable:
+        if not declaration.exportable:
             reason = readme[0]
             readme = readme[1:]
-            self.decl_logger.warning( "%s;%s" % ( decl, reason ) )
+            self.decl_logger.warning( "%s;%s" % ( declaration, reason ) )
 
         for msg in readme:
-            self.decl_logger.warning( "%s;%s" % ( decl, msg ) )
+            self.decl_logger.warning( "%s;%s" % ( declaration, msg ) )
 
-    def __should_generate_code( self, decl ):
-        if decl.ignore or decl.already_exposed:
+    def __should_generate_code( self, declaration ):
+        if declaration.ignore or declaration.already_exposed:
             return False
-        if isinstance( decl, declarations.calldef_t ):
-            return decl in self.__exported_decls
-        if isinstance( decl, declarations.variable_t ):
-            if isinstance( decl.parent, declarations.namespace_t ):
-                return decl in self.__exported_decls
+        if isinstance( declaration, declarations.calldef_t ):
+            return declaration in self.__exported_decls
+        if isinstance( declaration, declarations.variable_t ):
+            if isinstance( declaration.parent, declarations.namespace_t ):
+                return declaration in self.__exported_decls
         return True
 
-    def __contains_exported( self, decl ):
-        return bool( decl.decls( self.__should_generate_code, recursive=True, allow_empty=True ) )
+    def __contains_exported( self, declaration ):
+        return bool( declaration.decls( self.__should_generate_code, recursive=True, allow_empty=True ) )
 
     # - implement better 0(n) algorithm
     def __add_class_introductions( self, cc, class_ ):
@@ -157,12 +157,12 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
             cls_intro_cc.adopt_creator( code_creators.opaque_init_introduction_t( self.curr_decl ) )
         else:
             class_ = self.curr_decl
-            for decl in self.curr_decl.decls( recursive=False, allow_empty=True ):
-                if isinstance( decl, declarations.variable_t ):
+            for declaration in self.curr_decl.decls( recursive=False, allow_empty=True ):
+                if isinstance( declaration, declarations.variable_t ):
                     continue #fields_definition_t class treats them
-                if self.__should_generate_code( decl ):
-                    self.curr_decl = decl
-                    declarations.apply_visitor( self, decl )
+                if self.__should_generate_code( declaration ):
+                    self.curr_decl = declaration
+                    declarations.apply_visitor( self, declaration )
             self.curr_decl = class_
 
     def visit_enumeration(self):
@@ -191,10 +191,10 @@ class ctypes_creator_t( declarations.decl_visitor_t ):
             self.__namespace2pyclass[ self.curr_decl.parent ].adopt_creator( ns_creator )
 
         ns = self.curr_decl
-        for decl in self.curr_decl.decls( recursive=False, allow_empty=True ):
-            if isinstance( decl, declarations.namespace_t) or self.__should_generate_code( decl ):
-                self.curr_decl = decl
-                declarations.apply_visitor( self, decl )
+        for declaration in self.curr_decl.decls( recursive=False, allow_empty=True ):
+            if isinstance( declaration, declarations.namespace_t) or self.__should_generate_code( declaration ):
+                self.curr_decl = declaration
+                declarations.apply_visitor( self, declaration )
         self.curr_decl = ns
 
 

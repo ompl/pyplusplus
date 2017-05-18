@@ -15,7 +15,7 @@ class resolver_t( object ):
     def __init__( self ):
         object.__init__( self )
 
-    def __call__(self, decl, hint=None):
+    def __call__(self, declaration, hint=None):
         raise NotImplementedError()
 
 class default_policy_resolver_t(resolver_t):
@@ -152,16 +152,16 @@ class variable_accessors_resolver_t( resolver_t ):
             return None
         
         base_type = declarations.remove_alias( base_type )
-        decl = base_type.declaration
+        declaration = base_type.declaration
         
-        if declarations.is_class_declaration( decl ):
+        if declarations.is_class_declaration( declaration ):
             return None
         
-        if decl.is_abstract:
+        if declaration.is_abstract:
             return None
-        if declarations.has_destructor( decl ) and not declarations.has_public_destructor( decl ): 
+        if declarations.has_destructor( declaration ) and not declarations.has_public_destructor( declaration ): 
             return None
-        if not declarations.has_copy_constructor(decl):
+        if not declarations.has_copy_constructor(declaration):
             return None
         if hint == 'get':
             #if we rich this line, it means that we are able to create an obect using

@@ -423,7 +423,7 @@ class operators_helper:
         if isinstance( oper, declarations.free_operator_t ):
             #`Py++` should find out whether the relevant class is exposed to Python
             #and if not, than this operator should not be exposed too
-            included = [decl for decl in oper.class_types if decl.ignore == False]
+            included = [declaration for declaration in oper.class_types if declaration.ignore == False]
             if not included:
                 return messages.W1052 % str(oper)
         return ''

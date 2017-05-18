@@ -23,7 +23,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
 
     def customize(self, generator):
         fvector = generator.global_ns.typedef( 'foo_vector' )
-        fvector = declarations.remove_declarated( fvector.type )
+        fvector = declarations.remove_declarated( fvector.decl_type )
         fvector.indexing_suite.call_policies \
             =  module_builder.call_policies.return_internal_reference()
 

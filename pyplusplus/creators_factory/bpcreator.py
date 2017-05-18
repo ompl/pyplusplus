@@ -99,57 +99,57 @@ class bpcreator_t( declarations.decl_visitor_t ):
         self.__exposed_free_fun_overloads = set()
         self.__fc_manager = fake_constructors_manager.manager_t( global_ns )
 
-    def __print_readme( self, decl ):
-        readme = decl.readme()
+    def __print_readme( self, declaration ):
+        readme = declaration.readme()
         if not readme:
             return
 
-        if not decl.exportable:
+        if not declaration.exportable:
             reason = readme[0]
             readme = readme[1:]
-            self.decl_logger.warning( "%s;%s" % ( decl, reason ) )
+            self.decl_logger.warning( "%s;%s" % ( declaration, reason ) )
 
         for msg in readme:
-            self.decl_logger.warning( "%s;%s" % ( decl, msg ) )
+            self.decl_logger.warning( "%s;%s" % ( declaration, msg ) )
 
     def _prepare_decls( self, decls ):
         to_be_exposed = []
-        for decl in declarations.make_flatten( decls ):
-            if decl.ignore:
+        for declaration in declarations.make_flatten( decls ):
+            if declaration.ignore:
                 continue
 
-            if isinstance( decl, declarations.namespace_t ):
+            if isinstance( declaration, declarations.namespace_t ):
                 continue
 
-            if isinstance( decl, declarations.class_types ):
-                if decl.opaque:
+            if isinstance( declaration, declarations.class_types ):
+                if declaration.opaque:
                     continue
 
-            if not decl.exportable:
+            if not declaration.exportable:
                 #leave only decls that user wants to export and that could be exported
-                self.__print_readme( decl )
+                self.__print_readme( declaration )
                 continue
 
-            if decl.already_exposed:
+            if declaration.already_exposed:
                 #check wether this is already exposed in other module
                 continue
 
-            if isinstance( decl.parent, declarations.namespace_t ):
+            if isinstance( declaration.parent, declarations.namespace_t ):
                 #leave only declarations defined under namespace, but remove namespaces
-                to_be_exposed.append( decl )
+                to_be_exposed.append( declaration )
 
             #Right now this functionality introduce a bug: declarations that should
             #not be exported for some reason are not marked as such. I will need to
             #find out.
             #if isinstance( decl, declarations.calldef_t ) and not isinstance( decl, declarations.destructor_t ):
-                #self.__types_db.update( decl )
-                #if None is decl.call_policies:
-                    #decl.call_policies = self.__call_policies_resolver( decl )
+                #self.__types_db.update( declaration )
+                #if None is declaration.call_policies:
+                    #declaration.call_policies = self.__call_policies_resolver( declaration )
 
             #if isinstance( decl, declarations.variable_t ):
-                #self.__types_db.update( decl )
+                #self.__types_db.update( declaration )
 
-            self.__print_readme( decl )
+            self.__print_readme( declaration )
 
         return to_be_exposed
 
@@ -171,7 +171,7 @@ class bpcreator_t( declarations.decl_visitor_t ):
                 assert not "Found %d class code creators" % len(creator)
         find = code_creators.creator_finder.find_by_declaration
         if operator.target_class and operator.target_class.ignore == False:
-            found = find( lambda decl: operator.target_class is decl
+            found = find( lambda declaration: operator.target_class is declaration
                           , self.__extmodule.body.creators )
             adopt_operator_impl( operator, found )
 
@@ -313,9 +313,9 @@ class bpcreator_t( declarations.decl_visitor_t ):
         :rtype: :class:`code_creators.module_t`
         """
         # Invoke the appropriate visit_*() method on all decls
-        for decl in self.__decls:
-            self.curr_decl = decl
-            declarations.apply_visitor( self, decl )
+        for declaration in self.__decls:
+            self.curr_decl = declaration
+            declarations.apply_visitor( self, declaration )
         for operator in self.__free_operators:
             self._adopt_free_operator( operator )
         self._treat_smart_pointers()
@@ -459,10 +459,10 @@ class bpcreator_t( declarations.decl_visitor_t ):
 
         elif self.curr_decl.use_overload_macro:
             parent_decl = self.curr_decl.parent
-            names = set( [decl.name for decl in parent_decl.free_functions( allow_empty=True, recursive=False )] )
+            names = set( [declaration.name for declaration in parent_decl.free_functions( allow_empty=True, recursive=False )] )
             for name in names:
                 overloads = parent_decl.free_functions( name, allow_empty=True, recursive=False )
-                overloads = [decl for decl in overloads if decl.ignore == False and decl.use_overload_macro]
+                overloads = [declaration for declaration in overloads if declaration.ignore == False and declaration.use_overload_macro]
                 if not overloads:
                     continue
                 else:
@@ -530,10 +530,10 @@ class bpcreator_t( declarations.decl_visitor_t ):
     def expose_overloaded_mem_fun_using_macro( self, cls, cls_creator ):
         #returns set of exported member functions
         exposed = set()
-        names = set( [decl.name for decl in cls.member_functions( allow_empty=True, recursive=False )] )
+        names = set( [declaration.name for declaration in cls.member_functions( allow_empty=True, recursive=False )] )
         for name in names:
             overloads = cls.member_functions( name, allow_empty=True, recursive=False )
-            overloads = [decl for decl in overloads if decl.ignore == False and decl.use_overload_macro]
+            overloads = [declaration for declaration in overloads if declaration.ignore == False and declaration.use_overload_macro]
             if not overloads:
                 continue
             else:
@@ -609,11 +609,11 @@ class bpcreator_t( declarations.decl_visitor_t ):
         if cls_decl.expose_sizeof:
             cls_cc.adopt_creator( code_creators.expose_sizeof_t( cls_decl ) )
 
-        for decl in exportable_members:
-            if decl in exposed:
+        for declaration in exportable_members:
+            if declaration in exposed:
                 continue
-            self.curr_decl = decl
-            declarations.apply_visitor( self, decl )
+            self.curr_decl = declaration
+            declarations.apply_visitor( self, declaration )
 
         for redefined_func in cls_decl.redefined_funcs():
             if isinstance( redefined_func, declarations.operator_t ):

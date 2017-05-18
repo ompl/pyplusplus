@@ -22,7 +22,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def customize(self, mb ):
         mb.build_code_creator( self.EXTENSION_NAME )
         extmodule = mb.code_creator
-        matcher = declarations.match_declaration_t( name='item', type=declarations.class_t )
+        matcher = declarations.match_declaration_t( name='item', decl_type=declarations.class_t )
         item_creator = code_creators.creator_finder.find_by_declaration( matcher, extmodule.body.creators )[0]
         extmodule.body.remove_creator(item_creator)
         #This will add item creator to be last exported class

@@ -20,9 +20,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , *args )
 
     def customize(self, mb ):
-        mb.mem_funs( 'f' ).call_policies = return_value_policy(manage_new_object)
+        mb.member_functions( 'f' ).call_policies = return_value_policy(manage_new_object)
         mb.decl( 'DObjectState' ).opaque = True
-        saveState = mb.mem_funs( lambda f: f.name == 'saveState' and 'FObjectState' in f.decl_string )
+        saveState = mb.member_functions( lambda f: f.name == 'saveState' and 'FObjectState' in f.decl_string )
         saveState.call_policies = return_value_policy(manage_new_object)
         
     def run_tests( self, module):

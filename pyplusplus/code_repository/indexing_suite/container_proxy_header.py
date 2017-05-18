@@ -9,7 +9,7 @@ This file contains indexing suite v2 code
 
 file_name = "indexing_suite/container_proxy.hpp"
 
-code = """// Copyright (c) 2003 Raoul M. Gough
+code = r"""// Copyright (c) 2003 Raoul M. Gough
 //
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy

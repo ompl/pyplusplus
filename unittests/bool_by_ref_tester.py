@@ -23,10 +23,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             , *args )
 
     def customize( self, mb ):        
-        set_flag = mb.mem_fun( '::tests::listener::listen' )
+        set_flag = mb.member_function( '::tests::listener::listen' )
         set_flag.add_transformation( ft.inout(2) )
         
-        set_flag = mb.mem_fun( '::tests::listener::listenPV' )
+        set_flag = mb.member_function( '::tests::listener::listenPV' )
         set_flag.add_transformation( ft.inout(2) )
        
     def run_tests(self, module):

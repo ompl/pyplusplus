@@ -19,11 +19,11 @@ class duplicated_names_reporter_t(object):
 
     def __select( self ):
         duplicated = {}
-        for decl in self.decls:
-            value = self.get_value( decl )
+        for declaration in self.decls:
+            value = self.get_value( declaration )
             if value not in duplicated:
                 duplicated[ value ] = set()
-            duplicated[ value ].add( decl )
+            duplicated[ value ].add( declaration )
         result = duplicated.copy()
         for value, buggy_decls in list(duplicated.items()):
             if 1 == len( buggy_decls ):
@@ -41,8 +41,8 @@ class duplicated_names_reporter_t(object):
 
     def report( self, logger ):
         duplicated = self.__select()
-        for decl in self.decls:
-            self.__report_single( decl, duplicated, logger )
+        for declaration in self.decls:
+            self.__report_single( declaration, duplicated, logger )
 
 duplicated_aliases_reporter \
     = lambda decls: duplicated_names_reporter_t( decls, lambda d: d.alias, messages.W1047 )
@@ -57,34 +57,34 @@ class manager_t( object ):
         self.__exported_decls = []
         self.__logger = logger
 
-    def add_exported( self, decl ):
-        self.__exported_decls.append( decl )
-        if isinstance( decl, declarations.class_t ) and decl.indexing_suite:
-            included_decls = decl.decls( lambda d: d.ignore==False, allow_empty=True, recursive=True )
-            for decl in included_decls: self.add_exported(decl)
+    def add_exported( self, declaration ):
+        self.__exported_decls.append( declaration )
+        if isinstance( declaration, declarations.class_t ) and declaration.indexing_suite:
+            included_decls = declaration.decls( lambda d: d.ignore==False, allow_empty=True, recursive=True )
+            for declaration in included_decls: self.add_exported(declaration)
 
-    def __is_std_decl( self, decl ):
+    def __is_std_decl( self, declaration ):
         #Every class under std should be exported by Boost.Python and\\or `Py++`
         #Also this is not the case right now, I prefer to hide the warnings
-        dpath = declarations.declaration_path( decl )
+        dpath = declarations.declaration_path( declaration )
         if len( dpath ) < 3:
             return False
         if dpath[1] != 'std':
             return False
-        if decl.name.startswith( 'pair<' ):
+        if declaration.name.startswith( 'pair<' ):
             #special case
             return False
         return True
 
-    def __build_dependencies( self, decl ):
-        if self.__is_std_decl( decl ):
+    def __build_dependencies( self, declaration ):
+        if self.__is_std_decl( declaration ):
             #TODO add element_type to the list of dependencies
             return [] #std declarations should be exported by `Py++`!
-        if decl.already_exposed:
+        if declaration.already_exposed:
             return []
-        dependencies = decl.i_depend_on_them(recursive=False)
+        dependencies = declaration.i_depend_on_them(recursive=False)
 
-        if isinstance( decl, declarations.class_t ):
+        if isinstance( declaration, declarations.class_t ):
             dependencies = [d for d in dependencies if d.access_type != declarations.ACCESS_TYPES.PRIVATE]
 
         return dependencies
@@ -118,19 +118,19 @@ class manager_t( object ):
                 if dependency.hint == "base class":
                     return #base class for some class don't have to be exported
             if isinstance( depend_on_decl, declarations.variable_t ):
-                if not decl.expose_value:
+                if not depend_on_decl.expose_value:
                     return
 
-        if isinstance( dependency.decl, declarations.variable_t ):
+        if isinstance( dependency.declaration, declarations.variable_t ):
             #the only dependency of the variable is its type
-            if not dependency.decl.expose_value:
+            if not dependency.declaration.expose_value:
                 return
 
         if dependency.hint == "return type":
             #in this case we don't check, the return type but the function
-            if isinstance( dependency.decl, declarations.calldef_t ):
-                if dependency.decl.return_type and dependency.decl.call_policies \
-                   and decl_wrappers.is_return_opaque_pointer_policy( dependency.decl.call_policies ):
+            if isinstance( dependency.declaration, declarations.calldef_t ):
+                if dependency.declaration.return_type and dependency.declaration.call_policies \
+                   and decl_wrappers.is_return_opaque_pointer_policy( dependency.declaration.call_policies ):
                    return
 
         return id( depend_on_decl ) not in exported_ids
@@ -138,8 +138,8 @@ class manager_t( object ):
     def __find_out_used_but_not_exported( self ):
         used_not_exported = []
         exported_ids = set( [id( d ) for d in self.__exported_decls] )
-        for decl in self.__exported_decls:
-            for dependency in self.__build_dependencies( decl ):
+        for declaration in self.__exported_decls:
+            for dependency in self.__build_dependencies( declaration ):
                 for depend_on_decl in dependency.find_out_depend_on_it_declarations():
                     if self.__has_unexposed_dependency( exported_ids, depend_on_decl, dependency ):
                         if messages.filter_disabled_msgs([messages.W1040], depend_on_decl.disabled_messages ):
@@ -166,16 +166,16 @@ class manager_t( object ):
         return os.linesep.join( msg )
 
     def __report_duplicated_aliases( self ):
-        decls = [decl for decl in self.__exported_decls if isinstance( decl, declarations.class_types ) \
-                                     and isinstance( decl.parent, declarations.namespace_t )]
+        decls = [declaration for declaration in self.__exported_decls if isinstance( declaration, declarations.class_types ) \
+                                     and isinstance( declaration.parent, declarations.namespace_t )]
 
         dar = duplicated_aliases_reporter( decls )
         dar.report( self.__logger )
 
         classes = [c for c in decls if isinstance( c, declarations.class_t )]
-        query = lambda decl: isinstance( decl, declarations.class_types ) \
-                             and decl.ignore == False \
-                             and decl._already_exposed == False
+        query = lambda declaration: isinstance( declaration, declarations.class_types ) \
+                             and declaration.ignore == False \
+                             and declaration._already_exposed == False
 
         for cls in classes:
             internal_decls = cls.decls( query, recursive=False, allow_empty=True)
@@ -183,13 +183,13 @@ class manager_t( object ):
             dar.report( self.__logger )
 
     def __report_duplicated_wrapper_aliases( self ):
-        decls = [decl for decl in self.__exported_decls if isinstance( decl, declarations.class_t ) \
-                                     and isinstance( decl.parent, declarations.namespace_t )]
+        decls = [declaration for declaration in self.__exported_decls if isinstance( declaration, declarations.class_t ) \
+                                     and isinstance( declaration.parent, declarations.namespace_t )]
 
         dwar = duplicated_wrapper_aliases_reporter( decls )
         dwar.report( self.__logger )
 
-        query = lambda decl: decl.ignore == False and decl._already_exposed == False
+        query = lambda declaration: declaration.ignore == False and declaration._already_exposed == False
 
         for cls in decls:
             internal_decls = cls.classes( query, recursive=False, allow_empty=True)

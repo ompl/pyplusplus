@@ -45,8 +45,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             cls.add_destructor_code( decref_code )
             cls.add_wrapper_code( 'PyObject* m_pyobj;' )
             cls.set_constructors_body( 'm_pyobj=0;' )
-            cls.mem_fun( 'notify' ).add_override_precall_code( incref_code )
-            cls.mem_fun( 'notify' ).add_default_precall_code( incref_code )
+            cls.member_function( 'notify' ).add_override_precall_code( incref_code )
+            cls.member_function( 'notify' ).add_default_precall_code( incref_code )
 
             cls.held_type = 'std::auto_ptr< %s >' % cls.wrapper_alias
             cls.add_registration_code( impl_conv_code % { 'from' : cls.wrapper_alias
@@ -64,10 +64,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                                             , 'to' : base.related_class.decl_string }
                         , False)
 
-        schedule = mb.mem_fun( 'schedule' )
+        schedule = mb.member_function( 'schedule' )
         schedule.add_transformation( ft.transfer_ownership(0), alias='schedule' )
         simulator = mb.class_( 'simulator_t' )
-        simulator.mem_fun( 'get_event' ).call_policies \
+        simulator.member_function( 'get_event' ).call_policies \
             = call_policies.return_internal_reference()
 
     def run_tests( self, module):

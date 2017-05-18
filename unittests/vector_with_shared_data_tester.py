@@ -27,7 +27,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def customize( self, mb ):
         mb.global_ns.exclude()
         mb.namespace( 'samples' ).include()
-        do_smth = mb.free_fun( 'do_smth' )
+        do_smth = mb.free_function( 'do_smth' )
         v = declarations.remove_declarated( do_smth.return_type )
         v.indexing_suite.disable_method( 'sort' )
         v.indexing_suite.disable_method( 'count' )

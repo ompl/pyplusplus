@@ -233,7 +233,7 @@ class mem_fun_controller_t( sealed_fun_controller_t ):
         self.__inst_arg = None
         if not self.function.has_static:
             self.__inst_arg = declarations.argument_t( name=self.register_variable_name( 'inst' )
-                                                       , type=inst_arg_type )
+                                                       , decl_type=inst_arg_type )
 
     def apply( self, transformations ):
         for t in transformations: t.configure_mem_fun( self )
@@ -320,7 +320,7 @@ class virtual_mem_fun_controller_t( controller_base_t ):
             inst_arg_type = declarations.reference_t( inst_arg_type )
             
             self.__inst_arg = declarations.argument_t( name=self.register_variable_name( 'inst' )
-                                                       , type=inst_arg_type )
+                                                       , decl_type=inst_arg_type )
 
         @property 
         def inst_arg( self ):

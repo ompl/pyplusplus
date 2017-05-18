@@ -101,9 +101,9 @@ class creator_finder:
 def make_id_creator( code_creator ):
     return lambda decl_string: create_identifier( code_creator, decl_string )
 
-def complete_py_name( decl ):
+def complete_py_name( declaration ):
     aliases = []
-    current = decl
+    current = declaration
     while current:
         aliases.append( current.alias )
         current = current.parent

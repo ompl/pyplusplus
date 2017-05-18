@@ -24,10 +24,10 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def customize( self, mb ):
         mb.global_ns.calldefs().create_with_signature = True
         
-        sum_and_fill = mb.free_fun( 'sum_and_fill' )
+        sum_and_fill = mb.free_function( 'sum_and_fill' )
         sum_and_fill.add_transformation( ft.inout_static_matrix('m', rows=2, columns=3) )
         
-        #calculate = mb.mem_fun( 'calculate' )
+        #calculate = mb.member_function( 'calculate' )
         #calculate.add_transformation( ft.input_static_matrix('m', rows=3, columns=5) )
                
     def run_tests(self, module):

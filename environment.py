@@ -15,7 +15,7 @@ class indexing_suite:
 
 class boost:
     libdir = '/usr/lib'
-    lib = 'boost_python'
+    lib = 'boost_python-mt'
     include = '/usr/include'
 
 class python:

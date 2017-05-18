@@ -436,15 +436,15 @@ class class_t( class_common_details_t
                                             and member.virtuality == declarations.VIRTUALITY_TYPES.PURE_VIRTUAL
         members.extend( list(filter( vfunction_selector, self.private_members )) )
 
-        def is_exportable( decl ):
+        def is_exportable( declaration ):
             #filter out non-public member operators - `Py++` does not support them right now
-            if isinstance( decl, declarations.member_operator_t ) \
-               and decl.access_type != declarations.ACCESS_TYPES.PUBLIC:
+            if isinstance( declaration, declarations.member_operator_t ) \
+               and declaration.access_type != declarations.ACCESS_TYPES.PUBLIC:
                 return False
             #remove artificial constructors
-            if isinstance( decl, declarations.constructor_t ) and decl.is_artificial:
+            if isinstance( declaration, declarations.constructor_t ) and declaration.is_artificial:
                 return False
-            if decl.ignore == True or decl.exportable == False:
+            if declaration.ignore == True or declaration.exportable == False:
                 return False
             return True
         #-#if declarations.has_destructor( self ) \
@@ -508,7 +508,7 @@ class class_t( class_common_details_t
         if isinstance( self._redefined_funcs, list ):
             return self._redefined_funcs
 
-        all_included = declarations.custom_matcher_t( lambda decl: decl.ignore == False and decl.exportable )
+        all_included = declarations.custom_matcher_t( lambda declaration: declaration.ignore == False and declaration.exportable )
         all_protected = declarations.access_type_matcher_t( 'protected' ) & all_included
         all_pure_virtual = declarations.virtuality_type_matcher_t( VIRTUALITY_TYPES.PURE_VIRTUAL )
         all_virtual = declarations.virtuality_type_matcher_t( VIRTUALITY_TYPES.VIRTUAL ) \
@@ -518,7 +518,7 @@ class class_t( class_common_details_t
 
         query = all_protected | all_pure_virtual
         mf_query = query | all_virtual
-        relevant_opers = declarations.custom_matcher_t( lambda decl: decl.symbol in ('()', '[]') )
+        relevant_opers = declarations.custom_matcher_t( lambda declaration: declaration.symbol in ('()', '[]') )
         funcs = []
         defined_funcs = []
 

@@ -72,15 +72,15 @@ class exposed_decls_db_t( object ):
             else:
                 self.__init_from_str( decl_or_string )
 
-        def find_out_normalized_name( self, decl ):
-            if decl.name: 
-                return decl.partial_name
-            elif decl.location:#unnamed enums, classes, unions
-                return str( decl.location.as_tuple() )
-            elif isinstance( decl, declarations.namespace_t ):
+        def find_out_normalized_name( self, declaration ):
+            if declaration.name: 
+                return declaration.partial_name
+            elif declaration.location:#unnamed enums, classes, unions
+                return str( declaration.location.as_tuple() )
+            elif isinstance( declaration, declarations.namespace_t ):
                 return '' #I don't really care about unnamed namespaces
             else: #this should nevere happen
-                raise RuntimeError( "Unable to create normalized name for declaration: " + str(decl))
+                raise RuntimeError( "Unable to create normalized name for declaration: " + str(declaration))
 
         def __init_from_str( self, row ):
             self.exposed_sign, self.key, self.normalized_name, self.signature \
@@ -89,19 +89,19 @@ class exposed_decls_db_t( object ):
         def update_key( self, cls ):
             self.key = cls.__name__
             
-        def __init_from_decl( self, decl ):
-            if decl.ignore:
+        def __init_from_decl( self, declaration ):
+            if declaration.ignore:
                 self.exposed_sign = self.UNEXPOSED_DECL_SIGN
             else:
                 self.exposed_sign = self.EXPOSED_DECL_SIGN
             
-            self.update_key( decl.__class__ )
+            self.update_key( declaration.__class__ )
             
-            self.signature = decl.create_decl_string( with_defaults=False )
-            if isinstance( decl, declarations.calldef_t ):
-                self.signature = self.signature + decl.function_type().decl_string
+            self.signature = declaration.create_decl_string( with_defaults=False )
+            if isinstance( declaration, declarations.calldef_t ):
+                self.signature = self.signature + declaration.function_type().decl_string
                 
-            self.normalized_name = self.find_out_normalized_name( decl )
+            self.normalized_name = self.find_out_normalized_name( declaration )
             
         def __str__( self ):
             return self.FIELD_DELIMITER.join([ self.exposed_sign
@@ -150,38 +150,38 @@ class exposed_decls_db_t( object ):
         except (KeyError, StopIteration):
             return None
         
-    def __find_in_registry( self, decl ):
-        row = self.row_t( decl )
+    def __find_in_registry( self, declaration ):
+        row = self.row_t( declaration )
         found = self.__find_row_in_registry( row )
         if found:
             return found        
-        if isinstance( decl, declarations.class_t ):
+        if isinstance( declaration, declarations.class_t ):
             row.update_key( declarations.class_declaration_t )
             found = self.__find_row_in_registry( row )
             if found:
                 return found        
-        if isinstance( decl, declarations.class_declaration_t ):
+        if isinstance( declaration, declarations.class_declaration_t ):
             row.update_key( declarations.class_t )
             found = self.__find_row_in_registry( row )
             if found:
                 return found        
         return None
         
-    def is_exposed( self, decl ):
-        row = self.__find_in_registry( decl)
+    def is_exposed( self, declaration ):
+        row = self.__find_in_registry( declaration)
         return row and self.row_t.EXPOSED_DECL_SIGN == row.exposed_sign
         
     def update_decls( self, global_ns ):
-        for decl in global_ns.decls():
-            row = self.__find_in_registry( decl )
+        for declaration in global_ns.decls():
+            row = self.__find_in_registry( declaration )
             if not row:
                 continue
             if self.row_t.EXPOSED_DECL_SIGN == row.exposed_sign:
-                decl.ignore = False
-                decl.already_exposed = True
+                declaration.ignore = False
+                declaration.already_exposed = True
             else:
-                decl.ignore = True
-                decl.already_exposed = False
+                declaration.ignore = True
+                declaration.already_exposed = False
 
     def register_decls( self, global_ns, special_decls ):
         """register decls in the database
@@ -190,8 +190,8 @@ class exposed_decls_db_t( object ):
         special_decls - set of declarations, which were exposed, even so they 
         were not ``included``. For example std containers.
         """        
-        for decl in global_ns.decls():
-            row = self.row_t( decl )
-            if decl in special_decls:
+        for declaration in global_ns.decls():
+            row = self.row_t( declaration )
+            if declaration in special_decls:
                 row.exposed_sign = row.EXPOSED_DECL_SIGN    
             self.__update_registry( row )

@@ -7,14 +7,14 @@
 from setuptools import setup
 
 setup(name = "pyplusplus",
-      version = "1.7.0",
+      version = "1.8.0",
        author="Roman Yakovenko",
        author_email="roman yakovenko at gmail.com",
        maintainer="Mark Moll",
        maintainer_email="mark moll at gmail.com",
        description="Py++ is a framework of components for creating a C++ code generator using the Boost.Python library",
        url="https://bitbucket.org/ompl/pyplusplus",
-       download_url="https://bitbucket.org/ompl/pyplusplus/get/tip.zip",
+       download_url="https://bitbucket.org/ompl/pyplusplus/get/1.8.0.zip",
        license="Boost",
        keywords="C++, declaration parser, python bindings",
        packages=['pyplusplus',

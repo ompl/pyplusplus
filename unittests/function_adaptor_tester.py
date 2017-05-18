@@ -24,15 +24,15 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
             funs = mb.calldefs( 'get_' + suffix )
             funs.adaptor = 'PYPP_IDENTITY'
             funs.create_with_signature = False
-            mfuns = mb.global_ns.mem_funs( 'get_' + suffix, allow_empty=True )
+            mfuns = mb.global_ns.member_functions( 'get_' + suffix, allow_empty=True )
             mfuns.add_default_precall_code( '//add_default_precall_code' )
             mfuns.add_override_precall_code( '//add_override_precall_code' )
             mfuns.add_override_native_precall_code( '//add_override_native_precall_code' )
         mb.class_('base3_t' ).add_wrapper_code( '//just a comment to force Py++ create wrapper' )
-        mb.mem_fun( '::derived_t::get_two' ).alias = 'get2'
+        mb.member_function( '::derived_t::get_two' ).alias = 'get2'
         Foo = mb.class_('Foo')
         for f in [ 'virtual_public', 'virtual_protected' ]:
-            f = Foo.mem_fun( f )
+            f = Foo.member_function( f )
             f.add_default_precall_code( '//add_default_precall_code' )
             f.add_override_precall_code( '//add_override_precall_code' )
             f.add_override_native_precall_code( '//add_override_native_precall_code' )

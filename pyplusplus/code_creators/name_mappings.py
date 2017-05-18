@@ -18,9 +18,9 @@ class name_mappings_t(code_creator.code_creator_t):
         tmpl = '"%s" : "%s", '
         items_decorated = []
         items_undecorated = []
-        for blob, decl in self._exported_symbols.items():
-            items_decorated.append( tmpl % ( blob, str(decl) ) )
-            items_undecorated.append( tmpl % ( str(decl), blob ) )
+        for blob, declaration in self._exported_symbols.items():
+            items_decorated.append( tmpl % ( blob, str(declaration) ) )
+            items_undecorated.append( tmpl % ( str(declaration), blob ) )
 
         result = []
         result.append( '%s.undecorated_names = {#mapping between decorated and undecorated names'

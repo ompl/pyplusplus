@@ -46,7 +46,7 @@ class class_organizer_t(object):
         i_depend_on_them = set( [ full_name( base.related_class ) for base in class_.bases ] )
         #class depends on all classes that used in function as argument
         # types and those arguments have default value
-        calldefs = [decl for decl in declarations.make_flatten( class_ ) if isinstance( decl, declarations.calldef_t )]
+        calldefs = [declaration for declaration in declarations.make_flatten( class_ ) if isinstance( declaration, declarations.calldef_t )]
         for calldef in calldefs:
             for arg in calldef.arguments:
                 if declarations.is_enum( arg.decl_type ):
@@ -66,7 +66,7 @@ class class_organizer_t(object):
                     i_depend_on_them.add( full_name( top_class_inst ) )
 
         if self.__include_vars:
-            vars = [decl for decl in declarations.make_flatten( class_ ) if isinstance( decl, declarations.variable_t )]
+            vars = [declaration for declaration in declarations.make_flatten( class_ ) if isinstance( declaration, declarations.variable_t )]
             for var in vars:
                 if declarations.is_pointer( var.decl_type ):
                     continue
@@ -85,8 +85,8 @@ class class_organizer_t(object):
         i_depend_on_them.sort()
         return i_depend_on_them
 
-    def __get_top_class_inst( self, decl ):
-        curr = decl
+    def __get_top_class_inst( self, declaration ):
+        curr = declaration
         while isinstance( curr.parent, declarations.class_t ):
             curr = curr.parent
         if isinstance( curr, declarations.class_t ):
@@ -233,10 +233,10 @@ def sort( decls ):
     ordered = sort_classes( classes )
 
     ids = set( [ id( inst ) for inst in ordered ] )
-    for decl in decls:
-        if id( decl ) not in ids:
-            ids.add( id(decl) )
-            ordered.append( decl )
+    for declaration in decls:
+        if id( declaration ) not in ids:
+            ids.add( id(declaration) )
+            ordered.append( declaration )
     #type should be exported before it can be used.
     variables = []
     enums = []

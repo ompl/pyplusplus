@@ -53,9 +53,9 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
                         , False)
 
         simulator = mb.class_( 'simulator_t' )
-        simulator.mem_fun( 'get_event' ).call_policies \
+        simulator.member_function( 'get_event' ).call_policies \
             = call_policies.return_internal_reference()
-        schedule = mb.mem_fun( 'schedule' )
+        schedule = mb.member_function( 'schedule' )
         schedule.add_transformation( ft.transfer_ownership(0), alias='schedule' )
         
     def run_tests( self, module):

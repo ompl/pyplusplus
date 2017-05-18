@@ -20,20 +20,20 @@ class types_database_t( object ):
         self.__normalize_data = [ ',', '<', '>', '*', '&', '(', ')', '::' ]
         self.__containers = set()
 
-    def update_containers( self, decl ):
-        assert decl.indexing_suite
-        self.__containers.add( decl )
+    def update_containers( self, declaration ):
+        assert declaration.indexing_suite
+        self.__containers.add( declaration )
 
-    def update( self, decl ):
-        if isinstance( decl, declarations.calldef_t ):
-            if not isinstance( decl, declarations.constructor_t ):
-                self._update_db( self.__return_types, decl.return_type )
-            for arg in decl.arguments:
+    def update( self, declaration ):
+        if isinstance( declaration, declarations.calldef_t ):
+            if not isinstance( declaration, declarations.constructor_t ):
+                self._update_db( self.__return_types, declaration.return_type )
+            for arg in declaration.arguments:
                 self._update_db( self.__arguments_types, arg.decl_type )
-        elif isinstance( decl, declarations.variable_t ):
-            self._update_db( self.__variables, decl.decl_type )
+        elif isinstance( declaration, declarations.variable_t ):
+            self._update_db( self.__variables, declaration.decl_type )
         else:
-            assert not "types_database_t class can not process " + str( decl )
+            assert not "types_database_t class can not process " + str( declaration )
 
     def _is_relevant(self, decl_string):
         for smart_ptr in self.__smart_ptrs:
@@ -154,14 +154,14 @@ class types_database_t( object ):
         answer = []
         for registrator in registrators:
             answer.append( registrator )
-            decl = registrator.declaration
-            for hierarchy_info in decl.recursive_bases:
+            declaration = registrator.declaration
+            for hierarchy_info in declaration.recursive_bases:
                 if hierarchy_info.access_type != declarations.ACCESS_TYPES.PRIVATE:
                     converter = spconverter_t( smart_ptr=registrator.smart_ptr
                                                , source=class_creator.declaration
                                                , target=hierarchy_info.related_class )
                     answer.append( converter )
-            for hierarchy_info in decl.recursive_derived:
+            for hierarchy_info in declaration.recursive_derived:
                 if hierarchy_info.access_type != declarations.ACCESS_TYPES.PRIVATE:
                     converter = spconverter_t( smart_ptr=registrator.smart_ptr
                                                , source=hierarchy_info.related_class

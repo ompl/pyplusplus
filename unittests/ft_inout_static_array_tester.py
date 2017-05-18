@@ -43,8 +43,8 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         swap.add_transformation( ft.inout_static_array( 'v', 3 ) )
 
         
-        point3d.mem_fun( 'initialize' ).add_transformation( ft.input_static_array(0, size=3) )
-        point3d.mem_fun( 'position' ).add_transformation( ft.output_static_array(0, size=3) )
+        point3d.member_function( 'initialize' ).add_transformation( ft.input_static_array(0, size=3) )
+        point3d.member_function( 'position' ).add_transformation( ft.output_static_array(0, size=3) )
         
     def run_tests(self, module):
         """Run the actual unit tests.

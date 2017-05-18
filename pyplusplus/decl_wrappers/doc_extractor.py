@@ -16,18 +16,18 @@ class doc_extractor_i(object):
         object.__init__( self )
         self.encoding = encoding
 
-    def extract( self, decl ):
+    def extract( self, declaration ):
         """returns documentation text for the declaration
 
         This function should be implemented in derived class.
 
-        Using decl.location.file_name and decl.location.line variables you can
+        Using declaration.location.file_name and declaration.location.line variables you can
         find out the location of declaration within source file
         """
         raise NotImplementedError()
 
-    def __call__( self, decl ):
-        decl_doc = self.extract( decl )
+    def __call__( self, declaration ):
+        decl_doc = self.extract( declaration )
         return self.escape_doc( decl_doc )
 
     @staticmethod

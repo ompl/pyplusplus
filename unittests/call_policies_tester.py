@@ -70,13 +70,13 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         image = mb.class_('return_range_image_t')
         image.add_declaration_code( get_size_code )
         image.add_declaration_code( get_create_images_size )
-        get_raw_data = image.mem_fun( 'get_raw_data' )
+        get_raw_data = image.member_function( 'get_raw_data' )
         get_raw_data.call_policies \
             = call_policies.return_range( get_raw_data, 'raw_data_size_t' )
-        get_raw_data_const = image.mem_fun( 'get_raw_data_const' )
+        get_raw_data_const = image.member_function( 'get_raw_data_const' )
         get_raw_data_const.call_policies \
             = call_policies.return_range( get_raw_data_const, 'raw_data_size_t' )
-        create_images = image.mem_fun( 'create_images' )
+        create_images = image.member_function( 'create_images' )
         create_images.call_policies \
             = call_policies.return_range( create_images
                                           , 'get_create_images_size_t'

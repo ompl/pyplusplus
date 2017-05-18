@@ -24,11 +24,11 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
     def customize( self, mb ):
         mb.global_ns.calldefs().create_with_signature = True
         
-        sum = mb.free_fun( 'filler' )
+        sum = mb.free_function( 'filler' )
         sum.add_transformation( ft.output_static_matrix('m', rows=2, columns=3) )
 
         
-        #calculate = mb.mem_fun( 'calculate' )
+        #calculate = mb.member_function( 'calculate' )
         #calculate.add_transformation( ft.input_static_matrix('m', rows=3, columns=5) )
                
     def run_tests(self, module):

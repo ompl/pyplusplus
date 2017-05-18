@@ -141,7 +141,7 @@ class use_function_signature_bug_tester_t( unittest.TestCase ):
             [ module_builder.create_text_fc( self.CODE )]
             , xml_generator_config=autoconfig.xml_generator_config)
         d = mb.class_( 'derived' )
-        f = d.mem_fun( 'f' )
+        f = d.member_function( 'f' )
         self.assertTrue( f.create_with_signature == True )
 
 class class_multiple_files_tester_t(unittest.TestCase):
@@ -200,9 +200,9 @@ class class_multiple_files_tester_t(unittest.TestCase):
         mb.calldefs( 'get_opaque' ).call_policies \
           = module_builder.call_policies.return_value_policy( module_builder.call_policies.return_opaque_pointer )
         mb.class_( 'op_struct' ).exclude()
-        mb.mem_fun( 'get_rate' ).call_policies \
+        mb.member_function( 'get_rate' ).call_policies \
             = module_builder.call_policies.return_value_policy( module_builder.call_policies.return_pointee_value )
-        mb.mem_fun( 'get_size' ).add_transformation( ft.output(0) )
+        mb.member_function( 'get_size' ).add_transformation( ft.output(0) )
         mb.build_code_creator('x_class_multi')
         mb.split_module( autoconfig.build_dir
                         , [ mb.class_( '::tester::x' ) ]
@@ -250,7 +250,7 @@ class exclude_erronious_tester_t( unittest.TestCase ):
 
         self.assertTrue( xyz.ignore == False )
         self.assertTrue( xyz.class_( 'good' ).ignore == False )
-        self.assertTrue( xyz.free_fun( 'f_bad' ).ignore == True )
+        self.assertTrue( xyz.free_function( 'f_bad' ).ignore == True )
 
 class exclude_ellipsis_tester_t( unittest.TestCase ):
     def test(self):
@@ -265,7 +265,7 @@ class exclude_ellipsis_tester_t( unittest.TestCase ):
                 [ module_builder.create_text_fc( code ) ]
                 , xml_generator_config=autoconfig.xml_generator_config)
 
-        do_smth = mb.free_fun( 'do_smth' )
+        do_smth = mb.free_function( 'do_smth' )
 
         self.assertTrue( do_smth.exportable == False )
         print(do_smth.why_not_exportable())

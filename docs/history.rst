@@ -171,7 +171,7 @@ Version 1.0
       from pyplusplus import function_transformers as FT
 
       mb = module_builder_t( ... )
-      foo = mb.mem_funs( 'foo' )
+      foo = mb.member_functions( 'foo' )
       foo.add_transformation( FT.output(0) )
 
    The generated code, for class ``B``, is:
@@ -212,8 +212,8 @@ Version 1.0
        from pyplusplus import function_transformers as FT
 
        mb = module_builder_t( ... )
-       foo = mb.mem_funs( '::A::foo' ).add_transformation( FT.output(0), alias="foo_a" )
-       foo = mb.mem_funs( '::B::foo' ).add_transformation( FT.output(0), alias="foo_b" )
+       foo = mb.member_functions( '::A::foo' ).add_transformation( FT.output(0), alias="foo_a" )
+       foo = mb.member_functions( '::B::foo' ).add_transformation( FT.output(0), alias="foo_b" )
 
    * use ``inout`` transformation - it preserves a function signature
 

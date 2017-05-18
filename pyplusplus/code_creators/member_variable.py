@@ -636,12 +636,12 @@ class mem_var_ref_wrapper_t( code_creator.code_creator_t
         base_type = declarations.remove_alias( no_const )
         if not isinstance( base_type, declarations.declarated_t ):
             return True #TODO ????
-        decl = base_type.declaration
-        if decl.is_abstract:
+        declaration = base_type.declaration
+        if declaration.is_abstract:
             return False
-        if declarations.has_destructor( decl ) and not declarations.has_public_destructor( decl ):
+        if declarations.has_destructor( declaration ) and not declarations.has_public_destructor( declaration ):
             return False
-        if not declarations.has_copy_constructor(decl):
+        if not declarations.has_copy_constructor(declaration):
             return False
         return True
     has_setter = property( _get_has_setter )

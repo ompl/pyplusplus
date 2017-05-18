@@ -216,7 +216,7 @@ class decl_wrapper_t(object):
 
         .. code-block:: python
 
-           decl.disable_messages( messages.W1001, messages.W1040 )
+           declaration.disable_messages( messages.W1001, messages.W1040 )
         """
         for msg in args:
             msg_id = messages.find_out_message_id( msg )

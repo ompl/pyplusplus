@@ -27,7 +27,7 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         mb.classes().always_expose_using_scope = True
         mb.calldefs().create_with_signature = True
         mb.class_( 'Callback' ).add_wrapper_code( '//hhhh' )
-        execute = mb.class_( 'Callback' ).mem_fun( 'execute' )
+        execute = mb.class_( 'Callback' ).member_function( 'execute' )
         execute.add_transformation( ft.modify_type(0, tt ) )
         #execute.exclude()
 
