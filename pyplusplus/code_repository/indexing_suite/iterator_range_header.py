@@ -36,7 +36,6 @@ code = """// Copyright (c) 2003 Raoul M. Gough
 #include <algorithm>
 #include <utility>
 #include <boost/type_traits.hpp>
-#include <boost/type_traits/ice.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <indexing_suite/container_traits.hpp>
@@ -213,18 +212,14 @@ namespace boost { namespace python { namespace indexing {
         method_set_type,
         disabled_methods = (
             detail::method_set_if<
-               type_traits::ice_not<
-                   value_traits_type::equality_comparable
-               >::value,
+               !value_traits_type::equality_comparable,
                  method_index      // Impossible if !equality_comparable
                | method_contains   // Impossible if !equality_comparable
                | method_count      // Impossible if !equality_comparable
             >::value
 
           | detail::method_set_if<
-               type_traits::ice_not<
-                   value_traits_type::less_than_comparable
-               >::value,
+               !value_traits_type::less_than_comparable,
                method_sort         // Impossible if !less_than_comparable
             >::value
         ));

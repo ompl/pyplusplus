@@ -37,7 +37,6 @@ code = """// Copyright (c) 2003 Raoul M. Gough
 #include <boost/python/def_visitor.hpp>
 #include <boost/python/iterator.hpp>
 #include <boost/python/default_call_policies.hpp>
-#include <boost/type_traits/ice.hpp>
 #include <boost/bind.hpp>
 #include <functional>
 
