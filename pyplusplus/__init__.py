@@ -31,7 +31,7 @@ from . import messages
 
 from ._logging_ import multi_line_formatter_t
 
-__version__ = '1.8.0'
+__version__ = '1.8.1'
 
 import pygccxml
 if not hasattr( pygccxml, '__version__' ):
@@ -56,4 +56,3 @@ if not hasattr( pygccxml, '__version__' ):
 #~ > expect people to wrap functions taking non-const references to these
 #~ > shared_ptrs.  That is very rare -- it only happens when users want to
 #~ > replace one shared_ptr with another (possibly NULL) shared_ptr.
-
