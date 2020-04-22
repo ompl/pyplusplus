@@ -61,12 +61,12 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
             xml_generator_config = parser.xml_generator_configuration_t()
         if None is compilation_mode:
             compilation_mode = parser.COMPILATION_MODE.FILE_BY_FILE
-        start_time = time.clock()
+        start_time = time.perf_counter()
         self.logger.debug( 'parsing files - started' )
         reader = parser.project_reader_t( xml_generator_config, cache, decl_wrappers.dwfactory_t() )
         decls = reader.read_files( files, compilation_mode )
 
-        self.logger.debug( 'parsing files - done( %f seconds )' % ( time.clock() - start_time ) )
+        self.logger.debug( 'parsing files - done( %f seconds )' % ( time.perf_counter() - start_time ) )
 
         return decls_package.matcher.get_single( decls_package.namespace_matcher_t( name='::' )
                                                  , decls )
@@ -97,7 +97,7 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         self.__treat_char_ptr_as_binary_data = value
         if self.has_code_creator():
             self.code_creator.treat_char_ptr_as_binary_data = value
-            
+
     treat_char_ptr_as_binary_data = property( __get_treat_char_ptr_as_binary_data, __set_treat_char_ptr_as_binary_data,
                                               doc="""If True, Py++ will generate "POINTER( char )", instead of "c_char_p" for "char*" type. By default it is False""" )
 
@@ -158,5 +158,3 @@ class ctypes_module_builder_t(module_builder.module_builder_t):
         """
         self.__merge_user_code()
         file_writers.write_file( self.code_creator, file_name, encoding=self.encoding )
-
-

@@ -19,12 +19,12 @@ LICENSE = """// Copyright 2004-2008 Roman Yakovenko.
 // http://www.boost.org/LICENSE_1_0.txt)
 """
 
-class code_generator_t(object):    
+class code_generator_t(object):
     def __init__(self):
         self.__file = os.path.join( crc_settings.working_dir, 'crc_export.hpp' )
-        
-        self.__mb = module_builder.module_builder_t( 
-                        [ parser.create_cached_source_fc( 
+
+        self.__mb = module_builder.module_builder_t(
+                        [ parser.create_cached_source_fc(
                             self.__file
                             , os.path.join( crc_settings.generated_files_dir, 'crc.xml' ) ) ]
                         , gccxml_path=crc_settings.gccxml.executable
@@ -32,7 +32,7 @@ class code_generator_t(object):
                         , define_symbols=crc_settings.defined_symbols
                         , undefine_symbols=crc_settings.undefined_symbols
                         , indexing_suite_version=2)
-        
+
     def filter_declarations(self ):
         self.__mb.global_ns.exclude()
         boost_ns = self.__mb.global_ns.namespace( 'boost', recursive=False )
@@ -41,7 +41,7 @@ class code_generator_t(object):
         boost_ns.member_functions( 'process_bytes' ).exclude()
         boost_ns.member_functions( 'process_block' ).exclude()
         boost_ns.member_operators( symbol='()' ).exclude()
-        
+
     def prepare_declarations( self ):
         boost_ns = self.__mb.namespace( 'boost' )
         classes = boost_ns.classes( lambda decl: decl.name.startswith( 'crc_basic' ) )
@@ -49,7 +49,7 @@ class code_generator_t(object):
         for cls in classes:
             name, args = declarations.templates.split(cls.name)
             cls.alias = name + '_' + args[0]
-            
+
         classes = boost_ns.classes( lambda decl: decl.name.startswith( 'crc_optimal' ) )
         classes.always_expose_using_scope = True
         for cls in classes:
@@ -70,7 +70,7 @@ class code_generator_t(object):
                 cls.alias = 'slow_crc_type'
             else:
                 print 'no alias for class ', cls.name
-                
+
     def customize_extmodule( self ):
         global LICENSE
         extmodule = self.__mb.code_creator
@@ -85,16 +85,16 @@ class code_generator_t(object):
         self.__mb.write_module( os.path.join( crc_settings.generated_files_dir, 'crc.pypp.cpp' ) )
 
     def create(self):
-        start_time = time.clock()      
+        start_time = time.perf_counter()
         self.filter_declarations()
 
         self.prepare_declarations()
-        
+
         self.__mb.build_code_creator( crc_settings.module_name )
-        
+
         self.customize_extmodule()
         self.write_files( )
-        print 'time taken : ', time.clock() - start_time, ' seconds'
+        print 'time taken : ', time.perf_counter() - start_time, ' seconds'
 
 def export():
     cg = code_generator_t()
@@ -103,5 +103,3 @@ def export():
 if __name__ == '__main__':
     export()
     print 'done'
-    
-    
