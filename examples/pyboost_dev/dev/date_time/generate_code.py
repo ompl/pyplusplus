@@ -198,7 +198,7 @@ class code_generator_t(object):
                          , os.path.join( date_time_settings.generated_files_dir, 'date_time_wrapper.hpp' ) )
 
     def create(self):
-        start_time = time.perf_counter()
+        start_time = timer()
         mb = self.create_module_builder()
         self.filter_declarations(mb)
         self.add_code( mb )
@@ -207,7 +207,7 @@ class code_generator_t(object):
 
         self.customize_extmodule( mb )
         self.write_files( mb )
-        print 'time taken : ', time.perf_counter() - start_time, ' seconds'
+        print 'time taken : ', timer() - start_time, ' seconds'
 
 def export():
     cg = code_generator_t()

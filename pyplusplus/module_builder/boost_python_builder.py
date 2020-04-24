@@ -21,6 +21,11 @@ from pyplusplus import file_writers
 from pyplusplus import code_creators
 from pyplusplus import creators_factory
 
+if sys.version_info.major == 3:
+    timer = time.perf_counter
+else:
+    timer = time.clock
+
 class builder_t(module_builder.module_builder_t):
     """
     This class provides users with simple and intuitive interface to `Py++`
@@ -143,12 +148,12 @@ class builder_t(module_builder.module_builder_t):
             xml_generator_config = parser.xml_generator_configuration_t()
         if None is compilation_mode:
             compilation_mode = parser.COMPILATION_MODE.FILE_BY_FILE
-        start_time = time.perf_counter()
+        start_time = timer()
         self.logger.debug( 'parsing files - started' )
         reader = parser.project_reader_t( xml_generator_config, cache, decl_wrappers.dwfactory_t() )
         decls = reader.read_files( files, compilation_mode )
 
-        self.logger.debug( 'parsing files - done( %f seconds )' % ( time.perf_counter() - start_time ) )
+        self.logger.debug( 'parsing files - done( %f seconds )' % ( timer() - start_time ) )
         self.logger.debug( 'settings declarations defaults - started' )
 
         global_ns = decls_package.matcher.get_single(
@@ -160,10 +165,10 @@ class builder_t(module_builder.module_builder_t):
             for cls in global_ns.decls(decl_type=decls_package.class_declaration_t):
                 cls.indexing_suite_version = indexing_suite_version
 
-        start_time = time.perf_counter()
+        start_time = timer()
         self.__apply_decls_defaults(decls)
         self.logger.debug( 'settings declarations defaults - done( %f seconds )'
-                           % ( time.perf_counter() - start_time ) )
+                           % ( timer() - start_time ) )
         return global_ns
 
     def __filter_by_location( self, flatten_decls ):

@@ -87,7 +87,7 @@ class code_generator_t(object):
         self.__mb.write_module( os.path.join( rational_settings.generated_files_dir, 'rational.pypp.cpp' ) )
 
     def create(self):
-        start_time = time.perf_counter()
+        start_time = timer()
         self.filter_declarations()
 
         self.prepare_decls()
@@ -96,7 +96,7 @@ class code_generator_t(object):
 
         self.customize_extmodule()
         self.write_files( )
-        print 'time taken : ', time.perf_counter() - start_time, ' seconds'
+        print 'time taken : ', timer() - start_time, ' seconds'
 
 def export():
     cg = code_generator_t()

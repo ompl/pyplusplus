@@ -6,6 +6,7 @@
 
 
 import os
+import sys
 import time
 import logging
 import crc_settings
@@ -18,6 +19,12 @@ LICENSE = """// Copyright 2004-2008 Roman Yakovenko.
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 """
+
+if sys.version_info.major == 3:
+    timer = time.perf_counter
+else:
+    timer = time.clock
+
 
 class code_generator_t(object):
     def __init__(self):
@@ -85,7 +92,7 @@ class code_generator_t(object):
         self.__mb.write_module( os.path.join( crc_settings.generated_files_dir, 'crc.pypp.cpp' ) )
 
     def create(self):
-        start_time = time.perf_counter()
+        start_time = timer()
         self.filter_declarations()
 
         self.prepare_declarations()
@@ -94,7 +101,7 @@ class code_generator_t(object):
 
         self.customize_extmodule()
         self.write_files( )
-        print 'time taken : ', time.perf_counter() - start_time, ' seconds'
+        print 'time taken : ', timer() - start_time, ' seconds'
 
 def export():
     cg = code_generator_t()

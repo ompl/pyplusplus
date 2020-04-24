@@ -31,7 +31,7 @@ from . import messages
 
 from ._logging_ import multi_line_formatter_t
 
-__version__ = '1.8.2'
+__version__ = '1.8.3'
 
 import pygccxml
 if not hasattr( pygccxml, '__version__' ):
