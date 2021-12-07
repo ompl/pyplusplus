@@ -145,4 +145,3 @@ namespace pyplus_conv = pyplusplus::convenience;
 #endif//__ctypes_integration_pyplusplus_hpp__
 
 """
-

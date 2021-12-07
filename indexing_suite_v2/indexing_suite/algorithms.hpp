@@ -247,7 +247,7 @@ namespace boost { namespace python { namespace indexing {
     return std::find_if(
         most_derived::begin(c),
         most_derived::end(c),
-        std::bind1st (comparison(), key));
+        std::bind (comparison(), key, std::placeholders::_1));
   }
 
   /////////////////////////////////////////////////////////////////////////
@@ -288,7 +288,7 @@ namespace boost { namespace python { namespace indexing {
     return std::count_if(
         most_derived::begin(c),
         most_derived::end(c),
-        std::bind1st (comparison(), key));
+        std::bind (comparison(), key, std::placeholders::_1));
   }
 
   /////////////////////////////////////////////////////////////////////////
