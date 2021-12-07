@@ -82,7 +82,7 @@ class manager_t( object ):
             return [] #std declarations should be exported by `Py++`!
         if declaration.already_exposed:
             return []
-        dependencies = declaration.i_depend_on_them(recursive=False)
+        dependencies = declarations.get_dependencies_from_decl(declaration, recursive=False)
 
         if isinstance( declaration, declarations.class_t ):
             dependencies = [d for d in dependencies if d.access_type != declarations.ACCESS_TYPES.PRIVATE]
