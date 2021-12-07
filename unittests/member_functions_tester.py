@@ -38,7 +38,6 @@ class tester_t(fundamental_tester_base.fundamental_tester_base_t):
         env = mb.class_( 'mem_fun_environment_t' )
         get_value = env.member_function( 'get_value', return_type='int' )
         get_value.alias = 'get_value_int' 
-        get_value.name = get_value.demangled_name
         get_value.create_with_signature = True
         
         mb.run_query_optimizer()
