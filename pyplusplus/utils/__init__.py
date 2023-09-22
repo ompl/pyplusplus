@@ -83,8 +83,17 @@ class exposed_decls_db_t( object ):
                 raise RuntimeError( "Unable to create normalized name for declaration: " + str(declaration))
 
         def __init_from_str( self, row ):
-            self.exposed_sign, self.key, self.normalized_name, self.signature \
-                = row.split( self.FIELD_DELIMITER )
+            try:
+                self.exposed_sign, self.key, self.normalized_name, self.signature \
+                    = row.split( self.FIELD_DELIMITER )
+            except ValueError:
+                splits = row.split( self.FIELD_DELIMITER )
+                self.exposed_sign = splits[0]
+                self.key = splits[1]
+                self.signature = splits[-1]
+                self.normalized_name = self.FIELD_DELIMITER.join(splits[2:-1])
+
+
 
         def update_key( self, cls ):
             self.key = cls.__name__
