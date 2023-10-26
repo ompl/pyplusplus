@@ -7,7 +7,7 @@
 from setuptools import setup
 
 setup(name = "pyplusplus",
-      version = "1.8.5",
+      version = "1.8.6",
        author="Roman Yakovenko",
        author_email="roman.yakovenko@gmail.com",
        maintainer="Mark Moll",
