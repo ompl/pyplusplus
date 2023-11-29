@@ -35,6 +35,19 @@ code = """// Copyright (c) 2003 Raoul M. Gough
 #include <boost/shared_ptr.hpp>
 #include <functional>
 
+namespace pyplusplus {
+  template <class Arg1, class Arg2, class Result> struct binary_function {
+    using first_argument_type = Arg1;
+    using second_argument_type = Arg2;
+    using result_type = Result;
+  };
+
+  template <typename ArgumentType, typename ResultType> struct unary_function {
+    using argument_type = ArgumentType;
+    using result_type = ResultType;
+  };
+}
+
 namespace boost { namespace python { namespace indexing {
   // The default_value_traits template is used by all ContainerTraits
   // templates. It can be overridden by specialization or by supplying
@@ -63,13 +76,13 @@ namespace boost { namespace python { namespace indexing {
   struct indirect_value_traits : simple_value_traits<Ptr> {
     // Hide the base class versions of the comparisons, using these
     // indirect versions
-    struct less : std::binary_function<Ptr, Ptr, bool> {
+    struct less : pyplusplus::binary_function<Ptr, Ptr, bool> {
       bool operator() (Ptr const &p1, Ptr const &p2) const {
         return *p1 < *p2;
       }
     };
 
-    struct equal_to : std::binary_function<Ptr, Ptr, bool> {
+    struct equal_to : pyplusplus::binary_function<Ptr, Ptr, bool> {
       bool operator() (Ptr const &p1, Ptr const &p2) const {
         return *p1 == *p2;
       }

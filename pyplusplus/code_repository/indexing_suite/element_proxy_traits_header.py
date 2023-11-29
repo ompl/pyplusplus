@@ -54,7 +54,7 @@ namespace boost { namespace python { namespace indexing {
     // Wrap the base class versions of the comparisons using
     // indirection
     struct less
-      : std::binary_function<element_proxy_type, element_proxy_type, bool>
+      : pyplusplus::binary_function<element_proxy_type, element_proxy_type, bool>
     {
       typename base_type::less m_base_compare;
 
@@ -66,7 +66,7 @@ namespace boost { namespace python { namespace indexing {
     };
 
     struct equal_to
-      : std::binary_function<raw_value_type, element_proxy_type, bool>
+      : pyplusplus::binary_function<raw_value_type, element_proxy_type, bool>
     {
       // First param is raw_value_type to interface smoothly with the
       // bind1st used in default_algorithms::find
